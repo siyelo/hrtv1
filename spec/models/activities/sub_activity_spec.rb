@@ -101,11 +101,11 @@ describe SubActivity do
       project        = Factory(:project, :data_response => @response)
 
       # funding flows
-      in_flow        = Factory(:funding_flow, :data_response => @response,
+      in_flow        = Factory(:funding_flow,
                                :project => project,
                                :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory(:funding_flow, :data_response => @response,
+      out_flow       = Factory(:funding_flow,
                                :project => project,
                                :from => ngo, :to => @implementer,
                                :budget => 7, :spend => 7)

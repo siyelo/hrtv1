@@ -33,6 +33,10 @@ def zero_out_everything(project)
 
   project.funding_flows.each do |f|
     f = zero_out_flow(f)
+  end  
+  
+  project.funding_streams.each do |f|
+    f = zero_out_stream(f)
   end
 
   project
@@ -124,6 +128,15 @@ def zero_out_flow(flow)
     flow.budget_q4_prev     =
     nil
   flow
+end
+
+def zero_out_stream(funding_stream)
+  funding_stream.budget               =
+  funding_stream.budget_in_usd               =
+    funding_stream.spend              =
+    funding_stream.spend_in_usd              =
+    nil
+  funding_stream
 end
 
 def zero_out_funding_source(fs)

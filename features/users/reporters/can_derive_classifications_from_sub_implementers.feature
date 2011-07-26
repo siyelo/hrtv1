@@ -13,8 +13,8 @@ Feature: Reporter can derive classifications from sub implementers
       And a data_request exists with organization: the donor, title: "data_request1"
       And a data_response should exist with organization: the ngo, data_request: the data_request
       And a project exists with data_response: the data_response
-      And a funding_flow exists with data_response: the data_response, from: the donor, to: the ngo, budget: "10", spend: "10"
-      And a funding_flow exists with data_response: the data_response, from: the ngo, to: the provider, budget: "7", spend: "7"
+      And a funding_flow exists with project: the project, from: the donor, to: the ngo, budget: "10", spend: "10"
+      And a funding_flow exists with project: the project, from: the ngo, to: the provider, budget: "7", spend: "7"
       And a activity exists with name: "activity1", budget: "100", spend: "100", provider: the ngo, data_response: the data_response, project: the project
       And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, budget: "55", spend: "55"
 

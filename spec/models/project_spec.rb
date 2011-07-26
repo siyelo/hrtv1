@@ -190,8 +190,7 @@ describe Project do
       flow      = Factory(:funding_flow,
                           :from          => @other_org,
                           :to            => @our_org,
-                          :project       => @project,
-                          :data_response => @response)
+                          :project       => @project)
       @project.reload
       @project.funding_sources_have_organizations?.should be_true
     end
@@ -201,8 +200,7 @@ describe Project do
       flow      = Factory(:funding_flow,
                           :from          => @other_org,
                           :to            => @our_org,
-                          :project       => @project,
-                          :data_response => @response)
+                          :project       => @project)
       @project.reload
       @project.in_flows.each do |in_flow|
         in_flow.organization_id_from = nil
@@ -254,8 +252,7 @@ describe Project do
       flow      = Factory(:funding_flow,
                          :from          => @other_org,
                          :to            => @our_org,
-                         :project       => @project,
-                         :data_response => @response)
+                         :project       => @project)
       @project.amounts_matches_funders?(:spend).should be_true
     end
 
@@ -263,8 +260,7 @@ describe Project do
       flow      = Factory(:funding_flow,
                          :from          => @other_org,
                          :to            => @our_org,
-                         :project       => @project,
-                         :data_response => @response)
+                         :project       => @project)
       @project.amounts_matches_funders?(:budget).should be_true
     end
 
@@ -272,8 +268,7 @@ describe Project do
       flow      = Factory(:funding_flow,
                          :from          => @other_org,
                          :to            => @our_org,
-                         :project       => @project,
-                         :data_response => @response)
+                         :project       => @project)
       @project.reload
       @project.in_flows.first.should == flow
       @project.funding_sources.first.should == @other_org
@@ -283,8 +278,7 @@ describe Project do
       flow         = Factory(:funding_flow,
                             :from          => @our_org,
                             :to            => @other_org,
-                            :project       => @project,
-                            :data_response => @response)
+                            :project       => @project)
       @project.reload
       @project.out_flows.first.should == flow
       @project.implementers.first.should == @other_org
@@ -443,10 +437,8 @@ describe Project do
   describe "project spend check" do
     before :each do
       basic_setup_response
-      @project = Factory(:complete_project, :data_response => @response, :spend => 20)
-      funder = @project.in_flows.first
-      funder.spend = 20
-      funder.save
+      @project = Factory(:project, :data_response => @response, :spend => 20)
+      @funder = Factory(:funding_flow, :to => @project.organization, :project => @project, :spend => 20)
       @project.reload
     end
 
@@ -503,13 +495,13 @@ describe Project do
 
     it "returns true if a project is linked to a parent project" do
       @funding_flow = Factory(:funding_flow, :from => @organization, :to => @organization, :project => @project,
-                              :data_response => @response, :project_from_id => @project.id)
+                              :project_from_id => @project.id)
       @project.reload
       @project.linked?.should == true
     end
 
     it "returns true if a project is not linked to a parent project but has been set to project 'project missing/unknown'" do
-      @funding_flow = Factory(:funding_flow, :data_response => @response,
+      @funding_flow = Factory(:funding_flow,
                               :from => @organization, :to => @organization,
                               :project => @project, :project_from_id => 0)
       @project.reload

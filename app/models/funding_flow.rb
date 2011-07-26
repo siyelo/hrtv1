@@ -10,7 +10,7 @@ class FundingFlow < ActiveRecord::Base
   }
 
   ### Attributes
-  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
+  attr_accessible :organization_text, :project_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :updated_at
@@ -20,38 +20,50 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
   belongs_to :project_from # funder's project
-  belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
-
-  alias :response :data_response
-  alias :response= :data_response=
-
-
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
-  # validates_presence_of :project # ???
-  validates_presence_of :data_response_id
+  
+  # validates_presence_of :project # FIXME
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
-
+  
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
+  #
   validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
+  
   # if we pass "-1" then the user somehow selected "Add an Organization..."
+  #
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
-
   validate :spend_is_greater_than_zero
+  
+  ### Delegates
   delegate :organization, :to => :project
+  delegate :data_response, :to => :project
+  delegate :currency, :to => :project
 
+  alias :response :data_response
+  
+  ### Class Methods
+  
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
-
-  def currency
-    project.try(:currency)
+  
+  def self.create_flows(params)
+    unless params[:funding_flows].blank?
+      params[:funding_flows].each_pair do |flow_id, project_id|
+        ff = self.find(flow_id)
+        ff.project_from_id = project_id
+        ff.save
+      end
+    end
   end
+  
+  ### Instance Methods
 
   def name
     "From: #{from.name} - To: #{to.name}"
@@ -75,16 +87,6 @@ class FundingFlow < ActiveRecord::Base
 
   def updated_at
     Time.now
-  end
-
-  def self.create_flows(params)
-    unless params[:funding_flows].blank?
-      params[:funding_flows].each_pair do |flow_id, project_id|
-        ff = self.find(flow_id)
-        ff.project_from_id = project_id
-        ff.save
-      end
-    end
   end
 
   def funding_chains
@@ -123,7 +125,6 @@ class FundingFlow < ActiveRecord::Base
   end
 
   private
-
     def spend_is_greater_than_zero
       errors.add(:spend, "for funding must be greater than 0") unless (spend || 0) > 0
     end

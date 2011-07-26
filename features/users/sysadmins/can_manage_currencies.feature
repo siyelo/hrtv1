@@ -22,7 +22,7 @@ Feature: Admin can manage currencies
       And I press "Search"
       And I should see "BWP"
       And I should see "VEF"
-      And I should see "1.53423"      
+      And I should see "1.53423"
       When I follow "x"
       And I should not see "1.53423"
         

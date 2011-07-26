@@ -95,7 +95,7 @@ Spork.each_run do
   def proj_funded_by(proj, funder, budget = 50, spend = 50)
     to = proj.data_response.organization
     Factory(:funding_flow, :from => funder, :to => to, :project => proj,
-             :budget => budget, :spend => spend, :data_response => proj.response)
+             :budget => budget, :spend => spend)
     proj.reload
     proj
   end
@@ -213,7 +213,7 @@ Spork.each_run do
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
-    @funding_flow = Factory(:funding_flow, :data_response => @response, :project => @project,
+    @funding_flow = Factory(:funding_flow, :project => @project,
                             :from => @organization, :to => @ngo)
   end
 

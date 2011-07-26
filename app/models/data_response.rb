@@ -15,7 +15,6 @@ class DataResponse < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
-  has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
@@ -84,11 +83,9 @@ class DataResponse < ActiveRecord::Base
     self.find :all,
       :select => 'data_responses.*, organizations.raw_type',
       :joins => "LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                 LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
                  LEFT JOIN projects ON data_responses.id = projects.data_response_id
                  LEFT OUTER JOIN organizations ON organizations.id = data_responses.organization_id",
       :conditions => ["activities.data_response_id IS NULL AND
-                      funding_flows.data_response_id IS NULL AND
                       projects.data_response_id IS NULL AND
                       organizations.raw_type IN (?)",
                       ["Agencies", "Govt Agency", "Donors", "Donor",
@@ -109,7 +106,7 @@ class DataResponse < ActiveRecord::Base
 
   # TODO: spec
   def empty?
-    activities.empty? && projects.empty? && funding_flows.empty?
+    activities.empty? && projects.empty?
   end
 
   # TODO: spec

@@ -11,7 +11,6 @@ Feature: Admin can manage currencies
     And I am signed in as "sysadmin@hrtapp.com"
     And I follow "Currencies"
     
-    @run
     Scenario: Can add currency and delete it
       When I follow "Create Currency"
       And I fill in "From" with "VEF"

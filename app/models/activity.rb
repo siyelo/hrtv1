@@ -106,6 +106,7 @@ class Activity < ActiveRecord::Base
 
 
   ### Validations
+  before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_presence_of :data_response_id
@@ -513,6 +514,11 @@ class Activity < ActiveRecord::Base
       else
         raise "Unknown type #{type}".to_yaml
       end
+    end
+    
+    def strip_input_fields
+      self.name = self.name.strip if self.name
+      self.description = self.description.strip if self.description
     end
 end
 

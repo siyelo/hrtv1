@@ -212,11 +212,11 @@ class Reports::JawpReport
               row << ratio
               row << amount_total_in_usd * ratio
               obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val)
-              if obj.nil? or obj.blank?
+              if obj.blank?
                 obj = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
-              end   
+              end
               prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val)
-              if prog.nil? or prog.blank?
+              if prog.blank?
                 prog = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
               end
               row << obj

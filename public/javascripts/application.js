@@ -2155,11 +2155,11 @@ $(function () {
     if (typeof(window[controller_action]) !== 'undefined' && typeof(window[controller_action]['run']) === 'function') {
       window[controller_action]['run']();
     }
-  }
+  } 
 
-  $("#closeFlash").click(function (e) {
+  $(".closeFlash").click(function (e) {
     e.preventDefault();
-    $("#flash_holder").fadeOut("slow", function() {
+    $(this).parents('div:first').fadeOut("slow", function() {
       $(this).show().css({display: "none"});
     });
   });

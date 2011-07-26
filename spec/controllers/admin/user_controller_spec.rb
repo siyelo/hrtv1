@@ -20,7 +20,6 @@ describe Admin::UsersController do
     end
   end
 
-
   #todo test creation of users from admin/users controller
   describe "Requesting Users endpoints as a member" do
     it "POST /admin/users should create a user in the org" do

@@ -30,18 +30,7 @@ def setup_specs
   ENV['RAILS_ENV'] = 'test'
   run "rake db:migrate RAILS_ENV=test"
   run_or_die "rake setup_quick --trace"
-  setup_currencies
-end
-
-def setup_currencies
-  require 'yaml'
-  file = YAML.load_file "#{WORKSPACE}/db/seed_files/currencies.yml"
-  puts "\nImporting currencies to the database\n"
-  file.each { |currency| 
-              Currency.create!(:conversion => currency[0], 
-                               :rate => currency[1])
-  }
-  puts "\nFinished importing currencies to the database\n"
+  run "rake db:load_currencies"
 end
 
 def specs

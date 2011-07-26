@@ -22,7 +22,7 @@
 - form_tag response_workplan_path(@response, :current), :method => :put, :id => 'workplan' do
   %table.workplan
     %thead
-      %tr.filler
+      %tr
         %th{:colspan => 3}
         %th.no-padding{:colspan => 6}
           %ul.tabs
@@ -34,8 +34,8 @@
       %tr.head
         %th Project
         %th{:colspan => 2} Activity / Other Cost
-        %th Past Expenditure
-        %th Current Budget
+        %th.amount Past Expenditure
+        %th.amount Current Budget
     %tbody
       - @projects.each do |project|
         = render 'project_row', :project => project

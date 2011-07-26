@@ -25,8 +25,12 @@
       %tr.head
         %th Activity
         %th{:colspan => 2} Implementer
-        %th.amount= "Disbursements #{link_to '[?]', '#', :title => "The portion of your expenditure that was given to each implementers in the past fiscal year", :class => "tooltip"}"
-        %th.amount= "Planned Disbursements #{link_to '[?]', '#', :title => "The portion of your budget that will be given to each implementer in the current fiscal year", :class => "tooltip"}"
+        %th.amount
+          Disbursements 
+          = image_tag "hint.png", :title => "The portion of your expenditure that was given to each implementers in the past fiscal year", :class => "tooltip"
+        %th.amount
+          Planned Disbursements
+          = image_tag "hint.png",:title => "The portion of your budget that will be given to each implementer in the current fiscal year", :class => "tooltip"
         %th.actions
     %tbody
       - @projects.each do |project|

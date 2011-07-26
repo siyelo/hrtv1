@@ -2147,7 +2147,7 @@ var implementers_index = {
 $(function () {
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', live: true, html: true});
+  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

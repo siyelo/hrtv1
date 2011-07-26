@@ -1444,7 +1444,8 @@ var classifications_edit = {
     //      showACOnEmptyFocus: true,
           allowParentSelect: true,
           delim: ">",
-          select: purposes.select_purpose
+          select: purposes.select_purpose,
+          targetColumnSize: 1
         })
       },
 

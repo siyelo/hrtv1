@@ -16,7 +16,7 @@ Feature: Reporter can manage projects
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
-      And a funding_flow exists with data_response: the data_response, from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
+      And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
       And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
       And I follow "Projects"
 

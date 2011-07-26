@@ -31,9 +31,8 @@ class Organization < ActiveRecord::Base
   include ActsAsDateChecker
 
   ### Attributes
-  attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
-    :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location
+  attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name, :contact_position, 
+    :contact_phone_number, :contact_main_office_phone_number, :contact_office_location
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
@@ -59,11 +58,6 @@ class Organization < ActiveRecord::Base
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number, :on => :update
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :on => :update
-  validates_date :fiscal_year_start_date, :on => :update
-  validates_date :fiscal_year_end_date, :on => :update
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date.", :on => :update
-  validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
@@ -246,10 +240,6 @@ class Organization < ActiveRecord::Base
       end
     end
 
-    def validates_date_range
-      errors.add(:base, "The end date must be exactly one year after the start date") unless (fiscal_year_start_date + (1.year - 1.day)).eql? fiscal_year_end_date
-    end
-
     def create_data_responses
       DataRequest.all.each do |data_request|
         dr = self.data_responses.find(:first,
@@ -288,8 +278,6 @@ end
 #  comments_count                   :integer         default(0)
 #  acronym                          :string(255)
 #  currency                         :string(255)
-#  fiscal_year_start_date           :date
-#  fiscal_year_end_date             :date
 #  contact_name                     :string(255)
 #  contact_position                 :string(255)
 #  contact_phone_number             :string(255)

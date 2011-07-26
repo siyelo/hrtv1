@@ -27,8 +27,7 @@ class DataResponse < ActiveRecord::Base
   validates_uniqueness_of :data_request_id, :scope => :organization_id
 
   ### Delegate
-  delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
-    :contact_name, :contact_position, :contact_phone_number,
+  delegate :currency, :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
     :quarters_months, :to => :organization
 

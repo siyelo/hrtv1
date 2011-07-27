@@ -1,4 +1,3 @@
-@run
 Feature: Admin can manage data requests
   In order to collect data in the system
   As a admin

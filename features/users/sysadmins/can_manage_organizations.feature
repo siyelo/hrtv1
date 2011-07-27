@@ -9,31 +9,25 @@ Feature: Admin can manage organizations
       And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
       And a sysadmin exists with email: "admin@hrtapp.com", organization: the organization
       And a reporter exists with email: "org2_user@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And I am signed in as "admin@hrtapp.com"
-
 
 
     Scenario: Admin can CRUD organizations
       When I follow "Organizations"
         And I follow "Create Organization"
         And I fill in "Name" with "Organization name"
-        And I fill in "Raw type" with "My raw_type"
+        And I select "District" from "Raw type"
         And I fill in "Fosaid" with "123"
         And I press "Create organization"
       Then I should see "Organization was successfully created"
-        And I should see "Organization name"
-        And I should see "My raw_type"
-        And I should see "123"
-
-      When I follow "Edit"
         And I fill in "Name" with "My new organization"
         And I press "Update organization"
       Then I should see "Organization was successfully updated"
-        And I should see "My new organization"
+        And the "Name" field should contain "My new organization"
 
-      When I follow "X"
-      Then I should see "Organization was successfully deleted"
+      When I follow "Delete this Organization"
+      Then I should see "Organization was successfully destroyed."
         And I should not see "Organization name"
 
 
@@ -51,23 +45,23 @@ Feature: Admin can manage organizations
          | org1      | org2 - 2 users  | Organizations successfully merged.                    | 
 
 
-    @javascript
+    @javascript @wip
     Scenario Outline: Merge duplicate organizations (with JS)
       When I follow "Organizations"
-        And I follow "Fix duplicate organizations"
-        And I select "<duplicate>" from "Duplicate organization"
-        And I should see "Organization: <duplicate_box>" within "#duplicate"
-        And I select "<target>" from "Replacement organization"
-        And I should see "Organization: <target_box>" within "#target"
-        And I confirm the popup dialog
-        And I press "Replace"
+      And I follow "Fix duplicate organizations"
+      And I select "<duplicate>" from "Duplicate organization"
+      And I should see "Organization: <duplicate_box>" within "#duplicate"
+      And I select "<target>" from "Replacement organization"
+      And I should see "Organization: <target_box>" within "#target"
+      And I confirm the popup dialog
+      And I press "Replace"
       Then I should see "<message>"
-        And the "Duplicate organization" text should be "<select_text>"
+      And "<removed_duplicates>" should not be an option for "Duplicate organization"
 
       Examples:
-          | duplicate | target         | duplicate_box | target_box | message                                               | select_text | 
-          | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. | org1        | 
-          | org1      | org2 - 2 users  | org1          | org2       | Organizations successfully merged.                    |             | 
+        | duplicate | target         | duplicate_box | target_box | message                                               | remaining_duplicates |
+        | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. |                      |
+        | org1      | org2 - 2 users | org1          | org2       | Organizations successfully merged.                    | org1                 |
 
 
     @javascript

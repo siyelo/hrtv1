@@ -1,7 +1,7 @@
 - unless current_user.sysadmin?
   - response = current_user.responses.find_by_data_request_id(request)
 
-%tr{:class => (request.final_review? ? "final_review" : nil)}
+%tr{:class => (request.final_review? ? "final_review" : nil), :id => request.id}
   %td.title
     = link_to request.title, set_request_path(request.id), :class => "title"
     - if response && request.final_review?

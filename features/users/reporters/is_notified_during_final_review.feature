@@ -3,30 +3,11 @@ Feature: Reporter can see dashboard
   A reporter can see prompt to review data, when Request is in final review stage
   
   Background:
-    Given an organization exists with name: "WHO"
-    	And a reporter exists with email: "some_user@hrtapp.com", organization: the organization
-	    And a data_request exists with title: "Req1", final_review: true, organization: the organization
-	    And a data_response exists with data_request: the data_request, organization: the organization
-    
-  Scenario: Prompted to review incomplete data
-    Given I am signed in as "some_user@hrtapp.com"
-    When I go to the reporter dashboard page
-    Then I should see "Your response is not yet complete for the Request: 'Req1'."
-  
-  Scenario: Prompted to review incomplete data for each incomplete request
-    Given a data_request exists with title: "Req2", final_review: true, organization: the organization
-    	And a data_response exists with data_request: the data_request, organization: the organization
-	    And I am signed in as "some_user@hrtapp.com"
-    When I go to the reporter dashboard page
-    Then I should see "Your response is not yet complete for the Request: 'Req1'."
-	    And I should see "Your response is not yet complete for the Request: 'Req2'."
-    
-  Scenario: Prompted to review incomplete data for each incomplete request
-    Given a data_request exists with title: "Req2", final_review: false, organization: the organization
-    	And a data_response exists with data_request: the data_request, organization: the organization
-	    And I am signed in as "some_user@hrtapp.com"
-    When I go to the reporter dashboard page
-    Then I should see "Your response is not yet complete for the Request: 'Req1'."
-	    And I should not see "Your response is not yet complete for the Request: 'Req2'."
-
-  # Dont display message for Requests that are in Final Review for some reason but aren't "current"
+    Given an organization exists with name: "organization1"
+      And a data_request exists with title: "data_request1"
+      And a data_response should exist with data_request: the data_request, organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And I am signed in as "reporter@hrtapp.com"
+      
+  Scenario: Prompted to review incomplete data    
+    Then I should see "Empty / Not Started"

@@ -793,7 +793,7 @@
       if( !$keylist ){
         $keylist = $('<ul class="mcdropdown_autocomplete"></ul>').appendTo("body");
         // if IE6 we need an iframe to hide the scrolling list
-        if( isIE6 && !!$.fn.bgIframe ) $keylistiframe = $('<div></div>').bgIframe().appendTo("body");
+        if( isIE6 && !!$.fn.bgIframe ) $keylistiframe = $('<div class="ie_box"></div>').bgIframe().appendTo("body");
       }
 
       // should we show matches?

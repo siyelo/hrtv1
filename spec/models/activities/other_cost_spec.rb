@@ -83,7 +83,8 @@ describe OtherCost do
         organization = Factory(:organization, :currency => 'EUR')
         request      = Factory(:data_request, :organization => organization)
         response     = organization.latest_response
-        oc = Factory(:other_cost, :project => nil, :data_response => response)
+        project      = Factory(:project, :data_response => response)
+        oc = Factory(:other_cost, :project => project, :data_response => response)
         oc.currency.should.eql? 'EUR'
       end
 

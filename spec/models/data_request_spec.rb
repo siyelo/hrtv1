@@ -15,7 +15,6 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:purposes) }
     it { should allow_mass_assignment_of(:locations) }
     it { should allow_mass_assignment_of(:inputs) }
-    it { should allow_mass_assignment_of(:service_levels) }
     it { should allow_mass_assignment_of(:final_review) }
   end
 

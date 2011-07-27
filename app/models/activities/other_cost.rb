@@ -81,8 +81,6 @@ end
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
 #  budget2                      :decimal(, )
 #  budget3                      :decimal(, )
 #  budget4                      :decimal(, )
@@ -93,10 +91,8 @@ end
 #  coding_budget_valid          :boolean         default(FALSE)
 #  coding_budget_cc_valid       :boolean         default(FALSE)
 #  coding_budget_district_valid :boolean         default(FALSE)
-#  service_level_budget_valid   :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
-#  service_level_spend_valid    :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

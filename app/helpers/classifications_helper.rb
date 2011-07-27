@@ -39,8 +39,6 @@ module ClassificationsHelper
       'locations'
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       'inputs'
-    when 'ServiceLevelBudget', 'ServiceLevelSpend'
-      'service_levels'
     end
   end
 end

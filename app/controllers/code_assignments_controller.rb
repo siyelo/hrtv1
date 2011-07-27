@@ -122,16 +122,12 @@ class CodeAssignmentsController < Reporter::BaseController
         'Current Budget by Locations'
       when 'CodingBudgetCostCategorization'
         'Current Budget by Inputs'
-      when 'ServiceLevelBudget'
-        'Current Budget by Service Level'
       when 'CodingSpend'
         'Past Expenditure by Purposes'
       when 'CodingSpendDistrict'
         'Past Expenditure by Locations'
       when 'CodingSpendCostCategorization'
         'Past Expenditure by Inputs'
-      when 'ServiceLevelSpend'
-        'Past Expenditure by Service Level'
       end
     end
 
@@ -143,16 +139,12 @@ class CodeAssignmentsController < Reporter::BaseController
         activity.coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
         activity.coding_budget_cc_classified?
-      when 'ServiceLevelBudget'
-        activity.service_level_budget_classified?
       when 'CodingSpend'
         activity.coding_spend_classified?
       when 'CodingSpendDistrict'
         activity.coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
         activity.coding_spend_cc_classified?
-      when 'ServiceLevelSpend'
-        activity.service_level_spend_classified?
       end
     end
 
@@ -168,8 +160,6 @@ class CodeAssignmentsController < Reporter::BaseController
         [Location, 'locations']
       when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
         [CostCategory, 'inputs']
-      when 'ServiceLevelBudget', 'ServiceLevelSpend'
-        [ServiceLevel, 'service_levels']
       end
     end
 end

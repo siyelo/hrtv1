@@ -16,9 +16,6 @@
     - if @response.request.inputs?
       %li{:class => tab_class(activity, coding_type, 'CodingBudgetCostCategorization')}
         = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingBudgetCostCategorization')
-    - if @response.request.service_levels?
-      %li{:class => tab_class(activity, coding_type, 'ServiceLevelBudget')}
-        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelBudget')
 
   - if params[:controller] == 'activities' || get_coding_type(coding_type) == :spend
     - if @response.request.purposes?
@@ -32,6 +29,3 @@
     - if @response.request.inputs?
       %li{:class => tab_class(activity, coding_type, 'CodingSpendCostCategorization')}
         = link_to "3. Inputs", activity_code_assignments_path(activity, :coding_type => 'CodingSpendCostCategorization')
-    - if @response.request.service_levels?
-      %li{:class => tab_class(activity, coding_type, 'ServiceLevelSpend')}
-        = link_to "4. Service Levels", activity_code_assignments_path(activity, :coding_type => 'ServiceLevelSpend')

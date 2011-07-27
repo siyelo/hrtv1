@@ -58,12 +58,10 @@ describe OtherCost do
       @activity.coding_budget_classified?.should == true
       @activity.coding_budget_cc_classified?.should == true
       @activity.coding_budget_district_classified?.should == true
-      @activity.service_level_budget_classified?.should == true
       @activity.budget_classified?.should == true
       @activity.coding_spend_classified?.should == true
       @activity.coding_spend_cc_classified?.should == true
       @activity.coding_spend_district_classified?.should == true
-      @activity.service_level_spend_classified?.should == true
       @activity.spend_classified?.should == true
       @activity.classified?.should be_true
     end

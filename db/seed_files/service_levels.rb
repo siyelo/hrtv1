@@ -1,5 +1,6 @@
 puts "\n  Loading service_levels.csv..."
 
+class ServiceLevel < Code; end
 ServiceLevel.delete_all
 
 case ENV['HRT_COUNTRY']

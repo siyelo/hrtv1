@@ -27,13 +27,12 @@ module Activity::Classification
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget']
+  BUDGET_CODING_CLASSES = ['CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization']
 
   CLASSIFICATION_MAPPINGS = {
     'CodingBudget' => 'CodingSpend',
     'CodingBudgetDistrict' => 'CodingSpendDistrict',
-    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization',
-    'ServiceLevelBudget' => 'ServiceLevelSpend'
+    'CodingBudgetCostCategorization' => 'CodingSpendCostCategorization'
   }
 
 
@@ -53,10 +52,6 @@ module Activity::Classification
       !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
     end
 
-    def service_level_budget_classified? #service levels
-      !data_response.request.service_levels? || budget.blank? || service_level_budget_valid?
-    end
-
     def coding_spend_classified?
       !data_response.request.purposes? || spend.blank? || coding_spend_valid?
     end
@@ -69,24 +64,18 @@ module Activity::Classification
       !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
     end
 
-    def service_level_spend_classified?
-      !data_response.request.service_levels? || spend.blank? || service_level_spend_valid?
-    end
-
     def budget_classified?
-      budget.blank? ||
-      (coding_budget_classified? &&
-      coding_budget_district_classified? &&
-      coding_budget_cc_classified? &&
-      service_level_budget_classified?)
+      budget.blank? || coding_budget_classified?
+      # NOTE: following classifications are disabled
+      #coding_budget_district_classified? &&
+      #coding_budget_cc_classified? &&
     end
 
     def spend_classified?
-      spend.blank? ||
-      (coding_spend_classified? &&
-      coding_spend_district_classified? &&
-      coding_spend_cc_classified? &&
-      service_level_spend_classified?)
+      spend.blank? || coding_spend_classified?
+      # NOTE: following classifications are disabled
+      #coding_spend_district_classified? &&
+      #coding_spend_cc_classified? &&
     end
 
     # An activity can be considered classified if at least one of these are populated.
@@ -103,16 +92,12 @@ module Activity::Classification
         coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
         coding_budget_cc_classified?
-      when 'ServiceLevelBudget'
-        service_level_budget_classified?
       when 'CodingSpend'
         coding_spend_classified?
       when 'CodingSpendDistrict'
         coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
         coding_spend_cc_classified?
-      when 'ServiceLevelSpend'
-        service_level_spend_classified?
       else
         raise "Unknown type #{coding_type}".to_yaml
       end
@@ -123,12 +108,10 @@ module Activity::Classification
       coded += 1 if coding_budget_classified?
       coded += 1 if coding_budget_district_classified?
       coded += 1 if coding_budget_cc_classified?
-      coded += 1 if service_level_budget_classified?
       coded += 1 if coding_spend_classified?
       coded += 1 if coding_spend_district_classified?
       coded += 1 if coding_spend_cc_classified?
-      coded += 1 if service_level_spend_classified?
-      progress = ((coded.to_f / 8) * 100).to_i # dont need decimal places
+      progress = ((coded.to_f / 6) * 100).to_i # dont need decimal places
     end
 
     def budget_district_coding_adjusted

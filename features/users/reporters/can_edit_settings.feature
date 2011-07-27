@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can edit settings
   In order to setup my organization
   As a reporter

@@ -1801,6 +1801,10 @@ var workplans_index = {
   run: function () {
 
     import_export.init();
+    
+    $(document).ready(function() {
+      $('.js_add_project').trigger('click');
+    });
 
     var updateValues = function (element) {
       var tr = element.parents('tr:first');
@@ -1875,6 +1879,7 @@ var workplans_index = {
         currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
+        currentTr.prev('tr').find('#activity_name').trigger('focus');
       });
     });
 
@@ -1898,15 +1903,19 @@ var workplans_index = {
         if (data.status) {
           var box = element.parents('tr');
           var add_btn = element.parents('tr').next('tr').find('.disabled');
-          add_btn.removeClass('disabled');
 
           if (add_btn.hasClass('add_activity')) {
             element.parents('tr').prevAll('.js_other_costs_subheading:first').before(data.html);
           } else if (add_btn.hasClass('add_other_cost')) {
             element.parents('tr').before(data.html);
           }
-
-          $('.js_activity_add_inline').remove();
+          ajaxLoader.hide();
+          changeRowspan(element, 1);
+          var inputs = form.find('*[data-hint]');
+          form.find('#activity_name').val('');
+          form.find('#activity_description').val('');
+          initDemoText(form.find('*[data-hint]'));
+          form.find('#activity_name').trigger('focus'); 
           $('#workplan').find('.save_btn').show();
         } else {
           var newTr = $(data.html);
@@ -1962,6 +1971,8 @@ var workplans_index = {
           element.parents('tr').next('tr').find('.js_add_project').removeClass('disabled');
           box.after(data.html);
           box.remove();
+          $('.js_add_project').trigger('click');;
+          $('.add_activity').last().trigger('click');;
         } else {
           var newTr = $(data.html);
           var box = element.parents('tr');

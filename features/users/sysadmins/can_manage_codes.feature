@@ -9,7 +9,6 @@ Feature: Admin can manage codes
       And I am signed in as "admin@hrtapp.com"
 
 
-
     Scenario: Admin can CRUD codes
       When I follow "Codes"
         And I follow "Create Code"
@@ -21,11 +20,9 @@ Feature: Admin can manage codes
         And I press "Create New Code"
       Then I should see "Code was successfully created"
         And I should see "code1"
-        And I should see "code1 long"
-        And I should see "code1 official name"
+        And the "code_long_display" field should contain "code1 long"
         And I should see "code1 description"
 
-      When I follow "Edit"
         And I fill in "Short display" with "code2"
         And I fill in "Long display" with "code2 long"
         And I fill in "Official name" with "code2 official name"
@@ -35,7 +32,7 @@ Feature: Admin can manage codes
         And I should see "code2"
         And I should not see "code1"
 
-      When I follow "X"
+      When I follow "Delete this Code"
       Then I should see "Code was successfully destroyed"
         And I should not see "code1"
         And I should not see "code2"
@@ -99,22 +96,3 @@ Feature: Admin can manage codes
             | user2 desc | user1 desc | 
             | Nha        | Mtef       | 
             | Mtef       | Nha        | 
-
-
-    Scenario Outline: a sysadmin can sort codes
-      Given a mtef_code exists with short_display: "code1", description: "code1 desc"
-        And a nha_code exists with short_display: "code2", description: "code2 desc"
-      When I follow "Codes"
-        And I follow "<column_name>"
-      Then column "<column>" row "1" should have text "<text1>"
-        And column "<column>" row "2" should have text "<text2>"
-
-      When I follow "<column_name>"
-      Then column "<column>" row "1" should have text "<text2>"
-        And column "<column>" row "2" should have text "<text1>"
-
-        Examples:
-           | column_name   | column | text1      | text2      | 
-           | Short Display | 1      | code2      | code1      | 
-           | Type          | 2      | Mtef       | Nha        | 
-           | Description   | 3      | code1 desc | code2 desc | 

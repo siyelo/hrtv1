@@ -7,7 +7,7 @@ Feature: SysAdmin can approve a code breakdown for each activity
    Given an organization exists with name: "UNAIDS"
     And a data_request exists with title: "Req1", organization: the organization
     And an organization exists with name: "WHO"
-    And a data_response exists with data_request: the data_request, organization: the organization
+    And a data_response should exist with data_request: the data_request, organization: the organization
     And a project exists with name: "TB Treatment Project", data_response: the data_response
     And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
     And a mtef_code exists with short_display: "Mtef code"
@@ -20,6 +20,7 @@ Feature: SysAdmin can approve a code breakdown for each activity
     Scenario: See a budget coding breakdown
      When I go to the admin review data response page for organization "WHO", request "Req1"
       And wait a few moments
+      Then show me the page
      Then I should see "Mtef code"
       And I should see "1,000"
 

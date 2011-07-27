@@ -9,7 +9,8 @@
         - # sysadmin has no request/response
         - # TODO: show request name when logged in as admin
         - # but you're viewing a reporter's org/response
-        = "[#{current_request.name}]"
+        - unless current_user.sysadmin?
+          = "[#{current_request.name}]"
 
     .right
       - country = ENV['HRT_COUNTRY'] || 'rwanda'

@@ -282,19 +282,20 @@ end
 
 Given /^a basic org \+ reporter profile, signed in$/ do
   steps %Q{
-    Given a data_request exists with title: "Req1"
-    And an organization exists with name: "UNDP"
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-    And I am signed in as "reporter@hrtapp.com"
+    Given an organization exists with name: "organization1"
+      And a data_request exists with title: "data_request1"
+      And a data_response should exist with data_request: the data_request, organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And I am signed in as "reporter@hrtapp.com"
   }
 end
 
 Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*)"$/ do |org, request|
   steps %Q{
-    Given a data_request exists with title: "#{request}"
-    And an organization exists with name: "#{org}"
-    And a data_response exists with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
+    Given an organization exists with name: "#{org}"
+    And a data_request exists with title: "#{request}"
+    And a data_response should exist with data_request: the data_request, organization: the organization
+    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     And a project exists with name: "project1", data_response: the data_response
     And an activity exists with name: "activity1", data_response: the data_response, project: the project
   }

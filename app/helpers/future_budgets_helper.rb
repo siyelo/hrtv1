@@ -1,0 +1,2 @@
+module FutureBudgetsHelper
+end

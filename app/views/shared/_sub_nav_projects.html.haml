@@ -20,7 +20,7 @@
     %li{:class => 'inactive'}
       = link_to 'Locations', '#', :id => "inactive_location", "original-title" => "We'll re-enable Locations pending the changes to the Kenyan constitution."
   %li{:class => (params[:controller] == 'workplans' && params[:action] == 'keph' ? 'active' : nil)}
-    = link_to 'Future Budgets', response_long_term_budgets_path(@response)
+    = link_to 'Future Budgets', response_future_budgets_path(@response)
 
   %li{:class => (params[:controller] == 'responses' && params[:action] == 'submit' ? 'active' : nil)}
     = link_to 'Review & Submit', submit_response_path(@response)

@@ -69,12 +69,13 @@ ActionController::Routing::Routes.draw do |map|
       district.resources :organizations, :only => [:index, :show],
         :controller => "districts/organizations"
     end
-    response.resources :classifications,
-      :only => [:edit, :update, :destroy]
     response.resources :workplans
     response.resources :funders
     response.resources :implementers
-    response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
+    response.resources :classifications,
+      :only => [:edit, :update, :destroy]
+    response.resources :future_budgets,
+      :only => [:index, :create]
   end
 
   map.resources :activities do |activity|

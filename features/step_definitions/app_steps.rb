@@ -441,3 +441,16 @@ Given /^the latest response for "([^"]*)" is submitted$/ do |org_name|
   @response.save(false)
 end
 
+Then /^I should receive a csv file(?: "([^"]*)")?/ do |file|
+  result = page.response_headers['Content-Type'].should == "text/csv; charset=iso-8859-1; header=present"
+  if result
+    result = page.response_headers['Content-Disposition'].should =~ /#{file}/
+  end
+  result
+end
+
+When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
+  with_scope(selector) do
+    page.execute_script("$('#{element}').mouseover();")
+  end
+end

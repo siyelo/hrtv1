@@ -44,6 +44,8 @@ class Activity < ActiveRecord::Base
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
+  has_many :purposes, :through => :code_assignments,
+    :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
   has_many :code_assignments, :dependent => :destroy
   has_many :comments, :as => :commentable, :dependent => :destroy
   has_many :coding_budget, :dependent => :destroy
@@ -68,14 +70,14 @@ class Activity < ActiveRecord::Base
   named_scope :only_simple,          { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
   named_scope :only_simple_with_request, lambda {|request| { :select => 'DISTINCT activities.*',
-                                                             :joins => 'INNER JOIN data_responses ON 
+                                                             :joins => 'INNER JOIN data_responses ON
                                                                         data_responses.id = activities.data_response_id',
                                                              :conditions => ['(activities.type IS NULL
                                                                               OR activities.type IN (?)) AND
                                                                               data_responses.data_request_id = ?',
                                                                               'OtherCost', request.id]}}
   named_scope :with_request, lambda {|request| {  :select => 'DISTINCT activities.*',
-                                                  :joins => 'INNER JOIN data_responses ON 
+                                                  :joins => 'INNER JOIN data_responses ON
                                                              data_responses.id = activities.data_response_id',
                                                   :conditions => ['data_responses.data_request_id = ?', request.id]}}
   named_scope :with_a_project,       { :conditions => "activities.id IN
@@ -174,7 +176,7 @@ class Activity < ActiveRecord::Base
   end
 
   def self.jawp_activities(request = nil)
-    request ? @activities = Activity.only_simple_with_request(request) : @activities = Activity.only_simple    
+    request ? @activities = Activity.only_simple_with_request(request) : @activities = Activity.only_simple
     @activities.find(:all, :include => [:locations, :provider, :organizations,
                                         :beneficiaries, {:data_response => :organization}])
   end

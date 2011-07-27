@@ -190,9 +190,9 @@ module ApplicationHelper
 
   # given a project or activity, render a nice name from either
   # the name() or description()
-  def nice_name(object, length=16)
-    descr = object.description.presence ||
-            object.name.presence ||
+  def nice_name(object, length = 16)
+    descr = object.name.presence ||
+            object.description.presence ||
             "Unnamed #{object.class.to_s.titleize}"
     truncate(descr, :length => length)
   end

@@ -3,7 +3,9 @@
   %th Primary Contact (Phone)
   %th Secondary Contacts
   %th Activities Approved
+  %th Status
   - if current_user.admin?
     %th Raw Type
     %th Fosaid
+  - if current_user.activity_manager?
     %th

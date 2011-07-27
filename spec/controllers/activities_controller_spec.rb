@@ -3,18 +3,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe ActivitiesController do
 
   describe "Routing shortcuts for Activities (activities/1) should map" do
-    controller_name :activities
-
-    before(:each) do
-      @organization  = Factory(:organization)
-      @data_request  = Factory(:data_request, :organization => @organization)
-      @data_response = @organization.latest_response
-      @project       = Factory(:project, :data_response => @data_response)
-      @activity      = Factory(:activity, :data_response => @data_response, :project => @project)
-      @activity.stub!(:to_param).and_return('1')
-      @activities.stub!(:find).and_return(@activity)
-    end
-
     it "response_activities_path(1) to /responses/1/activities" do
       response_activities_path(1).should == '/responses/1/activities'
     end

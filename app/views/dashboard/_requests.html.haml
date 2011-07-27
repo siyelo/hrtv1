@@ -10,7 +10,7 @@
         %th Requested By
         %th Due
         - if current_user.reporter?
-          %th Submitted at
+          %th Ready to Submit
           %th Status
     %tbody
       = render :partial => 'request', :collection => @requests

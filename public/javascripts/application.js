@@ -1216,19 +1216,42 @@ var commentsInit = function () {
   });
 }
 
+var dropdown = {
+  // find the dropdown menu relative to the current element
+  menu: function(element){
+    return element.parents('.js_dropdown_menu');
+  },
+
+  toggle_on: function (menu_element) {
+    menu_element.find('.menu_items').slideDown(100);
+    menu_element.addClass('persist');
+  },
+
+  toggle_off: function (menu_element) {
+    menu_element.find('.menu_items').slideUp(100);
+    menu_element.removeClass('persist');
+  }
+};
+
 var projects_index = {
   run: function () {
-    // stop moving to top
-    $('.dropdown_trigger').click(function (e) {e.preventDefault()});
 
-    $('.dropdown_menu').hover(function (e){
+    // use click() not toggle() here, as toggle() doesnt
+    // work when menu items are also toggling it
+    $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
-      $('ul', this).slideDown(100);
-      $('.dropdown_trigger').addClass('persist');
-    }, function(e) {
-      e.preventDefault();
-      $('ul', this).slideUp(100);
-      $('.dropdown_trigger').removeClass('persist');
+      menu = dropdown.menu($(this));
+      if(!menu.is('.persist')){
+        dropdown.toggle_on(menu);
+      } else {
+        dropdown.toggle_off(menu);
+      };
+    });
+
+    $('.js_dropdown_menu .menu_items a').click(function (e){
+      menu = dropdown.menu($(this));
+      dropdown.toggle_off(menu);
+      $(this).click; // continue with desired click action
     });
 
     $('.js_upload_btn').click(function (e) {
@@ -1573,7 +1596,7 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
       } else {
         $(".organizations").hide().css('visibility', 'hidden');
       }
-      
+
       if (element.val()) {
         $(".locations").show().css('visibility', 'visible');
       } else {
@@ -1754,7 +1777,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
 $(function () {
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', live: true, html: true});
+  $('.tooltip').tipsy({gravity: 'w', delayOut: 800, fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

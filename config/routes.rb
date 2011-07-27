@@ -53,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
     response.resources :projects,
       :collection => {:create_from_file => :post,
                       :download_template => :get,
+                      :download_workplan => :get,
                       :bulk_edit => :get,
                       :export => :get,
                       :bulk_update => :put}

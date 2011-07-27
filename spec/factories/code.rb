@@ -17,7 +17,14 @@ end
 Factory.define :nsp_code, :class => Nsp, :parent => :code do |f|
 end
 
+# could use any of the mtef/nha/nasa/nsp here
+Factory.define :purpose, :parent => :nha_code do |f|
+end
+
 Factory.define :cost_category_code, :class => CostCategory, :parent => :code do |f|
+end
+
+Factory.define :input, :parent => :cost_category_code do |f|
 end
 
 Factory.define :other_cost_code, :class => OtherCostCode, :parent => :code do |f|

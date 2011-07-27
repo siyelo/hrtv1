@@ -1458,7 +1458,9 @@ var classifications_edit = {
           allowParentSelect: true,
           delim: ">",
           select: purposes.select_purpose,
-          targetColumnSize: 1
+          targetColumnSize: 1,
+          minRows: 1000, // force one column
+          maxRows: 1000 // force one column
         })
       },
 
@@ -2180,7 +2182,7 @@ $(function () {
     if (typeof(window[controller_action]) !== 'undefined' && typeof(window[controller_action]['run']) === 'function') {
       window[controller_action]['run']();
     }
-  } 
+  }
 
   $(".closeFlash").click(function (e) {
     e.preventDefault();

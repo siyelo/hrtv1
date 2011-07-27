@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110727101307) do
+ActiveRecord::Schema.define(:version => 20110727121753) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -45,8 +45,6 @@ ActiveRecord::Schema.define(:version => 20110727101307) do
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.decimal  "budget2"
     t.decimal  "budget3"
     t.decimal  "budget4"

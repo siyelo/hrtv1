@@ -74,8 +74,6 @@ ActionController::Routing::Routes.draw do |map|
     response.resources :implementers
     response.resources :classifications,
       :only => [:edit, :update, :destroy]
-    response.resources :future_budgets,
-      :only => [:index, :create]
   end
 
   map.resources :activities do |activity|
@@ -90,6 +88,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :organizations, :only => [:edit, :update]
+  map.resources :long_term_budgets, :only => [:show, :update]
 
   map.resources :members, :controller => "users",
     :only => [:index, :create, :edit, :update, :destroy],

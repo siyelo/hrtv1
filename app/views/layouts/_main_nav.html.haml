@@ -12,7 +12,7 @@
         %li{:class => (Admin::UsersController == controller.class ? "active" : nil)}
           = link_to "Members", admin_users_path
       - else
-        %li{:class => ([WorkplansController, ProjectsController, ActivitiesController, FundersController, ImplementersController, FutureBudgetsController, OtherCostsController, ClassificationsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
+        %li{:class => ([WorkplansController, ProjectsController, ActivitiesController, FundersController, ImplementersController, LongTermBudgetsController, OtherCostsController, ClassificationsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
           = link_to 'Projects', response_projects_path(current_or_last_response)
 
         %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}

@@ -1,4 +1,4 @@
-class Mtef < Code
+class Mtef < Purpose
 
   def self.codes_by_level(level = -1)
     unless level == -1
@@ -12,13 +12,6 @@ class Mtef < Code
   end
 
 end
-
-
-
-
-
-
-
 
 # == Schema Information
 #

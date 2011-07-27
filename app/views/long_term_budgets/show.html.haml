@@ -1,0 +1,27 @@
+- content_for :sub_nav do
+  = render 'shared/sub_nav_projects'
+
+%h1.main_heading Future Budgets
+
+%table.standard
+  %thead
+    %tr.head
+      %th Programme Area
+      %th= "FY #{@year + 1}-#{@year + 2}"
+      %th= "FY #{@year + 2}-#{@year + 3}"
+      %th= "FY #{@year + 3}-#{@year + 4}"
+      %th= "FY #{@year + 4}-#{@year + 5}"
+  %tbody
+    %tr
+      %td Child Health
+      %td
+        %input{:type => "text", :value => "1,000,000"}
+      %td
+        %input{:type => "text", :value => ""}
+      %td
+        %input{:type => "text", :value => ""}
+      %td
+        %input{:type => "text", :value => ""}
+
+%br
+= link_to 'Save', '#', :class => 'save_next_btn right next'

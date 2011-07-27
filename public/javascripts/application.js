@@ -1123,7 +1123,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     $( ".combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
                                 // handled by the "add row" js callback
-    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber  
+    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
     validateDates($('#project_start_date'), $('#project_end_date'));
 
@@ -1373,7 +1373,7 @@ var activity_form = function () {
     if(element.val() == "-1"){
       $('.implementer_container').hide();
     }
-  }); 
+  });
 
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
@@ -1405,10 +1405,10 @@ var activities_new = activities_create = activities_edit = activities_update = {
 var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
   run: function () {
     validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
-    
+
     $(".combobox").combobox();
     $(".ui-autocomplete-input").attr('id', 'theCombobox');
-    
+
   }
 };
 
@@ -1557,6 +1557,7 @@ var classifications_edit = {
         //$('.mcdropdown_autocomplete').remove()
         $('.mcdropdown_menu').hide();
         $('.mcdropdown_autocomplete').hide();
+        $('.ie_box').hide();
       },
 
       //on purpose select

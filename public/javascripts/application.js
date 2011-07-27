@@ -1129,6 +1129,19 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
     register_funding_flow_edit_event();
     close_funding_flow_fields($('.funding_flows .fields'));
+
+    $('#project_name').keydown(function (e) {
+      var project_name_input = $(this);
+      var inline_errors = project_name_input.parents('li:first').find('.inline-errors');
+
+      if (project_name_input.val().length > 50) {
+        if (inline_errors.length == 0) {
+        project_name_input.next().after('<p class="inline-errors">is too long (maximum is 50 characters)</p>');
+        }
+      } else {
+        inline_errors.remove();
+      }
+    });
   }
 };
 

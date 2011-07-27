@@ -49,6 +49,7 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
+  validates_length_of :name, :maximum => 50
   validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :allow_nil => true
 

@@ -1,14 +1,25 @@
 class LongTermBudgetsController < Reporter::BaseController
-  before_filter :load_current_response
   before_filter :load_organization
+  before_filter :load_long_term_budget
+  before_filter :load_current_response
 
   def show
-    @year = params[:id].to_i
+    4.times { @long_term_budget.budget_entries.build(:purpose_id => Purpose.all.first) }
+  end
+
+  def update
+    @long_term_budget.update_budgets(params[:long_term_budgets])
+    redirect_to long_term_budget_url(@year)
   end
 
   private
     def load_organization
       @organization = current_user.organization
+    end
+
+    def load_long_term_budget
+      @long_term_budget = LongTermBudget.find_or_create_by_organization_id_and_year(
+                                          @organization.id, params[:id])
     end
 
     def load_current_response

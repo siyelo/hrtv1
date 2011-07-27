@@ -1,0 +1,8 @@
+%tr
+  %td= select_tag :"long_term_budgets[purpose_id]", options_for_select(Purpose.all.map{ |p| [p.short_display, p.id] }), :style => 'width: 250px'
+  - if budget_entries[0].year
+    - entries = budget_entries.sort{|be| be.year }
+  - else
+    - entries = budget_entries
+  - entries.each_with_index do |budget_entry, index|
+    %td= text_field_tag :"long_term_budgets[#{purpose_id}][#{index}]", budget_entry.amount

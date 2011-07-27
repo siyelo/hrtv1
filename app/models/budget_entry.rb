@@ -7,3 +7,17 @@ class BudgetEntry < ActiveRecord::Base
   ### Validations
   validates_presence_of :long_term_budget_id, :purpose_id, :year, :amount
 end
+
+# == Schema Information
+#
+# Table name: budget_entries
+#
+#  id                  :integer         not null, primary key
+#  long_term_budget_id :integer
+#  purpose_id          :integer
+#  year                :integer
+#  amount              :decimal(, )
+#  created_at          :datetime
+#  updated_at          :datetime
+#
+

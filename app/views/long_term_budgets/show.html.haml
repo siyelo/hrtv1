@@ -3,25 +3,19 @@
 
 %h1.main_heading Future Budgets
 
-%table.standard
-  %thead
-    %tr.head
-      %th Programme Area
-      %th= "FY #{@year + 1}-#{@year + 2}"
-      %th= "FY #{@year + 2}-#{@year + 3}"
-      %th= "FY #{@year + 3}-#{@year + 4}"
-      %th= "FY #{@year + 4}-#{@year + 5}"
-  %tbody
-    %tr
-      %td Child Health
-      %td
-        %input{:type => "text", :value => "1,000,000"}
-      %td
-        %input{:type => "text", :value => ""}
-      %td
-        %input{:type => "text", :value => ""}
-      %td
-        %input{:type => "text", :value => ""}
+- form_tag long_term_budget_path(@long_term_budget.year), :method => :put do
+  %table.standard
+    %thead
+      %tr.head
+        %th Health Function
+        %th= "FY #{@long_term_budget.year + 1}-#{@long_term_budget.year + 2}"
+        %th= "FY #{@long_term_budget.year + 2}-#{@long_term_budget.year + 3}"
+        %th= "FY #{@long_term_budget.year + 3}-#{@long_term_budget.year + 4}"
+        %th= "FY #{@long_term_budget.year + 4}-#{@long_term_budget.year + 5}"
+    %tbody
+      - @long_term_budget.budget_entries.group_by{|be| be.purpose_id }.each_pair do |purpose_id, budget_entries|
+        = render 'purpose_long_term_budgets', :purpose_id => purpose_id, :budget_entries => budget_entries
 
-%br
-= link_to 'Save', '#', :class => 'save_next_btn right next'
+      %tr
+        %td.borderless{:colspan => 100}
+          = submit_tag "Save", :class => 'save_btn right'

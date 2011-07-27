@@ -18,6 +18,7 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.integer  "provider_id"
     t.text     "description"
     t.string   "type"
+    t.decimal  "budget"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "spend"
@@ -35,10 +36,8 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
+    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
+    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
@@ -280,15 +279,12 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "budget"
     t.decimal  "spend"
     t.decimal  "entire_budget"
     t.string   "currency"
     t.integer  "data_response_id"
     t.integer  "comments_count",   :default => 0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
     t.integer  "user_id"
     t.date     "am_approved_date"
   end

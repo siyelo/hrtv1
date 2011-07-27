@@ -59,7 +59,6 @@ class Project < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :description, :spend, :currency, :data_response, :activities,
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
-                  :budget2, :budget3, :budget4, :budget5,
                   :user_id
   ### Delegates
   delegate :organization, :to => :data_response
@@ -459,6 +458,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -468,15 +468,12 @@ end
 #  description      :text
 #  created_at       :datetime
 #  updated_at       :datetime
+#  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
 #  currency         :string(255)
 #  data_response_id :integer         indexed
 #  comments_count   :integer         default(0)
-#  budget2          :decimal(, )
-#  budget3          :decimal(, )
-#  budget4          :decimal(, )
-#  budget5          :decimal(, )
 #  user_id          :integer
 #  am_approved_date :date
 #

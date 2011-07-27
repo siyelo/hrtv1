@@ -69,13 +69,6 @@
 
         %ul.second-half
           = f.input :budget, :label => "Current Budget", :required => false, :wrapper_html => {:class => 'grid-20'} 
-            %li.grid-80
-              %label Future Budgets
-              %ul
-                = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
-                = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
-                = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
-                = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
 
       %li
         - unless f.object.provider

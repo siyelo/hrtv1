@@ -2,26 +2,11 @@ require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelpers
 
-  ### Aliases
-  #budget
-  alias_attribute :budget_gor_q2, :budget_q1
-  alias_attribute :budget_gor_q3, :budget_q2
-  alias_attribute :budget_gor_q4, :budget_q3
-  alias_attribute :budget_gor_q1_next_fy, :budget_q4
-  alias_attribute :budget_gor_q1, :budget_q4_prev
-  #spend
-  alias_attribute :spend_gor_q2, :spend_q1
-  alias_attribute :spend_gor_q3, :spend_q2
-  alias_attribute :spend_gor_q4, :spend_q3
-  alias_attribute :spend_gor_q1_next_fy, :spend_q4
-  alias_attribute :spend_gor_q1, :spend_q4_prev
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
-                  :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4,
-                  :updated_at, :project_from_id
+                  :spend, :budget, :updated_at, :project_from_id
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
@@ -33,8 +18,6 @@ class FundingFlow < ActiveRecord::Base
   alias :response :data_response
   alias :response= :data_response=
 
-
-  before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
   # validates_presence_of :project # ???
@@ -64,22 +47,6 @@ class FundingFlow < ActiveRecord::Base
 
   def name
     "From: #{from.name} - To: #{to.name}"
-  end
-
-  def spend_from_quarters
-    if spend.nil?
-      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0)
-    else
-      spend
-    end
-  end
-
-  def budget_from_quarters
-    if budget.nil?
-      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0)
-    else
-      budget
-    end
   end
 
   def updated_at

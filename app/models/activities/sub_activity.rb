@@ -175,7 +175,6 @@ class SubActivity < Activity
 end
 
 
-
 # == Schema Information
 #
 # Table name: activities
@@ -187,6 +186,7 @@ end
 #  provider_id                  :integer         indexed
 #  description                  :text
 #  type                         :string(255)     indexed
+#  budget                       :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
@@ -204,10 +204,6 @@ end
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

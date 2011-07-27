@@ -52,21 +52,8 @@ describe Activity do
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
-    it { should validate_numericality_of(:budget2) }
-    it { should validate_numericality_of(:budget3) }
-    it { should validate_numericality_of(:budget4) }
-    it { should validate_numericality_of(:budget5) }
-    it { should validate_numericality_of(:budget_q4_prev) }
-    it { should validate_numericality_of(:budget_q1) }
-    it { should validate_numericality_of(:budget_q2) }
-    it { should validate_numericality_of(:budget_q3) }
-    it { should validate_numericality_of(:budget_q4) }
     it { should validate_numericality_of(:spend) }
-    it { should validate_numericality_of(:spend_q4_prev) }
-    it { should validate_numericality_of(:spend_q1) }
-    it { should validate_numericality_of(:spend_q2) }
-    it { should validate_numericality_of(:spend_q3) }
-    it { should validate_numericality_of(:spend_q4) }
+
     #it "accepts start date < end date" do
       #a = Factory.build(:activity,
                         #:start_date => DateTime.new(2010, 01, 01),

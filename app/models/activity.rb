@@ -18,10 +18,7 @@ class Activity < ActiveRecord::Base
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :text_for_targets, :name, :description, :start_date, :end_date,
-    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-    :beneficiary_ids, :location_ids, :provider_id,
+    :approved, :am_approved, :spend, :budget, :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
     :am_approved_date, :user_id
@@ -262,8 +259,8 @@ class Activity < ActiveRecord::Base
   end
 
   def has_budget_or_spend?
-    return true if self.spend.present?
-    return true if self.budget.present?
+    return true if spend.present?
+    return true if budget.present?
   end
 
   def possible_duplicate?
@@ -525,6 +522,7 @@ end
 #  provider_id                  :integer         indexed
 #  description                  :text
 #  type                         :string(255)     indexed
+#  budget                       :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
@@ -542,10 +540,6 @@ end
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

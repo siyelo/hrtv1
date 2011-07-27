@@ -1,3 +1,4 @@
+@run
 Feature: Admin can manage data requests
   In order to collect data in the system
   As a admin
@@ -9,14 +10,13 @@ Feature: Admin can manage data requests
     And a sysadmin exists with email: "admin@hrtapp.com", organization: the organization
     And I am signed in as "admin@hrtapp.com"
     
-    @javascript
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
        And I follow "Create Data Request"
        And I select "org1" from "Organization"
        And I fill in "Title" with "My data response title"
-       And I fill in "Due date" with "2010-09-01"
-       And I fill in "Start year" with "2010"
+       And I fill in "Due date" with "2011-09-01"
+       And I fill in "Start year" with "2010-01-01"
        And I press "Create request"
       Then I should see "Request was successfully created"
        And I should see "My data response title"

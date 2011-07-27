@@ -96,3 +96,22 @@ Feature: Admin can manage codes
             | user2 desc | user1 desc | 
             | Nha        | Mtef       | 
             | Mtef       | Nha        | 
+
+
+    Scenario Outline: a sysadmin can sort codes
+      Given a mtef_code exists with short_display: "code1", description: "code1 desc"
+        And a nha_code exists with short_display: "code2", description: "code2 desc"
+      When I follow "Codes"
+        And I follow "<column_name>"
+      Then column "<column>" row "1" should have text "<text1>"
+        And column "<column>" row "2" should have text "<text2>"
+
+      When I follow "<column_name>"
+      Then column "<column>" row "1" should have text "<text2>"
+        And column "<column>" row "2" should have text "<text1>"
+
+        Examples:
+           | column_name   | column | text1      | text2      | 
+           | Short Display | 1      | code2      | code1      | 
+           | Type          | 2      | Mtef       | Nha        | 
+           | Description   | 3      | code1 desc | code2 desc | 

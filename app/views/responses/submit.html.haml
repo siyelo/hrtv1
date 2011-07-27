@@ -22,9 +22,9 @@
   %li.alt
     %h2 Settings
   %li.dashboard_section
-    %h3{:class => ready(@response.valid?)}
+    %h3{:class => ready(@response.organization.valid?)}
       Your Settings
-      - unless @response.valid?
+      - unless @response.organization.valid?
         %span.info
           = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
   %li.alt

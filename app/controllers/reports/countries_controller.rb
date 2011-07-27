@@ -9,13 +9,6 @@ class Reports::CountriesController < Reports::BaseController
 
   end
 
-  def funders
-    @budget_ufs_values = Charts::CountryPies::ultimate_funding_sources('budget', @request_id)
-    @budget_fa_values  = Charts::CountryPies::financing_agents('budget', @request_id)
-    @spend_ufs_values  = Charts::CountryPies::ultimate_funding_sources('spend', @request_id)
-    @spend_fa_values   = Charts::CountryPies::financing_agents('spend', @request_id)
-  end
-
   def classifications
     @pie          = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type     = get_code_type_and_initialize(params[:code_type])

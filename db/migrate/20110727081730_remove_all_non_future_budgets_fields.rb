@@ -6,6 +6,7 @@ class RemoveAllNonFutureBudgetsFields < ActiveRecord::Migration
     remove_column :activities, :budget_q4
     remove_column :activities, :budget_q4_prev
     remove_column :projects, :budget
+    remove_column :activities, :budget
   end
 
   def self.down
@@ -15,5 +16,6 @@ class RemoveAllNonFutureBudgetsFields < ActiveRecord::Migration
     add_column :activities, :budget_q4, :decimal
     add_column :activities, :budget_q4_prev, :decimal
     add_column :projects, :budget, :decimal
+    add_column :activities, :budget, :decimal
   end
 end

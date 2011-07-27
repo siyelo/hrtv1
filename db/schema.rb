@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.integer  "provider_id"
     t.text     "description"
     t.string   "type"
-    t.decimal  "budget"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "spend"

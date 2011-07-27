@@ -458,6 +458,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -467,7 +468,6 @@ end
 #  description      :text
 #  created_at       :datetime
 #  updated_at       :datetime
-#  budget           :decimal(, )
 #  spend            :decimal(, )
 #  entire_budget    :decimal(, )
 #  currency         :string(255)

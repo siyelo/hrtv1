@@ -48,7 +48,6 @@ end
 #  provider_id                  :integer         indexed
 #  description                  :text
 #  type                         :string(255)     indexed
-#  budget                       :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )

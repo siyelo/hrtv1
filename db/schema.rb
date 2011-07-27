@@ -281,7 +281,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget"
     t.decimal  "spend"
     t.decimal  "entire_budget"
     t.string   "currency"

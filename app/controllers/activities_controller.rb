@@ -107,7 +107,7 @@ class ActivitiesController < Reporter::BaseController
     activity = Activity.find(params[:id])
     other_costs = params[:other_costs] == '1' ? true : false
     code_roots =  other_costs ? OtherCostCode.roots : Code.purposes.roots
-    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.purposes.roots), :service_level_roots => ServiceLevel.roots}
+    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.purposes.roots)}
   end
 
   def project_sub_form
@@ -182,7 +182,7 @@ class ActivitiesController < Reporter::BaseController
                          :html => render_to_string({:partial => 'new_inline',
                                               :locals => {:activity => @activity,
                                                           :type => params[:type]}})}
-      end 
+      end
     end
 
     def confirm_activity_type

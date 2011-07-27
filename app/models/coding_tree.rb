@@ -89,8 +89,6 @@ class CodingTree
       @activity.class.to_s == "OtherCost" ? OtherCostCode.roots : Code.purposes.roots
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
-    when 'ServiceLevelBudget', 'ServiceLevelSpend'
-      ServiceLevel.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       @activity.locations
     when 'HsspBudget', 'HsspSpend'
@@ -219,8 +217,6 @@ class CodingTree
         @activity.class.to_s == "OtherCost" ? OtherCostCode.all : Code.all
       when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
         CostCategory.all
-      when 'ServiceLevelBudget', 'ServiceLevelSpend'
-        ServiceLevel.all
       when 'CodingBudgetDistrict', 'CodingSpendDistrict'
         @activity.locations
       when 'HsspBudget', 'HsspSpend'

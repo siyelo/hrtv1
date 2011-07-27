@@ -10,8 +10,8 @@ class Activity < ActiveRecord::Base
 
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", 
-                         "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget", 
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure",
+                         "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget",
                          "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
 
 
@@ -46,11 +46,9 @@ class Activity < ActiveRecord::Base
   has_many :coding_budget, :dependent => :destroy
   has_many :coding_budget_cost_categorization, :dependent => :destroy
   has_many :coding_budget_district, :dependent => :destroy
-  has_many :service_level_budget, :dependent => :destroy
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
-  has_many :service_level_spend, :dependent => :destroy
 
   ### Class-Level Method Invocations
   strip_commas_from_all_numbers
@@ -289,13 +287,13 @@ class Activity < ActiveRecord::Base
   def update_all_classified_amount_caches
     if budget_changed?
       [CodingBudget, CodingBudgetDistrict,
-         CodingBudgetCostCategorization, ServiceLevelBudget].each do |type|
+         CodingBudgetCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
     if spend_changed?
       [CodingSpend, CodingSpendDistrict,
-         CodingSpendCostCategorization, ServiceLevelSpend].each do |type|
+         CodingSpendCostCategorization].each do |type|
         set_classified_amount_cache(type)
       end
     end
@@ -332,9 +330,9 @@ class Activity < ActiveRecord::Base
 
   def classification_amount(classification_type)
     case classification_type.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'ServiceLevelBudget'
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
       budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'ServiceLevelSpend'
+    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
       spend
     else
       raise "Invalid coding_klass #{classification_type}".to_yaml
@@ -509,11 +507,9 @@ class Activity < ActiveRecord::Base
       when 'CodingBudget' then :coding_budget_valid
       when 'CodingBudgetCostCategorization' then :coding_budget_cc_valid
       when 'CodingBudgetDistrict' then :coding_budget_district_valid
-      when 'ServiceLevelBudget' then :service_level_budget_valid
       when 'CodingSpend' then :coding_spend_valid
       when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
       when 'CodingSpendDistrict' then :coding_spend_district_valid
-      when 'ServiceLevelSpend' then :service_level_spend_valid
       else
         raise "Unknown type #{type}".to_yaml
       end
@@ -562,8 +558,6 @@ end
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
-#  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
 #  budget2                      :decimal(, )
 #  budget3                      :decimal(, )
 #  budget4                      :decimal(, )
@@ -574,10 +568,8 @@ end
 #  coding_budget_valid          :boolean         default(FALSE)
 #  coding_budget_cc_valid       :boolean         default(FALSE)
 #  coding_budget_district_valid :boolean         default(FALSE)
-#  service_level_budget_valid   :boolean         default(FALSE)
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
-#  service_level_spend_valid    :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
 #
 

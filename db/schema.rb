@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110725143412) do
+ActiveRecord::Schema.define(:version => 20110727101307) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -57,10 +57,8 @@ ActiveRecord::Schema.define(:version => 20110725143412) do
     t.boolean  "coding_budget_valid",          :default => false
     t.boolean  "coding_budget_cc_valid",       :default => false
     t.boolean  "coding_budget_district_valid", :default => false
-    t.boolean  "service_level_budget_valid",   :default => false
     t.boolean  "coding_spend_valid",           :default => false
     t.boolean  "coding_spend_cc_valid",        :default => false
-    t.boolean  "service_level_spend_valid",    :default => false
     t.boolean  "coding_spend_district_valid",  :default => false
   end
 
@@ -97,7 +95,6 @@ ActiveRecord::Schema.define(:version => 20110725143412) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -150,7 +147,6 @@ ActiveRecord::Schema.define(:version => 20110725143412) do
     t.boolean  "purposes",          :default => true
     t.boolean  "locations",         :default => true
     t.boolean  "inputs",            :default => true
-    t.boolean  "service_levels",    :default => true
     t.boolean  "budget_by_quarter", :default => false
     t.integer  "start_year"
   end

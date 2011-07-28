@@ -1,5 +1,8 @@
 class LongTermBudget < ActiveRecord::Base
 
+  # exception for invalid params
+  class InvalidParams < StandardError; end
+
   ### Associations
   belongs_to :organization
   has_many   :budget_entries, :dependent => :destroy
@@ -8,23 +11,47 @@ class LongTermBudget < ActiveRecord::Base
   validates_presence_of :organization_id, :year
   ### TODO: add uniqueness validations
 
-  def update_budgets(classifications)
-    classifications.each_pair do |purpose_id, amounts|
-      #raise purpose_id.to_yaml
-      #raise amounts.to_yaml
-      amounts.each_pair do |index, amount|
-        budget_entry_year =  year + index.to_i + 1
-        budget_entry = budget_entries.
-          find_or_initialize_by_purpose_id_and_year(purpose_id, budget_entry_year)
-        budget_entry.amount = amount
-        budget_entry.save
+  def update_budget_entries(classifications)
+    if classifications.present?
+      delete_budget_entries_unsubmitted_purposes(classifications.keys)
+      classifications.each_pair do |purpose_id, amounts|
+        amounts = check_and_update_budget_entry_amounts(amounts)
+        amounts.each_pair do |index, amount|
+          create_budget_entry_for_index!(index, purpose_id, amount)
+        end
       end
+    else
+      budget_entries.delete_all
     end
   end
 
   def budget_entries_by_purposes
     budget_entries.find(:all, :include => :purpose).group_by{|be| be.purpose }
   end
+
+  private
+    def delete_budget_entries_unsubmitted_purposes(purpose_ids)
+      BudgetEntry.delete_all(["long_term_budget_id = ? AND
+                              purpose_id NOT IN (?)", self.id, purpose_ids])
+    end
+
+    def check_and_update_budget_entry_amounts(amounts)
+      defaults = HashWithIndifferentAccess.new({:"0" => 0, :"1" => 0, :"2" => 0, :"3" => 0})
+
+      # check if keys are not included in default keys
+      raise InvalidParams unless amounts.keys.all?{|k| defaults.keys.include?(k) }
+
+      # merge amounts into defaults
+      defaults.merge(amounts)
+    end
+
+    def create_budget_entry_for_index!(index, purpose_id, amount)
+      budget_entry_year =  year + index.to_i + 1
+      budget_entry = budget_entries.
+        find_or_initialize_by_purpose_id_and_year(purpose_id, budget_entry_year)
+      budget_entry.amount = amount
+      budget_entry.save!
+    end
 end
 
 # == Schema Information

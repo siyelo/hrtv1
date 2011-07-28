@@ -12,7 +12,8 @@ class LongTermBudgetsController < Reporter::BaseController
   end
 
   def update
-    @long_term_budget.update_budgets(params[:classifications])
+    @long_term_budget.update_budget_entries(params[:classifications])
+    flash[:notice] = "Long Term Budgets were successfully updated."
     redirect_to long_term_budget_url(@year)
   end
 

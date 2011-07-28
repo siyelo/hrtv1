@@ -23,12 +23,10 @@ class AddIsClassifiedFieldsToActivity < ActiveRecord::Migration
       activity.coding_budget_valid          = CodingTree.new(activity, CodingBudget).valid?
       activity.coding_budget_cc_valid       = CodingTree.new(activity, CodingBudgetCostCategorization).valid?
       activity.coding_budget_district_valid = CodingTree.new(activity, CodingBudgetDistrict).valid?
-      activity.service_level_budget_valid   = CodingTree.new(activity, ServiceLevelBudget).valid?
 
       activity.coding_spend_valid           = CodingTree.new(activity, CodingSpend).valid?
       activity.coding_spend_cc_valid        = CodingTree.new(activity, CodingSpendCostCategorization).valid?
       activity.coding_spend_district_valid  = CodingTree.new(activity, CodingSpendDistrict).valid?
-      activity.service_level_spend_valid    = CodingTree.new(activity, ServiceLevelSpend).valid?
       activity.save(false)
     end
   end

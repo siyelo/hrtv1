@@ -11,10 +11,7 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue", "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
-     "District Hospital", "Government", "Govt Insurance", "Health Center", "Health Post", "International NGO",
-     "Local NGO", "MOH central", "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
-     "Other ministries", "Parastatal", "Prison Clinic", "RBC institutions"]
+  ORGANIZATION_TYPES = ["Bilateral", "Government", "International NGO", "Local NGO", "Multilateral"]
 
   def usg_fiscal_year
     year = Date.today.strftime('%Y').to_i
@@ -32,7 +29,8 @@ class Organization < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :contact_name, :contact_position, 
-    :contact_phone_number, :contact_main_office_phone_number, :contact_office_location
+    :contact_phone_number, :contact_main_office_phone_number, :contact_office_location,
+    :provider_type
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
@@ -58,6 +56,7 @@ class Organization < ActiveRecord::Base
                         :contact_office_location, :contact_phone_number,
                         :contact_main_office_phone_number, :on => :update
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :on => :update
+  validates_uniqueness_of :raw_type, :if => Proc.new{|m| m.raw_type == 'Government'}
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'

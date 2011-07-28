@@ -9,6 +9,7 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
+  attr_accessor :implementer_type 
   attr_accessible :activity_id, :spend_percentage, :budget_percentage, :data_response_id
 
   ### Callbacks

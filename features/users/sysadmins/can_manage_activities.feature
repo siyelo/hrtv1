@@ -21,7 +21,6 @@ Feature: Reporter can manage activities
       When I follow "activity1"
 
   Scenario: a sysadmin can review activities
-
     And I follow "Delete this Activity"
     Then I should not see "activity1"
 
@@ -32,31 +31,25 @@ Feature: Reporter can manage activities
     Then I should see "activity2"
       And I should not see "activity1"
 
+
   Scenario: a sysadmin can create comments for an activity
       And I fill in "Title" with "Comment title"
       And I fill in "Comment" with "Comment body"
-      And I press "Create Comment"
+      Then show me the page
+      And I press "comment_submit"
     Then I should see "Comment title"
       And I should see "Comment body"
       And I should see "activity1"
 
-
   Scenario: a sysadmin can create comments for an activity and see comment errors
-      And I press "Create Comment"
-    Then I should see "can't be blank" within "#comment_title_input"
-      And I should see "can't be blank" within "#comment_comment_input"
+      And I press "comment_submit"
+      Then I should see "You cannot create blank comment."
 
-    When I fill in "Title" with "Comment title"
-      And I press "Create Comment"
-    Then I should not see "can't be blank" within "#comment_title_input"
-      And I should see "can't be blank" within "#comment_comment_input"
-
-    When I fill in "Comment" with "Comment body"
-      And I press "Create Comment"
-    Then I should see "Comment title"
-      And I should see "Comment body"
-      And I should see "activity1 description"
-
+      When I fill in "Comment" with "Comment body"
+      And I fill in "Title" with "Comment Title"
+        And I press "Create Comment"
+      Then I should see "Comment body"
+      And I should see "Comment Title"
 
   Scenario: Sends email to users when a comment is made by a sysadmin
     Given no emails have been sent

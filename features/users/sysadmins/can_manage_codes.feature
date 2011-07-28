@@ -71,7 +71,7 @@ Feature: Admin can manage codes
       When I follow "Download template"
       Then I should see "short_display,long_display,description,type,external_id,parent_short_display,hssp2_stratprog_val,hssp2_stratobj_val,official_name,sub_account,nha_code,nasa_code"
 
-
+	@run
     Scenario Outline: a sysadmin can filter codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"

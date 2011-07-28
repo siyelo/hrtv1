@@ -17,7 +17,7 @@
           %ul.tabs
             %li= link_to 'Yearly', response_funders_path(@response), :class => 'active'
       %tr.head
-        %th{:colspan => 3}
+        %th{:colspan => 4}
         %th.amount= current_fy(@response)
         %th.amount= next_fy(@response)
         %th
@@ -25,6 +25,9 @@
       %tr.head
         %th Project
         %th{:colspan => 2} Funder
+        %th
+          Funder's Project
+          = image_tag "hint.png", :title => "Linking Funder's Projects is the process of matching each of your Projects to a Project that your Funder has. <br/><br/> Linking your Project to a Funder, and to a specific Project of theirs, greatly improves the ability of the HRT to derive accurate information from your Response.", :class => "tooltip"
         %th.amount
           Funds Received 
           = image_tag "hint.png", :title => "The portion of your expenditure which came from each funder in the past fiscal year", :class => "tooltip"
@@ -37,7 +40,7 @@
         = render 'project_row', :project => project
 
       %tr.filler.js_projects_total_row
-        %td{:colspan => 2}
+        %td{:colspan => 3}
         %td.total Total
         %td.total_amount
           %span.js_projects_total_spend_amount= @response.funders_total_spend(false)

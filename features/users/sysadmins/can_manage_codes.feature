@@ -71,7 +71,6 @@ Feature: Admin can manage codes
       When I follow "Download template"
       Then I should see "short_display,long_display,description,type,external_id,parent_short_display,hssp2_stratprog_val,hssp2_stratobj_val,official_name,sub_account,nha_code,nasa_code"
 
-	@run
     Scenario Outline: a sysadmin can filter codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"
@@ -98,6 +97,7 @@ Feature: Admin can manage codes
             | Mtef       | Nha        | 
 
 
+			@run
     Scenario Outline: a sysadmin can sort codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"
@@ -113,5 +113,5 @@ Feature: Admin can manage codes
         Examples:
            | column_name   | column | text1      | text2      | 
            | Short Display | 1      | code2      | code1      | 
-           | Type          | 2      | Mtef       | Nha        | 
-           | Description   | 3      | code1 desc | code2 desc | 
+           | Type          | 3      | Mtef       | Nha        | 
+           # | Description   | 3      | code1 desc | code2 desc | 

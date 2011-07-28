@@ -37,7 +37,7 @@ def set_attributes_for_code(c, row)
   c.description  = row[$description_col]
   c.sub_account  = row[$sub_account_col]
   c.child_health = row[$child_health_col] == nil ? false : row[$child_health_col]
-  c.nha_code     = row[$nha_code]
+  c.nha_code     = row[$nha_code_col]
 
   c.save!
 end

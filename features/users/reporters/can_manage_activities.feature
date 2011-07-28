@@ -84,7 +84,6 @@ Feature: Reporter can manage activities
       When I press "Import" within ".activities_upload_box"
       Then I should see "Please select a file to upload"
 
-      @javascript
     Scenario: Adding malformed CSV file doesn't throw exception
     Given I follow "import_export"
       When I attach the file "spec/fixtures/malformed.csv" to "File"
@@ -188,22 +187,24 @@ Feature: Reporter can manage activities
             | Total Spent  | 3      | 1.0 RWF               | 2.0 RWF               |
             | Total Budget | 4      | 1.0 RWF               | 2.0 RWF               |
 
-    @javascript
+    @wip @javascript
     Scenario: A reporter can create funding sources (self funded) for an activity
       Given an organization "funding_organization1" exists with name: "funding_organization1"
         And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response
         And a funding_flow exists with from: organization "my_organization", to: organization "my_organization", project: the project, data_response: the data_response
+        And an activity exists with name: "activity1", description: "activity1 description", budget: "33", spend: "44", project: the project, data_response: the data_response
+        And I follow "Projects"
+      # When I follow "Add activity"
+      #   And I fill in "activity_name" with "activity1"
+      #   And I fill in "activity_description" with "activity1 description"
+      #   And I press "activity_submit"
+      #   Then wait a few moments
+      #   And I fill in the activities budget field with "33" and spend field with "44" for that activity
+      #   And I press "Save"
 
-      When I follow "Add activity"
-        And I fill in "activity_name" with "activity1"
-        And I fill in "activity_description" with "1ctivity1 description"
-        And I press "activity_submit"
-        Then wait a few moments
-        And I fill in the activities budget field with "33" and spend field with "44" for that activity
-        And I press "Save"
-
-      When I follow "1ctivity1 description"
+      When I follow "activity1"
         And I follow "Add funding source"
+        Then show me the page
         And I select "funding_organization1" from "Organization" within ".fields"
         And I fill in "Past Expenditure" with "111" within ".fields"
         And I fill in "Current Budget" with "222" within ".fields"
@@ -213,7 +214,7 @@ Feature: Reporter can manage activities
             
             
       # TODO: combobox
-      @javascript 
+      @javascript  @wip
       Scenario: A reporter can create funding sources for an activity
         Given an organization "funding_organization1" exists with name: "funding_organization1"
           And a funding_flow exists with from: organization "funding_organization1", to: organization "my_organization", project: the project, data_response: the data_response

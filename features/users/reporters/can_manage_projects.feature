@@ -20,18 +20,6 @@ Feature: Reporter can manage projects
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
 		And I follow "Workplan"
 
-  Scenario: Reporter cannot see the quarterly budget fields if they are not available
-    Given a data_request "request_no_quarters" exists with title: "request_no_quarters", budget_by_quarter: "false"
-    And an organization "organization4" exists with name: "organization4"
-    And a data_response "data_response3" exists with data_request: data_request "request_no_quarters", organization: organization "organization4"
-    And a project "Project9" exists with name: "Project9", data_response: data_response "data_response3"
-    And a reporter exists with email: "reporter2@hrtapp.com", organization: organization "organization4", current_response: the data_response
-    And I follow "Sign Out"
-    And I am signed in as "reporter2@hrtapp.com"
-    And I follow "Workplan"
-    And I follow "Project9"
-    Then I should not see "Quarterly budget"
-
   @javascript
   Scenario: Reporter can CRUD projects
     When I follow "Add project"

@@ -21,7 +21,7 @@ Feature: Reporter can derive classifications from sub implementers
       And a reporter exists with email: "reporter@hrtapp.com", organization: the ngo
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
-      And I follow "Workplan"
+      And I follow "Projects"
       And I follow "activity_description"
 
 

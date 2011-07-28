@@ -46,13 +46,13 @@ class CommentsController < Reporter::BaseController
     @comment = current_user.comments.new(params[:comment])
     @comment.commentable = find_commentable
     load_data_response(@comment)
-
     if @comment.save
       @comment.email_the_organisation_users(@comment) if current_user.admin?
       respond_to do |format|
         format.html do
           flash[:notice] = "Comment was successfully created."
-          redirect_to commentable_resource(@comment)
+          redirect_to :back ##sorry
+          # redirect_to commentable_resource(@comment)
         end
         format.js { render :partial => "row", :locals => {:comment => @comment} }
       end
@@ -60,7 +60,8 @@ class CommentsController < Reporter::BaseController
       respond_to do |format|
         format.html do
           flash[:error] = "You cannot create blank comment."
-          redirect_to commentable_resource(@comment)
+          redirect_to :back #sorry
+          # redirect_to commentable_resource(@comment)
         end
         format.js  { render :partial => "form",
                      :locals => {:comment => @comment},

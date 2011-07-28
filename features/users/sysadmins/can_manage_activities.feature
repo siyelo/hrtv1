@@ -31,26 +31,26 @@ Feature: Reporter can manage activities
     Then I should see "activity2"
       And I should not see "activity1"
 
-
+	@run
   Scenario: a sysadmin can create comments for an activity
       And I fill in "Title" with "Comment title"
       And I fill in "Comment" with "Comment body"
-      Then show me the page
       And I press "comment_submit"
     Then I should see "Comment title"
       And I should see "Comment body"
       And I should see "activity1"
 
+	@run
   Scenario: a sysadmin can create comments for an activity and see comment errors
       And I press "comment_submit"
       Then I should see "You cannot create blank comment."
-
       When I fill in "Comment" with "Comment body"
       And I fill in "Title" with "Comment Title"
         And I press "Create Comment"
       Then I should see "Comment body"
       And I should see "Comment Title"
 
+	@run
   Scenario: Sends email to users when a comment is made by a sysadmin
     Given no emails have been sent
       And I fill in "Title" with "Comment title"

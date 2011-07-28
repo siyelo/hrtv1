@@ -68,7 +68,7 @@ var purposes = {
       McDropDownGlobalUpdateValue(selected_li);
     }
 
-    if (purposes.type === 'single') {
+    if (purposes.type === 'multi') {
       purposes.lastIndex = tr.parents('.js_purpose_row').index();
     }
   },
@@ -139,7 +139,7 @@ var purposes = {
 
   remove_purpose: function (element) {
     var tr          = element.parents('tr:first');
-    tr.find('.js_ca').val(0).trigger('keyup');
+    tr.find('.js_amount').val(0).trigger('keyup');
     tr.remove();
 
     $('.js_add_purpose').removeClass('disabled');
@@ -161,16 +161,7 @@ var purposes = {
     var row            = mcdropdown.parents('.js_purpose_row');
     var activity_id    = tr.parents('.js_purpose_row').attr('activity_id');
 
-    // determine if the purpose was already added
-    addedIds = jQuery.map(row.find('.js_ca').not(':last'), function (e) {
-      //return Number($(e).attr('id').match(/\d+/)[0]);
-      var id = $(e).attr('id');
-      if (id) {
-        return Number(id.match(/classifications_(\d+)_(\d+)/)[2]);
-      }
-    });
-
-    if (addedIds.indexOf(Number(value)) >= 0) {
+    if (purposes.alreadyAdded(row, value)) {
       //purposes.resetMcdropdown(mcdropdown);
       //$('.mcdropdown_menu, .mcdropdown_autocomplete').hide();
       //mcdropdown.find('input:hidden').val('');
@@ -187,23 +178,23 @@ var purposes = {
       }
 
       if (purposes.type === 'multi') {
-        purposes.update_inputs_multi(tr, value);
+        purposes.update_inputs_multi(tr, activity_id, value);
       } else {
-        purposes.update_inputs_single(tr, activity_id, value);
+        purposes.update_inputs_single(tr, value);
       }
     }
   },
-  update_inputs_single: function (block, activity_id, value) {
-    var element = block.find('.total input');
-    element.attr('id', 'classifications_' + activity_id + '_' + value);
-    element.attr('name', 'classifications[' + activity_id + '][' + value + ']');
-  },
-  update_inputs_multi: function (block, value) {
-    $.each(block.find(".js_year"), function (index, element) {
+  update_inputs_single: function (block, value) {
+    $.each(block.find(".js_amount"), function (index, element) {
       var element = $(element);
       element.attr('id', 'classifications_' + value + '_' + index);
       element.attr('name', 'classifications[' + value + '][' + index + ']');
     });
+  },
+  update_inputs_multi: function (block, activity_id, value) {
+    var element = block.find('.total input');
+    element.attr('id', 'classifications_' + activity_id + '_' + value);
+    element.attr('name', 'classifications[' + activity_id + '][' + value + ']');
   },
   openMcDropDown: function (add_purpose_btn) {
     if (add_purpose_btn.length > 0) {
@@ -219,6 +210,36 @@ var purposes = {
       purposes.removeMcDropDown();
       purposes.openMcDropDown(purpose_row.find('.js_add_purpose:first'));
     }
+  },
+
+  alreadyAdded: function (row, value) {
+    var addedIds = [];
+
+    // determine if the purpose was already added
+    if (purposes.type === 'multi') {
+      addedIds = jQuery.map(row.find('.js_amount').not(':last'), function (e) {
+        //return Number($(e).attr('id').match(/\d+/)[0]);
+        var id = $(e).attr('id');
+        if (id) {
+          return Number(id.match(/classifications_(\d+)_(\d+)/)[2]);
+        }
+      });
+    } else {
+      var elements = []
+      $(".js_purpose_row").each(function () {
+        elements.push($(this).find('.js_amount:first'));
+      })
+
+      addedIds = jQuery.map(elements, function (e) {
+        //return Number($(e).attr('id').match(/\d+/)[0]);
+        var id = $(e).attr('id');
+        if (id) {
+          return Number(id.match(/classifications_(\d+)_(\d+)/)[1]);
+        }
+      });
+    }
+
+    return addedIds.indexOf(Number(value)) >= 0;
   },
 
 
@@ -286,12 +307,12 @@ var classifications_edit = {
     };
 
     // amount totals
-    $('.js_ca').live('keyup', function (e) {
+    $('.js_amount').live('keyup', function (e) {
       var element = $(this);
-      var tr = element.parents('tr.js_purpose_row');
+      var tr = element.parents('.js_purpose_row');
       var amount = Number(tr.attr('data-amount'));
       // activity total
-      var elements = tr.find('.js_ca');
+      var elements = tr.find('.js_amount');
       var amounts  = jQuery.map(elements, function (e) { return $(e).val();});
       var total    = getClassificationTotal(amounts, amount);
       tr.find('.js_activity_total_row .total li:first span.js_activity_total').text(total);
@@ -308,12 +329,12 @@ var classifications_edit = {
       this.setAttribute("title", this.textContent)
     }).tipsy({gravity: 'w', live: true, html: true})
 
-    purposes.init('single');
+    purposes.init('multi');
   }
 };
 
 var long_term_budgets_show =  {
   run: function () {
-    purposes.init('multi');
+    purposes.init('single');
   }
 };

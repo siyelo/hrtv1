@@ -4,9 +4,8 @@
 -#######################################################
 - if purpose
   - field = :"classifications[#{purpose.id}]"
-  %tr
+  %tr.js_purpose_row
     %td.desc.wrap-60.tooltip
-      %span.tooltip{:style => 'height: 100%'}
       = label_tag field, "#{purpose.short_display}", :title => purpose.description
       %span.context= purpose.context
     - 4.times do |index|
@@ -16,16 +15,11 @@
       = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
 - else
   // used in javascript !!!
-  %tr
+  %tr.js_purpose_row
     %td.desc.wrap-60.tooltip
       = text_field_tag '', '', :class => 'purpose_search'
-    %td.amount
-      = text_field_tag '', '', :class => 'js_year'
-    %td.amount
-      = text_field_tag '', '', :class => 'js_year'
-    %td.amount
-      = text_field_tag '', '', :class => 'js_year'
-    %td.amount
-      = text_field_tag '', '', :class => 'js_year'
+    - 4.times do |index|
+      %td.amount
+        = year_text_field_tag_with_name_and_amount("", "")
     %td.action
       = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'

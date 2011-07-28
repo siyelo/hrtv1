@@ -4,7 +4,7 @@
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
 
-= render 'projects/sub_nav'
+= render 'shared/sub_nav_projects'
 
 = render 'activities/tab_nav', :activity => @other_cost
 
@@ -32,7 +32,7 @@
     %li
       %ul.row
         %li Past Expenditure
-        %li= c(@other_cost.spend, @other_cost.currency) 
+        %li= c(@other_cost.spend, @other_cost.currency)
 
   %h3.form_heading Current Budget
   %ul.dashboard_section

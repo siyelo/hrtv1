@@ -1,16 +1,13 @@
-class Mtef < Purpose
+class Purpose < Code
 
-  def self.codes_by_level(level = -1)
-    unless level == -1
-      codes = []
-      Mtef.each_with_level(Mtef.all){|code, lvl| codes << code if lvl == level}
-    else
-      codes = Mtef.leaves
-    end
-
-    return codes
+  ### Class methods
+  def self.all
+    Code.purposes
   end
 
+  def self.first
+    Code.purposes.first
+  end
 end
 
 # == Schema Information

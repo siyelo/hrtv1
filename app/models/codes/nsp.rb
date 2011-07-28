@@ -1,4 +1,4 @@
-class Nsp < Code
+class Nsp < Purpose
   include NamedScopes::Roots # overrides 'roots' method from awesome_nested_set
 
   # NOTE: this method overrides the 'leaves' method from awesome_nested_set
@@ -15,12 +15,6 @@ class Nsp < Code
     ]
   end
 end
-
-
-
-
-
-
 
 # == Schema Information
 #

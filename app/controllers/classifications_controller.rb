@@ -5,6 +5,8 @@ class ClassificationsController < Reporter::BaseController
     @projects     = @response.projects.find(:all, :order => 'name ASC')
     @coding_tree  = CodingTree.new(Activity.new, params[:id].constantize)
     @codes        = @coding_tree.root_codes
+    @purpose_row  = render_to_string(:partial => 'purpose_row.html.haml',
+                       :locals => {:ca => nil, :activity => nil})
   end
 
   def update

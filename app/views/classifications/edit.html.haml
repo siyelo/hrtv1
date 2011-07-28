@@ -1,5 +1,6 @@
 :javascript
   var _response_id = "#{@response.id}"
+  var _purpose_row = "#{js_safe(escape_javascript(@purpose_row))}"
 
 - coding_name = friendly_name_for_coding_copy(params[:id]).singularize
 - coding_name = "Health Function" if coding_name == "Purpose"
@@ -45,7 +46,7 @@
 
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|
-    = render 'code_row', :code => code
+    = render 'shared/code_row', :code => code
 
 %br
 - if @projects.empty? || !@response.projects_have_activities?

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110727101307) do
+ActiveRecord::Schema.define(:version => 20110727132927) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -45,8 +45,6 @@ ActiveRecord::Schema.define(:version => 20110727101307) do
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.decimal  "budget2"
     t.decimal  "budget3"
     t.decimal  "budget4"
@@ -82,6 +80,15 @@ ActiveRecord::Schema.define(:version => 20110727101307) do
     t.integer "organization_id"
   end
 
+  create_table "budget_entries", :force => true do |t|
+    t.integer  "long_term_budget_id"
+    t.integer  "purpose_id"
+    t.integer  "year"
+    t.decimal  "amount",              :default => 0.0
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
@@ -95,6 +102,7 @@ ActiveRecord::Schema.define(:version => 20110727101307) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -245,6 +253,13 @@ ActiveRecord::Schema.define(:version => 20110727101307) do
   create_table "locations_projects", :id => false, :force => true do |t|
     t.integer "location_id"
     t.integer "project_id"
+  end
+
+  create_table "long_term_budgets", :force => true do |t|
+    t.integer  "organization_id"
+    t.integer  "year"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "organizations", :force => true do |t|

@@ -1,0 +1,25 @@
+-#######################################################
+-# !!!!! this partial is used by jQuery                #
+-# any changes in if block, must reflect in else block #
+-#######################################################
+- if purpose
+  - field = :"classifications[#{purpose.id}]"
+  %tr.js_purpose_row
+    %td.desc.wrap-60.tooltip
+      = label_tag field, "#{purpose.short_display}", :title => purpose.description
+      %span.context= purpose.context
+    - 4.times do |index|
+      %td.amount
+        = year_text_field_tag(budget_entries, field, @long_term_budget.year, index)
+    %td.action
+      = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
+- else
+  // used in javascript !!!
+  %tr.js_purpose_row
+    %td.desc.wrap-60.tooltip
+      = text_field_tag '', '', :class => 'purpose_search'
+    - 4.times do |index|
+      %td.amount
+        = year_text_field_tag_with_name_and_amount("", "")
+    %td.action
+      = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'

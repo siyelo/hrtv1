@@ -3,4 +3,4 @@
   - unless code.leaf?
     %ul
       - @coding_tree.cached_children(code).sort_by(&:short_display).each do |child|
-        = render 'code_row', :code => child
+        = render 'shared/code_row', :code => child

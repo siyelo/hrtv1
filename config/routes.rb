@@ -69,12 +69,11 @@ ActionController::Routing::Routes.draw do |map|
       district.resources :organizations, :only => [:index, :show],
         :controller => "districts/organizations"
     end
-    response.resources :classifications,
-      :only => [:edit, :update, :destroy]
     response.resources :workplans
     response.resources :funders
     response.resources :implementers
-    response.long_term_budgets 'long_term_budgets', :controller => :workplans, :action => :keph
+    response.resources :classifications,
+      :only => [:edit, :update, :destroy]
   end
 
   map.resources :activities do |activity|
@@ -89,6 +88,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :organizations, :only => [:edit, :update]
+  map.resources :long_term_budgets, :only => [:show, :update]
 
   map.resources :members, :controller => "users",
     :only => [:index, :create, :edit, :update, :destroy],

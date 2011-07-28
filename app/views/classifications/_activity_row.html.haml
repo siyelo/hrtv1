@@ -12,5 +12,5 @@
       %tbody
         - code_assignments.each do |ca|
           - if ca.amount.present? || ca.percentage.present?
-            = render 'purpose.html.haml', :ca => ca, :activity => activity
+            = render 'purpose_row.html.haml', :ca => ca, :activity => activity
         = render 'purpose_footer.html.haml', :activity => activity, :code_assignments => code_assignments, :coding_name => coding_name

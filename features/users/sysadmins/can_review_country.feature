@@ -1,4 +1,3 @@
-@run
 Feature: Admin can review country
   In order to reduce costs
   As a sysadmin

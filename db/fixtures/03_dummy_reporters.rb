@@ -48,4 +48,20 @@ else
   print "=> activity_manager #{am.name} created (org: #{am.organization.name})"
 end
 
+begin
+  puts "creating district manager"
+  @org = Factory(:nonreporting_organization, :name => "internal_district_manager_org")
+  dm = Factory(:district_manager, :email => 'district_manager@hrtapp.com',
+    :organization => @org,
+    :password => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo',
+    :password_confirmation => ENV['HRT_ACTIVITY_MGR_PASSWORD'] || 'si@yelo')
+  # assign some nice existing orgs
+  dm.location = Location.first
+  dm.save
+rescue ActiveRecord::RecordInvalid => e
+  puts e.message
+  puts "   Do you already have an org 'internal_district_manager_org' or user named 'district_manager@hrtapp.com'? "
+else
+  print "=> district manager #{dm.name} created (org: #{dm.organization.name})"
+end
 

@@ -28,7 +28,6 @@ Feature: Reporter can manage activities
     Scenario: a sysadmin can edit activity
       And I fill in "Name" with "activity2"
       And I fill in "Description" with "activity2 description"
-      Then show me the page
       And I press "Save"
     Then I should see "activity2"
       And I should not see "activity1"
@@ -36,7 +35,6 @@ Feature: Reporter can manage activities
   Scenario: a sysadmin can create comments for an activity
       And I fill in "Title" with "Comment title"
       And I fill in "Comment" with "Comment body"
-      Then show me the page
       And I press "Create Comment"
     Then I should see "Comment title"
       And I should see "Comment body"

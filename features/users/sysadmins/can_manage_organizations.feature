@@ -64,7 +64,7 @@ Feature: Admin can manage organizations
         | org1      | org2 - 2 users | org1          | org2       | Organizations successfully merged.                    | org1                 |
 
 
-    @javascript
+    @javascript 
     Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
       When I follow "Organizations"
         And I follow "Fix duplicate organizations"
@@ -83,13 +83,14 @@ Feature: Admin can manage organizations
     @javascript
     Scenario: Try to delete non-empty organization (with JS)
       When I follow "Organizations"
-        And I follow "Fix duplicate organizations"
-        And I select "org2 - 2 users" from "Replacement organization"
-        And I confirm the popup dialog
-        And I follow "Delete" within ".box[data-type='target']"
+      And I follow "Fix duplicate organizations"
+      Then show me the page
+      And I select "org2 - 2 users" from "Replacement organization"
+      And I confirm the popup dialog
+      And I follow "Delete" within ".box[data-type='target']"
       # Check that org2 organization is not deleted
       Then the "Replacement organization" text should match "org2 - 2 users"
-        And I should see "You cannot delete an organization that has users or data associated with it."
+      And I should see "You cannot delete an organization that has users or data associated with it."
 
 
     Scenario Outline: a sysadmin can sort organizations

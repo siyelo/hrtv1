@@ -107,11 +107,10 @@ Feature: Admin can manage users
     When I follow "Members"
       And I fill in "query" with "<first>"
       And I press "Search"
-      Then show me the page
-    Then I should see "Members found containing user1"
-    And I should see "<first>"
-    And I should not see "<second>"
-
+    Then I should see "Members found containing <first>"
+      And I should see "<first>"
+      And I should not see "<second>"
+    
     Examples:
        | first            | second           |
        | user1            | user2            |
@@ -120,11 +119,10 @@ Feature: Admin can manage users
        | user2@hrtapp.com | user1@hrtapp.com |
        | Full name 1      | Full name 2      |
        | Full name 2      | Full name 1      |
-       | organization2    | organization3    |
-       | organization3    | organization2    |
+       | organization2    | Full name 2    |
+       | organization3    | Full name 1    |
        
        
-  @run
   Scenario Outline: a sysadmin can sort users
     Given an organization exists with name: "organization2"
       And a reporter exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization

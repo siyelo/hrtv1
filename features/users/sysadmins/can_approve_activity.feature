@@ -20,7 +20,6 @@ Feature: SysAdmin can approve a code breakdown for each activity
     Scenario: See a budget coding breakdown
      When I go to the admin review data response page for organization "WHO", request "Req1"
       And wait a few moments
-      Then show me the page
      Then I should see "Mtef code"
       And I should see "1,000"
 

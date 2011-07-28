@@ -18,7 +18,6 @@ Feature: Activity Manager can approve a code breakdown for each activity
 
     @javascript
     Scenario: Approve an Activity
-      Then show me the page
       Given I follow "reporter_org"
         And I follow "activity1"
       When I follow "Approve this Activity's Budget"

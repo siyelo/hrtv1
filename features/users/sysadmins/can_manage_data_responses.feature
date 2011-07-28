@@ -16,7 +16,6 @@ Feature: Admin can manage data responses
       And I am signed in as "sysadmin@hrtapp.com"
 
     Scenario: Manage data responses
-      Then show me the page
       When I follow "Review Organization Past Expenditures and Current Budgets"
        And I follow "Empty"
       Then I should see "UNDP" within ".resources"

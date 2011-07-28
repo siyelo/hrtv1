@@ -89,7 +89,6 @@ Feature: Reporter can manage activities
     Given I follow "import_export"
       When I attach the file "spec/fixtures/malformed.csv" to "File"
         And I press "Import"
-        Then show me the page
       Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
     Scenario: Reporter can download Activities CSV template

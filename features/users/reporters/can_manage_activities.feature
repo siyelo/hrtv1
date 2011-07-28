@@ -204,7 +204,6 @@ Feature: Reporter can manage activities
 
       When I follow "activity1"
         And I follow "Add funding source"
-        Then show me the page
         And I select "funding_organization1" from "Organization" within ".fields"
         And I fill in "Past Expenditure" with "111" within ".fields"
         And I fill in "Current Budget" with "222" within ".fields"

@@ -84,7 +84,6 @@ Feature: Admin can manage organizations
     Scenario: Try to delete non-empty organization (with JS)
       When I follow "Organizations"
       And I follow "Fix duplicate organizations"
-      Then show me the page
       And I select "org2 - 2 users" from "Replacement organization"
       And I confirm the popup dialog
       And I follow "Delete" within ".box[data-type='target']"

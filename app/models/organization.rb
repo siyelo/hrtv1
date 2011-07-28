@@ -61,7 +61,7 @@ class Organization < ActiveRecord::Base
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
-  named_scope :ordered, :order => 'name ASC, created_at DESC'
+  named_scope :ordered, :order => 'UPPER(name) ASC, created_at DESC'
 
   ### Callbacks
   after_save :update_cached_currency_amounts

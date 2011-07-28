@@ -19,7 +19,7 @@ class Admin::CodesController < Admin::BaseController
                                           UPPER(description) LIKE UPPER(:q)",
                           {:q => "%#{params[:query]}%"}]) if params[:query]
     @codes = scope.paginate(:page => params[:page], :per_page => 10,
-                    :order => "#{sort_column} #{sort_direction}")
+                    :order => "UPPER(#{sort_column}) #{sort_direction}")
   end
 
   def create

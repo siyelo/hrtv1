@@ -45,6 +45,7 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true
   before_validation_on_create :assign_project_to_funding_flows
+  before_validation :strip_leading_spaces
 
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
@@ -434,6 +435,11 @@ END
         amount += spend * currency_rate(project.currency, 'USD')
       end
       amount
+    end
+    
+    def strip_leading_spaces
+      self.name = self.name.strip if self.name
+      self.description = self.description.strip if self.description
     end
 
     # work arround for validates_presence_of :project issue

@@ -14,7 +14,7 @@ class Reports::JawpReport
   end
 
   def csv
-    FasterCSV.generate do |csv|
+    FasterCSV.generate(:encoding => 'u') do |csv|
       csv << build_header
       @activities.each{|activity| build_rows(csv, activity)}
     end

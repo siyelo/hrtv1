@@ -21,6 +21,7 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:budget_q2) }
     it { should allow_mass_assignment_of(:budget_q3) }
     it { should allow_mass_assignment_of(:budget_q4) }
+    it { should allow_mass_assignment_of(:project_from_id) }
   end
 
   describe "Associations" do

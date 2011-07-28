@@ -5,8 +5,9 @@ class BudgetEntry < ActiveRecord::Base
   belongs_to :purpose
 
   ### Validations
-  validates_presence_of :long_term_budget_id, :purpose_id, :year, :amount
+  validates_presence_of :long_term_budget_id, :purpose_id, :year
 end
+
 
 # == Schema Information
 #
@@ -16,7 +17,7 @@ end
 #  long_term_budget_id :integer
 #  purpose_id          :integer
 #  year                :integer
-#  amount              :decimal(, )
+#  amount              :decimal(, )     default(0.0)
 #  created_at          :datetime
 #  updated_at          :datetime
 #

@@ -7,10 +7,19 @@ class LongTermBudget < ActiveRecord::Base
   ### Validations
   validates_presence_of :organization_id, :year
 
-  def update_budgets(budgets)
-    raise budgets.to_yaml
+  def update_budgets(classifications)
+    classifications.each_pair do |purpose_id, amounts|
+      #raise purpose_id.to_yaml
+      raise amounts.to_yaml
+      amounts.each_pair do |index, amount|
+        budget_entry = budget_entries.find_or_initialize_by_purpose_id_and_year(year + index + 1)
+        budget_entry.amount = amount
+        budget_entry.save
+      end
+    end
+    raise classifications.to_yaml
     [:year1, :year2, :year3, :year4].each_with_index do |key, index|
-      budgets[key].each_pair do |purpose_id, amount|
+      classifications[key].each_pair do |purpose_id, amount|
         budget_entry = budget_entries.find_or_initialize_by_long_term_budget_id_and_purpose_id(id, purpose_id)
         budget_entry.year = year + index + 1
         budget_entry.amount = amount

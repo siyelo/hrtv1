@@ -4,7 +4,7 @@ class CreateBudgetEntries < ActiveRecord::Migration
       t.integer :long_term_budget_id
       t.integer :purpose_id
       t.integer :year
-      t.decimal :amount
+      t.decimal :amount, :default => 0
 
       t.timestamps
     end

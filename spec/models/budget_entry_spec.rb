@@ -10,6 +10,5 @@ describe BudgetEntry do
     it { should validate_presence_of(:long_term_budget_id) }
     it { should validate_presence_of(:purpose_id) }
     it { should validate_presence_of(:year) }
-    it { should validate_presence_of(:amount) }
   end
 end

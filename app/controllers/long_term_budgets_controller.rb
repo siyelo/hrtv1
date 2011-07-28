@@ -11,8 +11,7 @@ class LongTermBudgetsController < Reporter::BaseController
   end
 
   def update
-    #raise params.to_yaml
-    @long_term_budget.update_budgets(params[:long_term_budgets])
+    @long_term_budget.update_budgets(params[:classifications])
     redirect_to long_term_budget_url(@year)
   end
 

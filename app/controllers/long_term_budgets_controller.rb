@@ -4,7 +4,8 @@ class LongTermBudgetsController < Reporter::BaseController
   before_filter :load_current_response
 
   def show
-    4.times { @long_term_budget.budget_entries.build(:purpose_id => Purpose.all.first) }
+    @coding_tree  = CodingTree.new(Activity.new, CodingBudget)
+    @codes        = @coding_tree.root_codes
   end
 
   def update

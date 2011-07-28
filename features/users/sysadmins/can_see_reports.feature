@@ -1,4 +1,3 @@
-@run
 Feature: Admin can see reports
   In order to increase funding
   As a sysadmin

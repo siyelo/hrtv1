@@ -5,11 +5,11 @@ module NumberHelper
     true if Float(i) rescue false
   end
 
-  def n2c(value, unit = "")
+  def n2c(value, unit = "", delimiter = ",")
     number_to_currency(value,
                       :separator => ".",
                       :unit => unit,
-                      :delimiter => ",")
+                      :delimiter => delimiter)
   end
 
   def n2cs(value, unit = "")

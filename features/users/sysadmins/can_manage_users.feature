@@ -163,7 +163,6 @@ Feature: Admin can manage users
       And the "Organizations" combobox should contain "organization3"
 
 
-      @run
   Scenario: An admin can create District Manager and assign districts for managing
     Given a location exists with short_display: "district1"
       And an organization exists with name: "Non-reporting org", raw_type: "Non-Reporting"
@@ -179,5 +178,4 @@ Feature: Admin can manage users
       And I press "Create New User"
     Then I should see "User was successfully created"
     When I follow "Pink Panter"
-
     Then the "District" combobox should contain "district1"

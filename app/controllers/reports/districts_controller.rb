@@ -24,17 +24,6 @@ class Reports::DistrictsController < Reports::BaseController
                                         'spend', current_request.id)
   end
 
-  def funders
-    @budget_ufs_values = Charts::DistrictPies::ultimate_funding_sources(@location,
-                                        'budget', current_request.id)
-    @budget_fa_values  = Charts::DistrictPies::financing_agents(@location,
-                                        'budget', current_request.id)
-    @spend_ufs_values  = Charts::DistrictPies::ultimate_funding_sources(@location,
-                                        'spend', current_request.id)
-    @spend_fa_values   = Charts::DistrictPies::financing_agents(@location,
-                                        'spend', current_request.id)
-  end
-
   def classifications
     @pie        = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type   = get_code_type_and_initialize(params[:code_type])

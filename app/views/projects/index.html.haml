@@ -20,13 +20,14 @@
     - link_to new_response_project_path(@response), :class => "create_new" do
       = image_tag "new_white.png"
       Create Project
-  %li.dropdown_menu
-    - link_to '#', :class => 'dropdown_trigger' do
-      = image_tag "icon_import_export_alt.png"
+  %li.js_dropdown_menu
+    - link_to '#', :class => 'js_dropdown_trigger create_new' do
       Import / Export
+      = image_tag "icon_arrow_down.gif"
 
-    %ul{:style => 'display: none'}
+    %ul.menu_items{:style => 'display: none'}
       %li= link_to 'Import Activities', '#', :id => "import_export"
+      %li= link_to 'Export Workplan', download_workplan_response_projects_path(@response)
       %li= link_to 'Export All', export_response_activities_path(@response)
 
   %li

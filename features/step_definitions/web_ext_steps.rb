@@ -17,7 +17,6 @@ When /^I confirm the popup dialog$/ do
   page.evaluate_script('window.confirm = function() { return true; }')
 end
 
-
 Then /^the cached field "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
   find(selector).value.should == value
 end

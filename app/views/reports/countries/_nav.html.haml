@@ -1,6 +1,5 @@
 %ul.group
   %li= link_to "Overview", reports_country_path, active_if(params[:action] == 'show')
-  %li= link_to "Funders & Agents", funders_reports_country_path, active_if(params[:action] == 'funders')
   %li= link_to "NSP", classifications_reports_country_path(:code_type => "nsp"), active_if(@nsp)
   %li= link_to "MTEF", classifications_reports_country_path(:code_type => "mtef"), active_if(@mtef)
   %li= link_to "Inputs", classifications_reports_country_path(:code_type => "cost_category"), active_if(@cost_category)

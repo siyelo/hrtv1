@@ -71,6 +71,11 @@ class ProjectsController < Reporter::BaseController
     send_csv(template, "all_activities.csv")
   end
 
+  def download_workplan
+    filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
+    send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
+  end
+
   def create_from_file
     begin
       if params[:file].present?

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-  
+
   describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
@@ -13,6 +13,7 @@ describe Activity do
     it { should have_many(:sub_implementers) }
     it { should have_many(:funding_sources).dependent(:destroy) }
     it { should have_many(:codes) }
+    it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
     it { should have_many(:comments).dependent(:destroy) }
     it { should have_many(:coding_budget).dependent(:destroy) }
@@ -244,6 +245,22 @@ describe Activity do
         @activity.sub_activities.reload
         @activity.amount_for_provider(@subact.provider, :budget).should == 10
       end
+    end
+  end
+
+  describe "purposes" do
+    it "should return only those codes designated as Purpose codes" do
+      basic_setup_activity
+      @purpose1    = Factory(:purpose, :short_display => 'purp1')
+      @purpose2    = Factory(:mtef_code, :short_display => 'purp2')
+      @input       = Factory(:input, :short_display => 'input')
+      Factory(:coding_budget, :activity => @activity, :code => @purpose1,
+        :amount => 5, :cached_amount => 5)
+      Factory(:coding_budget, :activity => @activity, :code => @purpose2,
+                 :amount => 15, :cached_amount => 15)
+      Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input,
+        :amount => 5, :cached_amount => 5)
+      @activity.purposes.should == [@purpose1, @purpose2]
     end
   end
 end

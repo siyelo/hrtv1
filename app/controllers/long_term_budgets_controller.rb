@@ -6,8 +6,9 @@ class LongTermBudgetsController < Reporter::BaseController
   def show
     @coding_tree  = CodingTree.new(Activity.new, CodingBudget)
     @codes        = @coding_tree.root_codes
+    @long_term_budget_by_purposes = @long_term_budget.budget_entries_by_purposes
     @purpose_row  = render_to_string(:partial => 'purpose_row.html.haml',
-                       :locals => {:ca => nil, :activity => nil})
+                                     :locals => {:purpose => nil})
   end
 
   def update

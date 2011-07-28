@@ -6,26 +6,24 @@ class LongTermBudget < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :organization_id, :year
+  ### TODO: add uniqueness validations
 
   def update_budgets(classifications)
     classifications.each_pair do |purpose_id, amounts|
       #raise purpose_id.to_yaml
-      raise amounts.to_yaml
+      #raise amounts.to_yaml
       amounts.each_pair do |index, amount|
-        budget_entry = budget_entries.find_or_initialize_by_purpose_id_and_year(year + index + 1)
+        budget_entry_year =  year + index.to_i + 1
+        budget_entry = budget_entries.
+          find_or_initialize_by_purpose_id_and_year(purpose_id, budget_entry_year)
         budget_entry.amount = amount
         budget_entry.save
       end
     end
-    raise classifications.to_yaml
-    [:year1, :year2, :year3, :year4].each_with_index do |key, index|
-      classifications[key].each_pair do |purpose_id, amount|
-        budget_entry = budget_entries.find_or_initialize_by_long_term_budget_id_and_purpose_id(id, purpose_id)
-        budget_entry.year = year + index + 1
-        budget_entry.amount = amount
-        budget_entry.save!
-      end
-    end
+  end
+
+  def budget_entries_by_purposes
+    budget_entries.find(:all, :include => :purpose).group_by{|be| be.purpose }
   end
 end
 

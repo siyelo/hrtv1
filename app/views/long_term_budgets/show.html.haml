@@ -17,8 +17,8 @@
         %th.amount= "FY #{@long_term_budget.year + 4}-#{@long_term_budget.year + 5}"
         %th.action
     %tbody
-      -#- @long_term_budget.budget_entries.group_by{|be| be.purpose_id }.each_pair do |purpose_id, budget_entries|
-        -#= render 'purpose_long_term_budgets', :purpose_id => purpose_id, :budget_entries => budget_entries
+      - @long_term_budget_by_purposes.each_pair do |purpose, budget_entries|
+        = render 'purpose_row', :purpose => purpose, :budget_entries => budget_entries
 
       %tr.js_activity_total_row
         %td{:colspan => 100}

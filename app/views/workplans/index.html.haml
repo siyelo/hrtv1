@@ -48,11 +48,11 @@
         %td.total Total
         %td.total_amount.wrap-10
           %span.js_projects_total_spend_amount
-            = @response.projects_total_spend(false)
+            = @response.projects_total_spend
           %span.currency= @response.currency
         %td.total_amount.wrap-10
           %span.js_projects_total_budget_amount
-            = @response.projects_total_budget(false)
+            = @response.projects_total_budget
           %span.currency= @response.currency
       %tr
         %td.borderless{:colspan => 8}

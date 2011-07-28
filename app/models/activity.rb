@@ -10,18 +10,15 @@ class Activity < ActiveRecord::Base
 
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure",
-                         "Q1 Spend", "Q2 Spend", "Q3 Spend", "Q4 Spend", "Current Budget", "Q1 Budget", "Q2 Budget",
-                         "Q3 Budget", "Q4 Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", 
+                         "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+
 
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :text_for_targets, :name, :description, :start_date, :end_date,
-    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-    :beneficiary_ids, :location_ids, :provider_id,
+    :approved, :am_approved, :spend, :budget, :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
     :am_approved_date, :user_id
@@ -262,8 +259,8 @@ class Activity < ActiveRecord::Base
   end
 
   def has_budget_or_spend?
-    return true if self.spend.present?
-    return true if self.budget.present?
+    return true if spend.present?
+    return true if budget.present?
   end
 
   def possible_duplicate?
@@ -399,8 +396,8 @@ class Activity < ActiveRecord::Base
     description.presence || '(no description)'
   end
 
-  def sub_activities_total_by_type(amount_type, quarters, other_currency)
-    sub_activities.map { |implementer| implementer.total_by_type(amount_type, quarters) }.compact.sum * currency_rate(currency, other_currency)
+  def sub_activities_total_by_type(amount_type, other_currency)
+    sub_activities.map { |implementer| implementer.total_by_type(amount_type) }.compact.sum * currency_rate(currency, other_currency)
   end
 
   def is_simple?
@@ -486,19 +483,10 @@ class Activity < ActiveRecord::Base
 
     #currency is still derived from the parent project or DR
     def update_cached_usd_amounts
-      if self.currency
-        if (rate = Money.default_bank.get_rate(self.currency, :USD))
+      if currency
+        if (rate = Money.default_bank.get_rate(currency, :USD))
           self.budget_in_usd = (budget || 0) * rate
           self.spend_in_usd  = (spend || 0)  * rate
-        end
-      end
-    end
-
-    # setting the total amount if the quarterlys are set
-    def check_quarterly_vs_total
-      ["budget", "spend"].each do |type|
-        if total_amount_of_quarters(type) > 0
-          self.send(:"#{type}=", total_amount_of_quarters(type))
         end
       end
     end
@@ -523,11 +511,6 @@ class Activity < ActiveRecord::Base
 end
 
 
-
-
-
-
-
 # == Schema Information
 #
 # Table name: activities
@@ -540,10 +523,6 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
@@ -556,20 +535,11 @@ end
 #  budget_percentage            :decimal(, )
 #  spend_percentage             :decimal(, )
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

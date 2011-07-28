@@ -28,8 +28,7 @@ class DataResponse < ActiveRecord::Base
 
   ### Delegate
   delegate :currency, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location,
-    :quarters_months, :to => :organization
+    :contact_main_office_phone_number, :contact_office_location, :to => :organization
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -396,30 +395,30 @@ class DataResponse < ActiveRecord::Base
     other_costs_entered? && uncoded_other_costs.empty?
   end
 
-  def projects_total_spend(quarters)
-    n2c(projects.map{ |p| p.converted_activities_total_by_type('spend', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('spend', quarters, currency)}.compact.sum)
+  def projects_total_spend
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('spend', currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('spend', currency)}.compact.sum)
   end
 
-  def projects_total_budget(quarters)
-    n2c(projects.map{ |p| p.converted_activities_total_by_type('budget', quarters, currency)}.compact.sum +
-    projects.map{ |p| p.converted_other_costs_total_by_type('budget', quarters, currency)}.compact.sum)
+  def projects_total_budget
+    n2c(projects.map{ |p| p.converted_activities_total_by_type('budget', currency)}.compact.sum +
+    projects.map{ |p| p.converted_other_costs_total_by_type('budget', currency)}.compact.sum)
   end
 
-  def funders_total_spend(quarters)
-    @projects.map{|p| p.converted_funders_total_by_type('spend', quarters, currency)}.sum
+  def funders_total_spend
+    @projects.map{|p| p.converted_funders_total_by_type('spend', currency)}.sum
   end
 
-  def funders_total_budget(quarters)
-    @projects.map{|p| p.converted_funders_total_by_type('budget', quarters, currency)}.sum
+  def funders_total_budget
+    @projects.map{|p| p.converted_funders_total_by_type('budget', currency)}.sum
   end
-
-  def implementers_total_spend(quarters)
-    @projects.map{ |p| p.sub_activities_total_by_type('spend', quarters, currency)}.sum
+  
+  def implementers_total_spend
+    @projects.map{ |p| p.sub_activities_total_by_type('spend', currency)}.sum
   end
-
-  def implementers_total_budget(quarters)
-    @projects.map{ |p| p.sub_activities_total_by_type('budget', quarters, currency)}.sum
+  
+  def implementers_total_budget
+    @projects.map{ |p| p.sub_activities_total_by_type('budget', currency)}.sum
   end
 
 

@@ -8,29 +8,17 @@ Feature: Reporter can manage projects
     And a data_request "request1" exists with title: "request1"
     And a data_request "request2" exists with title: "request2"
     And an organization "organization2" exists with name: "organization2"
-    And a data_response "data_response" exists with data_request: data_request "request1", organization: organization "organization2"
-    And a data_response "data_response1" exists with data_request: data_request "request2", organization: organization "organization3"
+    And a data_response "data_response" should exist with data_request: data_request "request1", organization: organization "organization2"
+    And a data_response "data_response1" should exist with data_request: data_request "request2", organization: organization "organization3"
     And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
     And a location exists with short_display: "Location1"
     And a location exists with short_display: "Location2"
     And I am signed in as "reporter@hrtapp.com"
     And I follow "request1"
     And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
-    And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3"
+    # And a funding_flow exists with from: organization "organization3", to: organization "organization2", project: project "Project5", id: "3", data_response: the data_response
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
-		And I follow "Workplan"
-
-  Scenario: Reporter cannot see the quarterly budget fields if they are not available
-    Given a data_request "request_no_quarters" exists with title: "request_no_quarters", budget_by_quarter: "false"
-    And an organization "organization4" exists with name: "organization4"
-    And a data_response "data_response3" exists with data_request: data_request "request_no_quarters", organization: organization "organization4"
-    And a project "Project9" exists with name: "Project9", data_response: data_response "data_response3"
-    And a reporter exists with email: "reporter2@hrtapp.com", organization: organization "organization4", current_response: the data_response
-    And I follow "Sign Out"
-    And I am signed in as "reporter2@hrtapp.com"
-    And I follow "Workplan"
-    And I follow "Project9"
-    Then I should not see "Quarterly budget"
+		And I follow "Projects"
 
   @javascript
   Scenario: Reporter can CRUD projects
@@ -49,7 +37,7 @@ Feature: Reporter can manage projects
    When I follow "Project2"
      And I follow "Delete this Project"
 		 And I confirm the popup dialog
-   Then I should see "Project was successfully destroyed"
+   Then I should not see "Project2"
 
   @wip
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
@@ -118,7 +106,7 @@ Feature: Reporter can manage projects
    Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
 
   Scenario: A reporter can create comments for a project
-   Given a project exists with name: "project1", data_response: data_response "data_response"  When I follow "Project1"
+   When I follow "Project5"
     And I fill in "Title" with "Comment title"
     And I fill in "Comment" with "Comment body"
     And I press "Create Comment"
@@ -126,22 +114,16 @@ Feature: Reporter can manage projects
     And I should see "Comment body"
 
   Scenario: A reporter can create comments for an activity and see comment errors
+    When I follow "Projects"
+    And I follow "Project5"
+      And I press "Create Comment"
+    Then I should see "You cannot create blank comment."
 
-   When I follow "Workplan"
-    And I follow "project1"
-    And I press "Create Comment"
-   Then I should see "can't be blank" within "#comment_title_input"
-    And I should see "can't be blank" within "#comment_comment_input"
-
-   When I fill in "Title" with "Comment title"
-    And I press "Create Comment"
-   Then I should not see "can't be blank" within "#comment_title_input"
-    And I should see "can't be blank" within "#comment_comment_input"
-
-   When I fill in "Comment" with "Comment body"
-    And I press "Create Comment"
-   Then I should see "Comment title"
-    And I should see "Comment body"
+    When I fill in "Comment" with "Comment body"
+    And I fill in "Title" with "Comment Title"
+      And I press "Create Comment"
+    Then I should see "Comment body"
+    And I should see "Comment Title"
 
 
   @javascript @wip

@@ -1,9 +1,6 @@
 %table.third.summary
   %tbody
     %tr
-      %td Dates
-      %td= "#{project.start_date} to #{project.end_date}"
-    %tr
       %td Total Budget:
       %td= n2cnds(project.entire_budget, project.currency || @response.currency)
     %tr

@@ -52,21 +52,8 @@ describe Activity do
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
-    it { should validate_numericality_of(:budget2) }
-    it { should validate_numericality_of(:budget3) }
-    it { should validate_numericality_of(:budget4) }
-    it { should validate_numericality_of(:budget5) }
-    it { should validate_numericality_of(:budget_q4_prev) }
-    it { should validate_numericality_of(:budget_q1) }
-    it { should validate_numericality_of(:budget_q2) }
-    it { should validate_numericality_of(:budget_q3) }
-    it { should validate_numericality_of(:budget_q4) }
     it { should validate_numericality_of(:spend) }
-    it { should validate_numericality_of(:spend_q4_prev) }
-    it { should validate_numericality_of(:spend_q1) }
-    it { should validate_numericality_of(:spend_q2) }
-    it { should validate_numericality_of(:spend_q3) }
-    it { should validate_numericality_of(:spend_q4) }
+
     #it "accepts start date < end date" do
       #a = Factory.build(:activity,
                         #:start_date => DateTime.new(2010, 01, 01),
@@ -94,7 +81,7 @@ describe Activity do
       basic_setup_response
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response.activities)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Q1 Spend,Q2 Spend,Q3 Spend,Q4 Spend,Current Budget,Q1 Budget,Q2 Budget,Q3 Budget,Q4 Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Current Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 

@@ -14,12 +14,11 @@ Feature: Reporter can edit profile
       And I press "Sign in"
 
 
-
     Scenario: User can change credentials and login again
       Given I follow "My Profile"
         And I fill in "Email" with "Frank2@hrtapp.com"
-        And I fill in "Password" with "password2"
-        And I fill in "Password confirmation" with "password2"
+        And I fill in "New password" with "password2"
+        And I fill in "Confirm new password" with "password2"
         And I press "Save"
       Then I should see "Profile was successfully updated"
 

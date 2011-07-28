@@ -1,0 +1,8 @@
+%div
+  - semantic_form_for @comment, :url => admin_comment_path(comment) do |f|
+    = f.semantic_errors :state
+    - f.inputs do
+      - f.inputs "", :id => "basic", :class => "collapsible" do
+        = f.input :comment, :label => 'Comment', :input_html => {:"data-hint" => 'Type your comment here'}
+      - f.buttons do
+        = f.commit_button :label => (comment.new_record? ? "Create Comment" : "Update Comment"), :button_html => { :class => "add_row" }

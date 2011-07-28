@@ -10,7 +10,7 @@ Feature: Admin can review country
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "UNDP"
       And a reporter exists with email: "undp_user@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "Project A", data_response: the data_response
       And an activity exists with name: "Activity A", data_response: the data_response, project: the project
       And a location exists with short_display: "Location A"
@@ -29,11 +29,11 @@ Feature: Admin can review country
     Given an organization exists with name: "SysAdmin Org"
     And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
     And I am signed in as "sysadmin@hrtapp.com"
-    When I follow "Dashboard"
-    And I follow "Review National Past Expenditures and Current Budgets"
+    When I follow "Reports"
+    And I follow "review_national_expenditures_and_current_budgets"
     And I follow "View all Activities"
     Then I should see "Activities" within "h1"
     When I follow "Activity A"
     Then I should see "Activity A" within "h1"
-    And I should see "NSP Past Expenditure"
+    And I should see "NSP Expenditure"
     And I should see "NSP Current Budget"

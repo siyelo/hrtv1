@@ -19,10 +19,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.text     "description"
     t.string   "type"
     t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "spend"
@@ -35,20 +31,11 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.decimal  "budget_percentage"
     t.decimal  "spend_percentage"
     t.boolean  "approved"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
     t.integer  "comments_count",               :default => 0
     t.integer  "sub_activities_count",         :default => 0
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
@@ -296,10 +283,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.string   "currency"
     t.integer  "data_response_id"
     t.integer  "comments_count",   :default => 0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
     t.integer  "user_id"
     t.date     "am_approved_date"
   end

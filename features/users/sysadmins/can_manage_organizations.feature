@@ -9,31 +9,25 @@ Feature: Admin can manage organizations
       And an organization exists with name: "org2", raw_type: "Ngo", fosaid: "222"
       And a sysadmin exists with email: "admin@hrtapp.com", organization: the organization
       And a reporter exists with email: "org2_user@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And I am signed in as "admin@hrtapp.com"
-
 
 
     Scenario: Admin can CRUD organizations
       When I follow "Organizations"
         And I follow "Create Organization"
         And I fill in "Name" with "Organization name"
-        And I fill in "Raw type" with "My raw_type"
+        And I select "District" from "Raw type"
         And I fill in "Fosaid" with "123"
         And I press "Create organization"
       Then I should see "Organization was successfully created"
-        And I should see "Organization name"
-        And I should see "My raw_type"
-        And I should see "123"
-
-      When I follow "Edit"
         And I fill in "Name" with "My new organization"
         And I press "Update organization"
       Then I should see "Organization was successfully updated"
-        And I should see "My new organization"
+        And the "Name" field should contain "My new organization"
 
-      When I follow "X"
-      Then I should see "Organization was successfully deleted"
+      When I follow "Delete this Organization"
+      Then I should see "Organization was successfully destroyed."
         And I should not see "Organization name"
 
 
@@ -51,26 +45,26 @@ Feature: Admin can manage organizations
          | org1      | org2 - 2 users  | Organizations successfully merged.                    | 
 
 
-    @javascript
+    @javascript @wip
     Scenario Outline: Merge duplicate organizations (with JS)
       When I follow "Organizations"
-        And I follow "Fix duplicate organizations"
-        And I select "<duplicate>" from "Duplicate organization"
-        And I should see "Organization: <duplicate_box>" within "#duplicate"
-        And I select "<target>" from "Replacement organization"
-        And I should see "Organization: <target_box>" within "#target"
-        And I confirm the popup dialog
-        And I press "Replace"
+      And I follow "Fix duplicate organizations"
+      And I select "<duplicate>" from "Duplicate organization"
+      And I should see "Organization: <duplicate_box>" within "#duplicate"
+      And I select "<target>" from "Replacement organization"
+      And I should see "Organization: <target_box>" within "#target"
+      And I confirm the popup dialog
+      And I press "Replace"
       Then I should see "<message>"
-        And the "Duplicate organization" text should be "<select_text>"
+      And "<removed_duplicates>" should not be an option for "Duplicate organization"
 
       Examples:
-          | duplicate | target         | duplicate_box | target_box | message                                               | select_text | 
-          | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. | org1        | 
-          | org1      | org2 - 2 users  | org1          | org2       | Organizations successfully merged.                    |             | 
+        | duplicate | target         | duplicate_box | target_box | message                                               | remaining_duplicates |
+        | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. |                      |
+        | org1      | org2 - 2 users | org1          | org2       | Organizations successfully merged.                    | org1                 |
 
-
-    @javascript
+	#combobox?!?!?
+    @javascript 
     Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
       When I follow "Organizations"
         And I follow "Fix duplicate organizations"
@@ -85,19 +79,20 @@ Feature: Admin can manage organizations
          | org1           | Duplicate organization   | .box[data-type='duplicate'] | 
          | org1 - 0 users | Replacement organization | .box[data-type='target']    | 
 
-
-    @javascript
+	
+	#combobox?!?!?
+    @javascript 
     Scenario: Try to delete non-empty organization (with JS)
       When I follow "Organizations"
-        And I follow "Fix duplicate organizations"
-        And I select "org2 - 2 users" from "Replacement organization"
-        And I confirm the popup dialog
-        And I follow "Delete" within ".box[data-type='target']"
+      And I follow "Fix duplicate organizations"
+      And I select "org2 - 2 users" from "Replacement organization"
+      And I confirm the popup dialog
+      And I follow "Delete" within ".box[data-type='target']"
       # Check that org2 organization is not deleted
       Then the "Replacement organization" text should match "org2 - 2 users"
-        And I should see "You cannot delete an organization that has users or data associated with it."
+      And I should see "You cannot delete an organization that has users or data associated with it."
 
-
+	@run
     Scenario Outline: a sysadmin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"
@@ -110,9 +105,9 @@ Feature: Admin can manage organizations
 
         Examples:
          | column_name | column | text1 | text2 | 
-         | Name        | 1      | org2  | org1  | 
-         | Raw Type    | 2      | Donor | Ngo   | 
-         | Fosaid      | 3      | 111   | 222   | 
+         | Organization| 1      | org2  | org1  | 
+         | Type		   | 5      | Donor | Ngo   | 
+         | Fosaid      | 6      | 111   | 222   | 
 
 
     Scenario: a sysadmin can filter organization

@@ -16,7 +16,7 @@ class OrganizationsController < Reporter::BaseController
       render :action => :edit
     end
   end
-
+  
   private
     def load_organization
       @organization = current_user.organization

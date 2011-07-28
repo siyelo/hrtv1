@@ -4,11 +4,11 @@ Feature: Admin can manage users
   I want to be able to manage users
 
   Background:
-    Given an organization exists with name: "organization1"
-      And an organization exists with name: "FHI"
-      And a data_response exists with organization: the organization
-      And an sysadmin exists with email: "pink.panter@hrt.com", organization: the organization
-      And I am signed in as "pink.panter@hrt.com"
+  
+    Given an organization exists with name: "MoH"
+      And a data_request exists with title: "Req1", organization: the organization
+      And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
+      And I am signed in as "sysadmin@hrtapp.com"
 		#requires javascript but filling in autocomplete is not working
   
     @javascript @wip
@@ -34,7 +34,7 @@ Feature: Admin can manage users
     When I follow "Members"
       And I follow "Edit"
       And I fill in "Email" with "pink.panter2@hrtapp.com"
-      And I press "Update User"
+      And I press "Update Member"
     Then I should see "User was successfully updated"
       And I should see "pink.panter2"
       And I should not see "pink.panter1"
@@ -49,21 +49,19 @@ Feature: Admin can manage users
       And I should not see "pink.panter1"
   
   
-  
-    @javascript
   Scenario Outline: Admin can CRUD users and see errors
-    When I follow "Members" within the main nav
-    And I fill in "theCombobox" with "<organization>"
-    And I fill in "Email" with "<email>"
-    And I fill in "Full name" with "<name>"
-    And I select "<roles>" from "Role"
-    And I press "Add user"
-    Then I should see "<message>"
-  
-    Examples:
-       | organization   | email         | name | roles    | message        |
-       |                | pp@hrtapp.com | P    | Reporter | can't be blank |
-       | organization1  |               | P    | Reporter | can't be blank |
+    When I follow "Members"
+      And I select "<organization>" from "Organization"
+      And I fill in "Email" with "<email>"
+      And I fill in "Full name" with "<name>"
+      And I select "<roles>" from "Role"
+      And I press "Add"
+      And I should see "<message>"
+
+      Examples:
+         | organization  | email         | name | roles    |message                     |
+         |               | pp@hrtapp.com | P    | Reporter | Oops, we couldn't add that member.  |
+         | MoH |               | P    | Reporter | Oops, we couldn't add that member.  |
   
   
   
@@ -98,33 +96,31 @@ Feature: Admin can manage users
     When I follow "Download template"
     Then I should see "organization_name,email,full_name,roles"
   
-  Scenario Outline: a sysadmin can filter users
-    Given an organization exists with name: "organization22"
+  
+  Scenario Outline: An admin can filter users
+    Given an organization exists with name: "organization2"
       And an user exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
-      And an organization exists with name: "organization33"
+      And an organization exists with name: "organization3"
       And an user exists with email: "user2@hrtapp.com", full_name: "Full name 2", organization: the organization
     When I follow "Members"
       And I fill in "query" with "<first>"
       And I press "Search"
-    Then I should see "Users with name, email or organiation name containing <first>"
-    And I should see "<first>" within "#js_organiations_tbl"
-    And I should not see "<second>" within "#js_organiations_tbl"
-    And I fill in "query" with "<second>"
-  
-    When I press "Search"
-    Then I should see "Users with name, email or organiation name containing <second>"
-    And I should see "<second>" within "#js_organiations_tbl"
-    And I should not see "<first>" within "#js_organiations_tbl"
-  
+    Then I should see "Members found containing <first>"
+      And I should see "<first>"
+      And I should not see "<second>"
+    
     Examples:
        | first            | second           |
+       | user1            | user2            |
+       | user2            | user1            |
        | user1@hrtapp.com | user2@hrtapp.com |
        | user2@hrtapp.com | user1@hrtapp.com |
        | Full name 1      | Full name 2      |
        | Full name 2      | Full name 1      |
-       | organization22    | organization33    |
-       | organization33    | organization22    |
-  
+       | organization2    | Full name 2    |
+       | organization3    | Full name 1    |
+       
+       
   Scenario Outline: a sysadmin can sort users
     Given an organization exists with name: "organization2"
       And a reporter exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization
@@ -144,8 +140,8 @@ Feature: Admin can manage users
   
       Examples:
           | column_name  | column | text1            | text2            |
-          | Organization | 1      | organization2    | organization3    |
-          | Full Name    | 2      | Full name 1      | Full name 2      |
-          | Email        | 3      | user2@hrtapp.com | user1@hrtapp.com |
+          | Organization | 3      | organization2    | organization3    |
+          | Full Name    | 1      | Full name 1      | Full name 2      |
+          | Email        | 2      | user2@hrtapp.com | user1@hrtapp.com |
 
 

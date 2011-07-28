@@ -175,14 +175,6 @@ class SubActivity < Activity
 end
 
 
-
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: activities
@@ -195,10 +187,6 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
@@ -211,20 +199,11 @@ end
 #  budget_percentage            :decimal(, )
 #  spend_percentage             :decimal(, )
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

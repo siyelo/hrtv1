@@ -14,8 +14,6 @@ class Admin::CodesController < Admin::BaseController
     scope  = Code.scoped({})
     scope  = scope.scoped(:conditions => ["UPPER(short_display) LIKE UPPER(:q) OR
                                           UPPER(type) LIKE UPPER(:q) OR
-                                          UPPER(code_level) LIKE UPPER(:q) OR
-                                          UPPER(child_health) LIKE UPPER(:q) OR
                                           UPPER(description) LIKE UPPER(:q)",
                           {:q => "%#{params[:query]}%"}]) if params[:query]
     @codes = scope.paginate(:page => params[:page], :per_page => 10,

@@ -21,9 +21,9 @@
       Add other cost
   %td.total Subtotal
   %td.total_amount
-    %span.js_project_total_spend_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('spend', false, project.currency) + project.converted_other_costs_total_by_type('spend', false, project.currency)
+    %span.js_project_total_spend_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('spend', project.currency) + project.converted_other_costs_total_by_type('spend', project.currency)
     %span.currency= project.currency
 
   %td.total_amount
-    %span.js_project_total_budget_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('budget', false, project.currency) + project.converted_other_costs_total_by_type('budget', false, project.currency)
+    %span.js_project_total_budget_amount{:"data-rate" => currency_rate(project.currency, @response.currency)}= project.converted_activities_total_by_type('budget', project.currency) + project.converted_other_costs_total_by_type('budget', project.currency)
     %span.currency= project.currency

@@ -9,14 +9,6 @@ module BudgetSpendHelpers
     !budget.nil? and budget > 0
   end
 
-  def budget_quarter(quarter)
-    get_quarter(:budget, quarter)
-  end
-
-  def spend_quarter(quarter)
-    get_quarter(:spend, quarter)
-  end
-
   def spend_RWF
     return 0 if spend.nil?
     spend * Money.default_bank.get_rate(currency, :RWF)
@@ -30,29 +22,17 @@ module BudgetSpendHelpers
   # GN TODO: refactor for spend in quarters to total up
   # into spend field so only spend field is checked here
   def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+    spend.present?
   end
 
   def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+    budget.present?
   end
 
-  def total_by_type(amount_type, quarters)
-    if quarters
-      amounts = [
-        self.send("#{amount_type}_q4_prev"),
-        self.send("#{amount_type}_q1"),
-        self.send("#{amount_type}_q2"),
-        self.send("#{amount_type}_q3"),
-        self.send("#{amount_type}_q4")
-      ].compact.sum
-    else
-      amounts = [
-        self.send("#{amount_type}")
-      ].compact.sum
-    end
+  def total_by_type(amount_type)
+    amounts = [
+      self.send("#{amount_type}")
+    ].compact.sum
   end
 
   def smart_sum(collection, method)
@@ -64,26 +44,6 @@ module BudgetSpendHelpers
     base.class_eval do
       validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
       validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-
-      if base.eql?(Activity) || base.eql?(FundingFlow)
-        validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
-        validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
-        validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
-        validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
-        validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
-        validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
-        validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
-        validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
-        validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
-        validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
-      end
-
-      if base.eql?(Project) || base.eql?(Activity)
-        validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
-        validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
-        validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
-        validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
-      end
     end
   end
 
@@ -99,11 +59,5 @@ module BudgetSpendHelpers
         data_ok = nil
       end
       data_ok
-    end
-
-    def get_quarter(method, quarter)
-      if check_data_response()
-        self.send(:"#{method}_#{GOR_QUARTERS[quarter-1]}")
-      end
     end
 end

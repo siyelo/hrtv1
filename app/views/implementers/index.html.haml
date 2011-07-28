@@ -41,10 +41,10 @@
         %td{:colspan => "2", :class => "name fixed"}
         %td.total Total
         %td.total_amount
-          %span.js_projects_total_spend_amount= @response.implementers_total_spend(false)
+          %span.js_projects_total_spend_amount= @response.implementers_total_spend
           %span.currency= @response.currency
         %td.total_amount
-          %span.js_projects_total_budget_amount= @response.implementers_total_budget(false)
+          %span.js_projects_total_budget_amount= @response.implementers_total_budget
           %span.currency= @response.currency
         %td.actions
 

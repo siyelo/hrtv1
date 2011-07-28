@@ -32,7 +32,7 @@
 
 - if params[:query]
   %p.search_user_message
-    = "Members found containing \"#{params[:query]}\""
+    = "Members found containing #{params[:query]}"
     = link_to "(Back to complete member list)", members_path
 
 %table.standard.rounded#js_organiations_tbl

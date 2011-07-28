@@ -29,19 +29,6 @@
     %ul.dashboard_section
       = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to past expenditure in the upcoming fiscal year", :required => false 
 
-    - unless @response.request.no_long_term_budgets?
-      %li.last
-        %h3 Future Budget
-        %p.hint The total amount that you are planning to past expenditure in the upcoming fiscal year(s).
-        %ul.dashboard_section
-          %li.amounts
-            %label Yearly budget
-            %ul
-              = f.input :budget2, :label => "Year + 2", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "Year + 3", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "Year + 4", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "Year + 5", :required => false if @response.request.year_5?
-
   %li.last
     %h3 Activity Funding Sources
     %ul.dashboard_section

@@ -1,17 +1,21 @@
+:javascript
+  var _purpose_row = "#{js_safe(escape_javascript(@purpose_row))}"
+
 - content_for :sub_nav do
   = render 'shared/sub_nav_projects'
 
 %h1.main_heading Future Budgets
 
 - form_tag long_term_budget_path(@long_term_budget.year), :method => :put do
-  %table.standard
+  %table.standard.long_term_budget
     %thead
       %tr.head
-        %th Health Function
-        %th= "FY #{@long_term_budget.year + 1}-#{@long_term_budget.year + 2}"
-        %th= "FY #{@long_term_budget.year + 2}-#{@long_term_budget.year + 3}"
-        %th= "FY #{@long_term_budget.year + 3}-#{@long_term_budget.year + 4}"
-        %th= "FY #{@long_term_budget.year + 4}-#{@long_term_budget.year + 5}"
+        %th.desc Health Function
+        %th.amount= "FY #{@long_term_budget.year + 1}-#{@long_term_budget.year + 2}"
+        %th.amount= "FY #{@long_term_budget.year + 2}-#{@long_term_budget.year + 3}"
+        %th.amount= "FY #{@long_term_budget.year + 3}-#{@long_term_budget.year + 4}"
+        %th.amount= "FY #{@long_term_budget.year + 4}-#{@long_term_budget.year + 5}"
+        %th.action
     %tbody
       -#- @long_term_budget.budget_entries.group_by{|be| be.purpose_id }.each_pair do |purpose_id, budget_entries|
         -#= render 'purpose_long_term_budgets', :purpose_id => purpose_id, :budget_entries => budget_entries

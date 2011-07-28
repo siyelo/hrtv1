@@ -1425,8 +1425,6 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
   }
 };
 
-
-
 var changeRowspan = function (element, value) {
   var projectTd = element.parents('tr').prevAll('.js_project_row:first').find('td');
   projectTd.attr('rowspan', projectTd.attr('rowspan') + value);

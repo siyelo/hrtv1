@@ -51,19 +51,21 @@ var purposes = {
     // disable this add purpose button
     add_link.addClass('disabled');
 
-    var tr = $('<tr/>').append(
-      $('<td/>').attr({'class': 'desc wrap-60'}).append(
-        $('<input/>').attr({'class': 'purpose_search', 'type': 'text'})
-      ),
-      $('<td/>').attr({'class': 'total'}).append(
-        $('<input/>').attr({'class': 'js_ca', 'type': 'text'})
-      ),
-      $('<td/>').attr({'class': 'actions'}).append(
-        $('<img/>').attr({src: "/images/delete_row.png", class: "js_remove_purpose delete_row pointer"})
-      )
-    )
+    //var tr = $('<tr/>').append(
+      //$('<td/>').attr({'class': 'desc wrap-60'}).append(
+        //$('<input/>').attr({'class': 'purpose_search', 'type': 'text'})
+      //),
+      //$('<td/>').attr({'class': 'total'}).append(
+        //$('<input/>').attr({'class': 'js_ca', 'type': 'text'})
+      //),
+      //$('<td/>').attr({'class': 'actions'}).append(
+        //$('<img/>').attr({src: "/images/delete_row.png", class: "js_remove_purpose delete_row pointer"})
+      //)
+    //)
+    var tr = $(_purpose_row);
 
-    add_link.parents('tr:first').before(tr)
+
+    add_link.parents('tr:first').before(tr);
 
     // hide all mcdropdowns fix
     //$('.mcdropdown_menu, .mcdropdown_autocomplete').hide();
@@ -311,7 +313,7 @@ var long_term_budgets_show =  {
   run: function () {
     $(".js_add_purpose").live('click', function (e) {
       e.preventDefault();
-      purposes.add_purpose($(this));
+      purposes.add_purpose($(this), '');
     });
   }
 };

@@ -1,0 +1,36 @@
+-#######################################################
+-# !!!!! this partial is used by jQuery                #
+-# any changes in if block, must reflect in else block #
+-#######################################################
+- if activity && ca
+  - field = :"classifications[#{activity.id}][#{ca.code.id}]"
+  %tr{:"data-ca_id" => ca.id}
+    %td.desc.wrap-60.tooltip
+      %span.tooltip{:style => 'height: 100%'}
+      = label_tag field, "#{ca.code.short_display}", :title => ca.code.description
+      %span.context= ca.code.context
+    %td.amount
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+    %td.amount
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+    %td.amount
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+    %td.amount
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+    %td.action
+      = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
+- else
+  // used in javascript !!!
+  %tr
+    %td.desc.wrap-60.tooltip
+      = text_field_tag '', '', :class => 'purpose_search'
+    %td.amount
+      = text_field_tag '', '', :class => 'js_ca'
+    %td.amount
+      = text_field_tag '', '', :class => 'js_ca'
+    %td.amount
+      = text_field_tag '', '', :class => 'js_ca'
+    %td.amount
+      = text_field_tag '', '', :class => 'js_ca'
+    %td.action
+      = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'

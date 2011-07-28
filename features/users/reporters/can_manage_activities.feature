@@ -72,35 +72,6 @@ Feature: Reporter can manage activities
       Then I should see "Comment title"
        And I should see "Comment body"
 
-       
-    @javascript
-    Scenario: Reporter can upload activities
-      Given I follow "import_export"
-      When I attach the file "spec/fixtures/projects.csv" to "File"
-        And I press "Import" within ".upload_box"
-      Then I should see "Projects & Activities"
-
-    Scenario: Reporter can see error if no csv file is not attached for upload
-      When I press "Import" within ".activities_upload_box"
-      Then I should see "Please select a file to upload"
-
-    Scenario: Adding malformed CSV file doesn't throw exception
-    Given I follow "import_export"
-      When I attach the file "spec/fixtures/malformed.csv" to "File"
-        And I press "Import"
-      Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
-
-    Scenario: Reporter can download Activities CSV template
-      When I follow "Get Template" within ".activities_upload_box"
-      Then I should see "project_name,project_description,activity_name,activity_description,spend,current_budget,start_date,end_date"
-
-    Scenario: Reporter can download Activities
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-      When I follow "Projects"
-        And I follow "Export" within ".upload_box"
-      Then I should see "Activity1"
-        And I should see "Activity1 description"
-
     Scenario: A reporter can create comments for an activity and see comment errors
       Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"

@@ -95,8 +95,9 @@ class ProjectsController < Reporter::BaseController
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
         if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Project.create_from_file(doc, @response)
-          flash[:notice] = "Created #{saved} of #{saved + errors} projects successfully"
+          saved_proj, error_proj, saved_activ, error_activ = Project.create_from_file(doc, @response)
+          flash[:notice] = "Successfully imported #{saved_proj} of #{saved_proj + error_proj} projects 
+                            and created/updated #{saved_activ} of #{saved_activ + error_activ} activities"
         else
           flash[:error] = 'Wrong fields mapping. Please download the CSV template'
         end

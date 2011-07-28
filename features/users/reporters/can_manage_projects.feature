@@ -74,37 +74,6 @@ Feature: Reporter can manage projects
         | 2010-01-01 | 2010-01-02 | 900           | 900        | Project was successfully created     | Project was successfully created                                     |
 
 
-    @wip
-  Scenario: Adding malformed CSV file doesn't throw exception
-   When I attach the file "spec/fixtures/malformed.csv" to "File"
-    And I press "Upload and Import"
-   Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
-
-    @wip
-  Scenario: Reporter can upload projects
-   When I attach the file "spec/fixtures/projects.csv" to "File"
-    And I press "Upload and Import"
-   Then I should see "Created 4 of 4 projects successfully"
-    And I should see "p1"
-    And I should see "p2"
-    And I should see "p3"
-    And I should see "p4"
-
-    @wip
-  Scenario: Reporter can see error if no csv file is not attached for upload
-   When I press "Upload and Import"
-   Then I should see "Please select a file to upload"
-
-
-    @wip
-  Scenario: Reporter can see error when invalid csv file is attached for upload and download template
-   When I attach the file "spec/fixtures/invalid.csv" to "File"
-    And I press "Upload and Import"
-   Then I should see "Wrong fields mapping. Please download the CSV template"
-
-   When I follow "Download template"
-   Then I should see "name,description,currency,entire_budget,budget,budget_q4_prev,budget_q1,budget_q2,budget_q3,budget_q4,spend,spend_q4_prev,spend_q1,spend_q2,spend_q3,spend_q4,start_date,end_date"
-
   Scenario: A reporter can create comments for a project
    When I follow "Project5"
     And I fill in "Title" with "Comment title"

@@ -5,7 +5,7 @@ require 'validators'
 class Project < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
-                           spend current_budget start_date end_date]
+                           spend budget]
 
   include ActionView::Helpers::TextHelper
   include ActsAsDateChecker
@@ -60,6 +60,7 @@ class Project < ActiveRecord::Base
   attr_accessible :name, :description, :spend, :currency, :data_response, :activities,
                   :location_ids, :in_flows_attributes, :budget, :entire_budget,
                   :user_id
+
   ### Delegates
   delegate :organization, :to => :data_response
 
@@ -133,18 +134,29 @@ END
   end
 
   def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
+    saved_proj, error_proj, saved_activ, error_activ = 0, 0, 0, 0
+    @project_name = ""
     doc.each do |row|
       attributes = row.to_hash
-      project = data_response.projects.find_by_name(attributes["project_name"])
+
+      @project_name = attributes["project_name"] unless attributes["project_name"].blank?
+      project = data_response.projects.find_by_name(@project_name)
       unless project
         project = data_response.projects.new(:name => attributes["project_name"], :description => attributes["project_description"])
-        project.save
+        project.save ? (saved_proj += 1) : (error_proj += 1)
       end
-      project.activities << project.add_activity(attributes)
-      project.save ? (saved += 1) : (errors += 1)
+
+      @activity_name = attributes["activity_name"].strip #activity name stripped of leading spaces when saving
+      activity = project.activities.find_by_name(@activity_name)
+      if activity
+        activity.update_attributes(attributes)
+      else
+        activity = project.add_activity(attributes)
+        project.activities << activity
+      end
+      activity.save ? (saved_activ += 1) : (error_activ += 1)
     end
-    return saved, errors
+    return saved_proj, error_proj, saved_activ, error_activ
   end
 
   def add_activity(attributes)

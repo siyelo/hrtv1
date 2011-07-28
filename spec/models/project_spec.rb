@@ -23,7 +23,6 @@ describe Project do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:entire_budget) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
@@ -377,5 +376,5 @@ describe Project do
       @project.reload
       @project.linked?.should == true
     end
-  end
+  end  
 end

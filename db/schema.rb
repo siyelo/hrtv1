@@ -36,8 +36,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
-    t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
-    t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"

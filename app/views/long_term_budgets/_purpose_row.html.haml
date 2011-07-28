@@ -10,13 +10,13 @@
       = label_tag field, "#{ca.code.short_display}", :title => ca.code.description
       %span.context= ca.code.context
     %td.amount
-      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_year'
     %td.amount
-      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_year'
     %td.amount
-      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_year'
     %td.amount
-      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_ca'
+      = text_field_tag field, ca.amount || "#{ca.percentage}%", :class => 'js_year'
     %td.action
       = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'
 - else
@@ -25,12 +25,12 @@
     %td.desc.wrap-60.tooltip
       = text_field_tag '', '', :class => 'purpose_search'
     %td.amount
-      = text_field_tag '', '', :class => 'js_ca'
+      = text_field_tag '', '', :class => 'js_year'
     %td.amount
-      = text_field_tag '', '', :class => 'js_ca'
+      = text_field_tag '', '', :class => 'js_year'
     %td.amount
-      = text_field_tag '', '', :class => 'js_ca'
+      = text_field_tag '', '', :class => 'js_year'
     %td.amount
-      = text_field_tag '', '', :class => 'js_ca'
+      = text_field_tag '', '', :class => 'js_year'
     %td.action
       = image_tag "delete_row.png", :class => 'js_remove_purpose delete_row pointer'

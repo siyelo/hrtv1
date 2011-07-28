@@ -63,7 +63,7 @@ Feature: Admin can manage organizations
         | org1      | org1 - 0 users | org1          | org1       | Same organizations for duplicate and target selected. |                      |
         | org1      | org2 - 2 users | org1          | org2       | Organizations successfully merged.                    | org1                 |
 
-
+	#combobox?!?!?
     @javascript 
     Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
       When I follow "Organizations"
@@ -79,8 +79,9 @@ Feature: Admin can manage organizations
          | org1           | Duplicate organization   | .box[data-type='duplicate'] | 
          | org1 - 0 users | Replacement organization | .box[data-type='target']    | 
 
-
-    @javascript
+	
+	#combobox?!?!?
+    @javascript 
     Scenario: Try to delete non-empty organization (with JS)
       When I follow "Organizations"
       And I follow "Fix duplicate organizations"
@@ -91,7 +92,7 @@ Feature: Admin can manage organizations
       Then the "Replacement organization" text should match "org2 - 2 users"
       And I should see "You cannot delete an organization that has users or data associated with it."
 
-
+	@run
     Scenario Outline: a sysadmin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"
@@ -104,9 +105,9 @@ Feature: Admin can manage organizations
 
         Examples:
          | column_name | column | text1 | text2 | 
-         | Name        | 1      | org2  | org1  | 
-         | Raw Type    | 2      | Donor | Ngo   | 
-         | Fosaid      | 3      | 111   | 222   | 
+         | Organization| 1      | org2  | org1  | 
+         | Type		   | 5      | Donor | Ngo   | 
+         | Fosaid      | 6      | 111   | 222   | 
 
 
     Scenario: a sysadmin can filter organization

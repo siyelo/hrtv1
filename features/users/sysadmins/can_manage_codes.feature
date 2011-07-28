@@ -97,7 +97,7 @@ Feature: Admin can manage codes
             | Mtef       | Nha        | 
 
 
-			@run
+			
     Scenario Outline: a sysadmin can sort codes
       Given a mtef_code exists with short_display: "code1", description: "code1 desc"
         And a nha_code exists with short_display: "code2", description: "code2 desc"

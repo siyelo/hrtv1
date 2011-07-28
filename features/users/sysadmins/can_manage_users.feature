@@ -5,12 +5,10 @@ Feature: Admin can manage users
 
   Background:
   
-    Given an organization exists with name: "organization1"
-      And an organization exists with name: "FHI"
-      And a data_request exists with title: "data_request1"
-      And a data_response should exist with data_request: the data_request, organization: the organization
-      And a sysadmin exists with email: "pink.panter@hrt.com", organization: the organization
-      And I am signed in as "pink.panter@hrt.com"
+    Given an organization exists with name: "MoH"
+      And a data_request exists with title: "Req1", organization: the organization
+      And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
+      And I am signed in as "sysadmin@hrtapp.com"
 		#requires javascript but filling in autocomplete is not working
   
     @javascript @wip
@@ -63,7 +61,7 @@ Feature: Admin can manage users
       Examples:
          | organization  | email         | name | roles    |message                     |
          |               | pp@hrtapp.com | P    | Reporter | Oops, we couldn't add that member.  |
-         | organization1 |               | P    | Reporter | Oops, we couldn't add that member.  |
+         | MoH |               | P    | Reporter | Oops, we couldn't add that member.  |
   
   
   
@@ -142,8 +140,8 @@ Feature: Admin can manage users
   
       Examples:
           | column_name  | column | text1            | text2            |
-          | Organization | 1      | organization2    | organization3    |
-          | Full Name    | 2      | Full name 1      | Full name 2      |
-          | Email        | 3      | user2@hrtapp.com | user1@hrtapp.com |
+          | Organization | 3      | organization2    | organization3    |
+          | Full Name    | 1      | Full name 1      | Full name 2      |
+          | Email        | 2      | user2@hrtapp.com | user1@hrtapp.com |
 
 

@@ -1,5 +1,5 @@
 ## not sure how this is supposed to be done
-
+@wip
 Feature: Admin can manage data responses
   In order to reduce costs
   As a sysadmin
@@ -15,6 +15,7 @@ Feature: Admin can manage data responses
       And a sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
       And I am signed in as "sysadmin@hrtapp.com"
 
+	@run
     Scenario: Manage data responses
       When I follow "Review Organization Past Expenditures and Current Budgets"
        And I follow "Empty"
@@ -25,7 +26,7 @@ Feature: Admin can manage data responses
       Then I should see "Data response was successfully deleted"
         And I should not see "UNDP" within ".resources"
 
-    @javascript
+    @javascript @run
     Scenario: Manage data responses (with JS)
       When I follow "Review Organization Past Expenditures and Current Budgets"
        And I follow "Empty"

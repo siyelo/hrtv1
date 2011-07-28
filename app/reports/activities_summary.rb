@@ -39,7 +39,7 @@ class Reports::ActivitiesSummary
       row << "activity.name"
       row << "activity.description"
       row << "activity.budget"
-      row << "activity.spend"
+      row << "activity.expenditure"
       row << "currency"
       row << "activity.start_date"
       row << "activity.end_date"
@@ -49,7 +49,7 @@ class Reports::ActivitiesSummary
       row << "activity.targets"
       row << "Is Implementer?"
       row << "parent_activity.total_budget"
-      row << "parent_activity.total_spend"
+      row << "parent_activity.total_expenditure"
 
       row
     end

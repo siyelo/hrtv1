@@ -34,7 +34,7 @@ class Reports::ActivitiesByCostCategorization
       row << "activity.text_for_beneficiaries"
       row << "activity.targets"
       row << "activity.budget"
-      row << "activity.spend"
+      row << "activity.expenditure"
       row << "currency"
       row << "activity.start_date"
       row << "activity.end_date"

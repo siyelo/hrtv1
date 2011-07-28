@@ -4,10 +4,10 @@ class CommentsController < Reporter::BaseController
     if current_user.admin?
       @comments = Comment.paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
     else
-      @comments = Comment.on_all(current_user.organization).paginate :per_page => 20, :page => params[:page], :order => 'created_at DESC'
+      @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).paginate(:per_page => 20, :page => params[:page], :order => 'created_at DESC')
     end
 
-    render :layout => 'admin'
+    # render :layout => 'admin'
   end
 
   def new

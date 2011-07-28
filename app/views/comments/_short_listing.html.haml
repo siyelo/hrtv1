@@ -1,7 +1,7 @@
 %h2
   = image_tag "icon_comments.png", :class => "heading_icon"
   Recent Comments
-  .read_more.comments_read_more= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path
+  .read_more.comments_read_more= link_to "view all", current_user.sysadmin? ? admin_comments_path : comments_path, :id => 'view_comments'
 %ul.dashboard_comments
   - comments.each do |comment|
     %li

@@ -5,7 +5,9 @@
         = f.input :activity_id, :as => :hidden
         = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
         = f.input :implementer_type, :as => :select, :collection => ['Self', 'Implementing Partner', 'Government'], :input_html => {:class => 'implementer_type_select'}, :wrapper_html => {:class => "implementer_type"}, :label => "Select implementer"
-        = f.input :provider, :as => :select, :collection => funding_organizations_select, :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}, :wrapper_html => {:style => "display:none;"}, :label => false
-        = f.commit_button "Add implementer", :wrapper_html => {:class => 'js_save_implementer'}, :button_html => {:class => 'create_button'}
-        %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
-        %li= link_to "Cancel", "#", :class => 'js_cancel_add_implementer row_cancel'
+        .buttons
+          = f.input :provider, :as => :select, :collection => funding_organizations_select, :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}, :wrapper_html => {:style => "display:none;"}, :label => false
+          = f.commit_button "Add implementer", :wrapper_html => {:class => 'js_save_implementer'}, :button_html => {:class => 'create_button'}
+          %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+          %li= link_to "Cancel", "#", :class => 'js_cancel_add_implementer row_cancel'
+

@@ -1,6 +1,9 @@
 class CodeAssignment < ActiveRecord::Base
   include NumberHelper
 
+  ### Constants
+  DELEGATED_CLASSIFICATION_LEVEL = 4
+
   strip_commas_from_all_numbers
 
   ### Attributes

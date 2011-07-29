@@ -70,6 +70,19 @@ describe Organization do
       org1.save
       org1.errors.on(:raw_type).should_not be_blank
     end
+
+    it "is valid when raw_type is included in the list" do
+      organization = Factory.build(:organization, :raw_type => 'Local NGO')
+      organization.save
+      organization.errors.on(:raw_type).should be_blank
+    end
+
+    it "is not valid when raw_type is not included in the list" do
+      organization = Factory.build(:organization, :raw_type => 'Wrong Type')
+      organization.save
+      organization.errors.on(:raw_type).should_not be_blank
+      organization.errors.on(:raw_type).should == "is not included in the list"
+    end
   end
 
   describe "Callbacks" do
@@ -187,7 +200,8 @@ describe Organization do
 
   describe "CSV" do
     before :each do
-      @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
+      @organization = Factory(:organization, :name => 'blarorg',
+                              :raw_type => 'Local NGO', :fosaid => "13")
     end
 
     it "will return just the headers if no organizations are passed" do

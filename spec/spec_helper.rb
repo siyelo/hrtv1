@@ -114,7 +114,7 @@ end
 
 # setup for Ultimate Funding Source scenarios
 def ufs_test_setup
-  @org0 = Factory(:organization, :name => 'org0', :currency => 'USD')
+  @org0 = Factory(:organization, :name => 'org0', :currency => 'USD', :raw_type => "Local NGO")
   @org1 = Factory(:organization, :name => 'org1', :currency => 'USD')
   @org2 = Factory(:organization, :name => 'org2', :currency => 'USD')
   @org3 = Factory(:organization, :name => 'org3', :currency => 'USD')

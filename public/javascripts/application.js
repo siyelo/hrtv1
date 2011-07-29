@@ -1727,9 +1727,8 @@ var funders_index = {
           $('#js_funders_form').find('.save_btn').show();
           $('.chosen').chosen();
         } else {
-          var newTr = $(data.html);
-          var box = element.parents('tr');
-          box.replaceWith(newTr);
+          ajaxLoader.hide();
+          $('theComboBox').val('');
         }
       });
     });

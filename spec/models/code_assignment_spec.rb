@@ -235,6 +235,17 @@ describe CodeAssignment do
     end
   end
 
+  describe "classifications" do
+    # If you delegate to implementer (that exists in HRT i.e.
+    # not a health center), you only have to enter
+    # Past Expenditure & Current Budget to Level D
+    context "when organization delegates to implemeneter" do
+      context "when organization that is delegated to is a Health Center" do
+      end
+      context "when organization that is delegated to is not a Health Center" do
+      end
+    end
+  end
 end
 
 # == Schema Information

@@ -17,7 +17,7 @@ class SubActivity < Activity
   after_destroy :update_counter_cache
 
   ### Delegates
-  [:projects, :name, :description, :start_date, :end_date, :approved,
+  [:projects, :name, :description, :approved,
    :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end

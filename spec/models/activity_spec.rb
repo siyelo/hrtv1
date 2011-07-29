@@ -25,8 +25,6 @@ describe Activity do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
@@ -53,27 +51,6 @@ describe Activity do
     it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
     it { should validate_numericality_of(:spend) }
-
-    #it "accepts start date < end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 01),
-                        #:end_date =>   DateTime.new(2010, 01, 02) )
-      #a.should be_valid
-    #end
-
-    #it "does not accept start date > end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 02),
-                        #:end_date =>   DateTime.new(2010, 01, 01) )
-      #a.should_not be_valid
-    #end
-
-    #it "does not accept start date = end date" do
-      #a = Factory.build(:activity,
-                        #:start_date => DateTime.new(2010, 01, 01),
-                        #:end_date =>   DateTime.new(2010, 01, 01) )
-      #a.should_not be_valid
-    #end
   end
 
   describe "download activity template" do
@@ -81,7 +58,7 @@ describe Activity do
       basic_setup_response
       Date.stub!(:today).and_return(Date.parse("01-01-2009"))
       header_row = Activity.download_template(@response.activities)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Current Budget,Districts,Beneficiaries,Outputs / Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Current Budget,Districts,Beneficiaries,Outputs / Targets,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
 

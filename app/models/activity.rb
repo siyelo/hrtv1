@@ -11,14 +11,14 @@ class Activity < ActiveRecord::Base
 
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", 
-                         "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets", "Start Date", "End Date"]
+                         "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets"]
 
 
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :text_for_targets, :name, :description, :start_date, :end_date,
-    :approved, :am_approved, :spend, :budget, :beneficiary_ids, :location_ids, :provider_id,
+    :text_for_targets, :name, :description, :approved, :am_approved, :spend,
+    :budget, :beneficiary_ids, :location_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
     :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries,
     :am_approved_date, :user_id
@@ -108,8 +108,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_presence_of :data_response_id
   validates_presence_of :project_id, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }, :on => :update
-  validates_length_of :name, :within => 3..64
+    validates_length_of :name, :within => 3..64
 
 
   ### Callbacks
@@ -168,8 +167,6 @@ class Activity < ActiveRecord::Base
         row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << ''
-        row << activity.start_date
-        row << activity.end_date
 
         (100 - row.length).times{ row << nil}
         row << activity.id
@@ -203,8 +200,6 @@ class Activity < ActiveRecord::Base
       activity.description             = row['Activity Description']
       activity.spend                   = row['Current Expenditure']
       activity.budget                  = row['Current Budget']
-      activity.start_date              = row['Start Date']
-      activity.end_date                = row['End Date']
       activity.text_for_beneficiaries  = row['Beneficiaries']
 
       # virtual attributes

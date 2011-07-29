@@ -89,7 +89,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -175,15 +174,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.datetime "updated_at"
   end
 
-  create_table "field_helps", :force => true do |t|
-    t.string   "attribute_name"
-    t.string   "short"
-    t.text     "long"
-    t.integer  "model_help_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "organization_id_to"
@@ -256,14 +246,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.integer  "year"
     t.datetime "created_at"
     t.datetime "updated_at"
-
-  create_table "model_helps", :force => true do |t|
-    t.string   "model_name"
-    t.string   "short"
-    t.text     "long"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|
@@ -287,13 +269,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
   create_table "organizations_managers", :id => false, :force => true do |t|
     t.integer "organization_id"
     t.integer "user_id"
-  end
-
-  create_table "outputs", :force => true do |t|
-    t.integer  "activity_id"
-    t.string   "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "projects", :force => true do |t|

@@ -178,14 +178,14 @@ describe Activity do
     end
   end
 
-  describe "#delegated_to_non_hc?" do
+  describe "#delegated_to_non_hc_implementer?" do
     before :each do
       basic_setup_activity
     end
 
     context "when no providers" do
       it "returns false" do
-        @activity.delegated_to_non_hc?.should be_false
+        @activity.delegated_to_non_hc_implementer?.should be_false
       end
     end
 
@@ -193,7 +193,7 @@ describe Activity do
       it "returns false" do
         Factory(:sub_activity, :activity => @activity, :data_response => @response,
                 :provider => @activity.organization)
-        @activity.delegated_to_non_hc?.should be_false
+        @activity.delegated_to_non_hc_implementer?.should be_false
       end
     end
 
@@ -202,7 +202,7 @@ describe Activity do
         health_center = Factory(:organization, :raw_type => "Health Center")
         Factory(:sub_activity, :activity => @activity, :data_response => @response,
                 :provider => health_center)
-        @activity.delegated_to_non_hc?.should be_false
+        @activity.delegated_to_non_hc_implementer?.should be_false
       end
     end
 
@@ -211,7 +211,7 @@ describe Activity do
         donor = Factory(:organization, :raw_type => "Donor")
         Factory(:sub_activity, :activity => @activity, :data_response => @response,
                 :provider => donor)
-        @activity.delegated_to_non_hc?.should be_true
+        @activity.delegated_to_non_hc_implementer?.should be_true
       end
     end
 
@@ -223,7 +223,7 @@ describe Activity do
         health_center = Factory(:organization, :raw_type => "Health Center")
         Factory(:sub_activity, :activity => @activity, :data_response => @response,
                 :provider => health_center)
-        @activity.delegated_to_non_hc?.should be_true
+        @activity.delegated_to_non_hc_implementer?.should be_true
       end
     end
   end

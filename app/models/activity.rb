@@ -402,7 +402,7 @@ class Activity < ActiveRecord::Base
     name.presence || "Unnamed #{self.class.to_s.titleize}"
   end
 
-  def delegated_to_non_hc?
+  def delegated_to_non_hc_implementer?
     providers = sub_activities.find(:all, :include => :provider).
       map{ |sa| sa.provider }.compact
 

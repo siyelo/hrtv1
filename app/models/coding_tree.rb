@@ -212,6 +212,8 @@ class CodingTree
     end
 
     def all_codes
+      # TODO: allow filtering codes to level and use then in
+      # classifications and long_term_budget code_row partials
       @all_codes ||= case @coding_klass.to_s
       when 'CodingBudget', 'CodingSpend'
         @activity.class.to_s == "OtherCost" ? OtherCostCode.all : Code.all

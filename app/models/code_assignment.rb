@@ -202,7 +202,7 @@ class CodeAssignment < ActiveRecord::Base
       code = Code.find(code_id)
 
       # purpose levels start from 0, 1, 2, 3 = 4 levels
-      break if activity.delegated_to_non_hc? && code.level >= DELEGATED_CLASSIFICATION_LEVEL
+      break if activity.delegated_to_non_hc_implementer? && code.level >= DELEGATED_CLASSIFICATION_LEVEL
 
       if value.present?
         non_blank_ids << code_id

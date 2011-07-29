@@ -19,4 +19,4 @@
     %ul.mcdropdown_menu{:id => "purpose_menu_#{activity.id}"}
       - coding_tree = CodingTree.new(activity, params[:id].constantize)
       - coding_tree.root_codes.sort_by(&:short_display).each do |code|
-        = render 'code_row', :code => code, :coding_tree => coding_tree
+        = render 'code_row', :code => code, :coding_tree => coding_tree, :delegated => activity.delegated_to_non_hc_implementer?, :level => 1

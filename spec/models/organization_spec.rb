@@ -389,6 +389,22 @@ describe Organization do
       @org.user_emails(1).should == ['reporter@org.com']
     end
   end
+
+  describe "#health_center?" do
+    context "when raw_type is 'Health Center'" do
+      it "returns true" do
+        organization = Factory.build(:organization, :raw_type => "Health Center")
+        organization.health_center?.should be_true
+      end
+    end
+
+    context "when raw_type is 'Donor'" do
+      it "returns false" do
+        organization = Factory.build(:organization, :raw_type => "Donor")
+        organization.health_center?.should be_false
+      end
+    end
+  end
 end
 
 # == Schema Information

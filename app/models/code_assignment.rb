@@ -199,6 +199,11 @@ class CodeAssignment < ActiveRecord::Base
     code_assignments = activity.code_assignments.with_type(coding_type)
 
     classifications.each_pair do |code_id, value|
+      code = Code.find(code_id)
+
+      # purpose levels start from 0, 1, 2, 3 = 4 levels
+      break if activity.delegated_to_non_hc? && code.level >= DELEGATED_CLASSIFICATION_LEVEL
+
       if value.present?
         non_blank_ids << code_id
 

@@ -219,6 +219,10 @@ class Organization < ActiveRecord::Base
     response_for(request).status
   end
 
+  def health_center?
+    raw_type == "Health Center"
+  end
+
   protected
 
     def tidy_name(n)

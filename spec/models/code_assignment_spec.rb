@@ -401,88 +401,81 @@ describe CodeAssignment do
         end
       end
 
-      context "when implementer is not a Health Center" do
+      context "when implementer is neither self neither a Health Center organization" do
+        before :each do
+          local_ngo = Factory(:organization, :raw_type => "Local NGO")
+          Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                  :provider => local_ngo)
+        end
+
         it "allows classifications to level 4" do
           CodeAssignment::DELEGATED_CLASSIFICATION_LEVEL.should == 4
         end
 
-        #it "allows classification for level 1" do
-          #purpose1        = Factory(:mtef_code)
-          #classifications = { purpose1.id => { "0" => "10",
-                                               #"1" => "20",
-                                               #"2" => "30",
-                                               #"3" => "40" } }
-          #@long_term_budget.update_budget_entries(classifications)
-          #budget_entries = @long_term_budget.budget_entries
-          #check_budget_entries(budget_entries, {2001 => 10, 2002 => 20, 2003 => 30, 2004 => 40})
-        #end
+        it "allows classification for level 1" do
+          purpose1        = Factory(:mtef_code)
 
-        #it "allows classification for level 2" do
-          #purpose1        = Factory(:mtef_code)
-          #purpose2        = Factory(:mtef_code)
-          #purpose2.move_to_child_of(purpose1)
+          classifications = { purpose1.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 1
+        end
 
-          #classifications = { purpose2.id => { "0" => "10",
-                                               #"1" => "20",
-                                               #"2" => "30",
-                                               #"3" => "40" } }
-          #@long_term_budget.update_budget_entries(classifications)
-          #budget_entries = @long_term_budget.budget_entries
-          #check_budget_entries(budget_entries, {2001 => 10, 2002 => 20, 2003 => 30, 2004 => 40})
-        #end
+        it "allows classification for level 2" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
 
-        #it "allows classification for level 3" do
-          #purpose1        = Factory(:mtef_code)
-          #purpose2        = Factory(:mtef_code)
-          #purpose2.move_to_child_of(purpose1)
-          #purpose3        = Factory(:mtef_code)
-          #purpose3.move_to_child_of(purpose2)
+          classifications = { purpose2.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 2
+        end
 
-          #classifications = { purpose3.id => { "0" => "10",
-                                               #"1" => "20",
-                                               #"2" => "30",
-                                               #"3" => "40" } }
-          #@long_term_budget.update_budget_entries(classifications)
-          #budget_entries = @long_term_budget.budget_entries
-          #check_budget_entries(budget_entries, {2001 => 10, 2002 => 20, 2003 => 30, 2004 => 40})
-        #end
+        it "allows classification for level 3" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
 
-        #it "allows classification for level 4" do
-          #purpose1        = Factory(:mtef_code)
-          #purpose2        = Factory(:mtef_code)
-          #purpose2.move_to_child_of(purpose1)
-          #purpose3        = Factory(:mtef_code)
-          #purpose3.move_to_child_of(purpose2)
-          #purpose4        = Factory(:mtef_code)
-          #purpose4.move_to_child_of(purpose3)
+          classifications = { purpose3.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 3
+        end
 
-          #classifications = { purpose4.id => { "0" => "10",
-                                               #"1" => "20",
-                                               #"2" => "30",
-                                               #"3" => "40" } }
-          #@long_term_budget.update_budget_entries(classifications)
-          #budget_entries = @long_term_budget.budget_entries
-          #check_budget_entries(budget_entries, {2001 => 10, 2002 => 20, 2003 => 30, 2004 => 40})
-        #end
+        it "allows classification for level 4" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
+          purpose4        = Factory(:mtef_code)
+          purpose4.move_to_child_of(purpose3)
 
-        #it "does not allow classification for level 5" do
-          #purpose1        = Factory(:mtef_code)
-          #purpose2        = Factory(:mtef_code)
-          #purpose2.move_to_child_of(purpose1)
-          #purpose3        = Factory(:mtef_code)
-          #purpose3.move_to_child_of(purpose2)
-          #purpose4        = Factory(:mtef_code)
-          #purpose4.move_to_child_of(purpose3)
-          #purpose5        = Factory(:mtef_code)
-          #purpose5.move_to_child_of(purpose4)
+          classifications = { purpose4.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 4
+        end
 
-          #classifications = { purpose5.id => { "0" => "10",
-                                               #"1" => "20",
-                                               #"2" => "30",
-                                               #"3" => "40" } }
-          #@long_term_budget.update_budget_entries(classifications)
-          #@long_term_budget.budget_entries.count.should == 0
-        #end
+        it "does not allow classification for level 5" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
+          purpose4        = Factory(:mtef_code)
+          purpose4.move_to_child_of(purpose3)
+          purpose5        = Factory(:mtef_code)
+          purpose5.move_to_child_of(purpose4)
+
+          classifications = { purpose5.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
       end
     end
 

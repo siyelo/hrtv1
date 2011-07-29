@@ -10,9 +10,8 @@ class Activity < ActiveRecord::Base
 
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure", 
+  FILE_UPLOAD_COLUMNS = ["Project Name", "Activity Name", "Activity Description", "Provider", "Past Expenditure",
                          "Current Budget", "Districts", "Beneficiaries", "Outputs / Targets"]
-
 
 
   ### Attribute Protection
@@ -403,6 +402,14 @@ class Activity < ActiveRecord::Base
     name.presence || "Unnamed #{self.class.to_s.titleize}"
   end
 
+  def delegated_to_non_hc_implementer?
+    providers = sub_activities.find(:all, :include => :provider).
+      map{ |sa| sa.provider }.compact
+
+    providers.delete(organization) # remove self organization
+    providers.present? && providers.any?{ |p| !p.health_center? }
+  end
+
   private
 
     def remove_district_codings
@@ -498,7 +505,7 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
-    
+
     def strip_input_fields
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description

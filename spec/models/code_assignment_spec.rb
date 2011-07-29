@@ -235,6 +235,251 @@ describe CodeAssignment do
     end
   end
 
+  describe "::mass_update_classifications" do
+    before :each do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+    end
+
+    context "when activities does not exist" do
+      it "does not saves anything" do
+        classifications = {}
+        coding_type     = 'CodingBudget'
+        CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+        CodeAssignment.count.should == 0
+      end
+    end
+
+    context "when activities exist" do
+      before :each do
+        @project  = Factory(:project, :data_response => @response)
+        @activity = Factory(:activity, :data_response => @response, :project => @project)
+      end
+
+      context "when classifications are blank" do
+        it "does not saves anything" do
+          classifications = {}
+          coding_type     = 'CodingBudget'
+          CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
+      end
+
+      context "when classifications are present" do
+        it "saves code assignments" do
+          code1 = Factory(:mtef_code)
+          code2 = Factory(:mtef_code)
+          classifications = { @activity.id.to_s => { code1.id => 10, code2.id => 20 } }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+          CodeAssignment.count.should == 2
+        end
+      end
+    end
+  end
+
+  describe "::update_classifications" do
+    before :each do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project)
+    end
+
+    context "when classifications does not exist" do
+      context "when submitting blank classifications" do
+        it "does not saves anything" do
+          classifications = {}
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
+      end
+
+      context "when submitting classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting amounts" do
+          it "creates code assignments" do
+            classifications = { @code1.id => 10, @code2.id => 20 }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+          end
+        end
+
+        context "when submitting percentages" do
+          it "creates code assignments" do
+            classifications = { @code1.id => '40%', @code2.id => '20%' }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+
+            code_assignments = CodeAssignment.all
+
+            ca1 = code_assignments.detect{|ca| ca.code_id == @code1.id}
+            ca1.amount.should == nil
+            ca1.percentage.should == 40
+
+            ca2 = code_assignments.detect{|ca| ca.code_id == @code2.id}
+            ca2.amount.should == nil
+            ca2.percentage.should == 20
+          end
+        end
+      end
+    end
+
+    context "when classifications exist" do
+      context "when submitting classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting amounts" do
+          it "updates code assignments" do
+            Factory(:coding_budget, :activity => @activity, :code => @code1, :amount => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20)
+            CodeAssignment.count.should == 2
+
+            # when submitting existing classifications, it updates them
+            classifications = { @code1.id => 11, @code2.id => 22 }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+
+            code_assignments = CodeAssignment.all
+            code_assignments.detect{|ca| ca.code_id == @code1.id}.amount.should == 11
+            code_assignments.detect{|ca| ca.code_id == @code2.id}.amount.should == 22
+          end
+        end
+
+        context "when submitting percentages" do
+          it "creates code assignments" do
+            Factory(:coding_budget, :activity => @activity, :code => @code1, :percentage => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20)
+            CodeAssignment.count.should == 2
+
+            # when submitting existing classifications, it updates them
+            classifications = { @code1.id => '11%', @code2.id => '22%' }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+            code_assignments = CodeAssignment.all
+            code_assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 11
+            code_assignments.detect{|ca| ca.code_id == @code2.id}.percentage.should == 22
+          end
+        end
+      end
+    end
+  end
+
+
+  describe "classification level" do
+    # If you delegate to implementer (that exists in HRT i.e.
+    # not a health center), you only have to enter
+    # Past Expenditure & Current Budget to Level D
+    context "when organization delegates to implementer" do
+      before :each do
+        @organization = Factory(:organization)
+        @request      = Factory(:data_request, :organization => @organization)
+        @response     = @organization.latest_response
+        @project      = Factory(:project, :data_response => @response)
+        @activity     = Factory(:activity, :data_response => @response, :project => @project)
+      end
+
+      context "when implementer is a Health Center" do
+        it "have to classify to the lowest level" do
+          pending
+          health_center = Factory(:organization, :raw_type => "Health Center")
+          Factory(:sub_activity, :activity => @activity, :provider => health_center)
+        end
+      end
+
+      context "when implementer is neither self neither a Health Center organization" do
+        before :each do
+          local_ngo = Factory(:organization, :raw_type => "Local NGO")
+          Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                  :provider => local_ngo)
+        end
+
+        it "allows classifications to level 4" do
+          CodeAssignment::DELEGATED_CLASSIFICATION_LEVEL.should == 4
+        end
+
+        it "allows classification for level 1" do
+          purpose1        = Factory(:mtef_code)
+
+          classifications = { purpose1.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 1
+        end
+
+        it "allows classification for level 2" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+
+          classifications = { purpose2.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 2
+        end
+
+        it "allows classification for level 3" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
+
+          classifications = { purpose3.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 3
+        end
+
+        it "allows classification for level 4" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
+          purpose4        = Factory(:mtef_code)
+          purpose4.move_to_child_of(purpose3)
+
+          classifications = { purpose4.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 4
+        end
+
+        it "does not allow classification for level 5" do
+          purpose1        = Factory(:mtef_code)
+          purpose2        = Factory(:mtef_code)
+          purpose2.move_to_child_of(purpose1)
+          purpose3        = Factory(:mtef_code)
+          purpose3.move_to_child_of(purpose2)
+          purpose4        = Factory(:mtef_code)
+          purpose4.move_to_child_of(purpose3)
+          purpose5        = Factory(:mtef_code)
+          purpose5.move_to_child_of(purpose4)
+
+          classifications = { purpose5.id => 1 }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
+      end
+    end
+
+  end
 end
 
 # == Schema Information

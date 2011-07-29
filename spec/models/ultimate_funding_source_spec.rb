@@ -328,10 +328,10 @@ describe Project do
 
     it "gives donor as real UFS if no matching activity is found for it in donor data response" do
       # organization 2 is donor
-      @org2.raw_type = "Donor"; @org2.save
-      Factory(:funding_flow, :data_response => @response2,
-              :from => @org0, :to => @org2, :project => @proj2,
-              :budget => 50, :spend => 50)
+      @org2.raw_type = "Donor"; @org2.save; @org2.reload
+      #Factory(:funding_flow, :data_response => @response2,
+              #:from => @org0, :to => @org2, :project => @proj2,
+              #:budget => 50, :spend => 50)
 
       # organization 3
       Factory(:funding_flow, :data_response => @response3,

@@ -1,5 +1,7 @@
 %li{:rel => "#{code.id}"}
   = code.short_display
+  // TODO: change coding_tree all_codes method to filter
+  // codes to appropriated level and remove all logic from here
   - if level < LongTermBudget::CLASSIFICATION_LEVEL && !code.leaf?
     %ul
       - @coding_tree.cached_children(code).sort_by(&:short_display).each do |child|

@@ -1,6 +1,9 @@
 class CodeAssignment < ActiveRecord::Base
   include NumberHelper
 
+  ### Constants
+  DELEGATED_CLASSIFICATION_LEVEL = 4
+
   strip_commas_from_all_numbers
 
   ### Attributes
@@ -185,7 +188,7 @@ class CodeAssignment < ActiveRecord::Base
       self.update_classifications(activity, activity_classifications, coding_type)
     end
   end
-  
+
   def cached_amount
     self[:cached_amount] || 0
   end
@@ -196,6 +199,11 @@ class CodeAssignment < ActiveRecord::Base
     code_assignments = activity.code_assignments.with_type(coding_type)
 
     classifications.each_pair do |code_id, value|
+      code = Code.find(code_id)
+
+      # purpose levels start from 0, 1, 2, 3 = 4 levels
+      break if activity.delegated_to_non_hc_implementer? && code.level >= DELEGATED_CLASSIFICATION_LEVEL
+
       if value.present?
         non_blank_ids << code_id
 

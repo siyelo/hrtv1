@@ -1,6 +1,6 @@
 Factory.define :organization, :class => Organization do |f|
   f.sequence(:name)                  { |i| "organization_name_#{i}_#{rand(100_000_000)}" }
-  f.raw_type                         { "" }
+  f.raw_type                         { "International NGO" }
   f.currency                         { "RWF" }
   f.contact_name                     { "Bob" }
   f.contact_position                 { "Manager" }

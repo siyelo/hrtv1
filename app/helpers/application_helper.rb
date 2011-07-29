@@ -250,10 +250,10 @@ module ApplicationHelper
 
   def spend_fiscal_year(response)
     budget_fiscal_year_prev(response)
-  end 
+  end
 
   def funding_organizations_select
-    orgs = Organization.find(:all, :order => 'old_type, name')
+    orgs = Organization.find(:all, :order => 'raw_type, name')
     orgs.map{|o| [o.display_name(100), o.id]}
   end
 

@@ -177,6 +177,56 @@ describe Activity do
 
     end
   end
+
+  describe "#delegated_to_non_hc_implementer?" do
+    before :each do
+      basic_setup_activity
+    end
+
+    context "when no providers" do
+      it "returns false" do
+        @activity.delegated_to_non_hc_implementer?.should be_false
+      end
+    end
+
+    context "when 1 provider (self)" do
+      it "returns false" do
+        Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :provider => @activity.organization)
+        @activity.delegated_to_non_hc_implementer?.should be_false
+      end
+    end
+
+    context "when 1 provider (Health Center)" do
+      it "returns false" do
+        health_center = Factory(:organization, :raw_type => "Health Center")
+        Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :provider => health_center)
+        @activity.delegated_to_non_hc_implementer?.should be_false
+      end
+    end
+
+    context "when 1 provider (Non-Health Center)" do
+      it "returns true" do
+        donor = Factory(:organization, :raw_type => "Donor")
+        Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :provider => donor)
+        @activity.delegated_to_non_hc_implementer?.should be_true
+      end
+    end
+
+    context "when 2 providers (Health Center and Non-Health Center)" do
+      it "returns true" do
+        donor = Factory(:organization, :raw_type => "Donor")
+        Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :provider => donor)
+        health_center = Factory(:organization, :raw_type => "Health Center")
+        Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :provider => health_center)
+        @activity.delegated_to_non_hc_implementer?.should be_true
+      end
+    end
+  end
 end
 
 

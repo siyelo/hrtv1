@@ -63,12 +63,17 @@ describe Organization do
       organization.errors.on(:currency).should be_blank
     end
 
-    it "allows only one organization with raw_type Government" do
-      org0 = Factory.build(:organization, :raw_type => 'Government')
-      org0.save
-      org1 = Factory.build(:organization, :raw_type => 'Government')
-      org1.save
-      org1.errors.on(:raw_type).should_not be_blank
+    it "is valid when raw_type is included in the list" do
+      organization = Factory.build(:organization, :raw_type => 'Local NGO')
+      organization.save
+      organization.errors.on(:raw_type).should be_blank
+    end
+
+    it "is not valid when raw_type is not included in the list" do
+      organization = Factory.build(:organization, :raw_type => 'Wrong Type')
+      organization.save
+      organization.errors.on(:raw_type).should_not be_blank
+      organization.errors.on(:raw_type).should == "is not included in the list"
     end
   end
 
@@ -187,7 +192,8 @@ describe Organization do
 
   describe "CSV" do
     before :each do
-      @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
+      @organization = Factory(:organization, :name => 'blarorg',
+                              :raw_type => 'Local NGO', :fosaid => "13")
     end
 
     it "will return just the headers if no organizations are passed" do
@@ -381,6 +387,22 @@ describe Organization do
       @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
       @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
       @org.user_emails(1).should == ['reporter@org.com']
+    end
+  end
+
+  describe "#health_center?" do
+    context "when raw_type is 'Health Center'" do
+      it "returns true" do
+        organization = Factory.build(:organization, :raw_type => "Health Center")
+        organization.health_center?.should be_true
+      end
+    end
+
+    context "when raw_type is 'Donor'" do
+      it "returns false" do
+        organization = Factory.build(:organization, :raw_type => "Donor")
+        organization.health_center?.should be_false
+      end
     end
   end
 end

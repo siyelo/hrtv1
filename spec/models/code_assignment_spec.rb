@@ -235,7 +235,50 @@ describe CodeAssignment do
     end
   end
 
-  describe "classifications" do
+  describe "::mass_update_classifications" do
+    before :each do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+    end
+
+    context "when activities does not exist" do
+      it "does not saves anything" do
+        classifications = {}
+        coding_type     = 'CodingBudget'
+        CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+        CodeAssignment.count.should == 0
+      end
+    end
+
+    context "when activities exist" do
+      before :each do
+        @project  = Factory(:project, :data_response => @response)
+        @activity = Factory(:activity, :data_response => @response, :project => @project)
+      end
+
+      context "when classifications are blank" do
+        it "does not saves anything" do
+          classifications = {}
+          coding_type     = 'CodingBudget'
+          CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
+      end
+
+      context "when classifications are present" do
+        it "saves code assignments" do
+          code1 = Factory(:mtef_code)
+          code2 = Factory(:mtef_code)
+          classifications = { @activity.id.to_s => { code1.id => 10, code2.id => 20 } }
+          coding_type     = 'CodingBudget'
+          CodeAssignment.mass_update_classifications(@response, classifications, coding_type)
+          CodeAssignment.count.should == 2
+        end
+      end
+    end
+
+
     # If you delegate to implementer (that exists in HRT i.e.
     # not a health center), you only have to enter
     # Past Expenditure & Current Budget to Level D

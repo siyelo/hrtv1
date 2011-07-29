@@ -80,7 +80,7 @@ group :test do
   gem 'guard-cucumber'
   gem 'guard-bundler'
   gem 'guard-spork'
-  # gem 'libnotify'
+  gem 'libnotify'
   gem 'growl'
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
 end

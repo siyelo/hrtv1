@@ -277,8 +277,109 @@ describe CodeAssignment do
         end
       end
     end
+  end
 
+  describe "::update_classifications" do
+    before :each do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project)
+    end
 
+    context "when classifications does not exist" do
+      context "when submitting blank classifications" do
+        it "does not saves anything" do
+          classifications = {}
+          coding_type     = 'CodingBudget'
+          CodeAssignment.update_classifications(@activity, classifications, coding_type)
+          CodeAssignment.count.should == 0
+        end
+      end
+
+      context "when submitting classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting amounts" do
+          it "creates code assignments" do
+            classifications = { @code1.id => 10, @code2.id => 20 }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+          end
+        end
+
+        context "when submitting percentages" do
+          it "creates code assignments" do
+            classifications = { @code1.id => '40%', @code2.id => '20%' }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+
+            code_assignments = CodeAssignment.all
+
+            ca1 = code_assignments.detect{|ca| ca.code_id == @code1.id}
+            ca1.amount.should == nil
+            ca1.percentage.should == 40
+
+            ca2 = code_assignments.detect{|ca| ca.code_id == @code2.id}
+            ca2.amount.should == nil
+            ca2.percentage.should == 20
+          end
+        end
+      end
+    end
+
+    context "when classifications exist" do
+      context "when submitting classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting amounts" do
+          it "updates code assignments" do
+            Factory(:coding_budget, :activity => @activity, :code => @code1, :amount => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20)
+            CodeAssignment.count.should == 2
+
+            # when submitting existing classifications, it updates them
+            classifications = { @code1.id => 11, @code2.id => 22 }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+
+            code_assignments = CodeAssignment.all
+            code_assignments.detect{|ca| ca.code_id == @code1.id}.amount.should == 11
+            code_assignments.detect{|ca| ca.code_id == @code2.id}.amount.should == 22
+          end
+        end
+
+        context "when submitting percentages" do
+          it "creates code assignments" do
+            Factory(:coding_budget, :activity => @activity, :code => @code1, :percentage => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20)
+            CodeAssignment.count.should == 2
+
+            # when submitting existing classifications, it updates them
+            classifications = { @code1.id => '11%', @code2.id => '22%' }
+            coding_type     = 'CodingBudget'
+            CodeAssignment.update_classifications(@activity, classifications, coding_type)
+            CodeAssignment.count.should == 2
+            code_assignments = CodeAssignment.all
+            code_assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 11
+            code_assignments.detect{|ca| ca.code_id == @code2.id}.percentage.should == 22
+          end
+        end
+      end
+    end
+  end
+
+  describe "classifications" do
     # If you delegate to implementer (that exists in HRT i.e.
     # not a health center), you only have to enter
     # Past Expenditure & Current Budget to Level D

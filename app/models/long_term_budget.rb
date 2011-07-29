@@ -26,7 +26,8 @@ class LongTermBudget < ActiveRecord::Base
   end
 
   def budget_entries_by_purposes
-    budget_entries.find(:all, :include => :purpose).group_by{|be| be.purpose }
+    budget_entries.find(:all, :order => "codes.short_display ASC",
+      :joins => :purpose, :include => :purpose).group_by{|be| be.purpose }
   end
 
   private

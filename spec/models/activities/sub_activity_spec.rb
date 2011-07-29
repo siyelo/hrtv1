@@ -377,7 +377,15 @@ describe SubActivity do
         @activity.reload.sub_activities_count.should == 2
       end
     end
+    
+    describe "implementer type" do
+      it "assigns value to implementer type" do
+      sub_activity = Factory.create(:sub_activity, :implementer_type => 'Government', :data_response => @response, :activity => @activity)
+
+      sub_activity.implementer_type.should == 'Government'
+    end
   end
+  end 
 end
 
 

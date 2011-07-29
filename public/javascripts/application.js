@@ -1770,6 +1770,51 @@ var funders_index = {
 var implementers_index = {
   run: function () {
 
+    $('#sub_activity_implementer_type').live('change', function (e) {
+      var selected_type = $(this).val();
+      var implementer_dropdown = $(this).parents('ol:first').find("#sub_activity_provider_input");
+
+      var build_select_options = function () {
+        var select_options = [];
+        var select_options_html = "";
+
+        for (prop in _organizations) {
+          if (!_organizations.hasOwnProperty(prop)) {
+            //The current property is not a direct property of _organizations
+            continue;
+          }
+          if (prop !== 'Government' && prop !== 'Self') {
+            var orgs = _organizations[prop];
+            for (var i = 0; i < orgs.length; i++) {
+              select_options.push(orgs[i].organization);
+            }
+          }
+        }
+       
+        for (var i = 0; i < select_options.length; i++) {
+          select_options_html += '<option value="'+ select_options[i].id +'">' +
+                                  select_options[i].name +
+                                 '</option>';
+        }
+
+        return select_options_html;
+      } 
+      
+      if (selected_type == 'Self') {
+        implementer_dropdown.hide();
+        implementer_dropdown.find('select').combobox('destroy');
+        implementer_dropdown.find('select').val(_organizations.Self[0].organization.id);
+      } else if (selected_type == 'Implementing Partner') {
+        implementer_dropdown.find('select').html(build_select_options());
+        implementer_dropdown.find('select').combobox();
+        implementer_dropdown.show();
+      } else if (selected_type == 'Government') {
+        implementer_dropdown.hide();
+        implementer_dropdown.find('select').combobox('destroy');
+        implementer_dropdown.find('select').val(_organizations.Government[0].organization.id);
+      }
+    });
+
     $('.add_implementer').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
@@ -1788,7 +1833,7 @@ var implementers_index = {
         currentTr = element.parents('tr');
         var newTr = $(data.html);
         currentTr.before(newTr);
-        newTr.find( ".combobox" ).combobox();
+        //newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
       });

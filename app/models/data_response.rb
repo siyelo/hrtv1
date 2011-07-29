@@ -294,10 +294,13 @@ class DataResponse < ActiveRecord::Base
 
   def projects_have_activities?
     return false unless activities_entered?
+    response_has_activities = false
     self.projects.each do |project|
-      return false unless project.has_activities?
+      unless response_has_activities
+        response_has_activities = project.has_activities?
+      end
     end
-    true
+    response_has_activities
   end
 
   def other_costs_entered?

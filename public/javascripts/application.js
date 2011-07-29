@@ -1906,6 +1906,9 @@ $(function () {
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
+  
+  // chosen everywhere!
+  $('.chosen').chosen();
 
   //jquery tools overlays
   $(".overlay").overlay();

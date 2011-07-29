@@ -3,4 +3,4 @@
   - if level < LongTermBudget::CLASSIFICATION_LEVEL && !code.leaf?
     %ul
       - @coding_tree.cached_children(code).sort_by(&:short_display).each do |child|
-        = render 'shared/code_row', :code => child, :level => level + 1
+        = render 'code_row', :code => child, :level => level + 1

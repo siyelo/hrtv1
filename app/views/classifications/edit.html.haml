@@ -46,7 +46,7 @@
 
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|
-    = render 'shared/code_row', :code => code
+    = render 'code_row', :code => code
 
 %br
 - if @projects.empty? || !@response.projects_have_activities?

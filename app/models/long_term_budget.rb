@@ -41,7 +41,7 @@ class LongTermBudget < ActiveRecord::Base
   private
     def delete_budget_entries_unsubmitted_purposes(purpose_ids)
       BudgetEntry.delete_all(["long_term_budget_id = ? AND
-                              purpose_id NOT IN (?)", self.id, purpose_ids])
+                              purpose_id NOT IN (?)", id, purpose_ids])
     end
 
     def check_and_update_budget_entry_amounts(amounts)

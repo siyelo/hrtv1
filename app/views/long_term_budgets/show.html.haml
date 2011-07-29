@@ -33,4 +33,4 @@
 
 %ul#purpose_menu.mcdropdown_menu
   - @codes.sort_by(&:short_display).each do |code|
-    = render 'shared/code_row', :code => code, :level => 1
+    = render 'code_row', :code => code, :level => 1

@@ -18,10 +18,12 @@ var purposes = {
     mcdropdown.find('input.purpose_search').trigger(e);
   },
 
-  initMcDropdown: function (elements) {
-    clone = $("#purpose_menu").clone();
-    $("#purpose_menu").remove();
-    $(clone).attr('id', 'purpose_menu')
+  initMcDropdown: function (elements, box_id) {
+    var menu_id = purposes.get_menu_id(box_id);
+
+    clone = $('#' + menu_id).clone();
+    $('#' + menu_id).remove();
+    $(clone).attr('id', menu_id)
     elements.mcDropdown(clone, {
       hoverOutDelay: 0,
       hoverOverDelay: 300,
@@ -33,6 +35,14 @@ var purposes = {
       minRows: 1000, // force one column
       maxRows: 1000 // force one column
     })
+  },
+
+  get_menu_id: function (box_id) {
+    if (purposes.type === "multi") {
+      return 'purpose_menu_' + box_id;
+    } else {
+      return 'purpose_menu';
+    }
   },
 
   add_purpose: function (add_link) {
@@ -60,10 +70,11 @@ var purposes = {
     // hide all mcdropdowns fix
     //$('.mcdropdown_menu, .mcdropdown_autocomplete').hide();
     var purpose_search = tr.find(".purpose_search");
-    purposes.initMcDropdown(purpose_search);
+    var box_id = add_link.parents('.js_purpose_row').attr("data-box_id");
+    purposes.initMcDropdown(purpose_search, box_id);
     purposes.resetMcdropdown($('.mcdropdown'));
 
-    var selected_li = $('#purpose_menu li[rel="' + purposes.lastId + '"]');
+    var selected_li = $('#' + purposes.get_menu_id(box_id) + ' li[rel="' + purposes.lastId + '"]');
     if (selected_li.length > 0) {
       McDropDownGlobalUpdateValue(selected_li);
     }
@@ -159,7 +170,7 @@ var purposes = {
     var mcdropdown     = $('.mcdropdown');
     var tr             = mcdropdown.parents('tr:first');
     var row            = mcdropdown.parents('.js_purpose_row');
-    var activity_id    = tr.parents('.js_purpose_row').attr('activity_id');
+    var activity_id    = tr.parents('.js_purpose_row').attr('data-activity_id');
 
     if (purposes.alreadyAdded(row, value)) {
       //purposes.resetMcdropdown(mcdropdown);
@@ -196,9 +207,9 @@ var purposes = {
     element.attr('id', 'classifications_' + activity_id + '_' + value);
     element.attr('name', 'classifications[' + activity_id + '][' + value + ']');
   },
-  openMcDropDown: function (add_purpose_btn) {
-    if (add_purpose_btn.length > 0) {
-      add_purpose_btn.trigger('click');
+  openMcDropDown: function (js_add_purpose) {
+    if (js_add_purpose.length > 0) {
+      js_add_purpose.trigger('click');
     }
   },
   removeMcDropDown: function () {
@@ -262,10 +273,10 @@ var purposes = {
 
       if (e.keyCode == 13) { // enter key
         e.preventDefault();
-        var add_purpose_button = $('.js_add_purpose:eq(' + purposes.lastIndex + ')')
+        var js_add_purpose = $('.js_add_purpose:eq(' + purposes.lastIndex + ')')
 
-        if (!add_purpose_button.hasClass('disabled')) {
-          purposes.openMcDropDown(add_purpose_button);
+        if (!js_add_purpose.hasClass('disabled')) {
+          purposes.openMcDropDown(js_add_purpose);
         }
       } else if (e.keyCode === 27) { // esc
         e.preventDefault();

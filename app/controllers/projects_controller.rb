@@ -123,6 +123,11 @@ class ProjectsController < Reporter::BaseController
       end
     end
   end
+  
+  def download_workplan
+    filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
+    send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
+  end
 
   protected
 

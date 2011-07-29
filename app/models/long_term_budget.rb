@@ -12,6 +12,7 @@ class LongTermBudget < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :organization_id, :year
+  validates_uniqueness_of :year, :scope => :organization_id
   ### TODO: add uniqueness validations
 
   def update_budget_entries(classifications)

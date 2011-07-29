@@ -1,4 +1,4 @@
-class Nha < Purpose
+class Nha < Code
   include NamedScopes::Roots # overrides 'roots' method from awesome_nested_set
 end
 

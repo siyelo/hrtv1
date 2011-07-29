@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110727132927) do
+ActiveRecord::Schema.define(:version => 20110729123856) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -19,8 +19,6 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.text     "description"
     t.string   "type"
     t.decimal  "budget"
-    t.date     "start_date"
-    t.date     "end_date"
     t.decimal  "spend"
     t.text     "text_for_provider"
     t.text     "text_for_targets"
@@ -89,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -250,10 +249,8 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.string   "old_type"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
     t.integer  "comments_count",                   :default => 0
@@ -264,6 +261,7 @@ ActiveRecord::Schema.define(:version => 20110727132927) do
     t.string   "contact_phone_number"
     t.string   "contact_main_office_phone_number"
     t.string   "contact_office_location"
+    t.string   "raw_type"
   end
 
   create_table "organizations_managers", :id => false, :force => true do |t|

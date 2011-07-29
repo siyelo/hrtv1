@@ -1,5 +1,8 @@
 class LongTermBudget < ActiveRecord::Base
 
+  ### Constants
+  CLASSIFICATION_LEVEL = 4
+
   # exception for invalid params
   class InvalidParams < StandardError; end
 
@@ -15,9 +18,13 @@ class LongTermBudget < ActiveRecord::Base
     if classifications.present?
       delete_budget_entries_unsubmitted_purposes(classifications.keys)
       classifications.each_pair do |purpose_id, amounts|
-        amounts = check_and_update_budget_entry_amounts(amounts)
-        amounts.each_pair do |index, amount|
-          create_budget_entry_for_index!(index, purpose_id, amount)
+        purpose = Code.find(purpose_id)
+        # purpose levels start from 0, 1, 2, 3 = 4 levels
+        if purpose.level < CLASSIFICATION_LEVEL
+          amounts = check_and_update_budget_entry_amounts(amounts)
+          amounts.each_pair do |index, amount|
+            create_budget_entry_for_index!(index, purpose.id, amount)
+          end
         end
       end
     else

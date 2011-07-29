@@ -1720,15 +1720,15 @@ var funders_index = {
 
       $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
-          var box = element.parents('tr')
-          box.next('tr').find('.add_funder').removeClass('disabled');
-          var newTr = $(data.html)
-          box.replaceWith(newTr)
-          $('#js_funders_form').find('.save_btn').show();
-        } else {
-          var newTr = $(data.html);
           var box = element.parents('tr');
+          box.next('tr').find('.add_funder').removeClass('disabled');
+          var newTr = $(data.html);
           box.replaceWith(newTr);
+          $('#js_funders_form').find('.save_btn').show();
+          $('.chosen').chosen();
+        } else {
+          ajaxLoader.hide();
+          $('theComboBox').val('');
         }
       });
     });
@@ -1906,6 +1906,9 @@ $(function () {
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
+  
+  // chosen everywhere!
+  $('.chosen').chosen();
 
   //jquery tools overlays
   $(".overlay").overlay();

@@ -280,7 +280,8 @@ body.login .buttons li:last-child
 
 a, input[type=submit]
 
-  &.create_button, &.create_new
+  &.create_button, &.create_new, &.save_btn
+    cursor: pointer
     background: $orange
     border: 1px solid $orange - #222
     color: #fff
@@ -308,7 +309,12 @@ a, input[type=submit]
       outline: none
       position: relative
       top: 1px
-
+  
+  &.save_btn
+    font-size: 12px
+    font-weight: bold
+    padding: 9px 15px 7px 15px
+    
   &.add_row, &.edit_button, &.delete_button
     background: #eee
     border: 1px solid $light-blue

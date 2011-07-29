@@ -1,21 +1,16 @@
-require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Activity < ActiveRecord::Base
-
-  ### Module inclusions
   include NumberHelper
-  include BudgetSpendHelpers
+  include BudgetSpendHelper
   include Activity::Classification
-
 
   ### Constants
   MAX_NAME_LENGTH = 64
   HUMANIZED_ATTRIBUTES = {
     :sub_activities => "Implementers",
     :budget => "Current Budget",
-    :spend => "Past Expenditure"
-  }
+    :spend => "Past Expenditure" }
 
 
   ### Attribute Protection

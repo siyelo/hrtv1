@@ -2,7 +2,6 @@ require File.dirname(__FILE__) + '/../spec_helper'
 require 'set'
 
 describe Project do
-
   describe "Associations" do
     it { should belong_to(:data_response) }
     it { should have_and_belong_to_many(:locations) }
@@ -115,6 +114,14 @@ describe Project do
       it " should NOT create workflow records after save" do
         subject.funding_flows.should have(0).items
       end
+    end
+  end
+
+  describe "create" do
+    it "should save without the optional currency override" do
+      basic_setup_response
+      p = Factory :project, :currency => "", :data_response => @response
+      p.save.should == true
     end
   end
 

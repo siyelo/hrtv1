@@ -1,19 +1,18 @@
-require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
-  include BudgetSpendHelpers
+  include BudgetSpendHelper
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",
     :organization_id_to => "The Funding Source 'to' organization",
     :budget => "The Funding Source budget",
-    :spend => "The Funding Source spend"
-  }
+    :spend => "The Funding Source spend" }
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :updated_at
+                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3,
+                  :budget_q4, :updated_at
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
@@ -23,36 +22,33 @@ class FundingFlow < ActiveRecord::Base
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
-  
   # validates_presence_of :project # FIXME
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
-  
+
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
   #
   validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
-  
   # if we pass "-1" then the user somehow selected "Add an Organization..."
-  #
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
   validate :spend_is_greater_than_zero
-  
+
   ### Delegates
   delegate :organization, :to => :project
   delegate :data_response, :to => :project
   delegate :currency, :to => :project
 
   alias :response :data_response
-  
+
   ### Class Methods
-  
+
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
-  
+
   def self.create_flows(params)
     unless params[:funding_flows].blank?
       params[:funding_flows].each_pair do |flow_id, project_id|
@@ -62,7 +58,7 @@ class FundingFlow < ActiveRecord::Base
       end
     end
   end
-  
+
   ### Instance Methods
 
   def name

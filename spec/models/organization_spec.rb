@@ -12,6 +12,7 @@ describe Organization do
     it { should allow_mass_assignment_of(:contact_phone_number) }
     it { should allow_mass_assignment_of(:contact_main_office_phone_number) }
     it { should allow_mass_assignment_of(:contact_office_location) }
+    it { should allow_mass_assignment_of(:provider_type) }
   end
 
   describe "Associations" do
@@ -60,6 +61,14 @@ describe Organization do
       organization = Factory.build(:organization, :currency => 'USD')
       organization.save
       organization.errors.on(:currency).should be_blank
+    end
+
+    it "allows only one organization with raw_type Government" do
+      org0 = Factory.build(:organization, :raw_type => 'Government')
+      org0.save
+      org1 = Factory.build(:organization, :raw_type => 'Government')
+      org1.save
+      org1.errors.on(:raw_type).should_not be_blank
     end
   end
 

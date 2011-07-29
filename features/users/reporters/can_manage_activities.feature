@@ -49,17 +49,15 @@ Feature: Reporter can manage activities
       When I follow "1ctivity1 description"
         And I fill in "Name" with "<name>"
         And I fill in "Description" with "activity description"
-        And I fill in "Start date" with "<start_date>"
-        And I fill in "End date" with "<end_date>"
         And I select "<project>" from "Project"
         And I press "Save"
       Then I should see "Oops, we couldn't save your changes."
         And I should see "<message>"
 
-        Examples:
-           | name | start_date | end_date   | project  | message                       |
-           | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
-
+        Examples:  
+           | name | project  | message                       |
+           | a1   |          | Project can't be blank        |
+                   
 
 
     Scenario: A reporter can create comments for an activity
@@ -119,8 +117,6 @@ Feature: Reporter can manage activities
       When I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
         And I fill in "theCombobox" with "organization2"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-03-01"
         And I press "Save"
       Then I should see "Activity was successfully updated"
 
@@ -224,8 +220,6 @@ Feature: Reporter can manage activities
       When I follow "Add" within ".sub-head:nth-child(2)"
         And I fill in "Name" with "activity1"
         And I fill in "Description" with "1ctivity1 description"
-        And I fill in "Start date" with "2011-01-01"
-        And I fill in "End date" with "2011-12-01"
         And I select "project1" from "Project"
       Then I should see "Save" button
       And I should not see "Save & Classify >" button

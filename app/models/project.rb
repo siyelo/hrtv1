@@ -162,9 +162,7 @@ END
   def add_activity(attributes)
     activity = Activity.new(:name => truncate(attributes["activity_name"], 50), :description => attributes["activity_description"],
                            :spend => attributes["spend"],
-                           :budget => attributes["current_budget"],
-                           :start_date => attributes["start_date"],
-                           :end_date => attributes["end_date"])
+                           :budget => attributes["current_budget"])
     activity.data_response_id = data_response_id
     activity
   end

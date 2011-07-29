@@ -22,8 +22,6 @@ describe OtherCost do
   describe "attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }

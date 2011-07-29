@@ -3,6 +3,8 @@ class ImplementersController < Reporter::BaseController
   before_filter :load_projects
 
   def index
+    @organizations = Organization.find(:all).group_by {|o| o.raw_type}
+    @organizations["Self"] = [current_user.organization]
   end
 
   def new

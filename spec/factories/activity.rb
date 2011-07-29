@@ -3,8 +3,6 @@ Factory.define :activity, :class => Activity do |f|
   f.description     { 'activity_description' }
   f.budget          { 50.00 }
   f.spend           { 40.00 }
-  f.start_date      { "2010-01-01" }
-  f.end_date        { "2010-12-31" }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|

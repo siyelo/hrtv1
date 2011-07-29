@@ -11,8 +11,8 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Government", "International NGO",
-                        "Local NGO", "Multilateral", "Health Center"]
+  ORGANIZATION_TYPES = ["Donor", "Bilateral", "Multilateral", "Government",
+                        "Local NGO", "International NGO", "Health Center"]
 
   def usg_fiscal_year
     year = Date.today.strftime('%Y').to_i
@@ -58,7 +58,6 @@ class Organization < ActiveRecord::Base
                         :contact_main_office_phone_number, :on => :update
   validates_inclusion_of :currency,
     :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :on => :update
-  validates_uniqueness_of :raw_type, :if => Proc.new{|m| m.raw_type == 'Government'}
   validates_inclusion_of :raw_type, :in => ORGANIZATION_TYPES
 
   ### Named scopes

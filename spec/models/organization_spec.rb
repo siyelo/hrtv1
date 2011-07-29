@@ -63,14 +63,6 @@ describe Organization do
       organization.errors.on(:currency).should be_blank
     end
 
-    it "allows only one organization with raw_type Government" do
-      org0 = Factory.build(:organization, :raw_type => 'Government')
-      org0.save
-      org1 = Factory.build(:organization, :raw_type => 'Government')
-      org1.save
-      org1.errors.on(:raw_type).should_not be_blank
-    end
-
     it "is valid when raw_type is included in the list" do
       organization = Factory.build(:organization, :raw_type => 'Local NGO')
       organization.save

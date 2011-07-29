@@ -367,14 +367,6 @@ class DataResponse < ActiveRecord::Base
     reject_uncoded(self.normal_activities)
   end
 
-  def uncoded_budgets
-    self.activities.select{ |a| !a.budget_classified? }
-  end
-
-  def uncoded_spends
-    self.activities.select{ |a| !a.spend_classified? }
-  end
-
   def coded_activities
     select_coded(self.normal_activities)
   end

@@ -20,8 +20,10 @@ describe LongTermBudget do
   end
 
   describe "Validations" do
+    subject { Factory(:long_term_budget) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_presence_of(:year) }
+    it { should validate_uniqueness_of(:year).scoped_to(:organization_id) }
   end
 
   describe "#update_budget_entries" do

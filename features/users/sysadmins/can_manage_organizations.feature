@@ -92,7 +92,6 @@ Feature: Admin can manage organizations
       Then the "Replacement organization" text should match "org2 - 2 users"
       And I should see "You cannot delete an organization that has users or data associated with it."
 
-	@run
     Scenario Outline: a sysadmin can sort organizations
       When I follow "Organizations"
         And I follow "<column_name>"

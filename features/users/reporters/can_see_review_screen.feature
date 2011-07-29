@@ -9,7 +9,7 @@ Feature: Reporter can view review page
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "WHO"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "TB Treatment Project", data_response: the data_response
       And an activity exists with name: "TB Drugs procurement", project: the project, data_response: the data_response
       And I am signed in as "reporter@hrtapp.com"

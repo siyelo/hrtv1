@@ -22,10 +22,9 @@ Feature: Reporter can manage projects
 
   @javascript
   Scenario: Reporter can CRUD projects
-    When I follow "Add project"
-      And I fill in "Name" with "Project1"
-      And I fill in "Description" with "Project1 description"
-      And I press "Add project"
+    When I fill in "project_name" with "Project1"
+    And I fill in "project_description" with "Project1 description"
+    And I press "Add project"
     Then I should see "Project1"
 
    When I follow "Project1"

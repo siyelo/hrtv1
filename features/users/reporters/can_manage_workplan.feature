@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can see workplan
   In order to review all my entered data
   As a reporter

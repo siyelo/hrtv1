@@ -51,7 +51,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And an activity exists with name: "Activity", data_response: the data_response, project: the project, description: "Activity description", budget: 5000000, spend: 6000000
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
-      And I follow "Workplan"
+      And I follow "Projects"
       And I follow "Activity description"
 
 

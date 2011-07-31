@@ -16,9 +16,9 @@ class ApplicationController < ActionController::Base
     flash[:error] = "You are not authorized to do that"
     redirect_to login_url
   end
-  
+
   rescue_from ActionController::MethodNotAllowed, :with => :invalid_method
-  
+
   protected
 
     # Require SSL for all actions in all controllers
@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     end
 
   private
-  
+
     def invalid_method
       flash[:error] = "I'm sorry, that page is not available"
       redirect_to root_url
@@ -58,7 +58,11 @@ class ApplicationController < ActionController::Base
     end
 
     def current_request
-      current_user.current_request
+      if current_user.district_manager?
+        district_manager_current_request
+      else
+        current_user.current_request
+      end
     end
 
     def require_user
@@ -125,10 +129,10 @@ class ApplicationController < ActionController::Base
 
     def find_organization(org_id)
       if current_user.admin?
-        @organization = Organization.find(org_id)
+        @organization = Organization.reporting.find(org_id)
       elsif current_user.activity_manager?
         # scope by the organizations the AM has access to
-        @organization = Organization.find(org_id,
+        @organization = Organization.reporting.find(org_id,
           :conditions => ["organization_id in (?)",
                          [current_user.organization.id] + current_user.organizations.map{|o| o.id}])
       else # reporter
@@ -188,19 +192,24 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def change_user_current_response(new_request_id)
-      user = current_user
-      response = user.responses.find_by_data_request_id(new_request_id)
-      if response
-        user.data_response_id_current = response.id
-        if user.save
-          user.reload #otherwise current_response association is stale
-          flash[:notice] = latest_request_message(user.current_response.request) if user.current_response_is_latest?
-        else
-          flash[:error] = "Sorry we could not update your response"
-        end
+    def load_comment_resources(resource)
+      @comment = Comment.new
+      @comment.commentable = resource
+      @comments = resource.comments.find(:all, :order => 'created_at DESC',
+                                         :conditions => 'parent_id is NULL',
+                                         :include => :user)
+      # @comments = resource.comments.roots.find(:all)
+      # :include => {:user => :organization} does not work when using roots scope
+      # Comment.send(:preload_associations, @comments, {:user => :organization})
+    end
+
+    def district_manager_current_request
+      if session[:request_id].present?
+        DataRequest.find(session[:request_id])
       else
-        flash[:error] = "Sorry we could not find that response"
+        current_request = DataRequest.find(:first, :order => 'id DESC')
+        session[:request_id] ||= current_request.id
+        current_request
       end
     end
 end

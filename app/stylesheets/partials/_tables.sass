@@ -28,11 +28,11 @@ table.standard
         text-transform: uppercase
         &:hover, &:focus, &:active
           color: #FFF
-          //background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #111
+          //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
         &.asc
-          background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #111
+          background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
         &.desc
-          background: image_url("arrow_down.gif") no-repeat right center $mid-blue - #111
+          background: image_url("icon_arrow_down.gif") no-repeat right center $mid-blue - #111
       &:first-child a
         +border-top-left-radius
       &:last-child a
@@ -146,11 +146,11 @@ table.sum
       text-transform: uppercase
       &:hover, &:focus, &:active
         color: #FFF
-        //background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #222
+        //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #222
       &.asc
-        background: image_url("arrow_up.gif") no-repeat right center $mid-blue - #222
+        background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #222
       &.desc
-        background: image_url("arrow_down.gif") no-repeat right center $mid-blue - #222
+        background: image_url("icon_arrow_down.gif") no-repeat right center $mid-blue - #222
 
     &:first-child a
       +border-top-left-radius
@@ -199,9 +199,9 @@ table.workplan
       &:hover, &:focus
         color: #FFF
       &.asc
-        background: image_url("arrow_up.gif") no-repeat right center
+        background: image_url("icon_arrow_up.gif") no-repeat right center
       &.desc
-        background: image_url("arrow_down.gif") no-repeat right center
+        background: image_url("icon_arrow_down.gif") no-repeat right center
 
   td
     font-size: 12px
@@ -235,6 +235,8 @@ table.workplan
       width: 1%
     &.wrap-10
       width: 10%
+    &.wrap-12
+      width: 12%
     &.wrap-20
       width: 20%
     &.wrap-30
@@ -379,7 +381,7 @@ tr.filler th, tr.filler td
 tr.filler2 th, tr.filler2 td
   background: $filler
   font-weight: bold
-  
+
 tr.filler_warning th, tr.filler_warning td
   background: #FFECE9
   font-weight: bold

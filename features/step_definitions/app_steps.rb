@@ -48,14 +48,6 @@ Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$
   code_assignments.merge(:code => Code.find_by_short_display(code_name))
 end
 
-Given /^the following projects$/ do |table|
-  table.hashes.each do |hash|
-    Factory(:project, { :data_response => get_data_response(hash.delete("request"),
-                                                            hash.delete("organization"))
-                      }.merge(hash) )
-  end
-end
-
 Given /^the following comments$/ do |table|
   table.hashes.each do |hash|
     commentable = Project.find_by_name(hash.delete("project"))
@@ -294,7 +286,7 @@ Given /^a basic org "([^"]*)" \+ reporter profile, with data response to "([^"]*
   steps %Q{
     Given a data_request exists with title: "#{request}"
     And an organization exists with name: "#{org}"
-    And a data_response exists with data_request: the data_request, organization: the organization
+    And a data_response should exist with data_request: the data_request, organization: the organization
     And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
     And a project exists with name: "project1", data_response: the data_response
     And an activity exists with name: "activity1", data_response: the data_response, project: the project
@@ -440,4 +432,25 @@ end
 
 Then /^I should see "([^"]*)" is "([^"]*)"$/ do |label, text|
   page.find("##{label} label").text.should == text
+end
+
+Given /^the latest response for "([^"]*)" is submitted$/ do |org_name|
+  @organization = Organization.find_by_name(org_name)
+  @response = @organization.latest_response
+  @response.submitted = true
+  @response.save(false)
+end
+
+Then /^I should receive a csv file(?: "([^"]*)")?/ do |file|
+  result = page.response_headers['Content-Type'].should == "text/csv; charset=iso-8859-1; header=present"
+  if result
+    result = page.response_headers['Content-Disposition'].should =~ /#{file}/
+  end
+  result
+end
+
+When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
+  with_scope(selector) do
+    page.execute_script("$('#{element}').mouseover();")
+  end
 end

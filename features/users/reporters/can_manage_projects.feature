@@ -41,9 +41,9 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I check "Location1"
         And I check "Location2"
-        And I fill in "theCombobox" with "EUR"
+        And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
-        
+
       Then I should see "Project was successfully created"
         And I should see "Project1"
 
@@ -57,6 +57,7 @@ Feature: Reporter can manage projects
       When I follow "Project2"
         And I follow "Delete this Project"
       Then I should see "Project was successfully destroyed"
+
 
     Scenario Outline: Edit project dates, see feedback messages for start and end dates
       When I follow "Create Project"
@@ -95,19 +96,19 @@ Feature: Reporter can manage projects
     Scenario: A reporter can create comments for a workplan (response) and see errors
       When I follow "Projects"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_comment_input"
+      Then I should see "You cannot create blank comment."
 
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"
       Then I should see "Comment body"
 
 
-    Scenario: A reporter can create comments for an activity and see errors
+    Scenario: A reporter can create comments for a project
       Given a project exists with name: "project1", data_response: data_response "data_response"
       When I follow "Projects"
         And I follow "project1"
         And I press "Create Comment"
-      Then I should see "can't be blank" within "#comment_comment_input"
+      Then I should see "You cannot create blank comment."
 
       When I fill in "Comment" with "Comment body"
         And I press "Create Comment"
@@ -122,16 +123,6 @@ Feature: Reporter can manage projects
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
         And I follow "Add funding source"
-
-        #todo, combobox for funding source
-        # Then show me the page
-        #   And I fill in "theCombobox" with "organization3"
-
-
-        # And I select "Add an Organization..." from "From" within ".fields"
-        #       And I fill in "organization_name" with "The Best Org"
-        #       And I follow "Create Organization"
-        #       And I select "The Best Org" from "From" within ".fields"
         And I fill in "Spent" with "11" within ".fields"
         And I fill in "Q4 08-09" with "22" within ".fields .spend"
         And I fill in "Q1 09-10" with "33" within ".fields .spend"
@@ -172,7 +163,7 @@ Feature: Reporter can manage projects
       Given I follow "Sign Out"
         And an organization exists with name: "organization5"
         And a data_request exists with title: "data_request2", spend: false
-        And a data_response exists with data_request: the data_request, organization: the organization
+        And a data_response should exist with data_request: the data_request, organization: the organization
         And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
         And a location exists with short_display: "Location1"
         And a location exists with short_display: "Location2"
@@ -212,7 +203,7 @@ Feature: Reporter can manage projects
     Scenario: Months quarters groups are grouped to the GoR FY
       Given an organization "Org A" exists with name: "Org A", fiscal_year_start_date: "01-07-2010", fiscal_year_end_date: "30-06-2011"
         And a data_request "req a" exists with title: "req a"
-        And a data_response "resp a" exists with data_request: data_request
+        And a data_response "resp a" should exist with data_request: data_request
         And I follow "Projects"
         And I follow "Create Project"
       Then I should see "project_spend_q4_prev_input" is "Jul '10 - Sep '10"

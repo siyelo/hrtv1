@@ -1,0 +1,30 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  var _pie = #{@pie.to_json};
+  google.load("visualization", "1", {packages: ["corechart", "treemap"]});
+  var _code_spent_values      = #{js_safe(@code_spent_values)};
+  var _code_budget_values     = #{js_safe(@code_budget_values)};
+
+- unless current_user.district_manager?
+  %ul.breadcrumb
+    %li= link_to "Reports", user_report_dashboard_path
+    %li= link_to "Districts", reports_districts_path
+
+%h1.main_heading
+  = h @location.name
+
+
+= render 'nav'
+
+.full
+  .first-half
+    %h2= "#{@chart_name} Expenditure"
+    #code_spent.bordered
+
+  .second-half
+    %h2= "#{@chart_name} Current Budget"
+    #code_budget.bordered
+
+= render :partial => 'top_organizations_and_activities'

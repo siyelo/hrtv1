@@ -18,16 +18,21 @@ class SubActivitiesController < Reporter::BaseController
         all_ok, @sa = SubActivity.create_sa(@activity, doc)
         message = @sa.empty? ? "Implementers were successfully uploaded." : "Not all Implementers could be resolved."
         flash[:notice] = message
-        redirect_to edit_response_activity_path(@activity.data_response, @activity) if all_ok
+        if all_ok
+          redirect_to edit_response_activity_path(@activity.data_response, @activity)
+        else
+          render :action => :create
+        end
       else
         flash[:error] = 'Please select a file to upload implementers.'
         redirect_to edit_response_activity_path(@activity.data_response, @activity)
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = 'Your CSV file does not seem to be properly formatted.'
+      redirect_to edit_response_activity_path(@activity.data_response, @activity)
     end
   end
-  
+
   def bulk_create
     params.each_key do |key|
       if key.to_i > 0

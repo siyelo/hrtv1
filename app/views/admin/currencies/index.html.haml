@@ -1,0 +1,35 @@
+- title("Currencies")
+
+%h1.main_heading
+  #search
+    - form_tag admin_currencies_path, :method => :get do
+      = render 'shared/search_form'
+  Currencies
+  
+%ul.horizontal
+  %li
+    - link_to new_admin_currency_path, :class => "create_new" do
+      = image_tag "new_white.png"
+      Create Currency
+
+%table.standard.rounded
+  %thead
+    %tr
+      %th From
+      %th To
+      %th Rate
+      %th
+
+  %tbody
+    - @currencies.each do |currency|
+      - c = currency.conversion.split("_")
+      %tr{:class => cycle("even", "odd")}
+        %td= c[0]
+        %td= c[2]
+        %td
+          %span{:id => currency.id, :class => "currency_label"}= currency.rate
+        %td
+          %ul.manage_bar
+            %li= link_to "x", admin_currency_path(currency), :confirm => "Are you sure you want to delete this currency?", :method => :delete, :class => "right"
+
+= will_paginate @currencies

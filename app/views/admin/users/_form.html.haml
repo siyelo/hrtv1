@@ -3,7 +3,7 @@
   %li.last
     %h3 User details
     %ul.dashboard_section
-      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered , :hint => "The organization this user is associated with"
+      = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization this user is associated with"
       = f.input :full_name, :hint => "Full name of the user", :required => false
       = f.input :email, :hint => "Email of the user"
       = f.input :roles, :label => 'Roles', :hint => "Assign roles to this user", :required => true, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :size => 3, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
@@ -11,13 +11,17 @@
   %li.last
     %h3 Password
     %ul.dashboard_section
-      = f.input :password, :hint => "Password of the user"
-      = f.input :password_confirmation, :hint => "Confirm the password"
-
+      =f.input :password, :label => "Password", :hint => "User password"
+      =f.input :password_confirmation, :label => "Password Confirmation", :hint => "User Password Confirmation"
   %li.last
     %h3 Organizations to Manage
     %ul.dashboard_section
       = f.input :organizations, :label => 'Organizations', :hint => "Assign organizations to this Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
+
+  %li.last
+    %h3 Districts to Manage
+    %ul.dashboard_section
+      = f.input :location, :label => "District", :hint => 'Assign districts to this district manager to manage', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC', :select => 'short_display, id'), :required => false, :input_html => {:class => 'js_combobox'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"

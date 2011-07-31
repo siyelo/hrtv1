@@ -5,11 +5,11 @@ module NumberHelper
     true if Float(i) rescue false
   end
 
-  def n2c(value, unit = "")
+  def n2c(value, unit = "", delimiter = ",")
     number_to_currency(value,
                       :separator => ".",
                       :unit => unit,
-                      :delimiter => ",")
+                      :delimiter => delimiter)
   end
 
   def n2cs(value, unit = "")
@@ -74,17 +74,18 @@ module NumberHelper
   end
 
   def currency_rate(from, to)
-    if from == to || from.nil? || to.nil?
-      1
-    elsif (rate = Money.default_bank.get_rate(from, to))
-      rate
-    else
-      to_usd   = Money.default_bank.get_rate(from, "USD")
-      from_usd = Money.default_bank.get_rate("USD", to)
+     if from == to || from.nil? || to.nil?
+       1
+     elsif (rate = Money.default_bank.get_rate(from, to))
+       rate
+     else
+       to_usd   = Money.default_bank.get_rate(from, "USD")
+       from_usd = Money.default_bank.get_rate("USD", to)
 
-      to_usd && from_usd ? to_usd * from_usd : 1
-    end
-  end
+       to_usd && from_usd ? to_usd * from_usd : 1
+     end
+   end
+
 
   def universal_currency_converter(amount, from, to)
     amount = 0 if amount.blank?

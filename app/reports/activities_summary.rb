@@ -3,7 +3,8 @@ require 'fastercsv'
 class Reports::ActivitiesSummary
   include Reports::Helpers
 
-  def initialize
+  def initialize(request)
+    @request = request
   end
 
   def csv
@@ -18,7 +19,7 @@ class Reports::ActivitiesSummary
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
       Activity.find(:all, :include => :provider).each do |activity|
         if ((activity.class == Activity && activity.sub_activities.empty?) ||
-            activity.class == SubActivity)
+            activity.class == SubActivity) && activity.data_request == @request
           csv << build_row(activity)
         end
       end
@@ -38,7 +39,7 @@ class Reports::ActivitiesSummary
       row << "activity.name"
       row << "activity.description"
       row << "activity.budget"
-      row << "activity.spend"
+      row << "activity.expenditure"
       row << "currency"
       row << "activity.start_date"
       row << "activity.end_date"
@@ -48,7 +49,7 @@ class Reports::ActivitiesSummary
       row << "activity.targets"
       row << "Is Implementer?"
       row << "parent_activity.total_budget"
-      row << "parent_activity.total_spend"
+      row << "parent_activity.total_expenditure"
 
       row
     end
@@ -74,7 +75,7 @@ class Reports::ActivitiesSummary
       row << provider_name(activity)
       row << provider_fosaid(activity)
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
+      row << "#{h activity.targets.map{|o| o.description}.join('; ')}"
       row << is_activity(activity)
       row << parent_activity_budget(activity)
       row << parent_activity_spend(activity)

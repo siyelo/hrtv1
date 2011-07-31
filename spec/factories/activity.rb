@@ -1,13 +1,10 @@
 Factory.define :activity, :class => Activity do |f|
-  f.sequence(:name) { |i| "activity_name_#{i}" }
+  f.sequence(:name) { |i| "activity_name_#{i}_#{rand(100_000_000)}" }
   f.description     { 'activity_description' }
   f.budget          { 50.00 }
   f.spend           { 40.00 }
-  f.project         { Factory.create(:project) }
-  f.provider        { Factory.create(:provider) }
-  f.data_response   { Factory.create(:data_response) }
-  f.start_date      { Date.parse("2010-01-01") }
-  f.end_date        { Date.parse("2010-12-31") }
+  f.start_date      { "2010-01-01" }
+  f.end_date        { "2010-12-31" }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
@@ -17,7 +14,7 @@ end
 Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
   f.sequence(:name) { |i| "sub_activity_name_#{i}" }
   f.description     { 'sub_activity_description' }
-  f.activity        { Factory.create :activity }
+  f.provider        { Factory.create(:provider) }
 end
 
 
@@ -99,5 +96,3 @@ Factory.define :other_cost_fully_coded, :class => OtherCost, :parent => :other_c
   f.after_create { |a| Factory(:coding_budget_district, :cached_amount => 50, :activity => a) }
   f.after_create { |a| Factory(:coding_budget_cost_categorization, :cached_amount => 50, :activity => a) }
 end
-
-

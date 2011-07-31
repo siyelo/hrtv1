@@ -49,7 +49,7 @@ module CurrencyHelper
       prios, all_currencies = load_currencies_in_order
       return prios + all_currencies
     end
-
+    
     protected
 
       def load_currencies_in_order

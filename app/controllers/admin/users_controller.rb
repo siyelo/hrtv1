@@ -21,22 +21,28 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
-    create! do |success, failure|
-      success.html do
-        flash[:notice] = "User was successfully created"
-        redirect_to edit_admin_user_url(resource)
-      end
+    @user = User.new(params[:user])
+    if @user.save_and_invite(current_user)
+      flash[:notice] = "User was successfully created"
+      redirect_to admin_users_path
+    else
+      flash.now[:error] = "Sorry, we were unable to save that user"
+      render :action => 'new'
     end
   end
 
   def update
-    # set roles to epty array if no role is assigned
+    # set roles to empty array if no role is assigned
     # otherwise, user model is saved, but user not notified for the error
     params[:user][:roles] = [] unless params[:user].has_key?(:roles)
     update! do |success, failure|
       success.html do
         flash[:notice] = "User was successfully updated"
         redirect_to edit_admin_user_url(resource)
+      end
+      failure.html do
+        flash[:error] = "Oops, we couldn't save your changes"
+        render :action => 'edit'
       end
     end
   end
@@ -66,10 +72,8 @@ class Admin::UsersController < Admin::BaseController
       redirect_to admin_users_url
     end
   end
-
-
+  
   private
-
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "email"
     end

@@ -1,0 +1,21 @@
+- if current_user.tips_shown
+  .main_heading
+    #gs_container
+      #getting_started_title
+        %h2 Getting started as a District Manager
+        = render :partial => 'shared/tips_hide'
+      .getting_started
+        .message
+          %p View Interactive Reports about your district:
+          %ul.bulleted
+            %li Implementers of Activities
+            %li Funders and Financing Agents of Projects
+            %li Organizations working in your district
+            %li Activities implemented in your district
+            %li Classifications across several dimensions: Input(s) (Cost Categories), Purpose(s), HSSP2 Strat Programme, HSSP2 Strat Objective
+          %p
+            Don't forget to check out our
+            = link_to "online help", help_link, :target => "_blank"
+            and you can
+            = link_to "contact the Support Team", contact_link, :target => "_blank"
+            anytime to start a discussion.

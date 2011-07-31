@@ -10,8 +10,9 @@
   var _code_budget_values = #{js_safe(@code_budget_values)};
 
 %ul.breadcrumb
-  %li= link_to "Reports", user_report_dashboard_path(current_user)
-  %li= link_to "Districts", reports_districts_path
+  - unless current_user.district_manager?
+    %li= link_to "Reports", user_report_dashboard_path
+    %li= link_to "Districts", reports_districts_path
   %li= link_to h(@location.name), reports_district_path(@location)
   %li= link_to 'Organizations', reports_district_organizations_path(@location)
 

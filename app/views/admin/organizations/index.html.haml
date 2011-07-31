@@ -1,5 +1,4 @@
 - title("Organizations")
-
 %h1.main_heading
   #search
     - form_tag admin_organizations_path, :method => :get do
@@ -30,18 +29,28 @@
 
       = link_to "Download template", download_template_admin_organizations_path, :class => 'target'
 
+%ul.group
+  - ["All", "Not Started",  "Submitted", "Submitted for Final Review", "Complete", "In Progress"].each do |filter|
+    - css_class = "active" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
+    %li= link_to filter, {:sort => params[:sort], :direction => params[:direction], :query => params[:query], :filter => filter}, {:class => css_class}
 
-%table.standard.rounded
-  %thead
-    %tr
-      %th= sortable "name", "Organization"
-      %th Primary Contact Name (Phone)
-      %th Secondary Contacts
-      %th Activities Approved
-      %th= sortable "raw_type", "Type"
-      %th= sortable "fosaid", "Fosaid"
-      %th
-  %tbody
-    = render :partial => '/organizations/organization', :collection => @organizations
+#filter_help
+  %p
+    = search_and_filter_message(@organizations.total_entries, params[:query], params[:filter])
 
-= will_paginate @organizations
+- unless @organizations.empty?
+  %table.standard.rounded
+    %thead
+      %tr
+        %th= sortable "name", "Organization"
+        %th Primary Contact Name (Phone)
+        %th Secondary Contacts
+        %th Activities Approved
+        %th Response Status
+        %th= sortable "raw_type", "Type"
+        %th= sortable "fosaid", "Fosaid"
+        %th
+    %tbody
+      = render :partial => '/organizations/organization', :collection => @organizations
+
+  = will_paginate @organizations

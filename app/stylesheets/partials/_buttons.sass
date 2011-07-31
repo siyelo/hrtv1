@@ -139,7 +139,7 @@ a.remove_nested
     &:hover, &:focus
       opacity: 1
 
-  &.dropdown_trigger
+  &.js_dropdown_trigger
     background: $orange
     border: 1px solid $orange - #222
     color: #fff
@@ -147,7 +147,7 @@ a.remove_nested
     font-size: 12px
     font-weight: bold
     margin-bottom: 10px
-    padding: 7px 12px 5px
+    padding: 7px 4px 5px 12px
     position: relative
     text-decoration: none
     z-index: 20
@@ -157,7 +157,6 @@ a.remove_nested
     +text-shadow($orange - #444, 0, 1px, 0)
     img
       position: relative
-      top: 1px
     &.persist
       color: #fff
       background: green - #222 !important
@@ -345,7 +344,7 @@ a, input[type=submit]
   &.delete_button
     &:hover, &:focus
       color: $red !important
-  
+
   &.small_submit_button
     background: #eee
     border: 1px solid $light-blue

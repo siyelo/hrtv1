@@ -1,10 +1,10 @@
 module Charts::CountryPies
   extend Charts::HelperMethods
-
+####
   class << self
     ### admin/district/:id/organizations
     def organizations_pie(code_type, data_request_id)
-      records = Organization.find :all,
+      records = Organization.reporting.find :all,
         :select => "organizations.id,
                     organizations.name as name,
                     SUM(ca1.cached_amount_in_usd) as value",

@@ -15,7 +15,6 @@ class DataResponse < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
   has_many :sub_activities, :dependent => :destroy
-  has_many :funding_flows, :dependent => :destroy
   has_many :projects, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
@@ -23,9 +22,8 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :data_request_id
-  # TODO - put back asap! validates_uniqueness_of :data_request_id, :scope => :organization_id
-  validates_presence_of :organization_id
+  validates_presence_of :data_request_id, :organization_id
+  validates_uniqueness_of :data_request_id, :scope => :organization_id
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -85,11 +83,9 @@ class DataResponse < ActiveRecord::Base
     self.find :all,
       :select => 'data_responses.*, organizations.raw_type',
       :joins => "LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                 LEFT JOIN funding_flows ON data_responses.id = funding_flows.data_response_id
                  LEFT JOIN projects ON data_responses.id = projects.data_response_id
                  LEFT OUTER JOIN organizations ON organizations.id = data_responses.organization_id",
       :conditions => ["activities.data_response_id IS NULL AND
-                      funding_flows.data_response_id IS NULL AND
                       projects.data_response_id IS NULL AND
                       organizations.raw_type IN (?)",
                       ["Agencies", "Govt Agency", "Donors", "Donor",
@@ -110,16 +106,16 @@ class DataResponse < ActiveRecord::Base
 
   # TODO: spec
   def empty?
-    activities.empty? && projects.empty? && funding_flows.empty?
+    activities.empty? && projects.empty?
   end
 
   # TODO: spec
   def status
-    return "Empty / Not Started" if empty?
-    return "Ready to Submit" if ready_to_submit?
-    return "Submitted" if submitted
-    return "Submitted for Final Review" if submitted_for_final
     return "Complete" if complete
+    return "Submitted for Final Review" if submitted_for_final
+    return "Submitted" if submitted
+    return "Ready to Submit" if ready_to_submit?
+    return "Empty / Not Started" if empty?
     return "In Progress"
   end
 
@@ -131,16 +127,6 @@ class DataResponse < ActiveRecord::Base
   # TODO: spec
   def total_project_spend
     projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + universal_currency_converter(p.spend, p.currency, currency)}
-  end
-
-  # TODO: spec
-  def total_project_budget_RWF
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + p.budget_RWF}
-  end
-
-  # TODO: spec
-  def total_project_spend_RWF
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + p.spend_RWF}
   end
 
   # TODO: spec
@@ -432,7 +418,7 @@ class DataResponse < ActiveRecord::Base
   def total_spend
     projects_total_spend + other_costs_subtotal(:spend)
   end
-
+  
   def total_budget
     projects_total_budget + other_costs_subtotal(:budget)
   end

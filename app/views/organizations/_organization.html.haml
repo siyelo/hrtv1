@@ -1,12 +1,14 @@
 - response = organization.response_for(current_request)
 %tr
   %td.title= link_to organization.name, response_projects_path(response)
-  %td= "#{organization.contact_name} (#{organization.contact_phone_number})"
+  %td= organization.contact_phone_number ? "#{organization.contact_name} (#{organization.contact_phone_number})" : "#{organization.contact_name}"
   %td
     %ul
       - organization.user_emails(2).each do |e|
         %li= mail_to(e)
   %td= "#{response.activities.manager_approved.count}/#{response.activities_count}"
+  %td= response.status
+
   - if current_user.admin?
     %td= organization.raw_type
     %td= organization.fosaid
@@ -14,3 +16,6 @@
       %ul.manage_bar
         %li= link_to "Edit", edit_admin_organization_path(organization)
         %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure you want to DELETE this organization? There is no undo."
+  - elsif current_user.activity_manager?
+    %td= link_to 'Export Workplan', download_workplan_response_projects_path(response)
+

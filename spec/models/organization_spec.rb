@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
@@ -16,7 +16,7 @@ describe Organization do
     it { should allow_mass_assignment_of(:contact_office_location) }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should have_and_belong_to_many(:activities) }
     it { should have_and_belong_to_many(:locations) }
     it { should have_many(:users) }
@@ -32,22 +32,31 @@ describe Organization do
     it { should have_and_belong_to_many :managers }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { Factory(:organization) }
-    it { should be_valid }
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name) }
-    it { should validate_presence_of(:currency) }
-    it { should validate_presence_of(:contact_name) }
-    it { should validate_presence_of(:contact_position) }
-    it { should validate_presence_of(:contact_phone_number) }
-    it { should validate_presence_of(:contact_main_office_phone_number) }
-    it { should validate_presence_of(:contact_office_location)}
 
-    it "is not valid when currency is not included in the list" do
-      organization = Factory.build(:organization, :currency => 'INVALID')
-      organization.save
+    it "validates presence of attributes only on update" do
+      attributes = {
+        :currency => nil,
+        :contact_name => nil,
+        :contact_position => nil,
+        :contact_phone_number => nil,
+        :contact_main_office_phone_number => nil,
+        :contact_office_location => nil
+      }
+
+      organization = Factory(:organization, attributes) # create valid org
+
+      # try updating with invalid attributes
+      organization.update_attributes(attributes).should be_false
       organization.errors.on(:currency).should_not be_blank
+      organization.errors.on(:contact_name).should_not be_blank
+      organization.errors.on(:contact_position).should_not be_blank
+      organization.errors.on(:contact_phone_number).should_not be_blank
+      organization.errors.on(:contact_main_office_phone_number).should_not be_blank
+      organization.errors.on(:contact_office_location).should_not be_blank
     end
 
     it "is valid when currency is included in the list" do
@@ -103,32 +112,100 @@ describe Organization do
     end
   end
 
+  describe "Named Scopes" do
+    before :each do
+      @request1 = Factory(:data_request)
+      @request2 = Factory(:data_request)
+      @org = Factory(:organization, :name => "Responder Organization")
+      @response = @org.responses.find_by_data_request_id(@request1.id)
+    end
+
+    it "should find submitted responses" do
+      @response.submitted = true
+      @response.save(false)
+      Organization.with_submitted_responses_for(@request1).should == [@org]
+      Organization.with_submitted_for_final_responses_for(@request1).should_not == [@org]
+      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    end
+
+    it "should find submitted for final review responses" do
+      @response.submitted_for_final = true
+      @response.save(false)
+      Organization.with_submitted_for_final_responses_for(@request1).should == [@org]
+      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    end
+
+    it "should find completed responses" do
+      @response.complete = true
+      @response.save(false)
+      Organization.with_complete_responses_for(@request1).should == [@org]
+    end
+
+    it "should find empty responses" do
+      Organization.with_empty_responses_for(@request1).should have(3).items
+    end
+
+    it "should find in progress responses (i.e. at least one activity) " do
+      @project = Factory(:project, :data_response => @response)
+      @activity = Factory(:activity, :project => @project, :data_response => @response)
+      Organization.with_in_progress_responses_for(@request1).should == [@org]
+    end
+  end
+
   describe "Callbacks" do
-    # after_create :create_data_responses
-    it "creates data_responsesfor each data_request after organization is created" do
-      org0 = Factory(:organization, :name => "Requester Organization")
-      data_request1 = Factory(:data_request, :organization => org0)
-      data_request2 = Factory(:data_request, :organization => org0)
+    context "when there is a data_request in the system" do
+      # after_create :create_data_responses
+      it "creates data_responses for each data_request after organization is created" do
+        org_requester = Factory(:organization)
+        data_request1 = Factory(:data_request, :organization => org_requester)
+        data_request2 = Factory(:data_request, :organization => org_requester)
 
-      organizations = Factory(:organization, :name => "Responder Organization")
+        organization = Factory(:organization)
 
-      data_requests = organizations.data_responses.map(&:data_request)
-      data_requests.should include(data_request1)
-      data_requests.should include(data_request2)
+        data_requests = organization.data_responses.map(&:data_request)
+        data_requests.should include(data_request1)
+        data_requests.should include(data_request2)
+      end
+
+      it "does not create data_responses for Non-Reporting organizations" do
+        org_requester = Factory(:organization)
+        Factory(:data_request, :organization => org_requester)
+
+        organization = Factory(:organization, :raw_type => 'Non-Reporting')
+        organization.data_responses.should be_empty
+      end
+    end
+
+    context "when there is no a data_request in the system" do
+      # after_create :create_data_responses
+      it "creates data_responses for each data_request after organization is created" do
+        org_requester = Factory(:organization)
+        data_request1 = Factory(:data_request, :organization => org_requester)
+        data_request2 = Factory(:data_request, :organization => org_requester)
+
+        data_requests = org_requester.data_responses.map(&:data_request)
+        data_requests.should include(data_request1)
+        data_requests.should include(data_request2)
+      end
+
+      it "does not create data_responses for Non-Reporting organizations" do
+        org_requester = Factory(:organization, :raw_type => 'Non-Reporting')
+        Factory(:data_request, :organization => org_requester)
+
+        org_requester.data_responses.should be_empty
+      end
     end
   end
 
   describe "creating a organization record" do
     before :each do
-      @organization = Factory(:organization)
-      Factory(:data_response, :organization => @organization)
+      basic_setup_project
     end
 
     it "can have many in_flows" do
       @organization.in_flows.should have(0).items
       Factory(:funding_flow,
-              :to => @organization,
-              :data_response => @organization.data_responses.first)
+              :project => @project, :to => @organization)
       @organization.reload
       @organization.in_flows.should have(1).item
     end
@@ -136,58 +213,42 @@ describe Organization do
     it "can have many out_flows" do
       @organization.out_flows.should have(0).items
       Factory(:funding_flow,
-                      :from => @organization,
-                      :data_response => @organization.data_responses.first)
+              :project => @project, :from => @organization)
       @organization.reload
       @organization.out_flows.should have(1).item
     end
 
-    context "flows to/from projects" do
-      before :each do
-        @project = Factory(:project,
-                           :data_response => @organization.data_responses.first)
-      end
+    it "can donate to a project" do
+      @organization.donor_for.should have(0).items
+      Factory(:funding_flow,
+              :project => @project, :from => @organization)
+      @organization.reload
+      @organization.donor_for.should have(1).item
+    end
 
-      it "can donate to a project" do
-        @organization.donor_for.should have(0).items
-        Factory(:funding_flow,
-                        :from => @organization,
-                        :project => @project,
-                        :data_response => @organization.data_responses.first)
-        @organization.reload
-        @organization.donor_for.should have(1).item
-      end
-
-      it "can implement a project" do
-        @organization.implementor_for.should have(0).items
-        Factory(:funding_flow,
-                        :to => @organization,
-                        :project => @project,
-                        :data_response => @organization.data_responses.first)
-        @organization.reload
-        @organization.implementor_for.should have(1).item
-        @organization.implementor_for.first.should == @project
-      end
+    it "can implement a project" do
+      @organization.implementor_for.should have(0).items
+      Factory(:funding_flow,
+              :project => @project, :to => @organization)
+      @organization.reload
+      @organization.implementor_for.should have(1).item
+      @organization.implementor_for.first.should == @project
     end
   end
 
   describe "empty organization" do
     before :each do
       @organization = Factory(:organization)
-    end
-
-    it "is empty when it has nothing" do
-      @organization.is_empty?.should be_true
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
     end
 
     it "is empty when it has empty data response" do
-      dr = Factory(:data_response)
       @organization.is_empty?.should be_true
     end
 
     it "is not empty when it has non empty data response" do
-      dr = Factory(:data_response, :organization => @organization)
-      Factory(:project, :data_response => dr)
+      Factory(:project, :data_response => @response)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -199,25 +260,24 @@ describe Organization do
     end
 
     it "is not empty when it has in flows" do
-      Factory(:data_response, :organization => @organization)
+      project = Factory(:project, :data_response => @response)
       Factory(:funding_flow,
-                      :to => @organization,
-                      :data_response => @organization.data_responses.first)
+              :to => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
     it "is not empty when it has out flows" do
-      Factory(:data_response, :organization => @organization)
+      project = Factory(:project, :data_response => @response)
       Factory(:funding_flow,
-                      :from => @organization,
-                      :data_response => @organization.data_responses.first)
+              :from => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
     it "is not empty when it has provider_for" do
-      Factory(:activity, :provider => @organization)
+      project  = Factory(:project, :data_response => @response)
+      activity = Factory(:activity, :data_response => @response, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -228,7 +288,8 @@ describe Organization do
     end
 
     it "is not empty when it has activities" do
-      @organization.activities << Factory.create(:activity)
+      project  = Factory(:project, :data_response => @response)
+      activity = Factory(:activity, :data_response => @response, :project => project)
       @organization.is_empty?.should_not be_true
     end
   end
@@ -254,12 +315,12 @@ describe Organization do
 
   describe "remove duplicate organization" do
     before :each do
-      @target     = Factory(:organization)
-      @duplicate  = Factory(:organization)
+      @target       = Factory(:organization)
+      @duplicate    = Factory(:organization)
       data_request1 = Factory(:data_request, :organization => @target)
       data_request2 = Factory(:data_request, :organization => @duplicate)
-      @target_dr    = Factory(:data_response, :organization => @target, :data_request => data_request1)
-      @duplicate_dr = Factory(:data_response, :organization => @duplicate, :data_request => data_request2)
+      @target_dr    = @target.latest_response
+      @duplicate_dr = @duplicate.latest_response
     end
 
     it "deletes duplicate after merge" do
@@ -270,8 +331,17 @@ describe Organization do
     end
 
     it "copies activities from @duplicate to @target" do
-      @target.activities << Factory(:activity)
-      @duplicate.activities << Factory(:activity)
+      target_project     = Factory(:project, :data_response => @target_dr)
+      duplicate_project  = Factory(:project, :data_response => @duplicate_dr)
+
+      target_activity    = Factory(:activity, :data_response => @target_dr,
+                                   :project => target_project)
+      duplicate_activity = Factory(:activity, :data_response => @duplicate_dr,
+                                   :project => duplicate_project)
+
+      @target.activities << target_activity
+      @duplicate.activities << duplicate_activity
+      @target.activities.count.should == 1
       Organization.merge_organizations!(@target, @duplicate)
       @target.activities.count.should == 2
     end
@@ -283,37 +353,40 @@ describe Organization do
 
     it "copies data responses from @duplicate to @target" do
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 6
+      @target.data_responses.count.should == 4
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      @duplicate.fiscal_year_start_date = Date.parse("2010-02-01")
-      @duplicate.fiscal_year_end_date = Date.parse("2010-01-01")
+      @duplicate.fiscal_year_start_date = "2010-02-01"
+      @duplicate.fiscal_year_end_date = "2010-01-01"
       @duplicate.save(false)
-      duplicate_data_response = Factory.build(:data_response, :organization => @duplicate)
-      duplicate_data_response.save
+      duplicate_data_response = @duplicate.latest_response
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 9 # not 2, since our before block created a valid DR
+      @target.data_responses.count.should == 4 # not 2, since our before block created a valid DR
     end
 
     it "copies out flows from duplicate to @target" do
+      project_from = Factory(:project, :data_response => @target_dr)
+      project_to   = Factory(:project, :data_response => @duplicate_dr)
       Factory(:funding_flow,
-                      :from => @target,
-                      :data_response => @target.data_responses.first)
+              :from => @target, :project => project_from)
       Factory(:funding_flow,
-                      :from => @duplicate,
-                      :data_response => @target.data_responses.first)
+              :from => @duplicate, :project => project_to)
+
+      @target.out_flows.count.should == 1
       Organization.merge_organizations!(@target, @duplicate)
       @target.out_flows.count.should == 2
     end
 
     it "copies in flows from duplicate to @target" do
+      project_from = Factory(:project, :data_response => @target_dr)
+      project_to   = Factory(:project, :data_response => @duplicate_dr)
       Factory(:funding_flow,
-                      :to => @target,
-                      :data_response => @target.data_responses.first)
+              :to => @target, :project => project_from)
       Factory(:funding_flow,
-                      :to => @duplicate,
-                      :data_response => @target.data_responses.first)
+              :to => @duplicate, :project => project_to)
+
+      @target.in_flows.count.should == 1
       Organization.merge_organizations!(@target, @duplicate)
       @target.in_flows.count.should == 2
     end
@@ -333,8 +406,12 @@ describe Organization do
     end
 
     it "copies provider_for from @duplicate to @target" do
-      Factory(:activity, :provider => @target)
-      Factory(:activity, :provider => @duplicate)
+      target_project = Factory(:project, :data_response => @target_dr)
+      duplicate_project = Factory(:project, :data_response => @duplicate_dr)
+      Factory(:activity, :provider => @target, :data_response => @target_dr,
+              :project => target_project)
+      Factory(:activity, :provider => @target, :data_response => @target_dr,
+              :project => duplicate_project)
       Organization.merge_organizations!(@target, @duplicate)
       @target.provider_for.count.should == 2
     end
@@ -365,11 +442,26 @@ describe Organization do
       Organization.without_users.should == [requestor, org2]
     end
 
-    it "should order organizations by name" do
+    it "order organizations by name" do
       org1 = Factory(:organization, :name => 'Org2')
       org2 = Factory(:organization, :name => 'Org1')
 
       Organization.ordered.should == [org2, org1]
+    end
+
+    context "reporting & nonreporting" do
+      before :each do
+        @org1 = Factory(:organization, :raw_type => 'Bilateral')
+        @org2 = Factory(:organization, :raw_type => 'Non-Reporting')
+      end
+
+      it "returns reporting organizations" do
+        Organization.reporting.should == [@org1]
+      end
+
+      it "returns reporting organizations" do
+        Organization.nonreporting.should == [@org2]
+      end
     end
   end
 
@@ -380,12 +472,8 @@ describe Organization do
       @org1 = Factory.create(:organization)
       @org2 = Factory.create(:organization)
 
-      @response1 = Factory.create(:data_response, :data_request => @request,
-                                 :organization => @org1)
-      @response2 = Factory.create(:data_response, :data_request => @request,
-                                 :organization => @org2)
-
-
+      @response1 = @org1.latest_response
+      @response2 = @org2.latest_response
     end
 
     it "has X as provider when any of its activities has it as provider" do
@@ -425,6 +513,26 @@ describe Organization do
       @reporter = Factory :reporter, :email => 'reporter@org.com', :organization => @org
       @reporter2 = Factory :reporter, :email => 'reporter2@org.com', :organization => @org
       @org.user_emails(1).should == ['reporter@org.com']
+    end
+  end
+
+  describe "organization types" do
+    it "includes 'Non-Reporting' type" do
+      Organization::ORGANIZATION_TYPES.should include('Non-Reporting')
+    end
+  end
+
+  describe "#reporting?" do
+    it "is reporting when raw_type is not 'Non-Reporting'" do
+      organization = Factory.build(:organization, :raw_type => 'Bilateral')
+      organization.reporting?.should be_true
+    end
+  end
+
+  describe "#nonreporting?" do
+    it "is nonreporting when raw_type is 'Non-Reporting'" do
+      organization = Factory.build(:organization, :raw_type => 'Non-Reporting')
+      organization.nonreporting?.should be_true
     end
   end
 end

@@ -1,0 +1,32 @@
+- content_for :head do
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+:javascript
+  google.load("visualization", "1", {packages: ["corechart"]});
+  var _budget_ufs_values      = #{js_safe(@budget_ufs_values)};
+  var _budget_fa_values       = #{js_safe(@budget_fa_values)};
+  var _spend_ufs_values       = #{js_safe(@spend_ufs_values)};
+  var _spend_fa_values        = #{js_safe(@spend_fa_values)};
+
+
+= render 'nav'
+
+
+.full
+  .first-half
+    %h2 Ultimate Funding Source (Expenditure)
+    #spend_ufs_pie.bordered
+  .second-half
+    %h2 Ultimate Funding Source (Current Budget)
+    #budget_ufs_pie.bordered
+
+.full
+  .first-half
+    %h2 Financing Agent (Expenditure)
+    #spend_fa_pie.bordered
+  .second-half
+    %h2 Financing Agent (Current Budget)
+    #budget_fa_pie.bordered
+
+
+= render 'top_organizations_and_activities'

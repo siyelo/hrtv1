@@ -40,10 +40,12 @@ module ApplicationHelper
   end
 
   # Generates proper dashboard url link depending on the type of user
-  def user_report_dashboard_path(current_user)
+  def user_report_dashboard_path
     if current_user
       if current_user.admin?
         admin_reports_path
+      elsif current_user.district_manager?
+        reports_district_path(current_user.location)
       elsif current_user.reporter?
         reporter_reports_path
       else
@@ -144,7 +146,7 @@ module ApplicationHelper
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
-    link_to title, {:sort => column, :direction => direction, :query => params[:query]}, {:class => css_class}
+    link_to title, {:sort => column, :direction => direction, :query => params[:query], :filter => params[:filter]}, {:class => css_class}
   end
 
 
@@ -188,9 +190,9 @@ module ApplicationHelper
 
   # given a project or activity, render a nice name from either
   # the name() or description()
-  def nice_name(object, length=16)
-    descr = object.description.presence ||
-            object.name.presence ||
+  def nice_name(object, length = 16)
+    descr = object.name.presence ||
+            object.description.presence ||
             "Unnamed #{object.class.to_s.titleize}"
     truncate(descr, :length => length)
   end
@@ -250,7 +252,7 @@ module ApplicationHelper
   end
 
   def funding_organizations_select
-    orgs = Organization.find(:all, :order => 'old_type, lower(name)')
+    orgs = Organization.find(:all, :order => 'lower(name)')
     orgs.map{|o| [o.display_name(100), o.id]}
   end
 

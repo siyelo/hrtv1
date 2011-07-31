@@ -30,6 +30,7 @@ def setup_specs
   ENV['RAILS_ENV'] = 'test'
   run "rake db:migrate RAILS_ENV=test"
   run_or_die "rake setup_quick --trace"
+  run "rake db:load_currencies"
 end
 
 def specs

@@ -17,7 +17,6 @@ When /^I confirm the popup dialog$/ do
   page.evaluate_script('window.confirm = function() { return true; }')
 end
 
-
 Then /^the cached field "([^"]*)" should contain "([^"]*)"$/ do |selector, value|
   find(selector).value.should == value
 end
@@ -56,4 +55,15 @@ end
 # Pickle
 Given /^#{capture_model} is one of #{capture_model}'s (\w+)$/ do |owned, owner, assoc|
   model!(owner).send(assoc) << model!(owned)
+end
+
+Then /^"([^"]*)" should( not)? be an option for "([^"]*)"(?: within "([^\"]*)")?$/ do |value, negate, field, selector|
+  with_scope(selector) do
+    expectation = negate ? :should_not : :should
+    field_labeled(field).find(:xpath, ".//option[text() = '#{value}']").send(expectation, be_present)
+  end
+end
+
+Then /^the "([^"]*)" combobox should contain "([^"]*)"$/ do |label, value|
+  find_field(label).value.should include(value)
 end

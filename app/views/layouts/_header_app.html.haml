@@ -9,6 +9,8 @@
         - # sysadmin may have no request/response
         - if current_user.sysadmin? && current_request.nil?
           = "[No Current Request]"
+        - elsif current_user.district_manager?
+          = "[#{current_request.name}]"
         - else
           = "[#{current_request.name}]"
 

@@ -1,7 +1,7 @@
 Factory.define :code, :class => Code do |f|
-  f.sequence(:short_display)   { |i| "code_#{i}" }
-  f.sequence(:description)     { |i| "description_#{i}" }
-  f.sequence(:long_display)    { |i| "long_display_#{i}" }
+  f.sequence(:short_display)   { |i| "code_#{i}_#{rand(100_000_000)}" }
+  f.sequence(:description)     { |i| "description_#{i}_#{rand(100_000_000)}" }
+  f.sequence(:long_display)    { |i| "long_display_#{i}_#{rand(100_000_000)}" }
   f.parent
 end
 
@@ -17,7 +17,14 @@ end
 Factory.define :nsp_code, :class => Nsp, :parent => :code do |f|
 end
 
+# could use any of the mtef/nha/nasa/nsp here
+Factory.define :purpose, :parent => :nha_code do |f|
+end
+
 Factory.define :cost_category_code, :class => CostCategory, :parent => :code do |f|
+end
+
+Factory.define :input, :parent => :cost_category_code do |f|
 end
 
 Factory.define :other_cost_code, :class => OtherCostCode, :parent => :code do |f|

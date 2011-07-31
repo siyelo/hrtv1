@@ -1,0 +1,14 @@
+%ul.group
+  %li= link_to "Overview", reports_country_path, active_if(params[:action] == 'show')
+  %li= link_to "NSP", classifications_reports_country_path(:code_type => "nsp"), active_if(@nsp)
+  %li= link_to "MTEF", classifications_reports_country_path(:code_type => "mtef"), active_if(@mtef)
+  %li= link_to "Inputs", classifications_reports_country_path(:code_type => "cost_category"), active_if(@cost_category)
+  %li= link_to "HSSP2 Strat Programme", classifications_reports_country_path(:code_type => "hssp2_strat_prog"), active_if(@hssp2_strat_prog)
+  %li= link_to "HSSP2 Strat Objective", classifications_reports_country_path(:code_type => "hssp2_strat_obj"), active_if(@hssp2_strat_obj)
+
+
+- if params[:action] == 'classifications'
+  %ul.group
+    %li= link_to "Pie", classifications_reports_country_path(:chart_type => "pie", :code_type => params[:code_type]), active_if(@pie)
+    - if !@hssp2_strat_prog && !@hssp2_strat_obj
+      %li= link_to "Treemap", classifications_reports_country_path(:chart_type => "treemap", :code_type => params[:code_type]), active_if(!@pie)

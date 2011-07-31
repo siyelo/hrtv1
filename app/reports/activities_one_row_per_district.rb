@@ -3,8 +3,9 @@ require 'fastercsv'
 class Reports::ActivitiesOneRowPerDistrict
   include Reports::Helpers
 
-  def initialize
+  def initialize(request)
     @locations = Location.roots.collect{|code| code.self_and_descendants}.flatten
+    @request = request
   end
 
   def csv
@@ -17,7 +18,7 @@ class Reports::ActivitiesOneRowPerDistrict
       #
       #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |activity| # DEBUG ONLY
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
-      Activity.find(:all, :include => :provider).each do |activity|
+      Activity.with_request(@request).each do |activity|
         if ((activity.class == Activity && activity.sub_activities.empty?) ||
             activity.class == SubActivity)
           build_rows(csv, activity)
@@ -38,7 +39,7 @@ class Reports::ActivitiesOneRowPerDistrict
      row << "activity.name"
      row << "activity.description"
      row << "activity.budget"
-     row << "activity.spend"
+     row << "activity.expenditure"
      row << "currency"
      row << "activity.start_date"
      row << "activity.end_date"
@@ -48,7 +49,7 @@ class Reports::ActivitiesOneRowPerDistrict
      row << "activity.targets"
      row << "Is Implementer?"
      row << "parent_activity.total_budget"
-     row << "parent_activity.total_spend"
+     row << "parent_activity.total_expenditure"
      @locations.each{|code| row << code.to_s_with_external_id}
      row << "District"
      row << "District Value"
@@ -74,7 +75,7 @@ class Reports::ActivitiesOneRowPerDistrict
       row << provider_name(activity)
       row << provider_fosaid(activity)
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
+      row << "#{h activity.targets.map{|o| o.description}.join('; ')}"
       row << is_activity(activity)
       row << parent_activity_budget(activity)
       row << parent_activity_spend(activity)

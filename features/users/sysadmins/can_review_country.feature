@@ -10,7 +10,7 @@ Feature: Admin can review country
       And a data_request exists with title: "Req1", organization: the organization
       And an organization exists with name: "UNDP"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
-      And a data_response exists with data_request: the data_request, organization: the organization
+      And a data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "Project A", data_response: the data_response
       And an activity exists with name: "Activity A", data_response: the data_response, project: the project
       And a location exists with short_display: "Location A"

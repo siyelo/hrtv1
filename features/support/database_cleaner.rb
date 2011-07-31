@@ -3,7 +3,7 @@
 if defined?(ActiveRecord::Base)
   begin
     require 'database_cleaner'
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :truncation, {:except => %w[currencies]}
     DatabaseCleaner.clean
   rescue LoadError => ignore_if_database_cleaner_not_present
   end

@@ -1,0 +1,15 @@
+%h1.main_heading New Currency
+
+= error_messages_for :organization, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+%h2 New currency information
+.dashboard_section
+  - semantic_form_for :currency, @currency, :url => admin_currencies_path, :html => {:class => 'basic_form'} do |f|
+    - f.inputs :class => 'wrap-80 inputs' do
+      = f.input :from, :label => 'From', :hint => 'From currency'
+      = f.input :to, :label => 'To', :hint => 'To currency'
+      = f.input :rate, :label => 'Rate', :hint => 'What is the conversion rate'
+      
+    = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}, :button_html => {:class => "next"}
+
+

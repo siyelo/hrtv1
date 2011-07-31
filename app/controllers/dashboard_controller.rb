@@ -3,15 +3,16 @@ class DashboardController < ApplicationController
 
   ### Filters
   before_filter :require_user
-  before_filter :warn_if_not_current_request
   before_filter :load_comments
-  before_filter :load_requests
 
   ### Public Methods
 
   # Load the dashboard with any special conditions detected by user type
   def index
     load_activity_manager if current_user.activity_manager?
+    load_requests
+
+    warn_if_not_current_request unless current_user.district_manager?
   end
 
   protected
@@ -37,11 +38,18 @@ class DashboardController < ApplicationController
     # Comment loading for all types of users
     def load_comments
       if current_user.sysadmin?
-        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => COMMENT_LIMIT)
+        @comments = Comment.find(:all, :order => 'created_at DESC', :limit => COMMENT_LIMIT,
+                                 :include => [:user, :commentable])
       elsif current_user.activity_manager?
         dr_ids = current_user.organizations.map{|o| o.data_responses.map{|dr| dr.id }}.flatten
         dr_ids += current_user.organization.data_responses.map{|dr| dr.id }
         @comments  = Comment.on_all(dr_ids).limit(COMMENT_LIMIT)
+      elsif current_user.district_manager?
+        activity_ids = current_user.location.code_assignments.find(:all,
+          :select => "DISTINCT(code_assignments.activity_id)").map{|a| a.activity_id}
+        @comments = Comment.limit(COMMENT_LIMIT).find(:all,
+                       :conditions => ["comments.commentable_type = 'Activity'
+                                       AND comments.commentable_id IN (?)", activity_ids])
       else
         @comments = Comment.on_all(current_user.organization.data_responses.map{|r| r.id}).limit(COMMENT_LIMIT)
       end

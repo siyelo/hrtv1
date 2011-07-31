@@ -57,7 +57,7 @@ class DataRequest < ActiveRecord::Base
 
   private
     def create_data_responses
-      Organization.all.each do |organization|
+      Organization.reporting.all.each do |organization|
         dr = organization.data_responses.find(:first,
           :conditions => {:data_request_id => self.id})
         unless dr

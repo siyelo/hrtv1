@@ -47,16 +47,19 @@ describe OtherCost do
   end
 
   describe "Validations" do
+    subject { basic_setup_other_cost; @other_cost }
     it { should_not validate_presence_of(:name) }
   end
 
 
   describe "classified?" do
     before :each do
-      @request  = Factory(:data_request, :title => 'Data Request 1')
-      @response = Factory(:data_response, :data_request => @request)
-      @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:other_cost_fully_coded)
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:other_cost_fully_coded,
+                              :data_response => @response, :project => @project)
     end
 
     it "is classified? when both budget and spend are classified with factories" do
@@ -77,21 +80,22 @@ describe OtherCost do
       @activity.classified?.should be_true
     end
 
-    def currency
-      project ? project.currency : data_response.currency
-    end
-
     describe "currency" do
       it "returns data response currency if other cost without a project" do
-        o = Factory(:organization, :currency => 'EUR')
-        dr = Factory(:data_response, :organization => o)
-        oc = Factory(:other_cost, :project => nil, :data_response => dr)
+        organization = Factory(:organization, :currency => 'EUR')
+        request      = Factory(:data_request, :organization => organization)
+        response     = organization.latest_response
+        oc = Factory(:other_cost, :project => nil, :data_response => response)
         oc.currency.should.eql? 'EUR'
       end
 
       it "returns project currency if other cost has a project" do
-        pr = Factory(:project, :currency => 'USD')
-        oc = Factory(:other_cost, :project => pr)
+        organization = Factory(:organization)
+        request      = Factory(:data_request, :organization => organization)
+        response     = organization.latest_response
+        project      = Factory(:project, :data_response => response, :currency => 'USD')
+        oc = Factory(:other_cost, :data_response => response, :project => project)
+
         oc.currency.should.eql? 'USD'
       end
     end

@@ -1,11 +1,11 @@
 Factory.define :request, :class => DataRequest do |f|
-  f.title             { "Data Request title #{(1..1000000).to_a.sample}" }           
-  f.organization      { Factory.create(:organization) }                              
-  f.start_date        { "2010-01-01" }                                               
-  f.end_date          { "2012-01-01" }                                               
-  f.due_date          { "2012-09-01" }                                               
-  f.budget            { true }                                                       
-  f.spend             { true }                                                       
+  f.sequence(:title)  { |i| "data_request_title_#{i}_#{rand(100_000_000)}" }
+  f.organization      { Factory.create(:organization) }
+  f.start_date        { "2010-01-01" }
+  f.end_date          { "2012-01-01" }
+  f.due_date          { "2012-09-01" }
+  f.budget            { true }
+  f.spend             { true }
   f.budget_by_quarter { false }
 end
 

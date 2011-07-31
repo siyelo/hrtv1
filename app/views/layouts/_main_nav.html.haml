@@ -7,14 +7,17 @@
           %span Home
 
       - if current_user.admin? && is_admin_controller
-        - %w(organizations reports users requests codes).each do |tab|
+        - %w(organizations reports users currencies requests codes).each do |tab|
           = build_admin_nav_tab(tab)
+      - elsif current_user.district_manager?
+        %li{:class => ([Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController].include?(controller.class) ? 'active' : nil)}
+          = link_to 'Reports', reports_district_path(current_user.location)
       - else
         %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
           = link_to 'Projects', response_projects_path(current_or_last_response)
 
         %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}
-          = link_to 'Reports', current_user.admin? ? admin_reports_path : reporter_reports_path
+          = link_to 'Reports', reporter_reports_path
 
         %li{:class => (controller.class == OrganizationsController && ['new', 'edit', 'create', 'update'].include?(controller.action_name) ? "active" : nil)}
           = link_to 'Settings', edit_organization_url(current_or_last_response.organization)

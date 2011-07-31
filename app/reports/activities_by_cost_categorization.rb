@@ -14,7 +14,7 @@ class Reports::ActivitiesByCostCategorization
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      root_activities.each{|activity| csv << build_row(activity)}
+      root_activities(@request).each{|activity| csv << build_row(activity)}
     end
   end
 
@@ -34,7 +34,7 @@ class Reports::ActivitiesByCostCategorization
       row << "activity.text_for_beneficiaries"
       row << "activity.targets"
       row << "activity.budget"
-      row << "activity.spend"
+      row << "activity.expenditure"
       row << "currency"
       row << "activity.start_date"
       row << "activity.end_date"
@@ -62,7 +62,7 @@ class Reports::ActivitiesByCostCategorization
       row << "#{h activity.description}"
       @beneficiaries.each{|beneficiary| row << (act_benefs.include?(beneficiary) ? "yes" : " " )}
       row << "#{h activity.text_for_beneficiaries}"
-      row << "#{h activity.outputs.map{|o| o.description}.join('; ')}"
+      row << "#{h activity.targets.map{|o| o.description}.join('; ')}"
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"

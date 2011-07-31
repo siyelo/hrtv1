@@ -10,13 +10,13 @@ class User < ActiveRecord::Base
   end
 
   ### Constants
-  ROLES = %w[admin reporter activity_manager]
+  ROLES = %w[admin reporter activity_manager district_manager]
   FILE_UPLOAD_COLUMNS = %w[organization_name email full_name roles password password_confirmation]
 
   ### Attributes
   attr_accessible :full_name, :email, :organization_id, :organization,
                   :password, :password_confirmation, :roles, :tips_shown,
-                  :organizations, :organization_ids
+                  :organization_ids, :location_id
 
   ### Associations
   has_many :comments, :dependent => :destroy
@@ -24,16 +24,20 @@ class User < ActiveRecord::Base
   belongs_to :organization, :counter_cache => true
   belongs_to :current_response, :class_name => "DataResponse", :foreign_key => :data_response_id_current
   has_and_belongs_to_many :organizations, :join_table => "organizations_managers" # for activity managers
+  belongs_to :location
 
   ### Validations
   validates_presence_of :full_name, :email, :organization_id
+  validates_presence_of :location_id, :message => "can't be blank", :if => Proc.new{ |model| model.roles.include?('district_manager') }
   validates_uniqueness_of :email, :case_sensitive => false
   validates_confirmation_of :password, :on => :create
   validate :validate_inclusion_of_roles
+  validate :validate_organization
 
   ### Callbacks
-  before_validation :set_current_response, :unless => Proc.new{|m| m.data_response_id_current.present?}
+  before_validation :assign_current_response_to_latest, :unless => Proc.new{|m| m.data_response_id_current.present?}
   before_save :unassign_organizations, :if => Proc.new{|m| m.roles.exclude?('activity_manager') }
+  before_save :unassign_location, :if => Proc.new{ |m| m.roles.exclude?('district_manager') }
 
   ### Delegates
   delegate :responses, :to => :organization # instead of deprecated data_response
@@ -94,6 +98,10 @@ class User < ActiveRecord::Base
     role?('reporter') || sysadmin?
   end
 
+  def district_manager?
+    role?('district_manager')
+  end
+
   def activity_manager?
     role?('activity_manager') || sysadmin?
   end
@@ -122,6 +130,34 @@ class User < ActiveRecord::Base
     name || email
   end
 
+  def generate_token
+    Digest::SHA1.hexdigest("#{self.email}#{Time.now}")[24..38]
+  end
+
+  def activate
+    self.active = true
+    self.invite_token = nil
+    self.save
+  end
+
+  def only_password_errors?
+    errors.length == errors.on(:password).to_a.length +
+      errors.on(:password_confirmation).to_a.length
+  end
+
+  def save_and_invite(inviter)
+    self.valid? ## We need to call self.valid?
+    if only_password_errors?
+      self.invite_token = generate_token
+      self.save(false)
+      send_user_invitation(inviter)
+    end
+  end
+
+  def send_user_invitation(inviter)
+    Notifier.deliver_send_user_invitation(self, inviter)
+  end
+
   def gravatar(size = 30)
     "http://gravatar.com/avatar/#{Digest::MD5.hexdigest(email.downcase)}.png?s=#{size}&d=mm"
   end
@@ -144,34 +180,51 @@ class User < ActiveRecord::Base
   end
 
   def set_current_response_to_latest!
-    self.current_response = self.latest_response
-    self.save!
+    assign_current_response_to_latest
+    self.save(false)
   end
 
   def current_organization
     @current_organization ||= self.current_response.organization
   end
 
+  def change_current_response!(new_request_id)
+    response = responses.find_by_data_request_id(new_request_id)
+    if response
+      self.current_response = response
+      self.save(false)
+    end
+  end
 
   private
 
-    def role?(role)
-      roles.include?(role.to_s)
+    def assign_current_response_to_latest
+      if organization.present? && organization.data_responses.present?
+        self.current_response = organization.latest_response
+      end
     end
 
-    def set_current_response
-      if organization.present? && organization.data_responses.present?
-        self.current_response = organization.data_responses.last
-      end
+    def role?(role)
+      roles.include?(role.to_s)
     end
 
     def unassign_organizations
       self.organizations = []
     end
 
+    def unassign_location
+      self.location_id = nil
+    end
+
     def validate_inclusion_of_roles
       if roles.blank? || roles.detect{|role| ROLES.exclude?(role)}
         errors.add(:roles, "is not included in the list")
+      end
+    end
+
+    def validate_organization
+      if district_manager? && roles.length == 1 && organization.reporting?
+        errors.add(:organization_id, 'cannot assign a "reporting" organization to District Manager. Please select organization with raw type "Non-Reporting"')
       end
     end
 
@@ -187,12 +240,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
 #
 #  id                       :integer         not null, primary key
-#  email                    :string(255)
+#  email                    :string(255)     indexed
 #  crypted_password         :string(255)
 #  password_salt            :string(255)
 #  persistence_token        :string(255)
@@ -203,7 +257,10 @@ end
 #  data_response_id_current :integer
 #  text_for_organization    :text
 #  full_name                :string(255)
-#  perishable_token         :string(255)     default(""), not null
+#  perishable_token         :string(255)     default(""), not null, indexed
 #  tips_shown               :boolean         default(TRUE)
+#  invite_token             :string(255)
+#  active                   :boolean         default(FALSE)
+#  location_id              :integer
 #
 

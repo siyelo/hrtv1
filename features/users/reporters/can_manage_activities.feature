@@ -19,7 +19,7 @@ Feature: Reporter can manage activities
     And I follow "Projects"
 
   @javascript
-  Scenario: Reporter can add outputs
+  Scenario: Reporter can add targets & outputs
     When I follow "Add Activities now"
       And I fill in "Name" with "activity1"
       And I fill in "Description" with "activity1 description"
@@ -29,11 +29,14 @@ Feature: Reporter can manage activities
       And I fill in "Budget" with "300"
       And I select "project1" from "Project"
       And I follow "Add Target"
-      And I fill in "Target" with "Output description value"
+      And I fill in "Target" with "Target description"
+      And I follow "Add Output"
+      And I fill in "Output" with "Output description"
       And I press "Save"
     Then I should see "Activity was successfully created"
     When I follow "activity1"
-    Then the "Target" field should contain "Output description value"
+    Then the "Target" field should contain "Target description"
+      And the "Output" field should contain "Output description"
 
    #combobox
   @javascript
@@ -48,7 +51,7 @@ Feature: Reporter can manage activities
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization2"
-    And I fill in "Implementer Expenditure" with "99"
+    And I fill in "Implementer Past Expenditure" with "99"
     And I fill in "Implementer Current Budget" with "19"
     And I press "Save"
     Then I should see "Activity was successfully created"
@@ -63,12 +66,12 @@ Feature: Reporter can manage activities
     And I fill in "Description" with "1ctivity1 description"
     And I fill in "Start date" with "2010-01-01"
     And I fill in "End date" with "2010-12-01"
-    And I fill in "Expenditure" with "200"
-    And I fill in "Budget" with "300"
+    And I fill in "Past Expenditure" with "200"
+    And I fill in "Current Budget" with "300"
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization1"
-    And I fill in "Implementer Expenditure" with "10%"
+    And I fill in "Implementer Past Expenditure" with "10%"
     And I fill in "Implementer Current Budget" with "10%"
     And I press "Save"
     Then I should see "Activity was successfully created"
@@ -181,12 +184,12 @@ Feature: Reporter can manage activities
       And I should see "Activity1 description"
 
 
-  Scenario: A reporter can create comments for an activity and see errors
+  Scenario: A reporter can create comments for a Activity
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
     When I follow "Projects"
       And I follow "Activity1 description"
       And I press "Create Comment"
-    Then I should see "can't be blank" within "#comment_comment_input"
+    Then I should see "You cannot create blank comment."
     When I fill in "Comment" with "Comment body"
       And I press "Create Comment"
     Then I should see "Comment body"
@@ -280,7 +283,6 @@ Feature: Reporter can manage activities
 
     When I follow "Activity1 description"
       And I follow "Edit" within ".fields"
-        Then show me the page
       And I select "funding_organization2" from "Organization" within ".fields"
       And I fill in "Expenditure" with "333" within ".fields"
       And I fill in "Budget" with "444" within ".fields"
@@ -290,7 +292,7 @@ Feature: Reporter can manage activities
   Scenario: Reporter can export Implementers
     Given an activity exists with description: "activity1", project: the project, data_response: the data_response
       And an organization exists with name: "implementer"
-      And a sub_activity exists with activity: the activity, provider: the organization, spend: 111, budget: 222
+      And a sub_activity exists with activity: the activity, provider: the organization, spend: 111, budget: 222, data_response: the data_response
     When I follow "Projects"
       And I follow "activity1"
       And I follow "Export" within "#sub_activities_upload_box"
@@ -323,8 +325,7 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-    Then show me the page
-      And the "Implementer Expenditure" field should contain "66"
+      And the "Implementer Past Expenditure" field should contain "66"
       And the "Implementer Current Budget" field should contain "77"
 
       @wip
@@ -336,5 +337,5 @@ Feature: Reporter can manage activities
       And I attach the file "spec/fixtures/implementers_update.csv" to "File" within "#sub_activities_upload_box"
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Implementers were successfully uploaded."
-      And the "Implementer Expenditure" field should contain "99"
+      And the "Implementer Past Expenditure" field should contain "99"
       And the "Implementer Current Budget" field should contain "100"

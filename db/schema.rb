@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110715133903) do
+ActiveRecord::Schema.define(:version => 20110726163726) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -126,6 +127,13 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "currencies", :force => true do |t|
+    t.string   "conversion"
+    t.float    "rate"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "data_requests", :force => true do |t|
     t.integer  "organization_id"
@@ -192,7 +200,6 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
     t.integer  "self_provider_flag",   :default => 0
     t.decimal  "spend"
     t.decimal  "spend_q4_prev"
-    t.integer  "data_response_id"
     t.decimal  "budget_q1"
     t.decimal  "budget_q2"
     t.decimal  "budget_q3"
@@ -201,7 +208,6 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
     t.integer  "project_from_id"
   end
 
-  add_index "funding_flows", ["data_response_id"], :name => "index_funding_flows_on_data_response_id"
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
@@ -245,7 +251,6 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
 
   create_table "organizations", :force => true do |t|
     t.string   "name"
-    t.string   "old_type"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "raw_type"
@@ -328,6 +333,13 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
+  create_table "targets", :force => true do |t|
+    t.integer  "activity_id"
+    t.string   "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email"
     t.string   "crypted_password"
@@ -340,11 +352,11 @@ ActiveRecord::Schema.define(:version => 20110715133903) do
     t.integer  "data_response_id_current"
     t.text     "text_for_organization"
     t.string   "full_name"
-    t.string   "perishable_token",         :default => "",   :null => false
+    t.string   "perishable_token",         :default => "",    :null => false
     t.boolean  "tips_shown",               :default => true
+    t.string   "invite_token"
+    t.boolean  "active",                   :default => false
+    t.integer  "location_id"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

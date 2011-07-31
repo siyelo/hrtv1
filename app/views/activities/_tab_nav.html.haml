@@ -4,10 +4,10 @@
       - link_to "#comments" do
         %span
           View Comments
-  - if current_user.sysadmin? || current_user.activity_manager?
+  - if current_user.sysadmin?
     = render 'activities/approve_as_admin', :activity => activity
 
-  - if current_user.sysadmin? || current_user.activity_manager?
+  - if current_user.activity_manager?
     = render 'activities/approve_budget', :activity => activity
 
 %ul.ordered_nav

@@ -1,61 +1,65 @@
-require 'lib/BudgetSpendHelpers'
 class FundingFlow < ActiveRecord::Base
-  include BudgetSpendHelpers
+  include BudgetSpendHelper
+
+  HUMANIZED_ATTRIBUTES = {
+    :organization_id_from => "The Funding Source 'from' organization",
+    :organization_id_to => "The Funding Source 'to' organization",
+    :budget => "The Funding Source budget",
+    :spend => "The Funding Source spend" }
 
   ### Attributes
-  attr_accessible :organization_text, :project_id, :data_response_id, :from, :to,
+  attr_accessible :organization_text, :project_id, :from, :to,
                   :self_provider_flag, :organization_id_from, :organization_id_to,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
-                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4, :updated_at
+                  :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3,
+                  :budget_q4, :updated_at
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
   belongs_to :project_from # funder's project
-  belongs_to :data_response # TODO: deprecate in favour of: delegate :data_response, :to => :project
-
-  alias :response :data_response
-  alias :response= :data_response=
-
-
   before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
-  # validates_presence_of :project # ???
-  validates_presence_of :data_response_id
-  validates_presence_of :organization_id_from,
-    :message => :"organization_id_from.missing"
-  validates_presence_of :organization_id_to,
-    :message => :"organization_id_to.missing"
-
-  validates_numericality_of :budget_q1, :if => Proc.new { |model| model.budget_q1.present? }
-  validates_numericality_of :budget_q2, :if => Proc.new { |model| model.budget_q2.present? }
-  validates_numericality_of :budget_q3, :if => Proc.new { |model| model.budget_q3.present? }
-  validates_numericality_of :budget_q4, :if => Proc.new { |model| model.budget_q4.present? }
-  validates_numericality_of :budget_q4_prev, :if => Proc.new { |model| model.budget_q4_prev.present? }
-  validates_numericality_of :spend_q1, :if => Proc.new { |model| model.spend_q1.present? }
-  validates_numericality_of :spend_q2, :if => Proc.new { |model| model.spend_q2.present? }
-  validates_numericality_of :spend_q3, :if => Proc.new { |model| model.spend_q3.present? }
-  validates_numericality_of :spend_q4, :if => Proc.new { |model| model.spend_q4.present? }
-  validates_numericality_of :spend_q4_prev, :if => Proc.new { |model| model.spend_q4_prev.present? }
+  # validates_presence_of :project # FIXME
+  validates_presence_of :organization_id_from
+  validates_presence_of :organization_id_to
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
+  #
   validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
-    :unless => lambda {|fs| fs["project_from_id"].blank?},
-    :message => :"organization_id_from.id_below_zero"
-
-  validates_numericality_of :budget, :spend, :message => "is not a number (Funding Sources)"
+    :unless => lambda {|fs| fs["project_from_id"].blank?}
   validate :spend_is_greater_than_zero
-  delegate :organization, :to => :project
 
-  def currency
-    project.try(:currency)
+  ### Delegates
+  delegate :organization, :to => :project
+  delegate :data_response, :to => :project
+  delegate :currency, :to => :project
+
+  alias :response :data_response
+
+  ### Class Methods
+
+  def self.human_attribute_name(attr)
+    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
+
+  def self.create_flows(params)
+    unless params[:funding_flows].blank?
+      params[:funding_flows].each_pair do |flow_id, project_id|
+        ff = self.find(flow_id)
+        ff.project_from_id = project_id
+        ff.save
+      end
+    end
+  end
+
+  ### Instance Methods
 
   def name
     "From: #{from.name} - To: #{to.name}"
@@ -81,21 +85,10 @@ class FundingFlow < ActiveRecord::Base
     Time.now
   end
 
-  def self.create_flows(params)
-    unless params[:funding_flows].blank?
-      params[:funding_flows].each_pair do |flow_id, project_id|
-        ff = self.find(flow_id)
-        ff.project_from_id = project_id
-        ff.save
-      end
-    end
-  end
-
   def funding_chains
     if self_funded?
-      [FundingChain.new(
-  { :organization_chain => [from, to],
-        :budget => budget, :spend => spend})]
+      [FundingChain.new({ :organization_chain => [from, to],
+                          :budget => budget, :spend => spend })]
     else
       chains = from.best_guess_funding_chains_to(to, response.data_request) unless from.nil?
 
@@ -128,7 +121,6 @@ class FundingFlow < ActiveRecord::Base
   end
 
   private
-
     def spend_is_greater_than_zero
       errors.add(:spend, "for funding must be greater than 0") unless (spend || 0) > 0
     end

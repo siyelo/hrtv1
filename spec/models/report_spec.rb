@@ -9,9 +9,6 @@ describe Report do
       Reports::UsersByOrganization.stub(:new).and_return(csv_report)
     end
 
-    subject { Report.new(:key => 'users_by_organization') }
-
-    it { should be_valid }
     it { should validate_presence_of(:key) }
     it { should allow_mass_assignment_of(:key) }
     it { should allow_mass_assignment_of(:csv) }

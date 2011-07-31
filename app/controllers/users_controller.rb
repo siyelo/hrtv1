@@ -3,7 +3,15 @@ class UsersController < ApplicationController
 
   # set the user's 'current response' based on the given Request id
   def set_request
-    change_user_current_response(DataRequest.find(params[:id]))
+    if current_user.district_manager?
+      session[:request_id] = DataRequest.find(params[:id]).id
+    else
+      current_user.change_current_response!(params[:id])
+      if current_user.current_response_is_latest?
+        flash[:notice] = latest_request_message(current_user.current_response.request)
+      end
+    end
+
     redirect_back
   end
 

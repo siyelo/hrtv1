@@ -1,0 +1,15 @@
+-title "New Profile Registration"
+
+.sign_in_form
+  %h3
+    Please select a password
+  %p.hint Welcome to the Health Resource Tracker. Please enter a password for your new account, and we'll send you right along.
+  %br
+  - semantic_form_for @user, :url => registration_path(:invite_token => params[:invite_token]), :html => {:class => "basic_form"} do |f|
+    - f.inputs do
+      %ul.dashboard_section
+        = f.input :password, :hint => "Your password", :value => nil
+        = f.input :password_confirmation, :hint => "A confirmation of your password"
+    
+    - f.buttons do
+      = f.commit_button "Save", :class => "last"

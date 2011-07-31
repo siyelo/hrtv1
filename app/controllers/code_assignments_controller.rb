@@ -34,8 +34,8 @@ class CodeAssignmentsController < Reporter::BaseController
     redirect_to activity_code_assignments_url(@activity, :coding_type => params[:coding_type], :view => params[:view])
   end
 
-  def copy_budget_to_spend
-    if @activity.copy_budget_codings_to_spend([params[:coding_type]])
+  def copy_spend_to_budget
+    if @activity.copy_spend_codings_to_budget([params[:coding_type]])
       flash[:notice] = "Current Budget classifications were successfully copied across."
     else
       flash[:error] = "We could not copy your current budget classifications across."
@@ -126,13 +126,13 @@ class CodeAssignmentsController < Reporter::BaseController
       when 'CodingBudgetDistrict'
         'Current Budget by Locations'
       when 'CodingBudgetCostCategorization'
-        'Current Budget by Inputs' 
+        'Current Budget by Inputs'
       when 'CodingSpend'
         'Past Expenditure by Purposes'
       when 'CodingSpendDistrict'
         'Past Expenditure by Locations'
       when 'CodingSpendCostCategorization'
-        'Past Expenditure by Inputs' 
+        'Past Expenditure by Inputs'
       end
     end
 
@@ -143,13 +143,13 @@ class CodeAssignmentsController < Reporter::BaseController
       when 'CodingBudgetDistrict'
         activity.coding_budget_district_classified?
       when 'CodingBudgetCostCategorization'
-        activity.coding_budget_cc_classified? 
+        activity.coding_budget_cc_classified?
       when 'CodingSpend'
         activity.coding_spend_classified?
       when 'CodingSpendDistrict'
         activity.coding_spend_district_classified?
       when 'CodingSpendCostCategorization'
-        activity.coding_spend_cc_classified? 
+        activity.coding_spend_cc_classified?
       end
     end
 
@@ -164,7 +164,7 @@ class CodeAssignmentsController < Reporter::BaseController
       when 'CodingBudgetDistrict', 'CodingSpendDistrict'
         [Location, 'locations']
       when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
-        [CostCategory, 'inputs'] 
+        [CostCategory, 'inputs']
       end
     end
 end

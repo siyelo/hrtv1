@@ -7,11 +7,12 @@
   var _budget_pie_values      = #{js_safe(@budget_pie_values)};
 
 %ul.breadcrumb
-  %li= link_to "Reports", user_report_dashboard_path(current_user)
-  %li= link_to "Districts", reports_districts_path
+  - unless current_user.district_manager?
+    %li= link_to "Reports", user_report_dashboard_path
+    %li= link_to "Districts", reports_districts_path
   %li= link_to h(@location.name), reports_district_path(@location)
 
-%h1.main_heading 
+%h1.main_heading
   Organizations
 
 .full

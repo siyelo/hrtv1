@@ -13,22 +13,22 @@ class OrganizationsController < Reporter::BaseController
       render :action => :edit
     end
   end
-  
+
   def export
     if params[:type] == 'NGO'
-      organizations = Organization.with_type("Donors").ordered + Organization.with_type("NGO").ordered
+      organizations = Organization.reporting.with_type("Donors").ordered + Organization.with_type("NGO").ordered
     elsif params[:type] == 'centers'
-      organizations = Organization.with_type("District Hospital").ordered + Organization.with_type("Health Center").ordered
-    else 
-      organizations = Organization.ordered
+      organizations = Organization.reporting.with_type("District Hospital").ordered + Organization.with_type("Health Center").ordered
+    else
+      organizations = Organization.reporting.ordered
     end
-    template = Organization.download_template(organizations)
+    template = Organization.reporting.download_template(organizations)
     send_csv(template, 'organizations.csv')
   end
 
   private
     def load_organization
-      @organization = current_user.organization
+      @organization = current_user.sysadmin? ? Organization.reporting.find(params[:id]) : current_user.organization
     end
 end
 

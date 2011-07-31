@@ -1,8 +1,10 @@
-require 'lib/acts_as_stripper' #TODO move
-require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
+  include ActsAsDateChecker
+  include CurrencyCacheHelpers
+  include BudgetSpendHelper
+  include NumberHelper
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget
@@ -10,15 +12,9 @@ class Project < ActiveRecord::Base
                          budget_q4 spend spend_q4_prev spend_q1 spend_q2
                          spend_q3 spend_q4 start_date end_date]
 
-  include ActsAsDateChecker
-  include CurrencyCacheHelpers
-  include BudgetSpendHelpers
-  include NumberHelper
-
   cattr_reader :per_page
   @@per_page = 3
 
-  # acts_as_stripper
   strip_commas_from_all_numbers
 
   ### Associations
@@ -36,8 +32,7 @@ class Project < ActiveRecord::Base
            :conditions => [ 'self_provider_flag = 0 and
                             organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ '
-                            organization_id_from = #{organization.id}' ] #note the single quotes !
+           :conditions => [ 'organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -52,30 +47,15 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
-  validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
-  validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
-  validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
-  validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
-  validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
-  validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-  validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
-  validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
-  validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
-  validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
-  validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
-  validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
-  validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
-  validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
-  validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
-  validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :allow_nil => true
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
+    :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
+  validates_numericality_of :entire_budget, :unless => Proc.new {|p| p.entire_budget.blank?}
 
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
-
+  validate :validate_total_budget_not_exceeded,
+    :if => Proc.new { |p| p.budget.present? && p.entire_budget.present? }
 
   ### Attributes
   attr_accessible :name, :description, :spend,
@@ -214,19 +194,9 @@ class Project < ActiveRecord::Base
   end
 
   def total_matches_quarters?(type)
-    (self.send(type) || 0) == total_amount_of_quarters(type)
+    (self.send(type) || 0) == (total_amount_of_quarters(type) || 0)
   end
 
-  def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
-  end
-
-  def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
-  end
-  
   def linked?
      return false if self.in_flows.empty?
      self.in_flows.each do |in_flow|
@@ -416,13 +386,13 @@ class Project < ActiveRecord::Base
     def set_total_amounts
       ["budget", "spend"].each do |type|
         amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount > 0
+        self.send(:"#{type}=", amount) if amount && amount > 0
       end
     end
 
     def strip_leading_spaces
-      name = name.strip if name
-      description = description.strip if description
+      self.name = self.name.strip if self.name
+      self.description = self.description.strip if self.description
     end
 
     # work arround for validates_presence_of :project issue

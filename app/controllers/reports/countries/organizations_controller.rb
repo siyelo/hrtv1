@@ -1,4 +1,5 @@
 class Reports::Countries::OrganizationsController < Reports::BaseController
+  before_filter :require_country_reports_permission
 
   def index
     data_request_id    = current_user.current_response.data_request.id
@@ -13,7 +14,7 @@ class Reports::Countries::OrganizationsController < Reports::BaseController
   end
 
   def show
-    @organization   = Organization.find(params[:id])
+    @organization   = Organization.reporting.find(params[:id])
     @treemap        = params[:chart_type] == "treemap"
     @pie            = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type       = get_code_type_and_initialize(params[:code_type])

@@ -98,7 +98,6 @@ var build_activity_funding_source_row = function (edit_block) {
 };
 
 
-
 var close_project_in_flow_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
@@ -120,9 +119,9 @@ var close_project_in_flow_fields = function (fields) {
 
     preview_block.show();
 
-    manage_block.find('.edit').remove();
+    manage_block.find('.edit_button').remove();
     manage_block.prepend(
-      $('<a/>').attr({'class': 'edit target', 'href': '#'}).text('Edit')
+      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
     )
   });
 };
@@ -963,14 +962,22 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
 var reports_districts_show = reports_countries_show = {
   run: function () {
+    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
+    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
+  }
+};
 
+var reports_districts_funders = reports_countries_funders = {
+  run: function () {
     drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
     drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
     drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
     drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
+  }
+}
 
+var reports_districts_classifications = reports_countries_classifications = {
+  run: function () {
     if (_pie) {
       drawPieChart('code_spent', _code_spent_values, 450, 300);
       drawPieChart('code_budget', _code_budget_values, 450, 300);
@@ -979,7 +986,7 @@ var reports_districts_show = reports_countries_show = {
       drawTreemapChart('code_budget', _code_budget_values, 'e');
     }
   }
-};
+}
 
 var reports_districts_activities_show = {
   run: function () {
@@ -994,6 +1001,32 @@ var reports_districts_activities_show = {
     }
   }
 };
+
+var admin_currencies_index = {
+  run: function () {
+    $(".currency_label").live("click", function () {
+      var element = $(this);
+      var id = element.attr('id');
+      element.hide();
+      element.parent('td').append($("<input id=\'" + id + "\' class=\'currency\' />"));
+    });
+
+    $(".currency").live('focusout', function () {
+      element = $(this);
+      var input_rate = element.val();
+      var url = "/admin/currencies/" + element.attr('id');
+      $.post(url, { "rate" : input_rate, "_method" : "put" }, function(data){
+        var data = $.parseJSON(data);
+        console.log(data);
+        if (data.status == 'success'){
+          element.parent('td').children('span').show();
+          element.parent('td').children('span').text(data.new_rate);
+          element.hide();
+        }
+      });
+    });
+  }
+}
 
 var reports_districts_activities_index = {
   run: function () {
@@ -1020,25 +1053,6 @@ var reports_districts_organizations_show = {
     }
   }
 };
-
-var reports_countries_show = {
-  run: function () {
-    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
-    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-    drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
-    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
-    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-    drawPieChart('spend_i_pie', _spend_i_values, 400, 250);
-
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
-  }
-}
 
 var reports_countries_organizations_index = {
   run: function () {
@@ -1202,19 +1216,42 @@ var commentsInit = function () {
   });
 }
 
+var dropdown = {
+  // find the dropdown menu relative to the current element
+  menu: function(element){
+    return element.parents('.js_dropdown_menu');
+  },
+
+  toggle_on: function (menu_element) {
+    menu_element.find('.menu_items').slideDown(100);
+    menu_element.addClass('persist');
+  },
+
+  toggle_off: function (menu_element) {
+    menu_element.find('.menu_items').slideUp(100);
+    menu_element.removeClass('persist');
+  }
+};
+
 var projects_index = {
   run: function () {
-    // stop moving to top
-    $('.dropdown_trigger').click(function (e) {e.preventDefault()});
 
-    $('.dropdown_menu').hover(function (e){
+    // use click() not toggle() here, as toggle() doesnt
+    // work when menu items are also toggling it
+    $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
-      $('ul', this).slideDown(100);
-      $('.dropdown_trigger').addClass('persist');
-    }, function(e) {
-      e.preventDefault();
-      $('ul', this).slideUp(100);
-      $('.dropdown_trigger').removeClass('persist');
+      menu = dropdown.menu($(this));
+      if(!menu.is('.persist')){
+        dropdown.toggle_on(menu);
+      } else {
+        dropdown.toggle_off(menu);
+      };
+    });
+
+    $('.js_dropdown_menu .menu_items a').click(function (e){
+      menu = dropdown.menu($(this));
+      dropdown.toggle_off(menu);
+      $(this).click; // continue with desired click action
     });
 
     $('.js_upload_btn').click(function (e) {
@@ -1493,18 +1530,6 @@ var activity_form = function () {
     $('.add_organization').slideToggle();
   });
 
-
-
-  $('.edit_button').live('click', function (e) {
-    e.preventDefault();
-    var element = $(this).parents('.fields');
-    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-    element.find('.edit_block').show();
-    element.find('.preview_block').hide();
-    close_activity_funding_sources_fields(fields);
-  });
-
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
@@ -1512,7 +1537,6 @@ var activity_form = function () {
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
-  close_activity_funding_sources_fields($('.funding_sources .fields'));
 
   $(".js_activity_budget_total").keyup(function () {
     console.info('2222')
@@ -1529,10 +1553,12 @@ var activity_form = function () {
   });
 
   $('.js_target_field').live('keydown', function (e) {
+    var block = $(this).parents('.js_targets');
+
     if (e.keyCode === 13) {
       e.preventDefault();
-      $('.js_targets .add_nested').trigger('click');
-      $('.js_targets .js_target_field:last').focus()
+      block.find('.js_add_nested').trigger('click');
+      block.find('.js_target_field:last').focus()
     }
   });
 
@@ -1541,6 +1567,18 @@ var activity_form = function () {
   approveAsAdmin();
 
   commentsInit();
+
+
+  $('.edit_button').live('click', function (e) {
+    e.preventDefault();
+    var element = $(this).parents('.fields');
+    var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+    element.find('.edit_block').show();
+    element.find('.preview_block').hide();
+    close_activity_funding_sources_fields(fields);
+  });
+  close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
 var admin_activities_new = admin_activities_create = admin_activities_edit = admin_activities_update = {
@@ -1558,6 +1596,12 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
       } else {
         $(".organizations").hide().css('visibility', 'hidden');
       }
+
+      if (element.val()) {
+        $(".locations").show().css('visibility', 'visible');
+      } else {
+        $(".locations").hide().css('visibility', 'hidden');
+      }
     };
 
     // choose either the full version
@@ -1570,6 +1614,8 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
     $('#user_roles').change(function () {
       toggleMultiselect($(this));
     });
+
+    $( ".js_combobox" ).combobox();
 
   }
 }
@@ -1670,22 +1716,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
                                 // handled by the "add row" js callback
     $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
 
-    $('.edit').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
-    // ?
-    validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
-
-
-
     // when project spend quarter is edited, update the spend total
     $("input[id^='project_spend_q']:not(:last)").keyup(function () {
       calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
@@ -1727,6 +1757,19 @@ var projects_new = projects_create = projects_edit = projects_update = {
    });
 
     commentsInit();
+    validateDates($('#project_start_date'), $('#project_end_date'));
+
+
+    $('.edit_button').live('click', function (e) {
+      e.preventDefault();
+      var element = $(this).parents('.fields');
+      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
+
+      element.find('.edit_block').show();
+      element.find('.preview_block').hide();
+      close_project_in_flow_fields(fields);
+    });
+    close_project_in_flow_fields($('.funding_flows .fields'));
   }
 }
 
@@ -1734,7 +1777,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
 $(function () {
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', live: true, html: true});
+  $('.tooltip').tipsy({gravity: 'w', delayOut: 800, fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

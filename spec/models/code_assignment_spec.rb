@@ -1,19 +1,17 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CodeAssignment do
-  describe "validations" do
-    subject { Factory(:code_assignment) }
-    it { should be_valid }
+  describe "Validations" do
     it { should validate_presence_of :activity_id }
     it { should validate_presence_of :code_id }
   end
 
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to :activity }
     it { should belong_to :code }
   end
 
-  describe "attributes" do
+  describe "Attributes" do
     it { should allow_mass_assignment_of(:activity) }
     it { should allow_mass_assignment_of(:code) }
     it { should allow_mass_assignment_of(:amount) }
@@ -35,7 +33,9 @@ describe CodeAssignment do
 
   describe "named scopes" do
     it "with_code_id" do
-      activity = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
 
       code1    = Factory.create(:code, :short_display => 'code1')
       code2    = Factory.create(:code, :short_display => 'code2')
@@ -47,7 +47,9 @@ describe CodeAssignment do
     end
 
     it "with_code_ids" do
-      activity = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
 
       code1    = Factory.create(:code, :short_display => 'code1')
       code2    = Factory.create(:code, :short_display => 'code2')
@@ -63,8 +65,11 @@ describe CodeAssignment do
     end
 
     it "with_activity" do
-      activity1 = Factory.create(:activity, :budget => 100, :spend => 200)
-      activity2 = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity1 = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
+      activity2 = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
 
       code      = Factory.create(:code, :short_display => 'code1')
 
@@ -75,9 +80,13 @@ describe CodeAssignment do
     end
 
     it "with_activities" do
-      activity1 = Factory.create(:activity, :budget => 100, :spend => 200)
-      activity2 = Factory.create(:activity, :budget => 100, :spend => 200)
-      activity3 = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity1 = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
+      activity2 = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
+      activity3 = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
 
       code      = Factory.create(:code, :short_display => 'code1')
 
@@ -89,24 +98,27 @@ describe CodeAssignment do
     end
 
     it "with_type" do
-      activity = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
+      code     = Factory.create(:code, :short_display => 'code1')
 
-      code      = Factory.create(:code, :short_display => 'code1')
-
-      ca1       = Factory.create(:coding_budget, :activity => activity, :code => code)
-      ca2       = Factory.create(:coding_spend,  :activity => activity, :code => code)
+      ca1      = Factory.create(:coding_budget, :activity => activity, :code => code)
+      ca2      = Factory.create(:coding_spend,  :activity => activity, :code => code)
 
       CodeAssignment.with_type('CodingBudget').should == [ca1]
       CodeAssignment.with_type('CodingSpend').should == [ca2]
     end
 
     it "cached_amount_desc" do
-      activity = Factory.create(:activity, :budget => 100, :spend => 200)
+      basic_setup_project
+      activity = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
 
-      code      = Factory.create(:code, :short_display => 'code1')
+      code     = Factory.create(:code, :short_display => 'code1')
 
-      ca1       = Factory.create(:coding_budget, :activity => activity, :code => code, :cached_amount => '100')
-      ca2       = Factory.create(:coding_spend,  :activity => activity, :code => code, :cached_amount => '101')
+      ca1      = Factory.create(:coding_budget, :activity => activity, :code => code, :cached_amount => '100')
+      ca2      = Factory.create(:coding_spend,  :activity => activity, :code => code, :cached_amount => '101')
 
       ca1.cached_amount.should == 100
       ca2.cached_amount.should == 101
@@ -116,22 +128,27 @@ describe CodeAssignment do
 
     it "select_for_pies" do
       Money.default_bank.add_rate(:USD, :RWF, "500")
-      organization = Factory.create(:organization, :currency => 'USD')
-      dr = Factory.create(:data_response, :organization => organization)
-      activity1 = Factory.create(:activity, :budget => 100, :spend => 200,
-                                 :data_response => dr,
-                                 :project => Factory(:project, :data_response => dr))
-      activity2 = Factory.create(:activity, :budget => 100, :spend => 200,
-                                 :data_response => dr,
-                                 :project => Factory(:project, :data_response => dr))
 
-      code1      = Factory.create(:code, :short_display => 'code1')
-      code2      = Factory.create(:code, :short_display => 'code2')
-
-      ca1       = Factory.create(:coding_budget, :activity => activity1, :code => code1, :cached_amount => 1, :cached_amount_in_usd => 1)
-      ca2       = Factory.create(:coding_spend,  :activity => activity1, :code => code2, :cached_amount => 11)
-      ca1       = Factory.create(:coding_budget, :activity => activity1, :code => code1, :cached_amount => 2)
-      ca2       = Factory.create(:coding_spend,  :activity => activity1, :code => code2, :cached_amount => 12)
+      organization = Factory(:organization, :currency => 'USD')
+      request      = Factory(:data_request, :organization => organization)
+      response     = organization.latest_response
+      project      = Factory(:project, :data_response => response)
+      activity1    = Factory.create(:activity,
+                                    :data_response => response, :project => project,
+                                    :budget => 100, :spend => 200)
+      activity2    = Factory.create(:activity,
+                                    :data_response => response, :project => project,
+                                    :budget => 100, :spend => 200)
+      code1        = Factory.create(:code, :short_display => 'code1')
+      code2        = Factory.create(:code, :short_display => 'code2')
+      ca1          = Factory.create(:coding_budget, :activity => activity1, :code => code1,
+                                    :cached_amount => 1, :cached_amount_in_usd => 1)
+      ca2          = Factory.create(:coding_spend,  :activity => activity1, :code => code2,
+                                    :cached_amount => 11)
+      ca1          = Factory.create(:coding_budget, :activity => activity1, :code => code1,
+                                    :cached_amount => 2)
+      ca2          = Factory.create(:coding_spend,  :activity => activity1, :code => code2,
+                                    :cached_amount => 12)
 
       code_assignments = CodeAssignment.select_for_pies.all
 
@@ -155,7 +172,10 @@ describe CodeAssignment do
 
   describe "updating amounts" do
     before :each do
-      @assignment = Factory(:code_assignment)
+      basic_setup_project
+      activity = Factory.create(:activity, :data_response => @response, :project => @project,
+                                :budget => 100, :spend => 200)
+      @assignment = Factory(:code_assignment, :activity => activity)
     end
 
     it "should allow updating of amount with ints and floats" do
@@ -190,17 +210,14 @@ describe CodeAssignment do
       Money.default_bank.add_rate(:RWF, :USD, 0.002)
       Money.default_bank.add_rate(:USD, :RWF, "500")
 
-      organization = Factory.create(:organization,
-                                    :currency => 'RWF')
+      @organization = Factory(:organization, :currency => 'RWF')
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project)
 
-      ### at time of writing, we need the long handed way of creating these objects
-      # since the ca factory creates a project whose DR may not == ca.activity.dr
-      # fix when the duplicate activity.dr association is removed.
-      @dr = Factory(:data_response, :organization => organization)
-      @a  = Factory(:activity, :data_response => @dr,
-                    :project => Factory(:project, :data_response => @dr))
       ###
-      @ca               = Factory.build(:code_assignment, :activity => @a)
+      @ca               = Factory.build(:code_assignment, :activity => @activity)
       @ca.amount        = 123.45
       @ca.cached_amount = 123.45
       @ca.save

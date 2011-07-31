@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # LOGIN/LOGOUT
   map.resource  :user_session
+  map.resource  :registration, :only => [:edit, :update]
   map.login     'login', :controller => 'user_sessions', :action => 'new'
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
   map.resources :password_resets
@@ -32,6 +33,7 @@ ActionController::Routing::Routes.draw do |map|
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
     admin.resources :reports, :member => {:generate => :get}
+    admin.resources :currencies, :only => [:index, :new, :create, :update, :destroy]
     admin.resources :users,
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :codes,
@@ -51,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
     response.resources :projects,
       :collection => {:create_from_file => :post,
                       :download_template => :get,
+                      :download_workplan => :get,
                       :bulk_edit => :get,
                       :export => :get,
                       :bulk_update => :put}
@@ -73,7 +76,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :activities do |activity|
     activity.resource :code_assignments,
       :only => [:show, :update],
-      :member => {:copy_budget_to_spend => :put,
+      :member => {:copy_spend_to_budget => :put,
       :derive_classifications_from_sub_implementers => :put},
       :collection => {:bulk_create => :put, :download_template => :get}
     activity.resources :sub_activities,
@@ -94,13 +97,15 @@ ActionController::Routing::Routes.draw do |map|
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource
 
   map.namespace :reports do |reports|
-    reports.resources :districts, :only => [:index, :show] do |districts|
+    reports.resources :districts, :only => [:index, :show],
+      :member => {:classifications => :get} do |districts|
       districts.resources :activities, :only => [:index, :show],
         :controller => "districts/activities"
       districts.resources :organizations, :only => [:index, :show],
         :controller => "districts/organizations"
     end
-    reports.resource :country do |country|
+    reports.resource :country,
+      :member => {:classifications => :get} do |country|
       country.resources :activities, :only => [:index, :show],
         :controller => "countries/activities"
       country.resources :organizations, :only => [:index, :show],

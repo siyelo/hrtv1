@@ -37,7 +37,6 @@ class Reports::OrganizationWorkplan
     row << "Activity Description"
     row << "Amount In Dollars"
     row << "Districts Worked In"
-    row << "Functions"
     row << "Inputs"
     row
   end
@@ -49,7 +48,6 @@ class Reports::OrganizationWorkplan
     row << activity.description
     row << n2c(universal_currency_converter(activity.budget, activity.currency, 'USD'), "", "")
     row << activity.locations.map{ |l| l.short_display }.join(', ')
-    row << activity.purposes.map{ |c| c.short_display }.join(', ')
     row << activity.coding_budget_cost_categorization.map{|ca| ca.code.short_display}.join(', ')
     row
   end

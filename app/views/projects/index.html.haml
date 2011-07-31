@@ -66,11 +66,10 @@
           = render 'no_projects_yet'
     %tr.filler
       %td{:colspan => 2}
-      %td.total ACTIVITY & OTHER COSTS TOTAL
-      %td.wrap-10= n2crs(@response.total_spend, @response.currency)
-      %td.wrap-10= n2crs(@response.total_budget, @response.currency)
+      %td.total TOTAL (ACTIVITIES + OTHER COSTS)
+      %td.wrap-12= n2crs(@response.total_spend, @response.currency)
+      %td.wrap-12= n2crs(@response.total_budget, @response.currency)
       %td
-
 
 = will_paginate @projects
 %br

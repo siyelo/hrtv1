@@ -1,4 +1,4 @@
-module BudgetSpendHelpers
+module BudgetSpendHelper
 
   GOR_QUARTERS = [:q4_prev, :q1, :q2, :q3]
   USG_QUARTERS = [:q1, :q2, :q3, :q4]

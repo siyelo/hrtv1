@@ -26,13 +26,13 @@ describe Activity do
       @activity.spend_quarter(3).should == 444
       @activity.spend_quarter(4).should == 555
       lambda { @activity.budget_quarter(0)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.budget_quarter(5)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.spend_quarter(0)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.spend_quarter(5)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
     end
   end
 
@@ -61,13 +61,13 @@ describe Activity do
       @activity.spend_quarter(3).should == 333
       @activity.spend_quarter(4).should == 444
       lambda { @activity.budget_quarter(0)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.budget_quarter(5)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.spend_quarter(0)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
       lambda { @activity.spend_quarter(5)
-               }.should raise_error(BudgetSpendHelpers::InvalidQuarter)
+               }.should raise_error(BudgetSpendHelper::InvalidQuarter)
     end
   end
 end

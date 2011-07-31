@@ -1,8 +1,10 @@
-require 'lib/acts_as_stripper' #TODO move
-require 'lib/BudgetSpendHelpers'
 require 'validators'
 
 class Project < ActiveRecord::Base
+  include ActsAsDateChecker
+  include CurrencyCacheHelpers
+  include BudgetSpendHelper
+  include NumberHelper
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget
@@ -10,15 +12,9 @@ class Project < ActiveRecord::Base
                          budget_q4 spend spend_q4_prev spend_q1 spend_q2
                          spend_q3 spend_q4 start_date end_date]
 
-  include ActsAsDateChecker
-  include CurrencyCacheHelpers
-  include BudgetSpendHelpers
-  include NumberHelper
-
   cattr_reader :per_page
   @@per_page = 3
 
-  # acts_as_stripper
   strip_commas_from_all_numbers
 
   ### Associations
@@ -36,8 +32,7 @@ class Project < ActiveRecord::Base
            :conditions => [ 'self_provider_flag = 0 and
                             organization_id_to = #{organization.id}' ] #note the single quotes !
   has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ '
-                            organization_id_from = #{organization.id}' ] #note the single quotes !
+           :conditions => [ 'organization_id_from = #{organization.id}' ] #note the single quotes !
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -52,14 +47,15 @@ class Project < ActiveRecord::Base
   ### Validations
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :allow_nil => true
-  validates_numericality_of :entire_budget, :if => Proc.new {|model| !model.entire_budget.blank?}
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
+    :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
+  validates_numericality_of :entire_budget, :unless => Proc.new {|p| p.entire_budget.blank?}
 
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validate :validate_total_budget_not_exceeded, :if => Proc.new { |model| model.budget.present? && model.entire_budget.present? }
-
+  validate :validate_total_budget_not_exceeded,
+    :if => Proc.new { |p| p.budget.present? && p.entire_budget.present? }
 
   ### Attributes
   attr_accessible :name, :description, :spend,

@@ -58,6 +58,7 @@ Feature: Reporter can manage projects
         And I follow "Delete this Project"
       Then I should see "Project was successfully destroyed"
 
+
     Scenario Outline: Edit project dates, see feedback messages for start and end dates
       When I follow "Create Project"
         And I fill in "Name" with "Some Project"

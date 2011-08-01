@@ -80,7 +80,7 @@ group :test do
   gem 'guard-cucumber'
   gem 'guard-bundler'
   gem 'guard-spork'
-  gem 'libnotify'
+  gem 'libnotify', '>=0.5.5' #prevents an error where rubygems can't find version 0.5.2
   gem 'growl'
   gem 'rb-fsevent' # inject GoFast Juice (TM) into Guard on OSX
 end

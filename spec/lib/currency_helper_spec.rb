@@ -26,6 +26,11 @@ describe CurrencyHelper do
         @foo.major_currencies(Money::Currency::TABLE).should == [:rwf, :usd, :eur, :chf]
       end
     end
+
+    it "should appear in the currency for select only once" do
+      @foo.currency_options_for_select.should include(["Euro (EUR)", "EUR"])
+      @foo.currency_options_for_select.count(["Euro (EUR)", "EUR"]).should == 1
+    end
   end
 
   describe "no _to_usd exchange rate" do

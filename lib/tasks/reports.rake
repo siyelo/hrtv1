@@ -109,13 +109,13 @@ namespace :reports do
     update_report(t)
   end
 
-  desc "Caches 'jawp_report_budget' report"
-  task :jawp_report_budget => :environment do |t|
+  desc "Caches 'dynamic_query_report_budget' report"
+  task :dynamic_query_report_budget => :environment do |t|
     update_report(t)
   end
 
-  desc "Caches 'jawp_report_spent' report"
-  task :jawp_report_spent => :environment do |t|
+  desc "Caches 'dynamic_query_report_spent' report"
+  task :dynamic_query_report_spent => :environment do |t|
     update_report(t)
   end
 
@@ -159,8 +159,8 @@ namespace :reports do
     'activities_by_expenditure_coding',
     'activities_by_expenditure_cost_categorization',
     'activities_by_expenditure_districts',
-    'jawp_report_budget',
-    'jawp_report_spent',
+    'dynamic_query_report_budget',
+    'dynamic_query_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
     'activities_by_nha_subimps',

@@ -63,7 +63,7 @@ class Reports::ActivitiesSummary
       row << funding_source_name(activity)
       row << activity.project.try(:name)
       row << "#{h organization.name}"
-      row << "#{organization.type}"
+      row << "#{organization.raw_type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"

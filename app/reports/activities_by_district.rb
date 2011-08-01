@@ -64,7 +64,7 @@ class Reports::ActivitiesByDistrict
       row << funding_source_name(activity)
       row << activity.project.try(:name)
       row << "#{h activity.organization.name}"
-      row << "#{activity.organization.type}"
+      row << "#{activity.organization.raw_type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"

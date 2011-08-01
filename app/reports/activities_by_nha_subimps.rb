@@ -16,7 +16,6 @@ class Reports::ActivitiesByNhaSubimps
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
                                          :group => 'activity_id')
-    puts activities.size
   end
 
   def csv

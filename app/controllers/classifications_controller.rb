@@ -14,7 +14,7 @@ class ClassificationsController < Reporter::BaseController
       redirect_to edit_response_classification_url(@response, params[:id])
     else
       if params[:id].match('Budget')
-        redirect_to response_long_term_budgets_path
+        redirect_to long_term_budget_path(Time.now.year)
       else
         redirect_to edit_response_classification_path(@response, @template.budget_coding_type(params[:id]))
       end

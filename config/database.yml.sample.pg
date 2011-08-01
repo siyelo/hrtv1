@@ -19,8 +19,8 @@
 # For OS X:
 #  - Use homebrew to install postgres
 #  - Create user and database
-#   createuser -d -R -P hrt_dev
-#   createdb -O hrt_dev hrt_dev
+#   createuser -d -R -P ke_hrt_dev
+#   createdb -O ke_hrt_dev ke_hrt_test
 
 # For Ubuntu:
 # - Change to md5, instead of using ident
@@ -43,10 +43,10 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: hrt_dev
+  database: ke_hrt_dev
   pool: 5
-  username: hrt_dev
-  password: hrt_dev
+  username: ke_hrt_dev
+  password: 
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -54,10 +54,10 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: hrt_test
+  database: ke_hrt_test
   pool: 5
-  username: hrt_test
-  password: hrt_test
+  username: ke_hrt_dev
+  password: 
 
 # note - yes this is a duplication of the test db - but with just
 #   cucumber:
@@ -66,9 +66,9 @@ test:
 cucumber:
   adapter: postgresql
   encoding: unicode
-  database: hrt_test
+  database: ke_hrt_test
   pool: 5
-  username: hrt_test
-  password: hrt_test
+  username: ke_hrt_dev
+  password: 
 
 # prod config doesnt matter since we're using heroku

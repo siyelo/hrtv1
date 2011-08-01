@@ -66,6 +66,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
+        flash.keep
         redirect_to response_workplans_path(@response)
       }
       failure.html do

@@ -31,6 +31,7 @@ class ActivitiesController < Reporter::BaseController
       respond_to do |format|
         format.html {
           flash[:notice] = 'Activity was successfully created'
+          flash.keep
           html_redirect
         }
         format.js   { js_redirect }
@@ -53,6 +54,7 @@ class ActivitiesController < Reporter::BaseController
           else
             flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
           end
+          flash.keep
           html_redirect
         end
         format.js   { js_redirect }

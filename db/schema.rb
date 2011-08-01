@@ -128,6 +128,16 @@ ActiveRecord::Schema.define(:version => 20110726163726) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "currencies", :force => true do |t|
     t.string   "conversion"
     t.float    "rate"
@@ -333,7 +343,8 @@ ActiveRecord::Schema.define(:version => 20110726163726) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
-  create_table "targets", :force => true do |t|
+  create_table "targets", :id => false, :force => true do |t|
+    t.integer  "id",          :null => false
     t.integer  "activity_id"
     t.string   "description"
     t.datetime "created_at"

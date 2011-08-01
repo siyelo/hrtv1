@@ -14,26 +14,29 @@ Feature: Reporter can manage other costs
       And I follow "data_request1"
       And I follow "Projects"
 
-  Scenario: Reporter can CRUD other costs
-    When I follow "Add other cost"
-    Then I should see "Create Other Cost"
-    When I fill in "Name" with "other_cost1"
-    When I fill in "Description" with "other_cost1 description"
-      And I select "project1" from "Project"
-      And I press "Save"
-    Then I should see "Other Cost was successfully created"
-    When I follow "other_cost1"
-      And I fill in "Name" with "other_cost2"
-      And I fill in "Description" with "other_cost2 description"
-      And I press "Save"
-    Then I should see "Othercost was successfully updated"
-      And I should see "other_cost2"
-      And I should not see "other_cost1"
-    When I follow "other_cost2"
-      And I follow "Delete this Other Cost"
-    Then I should see "Other Cost was successfully destroyed"
-      And I should not see "other_cost1"
-      And I should not see "other_cost2"
+    @javascript 
+    Scenario: Reporter can CRUD other costs
+      When I follow "Add other cost"
+      When I fill in "activity_name" with "other_cost1"
+        And I fill in "activity_description" with "other_cost1 description"
+        And I press "activity_submit"
+      Then wait a few moments
+        And I fill in the activities budget field with "33" and spend field with "44" for that activity
+        And I press "Save"
+      Then I should see "Workplan was successfully saved"
+      When I follow "other_cost1 description"
+        And I fill in "Name" with "other_cost2"
+        And I fill in "Description" with "other_cost2 description"
+        And I press "Save"
+      Then I should see "Othercost was successfully updated"
+        And I should see "other_cost2"
+        And I should not see "other_cost1"
+      When I follow "other_cost2"
+        And I follow "Delete this Other Cost"
+        And I confirm the popup dialog
+      Then I should see "Other Cost was successfully destroyed"
+        And I should not see "other_cost1"
+        And I should not see "other_cost2"
 
 
   Scenario: A reporter can create comments for an other cost

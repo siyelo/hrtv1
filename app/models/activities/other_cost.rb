@@ -37,6 +37,7 @@ class OtherCost < Activity
 end
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -49,8 +50,6 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  start_date                   :date
-#  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_targets             :text
@@ -66,10 +65,6 @@ end
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

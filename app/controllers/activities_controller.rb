@@ -147,15 +147,10 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def destroy
-    destroy! do |success, failure|
-      success.html do
-        if request.referrer.match('workplan')
-          redirect_to response_workplans_path(@response)
-        else
-          redirect_to response_projects_url(@response)
-        end
-      end
-    end
+    @activity = @response.activities.find(params[:id])
+    @activity.delete
+    flash[:notice] = "Activity was successfully destroyed"
+    redirect_to response_workplans_path(@response)
   end
 
   private

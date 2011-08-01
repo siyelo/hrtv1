@@ -54,14 +54,12 @@ class OtherCostsController < Reporter::BaseController
       failure.html { load_comment_resources(resource); render :action => 'edit'}
     end
   end
-
+  
   def destroy
-    destroy! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully destroyed'
-        redirect_to response_projects_url(@response)
-      end
-    end
+    @other_cost = @response.activities.find(params[:id])
+    @other_cost.delete
+    flash[:notice] = "Other Cost was successfully destroyed"
+    redirect_to response_workplans_path(@response)
   end
 
   def download_template

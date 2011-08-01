@@ -4,10 +4,6 @@
   %table.summary
     %tbody
       = render  '/code_assignments/progress_bar', :activity => activity
-      - unless other_costs
-        %tr
-          %td Dates
-          %td= "#{activity.start_date} to #{activity.end_date}"
       - unless @policy_maker
         %tr
           %td Text for Provider:

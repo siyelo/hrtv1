@@ -13,12 +13,6 @@
 
     %span.project= activity.project.try(:name)
     %ul.right
-      - if activity.start_date.present? && activity.end_date.present?
-        %li
-          %span Period:
-          = activity.start_date.strftime("%d.%m.%Y")
-          -
-          = activity.end_date.strftime("%d.%m.%Y")
       %li
         %span Past Expenditure:
         = "#{activity.spend} #{activity.currency}"
@@ -60,8 +54,6 @@
         %ul
           = f.input :name, :required => false, :wrapper_html => {:class => 'grid-30'}
           = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
-          = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
-          = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
 
       %li
         %ul.first-half

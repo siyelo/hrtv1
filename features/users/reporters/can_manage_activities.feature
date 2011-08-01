@@ -17,7 +17,7 @@ Feature: Reporter can manage activities
     And I am signed in as "pink.panther@hrtapp.com"
     And I follow "Projects"
 
-    @javascript 
+    @javascript
     Scenario: Reporter can CRUD activities
       When I follow "Add activity"
         And I fill in "activity_name" with "activity1"

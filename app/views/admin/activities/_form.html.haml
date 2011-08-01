@@ -25,8 +25,6 @@
             = render 'activities/project_sub_form', {:activity => @activity, :project => @activity.project}
       = f.input :name, :required => false, :hint => "The name of this activity."
       = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this activity."
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => false
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the project’s implementation.", :required => false 
 
   %li.last
     %h3 Activity Funding Sources

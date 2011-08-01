@@ -36,8 +36,6 @@ class Reports::ActivitiesByDistricts
       row << "activity.budget"
       row << "activity.spend"
       row << "currency"
-      row << "activity.start_date"
-      row << "activity.end_date"
       row << "activity.provider"
       @codes.each{|code| row << "#{code.short_display}"}
 
@@ -66,8 +64,6 @@ class Reports::ActivitiesByDistricts
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.data_response.currency}"
-      row << "#{activity.start_date}"
-      row << "#{activity.end_date}"
       row << provider_name(activity)
       @code_ids.each{|code_id| row << get_code_assignment_value(activity, code_assignments, code_id)}
 

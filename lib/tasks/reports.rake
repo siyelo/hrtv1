@@ -10,7 +10,8 @@ def update_report(t)
   key         = t.name_with_args.gsub(/reports:/, '')
   log "#{start_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE BEGIN: #{key}"
   report      = Report.find_or_initialize_by_key(key)
-  report.generate_csv_zip
+  request     = DataRequest.find_by_title("FY2010 Workplan and FY2009 Expenditures")
+  report.generate_csv_zip(request)
   report.save
   end_time    = Time.now
   log "#{end_time.strftime('%Y-%m-%d %H:%M:%S')} RAKE END: #{key} (Elapsed: #{(end_time - start_time).round(2)}s)"

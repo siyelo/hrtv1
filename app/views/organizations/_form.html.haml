@@ -1,6 +1,3 @@
-- editing = controller.action_name == 'edit' ? true : false
-- button_text =  editing ? "Update Response" : "Begin Response"
-
 .form_aside
   %h3 What currency should I use?
   %p Use the primary currency of all your projects and activities. If a specific project uses a different currency, you can override the currency in the project settings.
@@ -26,5 +23,5 @@
 
 
 - f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button button_text, :class => "last"
+  = f.commit_button "Save Settings", :class => "last"
 

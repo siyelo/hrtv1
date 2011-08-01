@@ -47,7 +47,7 @@ module CurrencyHelper
 
     def currency_options_for_select
       prios, all_currencies = load_currencies_in_order
-      return prios + all_currencies
+      return (prios + all_currencies).uniq
     end
 
     protected

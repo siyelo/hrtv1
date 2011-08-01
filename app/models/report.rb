@@ -1,8 +1,12 @@
 require 'iconv'
 class Report < ActiveRecord::Base
+
   include ScriptHelper
 
+  ### Associations
+  belongs_to :data_request
 
+  ### Constants
   REPORTS = [
     'districts_by_nsp_budget',
     'districts_by_all_codes_budget',
@@ -30,15 +34,20 @@ class Report < ActiveRecord::Base
     'activities_by_all_codes_budget'
   ]
 
-  attr_accessible :key, :csv, :formatted_csv
+  ### Attributes
+  attr_accessible :key, :csv, :formatted_csv, :data_request_id
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
+
+  ### Attachments
   has_attached_file :csv, Settings.paperclip.to_options
   has_attached_file :formatted_csv, Settings.paperclip.to_options
 
-  validates_presence_of :key
+  ### Validations
+  validates_presence_of :key, :data_request_id
   validates_uniqueness_of :key
   validates_inclusion_of :key, :in => REPORTS
 
+  ### Callbacks
   after_save :cleanup_temp_files
 
   ### Instance Methods
@@ -47,14 +56,11 @@ class Report < ActiveRecord::Base
     self.key
   end
 
-  def generate_csv_zip(current_request)
-    @current_request = current_request
-    if @current_request
-      self.run_report
-      self.create_tmp_csv
-      self.zip_file
-      self.attach_zip_file
-    end
+  def generate_csv_zip
+    self.run_report
+    self.create_tmp_csv
+    self.zip_file
+    self.attach_zip_file
   end
 
   protected
@@ -69,45 +75,45 @@ class Report < ActiveRecord::Base
         when 'users_by_organization'
           Reports::UsersByOrganization.new
         when 'map_districts_by_partner_budget'
-          Reports::MapDistrictsByPartner.new(:budget, @current_request)
+          Reports::MapDistrictsByPartner.new(:budget, data_request)
         when 'map_districts_by_partner_spent'
-          Reports::MapDistrictsByPartner.new(:spent, @current_request)
+          Reports::MapDistrictsByPartner.new(:spent, data_request)
         when 'map_districts_by_nsp_budget'
           Reports::MapDistrictsByNsp.new(simple_activities_for_request, :budget)
         when 'map_districts_by_all_codes_budget'
           Reports::MapDistrictsByAllCodes.new(simple_activities_for_request, :budget)
         when 'map_facilities_by_partner_budget'
-          Reports::MapFacilitiesByPartner.new(:budget, @current_request)
+          Reports::MapFacilitiesByPartner.new(:budget, data_request)
         when 'map_facilities_by_partner_spent'
-          Reports::MapFacilitiesByPartner.new(:spent, @current_request)
+          Reports::MapFacilitiesByPartner.new(:spent, data_request)
         when 'activities_summary'
-          Reports::ActivitiesSummary.new(@current_request)
+          Reports::ActivitiesSummary.new(data_request)
         when 'activities_by_district'
-          Reports::ActivitiesByDistrict.new(@current_request)
+          Reports::ActivitiesByDistrict.new(data_request)
         when 'activities_one_row_per_district'
-          Reports::ActivitiesOneRowPerDistrict.new(@current_request)
+          Reports::ActivitiesOneRowPerDistrict.new(data_request)
         when 'activities_by_budget_coding'
-          Reports::ActivitiesByCoding.new(:budget, @current_request)
+          Reports::ActivitiesByCoding.new(:budget, data_request)
         when 'activities_by_budget_cost_categorization'
-          Reports::ActivitiesByCostCategorization.new(:budget, @current_request)
+          Reports::ActivitiesByCostCategorization.new(:budget, data_request)
         when 'activities_by_budget_districts'
-          Reports::ActivitiesByDistricts.new(:budget, @current_request)
+          Reports::ActivitiesByDistricts.new(:budget, data_request)
         when 'activities_by_expenditure_coding'
-          Reports::ActivitiesByCoding.new(:spent, @current_request)
+          Reports::ActivitiesByCoding.new(:spent, data_request)
         when 'activities_by_expenditure_cost_categorization'
-          Reports::ActivitiesByCostCategorization.new(:spent, @current_request)
+          Reports::ActivitiesByCostCategorization.new(:spent, data_request)
         when 'activities_by_expenditure_districts'
-          Reports::ActivitiesByDistricts.new(:spent, @current_request)
+          Reports::ActivitiesByDistricts.new(:spent, data_request)
         when 'dynamic_query_report_budget'
-          Reports::JawpReport.new(:budget, Activity.jawp_activities(@current_request))
+          Reports::JawpReport.new(:budget, Activity.jawp_activities(data_request))
         when 'dynamic_query_report_spent'
-          Reports::JawpReport.new(:spent, Activity.jawp_activities(@current_request))
+          Reports::JawpReport.new(:spent, Activity.jawp_activities(data_request))
         when 'activities_by_nsp_budget'
           Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget, true)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(simple_activities_for_request)
         when 'activities_by_nha_subimps'
-          Reports::ActivitiesByNhaSubimps.new(:spent, Activity.jawp_activities(@current_request))
+          Reports::ActivitiesByNhaSubimps.new(:spent, Activity.jawp_activities(data_request))
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget, true)
         else
@@ -126,7 +132,7 @@ class Report < ActiveRecord::Base
     def zip_file
       self.zip_file_name = self.temp_file_name + ".zip"
       cmd = "zip -j -9 #{self.zip_file_name} #{self.temp_file_name}"
-      system cmd
+      output = %x(#{cmd})
     end
 
     def attach_zip_file
@@ -140,7 +146,7 @@ class Report < ActiveRecord::Base
 
   private
     def simple_activities_for_request
-      Activity.only_simple_with_request(@current_request)
+      Activity.only_simple_with_request(data_request)
     end
 end
 

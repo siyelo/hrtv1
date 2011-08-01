@@ -14,6 +14,7 @@ Feature: Reporter can manage activities
     And the location is one of the project's locations
     And a location exists with short_display: "Location2"
     And the location is one of the project's locations
+    And an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
     And I am signed in as "pink.panther@hrtapp.com"
     And I follow "Projects"
 
@@ -61,7 +62,6 @@ Feature: Reporter can manage activities
 
 
     Scenario: A reporter can create comments for an activity
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
        And I follow "Activity1 description"
        And I fill in "Title" with "Comment title"
@@ -71,7 +71,6 @@ Feature: Reporter can manage activities
        And I should see "Comment body"
 
     Scenario: A reporter can create comments for an activity and see comment errors
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
       When I follow "Projects"
         And I follow "Activity1 description"
         And I press "Create Comment"
@@ -90,8 +89,7 @@ Feature: Reporter can manage activities
 
 
     Scenario: Does not email users when a comment is made by a reporter
-      Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-        And no emails have been sent
+      Given no emails have been sent
       When I follow "Projects"
         And I follow "Activity1 description"
         And I fill in "Comment" with "Comment body"
@@ -99,8 +97,17 @@ Feature: Reporter can manage activities
         And I fill in "Comment" with "Comment body"
         And I press "Create Comment"
       Then "reporter_1@example.com" should not receive an email
+      
 
-    @javascript
+  	Scenario: Reporter see existing implementers when editing an activity
+  	  Given an organization exists with name: "implementer_org"
+  	    And sub_activity exists with budget: 66, spend: 77, data_response: the data_response, activity: the activity, provider: the organization, provider_type: "Implementing Partner" 	       
+       When I follow "Projects"
+        And I follow "Activity1 description"
+       Then I should see "Implementing Partner" 
+        And I should see "implementer_org"
+
+    @javascript @wip
     Scenario: A reporter can select implementer for an activity
       When I follow "Add activity"
         And I fill in "activity_name" with "activity1"
@@ -116,6 +123,7 @@ Feature: Reporter can manage activities
 
       When I fill in "Name" with "Activity1"
         And I fill in "Description" with "Activity1 description"
+        And I select "Implementing Partner" from "Select implementer"
         And I fill in "theCombobox" with "organization2"
         And I press "Save"
       Then I should see "Activity was successfully updated"

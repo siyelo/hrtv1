@@ -19,14 +19,16 @@ class ImplementersController < Reporter::BaseController
 
   def create
     @activity = @response.activities.find(params[:sub_activity].delete(:activity_id))
-    provider_id = params[:sub_activity][:provider_id]
     provider_type = params[:sub_activity][:provider_type]
     
-    provider_id = '' unless provider_type == "Implementing Partner"
-    provider_id = @activity.organization.id  if provider_type == "Self"
+    if provider_type == "Self"
+      params[:sub_activity][:provider_id] = @activity.organization.id  
+    else
+      params[:sub_activity][:provider_id] = '' unless provider_type == "Implementing Partner"
+    end
     
     @implementer = @activity.sub_activities.new(params[:sub_activity])
-
+    
     if @implementer.save
       respond_to do |format|
         format.json do

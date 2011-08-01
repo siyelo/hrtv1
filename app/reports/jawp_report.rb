@@ -176,7 +176,7 @@ class Reports::JawpReport
                 prov = "Unspecified"
                 prov_type = "Unspecified"
               else
-                prov = activity.provider.name
+                prov = activity.provider_name
                 prov_type = activity.provider.raw_type
               end
 

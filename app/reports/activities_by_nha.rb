@@ -75,7 +75,7 @@ class Reports::ActivitiesByNha
         end
         row << activity.organization.try(:raw_type)
         row << activity.organization.try(:name)
-        row << activity.provider.try(:name)
+        row << activity.provider_name
         row << get_locations(activity)
         row << get_sub_implementers(activity)
         row << activity.id

@@ -12,7 +12,6 @@ class ActivitiesController < Reporter::BaseController
   def new
     @activity = Activity.new
     @activity.project = @response.projects.find_by_id(params[:project_id])
-    @activity.provider = current_user.organization
     respond_to do |format|
       format.html
       format.json { render :json => {:html => render_to_string(:partial => 'new_inline.html.haml') } }

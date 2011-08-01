@@ -191,7 +191,7 @@ module Reports::Helpers
   end
 
   def provider_name(activity)
-    activity.provider ? "#{h activity.provider.name}" : " "
+    "#{h activity.provider_name}" || " "
   end
 
   def get_beneficiaries

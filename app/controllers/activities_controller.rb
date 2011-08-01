@@ -138,11 +138,11 @@ class ActivitiesController < Reporter::BaseController
         @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
       else
         flash[:error] = 'Please select a file to upload activities'
-        redirect_to response_projects_path(@response)
+        redirect_to response_workplans_path(@response)
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_path(@response)
+      redirect_to response_workplans_path(@response)
     end
   end
 
@@ -169,7 +169,7 @@ class ActivitiesController < Reporter::BaseController
     end
 
     def html_redirect
-      path = params[:commit] == "Save & Classify >" ? activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') : response_projects_path(@activity.project.response)
+      path = params[:commit] == "Save & Classify >" ? activity_code_assignments_path(@activity, :coding_type => 'CodingSpend') : response_workplans_path(@activity.project.response)
       redirect_to path
     end
 

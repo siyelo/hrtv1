@@ -29,7 +29,7 @@
 - if params[:query]
   %p
     = "Projects with names containing #{params[:query]}"
-    = link_to "(Back to complete project listing)", response_projects_path(@response)
+    = link_to "(Back to complete project listing)", response_workplans_path(@response)
 
 %table.sum.rounded
   %tbody

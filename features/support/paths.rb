@@ -17,7 +17,7 @@ module NavigationHelpers
     when /the projects page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)
       response = Organization.find_by_name($2).data_responses.find_by_data_request_id(req)
-      response_projects_path(response)
+      response_workplans_path(response)
 
     when /the new project page for response "(.+)" org "(.+)"/
       req = DataRequest.find_by_title($1)

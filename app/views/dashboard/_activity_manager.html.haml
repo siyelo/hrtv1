@@ -19,7 +19,7 @@
     - unless @recent_responses.empty?
       %ul
         - @recent_responses.each do |r|
-          %li= link_to r.organization.name, response_projects_path(r)
+          %li= link_to r.organization.name, response_workplans_path(r)
     - else
       %span.none No responses submitted recently
 

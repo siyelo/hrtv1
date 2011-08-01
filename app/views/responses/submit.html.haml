@@ -55,7 +55,7 @@
             - else
               %span.info
                 You have project(s), but not all have activities yet.
-                = link_to "Start by adding your activities here.", response_projects_path(@response)
+                = link_to "Start by adding your activities here.", response_workplans_path(@response)
           - unless @response.activities_without_amounts.empty?
             %span.info
               The activities below are missing amounts, click to edit and add amounts
@@ -76,7 +76,7 @@
             - else
               %span.info
                 Other Costs help you include any financial information at the national level and/or administrative expenses.
-                = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+                = link_to "Start adding your Other Costs now.", response_workplans_path(@response)
 
   %li.alt
     %h2 Classifications
@@ -95,7 +95,7 @@
             - else
               %span.info
                 Start by adding a few Activities first (see above), then you can start classifying them.
-                = link_to "Start adding your Activities here.", response_projects_path(@response)
+                = link_to "Start adding your Activities here.", response_workplans_path(@response)
         - unless @response.activities_coded?
           - unless @response.uncoded_activities.empty?
             = render 'uncoded_table', :activities => @response.uncoded_activities
@@ -111,7 +111,7 @@
             - else
               %span.info
                 Start by adding a few Other Costs first (see above), then you can start classifying them.
-                = link_to "Start adding your Other Costs here.", response_projects_path(@response)
+                = link_to "Start adding your Other Costs here.", response_workplans_path(@response)
 
         - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?

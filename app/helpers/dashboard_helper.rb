@@ -9,7 +9,7 @@ module DashboardHelper
     when "OtherCost"
       edit_response_other_cost_path(commentable.data_response, commentable)
     when "DataResponse"
-      response_projects_path(commentable)
+      response_workplans_path(commentable)
     end
   end
 

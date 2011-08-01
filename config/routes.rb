@@ -51,6 +51,7 @@ ActionController::Routing::Routes.draw do |map|
     :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridiculous, I know.
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
     response.resources :projects,
+      :except => [:index],
       :collection => {:bulk_create => :post,
                       :download_template => :get,
                       :download_workplan => :get,

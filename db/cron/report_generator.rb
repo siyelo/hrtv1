@@ -33,11 +33,7 @@ date = get_date()
 
 puts "\n\n*** #{date}: Report regeneration for #{HEROKU_APP} started... ***"
 
-#run "heroku maintenance:on --app #{HEROKU_APP}"
-
-run "heroku rake reports:fast --app #{HEROKU_APP}"
-
-#run "heroku maintenance:off --app #{HEROKU_APP}"
+run "heroku rake reports:#{RAKE_TASK} --app #{HEROKU_APP}"
 
 date = get_date()
 puts "*** #{date}: Report regeneration done.\n\n"

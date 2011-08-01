@@ -18,6 +18,6 @@ Feature: Reporter can edit settings
         And I fill in "Office number" with "3242343242"
         And I fill in "Office location" with "Japan"
         And I select "Euro (EUR)" from "Default Currency"
-        And I press "Update Response"
+        And I press "Save Settings"
       Then I should see "Successfully updated"
 

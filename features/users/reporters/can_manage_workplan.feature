@@ -13,7 +13,6 @@ Feature: Reporter can see workplan
       And I am signed in as "reporter@hrtapp.com"
       And I follow "Projects"
 
-	@run 
 	Scenario: Reporter can upload activities and projects
 		Given I follow "import_export"
 		When  I attach the file "spec/fixtures/projects.csv" to "File"

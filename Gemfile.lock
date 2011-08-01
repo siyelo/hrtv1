@@ -107,8 +107,8 @@ GEM
     launchy (0.3.7)
       configuration (>= 0.0.5)
       rake (>= 0.8.1)
-    libnotify (0.5.2)
-      ffi (~> 1.0)
+    libnotify (0.5.7)
+      ffi (= 1.0.9)
     linecache (0.46)
       rbx-require-relative (> 0.0.4)
     mime-types (1.16)
@@ -228,7 +228,7 @@ DEPENDENCIES
   interactive_editor
   json_pure
   launchy
-  libnotify
+  libnotify (>= 0.5.5)
   money (~> 3.5)
   mongrel
   open_gem

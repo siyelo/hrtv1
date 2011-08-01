@@ -3,8 +3,6 @@ class AddSubAccountAndNhaCodeAndNasaCodeToCodes < ActiveRecord::Migration
     add_column :codes, :sub_account, :string
     add_column :codes, :nha_code, :string
     add_column :codes, :nasa_code, :string
-
-    #load 'db/seed_files/codes.rb'
   end
 
   def self.down

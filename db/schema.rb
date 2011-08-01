@@ -251,6 +251,7 @@ ActiveRecord::Schema.define(:version => 20110729123856) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "raw_type"
     t.string   "fosaid"
     t.integer  "users_count",                      :default => 0
     t.integer  "comments_count",                   :default => 0
@@ -261,7 +262,6 @@ ActiveRecord::Schema.define(:version => 20110729123856) do
     t.string   "contact_phone_number"
     t.string   "contact_main_office_phone_number"
     t.string   "contact_office_location"
-    t.string   "raw_type"
   end
 
   create_table "organizations_managers", :id => false, :force => true do |t|

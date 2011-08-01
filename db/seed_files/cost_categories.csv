@@ -1,23 +1,31 @@
 "id","parent_id","short_display","description"
-1,,"Drugs, Commodities & Consumables","All drugs, commodities (condoms, bed nets, etc) and lab consumables"
-2,,"Communication & Advertising","Leaflets, flyers, billboards, SMS campaigns, etc. For example, flyers for behavior change communication programs"
-3,,"Food Supplies","Nutritional, therapeutic feeding (infants, malnourished patients), basic food packages, inpatient feeding, demonstration kitchens"
-4,,"Infrastructure","Investment, maintenance in buildings, water sources (for whatever use), energy sources (for whatever use).  Rehabilitation of existing facilities."
-5,,"Investment and maintenance of ICT equipment (computers, mobile phones, etc)",
-6,,"Medical Equipment","Investment, maintenance, spare parts of medical equipment"
-7,,"Vehicles","Investment, maintenance, fuel"
-8,,"Direct Salaries / Labor Costs","Of staff, healthcare workers, secondments to the MOH, district positions, excluding top-ups or other incentives offered to personnel"
-81,8,"In country staff","Staff employed by your organization directly"
-811,81,"Technical Assistance","Staff that formulate plans, policies, advise officials, conduct assessments, do oversight visits, and aim to build capacity within health institutions."
-812,81,"Monitoring and Evaluation","Staff involved in Monitoring and Evaluation of this activity"
-813,81,"Service Provision / Program Implementation","Staff delivering commodities, participating in data collection, and working in the field implementing services and programs."
-82,8,"External technical assistance","Compensation for short term consultants associated with bringing TA to Rwanda for a time-limited period and for a specific activity, e.g. national or district-level capacity building, policy support, site supervision, etc"
-821,82,"Technical Assistance","Staff that formulate plans, policies, advise officials, conduct assessments, do oversight visits, and aim to build capacity within health institutions. Includes costs for travel."
-822,82,"Monitoring and Evaluation","Staff involved in Monitoring and Evaluation of this activity"
-823,82,"Service Provision / Program Implementation","Staff delivering commodities, participating in data collection, and working in the field implementing services and programs."
-9,,"Capacity building","Workshops, onsite training, offsite training, including transport and per diems"
-91,9,"In Service",
-92,9,"Pre Service","Workshop costs and transport, onsite and offsite training and per diems, funding directed to professional schools"
-10,,"Incentives","Top-ups or other incentives offered to government or other direct health system personnel"
-101,10,"CHW","All investment or operational costs to support CHW system, not including training"
-102,10,"Non-CHW","Top-ups or other incentives offered to government or other direct health system personnel, not including CHWs"
+1,,"Recurrent","All recurrent expenses"
+11,1,"HRH salaries (also HRH contracting)",
+2,1,"Commodities procurement",
+,2,"EMMS drugs & med supplies",
+,2,"Vaccines",
+,2,"KEPI & cold chain supplies",
+,2,"FP commodities",
+,2,"HIV/AIDS drugs",
+,2,"HIV test kits",
+,2,"Lab reagents & supplies",
+,2,"Malaria drugs",
+,2,"LLITNs",
+,2,"Nutrition food commodities",
+,2,"Nutrition micronutrient commodities",
+,2,"TB drugs",
+3,1,"Operations & maintenance (O&M)",
+,3,"Health systems strengthening (HSS)",
+,3,"Operational funds (HSSF, HMSF; ops support to MOHs, DHMTs, etc)",
+,3,"In-service training",
+,3,"Pre-service training",
+,3,"Technical assistance",
+,3,"Other O&M",
+10,,"Development",
+101,10,"Equipment procurement",
+,101,"Clincal equipment & furniture",
+,101,"Office/admin equipment & furniture",
+,101,"Vehicles",
+,101,"Communications equipment",
+,101,"ICT equipment",
+102,10,"Infrastructure improvement",

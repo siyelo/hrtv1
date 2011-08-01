@@ -1,31 +1,71 @@
-"short_display","HASC","code","source: http://www.statoids.com/yrw.html"
-"Bugesera ","RW.ES.BG",507,
-"Burera ","RW.NO.BR",404,
-"Gakenke ","RW.NO.GK",402,
-"Gasabo ","RW.KV.GB",102,
-"Gatsibo ","RW.ES.GT",503,
-"Gicumbi ","RW.NO.GC",405,
-"Gisagara ","RW.SU.GG",202,
-"Huye ","RW.SU.HU",204,
-"Kamonyi ","RW.SU.KM",208,
-"Karongi ","RW.OU.KG",301,
-"Kayonza ","RW.ES.KZ",504,
-"Kicukiro ","RW.KV.KK",103,
-"Kirehe ","RW.ES.KH",505,
-"Muhanga ","RW.SU.MH",207,
-"Musanze ","RW.NO.MS",403,
-"Ngoma ","RW.ES.NM",506,
-"Ngororero ","RW.OU.NR",305,
-"Nyabihu ","RW.OU.NB",304,
-"Nyagatare ","RW.ES.NT",502,
-"Nyamagabe ","RW.SU.NY",205,
-"Nyamasheke","RW.OU.NS",307,
-"Nyanza ","RW.SU.NZ",201,
-"Nyarugenge","RW.KV.NG",101,
-"Nyaruguru ","RW.SU.NU",203,
-"Rubavu ","RW.OU.RB",303,
-"Ruhango ","RW.SU.RH",206,
-"Rulindo ","RW.NO.RL",401,
-"Rusizi ","RW.OU.RS",306,
-"Rutsiro ","RW.OU.RT",302,
-"Rwamagana ","RW.ES.RM",501,
+short_display,population
+Baringo,264978
+Bomet,	382794
+Bondo,	238780
+Bungoma,	876491
+Buret,	316882
+Busia,	370608
+Butere/Mumias,	476928
+Embu,	278196
+Garissa,	329939
+Gucha,	460939
+Homa Bay,	288540
+Ijara,	62571		
+Isiolo,	100861
+Kajiado,	406054
+Kakamega,	603422
+Keiyo,	143865
+Kericho,	468493
+Kiambu,	744010
+Kilifi,	544303
+Kirinyaga,	457105
+Kisii Central,491786
+Kisumu, 504359
+Kitui, 515422	
+Koibatek,	138163
+Kuria,	151887
+Kwale,	496133
+Laikipia,	322187
+Lamu, 72686
+Lugari,	215920
+Machakos,	906644
+Makueni,	771545
+Malindi,	281552
+Mandera,	250372
+Maragua,	387969
+Marakwet,	140629
+Marsabit,	121478
+Mbeere, 170953
+Meru Central, 498880
+Meru North, 604050
+Meru South, 205451
+Migori, 514897
+Mombasa,	665018
+Mount Elgon,	135033
+Moyale,	53479
+Murang'a, 348304
+Mwingi, 303828
+Nairobi,	2143254
+Nakuru,	1187039
+Nandi,	578751
+Narok,	365750
+Nyamira,	498102
+Nyandarua,	479902
+Nyando,	299930
+Nyeri,	661156
+Rachuonyo,307126
+Samburu,	143547
+Siaya,	480184
+Suba,	155666
+Taita, Taveta 246671
+Tana River, 180901
+Teso, 181491
+Tharaka,	100992
+Thika,	645713
+Trans Mara, 170591
+Trans Nzoia,	575662
+Turkana,	450860
+Uasin Gishu,	622705
+Vihiga, 498883
+Wajir,	319261
+West Pokot, 308086

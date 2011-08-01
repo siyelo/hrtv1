@@ -1,5 +1,4 @@
 class AddCacheColumnsForClassifiedToActivity < ActiveRecord::Migration
-
   load File.join(Rails.root, 'app', 'models', 'activity.rb') # load activity model
 
   def self.up
@@ -9,8 +8,6 @@ class AddCacheColumnsForClassifiedToActivity < ActiveRecord::Migration
     add_column :activities, "#{CodingSpend}_amount", :decimal, :default => 0
     add_column :activities, "#{CodingSpendCostCategorization}_amount", :decimal, :default => 0
     add_column :activities, "#{CodingSpendDistrict}_amount", :decimal, :default => 0
-
-    load 'db/fixes/update_activity_cached_amount_columns.rb'
   end
 
   def self.down

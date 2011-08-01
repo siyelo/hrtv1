@@ -3,22 +3,20 @@
 #
 
 require 'fastercsv'
-  puts "\n\nLoading seeds..."
 
-  load 'db/seed_files/codes.rb'
+puts "\n\nLoading seeds..."
 
-#  load 'db/seed_files/hssp2_codes.rb' # no longer are codes in db, just vals in codes table
+load 'db/seed_files/codes.rb'
 
-  load 'db/seed_files/cost_categories.rb'
+# breaks codes because of wrong parent_id and code_id
+# load 'db/seed_files/cost_categories.rb'
 
-  load 'db/seed_files/other_cost_codes.rb'
+load 'db/seed_files/other_cost_codes.rb'
 
-  load 'db/seed_files/districts.rb' #seeds locations and districts for rwanda and kenya
+load 'db/seed_files/districts.rb'
 
-  load 'db/seed_files/beneficiaries.rb'
+load 'db/seed_files/beneficiaries.rb'
 
-  load 'db/seed_files/organizations.rb'
+load 'db/seed_files/organizations.rb'
 
-  #load 'db/seed_files/service_levels.rb'
-
-  puts "...seeding DONE\n\n"
+puts "...seeding DONE\n\n"

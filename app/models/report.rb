@@ -29,7 +29,7 @@ class Report < ActiveRecord::Base
     'activities_by_nha_subimps',
     'activities_by_all_codes_budget'
   ]
-  
+
   attr_accessible :key, :csv, :formatted_csv
   attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
   has_attached_file :csv, Settings.paperclip.to_options
@@ -63,7 +63,7 @@ class Report < ActiveRecord::Base
       self.report =
         case self.key
         when 'districts_by_nsp_budget'
-          Reports::DistrictsByNsp.new(simple_activities_for_request_for_request, :budget)
+          Reports::DistrictsByNsp.new(simple_activities_for_request, :budget)
         when 'districts_by_all_codes_budget'
           Reports::DistrictsByAllCodes.new(simple_activities_for_request, :budget)
         when 'users_by_organization'
@@ -137,7 +137,7 @@ class Report < ActiveRecord::Base
       File.delete self.temp_file_name if self.temp_file_name
       File.delete self.zip_file_name if self.zip_file_name
     end
-  
+
   private
     def simple_activities_for_request
       Activity.only_simple_with_request(@current_request)

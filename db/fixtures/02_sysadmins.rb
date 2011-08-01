@@ -2,7 +2,7 @@ require 'factory_girl'
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'../','../','spec','factories','**','*.rb'))].each {|f| require f}
 
 org = Factory(:organization)
-req = Factory :request, :organization => org
+req = Factory(:request, :organization => org)
 
 begin
   puts "creating sysadmin"

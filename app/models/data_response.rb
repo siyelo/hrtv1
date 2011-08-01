@@ -119,37 +119,6 @@ class DataResponse < ActiveRecord::Base
     return "In Progress"
   end
 
-  # TODO: spec
-  def total_project_budget
-    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + universal_currency_converter(p.budget, p.currency, currency)}
-  end
-
-  # TODO: spec
-  def total_project_spend
-    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + universal_currency_converter(p.spend, p.currency, currency)}
-  end
-
-  # TODO: spec
-  def total_activity_spend
-    total_activity_method("spend")
-  end
-
-  # TODO: spec
-  def total_activity_budget
-    total_activity_method("budget")
-  end
-
-  # TODO: spec
-  def total_activity_method(method)
-    activities.only_simple.inject(0) do |sum, a|
-      unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
-        sum + universal_currency_converter(a.send(method), a.currency, currency)
-      else
-        sum
-      end
-    end
-  end
-
   # Checks if the response is "valid" and marks as Submitted.
   def submit!
     if ready_to_submit?
@@ -402,33 +371,33 @@ class DataResponse < ActiveRecord::Base
   end
   memoize :other_costs_coded?
 
-  def projects_total_spend
-    projects.map{|p| p.subtotals(:spend).to_f * currency_rate(p.currency, currency) }.compact.sum
+  def total_project_spend_in_usd
+    projects.inject(0) {|sum,p| p.spend.nil? ? sum : sum + universal_currency_converter(p.spend, p.currency, "USD")}
   end
 
-  def projects_total_budget
-    projects.map{|p| p.subtotals(:budget).to_f * currency_rate(p.currency, currency) }.compact.sum
+  def total_project_budget_in_usd
+    projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + universal_currency_converter(p.budget, p.currency, "USD")}
   end
 
-  def other_costs_subtotal(type = :spend)
-    (other_costs.without_a_project.select{ |a|
-      a.send(type).present?}.sum(&type)).to_f * currency_rate(currency, :USD)
+  def total_activities_and_other_costs_spend_in_usd
+    total_activities_and_other_costs_in_usd("spend")
   end
 
-  def total_spend
-    projects_total_spend + other_costs_subtotal(:spend)
+  def total_activities_and_other_costs_budget_in_usd
+    total_activities_and_other_costs_in_usd("budget")
   end
-  
-  def total_budget
-    projects_total_budget + other_costs_subtotal(:budget)
+
+  def total_activities_and_other_costs_in_usd(method)
+    activities.only_simple.with_a_project.inject(0) do |sum, a|
+      unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
+        sum + universal_currency_converter(a.send(method), a.currency, :USD)
+      else
+        sum
+      end
+    end
   end
 
   private
-    # Find all incomplete Activities, ignoring missing codings if the
-    # Request doesnt ask for that info.
-
-    ###Other Methods
-
     def reject_uncoded(activities)
       activities.select{ |a|
         (request.budget? && !a.budget_classified?) ||

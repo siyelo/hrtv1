@@ -4,7 +4,8 @@
 - spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
 - spend_fiscal_year = spend_fiscal_year(@response)
 
-= render 'shared/sub_nav_projects'
+- content_for :sub_nav do
+  = render 'shared/sub_nav_projects'
 
 = render 'activities/tab_nav', :activity => @other_cost
 

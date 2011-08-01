@@ -218,8 +218,8 @@ class Project < ActiveRecord::Base
     (self.send(amount_method) || 0) == in_flows_total(amount_method)
   end
 
-
-  #calculates the activitytotals for budget/spent
+  # calculates the activity totals for budget/spent
+  # FIXME - unclear if this returns ALL NORMAL ACTIVITIES + OTHER COSTS + SUB ACTIVITIES???!
   def subtotals(type)
     activities.select{|a| a.send(type).present?}.sum(&type)
   end
@@ -251,7 +251,6 @@ class Project < ActiveRecord::Base
   def other_costs_total(amount_type)
     smart_sum(other_costs, amount_type)
   end
-
 
   def errors_from_response
     errors = []

@@ -1,16 +1,16 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-HEADER = "Project Name,Project Description,Activity Name,Activity Description,Amount In Dollars,Districts Worked In,Inputs\n"
-
 describe Reports::OrganizationWorkplan do
   before :each do
+    @header = "Project Name,Project Description,Activity Name,Activity Description,Amount In Dollars," +
+      "Districts Worked In,Inputs\n"
     @organization = Factory(:organization, :currency => "USD")
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
   end
 
   it "should return the header with an empty response" do
-    Reports::OrganizationWorkplan.new(@response).csv.should == HEADER
+    Reports::OrganizationWorkplan.new(@response).csv.should == @header
   end
 
   describe "project rows" do
@@ -20,7 +20,7 @@ describe Reports::OrganizationWorkplan do
     end
 
     it "should include a project details" do
-      Reports::OrganizationWorkplan.new(@response).csv.should == HEADER + 'p name,p descr' + "\n"
+      Reports::OrganizationWorkplan.new(@response).csv.should == @header + 'p name,p descr' + "\n"
     end
 
     describe "with activities" do
@@ -39,7 +39,7 @@ describe Reports::OrganizationWorkplan do
       end
 
       it "should include a project + activity details" do
-        Reports::OrganizationWorkplan.new(@response).csv.should == HEADER +
+        Reports::OrganizationWorkplan.new(@response).csv.should == @header +
           'p name,p descr,' +
           'a name,a descr,20000.01,"loc1, loc2","input1, input2"' + "\n"
       end
@@ -50,7 +50,7 @@ describe Reports::OrganizationWorkplan do
           :project => @project, :data_response => @response
         Factory(:coding_budget_cost_categorization, :activity => @activity2, :code => @input1,
           :amount => 10, :cached_amount => 10)
-        Reports::OrganizationWorkplan.new(@response).csv.should == HEADER +
+        Reports::OrganizationWorkplan.new(@response).csv.should == @header +
           'p name,p descr,' +
           'a name,a descr,20000.01,"loc1, loc2","input1, input2"' + "\n" +
           '"","",a2 name,a2 descr,10.00,loc1,input1' + "\n"

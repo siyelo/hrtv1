@@ -32,12 +32,12 @@
           %tr
             %th Organization
             %th Projects
-            %th Expenditure Total
-            %th Budget Total
+            %th Expenditure Total (USD)
+            %th Budget Total (USD)
             %th Activities
             %th Implementers
-            %th Expenditure Total
-            %th Budget Total
+            %th Expenditure Total (USD)
+            %th Budget Total (USD)
             %th Unclassified Activities
             %th
         %tbody
@@ -45,12 +45,12 @@
             %tr{:id => "row_#{data_response.id}", :class => cycle("even", "odd")}
               %td= data_response.organization
               %td= data_response.projects.count
-              %td= n2c data_response.total_project_spend
-              %td= n2c data_response.total_project_budget
+              %td= n2c data_response.total_project_spend_in_usd
+              %td= n2c data_response.total_project_budget_in_usd
               %td= data_response.activities_count
               %td= data_response.sub_activities_count
-              %td= n2c data_response.total_activity_spend
-              %td= n2c data_response.total_activity_budget
+              %td= n2c data_response.total_activities_and_other_costs_spend_in_usd
+              %td= n2c data_response.total_activities_and_other_costs_budget_in_usd
               %td= "#{data_response.unclassified_activities_count} / #{data_response.activities_count}"
               %td
                 = link_to "Show", admin_response_path(data_response)

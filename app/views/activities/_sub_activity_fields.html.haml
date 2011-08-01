@@ -1,9 +1,16 @@
+:javascript
+  var _response_id = "#{@response.id}";
+  var _type        = "#{params[:id]}";
+  var _organizations = JSON.parse("#{escape_javascript(funding_organizations_select.to_json)}");
+
+- f.object.provider_type  == "Implementing Partner" ? style = "display:block;" : style = "display:none;"  
+  
 .fields
   %ul.dashboard_section
     = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
-    .implementer_container
-      .ui_widget
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this activity", :required => false, :input_html => {:class => 'organization_select combobox'}
+    .ui_widget
+      = f.input :provider_type, :as => :select, :collection => ['Self', 'Implementing Partner', 'Government', 'Service Provider (Level 1 - Community services)', 'Service Provider (Level 2/3 - Dispensary / Health centre)', 'Service Provider (Level 4 - Private and public district hospital)'], :input_html => {:class => 'implementer_type_select'}, :wrapper_html => {:class => "implementer_type"}, :label => "Select implementer"
+      = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => "The name of the organization that implemented this activity", :required => false, :input_html => {:class => 'organization_select combobox'}, :wrapper_html => {:style => style }
 
     %h4 Past expenditure
     .nested_field

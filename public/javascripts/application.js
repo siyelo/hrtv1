@@ -1351,7 +1351,7 @@ var approveActivity = function (element, approval_type, success_text) {
 
 
 
-var activity_form = function () {
+var activity_form = function () {  
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
 
@@ -1379,6 +1379,14 @@ var activity_form = function () {
   // setting the id for cucumber tests
   $( ".combobox" ).combobox();
   $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
+  
+  $(".implementer_type_select").live('change', function(e) {
+    e.preventDefault();
+    var selected_type = $(this).val();
+    var implementer_dropdown = $(this).parents('li').next();
+    build_implementer_options();
+    update_implementer_options(selected_type,implementer_dropdown);    
+  });
 
   $('.implementer_select').live('change', function(e) {
     e.preventDefault();
@@ -1401,17 +1409,17 @@ var activity_form = function () {
 };
 
 
-var admin_activities_edit = admin_activities_update = {
+var admin_activities_update = admin_activities_update = {
   run: function () {
     activity_form();
-
-
+    
+    
   }
 };
 
 var activities_new = activities_create = activities_edit = activities_update = {
   run: function () {
-    activity_form();
+    activity_form();  
   }
 };
 
@@ -1421,6 +1429,14 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
     $(".combobox").combobox();
     $(".ui-autocomplete-input").attr('id', 'theCombobox');
+
+    $(".implementer_type_select").live('change', function(e) {
+      e.preventDefault();
+      var selected_type = $(this).val();
+      var implementer_dropdown = $(this).parents('li').next();
+      build_implementer_options();
+      update_implementer_options(selected_type,implementer_dropdown);    
+    });
 
   }
 };
@@ -1770,49 +1786,11 @@ var funders_index = {
 var implementers_index = {
   run: function () {
 
-    $('#sub_activity_implementer_type').live('change', function (e) {
+    $('#sub_activity_provider_type').live('change', function (e) {      
       var selected_type = $(this).val();
       var implementer_dropdown = $(this).parents('ol:first').find("#sub_activity_provider_input");
-
-      var build_select_options = function () {
-        var select_options = [];
-        var select_options_html = "";
-
-        for (prop in _organizations) {
-          if (!_organizations.hasOwnProperty(prop)) {
-            //The current property is not a direct property of _organizations
-            continue;
-          }
-          if (prop !== 'Government' && prop !== 'Self') {
-            var orgs = _organizations[prop];
-            for (var i = 0; i < orgs.length; i++) {
-              select_options.push(orgs[i].organization);
-            }
-          }
-        }
-       
-        for (var i = 0; i < select_options.length; i++) {
-          select_options_html += '<option value="'+ select_options[i].id +'">' +
-                                  select_options[i].name +
-                                 '</option>';
-        }
-
-        return select_options_html;
-      } 
-      
-      if (selected_type == 'Self') {
-        implementer_dropdown.hide();
-        implementer_dropdown.find('select').combobox('destroy');
-        implementer_dropdown.find('select').val(_organizations.Self[0].organization.id);
-      } else if (selected_type == 'Implementing Partner') {
-        implementer_dropdown.find('select').html(build_select_options());
-        implementer_dropdown.find('select').combobox();
-        implementer_dropdown.show();
-      } else if (selected_type == 'Government') {
-        implementer_dropdown.hide();
-        implementer_dropdown.find('select').combobox('destroy');
-        implementer_dropdown.find('select').val(_organizations.Government[0].organization.id);
-      }
+      build_implementer_options();
+      update_implementer_options(selected_type,implementer_dropdown);
     });
 
     $('.add_implementer').live('click', function (e) {
@@ -1854,20 +1832,24 @@ var implementers_index = {
       var ajaxLoader = element.parents('ol').find('.ajax-loader');
 
       ajaxLoader.show();
+      if ($('#sub_activity_provider_type').val() != '') {
+        $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
+          if (data.status) {
+            var box = element.parents('tr')
+            box.next('tr').find('.add_implementer').removeClass('disabled');
+            var newTr = $(data.html)
+            box.replaceWith(newTr)
+            $('#js_implementers_form').find('.save_btn').show();
+          } else {
+            var newTr = $(data.html);
+            var box = element.parents('tr');
+            box.replaceWith(newTr);
+          }
+        });
+      } else {
+        ajaxLoader.hide();
+      };
 
-      $.post(buildJsonUrl(form.attr('action')), form.serialize(), function (data) {
-        if (data.status) {
-          var box = element.parents('tr')
-          box.next('tr').find('.add_implementer').removeClass('disabled');
-          var newTr = $(data.html)
-          box.replaceWith(newTr)
-          $('#js_implementers_form').find('.save_btn').show();
-        } else {
-          var newTr = $(data.html);
-          var box = element.parents('tr');
-          box.replaceWith(newTr);
-        }
-      });
     });
 
     $('.js_spend_column_amount').live('keyup', function (e) {
@@ -1981,9 +1963,42 @@ $(function () {
     $('#gs_container').remove();
     $.post('/profile/disable_tips', { "_method": "put" });
   });
-
-
-
-
 });
 
+var build_implementer_options = function () {
+  var select_options = [];
+  var select_options_html = "";
+  
+  for (prop in _organizations) {
+    if (!_organizations.hasOwnProperty(prop)) {
+      //The current property is not a direct property of _organizations
+      continue;
+    }
+    if (prop == 'Implementing Partner') {
+      var orgs = _organizations[prop];
+      for (var i = 0; i < orgs.length; i++) {
+        select_options.push(orgs[i].organization);
+      }
+    }
+  }
+ 
+  for (var i = 0; i < select_options.length; i++) {
+    select_options_html += '<option value="'+ select_options[i].id +'">' +
+                            select_options[i].name +
+                           '</option>';
+  }
+
+  return select_options_html;  
+};  
+
+var update_implementer_options = function (selected_type, implementer_dropdown) {     
+  if (selected_type == 'Self' || selected_type == '' || selected_type.indexOf("Service") >= 0 || selected_type == 'Government')  {
+   implementer_dropdown.hide();
+   implementer_dropdown.find('select').combobox('destroy');
+   implementer_dropdown.find('input').val('');
+  } else if (selected_type == 'Implementing Partner') {
+   // implementer_dropdown.find('select').html(build_implementer_options());
+   implementer_dropdown.find('select').combobox();
+   implementer_dropdown.show();
+  }
+};

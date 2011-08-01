@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20110802072539) do
     t.boolean  "coding_spend_valid",           :default => false
     t.boolean  "coding_spend_cc_valid",        :default => false
     t.boolean  "coding_spend_district_valid",  :default => false
+    t.string   "provider_type"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"

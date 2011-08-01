@@ -1,5 +1,6 @@
 %tr.js_implementer_row.filler2{:"data-implementer_id" => implementer.try(:id)}
-  %td{:colspan => "2", :class => "desc"}= implementer.provider.try(:name)
+  %td{:colspan => "2", :class => "desc"}
+    = implementer.provider_type != "Implementing Partner" ? implementer.provider_type : implementer.provider.try(:name) 
   %td= text_field_tag :"sub_activities[#{implementer.id}]spend", get_spend_value(implementer), :class => 'js_spend_column_amount'
   %td= text_field_tag :"sub_activities[#{implementer.id}]budget", get_budget_value(implementer), :class => 'js_budget_column_amount'
   %td.actions

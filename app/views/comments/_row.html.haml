@@ -5,4 +5,4 @@
   %td.manage
     / js event .edit_btn, .destroy_btn
     = link_to "Edit", edit_comment_path(comment), :class => "edit_btn"
-    = link_to "Delete", delete_comment_path(comment), :class => "destroy_btn"
+    = link_to "Delete", comment_path(comment), :class => "destroy_btn"

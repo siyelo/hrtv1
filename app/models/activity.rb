@@ -58,6 +58,11 @@ class Activity < ActiveRecord::Base
                                                    ["activities.type = ?", type]} }
   named_scope :only_simple,       { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
+  named_scope :with_request,      lambda {|request| {  :select => 'DISTINCT activities.*',
+                                    :joins => 'INNER JOIN data_responses ON
+                                             data_responses.id = activities.data_response_id',
+                                    :conditions => ['data_responses.data_request_id = ?',
+                                                    request.id]}}
   named_scope :with_a_project,    { :conditions => "activities.id IN (SELECT activity_id FROM activities_projects)" }
   named_scope :without_a_project, { :conditions => "project_id IS NULL" }
   named_scope :with_organization, { :joins => "INNER JOIN data_responses
@@ -83,6 +88,14 @@ class Activity < ActiveRecord::Base
   }
   named_scope :manager_approved, { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,           {:order => "activities.name" }
+  named_scope :only_simple_with_request, lambda {|request|
+          { :select => 'DISTINCT activities.*',
+            :joins => 'INNER JOIN data_responses ON
+                       data_responses.id = activities.data_response_id',
+            :conditions => ['(activities.type IS NULL
+                             OR activities.type IN (?)) AND
+                             data_responses.data_request_id = ?',
+                             'OtherCost', request.id]}}
 
 
   ### Attribute Accessor
@@ -141,10 +154,10 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified?}
   end
 
-  def self.jawp_activities
-    Activity.only_simple.find(:all,
-      :include => [:locations, :provider, :organizations,
-                  :beneficiaries, {:data_response => :organization}])
+  def self.jawp_activities(request = nil)
+    request ? @activities = Activity.only_simple_with_request(request) : @activities = Activity.only_simple
+    @activities.find(:all, :include => [:locations, :provider, :organizations,
+                                        :beneficiaries, {:data_response => :organization}])
   end
 
   def self.download_template(activities = [])

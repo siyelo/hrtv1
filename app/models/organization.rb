@@ -63,6 +63,29 @@ class Organization < ActiveRecord::Base
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'UPPER(name) ASC, created_at DESC'
+  named_scope :with_submitted_responses_for, lambda { |request|
+                   {:joins => "LEFT JOIN data_responses ON
+                               organizations.id = data_responses.organization_id",
+                   :conditions => ["data_responses.data_request_id = ? AND
+                                   data_responses.submitted = ? AND
+                                   (data_responses.submitted_for_final IS NULL OR
+                                   data_responses.submitted_for_final = ? ) AND
+                                   (data_responses.complete IS NULL OR
+                                   data_responses.complete = ?)",
+                                    request.id, true, false, false]} }
+  named_scope :with_in_progress_responses_for, lambda { |request|
+                   {:conditions => ["organizations.id in (
+                       SELECT organizations.id
+                         FROM organizations
+                    LEFT JOIN data_responses ON
+                      organizations.id = data_responses.organization_id
+                    INNER JOIN projects ON
+                      data_responses.id = projects.data_response_id
+                    INNER JOIN activities ON
+                      data_responses.id = activities.data_response_id
+                    WHERE data_responses.data_request_id = ? AND
+                          (data_responses.submitted IS NULL OR
+                          data_responses.submitted = ?))", request.id, false]}}
 
   ### Callbacks
   after_save :update_cached_currency_amounts

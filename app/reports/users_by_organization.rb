@@ -36,7 +36,7 @@ class Reports::UsersByOrganization
       row << user.email
       row << user.full_name
       row << user.organization.try(:name)
-      row << user.organization.try(:type)
+      row << user.organization.try(:raw_type)
       row << user.organization_status
 
       row

@@ -3,18 +3,19 @@ require 'fastercsv'
 class Reports::ActivitiesByCostCategorization
   include Reports::Helpers
 
-  def initialize(type)
+  def initialize(type, request)
     @is_budget     = is_budget?(type)
     @coding_class  = @is_budget ? CodingBudgetCostCategorization : CodingSpendCostCategorization
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries
+    @request       = request
   end
 
   def csv
     FasterCSV.generate do |csv|
       csv << build_header
-      root_activities.each{|activity| csv << build_row(activity)}
+      root_activities(@request).each{|activity| csv << build_row(activity)}
     end
   end
 
@@ -54,7 +55,7 @@ class Reports::ActivitiesByCostCategorization
       row << funding_source_name(activity)
       row << activity.project.try(:name)
       row << "#{h activity.organization.name}"
-      row << "#{activity.organization.type}"
+      row << "#{activity.organization.raw_type}"
       row << "#{activity.id}"
       row << "#{h activity.name}"
       row << "#{h activity.description}"

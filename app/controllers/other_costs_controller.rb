@@ -53,6 +53,22 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def update
+    # @other_cost = @response.othercosts.find(params[:id])
+    # if @other_cost.update_attributes(params)
+    #   respond_to do |format|
+    #     format.html do
+    #       flash[:notice] = "Other Cost was successfully updated"
+    #       html_redirect
+    #     end
+    #     format.js { js_redirect }
+    #   end
+    # else
+    #   respond_to do |format|
+    #     format.html { render :action => :new }
+    #     format.js { js_redirect }
+    #   end
+    # end
+    # debugger
     update! do |success, failure|
       success.html do
         flash[:notice] = 'Other Cost was successfully updated'

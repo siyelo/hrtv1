@@ -42,5 +42,24 @@ describe OtherCostsController do
          :commit => 'Save & Classify >', :response_id => @data_response.id
        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
      end
+     
+     it "correctly updates when an othercost doesn't have a project" do
+       @other_cost    = Factory(:other_cost, :project => nil,
+                                 :data_response => @data_response)
+       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
+                                    :commit => 'Save', :response_id => @data_response.id
+       flash[:notice].should == "Other Cost was successfully updated" 
+       response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
+     end
+     
+     it "correctly updates when an othercost doesn't have a project or a spend" do
+       @other_cost    = Factory(:other_cost, :project => nil,
+                                 :data_response => @data_response, :spend => nil)
+       put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
+                                    :commit => 'Save', :response_id => @data_response.id
+       flash[:notice].should == "Other Cost was successfully updated" 
+       response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
+     end
    end
 end
+

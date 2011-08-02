@@ -406,7 +406,7 @@ class Activity < ActiveRecord::Base
 
   def check_projects_budget_and_spend?
     return true if budget.nil? && spend.nil?
-    return true if budget.present? && spend.present? &&
+    return true if has_budget_or_spend? &&
                    type == "OtherCost" && project.nil?
     return true if actual_budget <= (project.budget || 0) &&
                    actual_spend <= (project.spend || 0) &&

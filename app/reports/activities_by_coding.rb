@@ -4,8 +4,8 @@ class Reports::ActivitiesByCoding
   include Reports::Helpers
 
   def initialize(type, request)
-    @is_budget    = is_budget?(type)
-    @coding_class = @is_budget ? CodingBudget : CodingSpend
+    @is_budget     = is_budget?(type)
+    @coding_class  = @is_budget ? CodingBudget : CodingSpend
     @codes         = get_codes
     @code_ids      = @codes.map{|code| code.id}
     @beneficiaries = get_beneficiaries

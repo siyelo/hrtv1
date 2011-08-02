@@ -62,7 +62,7 @@ module Reports::Helpers
     if codings.size == 1 && codings.first.code_id.nil?
       #coding was faked, just return this correctly
       #return [[codings.first, ["No Code Specified"]]]
-    end 
+    end
     coding_with_parent_codes = []
     coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
 

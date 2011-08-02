@@ -34,7 +34,6 @@ class FundingFlow < ActiveRecord::Base
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
-  validate :spend_is_greater_than_zero
 
   ### Delegates
   delegate :organization, :to => :project

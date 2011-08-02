@@ -1,8 +1,8 @@
 - title(truncate(@other_cost.description, :length => 100))
-- budget_fiscal_year_prev = budget_fiscal_year_prev(@response)
-- budget_fiscal_year = budget_fiscal_year(@response)
-- spend_fiscal_year_prev = spend_fiscal_year_prev(@response)
-- spend_fiscal_year = spend_fiscal_year(@response)
+- budget_fiscal_year_prev = budget_fiscal_year(@response)
+- budget_fiscal_year = budget_fiscal_year_next(@response)
+- spend_fiscal_year_prev = spend_fiscal_year(@response)
+- spend_fiscal_year = spend_fiscal_year_next(@response)
 
 = render 'projects/sub_nav'
 

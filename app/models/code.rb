@@ -31,10 +31,11 @@ class Code < ActiveRecord::Base
   named_scope :purposes, :conditions => ["codes.type in (?)", PURPOSES]
   named_scope :ordered, :order => 'lft'
   named_scope :ordered_by_short_display, :order => 'short_display ASC'
-  
+
 
   def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
+    levels = self.roots_with_level.collect{|a| a[0]}
+    @depest_nesting ||= levels.present? ? (levels.max + 1) : 0
   end
 
   def self.roots_with_level

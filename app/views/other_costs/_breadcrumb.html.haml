@@ -1,5 +1,5 @@
 %ul.breadcrumb
-  - unless activity.new_record?
+  - if !activity.new_record? && activity.project
     %li= link_to nice_name(activity.project), edit_response_project_path(response, activity.project)
   %li Other Costs
   - unless activity.new_record?

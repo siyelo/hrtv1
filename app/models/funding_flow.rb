@@ -129,6 +129,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
@@ -148,7 +149,6 @@ end
 #  self_provider_flag   :integer         default(0), indexed
 #  spend                :decimal(, )
 #  spend_q4_prev        :decimal(, )
-#  data_response_id     :integer         indexed
 #  budget_q1            :decimal(, )
 #  budget_q2            :decimal(, )
 #  budget_q3            :decimal(, )

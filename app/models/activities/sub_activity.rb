@@ -264,14 +264,6 @@ class SubActivity < Activity
 end
 
 
-
-
-
-
-
-
-
-
 # == Schema Information
 #
 # Table name: activities

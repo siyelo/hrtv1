@@ -16,13 +16,14 @@
 # END
 #
 #
-# For OS X:
+
+### For OS X:
 #  - Use homebrew to install postgres
 #  - Create user and database
 #   createuser -d -R -P hrt_dev
 #   createdb -O hrt_dev hrt_dev
 
-# For Ubuntu:
+### For Ubuntu:
 # - Change to md5, instead of using ident
 #   vi /etc/postgresql/8.4/main/pg_hba.conf
 #   Change the line:
@@ -32,7 +33,7 @@
 #
 #   Read more: http://jaystile.wordpress.com/2010/08/31/programming-rails-with-postgres-couldnt-create-database/
 #
-# - Create hrt_dev and hrt_test users
+#   - Create hrt_dev and hrt_test users
 #   sudo -u postgres createuser -d -R -P hrt_dev
 #   sudo -u postgres createuser -d -R -P hrt_test
 #

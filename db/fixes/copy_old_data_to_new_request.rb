@@ -3,7 +3,6 @@
 def zero_out_everything(project)
   project.budget =
     project.spend =
-    project.entire_budget =
     project.spend_q1 =
     project.spend_q1         =
     project.spend_q2         =
@@ -33,8 +32,8 @@ def zero_out_everything(project)
 
   project.funding_flows.each do |f|
     f = zero_out_flow(f)
-  end  
-  
+  end
+
   project.funding_streams.each do |f|
     f = zero_out_stream(f)
   end

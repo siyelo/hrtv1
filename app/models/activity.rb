@@ -75,8 +75,7 @@ class Activity < ActiveRecord::Base
                                                   :joins => 'INNER JOIN data_responses ON
                                                              data_responses.id = activities.data_response_id',
                                                   :conditions => ['data_responses.data_request_id = ?', request.id]}}
-  named_scope :with_a_project,       { :conditions => "activities.id IN
-                                    (SELECT activity_id FROM activities_projects)" }
+  named_scope :with_a_project,       { :conditions => "project_id IS NOT NULL" }
   named_scope :without_a_project,    { :conditions => "project_id IS NULL" }
   named_scope :with_organization,    { :joins => "INNER JOIN data_responses
                                     ON data_responses.id = activities.data_response_id
@@ -407,7 +406,7 @@ class Activity < ActiveRecord::Base
 
   def check_projects_budget_and_spend?
     return true if budget.nil? && spend.nil?
-    return true if budget.present? && spend.present? &&
+    return true if has_budget_or_spend? &&
                    type == "OtherCost" && project.nil?
     return true if actual_budget <= (project.budget || 0) &&
                    actual_spend <= (project.spend || 0) &&

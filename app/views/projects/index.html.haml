@@ -67,8 +67,10 @@
     %tr.filler
       %td{:colspan => 2}
       %td.total TOTAL (ACTIVITIES + OTHER COSTS)
-      %td.wrap-12= n2crs(@response.total_spend, @response.currency)
-      %td.wrap-12= n2crs(@response.total_budget, @response.currency)
+      - usd_spend_in_default_currency = universal_currency_converter(@response.total_activities_and_other_costs_spend_in_usd, :USD, @response.currency)
+      - usd_budget_in_default_currency = universal_currency_converter(@response.total_activities_and_other_costs_budget_in_usd, :USD, @response.currency)
+      %td.wrap-12= n2crs(usd_spend_in_default_currency, @response.currency)
+      %td.wrap-12= n2crs(usd_budget_in_default_currency, @response.currency)
       %td
 
 = will_paginate @projects

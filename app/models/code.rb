@@ -33,7 +33,8 @@ class Code < ActiveRecord::Base
 
 
   def self.deepest_nesting
-    @depest_nesting ||= self.roots_with_level.collect{|a| a[0]}.max + 1
+    levels = self.roots_with_level.collect{|a| a[0]}
+    @depest_nesting ||= levels.present? ? (levels.max + 1) : 0
   end
 
   def self.roots_with_level

@@ -31,7 +31,7 @@ class Reports::MapFacilitiesByPartner
         # otherwise get who gives me money by activities
         if dr && !dr.empty?
           in_flows = organization.in_flows.find(:all,
-                                  :conditions => ["data_response_id = ?", dr.id],
+                                  :conditions => ["projects.data_response_id = ?", dr.id],
                                   :include => :project)
           in_flows.each do |flow|
             set_amounts(organization, flow.from, in_flow_amount(flow))

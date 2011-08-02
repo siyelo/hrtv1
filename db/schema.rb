@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110801145715) do
+ActiveRecord::Schema.define(:version => 20110802115742) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -286,7 +286,6 @@ ActiveRecord::Schema.define(:version => 20110801145715) do
     t.datetime "updated_at"
     t.decimal  "budget"
     t.decimal  "spend"
-    t.decimal  "entire_budget"
     t.string   "currency"
     t.decimal  "spend_q1"
     t.decimal  "spend_q2"

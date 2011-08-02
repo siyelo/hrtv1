@@ -7,7 +7,7 @@ class Project < ActiveRecord::Base
   include NumberHelper
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name description currency entire_budget
+  FILE_UPLOAD_COLUMNS = %w[name description currency
                          budget budget_q4_prev budget_q1 budget_q2 budget_q3
                          budget_q4 spend spend_q4_prev spend_q1 spend_q2
                          spend_q3 spend_q4 start_date end_date]
@@ -49,18 +49,15 @@ class Project < ActiveRecord::Base
   validates_presence_of :name, :data_response_id
   validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
-  validates_numericality_of :entire_budget, :unless => Proc.new {|p| p.entire_budget.blank?}
 
   validates_date :start_date
   validates_date :end_date
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validate :validate_total_budget_not_exceeded,
-    :if => Proc.new { |p| p.budget.present? && p.entire_budget.present? }
 
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :in_flows_attributes, :budget, :entire_budget,
+                  :location_ids, :in_flows_attributes, :budget,
                   :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
                   :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
                   :budget2, :budget3, :budget4, :budget5, :am_approved, :am_approved_date,
@@ -271,17 +268,7 @@ class Project < ActiveRecord::Base
 
   private
 
-    ### Validations
-
-    def validate_total_budget_not_exceeded
-      errors.add(:base, "Current Budget must be less than or equal to the Total Budget") if budget > entire_budget
-    end
-
-    ### Misc
-
     def trace_ultimate_funding_source(organization, funders, traced = [])
-      #spacing = '   ' * traced.length                 # DEBUG
-      #puts "#{spacing}tracing #{organization.name}"   # DEBUG
       traced = traced.dup
       traced << organization
       funding_sources = []
@@ -404,6 +391,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -417,7 +405,6 @@ end
 #  updated_at       :datetime
 #  budget           :decimal(, )
 #  spend            :decimal(, )
-#  entire_budget    :decimal(, )
 #  currency         :string(255)
 #  spend_q1         :decimal(, )
 #  spend_q2         :decimal(, )

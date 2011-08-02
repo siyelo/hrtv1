@@ -22,7 +22,6 @@ describe Project do
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:budget) }
-    it { should allow_mass_assignment_of(:entire_budget) }
     it { should allow_mass_assignment_of(:start_date) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:end_date) }
@@ -56,7 +55,6 @@ describe Project do
     it { should allow_value(123.45).for(:budget) }
     it { should allow_value(123.45).for(:spend) }
     it { should allow_value('12,323.32').for(:spend) }
-    it { should allow_value(123.45).for(:entire_budget) }
     it { should allow_value('2010-12-01').for(:start_date) }
     it { should allow_value('2010-12-01').for(:end_date) }
     it { should_not allow_value('').for(:start_date) }
@@ -86,7 +84,6 @@ describe Project do
     it { should validate_numericality_of(:budget3) }
     it { should validate_numericality_of(:budget4) }
     it { should validate_numericality_of(:budget5) }
-    it { should validate_numericality_of(:entire_budget) }
     it { should validate_numericality_of(:budget_q4_prev) }
     it { should validate_numericality_of(:budget_q1) }
     it { should validate_numericality_of(:budget_q2) }
@@ -126,7 +123,7 @@ describe Project do
   end
 
   describe "cleans currency formats" do
-    FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :entire_budget]
+    FIELDS = [:spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget]
     TESTS = [
               ["10,783.32",     "10783.32",  "clean commas"],
               ["10783,32",      "1078332.0",  "ingore commas as decimal separator"],
@@ -319,31 +316,15 @@ describe Project do
       p.should_not be_valid
     end
 
-    it "accepts Total Budget >= Total Budget" do
-      p = Factory.build(:project, :data_response => @response,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02),
-                        :entire_budget => 900,
-                        :budget =>        800 )
-      p.should be_valid
+    it "accepts Current Budget < Lifetime Budget" do
+      pending
     end
 
-    it "accepts Total Budget = Total Budget" do
-      p = Factory.build(:project, :data_response => @response,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02),
-                        :entire_budget => 900,
-                        :budget =>        900 )
-      p.should be_valid
+    it "accepts Current Budget = Lifetime Budget" do
     end
 
-    it "does not accept Total Budget < Total Budget" do
-      p = Factory.build(:project, :data_response => @response,
-                        :start_date => DateTime.new(2010, 01, 01),
-                        :end_date =>   DateTime.new(2010, 01, 02),
-                        :entire_budget => 900,
-                        :budget =>        1000 )
-      p.should_not be_valid
+    it "does not accept Current Budget > Lifetime Budget" do
+      pending
     end
   end
 

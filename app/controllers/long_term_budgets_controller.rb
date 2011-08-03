@@ -13,7 +13,7 @@ class LongTermBudgetsController < Reporter::BaseController
 
   def update
     @long_term_budget.update_budget_entries(params[:classifications])
-    flash[:notice] = "Long Term Budgets were successfully updated."
+    flash[:notice] = "Future Budgets were successfully updated."
     redirect_to long_term_budget_url(@year)
   end
 

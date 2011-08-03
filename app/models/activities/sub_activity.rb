@@ -68,7 +68,7 @@ class SubActivity < Activity
     doc.each do |row|
       provider_id = Organization.find_by_name(row['Implementer']).try(:id)
       if provider_id
-        sa = activity.sub_activities.find_by_id(row['Id'])
+        row['id'] ? sa = activity.sub_activities.find_by_id(row['Id']) : sa = activity.sub_activities.find_by_provider_id(provider_id)
         attributes = {:budget => row['Current Budget'],
                       :spend => row['Past Expenditure'],
                       :provider_id => provider_id,

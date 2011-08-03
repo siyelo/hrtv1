@@ -173,7 +173,7 @@ class Activity < ActiveRecord::Base
         row << activity.project.try(:name)
         row << activity.name
         row << activity.description
-        row << activity.provider.try(:name)
+        row << activity.provider_name
         row << activity.spend
         row << activity.budget
         row << activity.locations.map{|l| l.short_display}.join(',')
@@ -281,6 +281,10 @@ class Activity < ActiveRecord::Base
 
   def organization_name
     organization.name
+  end
+  
+  def provider_name
+    provider ? provider.try(:name) : provider_type
   end
 
   def update_classified_amount_cache(type)

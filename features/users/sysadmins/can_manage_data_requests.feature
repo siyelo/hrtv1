@@ -9,7 +9,6 @@ Feature: Admin can manage data requests
     And a sysadmin exists with email: "admin@hrtapp.com", organization: the organization
     And I am signed in as "admin@hrtapp.com"
     
-    @run
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
        And I follow "Create Data Request"

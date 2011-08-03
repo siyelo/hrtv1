@@ -378,13 +378,31 @@ describe SubActivity do
       end
     end
     
-    describe "implementer type" do
-      it "assigns value to implementer type" do
-      sub_activity = Factory.create(:sub_activity, :implementer_type => 'Government', :data_response => @response, :activity => @activity)
-
-      sub_activity.implementer_type.should == 'Government'
+    describe "implementer types" do
+      it "allows activities without a provider" do
+         @sub_activity = Factory(:sub_activity, :activity => @activity,
+                                         :provider_type => "Government",
+                                         :data_response => @response)
+         @sub_activity.provider.should == nil
+         @sub_activity.provider_type.should == "Government"
+      end
+      
+      it "if there is no provider it returns the provider type when asking for the provider name" do 
+        @sub_activity = Factory(:sub_activity, :activity => @activity,
+                                        :provider_type => "Government",
+                                        :data_response => @response)
+        @sub_activity.provider.should == nil
+        @sub_activity.provider_name.should == "Government"
+        
+        @sub_activity = Factory.create(:sub_activity, :activity => @activity,
+                                        :provider => @implementer,
+                                        :provider_type => "Implementing Partner",
+                                        :data_response => @response)
+        @sub_activity.provider.should == @implementer
+        @sub_activity.provider_name.should == @implementer.name
+      end      
     end
-  end
+  
   end 
 end
 

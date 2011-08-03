@@ -80,6 +80,6 @@ class Reports::ActivitiesByNsp
     end
 
     def get_provider_name(activity)
-      activity.provider ? activity.provider.try(:short_name) : "No Implementer Specified"
+      activity.provider ? activity.provider.try(:short_name) : activity.try(:provider_type) || "No Implementer Specified"
     end
 end

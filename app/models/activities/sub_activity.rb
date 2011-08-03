@@ -9,8 +9,7 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessor :implementer_type 
-  attr_accessible :activity_id, :spend_percentage, :budget_percentage, :data_response_id
+  attr_accessible :activity_id, :spend_percentage, :budget_percentage, :data_response_id, :provider_type
 
   ### Callbacks
   after_create  :update_counter_cache
@@ -107,7 +106,7 @@ class SubActivity < Activity
 
       if activity
         activity.sub_activities.each do |sa|
-          row = [sa.provider.try(:name), sa.spend, sa.budget]
+          row = [sa.provider_name , sa.spend, sa.budget]
 
           (100 - row.length).times{ row << nil}
           row << sa.id

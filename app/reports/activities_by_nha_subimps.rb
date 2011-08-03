@@ -180,7 +180,7 @@ class Reports::ActivitiesByNhaSubimps
 
               row << activity.possible_duplicate?
               row << activity.id
-              row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
+              row << activity.provider_name || "No Implementer Specified" # include sub activity implementers here
               row << activity.provider.try(:raw_type) || "No Implementer Specified" # include sub activity implementers here
               row << funding_source[:ufs].try(:name)
               row << funding_source[:ufs].try(:raw_type)

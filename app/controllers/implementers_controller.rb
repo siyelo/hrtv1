@@ -3,8 +3,6 @@ class ImplementersController < Reporter::BaseController
   before_filter :load_projects
 
   def index
-    @organizations = Organization.find(:all).group_by {|o| o.raw_type}
-    @organizations["Self"] = [current_user.organization]
   end
 
   def new
@@ -21,8 +19,16 @@ class ImplementersController < Reporter::BaseController
 
   def create
     @activity = @response.activities.find(params[:sub_activity].delete(:activity_id))
+    provider_type = params[:sub_activity][:provider_type]
+    
+    if provider_type == "Self"
+      params[:sub_activity][:provider_id] = @activity.organization.id  
+    else
+      params[:sub_activity][:provider_id] = '' unless provider_type == "Implementing Partner"
+    end
+    
     @implementer = @activity.sub_activities.new(params[:sub_activity])
-
+    
     if @implementer.save
       respond_to do |format|
         format.json do

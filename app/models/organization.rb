@@ -1,6 +1,8 @@
 require 'validation_disabler'
 require 'validators'
 class Organization < ActiveRecord::Base
+  include ActsAsDateChecker
+  include Organization::FiscalYear
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
@@ -12,20 +14,6 @@ class Organization < ActiveRecord::Base
     "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
     "Non-Reporting", "Other ministries", "Parastatal", "Prison Clinic",
     "RBC institutions"]
-
-  def usg_fiscal_year
-    year = Date.today.strftime('%Y').to_i
-    { :start => Date.parse("01-01-#{year}"),
-      :end => Date.parse("31-12-#{year}") }
-  end
-
-  def gor_fiscal_year
-    year = Date.today.strftime('%Y').to_i
-    { :start => Date.parse("01-07-#{year - 1}"),
-      :end => Date.parse("30-06-#{year}") }
-  end
-
-  include ActsAsDateChecker
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
@@ -252,36 +240,6 @@ class Organization < ActiveRecord::Base
         # could enter "Unknown - maybe #{self.name}" ?
         [FundingChain.new({:organization_chain => [self, to]})]
       end
-    end
-  end
-
-  def budget_quarters_months(quarter)
-    case quarter
-    when "q1"
-      "#{(gor_fiscal_year[:start] + 12.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 14.months).strftime('%b \'%y')}"
-    when "q2"
-      "#{(gor_fiscal_year[:start] + 15.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 17.months).strftime('%b \'%y')}"
-    when "q3"
-      "#{(gor_fiscal_year[:start] + 18.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 20.months).strftime('%b \'%y')}"
-    when "q4"
-      "#{(gor_fiscal_year[:start] + 21.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 23.months).strftime('%b \'%y')}"
-    when "q1_next_fy"
-      "#{(gor_fiscal_year[:start] + 24.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 26.months).strftime('%b \'%y')}"
-    end
-  end
-
-  def spend_quarters_months(quarter)
-    case quarter
-    when "q1"
-      "#{gor_fiscal_year[:start].strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 2.months).strftime('%b \'%y')}"
-    when "q2"
-      "#{(gor_fiscal_year[:start] + 3.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 5.months).strftime('%b \'%y')}"
-    when "q3"
-      "#{(gor_fiscal_year[:start] + 6.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 8.months).strftime('%b \'%y')}"
-    when "q4"
-      "#{(gor_fiscal_year[:start] + 9.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 11.months).strftime('%b \'%y')}"
-    when "q1_next_fy"
-      "#{(gor_fiscal_year[:start] + 12.months).strftime('%b \'%y')} - #{(gor_fiscal_year[:start] + 14.months).strftime('%b \'%y')}"
     end
   end
 

@@ -406,6 +406,14 @@ Then /^page should not have css "([^"]*)"$/ do |selector|
   page.should_not have_css(selector)
 end
 
+Then /^page should have selector "([^"]*)"$/ do |selector|
+  page.find(selector).should be_present
+end
+
+Then /^page should not have selector "([^"]*)"$/ do |selector|
+  page.find(selector).should_not be_present
+end
+
 Then /^column "([^"]*)" row "([^"]*)" should have text "([^"]*)"$/ do |column, row, text|
   page.find("table tbody tr[#{row}] td[#{column}]").text.should == text
 end
@@ -453,4 +461,8 @@ When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
   with_scope(selector) do
     page.execute_script("$('#{element}').mouseover();")
   end
+end
+
+Given /^now is "([^"]*)"$/ do |time|
+  Timecop.freeze(Date.parse(time))
 end

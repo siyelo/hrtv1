@@ -34,6 +34,10 @@ Spork.prefork do
 
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
+
+    config.before(:each) do
+      Timecop.return
+    end
   end
 end
 

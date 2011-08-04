@@ -63,7 +63,7 @@ ActionController::Routing::Routes.draw do |map|
                       :template => :get,
                       :export => :get,
                       :project_sub_form => :get}
-    response.resources :other_costs,
+    response.resources :other_costs, :except => [:index, :show],
       :collection => {:create_from_file => :post, :download_template => :get}
     response.resources :districts, :only => [:index, :show] do |district|
       district.resources :activities, :only => [:index, :show],

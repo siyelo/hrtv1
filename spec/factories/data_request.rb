@@ -6,7 +6,7 @@ Factory.define :request, :class => DataRequest do |f|
   f.due_date          { "2012-09-01" }
   f.budget            { true }
   f.spend             { true }
-  f.budget_by_quarter { false }
+  f.budget_by_quarter { true }
 end
 
 # deprecated

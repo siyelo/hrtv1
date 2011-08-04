@@ -1,0 +1,9 @@
+%li.amounts.spend.js_row
+  %label Quarterly Expenditure
+  %ul.js_spend_quarters
+    - if @response.organization.usg?
+      = f.input :spend_q4_prev, :label => "#{@response.quarter_label(:spend, 'q4_prev')}", :required => false
+    = f.input :spend_q1, :label => "#{@response.quarter_label(:spend, 'q1')}", :required => false, :input_html => { :class => 'js_fy_quarter' }
+    = f.input :spend_q2, :label => "#{@response.quarter_label(:spend, 'q2')}", :required => false, :input_html => { :class => 'js_fy_quarter' }
+    = f.input :spend_q3, :label => "#{@response.quarter_label(:spend, 'q3')}", :required => false, :input_html => { :class => 'js_fy_quarter' }
+    = f.input :spend_q4, :label => "#{@response.quarter_label(:spend, 'q4')}", :required => false, :input_html => { :class => 'js_fy_quarter' }

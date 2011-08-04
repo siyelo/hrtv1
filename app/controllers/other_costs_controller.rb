@@ -27,11 +27,6 @@ class OtherCostsController < Reporter::BaseController
     edit!
   end
 
-  def show
-    load_comment_resources(resource)
-    show!
-  end
-
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
     @other_cost.data_response = @response

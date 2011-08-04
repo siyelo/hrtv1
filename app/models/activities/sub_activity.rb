@@ -20,6 +20,10 @@ class SubActivity < Activity
    :text_for_beneficiaries, :beneficiaries, :text_for_targets, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
+  
+  ### Validations
+  before_validation :validate_provider_and_provider_type
+  validates_presence_of :provider, :if => Proc.new {|model| model.provider_type == 'Implementing Partner'}, :message => "not a valid organization"
 
   ### Class Methods
   def self.bulk_update(response, sub_acts)
@@ -171,6 +175,20 @@ class SubActivity < Activity
       end
 
       return new_assignments
+    end
+    
+    def validate_provider_and_provider_type
+      if provider_type
+        if provider_type == 'Self'
+          self.provider = self.organization
+        elsif provider_type != 'Implementing Partner'
+          self.provider = nil
+        end
+      else
+        if provider
+          provider != organization ? self.provider_type = 'Implementing Partner' : self.provider_type = 'Self'
+        end
+      end
     end
 end
 

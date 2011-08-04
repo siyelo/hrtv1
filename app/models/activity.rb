@@ -3,6 +3,7 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include NumberHelper
   include BudgetSpendHelper
+  include Activity::GorAmountHelpers
   include Activity::Classification
 
   ### Constants

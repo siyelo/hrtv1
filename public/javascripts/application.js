@@ -1582,7 +1582,11 @@ var workplans_index = {
 
       $.get(url, function (data) {
         element.addClass('disabled');
-        currentTr = element.parents('tr');
+        if (type == 'activity'){
+          currentTr = element.parents('tr:first').prevAll('.js_other_costs_subheading:first');
+        }else{
+          currentTr = element.parents('tr');
+        }
         currentTr.before(data.html);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
@@ -1593,8 +1597,15 @@ var workplans_index = {
     $('.js_cancel_add_activity').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
+      var type = element.hasClass('activity') ? 'activity' : 'other_cost';
+      var button_row = element.parents('tr:first').nextAll().filter('.js_project_total_row:first');
       changeRowspan(element, -1);
-      element.parents('tr:first').next('tr').find('.add_activity, .add_other_cost').removeClass('disabled');
+      if (type == 'activity'){
+        button_row.find('.add_activity').removeClass('disabled')
+      } else{
+        button_row.find('.add_other_cost').removeClass('disabled')
+      }
+
       element.parents('tr:first').remove();
     });
 
@@ -1609,20 +1620,16 @@ var workplans_index = {
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         if (data.status) {
           var box = element.parents('tr');
-          var add_btn = element.parents('tr').next('tr').find('.disabled');
-
-          if (add_btn.hasClass('add_activity')) {
-            element.parents('tr').prevAll('.js_other_costs_subheading:first').before(data.html);
-          } else if (add_btn.hasClass('add_other_cost')) {
-            element.parents('tr').before(data.html);
-          }
+          element.parents('tr:first').before(data.html);
           ajaxLoader.hide();
           changeRowspan(element, 1);
           var inputs = form.find('*[data-hint]');
+          
           form.find('#activity_name').val('');
           form.find('#activity_description').val('');
           initDemoText(form.find('*[data-hint]'));
           form.find('#activity_name').trigger('focus'); 
+          
           $('#workplan').find('.save_btn').show();
         } else {
           var newTr = $(data.html);

@@ -79,6 +79,7 @@ div.chzn-container a.chzn-single {
   position: relative;
   text-decoration: none;
   white-space: nowrap;
+  width: 100%;
 }
 div.chzn-container a.chzn-single span {
   display: block;

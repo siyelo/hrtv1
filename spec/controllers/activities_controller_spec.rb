@@ -177,80 +177,22 @@ describe ActivitiesController do
     end
   end
 
-  describe "Redirects to budget or spend depending on datarequest" do
-    before :each do
-      @organization = Factory(:organization)
-      @data_request = Factory(:data_request, :organization => @organization)
-      @user = Factory(:reporter, :organization => @organization)
-      @data_response = @organization.latest_response
-      login @user
-    end
-
-    it "redirects to the classify activities page when Save & Go to Classify is clicked" do
-      @project = Factory.create(:project, :data_response => @data_response)
-      post :create, :activity => {
-        :name => "activity_name",
-        :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      },
-      :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
-    end
-
-    it "returns true and goes to classify if the activitys budget and past expenditure is less than that of the projects" do
-      @project = Factory.create(:project, :data_response => @data_response, :budget => 10000, :spend => 10000)
-      post :create, :activity => {
-        :name => "activity_name",
-        :description => "some description",
-        :start_date => '2011-01-01', :end_date => '2011-03-01',
-        :project_id => @project.id,
-        :budget => 9000,
-        :spend => 8000
-      }, :commit => 'Save & Classify >', :response_id => @data_response.id
-      flash[:notice].should == "Activity was successfully created"
-      response.should redirect_to("http://test.host/activities/#{@project.reload.activities.last.id}/code_assignments?coding_type=CodingSpend")
-    end
-
-  end
-
-  describe "Redirects to budget or past expenditure depending on datarequest" do
-     it "redircts to the past expenditure classifications page Save & Go to Classify" do
-       @data_request = Factory.create(:data_request)
-       @organization = Factory.create(:organization)
-       @user = Factory.create(:reporter, :organization => @organization)
-       @data_response = @user.current_response
-       @project = Factory.create(:project, :data_response => @data_response)
-       login @user
-       post :create, :activity => {
-         :name => "activity_name",
-         :description => "some description",
-         :start_date => '2011-01-01', :end_date => '2011-03-01',
-         :project_id => @project.id
-       },
-       :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(activity_code_assignments_path(@project.reload.activities.last, :coding_type => 'CodingSpend'))
-     end
+ describe "activitymanager can approve an activity project" do
+   before :each do
+     @organization     = Factory(:organization)
+     @data_request     = Factory(:data_request, :organization => @organization)
+     @data_response    = @organization.latest_response
+     @project          = Factory(:project, :data_response => @data_response)
+     @activity         = Factory(:activity, :project => @project,
+                                 :data_response => @data_response)
+     @activity_manager = Factory(:activity_manager, :organization => @organization)
+     login @activity_manager
    end
-
-   describe "activitymanager can approve an activity project" do
-     before :each do
-       @organization     = Factory(:organization)
-       @data_request     = Factory(:data_request, :organization => @organization)
-       @data_response    = @organization.latest_response
-       @project          = Factory(:project, :data_response => @data_response)
-       @activity         = Factory(:activity, :project => @project,
-                                   :data_response => @data_response)
-       @activity_manager = Factory(:activity_manager, :organization => @organization)
-       login @activity_manager
-     end
-     it "should approve the project if the am_approved field is not set" do
-       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
-       @activity.reload
-       @activity.user.should == @activity_manager
-       @activity.am_approved.should be_true
-     end
+   it "should approve the project if the am_approved field is not set" do
+     put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true
+     @activity.reload
+     @activity.user.should == @activity_manager
+     @activity.am_approved.should be_true
    end
+ end
 end

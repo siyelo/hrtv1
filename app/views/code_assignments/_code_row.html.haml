@@ -1,7 +1,0 @@
-%li
-  = render 'li', :code => code
-
-  - unless code.leaf?
-    %ul{:id => code.external_id, :class => "lvl#{level}"}
-      - @coding_tree.cached_children(code).each do |child|
-        = render '/code_assignments/code_row', :code => child, :tab => tab, :level => level + 1

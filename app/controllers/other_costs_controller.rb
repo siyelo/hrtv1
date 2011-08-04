@@ -4,7 +4,6 @@ class OtherCostsController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_response
-  before_filter :confirm_activity_type, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
@@ -37,7 +36,14 @@ class OtherCostsController < Reporter::BaseController
 
     if @other_cost.save
       respond_to do |format|
-        format.html { flash[:notice] = 'Other Cost was successfully created'; html_redirect }
+        format.html { 
+          if @other_cost.check_projects_budget_and_spend?
+            flash[:notice] = 'Other cost was successfully updated'
+          else
+            flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
+          end
+          redirect_to response_workplans_path(@response)
+        }
         format.js { js_redirect }
       end
     else
@@ -50,7 +56,7 @@ class OtherCostsController < Reporter::BaseController
 
   def update
     update! do |success, failure|
-      success.html { html_redirect }
+      success.html { redirect_to response_workplans_path(@response) }
       failure.html { load_comment_resources(resource); render :action => 'edit'}
     end
   end
@@ -97,22 +103,4 @@ class OtherCostsController < Reporter::BaseController
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
-
-    def html_redirect
-      unless @other_cost.check_projects_budget_and_spend?
-        flash.delete(:notice)
-        flash[:error] = "Please be aware that your activities past expenditure/current budget exceeded that of your projects"
-      end
-
-      path = params[:commit] == "Save & Classify >" ? activity_code_assignments_path(@other_cost, :coding_type => 'CodingSpend') : edit_response_other_cost_path(@response, @other_cost)
-      redirect_to path
-    end
-
-
-    def confirm_activity_type
-      @activity = Activity.find(params[:id])
-      return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
-      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
-    end
-
 end

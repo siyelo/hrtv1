@@ -559,14 +559,6 @@ class Activity < ActiveRecord::Base
       end
     end
 
-    # setting the total amount if the quarterlys are set
-    def set_total_amounts
-      ["budget", "spend"].each do |type|
-        amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount && amount > 0
-      end
-    end
-
     def dates_within_project_date_range
       if project.present? && project.start_date && project.end_date
         errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date

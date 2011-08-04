@@ -49,20 +49,47 @@ describe FundingFlow do
     it { should validate_numericality_of(:spend_q4_prev) }
   end
 
+  describe "Callbacks" do
+    describe "#set_total_amounts" do
+      before :each do
+        basic_setup_project
+      end
+
+      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
+        funding_flow = Factory(:funding_flow, :project => @project,
+                               :from => @organization, :to => @organization,
+                               :budget => nil, :budget_q4_prev => 5,
+                               :budget_q1 => 10, :budget_q2 => 10,
+                               :budget_q3 => 10, :budget_q4 => 10)
+        funding_flow.budget.should == 40
+      end
+
+      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
+        funding_flow = Factory(:funding_flow, :project => @project,
+                               :from => @organization, :to => @organization,
+                               :spend => nil, :spend_q4_prev => 5,
+                               :spend_q1 => 10, :spend_q2 => 10,
+                               :spend_q3 => 10, :spend_q4 => 10)
+        funding_flow.spend.should == 40
+      end
+    end
+  end
+
+
   describe "more validations" do
     before :each do
       basic_setup_project
     end
 
     it "should validate the spend fields" do
-      @funding_flow = Factory.build(:funding_flow, 
+      @funding_flow = Factory.build(:funding_flow,
                                     :project => @project, :spend => 'abcd',
                                     :from => @organization, :to => @organization)
       @funding_flow.save.should be_false
     end
 
     it "should validate the budget fields" do
-      @funding_flow = Factory.build(:funding_flow, 
+      @funding_flow = Factory.build(:funding_flow,
                                     :project => @project, :budget => 'abcd',
                                     :from => @organization, :to => @organization)
       @funding_flow.save.should be_false
@@ -74,7 +101,7 @@ describe FundingFlow do
       basic_setup_project
       @project.currency = "RWF"
       @project.save
-      funding_flow = Factory.build(:funding_flow, 
+      funding_flow = Factory.build(:funding_flow,
                                     :project => @project,
                                     :from => @organization, :to => @organization)
       funding_flow.currency.should == "RWF"
@@ -93,7 +120,7 @@ describe FundingFlow do
       funding_flow.name.should == "From: #{from} - To: #{to}"
     end
   end
-  
+
   describe "deprecated Response api" do
     it "should return (deprecated) response (but will do so via associated project)" do
       basic_setup_project
@@ -106,6 +133,4 @@ describe FundingFlow do
       funding_flow.data_response.should == @response
     end
   end
-  
 end
-

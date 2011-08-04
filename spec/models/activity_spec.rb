@@ -114,6 +114,30 @@ describe Activity do
     end
   end
 
+  describe "Callbacks" do
+    describe "#set_total_amounts" do
+      before :each do
+        basic_setup_project
+      end
+
+      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
+        activity = Factory(:activity, :data_response => @response, :project => @project,
+                         :budget => nil, :budget_q4_prev => 5,
+                         :budget_q1 => 10, :budget_q2 => 10,
+                         :budget_q3 => 10, :budget_q4 => 10)
+        activity.budget.should == 40
+      end
+
+      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
+        activity = Factory(:activity, :data_response => @response, :project => @project,
+                         :spend => nil, :spend_q4_prev => 5,
+                         :spend_q1 => 10, :spend_q2 => 10,
+                         :spend_q3 => 10, :spend_q4 => 10)
+        activity.spend.should == 40
+      end
+    end
+  end
+
   describe "download activity template" do
     it "returns the correct fields in the activity template" do
       organization  = Factory(:organization,

@@ -368,14 +368,6 @@ class Project < ActiveRecord::Base
       amount
     end
 
-    # setting the total amount if the quarterlys are set
-    def set_total_amounts
-      ["budget", "spend"].each do |type|
-        amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount && amount > 0
-      end
-    end
-
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description

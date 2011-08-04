@@ -114,6 +114,30 @@ describe Project do
     end
   end
 
+  describe "Callbacks" do
+    describe "#set_total_amounts" do
+      before :each do
+        basic_setup_response
+      end
+
+      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
+        project = Factory(:project, :data_response => @response,
+                         :budget => nil, :budget_q4_prev => 5,
+                         :budget_q1 => 10, :budget_q2 => 10,
+                         :budget_q3 => 10, :budget_q4 => 10)
+        project.budget.should == 40
+      end
+
+      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
+        project = Factory(:project, :data_response => @response,
+                         :spend => nil, :spend_q4_prev => 5,
+                         :spend_q1 => 10, :spend_q2 => 10,
+                         :spend_q3 => 10, :spend_q4 => 10)
+        project.spend.should == 40
+      end
+    end
+  end
+
   describe "create" do
     it "should save without the optional currency override" do
       basic_setup_response

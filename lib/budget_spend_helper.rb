@@ -57,12 +57,12 @@ module BudgetSpendHelper
     s || 0
   end
 
-  def total_amount_of_quarters(type)
-    total_quarterly_w_shift(type)
-    #(self.send("#{type}_q4_prev") || 0) +
-    #(self.send("#{type}_q1") || 0) +
-    #(self.send("#{type}_q2") || 0) +
-    #(self.send("#{type}_q3") || 0)
+  # set the total amount if the quarters are set
+  def set_total_amounts
+    ["budget", "spend"].each do |type|
+      amount = total_amount_of_quarters(type)
+      self.send(:"#{type}=", amount) if amount && amount > 0
+    end
   end
 
   def self.included(base)
@@ -101,5 +101,12 @@ module BudgetSpendHelper
       end
 
       self.send(:"#{method}_#{quarted_lookup[quarter-1]}")
+    end
+
+    def total_amount_of_quarters(type)
+      (self.send("#{type}_q1") || 0) +
+      (self.send("#{type}_q2") || 0) +
+      (self.send("#{type}_q3") || 0) +
+      (self.send("#{type}_q4") || 0)
     end
 end

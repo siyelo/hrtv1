@@ -19,7 +19,6 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
   belongs_to :project_from # funder's project
-  before_validation :spend_from_quarters, :budget_from_quarters
 
   ### Validations
   # validates_presence_of :project # FIXME
@@ -34,6 +33,9 @@ class FundingFlow < ActiveRecord::Base
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
+
+  ### Callbacks
+  before_save :set_total_amounts
 
   ### Delegates
   delegate :organization, :to => :project
@@ -64,22 +66,6 @@ class FundingFlow < ActiveRecord::Base
     "From: #{from.name} - To: #{to.name}"
   end
 
-  def spend_from_quarters
-    if spend.nil?
-      self.spend = (spend_q1 || 0) + (spend_q2 || 0) + (spend_q3 || 0) + (spend_q4 || 0)
-    else
-      spend
-    end
-  end
-
-  def budget_from_quarters
-    if budget.nil?
-      self.budget = (budget_q1 || 0) + (budget_q2 || 0) + (budget_q3 || 0) + (budget_q4 || 0)
-    else
-      budget
-    end
-  end
-
   def updated_at
     Time.now
   end
@@ -102,7 +88,7 @@ class FundingFlow < ActiveRecord::Base
       else
         error = from.nil? ? "From was nil" : "From guessed no chains"
         puts error
-  #raise error
+        # raise error
         [FundingChain.new(
           {:organization_chain => [Organization.new(:name => "Unspecified"), to],
            :budget => budget, :spend => spend})]

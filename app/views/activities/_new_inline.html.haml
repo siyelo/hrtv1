@@ -13,6 +13,6 @@
           %label.required Description
         = f.input :description, :input_html => { :rows => 1, 'data-hint' => params[:type] == 'activity' ? 'Enter activity description' : 'Enter other cost description' }, :label => false
       - f.buttons :class => 'buttons' do
-        = f.commit_button params[:type] == 'activity' ? "Add activity" : "Add other cost", :wrapper_html => {:class => 'js_save_activity'}, :button_html => {:class => 'create_button'}
+        = f.commit_button params[:type] == 'activity' ? "Add activity" : "Add other cost", :wrapper_html => {:class => 'js_save_activity'}, :button_html => {:class => "create_button #{params[:type]}"}
         %li= image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
-        %li= link_to "Cancel", "#", :class => 'js_cancel_add_activity row_cancel'
+        %li= link_to "Cancel", "#", :class => "js_cancel_add_activity row_cancel #{params[:type]}" 

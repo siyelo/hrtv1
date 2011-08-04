@@ -1678,8 +1678,8 @@ var workplans_index = {
           element.parents('tr').next('tr').find('.js_add_project').removeClass('disabled');
           box.after(data.html);
           box.remove();
-          $('.js_add_project').trigger('click');;
-          $('.add_activity').last().trigger('click');;
+          $('.js_add_project').trigger('click');
+          $('.add_activity').last().trigger('click');
         } else {
           var newTr = $(data.html);
           var box = element.parents('tr');
@@ -1786,9 +1786,9 @@ var funders_index = {
 var implementers_index = {
   run: function () {
 
-    $('#sub_activity_provider_type').live('change', function (e) {      
+    $('.implementer_type_radio').live('change', function (e) {      
       var selected_type = $(this).val();
-      var implementer_dropdown = $(this).parents('ol:first').find("#sub_activity_provider_input");
+      var implementer_dropdown = $(this).parents('ol:last').find("#sub_activity_provider_input");
       build_implementer_options();
       update_implementer_options(selected_type,implementer_dropdown);
     });
@@ -1811,9 +1811,9 @@ var implementers_index = {
         currentTr = element.parents('tr');
         var newTr = $(data.html);
         currentTr.before(newTr);
-        //newTr.find( ".combobox" ).combobox();
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
+        $('#sub_activity_provider_type_self').attr('checked',true);
       });
     });
 
@@ -1843,6 +1843,12 @@ var implementers_index = {
           } else {
             var newTr = $(data.html);
             var box = element.parents('tr');
+            var implementer_type = newTr.find('#sub_activity_provider_type');
+            if (implementer_type.val() == 'Implementing Partner'){
+              var implementer = newTr.find('#sub_activity_provider_id');
+              implementer.combobox();              
+              implementer.parents('li').show(); 
+            }
             box.replaceWith(newTr);
           }
         });
@@ -1991,14 +1997,15 @@ var build_implementer_options = function () {
   return select_options_html;  
 };  
 
-var update_implementer_options = function (selected_type, implementer_dropdown) {     
+var update_implementer_options = function (selected_type, implementer_dropdown) {  
   if (selected_type == 'Self' || selected_type == '' || selected_type.indexOf("Service") >= 0 || selected_type == 'Government')  {
    implementer_dropdown.hide();
    implementer_dropdown.find('select').combobox('destroy');
    implementer_dropdown.find('input').val('');
   } else if (selected_type == 'Implementing Partner') {
-   // implementer_dropdown.find('select').html(build_implementer_options());
+   implementer_dropdown.appendTo($('#sub_activity_provider_type_implementing_partner').parents('li:first'));
    implementer_dropdown.find('select').combobox();
    implementer_dropdown.show();
+   $('#theCombobox').trigger('focus');
   }
 };

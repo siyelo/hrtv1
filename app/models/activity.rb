@@ -120,7 +120,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :description, :if => Proc.new { |model| model.class.to_s == 'Activity' }
   validates_presence_of :data_response_id
   validates_presence_of :project_id, :unless => Proc.new { |model| model.class.to_s == 'SubActivity' }
-    validates_length_of :name, :within => 3..64
+    validates_length_of :name, :within => 3..50
 
 
   ### Callbacks

@@ -1,10 +1,11 @@
 %tr
   %td{:colspan => 7, :class => 'new_implementer'}
+    %h2= "Add an Implementer"
     - semantic_form_for @implementer, :url => response_implementers_path(@response, :type => params[:type]), :html => {:class => "basic_form new_implementer_form"} do |f|
       - f.inputs :class => 'inputs' do
         = f.input :activity_id, :as => :hidden
         = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
-        = f.input :provider_type, :as => :select, :collection => ['Self', 'Implementing Partner', 'Government', 'Service Provider (Level 1 - Community services)', 'Service Provider (Level 2/3 - Dispensary / Health centre)', 'Service Provider (Level 4 - Private and public district hospital)'], :input_html => {:class => 'implementer_type_select'}, :wrapper_html => {:class => "implementer_type"}, :label => "Select implementer"
+        = f.input :provider_type, :as => :radio, :collection => ['Self', 'Implementing Partner', 'Government', 'Service Provider (Level 1 - Community services)', 'Service Provider (Level 2/3 - Dispensary / Health centre)', 'Service Provider (Level 4 - Private and public district hospital)'], :input_html => {:class => 'implementer_type_radio'}, :wrapper_html => {:class => "implementer_type"}, :label => false
         .buttons
           = f.input :provider, :as => :select, :collection => funding_organizations_select, :required => false, :input_html => {:class => 'implementer_select combobox ff_from'}, :wrapper_html => {:style => "display:none;"}, :label => false
           %li= f.commit_button "Add implementer", :wrapper_html => {:class => 'js_save_implementer first'}, :button_html => {:class => 'create_button'}

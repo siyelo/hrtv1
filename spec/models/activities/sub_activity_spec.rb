@@ -379,15 +379,29 @@ describe SubActivity do
     end
     
     describe "implementer types" do
-      it "allows activities without a provider" do
+      it "allows activities without a provider if the provider type is Government or a Service Provider" do
          @sub_activity = Factory(:sub_activity, :activity => @activity,
                                          :provider_type => "Government",
                                          :data_response => @response)
          @sub_activity.provider.should == nil
          @sub_activity.provider_type.should == "Government"
+         
+         @sub_activity = Factory(:sub_activity, :activity => @activity,
+                                         :provider_type => "Service Provider (Level 1 - Community services)",
+                                         :data_response => @response)
+         @sub_activity.provider.should == nil
+         @sub_activity.provider_type.should == "Service Provider (Level 1 - Community services)"
       end
       
-      it "if there is no provider it returns the provider type when asking for the provider name" do 
+      it "sets the provider to the Activity's organization if the provider type is Self" do
+         @sub_activity = Factory(:sub_activity, :activity => @activity,
+                                         :provider_type => "Self",
+                                         :data_response => @response)
+         @sub_activity.provider.should == @activity.organization
+         @sub_activity.provider_type.should == "Self"
+      end
+      
+      it "returns the provider type when asking for the provider name if there is no provider" do 
         @sub_activity = Factory(:sub_activity, :activity => @activity,
                                         :provider_type => "Government",
                                         :data_response => @response)

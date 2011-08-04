@@ -80,6 +80,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :activities do |activity|
     activity.resource :code_assignments,
+      #remove me
       :only => [:show, :update],
       :member => {:copy_budget_to_spend => :put,
       :derive_classifications_from_sub_implementers => :put},

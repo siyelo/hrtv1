@@ -3,6 +3,6 @@
     %li= link_to nice_name(activity.project), edit_response_project_path(response, activity.project)
   %li= Activities
   - unless activity.new_record?
-    %li.last= link_to nice_name(activity), edit_response_activity_path(response, activity)
+    %li.last= link_to nice_name(activity), correct_activity_path(activity)
   - else
     %li.last New

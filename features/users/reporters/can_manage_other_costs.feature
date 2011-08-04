@@ -14,7 +14,7 @@ Feature: Reporter can manage other costs
       And I follow "data_request1"
       And I follow "Projects"
 
-    @javascript 
+    @javascript
     Scenario: Reporter can CRUD other costs
       When I follow "Add other cost"
       When I fill in "activity_name" with "other_cost1"

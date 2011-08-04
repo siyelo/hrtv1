@@ -5,7 +5,6 @@ class ActivitiesController < Reporter::BaseController
   inherit_resources
   helper_method :sort_column, :sort_direction
   before_filter :load_response
-  before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
@@ -180,11 +179,4 @@ class ActivitiesController < Reporter::BaseController
                                                           :type => params[:type]}})}
       end
     end
-
-    def confirm_activity_type
-      @activity = Activity.find(params[:id])
-      return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
-      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
-    end
-
 end

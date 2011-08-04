@@ -288,4 +288,15 @@ module ApplicationHelper
   def namespace(klass)
     klass.to_s.split("::").first
   end
+  
+  def correct_activity_path(activity)
+    case activity.type
+    when "OtherCost"
+      edit_response_other_cost_path(activity.data_response, activity)
+    when "SubActivity"
+      edit_response_activity_path(activity.data_response, activity.activity)
+    else
+      edit_response_activity_path(activity.data_response, activity)
+    end
+  end
 end

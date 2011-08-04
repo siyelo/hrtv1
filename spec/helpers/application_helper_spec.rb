@@ -29,4 +29,25 @@ describe ApplicationHelper do
       helper.spend_fiscal_year(@data_response).should == '09-10'
     end
   end
+  
+  context "it returns the correct path" do
+    describe "activity paths" do
+      before :each do
+        @project = Factory(:project, :data_response => @data_response)
+      end
+      it "returns correct path for activities" do
+        activity = Factory(:activity, :project => @project, :data_response => @data_response)
+        helper.correct_activity_path(activity).should == edit_response_activity_path(@data_response, activity)
+      end
+      it "returns correct path for other costs" do
+        activity = Factory(:other_cost, :project => @project, :data_response => @data_response)
+        helper.correct_activity_path(activity).should == edit_response_other_cost_path(@data_response, activity)
+      end
+      it "returns correct path for sub activities" do
+        activity = Factory(:activity, :project => @project, :data_response => @data_response)
+        sub_activity = Factory(:sub_activity, :data_response => @data_response, :activity => activity)
+        helper.correct_activity_path(sub_activity).should == edit_response_activity_path(@data_response, sub_activity.activity)
+      end
+    end
+  end
 end

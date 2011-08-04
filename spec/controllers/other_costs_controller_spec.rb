@@ -20,7 +20,7 @@ describe OtherCostsController do
           :project_id => @project.id
         },
         :commit => 'Save', :response_id => @data_response.id
-        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @project.reload.other_costs.first.id))
+        response.should redirect_to(response_workplans_path(@data_response))
       end
       
       it "no othercosts without a data_response" do
@@ -38,16 +38,6 @@ describe OtherCostsController do
         @oc.save.should be_true
       end
 
-      it "redirects to the past expenditure classifications page Save & Go to Classify is clicked and the datarequest past expenditure is true and budget is false" do
-        post :create, :other_cost => {
-          :name => 'other_cost_name',
-          :description => "some description",
-          :start_date => '2011-01-01', :end_date => '2011-03-01',
-          :project_id => @project.id
-        },
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
-      end
     end
 
     context "Update" do
@@ -65,13 +55,7 @@ describe OtherCostsController do
       it "redirects to the edit other cost page when Save is clicked" do
         put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
           :commit => 'Save', :response_id => @data_response.id
-        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
-      end
-
-      it "redirects to the spend classifications page when Save & Go to Classify" do
-        put :update, :other_cost => { :description => "some description"}, :id => @other_cost.id,
-          :commit => 'Save & Classify >', :response_id => @data_response.id
-        response.should redirect_to(activity_code_assignments_path(@project.other_costs.first, :coding_type => 'CodingSpend'))
+        response.should redirect_to(response_workplans_path(@data_response))
       end
     end
   end

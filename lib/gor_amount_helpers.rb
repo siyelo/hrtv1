@@ -1,4 +1,4 @@
-module Activity::GorAmountHelpers
+module GorAmountHelpers
 
   # NOTE: organizations reporting in GOR FY
   # are entering q1, q2, q3, and q4, but

@@ -386,6 +386,7 @@ describe Organization do
       Factory(:funding_flow,
               :to => @duplicate, :project => project_to)
 
+      @duplicate.reload
       @target.in_flows.count.should == 1
       Organization.merge_organizations!(@target, @duplicate)
       @target.in_flows.count.should == 2

@@ -30,7 +30,7 @@ class Reports::JawpReport
         amount_q2             = activity.gor_budget_quarter(2)
         amount_q3             = activity.gor_budget_quarter(3)
         amount_q4             = activity.gor_budget_quarter(4)
-        amount_total          = activity.budget
+        amount_total          = activity.gor_budget
         amount_total_in_usd   = activity.budget_in_usd
         is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
       else
@@ -38,7 +38,7 @@ class Reports::JawpReport
         amount_q2             = activity.gor_spend_quarter(2)
         amount_q3             = activity.gor_spend_quarter(3)
         amount_q4             = activity.gor_spend_quarter(4)
-        amount_total          = activity.spend
+        amount_total          = activity.gor_spend
         amount_total_in_usd   = activity.spend_in_usd
         is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
       end
@@ -135,16 +135,16 @@ class Reports::JawpReport
             if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
               if activity.budget?
                 district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
-                amount_total = activity.budget
-                amount_total_in_usd = parent_amount_total_in_usd * activity.budget / parent_activity.budget
+                amount_total = activity.gor_budget
+                amount_total_in_usd = parent_amount_total_in_usd * activity.gor_budget / parent_activity.gor_budget
               else
                 break_out = true
               end
             else
               if activity.spend?
                 district_codings = activity.spend_district_coding_adjusted if use_sub_activity_district_coding
-                amount_total = activity.spend
-                amount_total_in_usd = parent_amount_total_in_usd * activity.spend / parent_activity.spend
+                amount_total = activity.gor_spend
+                amount_total_in_usd = parent_amount_total_in_usd * activity.gor_spend / parent_activity.gor_spend
               else
                 break_out = true
               end

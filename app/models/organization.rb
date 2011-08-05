@@ -276,10 +276,14 @@ class Organization < ActiveRecord::Base
 
   private
     def update_cached_currency_amounts
-      if self.currency_changed?
-        self.dr_activities.each do |a|
+      if currency_changed?
+        dr_activities.each do |a|
           a.code_assignments.each {|c| c.save}
           a.save
+        end
+
+        in_flows.each do |in_flow|
+          in_flow.save
         end
       end
     end

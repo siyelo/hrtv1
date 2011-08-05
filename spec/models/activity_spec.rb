@@ -136,6 +136,33 @@ describe Activity do
         activity.spend.should == 40
       end
     end
+
+    describe "#update_cached_usd_amounts" do
+      before :each do
+        Money.default_bank.add_rate(:RWF, :USD, 0.1)
+      end
+
+      context "GOR FY" do
+        it "sets budget_in_usd and spend_in_usd amounts from spend/budget" do
+          attributes = {:budget => 123, :spend => 456}
+          setup_activity_in_fiscal_year("2010-07-01", "2011-06-30", attributes, 'RWF')
+          @activity.budget_in_usd.should == 12.3
+          @activity.spend_in_usd.should == 45.6
+        end
+      end
+
+      context "USG FY" do
+        it "sets budget_in_usd and spend_in_usd amounts from quarterly fields" do
+          attributes = {:budget_q4_prev => 10, :budget_q1 => 10,
+                        :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
+                        :spend_q4_prev => 11, :spend_q1 => 11,
+                        :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999}
+          setup_activity_in_fiscal_year("2010-10-01", "2011-09-30", attributes, 'RWF')
+          @activity.budget_in_usd.should == 4
+          @activity.spend_in_usd.should == 4.4
+        end
+      end
+    end
   end
 
   describe "download activity template" do

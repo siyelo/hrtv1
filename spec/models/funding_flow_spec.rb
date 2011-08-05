@@ -52,7 +52,12 @@ describe FundingFlow do
   describe "Callbacks" do
     describe "#set_total_amounts" do
       before :each do
-        basic_setup_project
+        @organization = Factory(:organization, :currency => 'USD')
+        @request      = Factory(:data_request, :organization => @organization)
+        @response     = @organization.latest_response
+        @project      = Factory(:project, :data_response => @response)
+        @organization.reload # reload in_flows
+        @project.reload      # reload in_flows
       end
 
       it "sets budget amount as sum of budget quarters (Q1-Q4)" do
@@ -72,9 +77,74 @@ describe FundingFlow do
                                :spend_q3 => 10, :spend_q4 => 10)
         funding_flow.spend.should == 40
       end
+
+      describe "keeping Money amounts in-sync" do
+        before :each do
+          Money.default_bank.add_rate(:RWF, :USD, 0.002)
+          @funding_flow = Factory(:funding_flow, :project => @project,
+                                  :from => @organization, :to => @organization,
+                                  :spend => 123.45, :budget => 123.45)
+        end
+
+        it "should update spend in USD after project currency change" do
+          @p = @funding_flow.project
+          @p.currency = 'RWF'
+          @p.save
+          @funding_flow.reload
+          @funding_flow.spend_in_usd.should == 0.2469
+        end
+
+        it "should update spend in USD after organization currency change" do
+          @organization.currency = "RWF"
+          @organization.save
+          @funding_flow.reload
+          @funding_flow.spend_in_usd.should == 0.2469
+        end
+      end
+
+    end
+
+    describe "#update_cached_usd_amounts" do
+      before :each do
+        Money.default_bank.add_rate(:RWF, :USD, 0.1)
+      end
+
+      context "GOR FY" do
+        it "sets budget_in_usd and spend_in_usd amounts" do
+          @organization = Factory(:organization, :currency => 'RWF',
+                                 :fiscal_year_start_date => "2010-07-01",
+                                 :fiscal_year_end_date => "2011-06-30")
+          @request      = Factory(:data_request, :organization => @organization)
+          @response     = @organization.latest_response
+          @project      = Factory(:project, :data_response => @response)
+          funding_flow = Factory(:funding_flow, :project => @project,
+                                 :from => @organization, :to => @organization,
+                                 :budget => 123, :spend => 456)
+          funding_flow.budget_in_usd.should == 12.3
+          funding_flow.spend_in_usd.should == 45.6
+        end
+      end
+
+      context "USG FY" do
+        it "sets budget_in_usd and spend_in_usd amounts" do
+          @organization = Factory(:organization, :currency => 'RWF',
+                                 :fiscal_year_start_date => "2010-10-01",
+                                 :fiscal_year_end_date => "2011-09-30")
+          @request      = Factory(:data_request, :organization => @organization)
+          @response     = @organization.latest_response
+          @project      = Factory(:project, :data_response => @response)
+          funding_flow = Factory(:funding_flow, :project => @project,
+                                 :from => @organization, :to => @organization,
+                                 :budget_q4_prev => 10, :budget_q1 => 10,
+                                 :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
+                                 :spend_q4_prev => 11, :spend_q1 => 11,
+                                 :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999)
+          funding_flow.budget_in_usd.should == 4
+          funding_flow.spend_in_usd.should == 4.4
+        end
+      end
     end
   end
-
 
   describe "more validations" do
     before :each do

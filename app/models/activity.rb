@@ -3,7 +3,7 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include NumberHelper
   include BudgetSpendHelper
-  include Activity::GorAmountHelpers
+  include GorAmountHelpers
   include Activity::Classification
 
   ### Constants
@@ -101,8 +101,7 @@ class Activity < ActiveRecord::Base
 
 
   ### Callbacks
-  before_save   :update_cached_usd_amounts
-  before_save   :set_total_amounts
+  # also see callbacks in BudgetSpendHelper
   before_update :remove_district_codings
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
   after_save    :update_counter_cache
@@ -129,6 +128,7 @@ class Activity < ActiveRecord::Base
 
 
   ### Validations
+  # also see validations in BudgetSpendHelper
   before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
@@ -349,22 +349,6 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def coding_budget_sum_in_usd
-    coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
-  end
-
-  def coding_spend_sum_in_usd
-    coding_spend.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
-  end
-
-  def coding_budget_district_sum_in_usd(district)
-    coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
-  end
-
-  def coding_spend_district_sum_in_usd(district)
-    coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
-  end
-
   def deep_clone
     clone = self.clone
     # HABTM's
@@ -548,16 +532,6 @@ class Activity < ActiveRecord::Base
 
     def approved_activity_cannot_be_changed
       errors.add(:base, "Activity was approved by SysAdmin and cannot be changed") if changed? and approved and changed != ["approved"]
-    end
-
-    #currency is still derived from the parent project or DR
-    def update_cached_usd_amounts
-      if currency
-        if (rate = Money.default_bank.get_rate(self.currency, :USD))
-          self.budget_in_usd = (budget || 0) * rate
-          self.spend_in_usd  = (spend || 0)  * rate
-        end
-      end
     end
 
     def dates_within_project_date_range

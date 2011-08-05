@@ -64,8 +64,7 @@ class Reports::ActivitiesByNha
       funding_sources_total = get_funding_sources_total(activity, funding_sources, false) # for spent
 
       funding_sources.each do |funding_source|
-        funding_source_amount = get_funding_source_amount(activity, funding_source, false) # for spent
-        funding_source_ratio  = get_ratio(funding_sources_total, funding_source_amount)
+        funding_source_ratio  = get_ratio(funding_sources_total, funding_source.spend_in_usd)
 
         row = []
         dr = activity.data_response
@@ -77,7 +76,7 @@ class Reports::ActivitiesByNha
 
         project = activity.project
         unless project.nil?
-          row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.spend})"}.join(";")
+          row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.gor_spend})"}.join(";")
         else
           row << "No FS info; project was not entered"
         end
@@ -98,7 +97,7 @@ class Reports::ActivitiesByNha
         row << (activity.spend_q2 ? activity.spend_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
         row << (activity.spend_q3 ? activity.spend_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
         row << (activity.spend_q4 ? activity.spend_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-        row << activity.spend
+        row << activity.gor_spend
         row << activity.spend_in_usd
 
         build_code_assignment_rows(csv, activity, row, funding_source_ratio)

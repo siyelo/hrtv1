@@ -1,5 +1,6 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
+  include GorAmountHelpers
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",
@@ -21,6 +22,7 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :project_from # funder's project
 
   ### Validations
+  # also see validations in BudgetSpendHelper
   # validates_presence_of :project # FIXME
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
@@ -35,7 +37,7 @@ class FundingFlow < ActiveRecord::Base
     :unless => lambda {|fs| fs["project_from_id"].blank?}
 
   ### Callbacks
-  before_save :set_total_amounts
+  # also see callbacks in BudgetSpendHelper
 
   ### Delegates
   delegate :organization, :to => :project

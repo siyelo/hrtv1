@@ -388,7 +388,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def total_activities_and_other_costs_in_usd(method)
-    activities.only_simple.with_a_project.inject(0) do |sum, a|
+    activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
         sum + universal_currency_converter(a.send(method), a.currency, :USD)
       else

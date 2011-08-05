@@ -24,43 +24,22 @@ module Activity::GorAmountHelpers
   end
 
   def gor_spend
-    total_quarterly_w_shift(:spend)
+    organization.usg? ? usg_to_gor_quarters_total(:spend) : (spend || 0)
   end
 
   def gor_budget
-    total_quarterly_w_shift(:budget)
-  end
-
-  def total_quarterly_w_shift(amount_type)
-    total = 0
-    if data_response.fiscal_year_start_date &&
-       data_response.fiscal_year_start_date.month == USG_START_MONTH
-      quarted_lookup = USG_QUARTERS
-    else
-      quarted_lookup = GOR_QUARTERS
-    end
-
-    quarted_lookup.each do |quarter|
-      amount = self.send(:"#{amount_type}_#{quarter}")
-      total += amount if amount
-    end
-
-    return total if total != 0
-    nil
+    organization.usg? ? usg_to_gor_quarters_total(:budget) : (budget || 0)
   end
 
   private
-
     def get_gor_quarter(method, quarter)
       raise InvalidQuarter unless [1, 2, 3, 4].include?(quarter)
 
-      if data_response.fiscal_year_start_date &&
-          data_response.fiscal_year_start_date.month == USG_START_MONTH
-        quarted_lookup = USG_QUARTERS
-      else
-        quarted_lookup = GOR_QUARTERS
-      end
-
+      quarted_lookup = organization.usg? ? USG_QUARTERS : GOR_QUARTERS
       self.send(:"#{method}_#{quarted_lookup[quarter-1]}")
+    end
+
+    def usg_to_gor_quarters_total(amount_type)
+      USG_QUARTERS.inject(0){|acc, q| acc + (self.send("#{amount_type}_#{q}") || 0)}
     end
 end

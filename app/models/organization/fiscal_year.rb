@@ -1,14 +1,17 @@
 module Organization::FiscalYear
 
+  USG_START_MONTH = 10
+  GOR_START_MONTH = 7
+
   # exception for invalid fiscal year type
   class InvalidFiscalYearType < StandardError; end
 
   def usg?
-    fiscal_year_start_date? && fiscal_year_start_date.month == 10
+    fiscal_year_start_date? && fiscal_year_start_date.month == USG_START_MONTH
   end
 
   def gor?
-    fiscal_year_start_date? && fiscal_year_start_date.month == 7
+    fiscal_year_start_date? && fiscal_year_start_date.month == GOR_START_MONTH
   end
 
   def quarter_label(type, quarter)

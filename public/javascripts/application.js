@@ -459,6 +459,7 @@ var calculate_total_from_quarters = function (quarter_boxes, total_box) {
 };
 
 var split_total_across_quarters = function (quarter_boxes, value) {
+  value = value.replace(",","");
   if (!isNaN(value)) {
     var quarter_value = value / quarter_boxes.length;
 

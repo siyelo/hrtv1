@@ -53,12 +53,12 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def update
+    @activity = resource # needed in js_redirect
     update! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully updated'
-        html_redirect
-      end
+      success.html { flash[:notice] = 'Other Cost was successfully updated'; html_redirect }
+      success.js   { js_redirect }
       failure.html { load_comment_resources(resource); render :action => 'edit'}
+      failure.js   { js_redirect }
     end
   end
 

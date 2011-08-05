@@ -268,7 +268,8 @@ class Activity < ActiveRecord::Base
 
       activity.project             = project if project
       activity.name                = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      provider                     = Organization.find_by_name(activity.csv_provider)
+      provider                     = Organization.find(:first,
+                                     :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
       activity.provider            = provider if provider
       activity.locations           = activity.csv_districts.to_s.split(',').
                                       map{|l| Location.find_by_short_display(l.strip)}.compact

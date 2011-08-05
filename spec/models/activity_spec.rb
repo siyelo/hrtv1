@@ -319,6 +319,24 @@ describe Activity do
       @activity.purposes.should == [@purpose1, @purpose2]
     end
   end
+
+  describe "#self.find_or_initialize_from_file" do
+    context "when CSV has implementer value of: 'Shyira HD District Hospital'" do
+      it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
+        organization   = Factory(:organization)
+        request        = Factory(:data_request, :organization => organization)
+        response       = organization.latest_response
+        project        = Factory(:project, :data_response => response)
+        activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
+        doc            = FasterCSV.open(activities_csv, {:headers => true})
+        implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
+
+        activities = Activity.find_or_initialize_from_file(response, doc, project.id)
+        activities.count.should == 1
+        activities[0].implementer.should == implementer
+      end
+    end
+  end
 end
 
 

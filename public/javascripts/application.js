@@ -1503,6 +1503,13 @@ var updateBudgetColumnValues = function (element) {
   $('.js_projects_total_row .js_projects_total_budget_amount').text(total);
 };
 
+var updateRemainingValues = function (element, type) {
+  var project_total = $('.js_project_total_row').attr("project_total_" + type);
+  var funders_total = $('.js_projects_total_' + type + '_amount').text();
+  var remainder     = project_total - funders_total;
+  $('.js_remaining_'+type).text(remainder);
+  
+};
 
 var workplans_index = {
   run: function () {
@@ -1759,11 +1766,13 @@ var funders_index = {
     $('.js_spend_column_amount').live('keyup', function (e) {
       var element = $(this);
       updateSpendColumnValues(element);
+      updateRemainingValues(element, 'spend');
     });
 
     $('.js_budget_column_amount').live('keyup', function (e) {
       var element = $(this);
       updateBudgetColumnValues(element);
+      updateRemainingValues(element, 'budget');
     });
 
     $(".js_remove_purpose").live('click', function (e) {
@@ -1774,6 +1783,17 @@ var funders_index = {
       var loader = destroy_link.next('.ajax-loader');
 
       if (confirm('Are you sure?')) {
+        var spend = destroy_link.parents('tr:first').find('.js_spend_column_amount');
+        var budget = destroy_link.parents('tr:first').find('.js_budget_column_amount');
+        spend.val('0');
+        budget.val('0');
+        
+        updateBudgetColumnValues(budget);
+        updateRemainingValues(budget, 'budget');
+        
+        updateSpendColumnValues(spend);
+        updateRemainingValues(spend, 'spend');
+        
         if (id) {
           loader.show();
           $.post('/responses/' + _response_id + '/funders/' + id, {'_method': 'delete'}, function (data) {
@@ -1795,7 +1815,7 @@ var implementers_index = {
 
     $('.implementer_type_radio').live('change', function (e) {      
       var selected_type = $(this).val();
-      var implementer_dropdown = $(this).parents('ol:last').find("#sub_activity_provider_input");
+      var implementer_dropdown = $(this).parents('ol:last').find("#sub_activity_provider_input");      
       build_implementer_options();
       update_implementer_options(selected_type,implementer_dropdown);
     });
@@ -1820,7 +1840,7 @@ var implementers_index = {
         currentTr.before(newTr);
         initDemoText(currentTr.prev('tr').find('*[data-hint]'));
         changeRowspan(element, 1);
-        $('#sub_activity_provider_type_self').attr('checked',true);
+        newTr.find('#sub_activity_provider_type_self').attr('checked',true);
       });
     });
 
@@ -2006,13 +2026,14 @@ var build_implementer_options = function () {
 
 var update_implementer_options = function (selected_type, implementer_dropdown) {  
   if (selected_type == 'Self' || selected_type == '' || selected_type.indexOf("Service") >= 0 || selected_type == 'Government')  {
-   implementer_dropdown.hide();
-   implementer_dropdown.find('select').combobox('destroy');
-   implementer_dropdown.find('input').val('');
+    implementer_dropdown.hide();
+    implementer_dropdown.find('select').combobox('destroy');
+    implementer_dropdown.find('input').val('');
   } else if (selected_type == 'Implementing Partner') {
-   implementer_dropdown.appendTo($('#sub_activity_provider_type_implementing_partner').parents('li:first'));
-   implementer_dropdown.find('select').combobox();
-   implementer_dropdown.show();
-   $('#theCombobox').trigger('focus');
+    var implementing_partner_radio = implementer_dropdown.parents('ol:first').find('#sub_activity_provider_type_implementing_partner');
+    implementer_dropdown.appendTo(implementing_partner_radio.parents('li:first'));
+    implementer_dropdown.find('select').combobox();
+    implementer_dropdown.show();
+    implementer_dropdown.find('#theCombobox').trigger('focus');
   }
 };

@@ -1,7 +1,6 @@
-- budget_fiscal_year_prev = "09-10"
-- budget_fiscal_year = "10-11"
-- spend_fiscal_year_prev = "08-09"
-- spend_fiscal_year = "09-10"
+- budget_fiscal_year = @response.organization.gor_fiscal_year_start(:budget).map{ |y| y.to_s.last(2) }.join("-")
+- spend_fiscal_year = budget_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 1).to_s.last(2) }.join("-")
+- spend_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 2).to_s.last(2) }.join("-")
 
 .header
   - if activity.valid?
@@ -70,11 +69,11 @@
             %li
               %label Quarterly Expenditure
               %ul
-                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year}"}, :label => false
-                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q2 #{spend_fiscal_year}"}, :label => false
-                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q3 #{spend_fiscal_year}"}, :label => false
-                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year}"}, :label => false
-                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year_prev}"}, :label => false
+                = f.input :spend_q4_prev, :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year_prev}"}, :label => false
+                = f.input :spend_q1     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q1 #{spend_fiscal_year}"}, :label => false
+                = f.input :spend_q2     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q2 #{spend_fiscal_year}"}, :label => false
+                = f.input :spend_q3     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q3 #{spend_fiscal_year}"}, :label => false
+                = f.input :spend_q4     , :required => false, :wrapper_html => {:class => 'grid-15'}, :input_html => {'data-hint' => "Q4 #{spend_fiscal_year}"}, :label => false
 
         - if response.data_request.budget?
           %ul.second-half
@@ -82,7 +81,7 @@
             %li.grid-80
               %label Quarterly budget
               %ul
-                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q1 #{budget_fiscal_year}"}, :label => false
+                = f.input :budget_q4_prev, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q4 #{budget_fiscal_year_prev}"}, :label => false
                 = f.input :budget_q1     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q1 #{budget_fiscal_year}"}, :label => false
                 = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q2 #{budget_fiscal_year}"}, :label => false
                 = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q3 #{budget_fiscal_year}"}, :label => false

@@ -184,6 +184,22 @@ module Activity::Classification
       self.update_classified_amount_cache(klass)
     end
 
+    def coding_budget_sum_in_usd
+      coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+    end
+
+    def coding_spend_sum_in_usd
+      coding_spend.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
+    end
+
+    def coding_budget_district_sum_in_usd(district)
+      coding_budget_district.with_code_id(district).sum(:cached_amount_in_usd)
+    end
+
+    def coding_spend_district_sum_in_usd(district)
+      coding_spend_district.with_code_id(district).sum(:cached_amount_in_usd)
+    end
+
     private
 
       def delete_existing_code_assignments_by_type(coding_type)

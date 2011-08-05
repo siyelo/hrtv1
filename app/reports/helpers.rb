@@ -3,41 +3,6 @@ module Reports::Helpers
   include StringCleanerHelper # gives h method
   extend ActiveSupport::Memoizable
 
-  def get_amount(activity, location)
-    ca = activity.code_assignments.detect{|ca| ca.code_id == location.id}
-
-    if ca
-       if ca.amount.present?
-         ca.amount
-       elsif ca.percentage.present?
-         max = get_max_amount(activity).to_f
-         if max > 0
-           ca.percentage * max / 100
-         else
-           "#{ca.percentage}%"
-         end
-       else
-        "yes"
-       end
-    else
-      "yes"
-    end
-  end
-
-  def get_max_amount(activity)
-    case activity.class.to_s
-    when 'CodingBudget', 'CodingBudgetCostCategorization', 'CodingBudgetDistrict'
-      activity.budget
-    when 'CodingSpend', 'CodingSpendCostCategorization', 'CodingSpendDistrict'
-      activity.spend
-    end
-  end
-
-  def get_currency(activity)
-    activity.currency.blank? ? :USD : activity.currency.to_sym
-  end
-  memoize :get_currency
-
   def get_coding_with_parent_codes(codings)
     coding_with_parent_codes = []
     coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
@@ -168,22 +133,8 @@ module Reports::Helpers
   end
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
-    sum = 0
-    usd_rate = get_usd_rate(activity)
-    funding_sources.each do |fs|
-      if is_budget
-        sum += fs.budget * usd_rate if fs.budget
-      else
-        sum += fs.spend * usd_rate if fs.spend
-      end
-    end
-    sum
-  end
-
-  def get_funding_source_amount(activity, funding_source, is_budget)
-    usd_rate = get_usd_rate(activity)
-    amount = is_budget ? funding_source.budget :  funding_source.spend
-    (amount || 0) * usd_rate
+    method = is_budget ? :budget_in_usd : :spend_in_usd
+    funding_sources.inject(0){|acc, fs| acc + fs.send(method)}
   end
 
   def get_ratio(amount_total, amount)
@@ -283,16 +234,6 @@ module Reports::Helpers
     else
       Activity.send(:preload_associations, activities,
                     [:locations, {:coding_spend_district => :activity}])
-    end
-  end
-
-  def get_usd_rate(activity)
-    if activity.currency.present?
-      Money.default_bank.get_rate(activity.currency, :USD)
-    else
-      # Workarround for reports not to raise an exception
-      # TODO: remove when all activities have a currency
-      1
     end
   end
 end

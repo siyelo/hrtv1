@@ -27,11 +27,6 @@ class OtherCostsController < Reporter::BaseController
     edit!
   end
 
-  def show
-    load_comment_resources(resource)
-    show!
-  end
-
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
     @other_cost.data_response = @response
@@ -53,12 +48,12 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def update
+    @activity = resource # needed in js_redirect
     update! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully updated'
-        html_redirect
-      end
+      success.html { flash[:notice] = 'Other Cost was successfully updated'; html_redirect }
+      success.js   { js_redirect }
       failure.html { load_comment_resources(resource); render :action => 'edit'}
+      failure.js   { js_redirect }
     end
   end
 

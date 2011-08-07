@@ -114,11 +114,67 @@ describe Activity do
     end
   end
 
+  describe "Callbacks" do
+    describe "#set_total_amounts" do
+      before :each do
+        basic_setup_project
+      end
+
+      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
+        activity = Factory(:activity, :data_response => @response, :project => @project,
+                         :budget => nil, :budget_q4_prev => 5,
+                         :budget_q1 => 10, :budget_q2 => 10,
+                         :budget_q3 => 10, :budget_q4 => 10)
+        activity.budget.should == 40
+      end
+
+      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
+        activity = Factory(:activity, :data_response => @response, :project => @project,
+                         :spend => nil, :spend_q4_prev => 5,
+                         :spend_q1 => 10, :spend_q2 => 10,
+                         :spend_q3 => 10, :spend_q4 => 10)
+        activity.spend.should == 40
+      end
+    end
+
+    describe "#update_cached_usd_amounts" do
+      before :each do
+        Money.default_bank.add_rate(:RWF, :USD, 0.1)
+      end
+
+      context "GOR FY" do
+        it "sets budget_in_usd and spend_in_usd amounts from spend/budget" do
+          attributes = {:budget => 123, :spend => 456}
+          setup_activity_in_fiscal_year("2010-07-01", "2011-06-30", attributes, 'RWF')
+          @activity.budget_in_usd.should == 12.3
+          @activity.spend_in_usd.should == 45.6
+        end
+      end
+
+      context "USG FY" do
+        it "sets budget_in_usd and spend_in_usd amounts from quarterly fields" do
+          attributes = {:budget_q4_prev => 10, :budget_q1 => 10,
+                        :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
+                        :spend_q4_prev => 11, :spend_q1 => 11,
+                        :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999}
+          setup_activity_in_fiscal_year("2010-10-01", "2011-09-30", attributes, 'RWF')
+          @activity.budget_in_usd.should == 4
+          @activity.spend_in_usd.should == 4.4
+        end
+      end
+    end
+  end
+
   describe "download activity template" do
     it "returns the correct fields in the activity template" do
-      basic_setup_response
-      Date.stub!(:today).and_return(Date.parse("01-01-2009"))
-      header_row = Activity.download_template(@response)
+      organization  = Factory(:organization,
+                              :fiscal_year_start_date => "2009-10-01",
+                              :fiscal_year_end_date => "2010-09-30")
+      data_request  = Factory(:data_request, :organization => organization)
+      data_response = organization.latest_response
+
+      Timecop.freeze(Date.parse("2009-10-15"))
+      header_row = Activity.download_template(data_response)
       header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
     end
   end
@@ -261,6 +317,24 @@ describe Activity do
       Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input,
         :amount => 5, :cached_amount => 5)
       @activity.purposes.should == [@purpose1, @purpose2]
+    end
+  end
+
+  describe "#self.find_or_initialize_from_file" do
+    context "when CSV has implementer value of: 'Shyira HD District Hospital'" do
+      it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
+        organization   = Factory(:organization)
+        request        = Factory(:data_request, :organization => organization)
+        response       = organization.latest_response
+        project        = Factory(:project, :data_response => response)
+        activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
+        doc            = FasterCSV.open(activities_csv, {:headers => true})
+        implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
+
+        activities = Activity.find_or_initialize_from_file(response, doc, project.id)
+        activities.count.should == 1
+        activities[0].implementer.should == implementer
+      end
     end
   end
 end

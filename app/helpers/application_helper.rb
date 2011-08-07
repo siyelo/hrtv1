@@ -211,46 +211,6 @@ module ApplicationHelper
     "f#{object.object_id}"
   end
 
-  def budget_fiscal_year_next(data_response)
-    year = data_response.organization.gor_fiscal_year[:start].year
-    year1 = year.pred.to_s.split('')[-2..-1].join
-    year2 = year.to_s.split('')[-2..-1].join
-
-    "#{year1}-#{year2}"
-  end
-
-  def budget_fiscal_year(data_response)
-    year = data_response.organization.gor_fiscal_year[:start].year
-    year1 = year.to_s.split('')[-2..-1].join
-    year2 = year.next.to_s.split('')[-2..-1].join
-
-    "#{year1}-#{year2}"
-  end
-
-  def spend_fiscal_year_next(data_response)
-    year = data_response.organization.gor_fiscal_year[:end].year + 1
-    year1 = year.pred.pred.to_s.split('')[-2..-1].join
-    year2 = year.pred.to_s.split('')[-2..-1].join
-
-    "#{year1}-#{year2}"
-  end
-
-  def spend_fiscal_year(data_response)
-    budget_fiscal_year_next(data_response)
-  end
-
-  def fiscal_year(data_response)
-    if data_response.fiscal_year_end_date.present?
-      year1 = data_response.fiscal_year_end_date.strftime('%y')
-      year2 = (data_response.fiscal_year_end_date + 1.year).strftime('%y')
-    else
-      year1 = 'xx'
-      year2 = 'xx'
-    end
-
-    "#{year1}-#{year2}"
-  end
-
   def funding_organizations_select
     orgs = Organization.find(:all, :order => 'lower(name)')
     orgs.map{|o| [o.display_name(100), o.id]}
@@ -282,17 +242,6 @@ module ApplicationHelper
 
   def next_fy(response)
     "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
-  end
-
-  def get_activity_type(type)
-    case type
-    when "Budget"
-      "Current Budget"
-    when "Spend"
-      "Past Expenditure"
-    else
-      type
-    end
   end
 
   # find namespace of given class

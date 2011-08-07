@@ -104,7 +104,7 @@ Feature: Reporter can manage activities
 
 
   Scenario Outline: Reporter can CRUD activities and see errors
-  When I follow "Add Activities now"
+    When I follow "Add Activities now"
       And I fill in "Name" with "<name>"
       And I fill in "Description" with "activity description"
       And I fill in "Start date" with "<start_date>"
@@ -123,19 +123,20 @@ Feature: Reporter can manage activities
 
 
   Scenario: Reporter can enter 5 year budget projections
-  When I follow "Add Activities now"
-     And I fill in "Name" with "Activity1"
-     And I fill in "Description" with "Activity1 description"
-     And I fill in "Start date" with "2010-01-01"
-     And I fill in "End date" with "2010-12-01"
-     And I select "project1" from "Project"
-     And I fill in "Budget" with "10000"
-     And I fill in "2012" with "2000"
-     And I fill in "2013" with "3000"
-     And I fill in "2014" with "4000"
-     And I fill in "2015" with "5000"
-     And I press "Save & Classify >"
-   Then I should see "Activity was successfully created"
+    Given now is "2010-07-15"
+    When I follow "Add Activities now"
+      And I fill in "Name" with "Activity1"
+      And I fill in "Description" with "Activity1 description"
+      And I fill in "Start date" with "2010-01-01"
+      And I fill in "End date" with "2010-12-01"
+      And I select "project1" from "Project"
+      And I fill in "Budget" with "10000"
+      And I fill in "2012" with "2000"
+      And I fill in "2013" with "3000"
+      And I fill in "2014" with "4000"
+      And I fill in "2015" with "5000"
+      And I press "Save & Classify >"
+    Then I should see "Activity was successfully created"
 
    When I follow "Activity1"
    Then the "Budget" field should contain "1000"

@@ -161,13 +161,6 @@ class ActivitiesController < Reporter::BaseController
       end
     end
 
-    def js_redirect
-      render :json => {:html => render_to_string(:partial => 'bulk_edit',
-                                       :layout => false,
-                                       :locals => {:activity => @activity,
-                                                   :response => @response})}
-    end
-
     def confirm_activity_type
       @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost

@@ -37,7 +37,7 @@ class DataResponse < ActiveRecord::Base
   delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
     :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
-    :spend_quarters_months, :budget_quarters_months, :to => :organization
+    :quarter_label, :to => :organization
 
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
@@ -388,7 +388,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def total_activities_and_other_costs_in_usd(method)
-    activities.only_simple.with_a_project.inject(0) do |sum, a|
+    activities.only_simple.inject(0) do |sum, a|
       unless a.nil? or !a.respond_to?(method) or a.send(method).nil?
         sum + universal_currency_converter(a.send(method), a.currency, :USD)
       else

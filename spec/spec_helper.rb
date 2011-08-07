@@ -34,6 +34,10 @@ Spork.prefork do
 
     config.include(EmailSpec::Helpers)
     config.include(EmailSpec::Matchers)
+
+    config.before(:each) do
+      Timecop.return
+    end
   end
 end
 
@@ -224,5 +228,17 @@ Spork.each_run do
     p "projects: #{Project.count}"
     p "activities: #{Activity.count}"
     p "sub_activities: #{SubActivity.count}"
+  end
+
+  def setup_activity_in_fiscal_year(fy_start, fy_end, attributes, currency = 'USD')
+    @organization = Factory(:organization,
+                            :fiscal_year_start_date => fy_start,
+                            :fiscal_year_end_date => fy_end,
+                            :currency => currency)
+    @request      = Factory(:data_request, :organization => @organization)
+    @response     = @organization.latest_response
+    @project      = Factory(:project, :data_response => @response)
+    @activity     = Factory(:activity, {:data_response => @response,
+                                        :project => @project}.merge(attributes))
   end
 end

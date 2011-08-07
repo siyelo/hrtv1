@@ -14,28 +14,13 @@ describe Report do
   end
 
   describe "Validations" do
-    before :each do
-      csv_report  = Reports::UsersByOrganization.new
-      csv_report.stub(:csv).and_return('1,1,1')
-      Reports::UsersByOrganization.stub(:new).and_return(csv_report)
-      @request = Factory(:data_request)
-    end
-
+    subject { Report.create!(:key => 'users_by_organization', :data_request_id => Factory(:data_request).id)}
+    it { should be_valid }
     it { should validate_presence_of(:key) }
     it { should validate_presence_of(:data_request_id) }
-
-    it "should only accept unique keys" do
-      Report.create!(:key => 'users_by_organization',
-                     :data_request_id => @request.id)
-      Report.new.should validate_uniqueness_of( :key )
-    end
-
+    it { should validate_uniqueness_of(:key).scoped_to(:data_request_id) }
     it "should accept only keys for certain Reports" do
-      r = Report.new(:key => 'users_by_organization',
-                     :data_request_id => @request.id)
-      r.should be_valid
-      r = Report.new(:key => 'blahblah')
-      r.should_not be_valid
+      Report.new(:key => 'blahblah').should_not be_valid
     end
   end
 
@@ -70,29 +55,24 @@ describe Report do
               :amount => 10, :code => cost_category_code)
     end
 
-    context "when report does not exist" do
-      Report::REPORTS.each do |key|
-        it "updates the report" do
-          report = Report.find_or_initialize_by_key_and_data_request_id(key, @request.id)
-          Report.count.should == 0
 
-          report.generate_csv_zip
-          report.save.should be_true
-          Report.count.should == 1
-        end
+    Report::REPORTS.each do |key|
+      it "creates a new: #{key}" do
+        report = Report.find_or_initialize_by_key_and_data_request_id(key, @request.id)
+        Report.count.should == 0
+        report.generate_csv_zip
+        report.save.should be_true
+        Report.count.should == 1
       end
     end
 
-    context "when report exists" do
-      Report::REPORTS.each do |key|
-        it "updates the report" do
-          report = Report.create!(:key => key, :data_request_id => @request.id)
-          Report.count.should == 1
-
-          report.generate_csv_zip
-          report.save.should be_true
-          Report.count.should == 1
-        end
+    Report::REPORTS.each do |key|
+      it "updates the existing: #{key}" do
+        report = Report.create!(:key => key, :data_request_id => @request.id)
+        Report.count.should == 1
+        report.generate_csv_zip
+        report.save.should be_true
+        Report.count.should == 1
       end
     end
   end

@@ -21,6 +21,9 @@ class DataRequest < ActiveRecord::Base
   ### Callbacks
   after_create :create_data_responses
 
+  ### Named scopes
+  named_scope :sorted, { :order => "data_requests.start_date" }
+
   ### Instance Methods
 
   def name

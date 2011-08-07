@@ -7,7 +7,7 @@ module ActiveRecord
 
         send(validation_method(configuration[:on]), configuration) do |record|
           if record.send(start_date).present? && record.send(end_date).present?
-            record.errors.add(:base, options[:message]) unless record.send(start_date) < record.send(end_date)
+            record.errors.add(start_date, options[:message]) unless record.send(start_date) < record.send(end_date)
           end
         end
       end

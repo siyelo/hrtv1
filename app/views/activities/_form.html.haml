@@ -1,8 +1,4 @@
-- budget_fiscal_year_next = budget_fiscal_year_next(@response)
-- budget_fiscal_year = budget_fiscal_year(@response)
-- spend_fiscal_year_next = spend_fiscal_year_next(@response)
-- spend_fiscal_year = spend_fiscal_year(@response)
-- fiscal_year_start_date = @response.organization.gor_fiscal_year[:start].try(:year)
+- budget_fy_start = @response.organization.gor_fiscal_year_start(:budget)[0]
 
 :javascript
   var _response_id = "#{@response.id}";
@@ -32,38 +28,27 @@
     %li.last
       %h3== Past Activity Expenditure (#{@activity.currency})
       %ul.dashboard_section
-        = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_activity_spend_total"}
-        %li.amounts.last
-          %label== Quarterly Expenditure
-          %ul.js_quarterly_inputs
-            = f.input :spend_q4_prev, :label => "#{@response.spend_quarters_months('q1')}", :required => false
-            = f.input :spend_q1     , :label => "#{@response.spend_quarters_months('q2')}",      :required => false
-            = f.input :spend_q2     , :label => "#{@response.spend_quarters_months('q3')}",      :required => false
-            = f.input :spend_q3     , :label => "#{@response.spend_quarters_months('q4')}",      :required => false
-            = f.input :spend_q4     , :label => "#{@response.spend_quarters_months('q1_next_fy')}",      :required => false
+        = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_spend"}
+
+        = render 'shared/spend_quarters', :f => f
 
   - if @response.data_request.budget?
     %li.last
       %h3== Current Budget (#{@activity.currency})
       %ul.dashboard_section
-        = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_activity_budget_total"}
         - if @response.request.budget_by_quarter?
-          %li.amounts.last
-            %label== Quarterly budget
-            %ul.js_quarterly_inputs
-              = f.input :budget_q4_prev, :label => "#{@response.budget_quarters_months('q1')}", :required => false
-              = f.input :budget_q1     , :label => "#{@response.budget_quarters_months('q2')}",      :required => false
-              = f.input :budget_q2     , :label => "#{@response.budget_quarters_months('q3')}",      :required => false
-              = f.input :budget_q3     , :label => "#{@response.budget_quarters_months('q4')}",      :required => false
-              = f.input :budget_q4     , :label => "#{@response.budget_quarters_months('q1_next_fy')}",      :required => false
+          = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_budget"}
+
+          = render 'shared/budget_quarters', :f => f
+
         - unless @response.request.no_long_term_budgets?
           %li.amounts
             %label Long-term
             %ul
-              = f.input :budget2, :label => "#{fiscal_year_start_date + 2}", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "#{fiscal_year_start_date + 3}", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "#{fiscal_year_start_date + 4}", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "#{fiscal_year_start_date + 5}", :required => false if @response.request.year_5?
+              = f.input :budget2, :label => "#{budget_fy_start + 2}", :required => false if @response.request.year_2?
+              = f.input :budget3, :label => "#{budget_fy_start + 3}", :required => false if @response.request.year_3?
+              = f.input :budget4, :label => "#{budget_fy_start + 4}", :required => false if @response.request.year_4?
+              = f.input :budget5, :label => "#{budget_fy_start + 5}", :required => false if @response.request.year_5?
 
   %li.last
     %h3 Activity Funding Sources

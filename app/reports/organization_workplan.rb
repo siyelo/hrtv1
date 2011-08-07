@@ -46,7 +46,7 @@ class Reports::OrganizationWorkplan
     row << "" if index > 0
     row << ApplicationController.helpers.nice_name(activity, 50)
     row << activity.description
-    row << n2c(universal_currency_converter(activity.budget, activity.currency, 'USD'), "", "")
+    row << n2c(activity.budget_in_usd, "", "")
     row << activity.locations.map{ |l| l.short_display }.join(', ')
     row << activity.coding_budget_cost_categorization.map{|ca| ca.code.short_display}.join(', ')
     row

@@ -75,4 +75,5 @@ group :test do
   gem 'ruby-pg'
   gem 'shoulda'
   gem 'spork', '~> 0.8'
+  gem 'timecop'
 end

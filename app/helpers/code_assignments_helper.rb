@@ -6,13 +6,13 @@ module CodeAssignmentsHelper
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
       'Locations'
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
-      'Inputs' 
+      'Inputs'
     end
   end
 
   def spend_or_budget(coding_type)
     case coding_type
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'HsspBudget' 
+    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'HsspBudget'
       "current budget"
     when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'HsspSpend'
       "expenditure"
@@ -34,6 +34,17 @@ module CodeAssignmentsHelper
       :spend
     else
       raise "Invalid coding_klass #{klass.to_s}".to_yaml
+    end
+  end
+
+  def get_activity_type(type)
+    case type
+    when :budget
+      "Current Budget"
+    when :spend
+      "Past Expenditure"
+    else
+      type
     end
   end
 

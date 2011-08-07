@@ -167,7 +167,7 @@ class CodeAssignment < ActiveRecord::Base
       activity.update_classified_amount_cache(self)
     end
   end
-  
+
   def cached_amount
     self[:cached_amount] || 0
   end
@@ -186,18 +186,16 @@ class CodeAssignment < ActiveRecord::Base
     cached_amount - sum_of_children > 0 ? true : false
   end
 
-  # TODO: spec
+  # NOTE: in this method we use amounts in USD
+  # because those amounts are in the GOR FY
   def proportion_of_activity
-    activity_amount = budget? ? (activity.try(:budget) || 0) : (activity.try(:spend) || 0)
+    activity_amount_in_usd = budget? ?
+      (activity.try(:budget_in_usd) || 0) : (activity.try(:spend_in_usd) || 0)
 
-    unless activity_amount == 0 or cached_amount.nil? or cached_amount == 0
-      cached_amount / activity_amount
+    if activity_amount_in_usd > 0 && cached_amount_in_usd > 0
+      cached_amount_in_usd / activity_amount_in_usd
     else
-      if !percentage.nil?
-        percentage / 100
-      else
-        0
-      end
+      percentage ? percentage / 100 : 0
     end
   end
 

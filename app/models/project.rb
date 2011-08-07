@@ -2,7 +2,6 @@ require 'validators'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
-  include CurrencyCacheHelpers
   include BudgetSpendHelper
   include NumberHelper
 
@@ -11,9 +10,6 @@ class Project < ActiveRecord::Base
                          budget budget_q4_prev budget_q1 budget_q2 budget_q3
                          budget_q4 spend spend_q4_prev spend_q1 spend_q2
                          spend_q3 spend_q4 start_date end_date]
-
-  cattr_reader :per_page
-  @@per_page = 3
 
   strip_commas_from_all_numbers
 
@@ -30,9 +26,9 @@ class Project < ActiveRecord::Base
   has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 and
-                            organization_id_to = #{organization.id}' ] #note the single quotes !
+                            organization_id_to = #{organization.id}' ]
   has_many :out_flows, :class_name => "FundingFlow",
-           :conditions => [ 'organization_id_from = #{organization.id}' ] #note the single quotes !
+           :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
             :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -45,14 +41,16 @@ class Project < ActiveRecord::Base
   before_validation :strip_leading_spaces
 
   ### Validations
+  # also see validations in BudgetSpendHelper
   validates_uniqueness_of :name, :scope => :data_response_id
   validates_presence_of :name, :data_response_id
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
+  validates_inclusion_of :currency,
+    :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"},
     :allow_nil => true, :unless => Proc.new {|p| p.currency.blank?}
-
   validates_date :start_date
   validates_date :end_date
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
+  validates_dates_order :start_date, :end_date,
+    :message => "Start date must come before End date."
 
   ### Attributes
   attr_accessible :name, :description, :spend,
@@ -67,8 +65,8 @@ class Project < ActiveRecord::Base
   delegate :organization, :to => :data_response
 
   ### Callbacks
+  # also see callbacks in BudgetSpendHelper
   after_save :update_cached_currency_amounts
-  before_save :set_total_amounts
 
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }
@@ -368,14 +366,6 @@ class Project < ActiveRecord::Base
       amount
     end
 
-    # setting the total amount if the quarterlys are set
-    def set_total_amounts
-      ["budget", "spend"].each do |type|
-        amount = total_amount_of_quarters(type)
-        self.send(:"#{type}=", amount) if amount && amount > 0
-      end
-    end
-
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
@@ -386,6 +376,19 @@ class Project < ActiveRecord::Base
     # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
     def assign_project_to_funding_flows
       funding_flows.each {|ff| ff.project = self}
+    end
+
+    def update_cached_currency_amounts
+      if self.currency_changed?
+        self.activities.each do |a|
+          a.code_assignments.each {|c| c.save}
+          a.save
+        end
+
+        self.in_flows.each do |in_flow|
+          in_flow.save
+        end
+      end
     end
 end
 

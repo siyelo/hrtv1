@@ -80,9 +80,9 @@ describe Reports::OrganizationResponses do
             'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
         end
 
-        it "should not show other costs without a project" do
+        it "should show other costs without a project" do
           Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-            'org1,In Progress,5.00,0.00,5.00,10.00,0.00,10.00'
+           'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
         end
       end
   end

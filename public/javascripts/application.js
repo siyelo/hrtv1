@@ -26,13 +26,14 @@ function add_fields(link, association, content) {
 };
 
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
-  var value            = edit_block.find('.ff_' + type).val();
-  var value_q4_prev    = edit_block.find('.ff_' + type + '_q4_prev').val();
-  var value_q1         = edit_block.find('.ff_' + type + '_q1').val();
-  var value_q2         = edit_block.find('.ff_' + type + '_q2').val();
-  var value_q3         = edit_block.find('.ff_' + type + '_q3').val();
-  var value_q4         = edit_block.find('.ff_' + type + '_q4').val();
-  var values = [value_q4_prev, value_q1, value_q2, value_q3, value_q4];
+  var total = edit_block.find('.js_' + type).val();
+
+  var values = jQuery.map(edit_block.find(".js_" + type + "_quarters input"), function (e) {
+    return $(e).val();
+  });
+  var labels = jQuery.map(edit_block.find(".js_" + type + "_quarters label"), function (e) {
+    return $(e).text();
+  });
 
   if (display_funder) {
     var organization = edit_block.find('.ff_from option:selected').text();
@@ -43,10 +44,6 @@ var build_project_in_flow_row = function (edit_block, type, type_name, display_f
   } else {
     var funder = $('<li/>');
   }
-
-  var labels = jQuery.map(edit_block.find('.' + type + ' ul label'), function (e) {
-    return $(e).text();
-  });
 
   var ul = $('<ul/>');
   for (var i = 0; i < values.length; i++) {
@@ -62,7 +59,7 @@ var build_project_in_flow_row = function (edit_block, type, type_name, display_f
     funder,
     $('<li/>').append(
       $('<span/>').text(type_name),
-      value || 'N/A'
+      total || 'N/A'
     ),
     $('<li/>').append(ul)
   )
@@ -444,11 +441,11 @@ var removeRow = function (resources, rowId) {
   updateCount(resources);
 };
 
-var calculate_total_from_quarters = function (quarter_boxes, total_box) {
+var calculate_total_from_quarters = function (quarterInputs, total_box) {
   var total_ammount = 0;
 
-  for (var i = 0; i < quarter_boxes.length; i++) {
-    var quarter_value = Number($(quarter_boxes[i]).val());
+  for (var i = 0; i < quarterInputs.length; i++) {
+    var quarter_value = Number($(quarterInputs[i]).val());
 
     if (!isNaN(quarter_value)) {
       total_ammount += quarter_value;
@@ -458,15 +455,34 @@ var calculate_total_from_quarters = function (quarter_boxes, total_box) {
   total_box.val(total_ammount);
 };
 
-var split_total_across_quarters = function (quarter_boxes, value) {
-  if (!isNaN(value)) {
-    var quarter_value = value / quarter_boxes.length;
+var split_total_across_quarters = function (quarterInputs, value) {
+  value = value.replace(",","");
 
-    for (var i = 0; i < quarter_boxes.length; i++) {
-      $(quarter_boxes[i]).val(quarter_value);
+  if (!isNaN(value)) {
+    var quarter_value = value / quarterInputs.length;
+
+    for (var i = 0; i < quarterInputs.length; i++) {
+      $(quarterInputs[i]).val(quarter_value);
     }
   }
-}
+};
+
+var quartersSplit = function (elements) {
+  elements.live('keyup', function () {
+    split_total_across_quarters($(this).parents("li:first").next().find('.js_fy_quarter'), $(this).val());
+  });
+};
+
+var quartersSum = function (quarters) {
+  quarters.live('keyup', function () {
+    calculate_total_from_quarters($(this).parents('ul:first').find('.js_fy_quarter'), $(this).parents('li.js_row').prev().find('input'));
+  });
+};
+
+var quartersInit = function () {
+  quartersSplit($(".js_budget, .js_spend"));
+  quartersSum($('.js_fy_quarter'));
+};
 
 var admin_responses_index = {
   run: function () {
@@ -1017,7 +1033,6 @@ var admin_currencies_index = {
       var url = "/admin/currencies/" + element.attr('id');
       $.post(url, { "rate" : input_rate, "_method" : "put" }, function(data){
         var data = $.parseJSON(data);
-        console.log(data);
         if (data.status == 'success'){
           element.parent('td').children('span').show();
           element.parent('td').children('span').text(data.new_rate);
@@ -1538,20 +1553,6 @@ var activity_form = function () {
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
 
-  $(".js_activity_budget_total").keyup(function () {
-    console.info('2222')
-    split_total_across_quarters($(this).parents("ul:first").find(".js_quarterly_inputs input:not(:last)"), $(this).val());
-  });
-
-  $(".js_activity_spend_total").keyup(function () {
-    console.info('1111')
-    split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
-  });
-
-  $(".js_quarterly_inputs input:not(:last)").keyup(function () {
-    calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find('li:first input'));
-  });
-
   $('.js_target_field').live('keydown', function (e) {
     var block = $(this).parents('.js_targets');
 
@@ -1562,13 +1563,6 @@ var activity_form = function () {
     }
   });
 
-  approveBudget();
-
-  approveAsAdmin();
-
-  commentsInit();
-
-
   $('.edit_button').live('click', function (e) {
     e.preventDefault();
     var element = $(this).parents('.fields');
@@ -1578,6 +1572,11 @@ var activity_form = function () {
     element.find('.preview_block').hide();
     close_activity_funding_sources_fields(fields);
   });
+
+  approveBudget();
+  approveAsAdmin();
+  commentsInit();
+  quartersInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
@@ -1688,77 +1687,19 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
       $('.add_organization').slideToggle();
     });
 
-    $('#other_cost_spend').keyup(function () {
-      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
-    });
-
-    $('.js_quarterly_inputs input:not(:last)').keyup(function () {
-      calculate_total_from_quarters($(this).parents('ul:first').find('input:not(:last)'), $(this).parents('li.amounts').prev().find('input'));
-    });
-
-    $('#other_cost_budget').keyup(function () {
-      split_total_across_quarters($(this).parents('li:first').next().find('input:not(:last)'), $(this).val());
-    });
-
     approveBudget();
-
     approveAsAdmin();
+    quartersInit();
   }
 };
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-
-
     // show the jquery autocomplete combobox instead of standard dropdown
     $( ".js_combobox" ).combobox(); // for currency dropdown
                                 // the nested funding source init should be
                                 // handled by the "add row" js callback
     $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
-
-    // when project spend quarter is edited, update the spend total
-    $("input[id^='project_spend_q']:not(:last)").keyup(function () {
-      calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("input#project_spend"));
-    });
-
-    // when project budget quarter is edited, update the budget total
-   $("input[id^='project_budget_q']:not(:last)").keyup(function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".dashboard_section").find("#project_budget"));
-   });
-
-    // when fs spend quarter is edited, update the spend total
-   $(".js_funding_exp_q").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
-   });
-
-    // when fs budget quarter is edited, update the budget total
-   $(".js_funding_bud_q").live('keyup', function () {
-     calculate_total_from_quarters($(this).parents("ul:first").find("input:not(:last)"), $(this).parents(".amounts").prev().find("input"));
-   });
-
-    // when project spend is edited, update the quarters
-    $("#project_spend").keyup(function () {
-      split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
-    });
-
-    // when project budget is edited, update the quarters
-    $("#project_budget").keyup(function () {
-      split_total_across_quarters($(this).parents(".dashboard_section").find('.js_quarterly_fields input:not(:last)'), $(this).val());
-    });
-
-    // when fs spend is edited, update the quarters
-   $(".ff_spend").live('keyup', function () {
-     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
-   });
-
-    // when fs budget is edited, update the quarters
-   $(".ff_budget").live('keyup', function () {
-     split_total_across_quarters($(this).parents("li:first").next().find("input:not(:last)"), $(this).val());
-   });
-
-    commentsInit();
-    validateDates($('#project_start_date'), $('#project_end_date'));
-
 
     $('.edit_button').live('click', function (e) {
       e.preventDefault();
@@ -1769,6 +1710,10 @@ var projects_new = projects_create = projects_edit = projects_update = {
       element.find('.preview_block').hide();
       close_project_in_flow_fields(fields);
     });
+
+    commentsInit();
+    quartersInit();
+    validateDates($('#project_start_date'), $('#project_end_date'));
     close_project_in_flow_fields($('.funding_flows .fields'));
   }
 }

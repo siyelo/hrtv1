@@ -19,10 +19,8 @@ class Reports::ActivitiesByNsp
   end
 
   private
-
     def build_header
       row = []
-
       Nsp.deepest_nesting.times{|i| row << "NSP Code"}
       row << "Current Budget"
       row << "Activity Description"
@@ -38,7 +36,6 @@ class Reports::ActivitiesByNsp
       row << "# of HC's implementing"
       row << "Beneficiaries"
       row << "ID"
-
       row
     end
 
@@ -54,7 +51,6 @@ class Reports::ActivitiesByNsp
         row = []
         add_nsp_codes_hierarchy(row, code)
         row << "Total Budget - " + n2c(code_total) #put total in Q1 column
-
         csv << row
       end
     end
@@ -66,7 +62,6 @@ class Reports::ActivitiesByNsp
           activity = assignment.activity
           row      = []
           add_nsp_codes_hierarchy(row, code)
-
           row << n2c(assignment.cached_amount_in_usd)
           row << activity_description(activity)
           row << funding_source_name(activity)
@@ -81,7 +76,6 @@ class Reports::ActivitiesByNsp
           row << number_of_health_centers(activity)
           row << activity.beneficiaries.join(' | ')
           row << activity.id
-
           csv << row
         end
       end

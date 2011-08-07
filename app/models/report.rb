@@ -44,7 +44,7 @@ class Report < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :key, :data_request_id
-  validates_uniqueness_of :key
+  validates_uniqueness_of :key, :scope => :data_request_id
   validates_inclusion_of :key, :in => REPORTS
 
   ### Callbacks
@@ -105,15 +105,15 @@ class Report < ActiveRecord::Base
         when 'activities_by_expenditure_districts'
           Reports::ActivitiesByDistricts.new(:spent, data_request)
         when 'dynamic_query_report_budget'
-          Reports::JawpReport.new(:budget, Activity.jawp_activities(data_request))
+          Reports::JawpReport.new(:budget, simple_activities_for_request_with_associations)
         when 'dynamic_query_report_spent'
-          Reports::JawpReport.new(:spent, Activity.jawp_activities(data_request))
+          Reports::JawpReport.new(:spent, simple_activities_for_request_with_associations)
         when 'activities_by_nsp_budget'
           Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget, true)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(simple_activities_for_request)
         when 'activities_by_nha_subimps'
-          Reports::ActivitiesByNhaSubimps.new(:spent, Activity.jawp_activities(data_request))
+          Reports::ActivitiesByNhaSubimps.new(:spent, simple_activities_for_request_with_associations)
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget, true)
         else
@@ -124,7 +124,7 @@ class Report < ActiveRecord::Base
 
     def create_tmp_csv
       bom = "\377\376"
-      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{get_date()}.csv"
+      self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{data_request_id}_#{get_date()}.csv"
       content = bom + Iconv.conv("utf-16le", "utf-8", self.raw_csv)
       File.open(self.temp_file_name, 'w')  {|f| f.write(content)}
     end
@@ -144,9 +144,14 @@ class Report < ActiveRecord::Base
       File.delete self.zip_file_name if self.zip_file_name
     end
 
-  private
     def simple_activities_for_request
-      Activity.only_simple_with_request(data_request)
+      Activity.only_simple_with_request(self.data_request)
+    end
+
+    def simple_activities_for_request_with_associations
+      self.simple_activities_for_request.find(:all,
+        :include => [:locations, :provider, :organizations, :beneficiaries,
+                      {:data_response => :organization}])
     end
 end
 

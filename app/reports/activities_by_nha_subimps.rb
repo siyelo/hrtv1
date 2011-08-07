@@ -5,13 +5,7 @@ class Reports::ActivitiesByNhaSubimps
 
   def initialize(type, activities)
     @is_budget  = is_budget?(type)
-
     @activities = activities
-    @activities = Activity.only_simple.find(:all,
-    #              :conditions => ["activities.id IN (?)", [ 3219]], # NOTE: FOR DEBUG ONLY
-                  :include => [:locations, :provider, :organizations,
-                              :beneficiaries, {:data_response => :organization}])
-
     @hc_sub_activities = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
@@ -26,69 +20,58 @@ class Reports::ActivitiesByNhaSubimps
   end
 
   private
-
-  # gor_quarters methods returns values for US fiscal year (10th month)
-  # otherwise it returns the values for Rwanda fiscal year
-  def build_rows(csv, activity)
-    if @is_budget
-      amount_q1             = activity.gor_budget_quarter(1)
-      amount_q2             = activity.gor_budget_quarter(2)
-      amount_q3             = activity.gor_budget_quarter(3)
-      amount_q4             = activity.gor_budget_quarter(4)
-      amount_total          = activity.budget
-      amount_total_in_usd   = activity.budget_in_usd
-      is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
-    else
-      amount_q1             = activity.gor_spend_quarter(1)
-      amount_q2             = activity.gor_spend_quarter(2)
-      amount_q3             = activity.gor_spend_quarter(3)
-      amount_q4             = activity.gor_spend_quarter(4)
-      amount_total          = activity.spend
-      amount_total_in_usd   = activity.spend_in_usd
-      is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
+    # gor_quarters methods returns values for US fiscal year (10th month)
+    # otherwise it returns the values for Rwanda fiscal year
+    def build_rows(csv, activity)
+      if @is_budget
+        amount_q1             = activity.gor_budget_quarter(1)
+        amount_q2             = activity.gor_budget_quarter(2)
+        amount_q3             = activity.gor_budget_quarter(3)
+        amount_q4             = activity.gor_budget_quarter(4)
+        amount_total          = activity.budget
+        amount_total_in_usd   = activity.budget_in_usd
+        is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
+      else
+        amount_q1             = activity.gor_spend_quarter(1)
+        amount_q2             = activity.gor_spend_quarter(2)
+        amount_q3             = activity.gor_spend_quarter(3)
+        amount_q4             = activity.gor_spend_quarter(4)
+        amount_total          = activity.spend
+        amount_total_in_usd   = activity.spend_in_usd
+        is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
+      end
+      row = []
+      dr = activity.data_response
+      row << dr.contact_name
+      row << dr.contact_position
+      row << dr.contact_phone_number
+      row << dr.contact_main_office_phone_number
+      row << dr.contact_office_location
+      row << activity.project.try(:name)
+      row << activity.project.try(:description)
+      row << activity.name
+      row << activity.description
+      row << amount_q1
+      row << amount_q2
+      row << amount_q3
+      row << amount_q4
+      row << amount_q1
+      row << amount_q2
+      row << amount_q3
+      row << amount_q4
+      row << get_locations(activity)
+      row << activity.sub_activities_count
+      row << get_hc_sub_activity_count(activity)
+      row << ""
+      row << activity.organization.try(:name)
+      row << get_beneficiaries(activity)
+      row << activity.id
+      row << activity.currency
+      row << amount_total
+      row << amount_total_in_usd
+      row << is_national
+      build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
     end
-
-    row = []
-    dr = activity.data_response
-    row << dr.contact_name
-    row << dr.contact_position
-    row << dr.contact_phone_number
-    row << dr.contact_main_office_phone_number
-    row << dr.contact_office_location
-
-    row << activity.project.try(:name)
-    row << activity.project.try(:description)
-    row << activity.name
-    row << activity.description
-    row << amount_q1
-    row << amount_q2
-    row << amount_q3
-    row << amount_q4
-    #row << # reimplement currency conversion here later (amount_q1 ? amount_q1 * activity.toUSD : '')
-   # row << # reimplement currency conversion here later (amount_q2 ? amount_q2 * activity.toUSD : '')
-   # row << # reimplement currency conversion here later (amount_q3 ? amount_q3 * activity.toUSD : '')
-   # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')
-    row << amount_q1
-    row << amount_q2
-    row << amount_q3
-    row << amount_q4
-    row << get_locations(activity)
-    row << activity.sub_activities_count
-    row << get_hc_sub_activity_count(activity)
-    #row << get_sub_implementers(activity)
-    row << ""
-    row << activity.organization.try(:name)
-    row << get_beneficiaries(activity)
-    row << activity.id
-    row << activity.currency
-    row << amount_total
-    row << amount_total_in_usd
-    row << is_national
-
-    build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
-  end
-
-  private
 
     def build_code_assignment_rows(csv, base_row, activity, amount_total, amount_total_in_usd)
       if @is_budget
@@ -119,8 +102,6 @@ class Reports::ActivitiesByNhaSubimps
       end
 
       funding_sources = activity.funding_streams
-      #funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
-      #funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
       funding_sources_total = 0
       funding_sources.each do |fs|
         if @is_budget
@@ -141,9 +122,6 @@ class Reports::ActivitiesByNhaSubimps
 
       coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
 
-      #puts  codings.size
-      #puts  district_codings
-      #puts  cost_category_codings
       sub_activities.each do |activity|
         break_out = false
         if activity != parent_activity
@@ -179,21 +157,7 @@ class Reports::ActivitiesByNhaSubimps
               funding_source_amount =  0 if funding_source_amount.nil?
               ratio = get_ratio(parent_amount_total, ca.amount_not_in_children) *
                 get_ratio(funding_sources_total, funding_source_amount)
-
-              #puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(parent_amount_total, ca.amount_not_in_children)})"
-              #puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children)}"
-              #puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children)}"
-              #puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
-
-              # adjust ratio with subactivity % or amount
-              # if activity.sub_activities.empty?
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
-              # else
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
-              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? )}
-              # end
               amount = (amount_total || 0) * ratio
-
               row << activity.possible_duplicate?
               row << activity.id
               row << activity.provider.try(:name) || "No Implementer Specified" # include sub activity implementers here
@@ -211,9 +175,7 @@ class Reports::ActivitiesByNhaSubimps
               row << last_code.try(:nasa_code)
               row << get_nha_or_nasa(last_code)
               add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
-
               csv << row
-              #puts row
             end
           end
         end#sub_activities
@@ -221,7 +183,6 @@ class Reports::ActivitiesByNhaSubimps
 
     def build_header
       amount_type = @is_budget ? 'Current Budget' : 'Past Expenditure'
-
       row = []
       row << "contact name"
       row << "contact position"
@@ -248,7 +209,6 @@ class Reports::ActivitiesByNhaSubimps
       row << "Beneficiaries"
       row << "ID"
       row << "Currency"
-
       # values below given through build_code_assignment_rows
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
@@ -270,7 +230,6 @@ class Reports::ActivitiesByNhaSubimps
       row << "Code nasa code"
       row << 'NHA/NASA Code'
       Code.deepest_nesting.times{ row << "Code" }
-
       row
     end
 
@@ -280,6 +239,7 @@ class Reports::ActivitiesByNhaSubimps
         'n/a'
       end
     end
+
     def get_fake_ca
       @fake ||= CodeAssignment.new
     end
@@ -289,7 +249,6 @@ class Reports::ActivitiesByNhaSubimps
       fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
       fake_ca.sum_of_children = 0 # so amount_not_in_children returns correctly
       fake_ca.cached_amount_in_usd = amount_total_in_usd
-
       codings.empty? ? [fake_ca] : codings
     end
 

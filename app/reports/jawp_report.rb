@@ -3,8 +3,10 @@ require 'fastercsv'
 class Reports::JawpReport
   include Reports::Helpers
 
-  def initialize(type, activities, include_subs = false)
-    @include_subs = include_subs
+  attr_accessor :include_subs # could be deprecated
+
+  def initialize(type, activities)
+    @include_subs = false
     @is_budget  = is_budget?(type)
     @activities = activities
     @hc_sub_activities = Activity.with_type('SubActivity').
@@ -21,7 +23,6 @@ class Reports::JawpReport
   end
 
   private
-
     # gor_quarters methods returns values for US fiscal year (10th month)
     # otherwise it returns the values for Rwanda fiscal year
     def build_rows(csv, activity)
@@ -42,7 +43,6 @@ class Reports::JawpReport
         amount_total_in_usd   = activity.spend_in_usd
         is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
       end
-
       row = []
       row << activity.project.try(:name)
       row << activity.project.try(:description).try(:gsub, /[\n\r-]+/, " ")
@@ -52,10 +52,6 @@ class Reports::JawpReport
       row << amount_q2
       row << amount_q3
       row << amount_q4
-      #row << # reimplement currency conversion here later (amount_q1 ? amount_q1 * activity.toUSD : '')
-     # row << # reimplement currency conversion here later (amount_q2 ? amount_q2 * activity.toUSD : '')
-     # row << # reimplement currency conversion here later (amount_q3 ? amount_q3 * activity.toUSD : '')
-     # row << # reimplement currency conversion here later (amount_q4 ? amount_q4 * activity.toUSD : '')
       row << amount_q1
       row << amount_q2
       row << amount_q3
@@ -72,7 +68,6 @@ class Reports::JawpReport
       row << amount_total
       row << amount_total_in_usd
       row << is_national
-
       build_code_assignment_rows(csv, row, activity, amount_total, amount_total_in_usd)
     end
 
@@ -87,7 +82,6 @@ class Reports::JawpReport
         district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding_adjusted)
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
-
       parent_activity = activity
       parent_amount_total = amount_total
       parent_amount_total_in_usd = amount_total_in_usd
@@ -106,8 +100,6 @@ class Reports::JawpReport
       end
 
       funding_sources = activity.funding_streams
-      #funding_sources       = fake_one_funding_source_if_none(get_funding_sources(activity))
-      #funding_sources_total = get_funding_sources_total(activity, funding_sources, @is_budget)
       funding_sources_total = 0
       funding_sources.each do |fs|
         if @is_budget
@@ -170,26 +162,7 @@ class Reports::JawpReport
                 get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children) *
                 get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children) *
                 get_ratio(funding_sources_total, funding_source_amount)
-
-              # puts " get_ratio(amount_total, ca.amount_not_in_children) : #{get_ratio(parent_amount_total, ca.amount_not_in_children)})"
-              # puts "  get_ratio(amount_total, district_coding.amount_not_in_children) : #{get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children)}"
-              # puts "  get_ratio(amount_total, cost_category_coding.amount_not_in_children) : #{get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children)}"
-              # puts "  get_ratio(funding_sources_total, funding_source_amount) : #{get_ratio(funding_sources_total, funding_source_amount)}"
-
-              # adjust ratio with subactivity % or amount
-              # if activity.sub_activities.empty?
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
-              # else
-              #  add_row_with_ratio_ufs_fa_implementer_poss_dup(csv,activity,funding_source[:ufs], funding_source[:fa],imp,activity.possible_duplicate?)
-              #  activity.sub_activities.each{|sa| add_row_with_ratio_ufs_fa_implementer_poss_dup(..., sa.implementer, sa.possible_duplicate? )}
-              # end
               amount = (amount_total || 0) * ratio
-
-              #puts "  get_ratio(amount_total, ca.cached_amount) *" + get_ratio(amount_total, ca.cached_amount).to_s
-              #puts "  get_ratio(amount_total, district_coding.cached_amount) *" + get_ratio(amount_total, district_coding.cached_amount).to_s
-              #puts "  get_ratio(amount_total, cost_category_coding.cached_amount) *" + get_ratio(amount_total, cost_category_coding.cached_amount).to_s
-              #puts "  get_ratio(funding_sources_total, funding_source_amount)" + get_ratio(funding_sources_total, funding_source_amount).to_s
-
               if activity.class == OtherCost
                 prov = "Administration - #{activity.data_response.organization.raw_type}"
                 prov_type = "Admin"
@@ -200,7 +173,6 @@ class Reports::JawpReport
                 prov = activity.provider.name
                 prov_type = activity.provider.raw_type
               end
-
               row << activity.possible_duplicate?
               row << prov
               row << prov_type
@@ -231,7 +203,6 @@ class Reports::JawpReport
               row << last_code.try(:nasa_code)
               row << codes_cache[district_coding.code_id].try(:short_display)
               add_codes_to_row(row, cost_category_codes, CostCategory.deepest_nesting, :short_display)
-
               csv << row
             end
           end
@@ -242,7 +213,6 @@ class Reports::JawpReport
 
     def build_header
       amount_type = @is_budget ? 'Current Budget' : 'Past Expenditure'
-
       row = []
       row << "Project Name"
       row << "Project Description"
@@ -265,7 +235,6 @@ class Reports::JawpReport
       row << "Beneficiaries"
       row << "ID"
       row << "Currency"
-
       # values below given through build_code_assignment_rows
       row << "Total #{amount_type}"
       row << "Converted #{amount_type} (USD)"
@@ -292,7 +261,6 @@ class Reports::JawpReport
       row << "Code nasa code"
       row << "District"
       CostCategory.deepest_nesting.times{ row << "Input" }
-
       row
     end
 
@@ -304,7 +272,6 @@ class Reports::JawpReport
       fake_ca = get_fake_ca
       fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
       fake_ca.cached_amount_in_usd = amount_total_in_usd
-
       codings.empty? ? [fake_ca] : codings
     end
 

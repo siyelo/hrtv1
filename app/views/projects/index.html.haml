@@ -66,7 +66,7 @@
           = render 'no_projects_yet'
     %tr.filler
       %td{:colspan => 2}
-      %td.total TOTAL (ACTIVITIES + OTHER COSTS)
+      %td.total TOTAL
       - usd_spend_in_default_currency = universal_currency_converter(@response.total_activities_and_other_costs_spend_in_usd, :USD, @response.currency)
       - usd_budget_in_default_currency = universal_currency_converter(@response.total_activities_and_other_costs_budget_in_usd, :USD, @response.currency)
       %td.wrap-12= n2crs(usd_spend_in_default_currency, @response.currency)

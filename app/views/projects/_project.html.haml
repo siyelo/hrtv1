@@ -15,13 +15,6 @@
 
   %tr.filler2
     %td{:colspan => 1}
-    %td.total Activities + Other Costs
-    %td.wrap-12= n2crs((project.subtotals(:spend) || 0), project.currency)
-    %td.wrap-12= n2crs((project.subtotals(:budget) || 0), project.currency)
-    %td
-
-  %tr.filler2
-    %td{:colspan => 1}
       %ul.horizontal
         %li
     %td.total Project Total

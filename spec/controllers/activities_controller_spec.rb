@@ -164,16 +164,6 @@ describe ActivitiesController do
       response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
     end
 
-    it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
-      @data_request.spend = false
-      @data_request.budget = true
-      @data_request.save
-      @project.budget = 100
-      put :update, :activity => { :budget => 110, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
-    end
-
     it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
       @data_request.spend = true
       @data_request.budget = false

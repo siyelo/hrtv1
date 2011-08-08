@@ -6,10 +6,7 @@ class Project < ActiveRecord::Base
   include NumberHelper
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name description currency
-                         budget budget_q4_prev budget_q1 budget_q2 budget_q3
-                         budget_q4 spend spend_q4_prev spend_q1 spend_q2
-                         spend_q3 spend_q4 start_date end_date]
+  FILE_UPLOAD_COLUMNS = %w[name description currency start_date end_date]
 
   strip_commas_from_all_numbers
 
@@ -55,11 +52,8 @@ class Project < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :in_flows_attributes, :budget,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-                  :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
-                  :budget2, :budget3, :budget4, :budget5, :am_approved, :am_approved_date,
-                  :user_id
+                  :location_ids, :in_flows_attributes, :am_approved, :am_approved_date,
+                  :user_id, :budget2, :budget3, :budget4, :budget5
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -84,6 +78,16 @@ class Project < ActiveRecord::Base
   # view helper ??!
   def organization_name
     organization.name
+  end
+
+  # TODO: spec
+  def budget
+    activities.only_simple.map{ |a| a.budget || 0 }.sum
+  end
+
+  # TODO: spec
+  def spend
+    activities.only_simple.map{ |a| a.spend || 0 }.sum
   end
 
   # Returns DR.currency if no project currency specified
@@ -188,10 +192,6 @@ class Project < ActiveRecord::Base
     true
   end
 
-  def total_matches_quarters?(type)
-    (self.send(type) || 0) == (total_amount_of_quarters(type) || 0)
-  end
-
   def linked?
      return false if self.in_flows.empty?
      self.in_flows.each do |in_flow|
@@ -210,7 +210,7 @@ class Project < ActiveRecord::Base
 
   #checks if the project amount == the inflows amount
   def amounts_matches_funders?(amount_method)
-    (self.send(amount_method) || 0) == in_flows_total(amount_method)
+    self.send(amount_method) == in_flows_total(amount_method)
   end
 
   # calculates the activity totals for budget/spent

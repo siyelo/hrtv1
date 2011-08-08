@@ -1,25 +1,3 @@
-shared_examples_for "project budget checker" do
-  it "succeeds with only a project budget entered" do
-    @project.spend = nil; @project.save
-    @response.project_amounts_entered?.should == true
-  end
-  it "succeeds if project budget not entered but a quarter budget is" do
-    @project.budget = nil; @project.budget_q1 = 10; @project.save
-    @response.project_amounts_entered?.should == true
-  end
-end
-
-shared_examples_for "project spend checker" do
-  it "succeeds with only a project spend entered" do
-    @project.budget = nil; @project.save; @response.reload
-    @response.project_amounts_entered?.should == true
-  end
-  it "succeeds if project spend not entered but a quarter spend is" do
-    @project.spend = nil; @project.spend_q1 = 10 ; @project.save
-    @response.project_amounts_entered?.should == true
-  end
-end
-
 shared_examples_for "activity spend checker" do
   it "succeeds with only activity spend entered" do
     @activity.budget = nil; @activity.save

@@ -41,11 +41,7 @@ class ActivitiesController < Reporter::BaseController
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html do
-          if @activity.check_projects_budget_and_spend?
-            flash[:notice] = 'Activity was successfully updated'
-          else
-            flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
-          end
+          flash[:notice] = 'Activity was successfully updated'
           html_redirect
         end
         format.js   { js_redirect }

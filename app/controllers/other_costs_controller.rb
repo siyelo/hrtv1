@@ -103,11 +103,6 @@ class OtherCostsController < Reporter::BaseController
     end
 
     def html_redirect
-      unless @other_cost.check_projects_budget_and_spend?
-        flash.delete(:notice)
-        flash[:error] = "Please be aware that your activities past expenditure/current budget exceeded that of your projects"
-      end
-
       if params[:commit] == "Save & Classify >"
         coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
         redirect_to activity_code_assignments_path(@other_cost, :coding_type => coding_type)

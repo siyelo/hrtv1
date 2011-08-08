@@ -132,7 +132,6 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
       errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
@@ -141,8 +140,6 @@ class DataResponse < ActiveRecord::Base
       errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
       errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
-      errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
   end
@@ -155,30 +152,24 @@ class DataResponse < ActiveRecord::Base
 
   def basics_done?
     projects_entered? &&
-    project_amounts_entered? &&
     projects_have_activities? &&
     projects_have_other_costs? &&
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends? &&
     activity_amounts_entered? &&
     activities_coded? &&
-    other_costs_coded? &&
-    projects_and_activities_have_matching_budgets? &&
-    projects_and_activities_have_matching_spends?
+    other_costs_coded?
   end
 
   def basics_done_to_h
     {:projects_entered =>                                  projects_entered?,
-    :project_amounts_entered =>                            project_amounts_entered?,
     :projects_have_activities =>                           projects_have_activities?,
     :projects_have_other_costs =>                          projects_have_other_costs?,
     :projects_and_funding_sources_have_matching_budgets => projects_and_funding_sources_have_matching_budgets?,
     :projects_and_funding_sources_have_correct_spends =>   projects_and_funding_sources_have_correct_spends?,
     :activity_amounts_entered =>                           activity_amounts_entered?,
     :activities_coded =>                                   activities_coded?,
-    :other_costs_coded =>                                  other_costs_coded?,
-    :projects_and_activities_have_matching_budgets =>       projects_and_activities_have_matching_budgets?,
-    :projects_and_activities_have_matching_spends? =>       projects_and_activities_have_matching_spends? }
+    :other_costs_coded =>                                  other_costs_coded?}
   end
 
 
@@ -194,11 +185,6 @@ class DataResponse < ActiveRecord::Base
     !projects.empty?
   end
   memoize :projects_entered?
-
-  def project_amounts_entered?
-    projects_entered? && projects_without_amounts.empty?
-  end
-  memoize :project_amounts_entered?
 
   def projects_without_amounts
     select_without_amounts(self.projects)
@@ -310,27 +296,6 @@ class DataResponse < ActiveRecord::Base
     projects_and_funding_sources_have_correct_spends?
   end
   memoize :projects_funding_sources_ok?
-
-  def projects_and_activities_have_matching_budgets?
-    projects_and_activities_matching_amounts?(:budget)
-  end
-
-  def projects_and_activities_have_matching_spends?
-    projects_and_activities_matching_amounts?(:spend)
-  end
-
-  def projects_activities_ok?
-    projects_and_activities_have_matching_budgets? &&
-    projects_and_activities_have_matching_spends?
-  end
-  memoize :projects_activities_ok?
-
-  def projects_and_activities_matching_amounts?(amount_method)
-    projects.each do |project|
-      return false if !project_and_activities_matching_amounts?(project, amount_method)
-    end
-    true
-  end
 
   def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method

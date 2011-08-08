@@ -1504,12 +1504,6 @@ var activity_form = function () {
     }
   });
 
-  // show the jquery autocomplete combobox instead of
-  // standard dropdown
-  // setting the id for cucumber tests
-  $( ".js_combobox" ).combobox();
-  $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
-
   $('.js_implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
@@ -1635,11 +1629,6 @@ var dashboard_index = {
   }
 };
 
-var sub_activities_create = {
-  run: function () {
-    $( ".js_combobox" ).combobox();
-  }
-};
 
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
@@ -1695,12 +1684,6 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    // show the jquery autocomplete combobox instead of standard dropdown
-    $( ".js_combobox" ).combobox(); // for currency dropdown
-                                // the nested funding source init should be
-                                // handled by the "add row" js callback
-    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
-
     $('.edit_button').live('click', function (e) {
       e.preventDefault();
       var element = $(this).parents('.fields');

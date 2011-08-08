@@ -117,6 +117,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
@@ -142,5 +143,7 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  project_from_id      :integer
+#  budget_in_usd        :decimal(, )     default(0.0)
+#  spend_in_usd         :decimal(, )     default(0.0)
 #
 

@@ -395,6 +395,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -406,20 +407,8 @@ end
 #  end_date         :date
 #  created_at       :datetime
 #  updated_at       :datetime
-#  budget           :decimal(, )
-#  spend            :decimal(, )
 #  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
 #  data_response_id :integer         indexed
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
 #  comments_count   :integer         default(0)
 #  budget2          :decimal(, )
 #  budget3          :decimal(, )

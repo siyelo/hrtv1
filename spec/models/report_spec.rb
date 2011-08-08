@@ -43,8 +43,7 @@ describe Report do
       @organization      = Factory(:organization)
       @request           = Factory(:data_request, :organization => @organization)
       @response          = @organization.latest_response
-      @project           = Factory(:project, :data_response => @response,
-                                   :budget => 10, :spend => 10)
+      @project           = Factory(:project, :data_response => @response)
       @activity          = Factory(:activity, :data_response => @response, :project => @project,
                                    :budget => 10, :spend => 10)
       Factory(:coding_budget, :activity => @activity,

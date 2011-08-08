@@ -40,9 +40,6 @@
           - unless @response.projects_entered?
             %span.info
               = render 'projects/no_projects_yet'
-      // maybe ul.review first?
-      %li
-        = render 'project_amounts', :project_amounts_entered => ready(@response.project_amounts_entered?), :projects_entered => ready(@response.projects_entered?)
 
       %li
         %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
@@ -169,28 +166,7 @@
                   %th Diff
                   %th.manage Manage
               %tbody
-                = render :partial => 'project_funding_sources'
-
-      %li
-        %h3{:class =>  ready(@response.projects_activities_ok?)}
-          Projects Amounts = Totals for Activities + Totals for Other Costs
-          - unless @response.projects_activities_ok?
-            %span.info
-              The Project amounts should match the total amounts for Activities plus Other Costs. Please update your projects/activities/other costs accordingly.
-
-        - unless @response.projects_activities_ok?
-          .simple_table.push.review
-            %table
-              %thead
-                %tr
-                  %th= "Project/Activity"
-                  %th= "Project Amount Total"
-                  %th= "Activity/Other Costs Amount Total"
-                  %th= "Diff"
-              %tbody
-                = render :partial => 'project_amounts_match_activities_othercosts'
-
-
+                -#= render :partial => 'project_funding_sources'
 
 //%hr.divider
 %p

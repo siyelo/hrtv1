@@ -6,24 +6,26 @@ module BudgetSpendHelper
     base.class_eval do
 
       ### Callbacks
-      before_save :set_total_amounts
       if base.eql?(Activity) || base.eql?(FundingFlow)
+        before_save :set_total_amounts
         before_save :update_cached_usd_amounts
       end
 
       ### Validations
-      validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
-      validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
-      validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
-      validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
-      validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
-      validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
-      validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-      validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
-      validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
-      validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
-      validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
-      validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
+      unless base.eql?(Project)
+        validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
+        validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
+        validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
+        validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
+        validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
+        validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
+        validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
+        validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
+        validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
+        validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
+        validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
+        validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
+      end
 
       if base.eql?(Project) || base.eql?(Activity)
         validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}

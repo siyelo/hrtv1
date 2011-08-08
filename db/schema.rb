@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110805133157) do
+ActiveRecord::Schema.define(:version => 20110808125225) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -297,20 +297,8 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget"
-    t.decimal  "spend"
     t.string   "currency"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
-    t.decimal  "spend_q4_prev"
     t.integer  "data_response_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
     t.integer  "comments_count",   :default => 0
     t.decimal  "budget2"
     t.decimal  "budget3"

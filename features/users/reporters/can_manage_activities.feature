@@ -9,7 +9,7 @@ Feature: Reporter can manage activities
     And an organization "my_organization" exists with name: "organization2"
     Then data_response should exist with data_request: the data_request, organization: the organization
     And a reporter exists with email: "reporter@hrtapp.com", organization: organization "my_organization"
-    And a project exists with name: "project1", budget: "20000", data_response: the data_response
+    And a project exists with name: "project1", data_response: the data_response
     And a location exists with short_display: "Location1"
     And the location is one of the project's locations
     And a location exists with short_display: "Location2"

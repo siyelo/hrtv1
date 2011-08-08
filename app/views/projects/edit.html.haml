@@ -20,13 +20,6 @@
   - if @response.data_request.budget? && !@project.amounts_matches_funders?(:budget)
     %li= "Project current budget does not match the total of budgets stated in funding sources below. Please add funding sources or adjust your amounts."
 
-  - if !@project.total_matches_quarters?("spend")
-    %li Your quarterly Expenditure amounts do not match the total Expenditure amounts
-
-  - if @response.request.budget_by_quarter?
-    - if !@project.total_matches_quarters?("budget")
-      %li Your quarterly Budget amounts do not match the total Budget amounts
-
 %ul.horizontal.right.plain
   %li
     - link_to "#comments" do

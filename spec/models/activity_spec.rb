@@ -336,6 +336,29 @@ describe Activity do
         activities[0].implementer.should == implementer
       end
     end
+
+    context "when CSV has an existing project" do
+      it "assigns existing project to the activity from the organization's response" do
+        organization1  = Factory(:organization)
+        request        = Factory(:data_request, :organization => organization1)
+        response1      = organization1.latest_response
+        project        = Factory(:project, :data_response => response1)
+        activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
+        doc            = FasterCSV.open(activities_csv, {:headers => true})
+
+        # project named: 'project1' in the organization uploading the file
+        project1       = Factory(:project, :name => 'project1', :data_response => response1)
+
+        organization2  = Factory(:organization)
+        response2      = organization2.latest_response
+        # project named: 'project1' in the other organization
+        project2       = Factory(:project, :name => 'project1', :data_response => response2)
+
+        activities = Activity.find_or_initialize_from_file(response1, doc, project.id)
+        activities.count.should == 1
+        activities[0].project.should == project1
+      end
+    end
   end
 end
 

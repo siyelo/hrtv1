@@ -4,6 +4,7 @@ describe Organization do
 
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
+    it { should allow_mass_assignment_of(:location_id) }
     it { should allow_mass_assignment_of(:raw_type) }
     it { should allow_mass_assignment_of(:fosaid) }
     it { should allow_mass_assignment_of(:currency) }
@@ -18,7 +19,7 @@ describe Organization do
 
   describe "Associations" do
     it { should have_and_belong_to_many(:activities) }
-    it { should have_and_belong_to_many(:locations) }
+    it { should belong_to(:location) }
     it { should have_many(:users) }
     it { should have_many(:data_requests) }
     it { should have_many(:data_responses) }
@@ -282,8 +283,8 @@ describe Organization do
       @organization.is_empty?.should_not be_true
     end
 
-    it "is not empty when it has locations" do
-      @organization.locations << Factory.create(:location)
+    it "is not empty when it has a location" do
+      @organization.location = Factory.create(:location)
       @organization.is_empty?.should_not be_true
     end
 
@@ -392,11 +393,12 @@ describe Organization do
       @target.in_flows.count.should == 2
     end
 
-    it "copies locations from duplicate to @target" do
-      @target.locations << Factory(:location)
-      @duplicate.locations << Factory(:location)
+    it "copies location from duplicate to @target" do
+      @target.location = Factory(:location)
+      new_location = Factory(:location)
+      @duplicate.location = new_location
       Organization.merge_organizations!(@target, @duplicate)
-      @target.locations.count.should == 2
+      @target.location.should == new_location
     end
 
     it "copies users from @duplicate to @target" do

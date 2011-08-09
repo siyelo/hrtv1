@@ -115,9 +115,9 @@ class SubActivity < Activity
     @budget_mask = the_budget_mask
   end
 
-  def locations
-    if provider && provider.locations.present?
-      provider.locations
+  def locations # TODO: deprecate
+    if provider && provider.location.present?
+      [provider.location] # TODO - return without array
     else
       activity.locations
     end
@@ -161,6 +161,7 @@ class SubActivity < Activity
   memoize :coding_spend_cost_categorization
 
   private
+
     def update_counter_cache
       self.data_response.sub_activities_count = data_response.sub_activities.count
       self.data_response.save(false)
@@ -169,20 +170,18 @@ class SubActivity < Activity
     # if the provider is a clinic or hospital it has only one location
     # so put all the money towards that location
     def adjusted_district_assignments(klass, sub_activity_amount, activity_amount)
-      sub_activity_amount = 0 if sub_activity_amount.blank?
-      activity_amount = 0 if activity_amount.blank?
-
-      if locations.size == 1 && sub_activity_amount > 0
-        [fake_ca(klass, locations.first, sub_activity_amount)]
+      sub_activity_amount ||= 0
+      activity_amount ||= 0
+      if provider.location && sub_activity_amount > 0
+        [fake_ca(klass, provider.location, sub_activity_amount)]
       else
         adjusted_assignments(klass, sub_activity_amount, activity_amount)
       end
     end
 
     def adjusted_assignments(klass, sub_activity_amount, activity_amount)
-      sub_activity_amount = 0 if sub_activity_amount.blank?
-      activity_amount = 0 if activity_amount.blank?
-
+      sub_activity_amount ||= 0
+      activity_amount ||= 0
       old_assignments = activity.code_assignments.with_type(klass.to_s)
       new_assignments = []
 
@@ -260,7 +259,6 @@ class SubActivity < Activity
       budget_mask = budget_mask.strip if budget_mask && !is_number?(budget_mask)
       spend_mask = spend_mask.strip if spend_mask && !is_number?(spend_mask)
     end
-
 end
 
 

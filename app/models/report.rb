@@ -30,7 +30,6 @@ class Report < ActiveRecord::Base
     'dynamic_query_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
-    'activities_by_nha_subimps',
     'activities_by_all_codes_budget'
   ]
 
@@ -112,8 +111,6 @@ class Report < ActiveRecord::Base
           Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget, true)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(simple_activities_for_request)
-        when 'activities_by_nha_subimps'
-          Reports::ActivitiesByNhaSubimps.new(:spent, simple_activities_for_request_with_associations)
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget, true)
         else

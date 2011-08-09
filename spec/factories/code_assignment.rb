@@ -14,7 +14,7 @@ Factory.define :coding_budget_other_cost, :class => CodingBudget, :parent => :co
 end
 
 Factory.define :coding_budget_district, :class => CodingBudgetDistrict, :parent => :code_assignment do |f|
-  f.code            { Factory.create :mtef_code }
+  f.code            { Factory.create :location }
 end
 
 Factory.define :coding_budget_cost_categorization, :class => CodingBudgetCostCategorization, :parent => :code_assignment do |f|
@@ -30,7 +30,7 @@ Factory.define :coding_spend_other_cost, :class => CodingSpend, :parent => :code
 end
 
 Factory.define :coding_spend_district, :class => CodingSpendDistrict, :parent => :code_assignment do |f|
-  f.code            { Factory.create :mtef_code }
+  f.code            { Factory.create :location }
 end
 
 Factory.define :coding_spend_cost_categorization, :class => CodingSpendCostCategorization, :parent => :code_assignment do |f|

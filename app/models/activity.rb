@@ -169,10 +169,7 @@ class Activity < ActiveRecord::Base
 
   def self.download_template(response, activities = [])
     FasterCSV.generate do |csv|
-      header_row = file_upload_columns(response)
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      csv << header_row
+      csv << file_upload_columns_with_id_col(response)
 
       activities.each do |activity|
         row = []
@@ -193,14 +190,11 @@ class Activity < ActiveRecord::Base
         row << activity.budget_q3
         row << activity.budget_q4
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << activity.text_for_beneficiaries
         row << activity.targets.map{|o| o.description}.join(",")
         row << activity.start_date
         row << activity.end_date
-
         (100 - row.length).times{ row << nil}
         row << activity.id
-
         csv << row
       end
     end
@@ -208,10 +202,10 @@ class Activity < ActiveRecord::Base
 
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
+    col_names = file_upload_columns(response)
 
     doc.each do |row|
       activity_id = row['Id']
-
       if activity_id.present?
         # reset the activity id if it is already found in previous rows
         # this can happen when user edits existing activities but copies
@@ -224,27 +218,24 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
-      activity.csv_project_name        = row[0].try(:strip)
-      activity.name                    = row[1].try(:strip)
-      activity.description             = row[2].try(:strip)
-      activity.csv_provider            = row[3].try(:strip)
-      activity.spend                   = row[4].try(:strip)
-      activity.spend_q4_prev           = row[5].try(:strip)
-      activity.spend_q1                = row[6].try(:strip)
-      activity.spend_q2                = row[7].try(:strip)
-      activity.spend_q3                = row[8].try(:strip)
-      activity.spend_q4                = row[9].try(:strip)
-      activity.budget                  = row[10].try(:strip)
-      activity.budget_q4_prev          = row[11].try(:strip)
-      activity.budget_q1               = row[12].try(:strip)
-      activity.budget_q2               = row[13].try(:strip)
-      activity.budget_q3               = row[14].try(:strip)
-      activity.budget_q4               = row[15].try(:strip)
-      activity.csv_beneficiaries       = row[16].try(:strip)
-      activity.text_for_beneficiaries  = row[17].try(:strip)
-      activity.csv_targets             = row[18].try(:strip)
-      activity.start_date              = flexible_date_parse(row[19].try(:strip))
-      activity.end_date                = flexible_date_parse(row[20].try(:strip))
+      activity.csv_project_name  = row[col_names[0]].try(:strip)
+      activity.name              = row[col_names[1]].try(:strip)
+      activity.description       = row[col_names[2]].try(:strip)
+      activity.csv_provider      = row[col_names[3]].try(:strip)
+      activity.spend             = row[4].try(:strip) # "<MMM 'YY - MMM 'YY> Spend"
+      activity.spend_q1          = row[5].try(:strip)
+      activity.spend_q2          = row[6].try(:strip)
+      activity.spend_q3          = row[7].try(:strip)
+      activity.spend_q4          = row[8].try(:strip)
+      activity.budget            = row[9].try(:strip) # "<MMM 'YY - MMM 'YY> Budget"
+      activity.budget_q1         = row[10].try(:strip)
+      activity.budget_q2         = row[11].try(:strip)
+      activity.budget_q3         = row[12].try(:strip)
+      activity.budget_q4         = row[13].try(:strip)
+      activity.csv_beneficiaries = row['Beneficiaries'].try(:strip)
+      activity.csv_targets       = row['Targets'].try(:strip)
+      activity.start_date        = DateHelper::flexible_date_parse(row['Start Date'].try(:strip))
+      activity.end_date          = DateHelper::flexible_date_parse(row['End Date'].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -255,15 +246,15 @@ class Activity < ActiveRecord::Base
         project = project_id.present? ? Project.find_by_id(project_id) : nil
       end
 
-      activity.project             = project if project
-      activity.name                = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      provider                     = Organization.find(:first,
-                                     :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-      activity.provider            = provider if provider
-      activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
-                                      map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
-      activity.targets             = activity.csv_targets.to_s.split(';').
-                                      map{|o| Target.find_or_create_by_description(o.strip)}.compact
+      activity.project       = project if project
+      activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
+      provider               = Organization.find(:first,
+                                 :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
+      activity.provider      = provider if provider
+      activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
+                                 map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+      activity.targets       = activity.csv_targets.to_s.split(';').
+                                 map{|o| Target.find_or_create_by_description(o.strip)}.compact
 
       activity.save
 
@@ -358,17 +349,13 @@ class Activity < ActiveRecord::Base
 
   def funding_streams
     return [] if project.nil?
-
     budget_ratio = budget && project.budget ? budget / project.budget : 0
     spend_ratio  = spend && project.spend ? spend / project.spend : 0
-
     ufs = project.cached_ultimate_funding_sources
-
     ufs.each do |fs|
       fs[:budget] = fs[:budget] * budget_ratio if fs[:budget]
       fs[:spend]  = fs[:spend] * spend_ratio if fs[:spend]
     end
-
     ufs
   end
 
@@ -393,7 +380,6 @@ class Activity < ActiveRecord::Base
                    (budget_q2 || 0) <= (project.budget_q2 || 0) &&
                    (budget_q3 || 0) <= (project.budget_q3 || 0) &&
                    (budget_q4 || 0) <= (project.budget_q4 || 0)
-
     return false
   end
 
@@ -427,9 +413,13 @@ class Activity < ActiveRecord::Base
   private
 
     ### Class methods
+
     def self.file_upload_columns(response)
-      ["Project Name", "Activity Name", "Activity Description",
-       "Provider", "Past Expenditure",
+      ["Project Name",
+       "Activity Name",
+       "Activity Description",
+       "Provider",
+       "Past Expenditure",
        "#{response.quarter_label(:spend, 'q4_prev')} Spend",
        "#{response.quarter_label(:spend, 'q1')} Spend",
        "#{response.quarter_label(:spend, 'q2')} Spend",
@@ -441,19 +431,19 @@ class Activity < ActiveRecord::Base
         "#{response.quarter_label(:budget, 'q2')} Budget",
         "#{response.quarter_label(:budget, 'q3')} Budget",
         "#{response.quarter_label(:budget, 'q4')} Budget",
-       "Districts", "Beneficiaries",
-       "Beneficiary details / Other beneficiaries", "Targets",
-       "Start Date", "End Date"]
+       "Beneficiaries",
+       "Targets",
+       "Start Date",
+       "End Date"]
     end
 
-    def self.flexible_date_parse(datestr)
-      begin
-        Date.parse(datestr.gsub('/', '-'))
-      rescue
-        Date.strptime(datestr.gsub('/', '-'), '%d-%m-%Y') rescue datestr
-      end
+    # adds a 'hidden' id column at the end of the row
+    def self.file_upload_columns_with_id_col(response)
+      header_row = file_upload_columns(response)
+      (100 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+      header_row
     end
-
 
     ### Instance methods
 

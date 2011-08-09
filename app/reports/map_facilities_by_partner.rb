@@ -80,7 +80,7 @@ class Reports::MapFacilitiesByPartner
       row = []
 
       row << organization.fosaid
-      row << organization.locations.last.to_s
+      row << organization.location.to_s
       row << organization.to_s.upcase
       row << n2c(@districts_hash[organization].delete(:total)) #remove key
 

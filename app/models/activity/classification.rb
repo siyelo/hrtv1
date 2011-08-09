@@ -166,7 +166,6 @@ module Activity::Classification
     end
 
     private
-
       def delete_existing_code_assignments_by_type(coding_type)
         CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
       end
@@ -194,13 +193,11 @@ module Activity::Classification
 
       def district_codings_from_sub_activities(klass)
         code_assignments = sub_activity_district_code_assignments_if_complete(klass.name)
-
         location_amounts = {}
         code_assignments.each do |ca|
           location_amounts[ca.code] = 0 unless location_amounts[ca.code]
           location_amounts[ca.code] += ca.cached_amount
         end
-
         location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
       end
 

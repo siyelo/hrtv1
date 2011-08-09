@@ -1,9 +1,10 @@
 class Location < Code
-
   # Associations
   has_and_belongs_to_many :activities
-  has_and_belongs_to_many :organizations
+  has_many :organizations
   has_one :district, :foreign_key => 'old_location_id'
+
+  alias_attribute :name, :short_display
 
   # Named scopes
   named_scope :all_with_counters,

@@ -1,3 +1,7 @@
+Organization.class_eval do
+  has_and_belongs_to_many :locations
+end
+
 class CalculateCachedAmountsForActivitiesAndFundingFlows < ActiveRecord::Migration
   def self.up
     # don't run this now since we are removing amounts from the models

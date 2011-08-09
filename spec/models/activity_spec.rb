@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Activity do
-
   describe "Associations" do
     it { should belong_to :provider }
     it { should belong_to :data_response }
@@ -165,7 +164,64 @@ describe Activity do
       data_response = organization.latest_response
       Timecop.freeze(Date.parse("2009-10-15"))
       header_row = Activity.download_template(data_response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Districts,Beneficiaries,Beneficiary details / Other beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Past Expenditure,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Current Budget,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
+    end
+
+    it "should return csv header" do
+      organization  = Factory(:organization)
+      request        = Factory(:data_request, :organization => organization)
+      response      = organization.latest_response
+      Activity.file_upload_columns(response).should == [
+        'Project Name',
+        'Activity Name',
+        'Activity Description',
+        'Provider',
+        'Past Expenditure',
+        "Apr '10 - Jun '10 Spend",
+        "Jul '10 - Sep '10 Spend",
+        "Oct '10 - Dec '10 Spend",
+        "Jan '11 - Mar '11 Spend",
+        "Apr '11 - Jun '11 Spend",
+        "Current Budget",
+        "Apr '11 - Jun '11 Budget",
+        "Jul '11 - Sep '11 Budget",
+        "Oct '11 - Dec '11 Budget",
+        "Jan '12 - Mar '12 Budget",
+        "Apr '12 - Jun '12 Budget",
+        'Beneficiaries',
+        'Targets',
+        'Start Date',
+        'End Date']
+    end
+  end
+
+  describe "#download_template" do
+    it "should return template" do
+      basic_setup_activity
+      #@activity.targets << Factory(:target)
+      csv = Activity.download_template(@response, [@activity])
+      rows = FasterCSV.parse(csv)
+      rows[0].should == Activity.file_upload_columns_with_id_col(@response)
+      rows[1][0].should == @activity.project.try(:name)
+      rows[1][1].should == @activity.name
+      rows[1][2].should == @activity.description
+      rows[1][3].should == @activity.provider.try(:name)
+      rows[1][4].to_s.should == @activity.spend.to_s
+      rows[1][5].to_s.should == @activity.spend_q4_prev.to_s
+      rows[1][6].to_s.should == @activity.spend_q1.to_s
+      rows[1][7].to_s.should == @activity.spend_q2.to_s
+      rows[1][8].to_s.should == @activity.spend_q3.to_s
+      rows[1][9].to_s.should == @activity.spend_q4.to_s
+      rows[1][10].to_s.should == @activity.budget.to_s
+      rows[1][11].to_s.should == @activity.budget_q4_prev.to_s
+      rows[1][12].to_s.should == @activity.budget_q1.to_s
+      rows[1][13].to_s.should == @activity.budget_q2.to_s
+      rows[1][14].to_s.should == @activity.budget_q3.to_s
+      rows[1][15].to_s.should == @activity.budget_q4.to_s
+      rows[1][16].should == @activity.beneficiaries.map{|l| l.short_display}.join(',')
+      rows[1][17].should == @activity.targets.map{|o| o.description}.join("")
+      rows[1][18].should == @activity.start_date.to_s
+      rows[1][19].should == @activity.end_date.to_s
     end
   end
 
@@ -254,18 +310,6 @@ describe Activity do
     end
   end
 
-  describe "CSV dates" do
-    it "changes the date format from 12/12/2012 to 12-12-2012" do
-      new_date = Activity.flexible_date_parse('12/12/2012')
-      new_date.should.eql? Date.parse('12-12-2012')
-    end
-
-    it "changes the date format from 2012/03/30 to 30-03-2012" do
-      new_date = Activity.flexible_date_parse('2012/03/30')
-      new_date.should.eql? Date.parse('30-03-2012')
-    end
-  end
-
   describe "#amount_for_provider" do
     before :each do
       basic_setup_activity
@@ -309,18 +353,25 @@ describe Activity do
 
   describe "#self.find_or_initialize_from_file" do
     context "when CSV has implementer value of: 'Shyira HD District Hospital'" do
-      it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
-        organization   = Factory(:organization)
-        request        = Factory(:data_request, :organization => organization)
-        response       = organization.latest_response
-        project        = Factory(:project, :data_response => response)
-        activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
-        doc            = FasterCSV.open(activities_csv, {:headers => true})
-        implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
+      before :each do
+        @organization   = Factory(:organization)
+        @request        = Factory(:data_request, :organization => @organization)
+        @response       = @organization.latest_response
+        @project        = Factory(:project, :data_response => @response)
+        @activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
+        @doc            = FasterCSV.open(@activities_csv, {:headers => true})
+        @implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
+        @activities     = Activity.find_or_initialize_from_file(@response, @doc, @project.id)
+      end
 
-        activities = Activity.find_or_initialize_from_file(response, doc, project.id)
-        activities.count.should == 1
-        activities[0].implementer.should == implementer
+      it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
+        @activities.count.should == 1
+        @activities[0].implementer.should == @implementer
+      end
+
+      it "recognizes non-standard dates" do
+        @activities[0].start_date.to_s.should  == '2012-01-01'
+        @activities[0].end_date.to_s.should    == '2012-12-12'
       end
     end
 

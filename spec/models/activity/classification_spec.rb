@@ -358,8 +358,8 @@ describe Activity, "Classification" do
       it "returns sub_activity budget district code assignments" do
         @location1    = Factory(:location, :short_display => 'Location1')
         @location2    = Factory(:location, :short_display => 'Location2')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory(:ngo, :name => 'Implementer2', :locations => [@location2])
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
+        implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
 
         @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
                                                   :activity => @activity,
@@ -391,8 +391,8 @@ describe Activity, "Classification" do
 
       it "returns empty array unless all sub implementers have locations" do
         @location1    = Factory(:location, :short_display => 'Location1')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory(:ngo, :name => 'Implementer2')# , :locations => [@location2])
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
+        implementer2  = Factory(:ngo, :name => 'Implementer2')# , :location => @location2)
 
         @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
                                                   :provider => implementer1,
@@ -454,8 +454,8 @@ describe Activity, "Classification" do
       it "returns sub_activity spend district code assignments" do
         @location1    = Factory(:location, :short_display => 'Location1')
         @location2    = Factory(:location, :short_display => 'Location2')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :locations => [@location1])
-        implementer2  = Factory(:ngo, :name => 'Implementer2', :locations => [@location2])
+        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
+        implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
 
         @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
                                                   :provider => implementer1,
@@ -601,126 +601,64 @@ describe Activity, "Classification" do
 
   describe "derive_classifications_from_sub_implementers" do
     before :each do
-      # organizations
       donor          = Factory(:donor, :name => 'Donor')
       ngo            = Factory(:ngo,   :name => 'Ngo')
       @location1     = Factory(:location, :short_display => 'Location1')
       @location2     = Factory(:location, :short_display => 'Location2')
-
       @implementer1  = Factory(:ngo, :name => 'Implementer1')
       @implementer2  = Factory(:ngo, :name => 'Implementer2')
-
-      # requests, responses
       @data_request  = Factory(:data_request, :organization => donor)
       @response      = ngo.latest_response
-
-      # project
       project        = Factory(:project, :data_response => @response)
-
-      # funding flows
-      in_flow        = Factory(:funding_flow,
-                               :project => project,
-                               :from => donor, :to => ngo,
+      in_flow        = Factory(:funding_flow, :project => project, :from => donor, :to => ngo,
                                :budget => 10, :spend => 10)
-      out_flow       = Factory(:funding_flow,
-                               :project => project,
-                               :from => ngo, :to => @implementer1,
+      out_flow       = Factory(:funding_flow, :project => project, :from => ngo, :to => @implementer1,
                                :budget => 7, :spend => 7)
-
-      # activities
       @activity      = Factory(:activity, :data_response => @response, :project => project,
-                               :name => 'Activity 1',
-                               :budget => 100, :spend => 100,
+                               :name => 'Activity 1', :budget => 100, :spend => 100,
                                :provider => ngo, :project => project)
-
-      @sub_activity1 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity,
-                               :provider => @implementer1,
-                               :data_response => @response,
+      @sub_activity1 = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+                               :provider => @implementer1, :data_response => @response,
                                :budget => 2, :spend => 2)
-
       @sub_activity2 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity,
-                               :provider => @implementer2,
-                               :data_response => @response,
-                               :budget => 3, :spend => 3)
+                               :activity => @activity, :provider => @implementer2,
+                               :data_response => @response, :budget => 3, :spend => 3)
     end
 
-    context "budget" do
-      it "removes existing code assignments" do
-        Factory(:coding_budget_district, :activity => @activity, :amount => nil, :cached_amount => 100)
-        @activity.code_assignments.length.should == 1
-        @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
-        @activity.code_assignments.reload.length.should == 0
-      end
+    [:coding_budget_district, :coding_spend_district].each do |district_coding_type|
+      describe "#{district_coding_type.to_s.humanize}" do
+        it "removes existing code assignments" do
+          Factory(district_coding_type, :activity => @activity, :amount => nil, :cached_amount => 100)
+          @activity.code_assignments.length.should == 1
+          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
+          @activity.code_assignments.reload.length.should == 0
+        end
 
-      it "derives nothing when no implementers has no locations" do
-        @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
-        @activity.code_assignments.length.should == 0
-      end
+        it "derives nothing when no implementers has no locations" do
+          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
+          @activity.code_assignments.length.should == 0
+        end
 
-      it "derives only classifications for the locations of the implementers" do
-        @implementer1.locations << @location1
-        @implementer2.locations << @location2
+        it "derives only classifications for the locations of the implementers" do
+          @implementer1.location = @location1; @implementer1.save
+          @implementer2.location = @location2; @implementer2.save
+          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
+          @activity.code_assignments.length.should == 2
+          @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase
+          @activity.code_assignments[1].type.should == district_coding_type.to_s.camelcase
+          cached_amounts = @activity.code_assignments.map(&:cached_amount)
+          cached_amounts.should include(2)
+          cached_amounts.should include(3)
+        end
 
-        @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
-
-        @activity.code_assignments.length.should == 2
-        @activity.code_assignments[0].type.should == 'CodingBudgetDistrict'
-        @activity.code_assignments[1].type.should == 'CodingBudgetDistrict'
-        cached_amounts = @activity.code_assignments.map(&:cached_amount)
-        cached_amounts.should include(2)
-        cached_amounts.should include(3)
-      end
-
-      it "sums derived classifications when 2 sub implementers in same location" do
-        @implementer1.locations << @location1
-        @implementer2.locations << @location1
-
-        @activity.derive_classifications_from_sub_implementers!('CodingBudgetDistrict')
-
-        @activity.code_assignments.length.should == 1
-        @activity.code_assignments[0].type.should == 'CodingBudgetDistrict'
-        @activity.code_assignments[0].cached_amount.should == 5
-      end
-    end
-
-    context "spend" do
-      it "removes existing code assignments" do
-        Factory(:coding_spend_district, :activity => @activity, :amount => nil, :cached_amount => 100)
-        @activity.code_assignments.length.should == 1
-        @activity.derive_classifications_from_sub_implementers!('CodingSpendDistrict')
-        @activity.code_assignments.reload.length.should == 0
-      end
-
-      it "derives nothing when activity does not have locations" do
-        @activity.derive_classifications_from_sub_implementers!('CodingSpendDistrict')
-        @activity.code_assignments.length.should == 0
-      end
-
-      it "derives only classifications for the locations in which is this activity" do
-        @implementer1.locations << @location1
-        @implementer2.locations << @location2
-
-        @activity.derive_classifications_from_sub_implementers!('CodingSpendDistrict')
-
-        @activity.code_assignments.length.should == 2
-        @activity.code_assignments[0].type.should == 'CodingSpendDistrict'
-        @activity.code_assignments[1].type.should == 'CodingSpendDistrict'
-        cached_amounts = @activity.code_assignments.map(&:cached_amount)
-        cached_amounts.should include(2)
-        cached_amounts.should include(3)
-      end
-
-      it "sums derived classifications when 2 sub implementers in same location" do
-        @implementer1.locations << @location1
-        @implementer2.locations << @location1
-
-        @activity.derive_classifications_from_sub_implementers!('CodingSpendDistrict')
-
-        @activity.code_assignments.length.should == 1
-        @activity.code_assignments[0].type.should == 'CodingSpendDistrict'
-        @activity.code_assignments[0].cached_amount.should == 5
+        it "sums derived classifications when 2 sub implementers in same location" do
+          @implementer1.location = @location1; @implementer1.save
+          @implementer2.location = @location1; @implementer2.save
+          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
+          @activity.code_assignments.length.should == 1
+          @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase
+          @activity.code_assignments[0].cached_amount.should == 5
+        end
       end
     end
   end

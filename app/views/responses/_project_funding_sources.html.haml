@@ -2,22 +2,22 @@
   %th{:colspan => 5}
     Current Budget
 - @projects.each do |project|
-  - if (project.in_flows_total(:budget) || 0) != (project.budget || 0)
+  - unless project.matches_in_flow_amount?(:budget)
     %tr
       %td= project.name
       %td= n2crs(project.budget, project.currency)
-      %td= n2crs(project.amounts_matches_funders?(:budget), project.currency)
+      %td= n2crs(project.in_flows_total(:budget), project.currency)
       %td= n2crs(((project.budget || 0) - project.in_flows_total(:budget)), project.currency)
       %td= link_to "Edit", edit_response_project_path(@response, project)
 
 %tr
   %th{:colspan => 5}
-    Expenditure
+    Past Expenditure
 - @projects.each do |project|
-  - if (project.in_flows_total(:spend) || 0) != (project.spend || 0)
+  - unless project.matches_in_flow_amount?(:spend)
     %tr
       %td= project.name
       %td= n2crs(project.spend, project.currency)
       %td= n2crs(project.in_flows_total(:spend), project.currency)
-      %td= n2crs(((project.spend || 0) - project.in_flows_total(:spend)), project.currency)
+      %td= n2crs((project.spend - project.in_flows_total(:spend)), project.currency)
       %td= link_to "Edit", edit_response_project_path(@response, project)

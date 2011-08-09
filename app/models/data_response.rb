@@ -276,18 +276,12 @@ class DataResponse < ActiveRecord::Base
   memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_matching_budgets?
-    projects.each do |project|
-      return false unless project.amounts_matches_funders?(:budget)
-    end
-    true
+    projects.all?{ |project| project.matches_in_flow_amount?(:budget) }
   end
   memoize :projects_and_funding_sources_have_matching_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
-    projects.each do |project|
-      return false unless project.amounts_matches_funders?(:spend)
-    end
-    true
+    projects.all?{ |project| project.matches_in_flow_amount?(:spend) }
   end
   memoize :projects_and_funding_sources_have_correct_spends?
 
@@ -304,10 +298,6 @@ class DataResponse < ActiveRecord::Base
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
     p_total + leeway >= a_total + o_total && p_total - leeway <= a_total + o_total
-  end
-
-  def projects_with_activities_not_matching_amounts(amount_method)
-    select_failing(projects, :project_and_activities_matching_amounts?, amount_method)
   end
 
   def uncoded_activities

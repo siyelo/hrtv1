@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include BudgetSpendHelper
   include NumberHelper
+  include Project::Validations
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name description currency start_date end_date]
@@ -192,25 +193,12 @@ class Project < ActiveRecord::Base
     true
   end
 
-  def linked?
-     return false if self.in_flows.empty?
-     self.in_flows.each do |in_flow|
-       return false unless in_flow.project_from_id
-     end
-     true
-   end
-
   def has_activities?
     !normal_activities.empty?
   end
 
   def has_other_costs?
     !activities.with_type("OtherCost").empty?
-  end
-
-  #checks if the project amount == the inflows amount
-  def amounts_matches_funders?(amount_method)
-    self.send(amount_method) == in_flows_total(amount_method)
   end
 
   # calculates the activity totals for budget/spent
@@ -245,23 +233,6 @@ class Project < ActiveRecord::Base
 
   def other_costs_total(amount_type)
     smart_sum(other_costs, amount_type)
-  end
-
-  def errors_from_response
-    errors = []
-
-    [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
-      if !response.project_and_activities_matching_amounts?(self, m)
-        st = m == :budget ? "Current Budget" : "Past Expenditure"
-        errors << "The Project #{st} (#{n2cndrs(self.send(m), self.currency)}) should match
-         the total #{st.downcase} for Activities plus Other Costs (#{n2cndrs(self.direct_activities_total(m) + self.other_costs_total(m), self.currency)}).
-         Please update your activities/other costs for this project accordingly."
-      end
-    end
-    if !linked?
-      errors << "The Project is not currently linked."
-    end
-    errors
   end
 
   private

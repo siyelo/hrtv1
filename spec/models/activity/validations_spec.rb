@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Activity do
+describe Activity, "Validations" do
   describe "review screen validations" do
     before :each do
       basic_setup_project

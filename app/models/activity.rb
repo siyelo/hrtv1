@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
   include BudgetSpendHelper
   include GorAmountHelpers
   include Activity::Classification
+  include Activity::Validations
 
   ### Constants
   MAX_NAME_LENGTH = 64
@@ -20,9 +21,9 @@ class Activity < ActiveRecord::Base
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
     :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-    :beneficiary_ids, :location_ids, :provider_id,
+    :beneficiary_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
+    :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets,
     :targets_attributes, :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
 
@@ -31,7 +32,6 @@ class Activity < ActiveRecord::Base
   belongs_to :data_response
   belongs_to :project
   belongs_to :user
-  has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
   has_many :sub_activities, :class_name => "SubActivity",
@@ -65,17 +65,19 @@ class Activity < ActiveRecord::Base
                                              ["activities.type = ?", type]} }
   named_scope :only_simple,          { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
-  named_scope :only_simple_with_request, lambda {|request| { :select => 'DISTINCT activities.*',
-                                                             :joins => 'INNER JOIN data_responses ON
-                                                                        data_responses.id = activities.data_response_id',
-                                                             :conditions => ['(activities.type IS NULL
-                                                                              OR activities.type IN (?)) AND
-                                                                              data_responses.data_request_id = ?',
-                                                                              'OtherCost', request.id]}}
-  named_scope :with_request, lambda {|request| {  :select => 'DISTINCT activities.*',
-                                                  :joins => 'INNER JOIN data_responses ON
-                                                             data_responses.id = activities.data_response_id',
-                                                  :conditions => ['data_responses.data_request_id = ?', request.id]}}
+  named_scope :only_simple_with_request, lambda {|request| {
+                :select => 'DISTINCT activities.*',
+                :joins => 'INNER JOIN data_responses ON
+                           data_responses.id = activities.data_response_id',
+                :conditions => ['(activities.type IS NULL
+                                 OR activities.type IN (?)) AND
+                                 data_responses.data_request_id = ?',
+                                 'OtherCost', request.id]}}
+  named_scope :with_request, lambda {|request| {
+              :select => 'DISTINCT activities.*',
+              :joins => 'INNER JOIN data_responses ON
+                         data_responses.id = activities.data_response_id',
+              :conditions => ['data_responses.data_request_id = ?', request.id]}}
   named_scope :with_a_project,       { :conditions => "project_id IS NOT NULL" }
   named_scope :without_a_project,    { :conditions => "project_id IS NULL" }
   named_scope :with_organization,    { :joins => "INNER JOIN data_responses
@@ -102,15 +104,13 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
-  before_update :remove_district_codings
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
   after_save    :update_counter_cache
   after_destroy :update_counter_cache
 
 
   ### Attribute Accessor
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts,
-                :csv_beneficiaries, :csv_targets
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
 
   ### Nested attributes
@@ -195,7 +195,6 @@ class Activity < ActiveRecord::Base
         row << activity.budget_q2
         row << activity.budget_q3
         row << activity.budget_q4
-        row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << activity.text_for_beneficiaries
         row << activity.targets.map{|o| o.description}.join(",")
@@ -244,12 +243,11 @@ class Activity < ActiveRecord::Base
       activity.budget_q2               = row[13].try(:strip)
       activity.budget_q3               = row[14].try(:strip)
       activity.budget_q4               = row[15].try(:strip)
-      activity.csv_districts           = row[16].try(:strip)
-      activity.csv_beneficiaries       = row[17].try(:strip)
-      activity.text_for_beneficiaries  = row[18].try(:strip)
-      activity.csv_targets             = row[19].try(:strip)
-      activity.start_date              = flexible_date_parse(row[20].try(:strip))
-      activity.end_date                = flexible_date_parse(row[21].try(:strip))
+      activity.csv_beneficiaries       = row[16].try(:strip)
+      activity.text_for_beneficiaries  = row[17].try(:strip)
+      activity.csv_targets             = row[18].try(:strip)
+      activity.start_date              = flexible_date_parse(row[19].try(:strip))
+      activity.end_date                = flexible_date_parse(row[20].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -265,8 +263,6 @@ class Activity < ActiveRecord::Base
       provider                     = Organization.find(:first,
                                      :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
       activity.provider            = provider if provider
-      activity.locations           = activity.csv_districts.to_s.split(',').
-                                      map{|l| Location.find_by_short_display(l.strip)}.compact
       activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
                                       map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
       activity.targets             = activity.csv_targets.to_s.split(';').
@@ -303,11 +299,6 @@ class Activity < ActiveRecord::Base
     end
 
     @provider_mask   = self.provider_id
-  end
-
-  def has_budget_or_spend?
-    return true if self.spend.present?
-    return true if self.budget.present?
   end
 
   def possible_duplicate?
@@ -347,7 +338,7 @@ class Activity < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations organizations beneficiaries].each do |assoc|
+    %w[organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
@@ -431,6 +422,11 @@ class Activity < ActiveRecord::Base
     0
   end
 
+  def locations
+    code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
+      find(:all, :include => :code).map{|ca| ca.code }.uniq
+  end
+
   private
 
     ### Class methods
@@ -493,24 +489,6 @@ class Activity < ActiveRecord::Base
       end
       return [] if cas.include?([])
       cas.flatten
-    end
-
-    # removes code assignments for non-existing locations for this activity
-    def remove_district_codings
-      activity_id           = self.id
-      location_ids          = locations.map(&:id)
-      code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-      deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                        {:activity_id => activity_id,
-                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
-                         :location_ids => location_ids}])
-
-      # only if there are deleted code assignments, update the district cached amounts
-      if deleted_count > 0
-        code_assignment_types.each do |type|
-          set_classified_amount_cache(type)
-        end
-      end
     end
 
     def approved_activity_cannot_be_changed

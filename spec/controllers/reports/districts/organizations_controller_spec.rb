@@ -5,13 +5,6 @@ describe Reports::Districts::OrganizationsController do
     before :each do
       @organization  = Factory(:organization)
       @data_request  = Factory(:data_request, :organization => @organization)
-      #@data_response = @organization.latest_response
-      #@project       = Factory(:project, :data_response => @data_response)
-      #@admin         = Factory(:admin, :organization => @organization)
-      #login @admin
-      #@location = Factory(:location)
-      #@activity = Factory(:activity, :data_response => @data_response,
-                          #:project => @project, :locations => [@location])
     end
 
     context "district_manager" do

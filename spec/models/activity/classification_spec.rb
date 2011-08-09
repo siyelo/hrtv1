@@ -75,18 +75,11 @@ describe Activity, "Classification" do
       activity.coding_budget_district_classified?.should be_true
     end
 
-    it "is classified when activity locations are empty" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100, :locations => [])
-      activity.coding_budget_district_classified?.should be_true
-    end
-
     it "is classified when activity budget is equal to coded location budget" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100, :locations => [code])
+                         :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => {"amount" => 100}}
@@ -98,7 +91,7 @@ describe Activity, "Classification" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100, :locations => [code])
+                         :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => {"amount" => 101}}
@@ -183,19 +176,11 @@ describe Activity, "Classification" do
       activity.coding_spend_district_classified?.should be_true
     end
 
-    it "is classified when activity has no locations" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100, :locations => [])
-
-      activity.coding_spend_district_classified?.should be_true
-    end
-
     it "is classified when activity spend is equal to coded location spend" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100, :locations => [code])
+                         :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => {"amount" => 100}}
@@ -207,7 +192,7 @@ describe Activity, "Classification" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100, :locations => [code])
+                         :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => {"amount" => 101}}
@@ -428,9 +413,11 @@ describe Activity, "Classification" do
 
       context "sub_activities does not have budget district code assignments" do
         it "returns even split on activity locations when activity has locations" do
-          @location1 = Factory(:location, :short_display => 'Location1')
-          @location2 = Factory(:location, :short_display => 'Location2')
-          @activity.locations << [@location1, @location2]
+          @location1    = Factory(:location, :short_display => 'Location1')
+          @location2    = Factory(:location, :short_display => 'Location2')
+          Factory(:coding_spend_district, :activity => @activity, :code => @location1)
+          Factory(:coding_spend_district, :activity => @activity, :code => @location2)
+
           @activity.budget_district_coding_adjusted.length.should == 2
           @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
           @activity.budget_district_coding_adjusted[0].cached_amount.should == 50
@@ -499,7 +486,8 @@ describe Activity, "Classification" do
         it "returns even split on activity locations when activity has locations" do
           @location1    = Factory(:location, :short_display => 'Location1')
           @location2    = Factory(:location, :short_display => 'Location2')
-          @activity.locations << [@location1, @location2]
+          Factory(:coding_budget_district, :activity => @activity, :code => @location1)
+          Factory(:coding_budget_district, :activity => @activity, :code => @location2)
           @activity.spend_district_coding_adjusted.length.should == 2
           @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
           @activity.spend_district_coding_adjusted[0].cached_amount.should == 50

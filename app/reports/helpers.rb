@@ -230,10 +230,10 @@ module Reports::Helpers
   def preload_district_associations(activities, is_budget)
     if is_budget
       Activity.send(:preload_associations, activities,
-                    [:locations, {:coding_budget_district => :activity}])
+                    {:coding_budget_district => :activity})
     else
       Activity.send(:preload_associations, activities,
-                    [:locations, {:coding_spend_district => :activity}])
+                    {:coding_spend_district => :activity})
     end
   end
 end

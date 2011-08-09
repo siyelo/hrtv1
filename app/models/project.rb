@@ -13,7 +13,6 @@ class Project < ActiveRecord::Base
 
   ### Associations
   belongs_to :data_response, :counter_cache => true
-  has_and_belongs_to_many :locations
   belongs_to :user
   has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
@@ -53,7 +52,7 @@ class Project < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :description, :spend,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :in_flows_attributes, :am_approved, :am_approved_date,
+                  :in_flows_attributes, :am_approved, :am_approved_date,
                   :user_id, :budget2, :budget3, :budget4, :budget5
 
   ### Delegates
@@ -108,7 +107,7 @@ class Project < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations user].each do |assoc|
+    %w[user].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
 
@@ -233,6 +232,10 @@ class Project < ActiveRecord::Base
 
   def other_costs_total(amount_type)
     smart_sum(other_costs, amount_type)
+  end
+
+  def locations
+    activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
   private

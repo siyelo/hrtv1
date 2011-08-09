@@ -10,10 +10,6 @@ Feature: Reporter can manage activities
     Then data_response should exist with data_request: the data_request, organization: the organization
     And a reporter exists with email: "reporter@hrtapp.com", organization: organization "my_organization"
     And a project exists with name: "project1", data_response: the data_response
-    And a location exists with short_display: "Location1"
-    And the location is one of the project's locations
-    And a location exists with short_display: "Location2"
-    And the location is one of the project's locations
     And I am signed in as "reporter@hrtapp.com"
     And I follow "data_request1"
     And I follow "Projects"
@@ -86,14 +82,11 @@ Feature: Reporter can manage activities
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-12-01"
       And I select "project1" from "Project"
-      And I check "Location1"
-      And I check "Location2"
       And I press "Save & Classify >"
     Then I should see "Activity was successfully created"
     When I follow "1ctivity1 description"
       And I fill in "Name" with "activity2"
       And I fill in "Description" with "activity2 description"
-      And I uncheck "Location2"
       And I press "Save & Classify >"
     Then I should see "Activity was successfully updated"
 

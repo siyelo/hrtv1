@@ -34,7 +34,6 @@
         %ul
           =  f.input :csv_project_name, :as => :hidden
           =  f.input :csv_provider, :as => :hidden
-          =  f.input :csv_districts, :as => :hidden
           =  f.input :csv_beneficiaries, :as => :hidden
       %li
         - unless f.object.project
@@ -42,18 +41,8 @@
             %li== We didn't find the project "#{activity.csv_project_name}" in the list, please select the correct one
             %br
 
-        - if activity.is_a?(Activity) && activity.csv_districts.present? && activity.locations.length != activity.csv_districts.to_s.split(',').length
-          %ul.response-notice
-            %li== We didn't find all the locations "#{activity.csv_districts}" in the list, please check the correct ones
-            %br
-
-
         %ul.clearfix
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => @response.projects
-
-          %li.project_sub_form
-            .project_sub_form_fields
-              = render 'activities/project_sub_form', {:activity => activity}
 
       %li
         %ul

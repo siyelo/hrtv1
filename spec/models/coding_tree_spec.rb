@@ -254,7 +254,7 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'CodingBudgetDistrict' type" do
-        @activity.stub(:locations).and_return(@fake_codes)
+        Location.stub(:all).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, CodingBudgetDistrict)
         ct.root_codes.should == @fake_codes
@@ -291,7 +291,7 @@ describe CodingTree do
       end
 
       it "returns codes for simple activity and 'CodingSpendDistrict' type" do
-        @activity.stub(:locations).and_return(@fake_codes)
+        Location.stub(:all).and_return(@fake_codes)
 
         ct = CodingTree.new(@activity, CodingSpendDistrict)
         ct.root_codes.should == @fake_codes
@@ -334,7 +334,7 @@ describe CodingTree do
       end
 
       it "returns codes for other cost activity and 'CodingBudgetDistrict' type" do
-        @other_cost.stub(:locations).and_return(@fake_codes)
+        Location.stub(:all).and_return(@fake_codes)
 
         ct = CodingTree.new(@other_cost, CodingBudgetDistrict)
         ct.root_codes.should == @fake_codes
@@ -355,7 +355,7 @@ describe CodingTree do
       end
 
       it "returns codes for other cost activity and 'CodingSpendDistrict' type" do
-        @other_cost.stub(:locations).and_return(@fake_codes)
+        Location.stub(:all).and_return(@fake_codes)
 
         ct = CodingTree.new(@other_cost, CodingSpendDistrict)
         ct.root_codes.should == @fake_codes

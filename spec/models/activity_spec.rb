@@ -6,7 +6,6 @@ describe Activity do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
-    it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many(:sub_activities).dependent(:destroy) }
@@ -44,7 +43,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:spend_q2) }
     it { should allow_mass_assignment_of(:spend_q3) }
     it { should allow_mass_assignment_of(:spend_q4) }
-    it { should allow_mass_assignment_of(:location_ids) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
@@ -55,7 +53,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:funding_sources_attributes) }
     it { should allow_mass_assignment_of(:csv_project_name) }
     it { should allow_mass_assignment_of(:csv_provider) }
-    it { should allow_mass_assignment_of(:csv_districts) }
     it { should allow_mass_assignment_of(:csv_beneficiaries) }
     it { should allow_mass_assignment_of(:targets_attributes) }
     it { should allow_mass_assignment_of(:outputs_attributes) }
@@ -263,8 +260,6 @@ describe Activity do
       save_and_deep_clone
       @clone.beneficiaries.should == @benefs
     end
-
-    it_should_behave_like "location cloner"
   end
 
   describe "CSV dates" do
@@ -358,6 +353,25 @@ describe Activity do
         activities.count.should == 1
         activities[0].project.should == project1
       end
+    end
+  end
+
+  describe "#locations" do
+    it "returns uniq locations only from district classifications" do
+      basic_setup_activity
+      location1 = Factory(:location)
+      location2 = Factory(:location)
+      location3 = Factory(:location)
+      location4 = Factory(:location)
+      Factory(:coding_budget_district, :activity => @activity, :code => location1)
+      Factory(:coding_budget_district, :activity => @activity, :code => location2)
+      Factory(:coding_spend_district, :activity => @activity, :code => location2)
+      Factory(:coding_budget, :activity => @activity, :code => location3)
+      Factory(:coding_spend, :activity => @activity, :code => location4)
+
+      @activity.locations.length.should == 2
+      @activity.locations.should include(location1)
+      @activity.locations.should include(location2)
     end
   end
 end

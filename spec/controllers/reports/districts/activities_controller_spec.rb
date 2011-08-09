@@ -10,8 +10,7 @@ describe Reports::Districts::ActivitiesController do
     @admin         = Factory(:admin, :organization => @organization)
     login @admin
     @location = Factory(:location)
-    @activity = Factory(:activity, :data_response => @data_response,
-                        :project => @project, :locations => [@location])
+    @activity = Factory(:activity, :data_response => @data_response, :project => @project)
   end
 
   describe "GET 'index'" do

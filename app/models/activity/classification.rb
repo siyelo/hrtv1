@@ -51,7 +51,7 @@ module Activity::Classification
     end
 
     def coding_budget_district_classified? #locations
-      !data_response.request.locations? || locations.empty? || budget.blank? || coding_budget_district_valid?
+      !data_response.request.locations? || budget.blank? || coding_budget_district_valid?
     end
 
     def coding_spend_classified?
@@ -63,7 +63,7 @@ module Activity::Classification
     end
 
     def coding_spend_district_classified?
-      !data_response.request.locations? || locations.empty? || spend.blank? || coding_spend_district_valid?
+      !data_response.request.locations?  || spend.blank? || coding_spend_district_valid?
     end
 
     def budget_classified?
@@ -169,7 +169,6 @@ module Activity::Classification
       location_amounts = {}
 
       delete_existing_code_assignments_by_type(coding_type)
-      self.locations = [] # delete all locations
 
       sub_activity_district_code_assignments(coding_type).each do |ca|
         location_amounts[ca.code] ||= 0
@@ -177,7 +176,6 @@ module Activity::Classification
       end
 
       location_amounts.each do |location, amount|
-        self.locations << location
         fake_ca(klass, location, amount).save!
       end
 

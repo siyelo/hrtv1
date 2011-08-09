@@ -11,8 +11,6 @@ Feature: Reporter can manage projects
     Then data_response "data_response" should exist with data_request: data_request "data_request1", organization: organization "organization2"
       And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
       And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
-      And a location exists with short_display: "Location1"
-      And a location exists with short_display: "Location2"
       And I am signed in as "reporter@hrtapp.com"
       And I follow "data_request1"
       And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
@@ -26,8 +24,6 @@ Feature: Reporter can manage projects
         And I fill in "Description" with "Project1 description"
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
-        And I check "Location1"
-        And I check "Location2"
         And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
 
@@ -37,7 +33,6 @@ Feature: Reporter can manage projects
       When I follow "Project1"
         And I fill in "Name" with "Project2"
         And I fill in "Description" with "Project2 description"
-        And I uncheck "Location1"
         And I press "Update Project"
       Then I should see "Project was successfully updated"
 

@@ -143,42 +143,6 @@ describe SubActivity do
       end
     end
 
-    describe "locations" do
-      context "implementer present" do
-        it "returns implementer locations when implementer has locations" do
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :budget => 4, :spend => 4)
-          @implementer.locations = [Factory.create(:location)]
-
-          @sub_activity.locations.should == @implementer.locations
-        end
-
-        it "returns activity locations when implementer does not have locations" do
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :provider => @implementer,
-                                         :data_response => @response,
-                                         :budget => 4, :spend => 4)
-          @implementer.locations = []
-          @activity.locations    = [Factory.create(:location)]
-
-          @sub_activity.locations.should == @activity.locations
-        end
-      end
-
-      context "implementer not present" do
-        it "returns activity locations" do
-          @sub_activity = Factory.create(:sub_activity, :activity => @activity,
-                                         :data_response => @response,
-                                         :budget => 4, :spend => 4)
-          @activity.locations = [Factory.create(:location)]
-
-          @sub_activity.locations.should == @activity.locations
-        end
-      end
-    end
-
     describe "code_assignments" do
       it "returns code assignments for all types of codings" do
         @location = Factory.create(:location, :short_display => 'Location 1')

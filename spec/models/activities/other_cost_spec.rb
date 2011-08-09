@@ -5,7 +5,6 @@ describe OtherCost do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
-    it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :sub_implementers }
@@ -37,7 +36,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:spend_q2) }
     it { should allow_mass_assignment_of(:spend_q3) }
     it { should allow_mass_assignment_of(:spend_q4) }
-    it { should allow_mass_assignment_of(:location_ids) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }

@@ -1403,37 +1403,6 @@ var activities_bulk_create = {
       });
     });
 
-
-    // NOTE: project sub form is disabled because in CSV files
-    // project was not selected, but only locations, and when
-    // changing the project it was removing these locations
-
-    //$('.activity_project_id').live('change', function () {
-      //var element = $(this);
-      //var _project_id = element.val();
-      //var form = element.parents('form');
-      //var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
-      //var activityBox = element.parents('.activity_box');
-      //_response_id = matches[1];
-      //_activity_id = matches[2];
-
-      //if (_project_id) {
-        //var url = '/responses/' + _response_id +
-        //'/activities/project_sub_form?' + 'project_id=' + _project_id;
-        //if (_activity_id) {
-          //url += '&activity_id=' + _activity_id;
-        //}
-        //$.get(url, function (data) {
-          //activityBox.find('.project_sub_form_fields').html(data)
-          //activityBox.find('.project_sub_form_fields').show();
-          //activityBox.find('.project_sub_form_hint').hide();
-        //});
-      //} else {
-        //activityBox.find('.project_sub_form_fields').hide();
-        //activityBox.find('.project_sub_form_hint').show();
-      //}
-    //});
-
     $(".js_combobox").combobox(); // for pretty currency select
   }
 }
@@ -1484,24 +1453,6 @@ var activities_new = activities_create = activities_edit = activities_update = {
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
-
-    var element = $('#project_sub_form');
-    var _project_id = $(this).val();
-    if (_project_id) {
-      var url = '/responses/' + _response_id +
-      '/activities/project_sub_form?' + 'project_id=' + _project_id;
-      if (_activity_id) {
-        url += '&activity_id=' + _activity_id;
-      }
-      $.get(url, function (data) {
-        $('#project_sub_form_fields').html(data)
-        $('#project_sub_form_fields').show();
-        $('#project_sub_form_hint').hide();
-      });
-    } else {
-      $('#project_sub_form_fields').hide();
-      $('#project_sub_form_hint').show();
-    }
   });
 
   $('.js_implementer_select').live('change', function(e) {
@@ -1542,7 +1493,6 @@ var activity_form = function () {
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
-    // namespace is from project_sub_form,
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }

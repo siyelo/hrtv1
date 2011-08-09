@@ -150,7 +150,7 @@ class Report < ActiveRecord::Base
 
     def simple_activities_for_request_with_associations
       self.simple_activities_for_request.find(:all,
-        :include => [:locations, :provider, :organizations, :beneficiaries,
+        :include => [:provider, :organizations, :beneficiaries,
                       {:data_response => :organization}])
     end
 end

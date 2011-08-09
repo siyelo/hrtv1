@@ -98,13 +98,6 @@ class ActivitiesController < Reporter::BaseController
     render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.purposes.roots)}
   end
 
-  def project_sub_form
-    @activity = @response.activities.find_by_id(params[:activity_id])
-    @project  = @response.projects.find(params[:project_id])
-    render :partial => "project_sub_form",
-           :locals => {:activity => (@activity || :activity)}
-  end
-
   def template
     template = Activity.download_template(@response)
     send_csv(template, 'activities_template.csv')

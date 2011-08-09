@@ -61,8 +61,7 @@ ActionController::Routing::Routes.draw do |map|
       :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
       :collection => {:bulk_create => :post,
                       :template => :get,
-                      :export => :get,
-                      :project_sub_form => :get}
+                      :export => :get}
     response.resources :other_costs, :except => [:index, :show],
       :collection => {:create_from_file => :post, :download_template => :get}
     response.resources :districts, :only => [:index, :show] do |district|

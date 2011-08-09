@@ -78,15 +78,6 @@ Spork.each_run do
     end
   end
 
-  shared_examples_for "location cloner" do
-    it "should clone locations" do
-      @location = Factory(:location)
-      @original.locations << @location
-      save_and_deep_clone
-      @clone.locations.first.should == @location
-    end
-  end
-
   def save_and_deep_clone
     @original.save!
     @clone = @original.deep_clone

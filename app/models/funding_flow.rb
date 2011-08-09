@@ -19,7 +19,7 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
-  belongs_to :project_from # funder's project
+  belongs_to :project_from, :class_name => 'Project' # funder's project
 
   ### Validations
   # also see validations in BudgetSpendHelper

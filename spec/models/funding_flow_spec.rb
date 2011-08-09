@@ -26,6 +26,7 @@ describe FundingFlow do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
+    it { should belong_to :project_from }
   end
 
   describe "Validations" do

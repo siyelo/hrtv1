@@ -5,9 +5,8 @@
 
       = link_to "#{h project.name}", edit_response_project_path(@response, project)
 
-      - project_errors = get_project_errors(project)
-      - if project_errors.present?
-        = image_tag "warning_12.png", :title => project_errors, :class => 'tooltip'
+      - if project.validation_errors.present?
+        = image_tag "warning_12.png", :title => format_errors(project.validation_errors), :class => 'tooltip'
 
   = render 'activities', :response => @response, :project => project, :activities => project.normal_activities.sorted
 
@@ -18,8 +17,17 @@
       %ul.horizontal
         %li
     %td.total Project Total
-    %td.wrap-12= n2crs((project.spend || 0), project.currency)
-    %td.wrap-12= n2crs((project.budget || 0), project.currency)
+    %td.wrap-12= n2crs(project.spend, project.currency)
+    %td.wrap-12= n2crs(project.budget, project.currency)
+    %td
+
+  %tr.filler2
+    %td{:colspan => 1}
+      %ul.horizontal
+        %li
+    %td.total Funding Sources Total
+    %td.wrap-12= n2crs(project.in_flows_total(:spend), project.currency)
+    %td.wrap-12= n2crs((project.in_flows_total(:budget)), project.currency)
     %td
 
   - if(!@response.project_and_activities_matching_amounts?(project, :spend) || !@response.project_and_activities_matching_amounts?(project, :budget))
@@ -27,6 +35,6 @@
       %td{:colspan => 1}
 
       %td.total Project Total - (Activities + Other Costs)
-      %td.wrap-12= n2crs((project.spend || 0) - project.subtotals(:spend), project.currency)
-      %td.wrap-12= n2crs((project.budget || 0) - project.subtotals(:budget), project.currency)
+      %td.wrap-12= n2crs(project.spend - project.subtotals(:spend), project.currency)
+      %td.wrap-12= n2crs(project.budget - project.subtotals(:budget), project.currency)
       %td= image_tag "warning_12.png", :title => get_project_total_differences(project), :class => 'tooltip_projects'

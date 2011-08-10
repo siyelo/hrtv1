@@ -28,6 +28,10 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def create
+    if params[:other_cost][:project_id] == "-1" then
+      create_project
+    end
+    
     @other_cost = @response.other_costs.new(params[:other_cost])
     @other_cost.data_response = @response
 
@@ -49,6 +53,10 @@ class OtherCostsController < Reporter::BaseController
 
   def update
     @activity = resource # needed in js_redirect
+    if params[:other_cost][:project_id] == "-1" then
+      create_project
+    end
+    
     update! do |success, failure|
       success.html { flash[:notice] = 'Other Cost was successfully updated'; html_redirect }
       success.js   { js_redirect }
@@ -94,6 +102,18 @@ class OtherCostsController < Reporter::BaseController
 
 
   private
+    
+    def create_project
+      @project =  @response.projects.find_by_name(params[:other_cost][:name])
+      unless @project
+        @project = Project.new(:name       => params[:other_cost][:name], 
+                               :start_date => params[:other_cost][:start_date], 
+                               :end_date   => params[:other_cost][:end_date], 
+                               :data_response => @response)
+      end
+      @project.save ? params[:other_cost][:project_id] = @project.id : params[:other_cost][:project_id] = ""
+    end
+  
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
     end

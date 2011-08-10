@@ -21,6 +21,10 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
+    if params[:activity][:project_id] == "-1" then
+      create_project
+    end
+    
     @activity = @response.activities.new(params[:activity])
 
     if @activity.save
@@ -38,6 +42,11 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     @activity = Activity.find(params[:id])
+    
+    if params[:activity][:project_id] == "-1" then
+      create_project
+    end
+    
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html do
@@ -124,6 +133,17 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
+  
+    def create_project
+      @project =  @response.projects.find_by_name(params[:activity][:name])
+      unless @project
+        @project = Project.new(:name       => params[:activity][:name], 
+                               :start_date => params[:activity][:start_date], 
+                               :end_date   => params[:activity][:end_date], 
+                               :data_response => @response)
+      end
+      params[:activity][:project_id] = @project.id if @project.save
+    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"

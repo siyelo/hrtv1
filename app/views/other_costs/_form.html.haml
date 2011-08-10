@@ -1,9 +1,11 @@
+- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
+
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :required => false, :label => "Project", :collection => @response.projects, :as => :select, :hint => "The Project this Other Cost correlates to"
-      = f.input :name, :required => false, :hint => "The name of this Other Cost."
+      = f.input :project_id, :label => "Project", :as => :select, :collection => sorted_projects.insert(0,["<Automatically create a project for me>", -1], ["<No project>", nil]) , :hint => "The Project this Other Cost correlates to", :prompt => 'Select a project...'
+      = f.input :name, :hint => "The name of this Other Cost."
       = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Other Cost."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => true
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => true

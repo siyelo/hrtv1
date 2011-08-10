@@ -131,9 +131,11 @@ class Activity < ActiveRecord::Base
   before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
-  validates_presence_of :name, :if => :is_activity?
+  validates_presence_of :name
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
+  validates_exclusion_of :project_id, :in => [-1], :message => 'could not be automatically created', 
+                         :if => Proc.new { |model| model.start_date.present? && model.end_date.present? && model.name.present?}
   validates_presence_of :data_response_id
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?

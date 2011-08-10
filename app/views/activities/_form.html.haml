@@ -1,3 +1,5 @@
+- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
+
 :javascript
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
@@ -7,7 +9,7 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => @response.projects, :hint => "The Project this activity correlates to"
+      = f.input :project_id, :label => "Project", :as => :select, :collection => sorted_projects.insert(0,["<Automatically create a project for me>", -1]) , :hint => "The Project this activity correlates to", :prompt => 'Select a project...'
 
       = f.input :name, :hint => "A short name for this Activity."
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A longer description of this Activity."

@@ -16,10 +16,17 @@
         View Comments
 
 %ul#nav.horizontal
-  %li
-    - link_to new_response_project_path(@response), :class => "create_new" do
+  %li.js_dropdown_menu
+    - link_to '#', :class => 'js_dropdown_trigger create_new' do
       = image_tag "new_white.png"
-      Create Project
+      Create New...
+      = image_tag "icon_arrow_down.gif"
+
+    %ul.menu_items{:style => 'display: none'}
+      %li= link_to 'Project', new_response_project_path(@response)
+      %li= link_to 'Activity', new_response_activity_path(@response)
+      %li= link_to 'Other Cost', new_response_other_cost_path(@response)
+          
   %li.js_dropdown_menu
     - link_to '#', :class => 'js_dropdown_trigger create_new' do
       Import / Export

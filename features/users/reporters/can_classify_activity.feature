@@ -60,7 +60,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" with "5000000.00"
         And I press "Save"
       Then I should see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "activity1"
+        And I should be on the purposes classification page for "activity1"
         And the "mtef1" field should contain "5,000,000.00"
 
     Scenario: enter budget for an activity (see flash errors)
@@ -69,11 +69,11 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "mtef1" with "1234567.00"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "activity1"
+        And I should be on the purposes classification page for "activity1"
         And the "mtef1" field should contain "1,234,567.00"
         And I should see "We're sorry, when we added up your Current Budget by Purposes classifications, they equaled 1,234,567.00 but the Budget is 5,000,000.00 (5,000,000.00 - 1,234,567.00 = 3,765,433.00, which is ~75.31%). The total classified should add up to 5,000,000.00. Your Current Budget by Purposes classifications must be entered and the total must be equal to the Budget amount." within "#flashes"
 
-    Scenario Outline: enter percentage for an activity budget classification
+    Scenario Outline: enter percentage for an activity purposes classification
       When I follow "Budget"
         And I follow "Purposes"
         And I fill in "mtef1" percentage field with "<amount>"
@@ -138,7 +138,7 @@ Feature: Reporter can enter a code breakdown for each activity
         And I fill in "%" with "1" within "ul.activity_tree > li:nth-child(2) > ul > li:nth-child(1) > ul > li:nth-child(1)"
         And I press "Save"
       Then I should not see "Activity classification was successfully updated."
-        And I should be on the budget classification page for "activity1"
+        And I should be on the purposes classification page for "activity1"
         And the cached field within "ul.activity_tree > li:nth-child(1)" should contain "600,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1)" should contain "300,000.00"
         And the cached field within "ul.activity_tree > li:nth-child(1) > ul > li:nth-child(1) > ul > li:nth-child(1)" should contain "60,000.00"

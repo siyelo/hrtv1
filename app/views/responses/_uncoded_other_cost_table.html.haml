@@ -18,4 +18,4 @@
           %th= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"}
           %th= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"}
           %th= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"}
-          %th= "#{link_to 'Classify', activity_code_assignments_path(activity), :target => "_blank"} #{link_to 'Edit', edit_response_other_cost_path(activity.data_response, activity)}"
+          %th= "#{link_to 'Classify', edit_activity_classification_path(activity, 'purposes'), :target => "_blank"} #{link_to 'Edit', edit_response_other_cost_path(activity.data_response, activity)}"

@@ -94,7 +94,7 @@ Feature: Reporter can upload classifications
       And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
       And I press "Upload"
     Then I should see "Activity classification was successfully uploaded."
-      And I should be on the budget classification page for "Activity1"
+      And I should be on the purposes classification page for "Activity1"
       And the "mtef1" field should contain "20"
       And the "mtef1" percentage field should contain "10"
 
@@ -110,7 +110,7 @@ Feature: Reporter can upload classifications
       And I attach the file "spec/fixtures/classifications_inputs.csv" to "File" within ".upload_box"
       And I press "Upload"
     Then I should see "Activity classification was successfully uploaded."
-      And I should be on the budget classification page for "Activity1"
+      And I should be on the purposes classification page for "Activity1"
       And the "cost_category1" field should contain "20"
       And the "cost_category1" percentage field should contain "10"
 
@@ -126,7 +126,7 @@ Feature: Reporter can upload classifications
       And I attach the file "spec/fixtures/classifications_locations.csv" to "File" within ".upload_box"
       And I press "Upload"
     Then I should see "Activity classification was successfully uploaded."
-      And I should be on the budget classification page for "Activity1"
+      And I should be on the purposes classification page for "Activity1"
       And the "location1" field should contain "20"
       And the "location1" percentage field should contain "10"
 

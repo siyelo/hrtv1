@@ -45,13 +45,9 @@ module NavigationHelpers
     when /the implementers page/
       implementers_path
 
-    when /the budget classification page for "(.+)"/
+    when /the purposes classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      activity_code_assignments_path(activity)
-
-    when /the activity classification page for "(.+)"/
-      activity = Activity.find_by_name($1)
-      activity_code_assignments_path(activity)
+      activity_classification_path(activity, 'purposes')
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

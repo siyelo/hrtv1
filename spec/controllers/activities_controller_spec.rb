@@ -152,7 +152,7 @@ describe ActivitiesController do
     it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
       put :update, :activity => { :budget => 0, :spend => 0}, :id => @activity.id,
         :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+      response.should redirect_to(edit_activity_classification_path(@project.activities.first, 'purposes'))
     end
 
     it "redirects to the budget classifications page when Save & Classify is clicked and the datarequest spend is false and budget is true" do
@@ -161,7 +161,7 @@ describe ActivitiesController do
       @data_request.save
       put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
         :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+      response.should redirect_to(edit_activity_classification_path(@project.activities.first, 'purposes'))
     end
 
     it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
@@ -170,7 +170,7 @@ describe ActivitiesController do
       @data_request.save
       put :update, :activity => { :budget => 0, :spend => 89}, :id => @activity.id,
         :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+      response.should redirect_to(edit_activity_classification_path(@project.activities.first, 'purposes'))
     end
 
     it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do
@@ -179,7 +179,7 @@ describe ActivitiesController do
       @data_request.save
       put :update, :activity => { :budget => 89, :spend => 89}, :id => @activity.id,
         :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
+      response.should redirect_to(edit_activity_classification_path(@project.activities.first, 'purposes'))
     end
 
     it "should NOT approve the project as a reporter" do

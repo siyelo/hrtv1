@@ -1,4 +1,4 @@
-module CodeAssignmentsHelper
+module ClassificationsHelper
   def friendly_name_for_coding_copy(coding_type)
     case coding_type
     when 'CodingBudget', 'CodingSpend'
@@ -50,5 +50,17 @@ module CodeAssignmentsHelper
 
   def node_error(code, assignment)
     "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children})."
+  end
+
+  def all_view?
+    params[:view] != 'my'
+  end
+
+  def code_classified?(budget_assignments, spend_assignments, code)
+    budget_assignments.has_key?(code.id) || spend_assignments.has_key?(code.id)
+  end
+
+  def percentage_field_options(code, assignment, valid)
+    valid ? {:title => node_error(code, assignment), :class => "tooltip invalid_node"} : {}
   end
 end

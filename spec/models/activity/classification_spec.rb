@@ -16,8 +16,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudget.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudget.update_classifications(activity, params)
       activity.coding_budget_classified?.should be_true
     end
 
@@ -28,8 +28,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudget.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudget.update_classifications(activity, params)
       activity.coding_budget_classified?.should be_false
     end
   end
@@ -49,8 +49,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudgetCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudgetCostCategorization.update_classifications(activity, params)
       activity.coding_budget_cc_classified?.should be_true
     end
 
@@ -61,8 +61,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudgetCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudgetCostCategorization.update_classifications(activity, params)
       activity.coding_budget_cc_classified?.should be_false
     end
   end
@@ -82,8 +82,8 @@ describe Activity, "Classification" do
                          :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudgetDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudgetDistrict.update_classifications(activity, params)
       activity.coding_budget_district_classified?.should be_true
     end
 
@@ -94,8 +94,8 @@ describe Activity, "Classification" do
                          :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudgetDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudgetDistrict.update_classifications(activity, params)
       activity.coding_budget_district_classified?.should be_false
     end
   end
@@ -115,8 +115,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpend.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpend.update_classifications(activity, params)
       activity.coding_spend_classified?.should be_true
     end
 
@@ -127,8 +127,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpend.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpend.update_classifications(activity, params)
       activity.coding_spend_classified?.should be_false
     end
   end
@@ -149,8 +149,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpendCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpendCostCategorization.update_classifications(activity, params)
       activity.coding_spend_cc_classified?.should be_true
     end
 
@@ -161,8 +161,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpendCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpendCostCategorization.update_classifications(activity, params)
       activity.coding_spend_cc_classified?.should be_false
     end
   end
@@ -183,8 +183,8 @@ describe Activity, "Classification" do
                          :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpendDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpendDistrict.update_classifications(activity, params)
       activity.coding_spend_district_classified?.should be_true
     end
 
@@ -195,8 +195,8 @@ describe Activity, "Classification" do
                          :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpendDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpendDistrict.update_classifications(activity, params)
       activity.coding_spend_district_classified?.should be_false
     end
   end

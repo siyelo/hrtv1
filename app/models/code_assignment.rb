@@ -13,6 +13,8 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Validations
   validates_presence_of :activity_id, :code_id
+  validates_inclusion_of :percentage, :in => 1..100,
+    :if => Proc.new { |model| model.percentage.present? }
 
   ### Named scopes
   named_scope :with_code_id,
@@ -101,7 +103,7 @@ class CodeAssignment < ActiveRecord::Base
     end
 
     klass = coding_type.constantize
-    klass.update_codings(updates, activity)
+    klass.update_classifications(activity, updates)
   end
 
   def self.add_rows(csv, code, max_level, current_level)
@@ -146,27 +148,63 @@ class CodeAssignment < ActiveRecord::Base
   end
 
   # TODO: spec
-  def self.update_codings(code_assignments, activity)
-    if code_assignments
-      code_assignments.delete_if { |key,val| val["amount"].blank? && val["percentage"].blank? }
-      selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
-      self.with_activity(activity.id).delete_all
-      # if there are any codes, then save them!
-      selected_codes.each do |code|
-        self.create!(:activity => activity,
-                     :code => code,
-                     :amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
-                     :percentage => code_assignments[code.id.to_s]["percentage"]
-        )
-      end
+  #def self.update_classifications(activity, code_assignments)
+    #raise activity.to_yaml
+    #if code_assignments
+      #code_assignments.delete_if { |key,val| val["amount"].blank? && val["percentage"].blank? }
+      #selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
+      #self.with_activity(activity.id).delete_all
+      ## if there are any codes, then save them!
+      #selected_codes.each do |code|
+        #self.create!(:activity => activity,
+                     #:code => code,
+                     #:amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
+                     #:percentage => code_assignments[code.id.to_s]["percentage"]
+        #)
+      #end
 
-      # TODO: find what's the problem with this !
-      # sum_of_children gets saved properly when this is called 2 times
-      #
-      # activity.update_classified_amount_cache(self)
-      activity.update_classified_amount_cache(self)
+      ## TODO: find what's the problem with this !
+      ## sum_of_children gets saved properly when this is called 2 times
+      ##
+      ## activity.update_classified_amount_cache(self)
+      #activity.update_classified_amount_cache(self)
+    #end
+  #end
+
+
+  def self.update_classifications(activity, classifications)
+    present_ids = []
+    assignments = self.with_activity(activity.id)
+    codes       = Code.find(classifications.keys)
+
+    classifications.each_pair do |code_id, value|
+      code = codes.detect{|code| code.id == code_id.to_i}
+
+      if value.present?
+        present_ids << code_id
+
+        ca = assignments.detect{|ca| ca.code_id == code_id.to_i}
+
+        # initialize new code assignment if it does not exist
+        ca = self.new(:activity => activity, :code => code) unless ca
+        ca.percentage = value
+        ca.save
+      end
     end
+
+    # SQL deletion, faster than deleting records individually
+    if present_ids.present?
+      self.delete_all(["activity_id = ? AND code_id NOT IN (?)",
+                                 activity.id, present_ids])
+    else
+      self.delete_all(["activity_id = ?", activity.id])
+    end
+
+    activity.update_classified_amount_cache(self)
   end
+
+
+
 
   def cached_amount
     self[:cached_amount] || 0

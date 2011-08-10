@@ -1,6 +1,5 @@
 /* Nested model forms BEGIN */
-function inspect(obj)
-{
+function inspect (obj) {
         var str;
         for(var i in obj)
         str+=i+";\n"
@@ -840,7 +839,7 @@ var policy_maker_data_responses_show = {
   }
 };
 
-var code_assignments_show = {
+var classifications_edit = {
   run: function () {
 
     /*

@@ -18,7 +18,7 @@ end
 begin
   @reporter ||= User.find_by_email 'reporter@hrtapp.com'
   puts "creating project"
-  @project = Factory(:project, :organization => @org, :budget => 100, :spend => 80)
+  @project = Factory(:project, :organization => @org)
   puts "creating activity & coding"
   Factory(:activity_fully_coded, :organization => @org, :project => @project)
   puts "creating other costs & coding"

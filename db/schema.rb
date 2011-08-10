@@ -208,15 +208,6 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
-  create_table "funding_sources", :force => true do |t|
-    t.integer  "activity_id"
-    t.integer  "funding_flow_id"
-    t.decimal  "spend"
-    t.decimal  "budget"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "funding_streams", :force => true do |t|
     t.integer  "project_id"
     t.integer  "organization_ufs_id"

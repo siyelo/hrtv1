@@ -1083,32 +1083,6 @@ var reports_countries_activities_show = {
   }
 };
 
-var update_funding_source_selects = function () {
-  var project_id = $('#activity_project_id').val();
-  var fs_selects = $('.ff_organization');
-  if (project_id) {
-    var options = ['<option value=""></option>'];
-    $.each(_funding_sources[project_id], function (i) {
-      options.push('<option value="' + this[1] + '">' + this[0] + '</option>');
-    });
-    var options_string = options.join('\n');
-
-    $.each(fs_selects, function (i) {
-      var element = $(this);
-      if (element.html() !== options_string) {
-        var value = element.val();
-        element.html(options_string);
-        element.val(value);
-      }
-    });
-  } else {
-    $.each(fs_selects, function (i) {
-      var element = $(this);
-      $(this).html('<option value=""></option>');
-    })
-  }
-};
-
 var validateDates = function (startDate, endDate) {
   var checkDates = function (e) {
     var element = $(e.target);

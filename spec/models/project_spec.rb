@@ -11,7 +11,6 @@ describe Project do
     it { should have_many(:in_flows) }
     it { should have_many(:out_flows) }
     it { should have_many(:comments) }
-    it { should have_many(:funding_sources) }
     it { should have_many(:providers) }
     it { should have_many(:comments) }
   end

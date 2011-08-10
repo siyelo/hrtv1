@@ -4,7 +4,6 @@
       %th Name
       %th Organization
       %th Project
-      %th Funders
       = render :partial => 'reports/shared/sort_columns'
 
   %tbody
@@ -13,11 +12,6 @@
         %td= link_to "#{friendly_name(activity)}", reports_country_activity_path(activity)
         %td= h activity.org_name
         %td= h friendly_name(activity.project)
-        %td
-          - if activity.project
-            %ul
-              - activity.project.funding_sources.map(&:name).uniq.each do |name|
-                %li= name
         - spent_total = activity.spent_sum
         - budget_total = activity.budget_sum
         %td

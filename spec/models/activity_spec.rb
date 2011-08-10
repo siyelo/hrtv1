@@ -10,7 +10,6 @@ describe Activity do
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many(:sub_activities).dependent(:destroy) }
     it { should have_many(:sub_implementers) }
-    it { should have_many(:funding_sources).dependent(:destroy) }
     it { should have_many(:codes) }
     it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
@@ -50,7 +49,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
-    it { should allow_mass_assignment_of(:funding_sources_attributes) }
     it { should allow_mass_assignment_of(:csv_project_name) }
     it { should allow_mass_assignment_of(:csv_provider) }
     it { should allow_mass_assignment_of(:csv_beneficiaries) }

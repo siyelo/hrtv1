@@ -26,8 +26,6 @@ class Project < ActiveRecord::Base
                             organization_id_to = #{organization.id}' ]
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
-  has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
-            :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
            :source => :to
   has_many :comments, :as => :commentable, :dependent => :destroy

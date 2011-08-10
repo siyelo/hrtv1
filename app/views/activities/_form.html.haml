@@ -32,16 +32,6 @@
 
         = render 'shared/budget_quarters', :f => f
 
-  %li.last
-    %h3 Activity Funding Sources
-    %ul.dashboard_section
-      %p.heading_hint Enter sources here if this activity is funded differently from other activities for this project. For example, if your project has two donors, and only one of them funds this activity, enter that single source of funds here.
-      .funding_sources
-        - f.semantic_fields_for :funding_sources do |fs|
-          = render "activities/funding_source_fields", :f => fs
-        .add
-          = link_to_add_fields "Add funding source", f, :funding_sources, "activities/", :class => "create_alt marginless"
-
   %li.last.sub_activities
     %h3 Implementers
     .dashboard_section

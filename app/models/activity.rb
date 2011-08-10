@@ -21,9 +21,9 @@ class Activity < ActiveRecord::Base
     :budget, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :provider_id,
-    :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets,
-    :targets_attributes, :outputs_attributes, :am_approved_date, :user_id, :provider_mask
+    :sub_activities_attributes, :organization_ids, :csv_project_name, 
+    :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes, 
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask
 
 
   ### Associations
@@ -37,7 +37,6 @@ class Activity < ActiveRecord::Base
                             :foreign_key => :activity_id,
                             :dependent => :destroy
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
@@ -115,8 +114,6 @@ class Activity < ActiveRecord::Base
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true
-  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
-    :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
 
@@ -342,7 +339,7 @@ class Activity < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
-    %w[code_assignments sub_activities funding_sources targets].each do |assoc|
+    %w[code_assignments sub_activities targets].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone

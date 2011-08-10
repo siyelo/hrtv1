@@ -18,7 +18,6 @@ Feature: Reporter can manage projects
       And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
       And I follow "Projects"
 
-@run
     Scenario: Reporter can CRUD projects
       When I follow "Project"
         And I fill in "Name" with "Project1"

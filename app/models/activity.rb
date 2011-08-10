@@ -8,7 +8,7 @@ class Activity < ActiveRecord::Base
   include Activity::Validations
 
   ### Constants
-  MAX_NAME_LENGTH = 64
+  MAX_NAME_LENGTH = 50
   HUMANIZED_ATTRIBUTES = {
     :sub_activities => "Implementers",
     :budget => "Current Budget",

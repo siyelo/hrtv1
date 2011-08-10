@@ -12,8 +12,8 @@
       %li#activity_name_input.string.required
         .name
           = f.label :name, "Name*"
-          = link_to "(?)", "#", :title => "A short name for this activity", :class => 'tooltip'
-        = f.text_field :name
+          = link_to "(?)", "#", :title => "A short name for this activity", :class => 'tooltip remaining_characters'
+        = f.text_field :name, "data-maxlength" => "#{Activity::MAX_NAME_LENGTH}"
       %li#activity_start_date_input.string.required
         .name
           = f.label :start_date, "Start Date*"

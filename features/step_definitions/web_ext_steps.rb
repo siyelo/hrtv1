@@ -36,6 +36,24 @@ class Capybara::XPath
   end
 end
 
+# fix Selenium deprecation warnings from Capybara
+class Capybara::Driver::Selenium::Node
+  def [](name)
+    node.attribute(name.to_s)
+  rescue Selenium::WebDriver::Error::WebDriverError
+    nil
+  end
+
+
+  def select(option)
+    option_node = node.find_element(:xpath, ".//option[normalize-space(text())=#{Capybara::XPath.escape(option)}]") || node.find_element(:xpath, ".//option[contains(.,#{Capybara::XPath.escape(option)})]")
+    option_node.click
+  rescue
+    options = node.find_elements(:xpath, "//option").map { |o| "'#{o.text}'" }.join(', ')
+    raise Capybara::OptionNotFound, "No such option '#{option}' in this select box. Available options: #{options}"
+  end
+end
+
 When /^I click element "([^"]*)"$/ do |selector|
   find(selector).click
 end

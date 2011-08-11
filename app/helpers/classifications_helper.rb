@@ -37,17 +37,6 @@ module ClassificationsHelper
     end
   end
 
-  def get_activity_type(type)
-    case type
-    when :budget
-      "Current Budget"
-    when :spend
-      "Past Expenditure"
-    else
-      type
-    end
-  end
-
   def node_error(code, assignment)
     "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children})."
   end

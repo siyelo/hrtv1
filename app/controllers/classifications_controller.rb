@@ -22,11 +22,13 @@ class ClassificationsController < Reporter::BaseController
   end
 
   def update
-    @budget_klass.update_classifications(@activity, params[:classifications][:budget])
-    @spend_klass.update_classifications(@activity, params[:classifications][:spend])
+    unless (@activity.approved? || @activity.am_approved?)
+      @budget_klass.update_classifications(@activity, params[:classifications][:budget])
+      @spend_klass.update_classifications(@activity, params[:classifications][:spend])
+      flash[:notice] = "Activity classification was successfully updated."
+    end
 
     set_classification_errors
-    flash[:notice] = "Activity classification was successfully updated."
     redirect_to edit_activity_classification_url(@activity, params[:id])
   end
 
@@ -41,16 +43,18 @@ class ClassificationsController < Reporter::BaseController
   end
 
   def bulk_create
-    begin
-      if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        CodeAssignment.create_from_file(doc, @activity, @budget_klass, @spend_klass)
-        flash[:notice] = "Activity classification was successfully uploaded."
-      else
-        flash[:error] = 'Please select a file to upload classifications'
+    unless (@activity.approved? || @activity.am_approved?)
+      begin
+        if params[:file].present?
+          doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
+          CodeAssignment.create_from_file(doc, @activity, @budget_klass, @spend_klass)
+          flash[:notice] = "Activity classification was successfully uploaded."
+        else
+          flash[:error] = 'Please select a file to upload classifications'
+        end
+      rescue FasterCSV::MalformedCSVError
+        flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
       end
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
     end
 
     redirect_to edit_activity_classification_url(@activity, params[:id], :view => params[:view])
@@ -118,7 +122,11 @@ class ClassificationsController < Reporter::BaseController
     end
 
     def set_classification_errors
-      errors = @activity.classification_errors_by_type(params[:id])
-      flash[:error] = errors.join(" and ") if errors.present?
+      if @activity.approved? || @activity.am_approved?
+        flash[:error] = "Classification for approved activity cannot be changed."
+      else
+        errors = @activity.classification_errors_by_type(params[:id])
+        flash[:error] = errors.join(" and ") if errors.present?
+      end
     end
 end

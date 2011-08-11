@@ -47,7 +47,7 @@ module NavigationHelpers
 
     when /the purposes classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      activity_classification_path(activity, 'purposes')
+      edit_activity_classification_path(activity, 'purposes')
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

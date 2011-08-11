@@ -4,12 +4,12 @@
     %p#expl
       %span.spend
         - link_to '#', :id => 'spend_to_budget' do
-          Spend
-          = image_tag "icon_s2b.png", :alt => "copy spend to budget"
+          Past Expenditure
+          = image_tag "icon_s2b.png", :alt => "Copy Past Expenditure to Current Budget", :title => "Copy Past Expenditure to Current Budget"
       %span.budget
         - link_to '#', :id => 'budget_to_spend' do
-          = image_tag "icon_b2s.png", :alt => "copy budget to spend"
-          Budget
+          = image_tag "icon_b2s.png", :alt => "Copy Current Budget to Past Expenditure", :title => "Copy Current Budget to Past Expenditure"
+          Current Budget
 
     %ul.buttons.left
       %li= link_to 'All data', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)

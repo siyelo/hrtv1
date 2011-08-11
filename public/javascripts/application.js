@@ -798,18 +798,6 @@ var build_data_response_review_screen = function () {
     //createPieChart("project", {id: id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
     //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
   });
-
-  // Ajax load of classifications for activities
-  $.each($('.activity_classifications'), function (i, element) {
-    element = $(element);
-    var activity_id = element.attr('data-activity_id');
-    var response_id = element.attr('data-response_id');
-    var other_cost = element.attr('data-other_costs');
-    var url =  '/responses/' + response_id + '/activities/' +
-      activity_id + '/classifications?other_costs=' + other_cost;
-    $.get(url, function (data) {element.html(data)});
-  });
-
 };
 
 var admin_responses_show = {
@@ -869,6 +857,22 @@ var classifications_edit = {
 
     $('.js_submit_btn').click(function (e) {
       $(this).next('.ajax-loader').show();
+    });
+
+    $('#budget_to_spend').click(function (e) {
+      e.preventDefault();
+      $('.js_budget input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_spend input').val(element.val());
+      });
+    });
+
+    $('#spend_to_budget').click(function (e) {
+      e.preventDefault();
+      $('.js_spend input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_budget input').val(element.val());
+      });
     });
   }
 };

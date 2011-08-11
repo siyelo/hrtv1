@@ -10,25 +10,12 @@
     .dashboard_section
       %p Create one or more classifications from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
       %br
-      - form_tag(bulk_create_activity_classifications_path(@activity), :multipart => true, :method => 'put') do
+      - form_tag(bulk_create_activity_classification_path(@activity, params[:id]), :multipart => true, :method => 'put') do
         .upbox
           = label_tag :file, "File"
           = file_field_tag :file
         = submit_tag "Upload", :class => 'small_submit_button'
 
-        = link_to "Download template", download_template_activity_classifications_path(@activity), :class => "create_alt right"
+        = link_to "Download template", download_template_activity_classification_path(@activity, params[:id]), :class => "create_alt right"
 
-- if @budget_coding_tree.root_codes.present?
-  - form_tag activity_classification_path(@activity, params[:id], :view => params[:view]), :method => :put do
-
-    %p#expl
-      %span Amount (#{@activity.currency} or %)
-      %span Subtotal
-    %ul.buttons.left
-      %li= link_to 'All data', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)
-      %li= link_to 'My data', edit_activity_classification_path(@activity, params[:id], :view => 'my'), :class => (params[:view] == 'my' ? 'active' : nil)
-    %ul.activity_tree
-      - @budget_coding_tree.root_codes.each do |code|
-        = render 'code_row', :code => code
-    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
-    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+= render 'classification'

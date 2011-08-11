@@ -3,7 +3,7 @@ class ClassificationsController < Reporter::BaseController
   include NumberHelper
 
   before_filter :load_activity_and_data_response
-  before_filter :load_klasses, :only => [:edit, :update]
+  before_filter :load_klasses, :only => [:edit, :update, :download_template, :bulk_create]
 
   def edit
     @budget_coding_tree = CodingTree.new(@activity, @budget_klass)
@@ -44,7 +44,7 @@ class ClassificationsController < Reporter::BaseController
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        CodeAssignment.create_from_file(doc, @activity, params[:coding_type])
+        CodeAssignment.create_from_file(doc, @activity, @budget_klass, @spend_klass)
         flash[:notice] = "Activity classification was successfully uploaded."
       else
         flash[:error] = 'Please select a file to upload classifications'
@@ -57,9 +57,9 @@ class ClassificationsController < Reporter::BaseController
   end
 
   def download_template
-    klass, name = get_klass_and_name_from_coding_type(params[:coding_type])
-    template = CodeAssignment.download_template(klass)
-    send_csv(template, "#{name}_template.csv")
+    code_klass = get_code_klass_for_classification_type(params[:id])
+    template = CodeAssignment.download_template(code_klass)
+    send_csv(template, "#{params[:id]}_template.csv")
   end
 
   private
@@ -95,14 +95,14 @@ class ClassificationsController < Reporter::BaseController
       @response = @activity.data_response
     end
 
-    def get_klass_and_name_from_coding_type(coding_type)
+    def get_code_klass_for_classification_type(coding_type)
       case coding_type
-      when 'CodingBudget', 'CodingSpend'
-        [Mtef, 'purposes']
-      when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-        [Location, 'locations']
-      when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
-        [CostCategory, 'inputs']
+      when 'purposes'
+        Mtef
+      when 'inputs'
+        CostCategory
+      when 'locations'
+        Location
       end
     end
 

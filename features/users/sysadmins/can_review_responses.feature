@@ -13,16 +13,6 @@ Feature: Admin can approve a code breakdown for each activity
       And a mtef_code exists with short_display: "Mtef code"
       And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
 
-
-    @javascript
-    Scenario: See a budget coding breakdown
-      Given I am signed in as a sysadmin
-      When I go to the admin review data response page for organization "WHO", request "Req1"
-        And wait a few moments
-      Then I should see "Mtef code"
-        And I should see "1,000"
-
-
     # NB: this scenario will only work for 1 activity, 1 classification
     @javascript @wip
     Scenario: Approve a budget coding breakdown

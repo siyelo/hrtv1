@@ -3,12 +3,12 @@
     = check_box_tag "activity[code_assignment_tree][]", code.id, classified
     = label_tag code.short_display
     = link_to "?", "#", :title => code.description, :class => "tooltip info" if code.description
-  .values.right
-    .budget
-      - budget_assignment = @budget_assignments[code.id]
-      - valid = budget_assignment && !@budget_coding_tree.valid_ca?(budget_assignment)
-      = render 'fields', :code => code, :assignment => budget_assignment, :type => 'budget', :valid => valid
-    .spend
+  .values.js_values.right
+    .spend.js_spend
       - spend_assignment = @spend_assignments[code.id]
       - valid = spend_assignment && !@spend_coding_tree.valid_ca?(spend_assignment)
       = render 'fields', :code => code, :assignment => spend_assignment, :type => 'spend', :valid => valid
+    .budget.js_budget
+      - budget_assignment = @budget_assignments[code.id]
+      - valid = budget_assignment && !@budget_coding_tree.valid_ca?(budget_assignment)
+      = render 'fields', :code => code, :assignment => budget_assignment, :type => 'budget', :valid => valid

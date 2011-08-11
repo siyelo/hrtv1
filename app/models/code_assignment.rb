@@ -65,21 +65,10 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Class Methods
 
-  # assumes a format like "17,798,123.00"
-  # TODO: spec
-  def self.currency_to_number(number_string, options ={})
-    options.symbolize_keys!
-    defaults  = I18n.translate(:'number.format', :locale => options[:locale], :raise => true) rescue {}
-    currency  = I18n.translate(:'number.currency.format', :locale => options[:locale], :raise => true) rescue {}
-    defaults  = defaults.merge(currency)
-    delimiter = options[:delimiter] || defaults[:delimiter]
-    number_string.to_s.gsub(delimiter,'')
-  end
-
   def self.download_template(klass)
     max_level = klass.deepest_nesting
     FasterCSV.generate do |csv|
-      header_row = (['Code'] * max_level).concat(['Percentage', 'Amount', 'Code', 'Description'])
+      header_row = (['Code'] * max_level).concat(['Past Expenditure', 'Current Budget', 'Code', 'Description'])
       (100 - header_row.length).times{ header_row << nil}
       header_row << 'Id'
       csv << header_row
@@ -87,23 +76,20 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
-  def self.create_from_file(doc, activity, coding_type)
-    updates = HashWithIndifferentAccess.new
+  def self.create_from_file(doc, activity, budget_klass, spend_klass)
+    budget_updates = {}
+    spend_updates  = {}
     doc.each do |row|
-      percentage = row['Percentage']
-      amount     = row['Amount']
-      id         = row['Id']
+      spend   = row['Past Expenditure']
+      budget  = row['Current Budget']
+      code_id = row['Id']
 
-      code = Code.find(id)
-
-      if (code && (amount.present? || percentage.present?))
-        updates[code.id.to_s] = HashWithIndifferentAccess.new({:amount => amount,
-                                                               :percentage => percentage})
-      end
+      budget_updates[code_id] = budget if code_id && budget.present?
+      spend_updates[code_id]  = spend if code_id && spend.present?
     end
 
-    klass = coding_type.constantize
-    klass.update_classifications(activity, updates)
+    budget_klass.update_classifications(activity, budget_updates)
+    spend_klass.update_classifications(activity, spend_updates)
   end
 
   def self.add_rows(csv, code, max_level, current_level)
@@ -146,31 +132,6 @@ class CodeAssignment < ActiveRecord::Base
       :conditions => "activities.#{activity_value} > 0"
     ).group_by{|ca| ca.activity_id}
   end
-
-  # TODO: spec
-  #def self.update_classifications(activity, code_assignments)
-    #raise activity.to_yaml
-    #if code_assignments
-      #code_assignments.delete_if { |key,val| val["amount"].blank? && val["percentage"].blank? }
-      #selected_codes = code_assignments.nil? ? [] : code_assignments.keys.collect{ |id| Code.find_by_id(id) }
-      #self.with_activity(activity.id).delete_all
-      ## if there are any codes, then save them!
-      #selected_codes.each do |code|
-        #self.create!(:activity => activity,
-                     #:code => code,
-                     #:amount => currency_to_number(code_assignments[code.id.to_s]["amount"]),
-                     #:percentage => code_assignments[code.id.to_s]["percentage"]
-        #)
-      #end
-
-      ## TODO: find what's the problem with this !
-      ## sum_of_children gets saved properly when this is called 2 times
-      ##
-      ## activity.update_classified_amount_cache(self)
-      #activity.update_classified_amount_cache(self)
-    #end
-  #end
-
 
   def self.update_classifications(activity, classifications)
     present_ids = []

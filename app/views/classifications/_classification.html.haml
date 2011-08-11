@@ -1,0 +1,19 @@
+- if @budget_coding_tree.root_codes.present?
+  - form_tag activity_classification_path(@activity, params[:id], :view => params[:view]), :method => :put do
+
+    %p#expl
+      %span= link_to 'b2s', '#', :id => 'budget_to_spend'
+      %span= link_to 's2b', '#', :id => 'spend_to_budget'
+      %span Amount (#{@activity.currency} or %)
+      %span Subtotal
+
+    %ul.buttons.left
+      %li= link_to 'All data', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)
+      %li= link_to 'My data', edit_activity_classification_path(@activity, params[:id], :view => 'my'), :class => (params[:view] == 'my' ? 'active' : nil)
+
+    %ul.activity_tree
+      - @budget_coding_tree.root_codes.each do |code|
+        = render 'code_row', :code => code
+
+    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

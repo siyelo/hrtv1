@@ -98,20 +98,6 @@ Feature: Reporter can enter a code breakdown for each activity
         And the "mtef1" field should contain "1,234,567.00"
 
 
-    Scenario: Use expenditure by district for budget by district
-      Given a location exists with short_display: "Location1"
-        And the location is one of the activity's locations
-        And I follow "Past Expenditure"
-        And I follow "Locations"
-        And I fill in "Location1" with "1234567.00"
-      When I press "Save"
-      Then I should not see "Activity classification was successfully updated."
-        And the "Location1" field should contain "1,234,567.00"
-      When I follow "Copy Past Expenditure to Current Budget"
-        And I follow "Past Expenditure"
-        And I follow "Locations"
-      Then the "Location1" field should contain "1,234,567.00"
-
     Scenario: Use expenditure by cost categorization for budget by cost categorization
       When I follow "Past Expenditure"
         And I follow "Inputs"

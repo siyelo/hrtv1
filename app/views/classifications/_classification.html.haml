@@ -2,10 +2,14 @@
   - form_tag activity_classification_path(@activity, params[:id], :view => params[:view]), :method => :put do
 
     %p#expl
-      %span= link_to 'b2s', '#', :id => 'budget_to_spend'
-      %span= link_to 's2b', '#', :id => 'spend_to_budget'
-      %span Amount (#{@activity.currency} or %)
-      %span Subtotal
+      %span.spend
+        - link_to '#', :id => 'spend_to_budget' do
+          Spend
+          = image_tag "icon_s2b.png", :alt => "copy spend to budget"
+      %span.budget
+        - link_to '#', :id => 'budget_to_spend' do
+          = image_tag "icon_b2s.png", :alt => "copy budget to spend"
+          Budget
 
     %ul.buttons.left
       %li= link_to 'All data', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)

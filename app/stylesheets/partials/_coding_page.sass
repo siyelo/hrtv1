@@ -26,15 +26,32 @@ body #content #main .activity_tree a
 
 .edit_activity
   position: relative
+  
 #expl
   color: $mid-blue + #222
   float: right
   font-size: 11px
   position: relative
   top: 15px
+  width: 332px
   span
-    padding: 0 48px 0 3px
-
+    &.budget
+      float: right
+      text-align: right
+      width: 133px
+      img
+        float: left
+    &.spend
+      float: left
+      width: 133px
+      img
+        float: right
+    
+  a
+    text-decoration: none
+  img
+    margin: 0 3px
+    
 body.app
   ul.activity_tree, #activity_description
     label
@@ -44,11 +61,26 @@ body.app
 
       .budget
         float: left
-        width: 150px
+        height: 12px
+        position: relative
+        width: 131px
+        input
+          +border-right-radius(0)
+          
       .spend
         float: left
-        width: 150px
-        margin-right: 15px
+        margin-right: 70px
+        position: relative
+        width: 131px
+        input
+          +border-right-radius(0)
+
+.inline_ratio
+  display: inline-block !important
+  font-size: 10px !important
+  position: absolute
+  left: 29px
+  top: 6px
 
 .tooltip
   &.info

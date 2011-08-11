@@ -11,19 +11,16 @@ class Currency < ActiveRecord::Base
   after_save :reload_currencies
   
   ### Class Methods
-  def self.special_yaml(currencies)
-    yaml = "--- \n"
-    currencies.each do |c|
-      yaml += "#{c.conversion}: #{c.rate}\n"
-    end
-    yaml
+  def self.currencies_to_yaml
+    currencies = Currency.all(:select => 'conversion, rate').map { |cur| [cur.conversion, cur.rate]}.flatten
+    Hash[*currencies].to_yaml
   end
   
   private
   
     def reload_currencies
       @cur = Currency.all
-      currency_config     = Currency.special_yaml(@cur)
+      currency_config     = Currency.currencies_to_yaml
       Money.default_bank.import_rates(:yaml, currency_config)
     end
   

@@ -41,6 +41,7 @@ class FundingFlow < ActiveRecord::Base
     :unless => lambda {|fs| fs["project_from_id"].blank?}
   validates_uniqueness_of :organization_id_from, :scope => :project_id
 
+
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
 

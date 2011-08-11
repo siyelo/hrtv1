@@ -11,20 +11,6 @@
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => true
 
   %li.last
-    %h3== Past Other Cost Expenditure (#{@other_cost.currency})
-    %ul.dashboard_section
-      = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => { :class => 'js_spend' }
-
-      = render 'shared/spend_quarters', :f => f
-
-  %li.last
-    %h3== Other Cost Current Budget (#{@other_cost.currency})
-    %ul.dashboard_section
-      = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => { :class => 'js_budget' }
-
-      = render 'shared/budget_quarters', :f => f
-
-  %li.last
     %h3== Implementers
     %ul.dashboard_section
       %p.hint Service Providers and partners you work with

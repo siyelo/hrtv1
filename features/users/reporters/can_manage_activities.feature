@@ -21,8 +21,6 @@ Feature: Reporter can manage activities
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-    And I fill in "activity_spend" with "200"
-    And I fill in "activity_budget" with "300"
     And I select "project1" from "Project"
     And I follow "Add Target"
     And I fill in "Target" with "Target description"
@@ -35,14 +33,13 @@ Feature: Reporter can manage activities
 
    #combobox
   @javascript
+  @run
   Scenario: Reporter can add implementers (normal values)
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-    And I fill in "activity_spend" with "200"
-    And I fill in "activity_budget" with "300"
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization2"
@@ -61,8 +58,6 @@ Feature: Reporter can manage activities
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-    And I fill in "activity_spend" with "200"
-    And I fill in "activity_budget" with "300"
     And I select "project1" from "Project"
     And I follow "Add Implementer"
     And I fill in "Implementer" with "organization1"
@@ -126,19 +121,6 @@ Feature: Reporter can manage activities
          | a1   |            | 2011-12-01 | project1 | Start date can't be blank |
          | a1   | 2011-01-01 |            | project1 | End date can't be blank   |
          #| a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
-
-
-  Scenario: Reporter can enter 5 year budget projections
-    Given now is "2010-07-15"
-    When I follow "Add Activities now"
-      And I fill in "activity_name" with "activity1"
-      And I fill in "activity_description" with "activity1 description"
-      And I fill in "activity_start_date" with "2010-01-01"
-      And I fill in "activity_end_date" with "2010-12-01"
-      And I select "project1" from "Project"
-      And I fill in "Budget" with "10000"
-      And I press "Save & Classify >"
-    Then I should see "Activity was successfully created."
 
 
   Scenario: Reporter can upload activities

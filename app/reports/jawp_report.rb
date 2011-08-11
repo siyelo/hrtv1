@@ -27,18 +27,10 @@ class Reports::JawpReport
     # otherwise it returns the values for Rwanda fiscal year
     def build_rows(csv, activity)
       if @is_budget
-        amount_q1             = activity.gor_budget_quarter(1)
-        amount_q2             = activity.gor_budget_quarter(2)
-        amount_q3             = activity.gor_budget_quarter(3)
-        amount_q4             = activity.gor_budget_quarter(4)
         amount_total          = activity.gor_budget
         amount_total_in_usd   = activity.budget_in_usd
         is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
       else
-        amount_q1             = activity.gor_spend_quarter(1)
-        amount_q2             = activity.gor_spend_quarter(2)
-        amount_q3             = activity.gor_spend_quarter(3)
-        amount_q4             = activity.gor_spend_quarter(4)
         amount_total          = activity.gor_spend
         amount_total_in_usd   = activity.spend_in_usd
         is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
@@ -48,14 +40,6 @@ class Reports::JawpReport
       row << activity.project.try(:description).try(:gsub, /[\n\r-]+/, " ")
       row << activity.name
       row << activity.description.try(:gsub, /[\n\r-]+/, " ")
-      row << amount_q1
-      row << amount_q2
-      row << amount_q3
-      row << amount_q4
-      row << amount_q1
-      row << amount_q2
-      row << amount_q3
-      row << amount_q4
       row << get_locations(activity)
       row << activity.sub_activities_count
       row << get_hc_sub_activity_count(activity)
@@ -218,14 +202,6 @@ class Reports::JawpReport
       row << "Project Description"
       row << "Activity Name"
       row << "Activity Description"
-      row << "Q1"
-      row << "Q2"
-      row << "Q3"
-      row << "Q4"
-      row << "Q1 (USD)"
-      row << "Q2 (USD)"
-      row << "Q3 (USD)"
-      row << "Q4 (USD)"
       row << "Districts"
       row << "# of implemeneters"
       row << "# of facilities implementing"

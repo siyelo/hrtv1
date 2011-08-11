@@ -54,22 +54,6 @@
       //= f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The date when the Activity started."
       //= f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Activity’s implementation."
 
-
-  %li.last
-    %h3== Past Activity Expenditure (#{@activity.currency})
-    %ul.dashboard_section
-      = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_spend"}
-
-      = render 'shared/spend_quarters', :f => f
-
-  %li.last
-    %h3== Current Budget (#{@activity.currency})
-    %ul.dashboard_section
-      - if @response.request.budget_by_quarter?
-        = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_budget"}
-
-        = render 'shared/budget_quarters', :f => f
-
   %li.last.sub_activities
     %h3 Implementers
     .dashboard_section

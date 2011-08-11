@@ -1,10 +1,16 @@
 class Currency < ActiveRecord::Base
-  
-  after_save :reload_currencies
+
+  ### Attributes
   attr_accessor :to, :from
+  
+  ### Validations
   validates_uniqueness_of :conversion
   validates_numericality_of :rate
   
+  ### Callbacks
+  after_save :reload_currencies
+  
+  ### Class Methods
   def self.special_yaml(currencies)
     yaml = "--- \n"
     currencies.each do |c|

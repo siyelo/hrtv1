@@ -464,13 +464,6 @@ ul.activity_tree
       background: #f7eeec
       .subtotal
         background: $lighter-blue
-    a.invalid_node
-      background: #FF0000
-      color: #FFF
-      font-weight: bold
-      text-align: center
-      width: 8px
-      +border-radius(30px)
     > span
       float: left
     label
@@ -504,13 +497,14 @@ ul.activity_tree
   .subtotal
     background: $lightest-blue
     display: inline-block !important
-    float: right
     height: 12px
-    margin-left: 3px
     overflow: hidden
     padding: 5px 2px
-    width: 115px
-    +border-radius
+    position: absolute
+    right: 0
+    top: 0
+    width: 85px
+    +border-right-radius
 
   .hide
     display: none

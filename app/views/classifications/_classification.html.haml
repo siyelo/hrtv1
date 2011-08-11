@@ -1,0 +1,23 @@
+- if @budget_coding_tree.root_codes.present?
+  - form_tag activity_classification_path(@activity, params[:id], :view => params[:view]), :method => :put do
+
+    %p#expl
+      %span.spend
+        - link_to '#', :id => 'spend_to_budget' do
+          Past Expenditure
+          = image_tag "icon_s2b.png", :alt => "Copy Past Expenditure to Current Budget", :title => "Copy Past Expenditure to Current Budget"
+      %span.budget
+        - link_to '#', :id => 'budget_to_spend' do
+          = image_tag "icon_b2s.png", :alt => "Copy Current Budget to Past Expenditure", :title => "Copy Current Budget to Past Expenditure"
+          Current Budget
+
+    %ul.buttons.left
+      %li= link_to 'All data', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active' : nil)
+      %li= link_to 'My data', edit_activity_classification_path(@activity, params[:id], :view => 'my'), :class => (params[:view] == 'my' ? 'active' : nil)
+
+    %ul.activity_tree
+      - @budget_coding_tree.root_codes.each do |code|
+        = render 'code_row', :code => code
+
+    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

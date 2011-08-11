@@ -1,0 +1,10 @@
+- # amount     = assignment.nil? ? '' : assignment.amount
+- # amount2     = assignment2.nil? ? '' : assignment2.amount
+- percentage = assignment.nil? ? '' : assignment.percentage
+- cached_amount = assignment.nil? ? '' : assignment.cached_amount
+- cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
+- options = percentage_field_options(code, assignment, valid)
+
+= text_field_tag "classifications[#{type}][#{code.id}]", h(percentage), {:size => 3}.merge(options)
+= label_tag "classifications[#{type}][#{code.id}]", "%", :class => "inline_ratio"
+= label_tag "classifications[#{type}][#{code.id}][cached_amount]", cached_label, :id => nil, :class => "subtotal"

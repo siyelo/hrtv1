@@ -12,19 +12,18 @@
 
 %ul.ordered_nav
   - if activity.new_record?
-    - link = activity.class == OtherCost ? new_response_other_cost_path(@response) : new_response_activity_path(@response)
     %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}
-      - link_to link do
+      .dummy
         %span 1
         Details
     %li
       .dummy
         %span 2
-        Expenditure
+        Purposes
     %li
       .dummy
         %span 3
-        Current Budget
+        Inputs
   - else
     - link = activity.class == OtherCost ? edit_response_other_cost_path(activity.data_response, activity) : edit_response_activity_path(activity.data_response, activity)
     %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}
@@ -32,15 +31,12 @@
         %span 1
         Details
 
-    - if @response.data_request.spend?
-      %li{:class => (@coding_type.present? && get_coding_type(@coding_type) == :spend ? 'selected' : nil)}
-        - link_to activity_code_assignments_path(activity, :coding_type => 'CodingSpend') do
-          %span 2
-          Past Expenditure
+    %li{:class => params[:id] == 'purposes' ? 'selected' : nil}
+      - link_to edit_activity_classification_path(activity, 'purposes') do
+        %span 2
+        Purposes
 
-    - if @response.data_request.budget?
-      %li{:class => (@coding_type.present? && get_coding_type(@coding_type) == :budget ? 'selected' : nil)}
-        - link_to activity_code_assignments_path(activity, :coding_type => 'CodingBudget') do
-          %span 3
-          Current Budget
-
+    %li{:class => params[:id] == 'inputs' ? 'selected' : nil}
+      - link_to edit_activity_classification_path(activity, 'inputs') do
+        %span 3
+        Inputs

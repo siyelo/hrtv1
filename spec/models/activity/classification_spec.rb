@@ -16,8 +16,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudget.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudget.update_classifications(activity, params)
       activity.coding_budget_classified?.should be_true
     end
 
@@ -28,8 +28,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudget.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudget.update_classifications(activity, params)
       activity.coding_budget_classified?.should be_false
     end
   end
@@ -49,8 +49,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudgetCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudgetCostCategorization.update_classifications(activity, params)
       activity.coding_budget_cc_classified?.should be_true
     end
 
@@ -61,8 +61,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudgetCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudgetCostCategorization.update_classifications(activity, params)
       activity.coding_budget_cc_classified?.should be_false
     end
   end
@@ -82,8 +82,8 @@ describe Activity, "Classification" do
                          :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingBudgetDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingBudgetDistrict.update_classifications(activity, params)
       activity.coding_budget_district_classified?.should be_true
     end
 
@@ -94,8 +94,8 @@ describe Activity, "Classification" do
                          :project => @project, :budget => 100)
 
       activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingBudgetDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingBudgetDistrict.update_classifications(activity, params)
       activity.coding_budget_district_classified?.should be_false
     end
   end
@@ -115,8 +115,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpend.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpend.update_classifications(activity, params)
       activity.coding_spend_classified?.should be_true
     end
 
@@ -127,8 +127,8 @@ describe Activity, "Classification" do
       code     = Factory(:mtef_code, :short_display => 'code')
 
       activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpend.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpend.update_classifications(activity, params)
       activity.coding_spend_classified?.should be_false
     end
   end
@@ -149,8 +149,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpendCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpendCostCategorization.update_classifications(activity, params)
       activity.coding_spend_cc_classified?.should be_true
     end
 
@@ -161,8 +161,8 @@ describe Activity, "Classification" do
       code     = Factory(:cost_category_code, :short_display => 'code')
 
       activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpendCostCategorization.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpendCostCategorization.update_classifications(activity, params)
       activity.coding_spend_cc_classified?.should be_false
     end
   end
@@ -183,8 +183,8 @@ describe Activity, "Classification" do
                          :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 100}}
-      CodingSpendDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 100}
+      CodingSpendDistrict.update_classifications(activity, params)
       activity.coding_spend_district_classified?.should be_true
     end
 
@@ -195,8 +195,8 @@ describe Activity, "Classification" do
                          :project => @project, :spend => 100)
 
       activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => {"amount" => 101}}
-      CodingSpendDistrict.update_codings(params, activity)
+      params = {code.id.to_s => 99}
+      CodingSpendDistrict.update_classifications(activity, params)
       activity.coding_spend_district_classified?.should be_false
     end
   end
@@ -597,118 +597,6 @@ describe Activity, "Classification" do
         end
       end
     end
-  end
-
-  describe "use spent for budget codings" do
-    def copy_expenditure_to_budget_check(activity, actual_type, expected_type)
-      activity.copy_spend_codings_to_budget([actual_type])
-      code_assignments = activity.code_assignments.find(:all, :order => "id ASC")
-      code_assignments.length.should == 2
-      code_assignments[0].class.to_s.should == actual_type
-      code_assignments[1].class.to_s.should == expected_type
-    end
-
-    def dont_copy_expenditure_to_budget_check(activity, actual_type, expected_type)
-      activity.copy_spend_codings_to_budget([actual_type])
-      code_assignments = activity.code_assignments
-      code_assignments.length.should == 1
-      code_assignments[0].class.to_s.should == actual_type
-    end
-
-    def copy_expenditure_to_spend_check_cached_amount(activity, type, expected_cached_amount)
-      activity.copy_budget_codings_to_spend([type])
-      code_assignments = activity.code_assignments
-      code_assignments[1].cached_amount.should == expected_cached_amount
-    end
-
-    it "copies spent for budget codings for CodingBudget" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend, :activity => activity)
-      copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
-    end
-
-    it "copies spent for budget codings for CodingBudgetDistrict" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend_district, :activity => activity)
-      copy_expenditure_to_budget_check(activity, 'CodingSpendDistrict', 'CodingBudgetDistrict')
-    end
-
-    it "copies spent for budget codings for CodingBudgetCostCategorization" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend_cost_categorization, :activity => activity)
-      copy_expenditure_to_budget_check(activity, 'CodingSpendCostCategorization', 'CodingBudgetCostCategorization')
-    end
-
-    it "does not copy spent to budget when spent is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project,
-                        :spend => nil)
-      Factory(:coding_spend, :activity => activity)
-      dont_copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
-    end
-
-    it "does not copy spent to budget when spent is 0" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project,
-                        :spend => 0)
-      Factory(:coding_spend, :activity => activity)
-      dont_copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
-    end
-
-    it "deletes existing budget codings before copying the spend ones" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend, :activity => activity)
-      Factory(:coding_budget, :activity => activity)
-      copy_expenditure_to_budget_check(activity, 'CodingSpend', 'CodingBudget')
-    end
-
-    it "calculates budget amount when there is amount for spend" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => 50, :spend => 100)
-      Factory(:coding_spend, :activity => activity, :amount => 50, :cached_amount => 50)
-      activity.copy_spend_codings_to_budget(['CodingSpend'])
-      code_assignments = activity.code_assignments.find(:all, :order => 'id ASC')
-      code_assignments[1].amount.should == 25
-    end
-
-    it "sets budget amount to nil when there is amount for spend and code_assignment amount is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => 50, :spend => 100)
-      Factory(:coding_spend, :activity => activity, :amount => nil, :cached_amount => 50)
-      activity.copy_spend_codings_to_budget(['CodingSpend'])
-      code_assignments = activity.code_assignments.with_type('CodingSpend')
-      code_assignments[0].amount.should == nil
-    end
-
-    def check_percentage_copying(spend)
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => 50, :spend => spend)
-
-      Factory(:coding_spend, :activity => activity, :percentage => 50)
-      activity.copy_spend_codings_to_budget(['CodingSpend'])
-      code_assignments = activity.code_assignments.with_type('CodingSpend')
-      code_assignments[0].percentage.should == 50
-    end
-
-    it "copies percentage from spend to budget code assignment when spend is 100" do
-      check_percentage_copying(100)
-    end
-
-    it "copies percentage from spend to budget code assignment when spend is nil" do
-      check_percentage_copying(nil)
-    end
-
-    it "copies percentage from spend to budget code assignment when spend is 0" do
-      check_percentage_copying(0)
-    end
-
   end
 
   describe "derive_classifications_from_sub_implementers" do

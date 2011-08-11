@@ -6,7 +6,7 @@
   - colspan += 1 if @data_request.send(request.to_sym)
   - if @data_request.locations?
     - colspan -= 1 if request == "locations" && activities.first.class == OtherCost
-  
+
 .simple_table.push
   %table
     %thead
@@ -23,14 +23,14 @@
           - unless other_costs
             %th Locations
         - if @data_request.inputs?
-          %th Inputs 
+          %th Inputs
         - if @data_request.purposes?
           %th Purposes
         - if @data_request.locations?
           - unless other_costs
             %th Locations
         - if @data_request.inputs?
-          %th Inputs 
+          %th Inputs
         %th
     %tbody
       - activities.each do |activity|
@@ -49,5 +49,5 @@
             - unless other_costs
               %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
           - if @data_request.inputs?
-            %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs? 
-          %td= link_to 'Classify', activity_code_assignments_path(activity)
+            %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+          %td= link_to 'Classify', edit_activity_classification_path(activity, 'purposes')

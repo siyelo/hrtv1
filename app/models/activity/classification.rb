@@ -29,15 +29,6 @@ module Activity::Classification
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  SPEND_CODING_CLASSES = ['CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization']
-
-  CLASSIFICATION_MAPPINGS = {
-    'CodingSpend' => 'CodingBudget',
-    'CodingSpendDistrict' => 'CodingBudgetDistrict',
-    'CodingSpendCostCategorization' => 'CodingBudgetCostCategorization'
-  }
-
-
   module ClassMethods
   end
 
@@ -138,30 +129,6 @@ module Activity::Classification
 
     def spend_stratobj_coding
       virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
-    end
-
-    # This method copies spend code assignments to budget when user has chosen
-    # to use expenditure codings for budget: All budget mappings are copied.
-    def copy_spend_codings_to_budget(coding_types = SPEND_CODING_CLASSES)
-      coding_types.each do |spend_coding_type|
-        budget_coding_type = CLASSIFICATION_MAPPINGS[spend_coding_type]
-        klass             = budget_coding_type.constantize
-
-        delete_existing_code_assignments_by_type(budget_coding_type)
-
-        # copy across the ratio, not just the amount
-        code_assignments.with_type(spend_coding_type).each do |ca|
-          if spend && spend > 0
-            amount = (ca.amount && spend && spend > 0) ?  budget * ca.amount / spend : nil
-            budget_ca = fake_ca(klass, ca.code, amount, ca.percentage)
-            budget_ca.save!
-          end
-        end
-
-        self.update_classified_amount_cache(klass)
-      end
-
-      true
     end
 
     def derive_classifications_from_sub_implementers!(coding_type)

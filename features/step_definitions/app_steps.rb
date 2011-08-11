@@ -243,20 +243,6 @@ def field_id(code_name)
   return "activity_updates_#{code.id}_percentage"
 end
 
-When /^I fill in "([^"]*)" percentage field with "([^"]*)"$/ do |code_name, value|
-  steps %Q{
-    When I fill in "#{field_id(code_name)}" with "#{value}"
-  }
-end
-
-Then /^the "([^"]*)" percentage field should contain "([^"]*)"$/ do |code_name, value|
-  steps %Q{
-    And the "#{field_id(code_name)}" field should contain "#{value}"
-  }
-end
-
-
-
 # band aid fix
 Given /^a data response to "([^"]*)" by "([^"]*)"$/ do |request, org|
   @response = Factory(:data_response,

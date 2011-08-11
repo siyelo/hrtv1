@@ -2,8 +2,15 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe CodeAssignment do
   describe "Validations" do
+    subject { basic_setup_activity; Factory(:code_assignment, :activity => @activity) }
     it { should validate_presence_of :activity_id }
     it { should validate_presence_of :code_id }
+    it { should ensure_inclusion_of(:percentage).in_range(1..100) }
+
+    it "does not validate percentage when it is not present" do
+      subject.percentage = nil
+      subject.valid?.should be_true
+    end
   end
 
   describe "Associations" do
@@ -232,6 +239,83 @@ describe CodeAssignment do
       @ca.cached_amount = 456.78
       @ca.save
       @ca.cached_amount_in_usd.should == 0.91356
+    end
+  end
+
+  describe "#self.update_classifications" do
+    before :each do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response, :project => @project)
+    end
+
+    context "when classifications does not exist" do
+      context "when submitting empty classifications" do
+        it "does not saves anything" do
+          classifications = {}
+          coding_type     = 'CodingBudget'
+          CodingBudget.update_classifications(@activity, classifications)
+          CodingBudget.count.should == 0
+        end
+      end
+
+      context "when submitting non empty classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting percentages <= 100" do
+          it "creates code assignments" do
+            classifications = { @code1.id => 100, @code2.id => 20 }
+            CodingBudget.update_classifications(@activity, classifications)
+
+            CodingBudget.count.should == 2
+            assignments = CodingBudget.all
+            assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 100
+            assignments.detect{|ca| ca.code_id == @code2.id}.percentage.should == 20
+          end
+        end
+
+        context "when submitting percentages > 100" do
+          it "creates code assignments" do
+            classifications = { @code1.id => 100, @code2.id => 101 }
+            CodingBudget.update_classifications(@activity, classifications)
+
+            CodingBudget.count.should == 1
+            assignments = CodingBudget.all
+            assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 100
+          end
+        end
+      end
+    end
+
+    context "when classifications exist" do
+      context "when submitting classifications" do
+        before :each do
+          @code1 = Factory(:mtef_code)
+          @code2 = Factory(:mtef_code)
+        end
+
+        context "when submitting percentages" do
+          it "creates code assignments" do
+            Factory(:coding_budget, :activity => @activity, :code => @code1, :percentage => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20)
+            CodingBudget.count.should == 2
+
+            # when submitting existing classifications, it updates them
+            classifications = { @code1.id => 11, @code2.id => 22 }
+            CodingBudget.update_classifications(@activity, classifications)
+
+            CodingBudget.count.should == 2
+            assignments = CodeAssignment.all
+            assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 11
+            assignments.detect{|ca| ca.code_id == @code2.id}.percentage.should == 22
+          end
+        end
+      end
     end
   end
 

@@ -44,8 +44,8 @@
               %ul
                 %li= link_to "Edit", edit_response_activity_path(activity.data_response, activity)
                 %li= link_to "Delete", response_activity_path(activity.data_response, activity), :method => :delete, :confirm => "Are you sure you want to delete this #{activity.type ? "other cost" : "activity"}?"
-                %li= link_to "Classify", activity_code_assignments_url(activity)
-                %li= render '/code_assignments/approve', :activity => activity
+                %li= link_to "Classify", edit_activity_classification_path(activity, 'inputs')
+                %li= render '/classifications/approve', :activity => activity
 
           %tr.activity.entry_main
             %td.s_border{:colspan => 100}

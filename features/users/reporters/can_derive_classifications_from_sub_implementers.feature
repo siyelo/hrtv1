@@ -1,3 +1,5 @@
+# NOTE: fix these scenarios when sub activities removed
+@wip
 Feature: Reporter can derive classifications from sub implementers
   In order to save time entering values
   As a reporter

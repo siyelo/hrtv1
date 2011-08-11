@@ -50,7 +50,7 @@ Feature: Reporter can manage activities
     And I fill in "Implementer Past Expenditure" with "99"
     And I fill in "Implementer Current Budget" with "19"
     And I press "Save"
-    Then I should see "Activity was successfully created"
+    Then I should see "Activity was successfully created."
     And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "99"
     And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "19"
 
@@ -70,20 +70,20 @@ Feature: Reporter can manage activities
     And I fill in "Implementer Past Expenditure" with "10%"
     And I fill in "Implementer Current Budget" with "10%"
     And I press "Save"
-    Then I should see "Activity was successfully created"
+    Then I should see "Activity was successfully created."
     And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "20"
     And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "30"
 
   @javascript
   Scenario: Reporter can CRUD activities
-  When I follow "Add Activities now"
+    When I follow "Add Activities now"
       And I fill in "Name" with "1ctivity1 description"
       And I fill in "Description" with "1ctivity1 description"
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-12-01"
       And I select "project1" from "Project"
       And I press "Save & Classify >"
-    Then I should see "Activity was successfully created"
+    Then I should see "Activity was successfully created."
     When I follow "1ctivity1 description"
       And I fill in "Name" with "activity2"
       And I fill in "Description" with "activity2 description"
@@ -93,6 +93,22 @@ Feature: Reporter can manage activities
       And I confirm the popup dialog
       And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
+
+  Scenario: Reported can create activity with automatically created project
+    When I follow "Add Activities now"
+      And I fill in "Name" with "1ctivity1 description"
+      And I fill in "Description" with "1ctivity1 description"
+      And I fill in "Start date" with "2010-01-01"
+      And I fill in "End date" with "2010-12-01"
+      And I select "<Automatically create a project for me>" from "Project"
+      And I press "Save & Classify >"
+    Then I should see "Activity and Project were successfully created. Click here to enter the funding sources for the new project"
+    When I follow "1ctivity1 description"
+      And I fill in "Name" with "activity2"
+      And I fill in "Description" with "activity2 description"
+      And I select "<Automatically create a project for me>" from "Project"
+      And I press "Save & Classify >"
+    Then I should see "Activity was successfully updated and a new project was created. Click here to enter the funding sources for the new project."
 
   Scenario Outline: Reporter can CRUD activities and see errors
     When I follow "Add Activities now"

@@ -34,11 +34,12 @@ class OtherCostsController < Reporter::BaseController
     
     @other_cost = @response.other_costs.new(params[:other_cost])
     @other_cost.data_response = @response
-
     if @other_cost.save
       respond_to do |format|
         format.html do
-          flash[:notice] = 'Other Cost was successfully created'
+          flash[:notice] = "Other Cost #{@new_project ? "and Project were" : "was"} successfully created. 
+                            #{"<a href=#{edit_response_project_path(@response, @project)}>Click here</a> 
+                            to enter the funding sources for the new project." if @new_project}"
           html_redirect
         end
         format.js { js_redirect }
@@ -58,7 +59,10 @@ class OtherCostsController < Reporter::BaseController
     end
     
     update! do |success, failure|
-      success.html { flash[:notice] = 'Other Cost was successfully updated'; html_redirect }
+      success.html { flash[:notice] = "Other Cost was successfully updated#{" and a new project was created.  
+                                       <a href=#{edit_response_project_path(@response, @project)}>Click here</a> 
+                                       to enter the funding sources for the new project." if @new_project}"; 
+                                       html_redirect }
       success.js   { js_redirect }
       failure.html { load_comment_resources(resource); render :action => 'edit'}
       failure.js   { js_redirect }
@@ -110,8 +114,15 @@ class OtherCostsController < Reporter::BaseController
                                :start_date => params[:other_cost][:start_date], 
                                :end_date   => params[:other_cost][:end_date], 
                                :data_response => @response)
+        if @project.save
+          params[:other_cost][:project_id] = @project.id
+          @new_project = true
+        else
+          params[:other_cost][:project_id] = ""
+        end
+      else
+        params[:other_cost][:project_id] = @project.id
       end
-      @project.save ? params[:other_cost][:project_id] = @project.id : params[:other_cost][:project_id] = ""
     end
   
     def sort_column

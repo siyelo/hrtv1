@@ -94,7 +94,6 @@ Feature: Reporter can manage activities
       And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
 
-
   Scenario Outline: Reporter can CRUD activities and see errors
     When I follow "Add Activities now"
       And I fill in "Name" with "<name>"
@@ -108,10 +107,10 @@ Feature: Reporter can manage activities
 
       Examples:
          | name | start_date | end_date   | project  | message                       |
-         #|      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
-         #| a1   |            | 2011-12-01 | project1 | Start date is an invalid date |
-         #| a1   | 2011-01-01 |            | project1 | End date is an invalid date   |
-         | a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
+         |      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
+         | a1   |            | 2011-12-01 | project1 | Start date can't be blank |
+         | a1   | 2011-01-01 |            | project1 | End date can't be blank   |
+         #| a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
 
   Scenario: Reporter can enter 5 year budget projections

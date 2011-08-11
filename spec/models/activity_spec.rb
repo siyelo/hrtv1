@@ -76,6 +76,13 @@ describe Activity do
     it { should validate_numericality_of(:spend_q2) }
     it { should validate_numericality_of(:spend_q3) }
     it { should validate_numericality_of(:spend_q4) }
+    
+    
+    it "should not allow a project to be saved with a project_id == -1" do
+      basic_setup_response
+      @activity = Factory.build(:activity, :data_response => @response, :project_id => -1)
+      @activity.should_not be_valid
+    end
 
     it "will return false if the activity start date is before the project start date" do
       basic_setup_response

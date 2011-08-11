@@ -120,7 +120,7 @@ describe ActivitiesController do
     end
   end
 
-  describe "Update" do
+  describe "Update / Create" do
     before :each do
       @organization = Factory(:organization)
       @data_request = Factory(:data_request, :organization => @organization)
@@ -130,6 +130,29 @@ describe ActivitiesController do
       @activity = Factory(:activity, :project => @project,
                           :data_response => @data_response, :am_approved => false)
       login @user
+    end
+    
+    it "should allow a project to be created automatically on update" do
+      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+      put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:project_id => '-1', :name => @activity.name, :start_date => @activity.start_date, :end_date => @activity.end_date}
+      @activity.reload
+      @activity.project.name.should == @activity.name
+    end
+    
+    it "should allow a project to be created automatically on create" do
+      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+      put :create, :response_id => @data_response.id,
+          :activity => {:project_id => '-1', :name => "new activity", :description => "description", :start_date => @activity.start_date, :end_date => @activity.end_date}
+      @new_activity = Activity.find_by_name('new activity')
+      @new_activity.project.name.should == @new_activity.name
+    end
+    
+    it "should assign the activity to an existing project if a project exists with the same name as the activity" do
+      put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:name => @project.name, :project_id => '-1'}
+      @activity.reload
+      @activity.project.name.should == @project.name
     end
 
     it "should allow a reporter to update an activity if it's not am approved" do

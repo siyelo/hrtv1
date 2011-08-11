@@ -7,6 +7,7 @@
     = "#{@activity.class.to_s.underscore.humanize.titleize}"
     = render 'help'
 
+= render 'uncoded_overlay', :activity => @activity
 = render 'getting_started'
 = render 'activities/tab_nav', :activity => @activity
 

@@ -5,6 +5,7 @@ class OtherCostsController < Reporter::BaseController
   helper_method :sort_column, :sort_direction
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
+  before_filter :warn_if_not_classified, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def index
@@ -94,6 +95,7 @@ class OtherCostsController < Reporter::BaseController
 
 
   private
+    
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
     end

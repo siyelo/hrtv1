@@ -4,6 +4,7 @@
   = render :partial => 'shared/sub_nav_projects'
 
 = render 'breadcrumb', :response => @response, :activity => @activity
+= render 'classifications/uncoded_overlay', :activity => @activity
 
 %h1.main_heading
   Edit Activity

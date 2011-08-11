@@ -7,6 +7,7 @@ class ActivitiesController < Reporter::BaseController
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
+  before_filter :warn_if_not_classified, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def new
@@ -109,11 +110,11 @@ class ActivitiesController < Reporter::BaseController
         @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
       else
         flash[:error] = 'Please select a file to upload activities'
-        redirect_to response_projects_path(@response)
+        redirect_to response_projects_url(@response)
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_path(@response)
+      redirect_to response_projects_url(@response)
     end
   end
 

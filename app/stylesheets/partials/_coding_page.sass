@@ -33,17 +33,17 @@ body #content #main .activity_tree a
   font-size: 11px
   position: relative
   top: 15px
-  width: 332px
+  width: 335px
   span
     &.budget
       float: right
       text-align: right
-      width: 133px
+      width: 143px
       img
         float: left
     &.spend
       float: left
-      width: 133px
+      width: 143px
       img
         float: right
     
@@ -57,29 +57,39 @@ body.app
     label
       display: inline
     .values
-      min-width: 310px
+      width: 336px
 
-      .budget
-        float: left
-        height: 12px
+      > .budget
+        background: $lightest-blue
+        float: right
         position: relative
-        width: 131px
+        width: 141px
+        +border-radius
+        +pie-clearfix
         input
+          height: 14px
+          margin: 0
+          padding-left: 2px
           +border-right-radius(0)
           
-      .spend
+      > .spend
+        background: $lightest-blue
         float: left
-        margin-right: 70px
+        margin-right: 50px
         position: relative
-        width: 131px
+        width: 141px
+        +border-radius
+        +pie-clearfix
         input
+          height: 14px
+          margin: 0
           +border-right-radius(0)
 
 .inline_ratio
   display: inline-block !important
   font-size: 10px !important
+  left: 36px
   position: absolute
-  left: 29px
   top: 6px
 
 .tooltip

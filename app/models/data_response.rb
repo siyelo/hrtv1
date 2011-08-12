@@ -334,6 +334,18 @@ class DataResponse < ActiveRecord::Base
     projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + universal_currency_converter(p.budget, p.currency, "USD")}
   end
 
+  def budget
+    activities.only_simple.inject(0) do |sum, activity|
+      sum + (activity.budget || 0) * currency_rate(activity.currency, currency)
+    end
+  end
+
+  def spend
+    activities.only_simple.inject(0) do |sum, activity|
+      sum + (activity.spend || 0) * currency_rate(activity.currency, currency)
+    end
+  end
+
   def total_activities_and_other_costs_spend_in_usd
     total_activities_and_other_costs_in_usd("spend")
   end

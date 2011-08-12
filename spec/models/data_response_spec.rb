@@ -101,6 +101,44 @@ describe DataResponse do
       response.name.should == 'Data Request 1'
     end
   end
+
+  describe "#budget & #spend" do
+    before :each do
+      organization = Factory(:organization, :currency => 'USD')
+      request      = Factory(:data_request, :organization => organization)
+      @response    = organization.latest_response
+    end
+
+    context "same currency" do
+      it "returns total" do
+        project      = Factory(:project, :data_response => @response)
+        Factory(:activity, :data_response => @response, :project => project,
+                :spend => 100, :budget => 200)
+        Factory(:other_cost, :data_response => @response, :project => project,
+                :spend => 100, :budget => 200)
+        Factory(:other_cost, :data_response => @response,
+                :spend => 100, :budget => 200)
+        @response.budget.should == 600
+        @response.spend.should == 300
+      end
+    end
+
+    context "different currency" do
+      it "returns total" do
+        Money.default_bank.add_rate(:RWF, :USD, 0.5)
+        Money.default_bank.add_rate(:USD, :RWF,  2)
+        project      = Factory(:project, :data_response => @response, :currency => 'RWF')
+        Factory(:activity, :data_response => @response, :project => project,
+                :spend => 100, :budget => 200)
+        Factory(:other_cost, :data_response => @response, :project => project,
+                :spend => 100, :budget => 200)
+        Factory(:other_cost, :data_response => @response,
+                :spend => 100, :budget => 200)
+        @response.budget.should == 400 # 100 + 100 + 200
+        @response.spend.should == 200 # 50 + 50 + 100
+      end
+    end
+  end
 end
 
 

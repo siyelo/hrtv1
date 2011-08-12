@@ -73,14 +73,6 @@
               = f.input :budget_q2     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q2 #{budget_fiscal_year}"}, :label => false
               = f.input :budget_q3     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q3 #{budget_fiscal_year}"}, :label => false
               = f.input :budget_q4     , :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => "Q4 #{budget_fiscal_year}"}, :label => false
-          %li.grid-80
-            %label Long-term
-            %ul
-              = f.input :budget2, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 2'}, :label => false
-              = f.input :budget3, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 3'}, :label => false
-              = f.input :budget4, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 4'}, :label => false
-              = f.input :budget5, :required => false, :wrapper_html => {:class => 'grid-20'}, :input_html => {'data-hint' => 'Year + 5'}, :label => false
-
 
       %li
         - unless f.object.provider

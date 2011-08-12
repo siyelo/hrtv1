@@ -124,19 +124,8 @@ Feature: Reporter can manage activities
       And I fill in "End date" with "2010-12-01"
       And I select "project1" from "Project"
       And I fill in "Budget" with "10000"
-      And I fill in "2012" with "2000"
-      And I fill in "2013" with "3000"
-      And I fill in "2014" with "4000"
-      And I fill in "2015" with "5000"
       And I press "Save & Classify >"
     Then I should see "Activity was successfully created"
-
-   When I follow "Activity1"
-   Then the "Budget" field should contain "1000"
-     And the "2012" field should contain "2000"
-     And the "2013" field should contain "3000"
-     And the "2014" field should contain "4000"
-     And the "2015" field should contain "5000"
 
 
   Scenario: Reporter can upload activities
@@ -144,10 +133,12 @@ Feature: Reporter can manage activities
       And I press "Import"
     Then I should see "Activities Bulk Create"
 
- Scenario: Reporter can upload activities
+
+  Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
       And I press "Import"
     Then I should not see "is not a valid date"
+
 
   @javascript @wip
   Scenario: Reporter can upload Implementers

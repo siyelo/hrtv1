@@ -17,9 +17,8 @@ class Activity < ActiveRecord::Base
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description, :start_date, :end_date,
-    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
+    :name, :description, :start_date, :end_date, :approved, :am_approved,
+    :budget, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
     :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
     :beneficiary_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :funding_sources_attributes,

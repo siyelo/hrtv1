@@ -26,14 +26,6 @@ module BudgetSpendHelper
         validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
         validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
       end
-
-      if base.eql?(Activity)
-        validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
-        validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
-        validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
-        validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
-      end
-
     end
   end
 

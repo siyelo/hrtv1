@@ -1,5 +1,3 @@
-- budget_fy_start = @response.organization.gor_fiscal_year_start(:budget)[0]
-
 :javascript
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
@@ -31,15 +29,6 @@
         = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_budget"}
 
         = render 'shared/budget_quarters', :f => f
-
-      - unless @response.request.no_long_term_budgets?
-        %li.amounts
-          %label Long-term
-          %ul
-            = f.input :budget2, :label => "#{budget_fy_start + 2}", :required => false if @response.request.year_2?
-            = f.input :budget3, :label => "#{budget_fy_start + 3}", :required => false if @response.request.year_3?
-            = f.input :budget4, :label => "#{budget_fy_start + 4}", :required => false if @response.request.year_4?
-            = f.input :budget5, :label => "#{budget_fy_start + 5}", :required => false if @response.request.year_5?
 
   %li.last
     %h3 Activity Funding Sources

@@ -4,8 +4,7 @@ class DataRequest < ActiveRecord::Base
   ### Attributes
   attr_accessible :organization_id, :title, :final_review,
                   :start_date, :end_date, :due_date, :budget, :spend,
-                  :year_2, :year_3, :year_4, :year_5, :purposes, :locations,
-                  :inputs, :budget_by_quarter
+                  :purposes, :locations, :inputs, :budget_by_quarter
 
   ### Associations
   belongs_to :organization
@@ -33,10 +32,6 @@ class DataRequest < ActiveRecord::Base
   def status
     return 'Final review' if final_review?
     return 'In progress'
-  end
-
-  def no_long_term_budgets?
-    !year_2 && !year_3 && !year_4 && !year_5
   end
 
   private

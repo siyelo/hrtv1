@@ -83,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -117,6 +118,16 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
   add_index "comments", ["commentable_id"], :name => "index_comments_on_commentable_id"
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
+
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "currencies", :force => true do |t|
     t.string   "conversion"
@@ -323,8 +334,5 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
     t.boolean  "active",                   :default => false
     t.integer  "location_id"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

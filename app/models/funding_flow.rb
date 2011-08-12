@@ -26,15 +26,20 @@ class FundingFlow < ActiveRecord::Base
   # validates_presence_of :project # FIXME
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
+  # either budget or spend must be present
+  validates_presence_of :spend, :if => lambda {|ff| !ff.budget? && !ff.spend?},
+    :message => "Actual and/or Planned must be present"
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
   #
-  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0,
+    :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_uniqueness_of :organization_id_from, :scope => :project_id
 
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
@@ -105,6 +110,14 @@ class FundingFlow < ActiveRecord::Base
 
   def donor_funded?
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
+  end
+
+  def in_flow?
+    self.organization == self.to
+  end
+
+  def out_flow?
+    self.organization == self.from
   end
 
   private

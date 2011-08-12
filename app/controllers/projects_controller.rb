@@ -33,7 +33,7 @@ class ProjectsController < Reporter::BaseController
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
-      success.html { redirect_to response_projects_url(@response) }
+      success.html { redirect_to edit_response_project_url(@response, @project) }
     end
   end
 
@@ -42,7 +42,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to response_projects_url(@response)
+        redirect_to edit_response_project_url(@response, @project)
       }
       failure.html do
         load_comment_resources(resource)

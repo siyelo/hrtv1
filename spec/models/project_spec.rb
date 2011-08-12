@@ -82,4 +82,25 @@ describe Project do
       @project.locations.should include(location2)
     end
   end
+
+  describe "#in_flows_total" do
+    it "should return sum of spends/budgets" do
+      basic_setup_project
+      @donor1 = Factory :organization
+      @donor2 = Factory :organization
+      @response1     = @donor1.latest_response
+      @response2     = @donor2.latest_response
+      @project1      = Factory(:project, :data_response => @response1)
+      @project2      = Factory(:project, :data_response => @response2)
+      Factory(:funding_flow, :from => @donor1, :to => @organization,
+             :project => @project, :project_from => @project1,
+             :spend => 10, :budget => 20)
+      Factory(:funding_flow, :from => @donor2, :to => @organization,
+             :project => @project, :project_from => @project2,
+             :spend => 10, :budget => 20)
+
+      @project.in_flows_total(:budget).should == 40
+      @project.in_flows_total(:spend).should == 20
+    end
+  end
 end

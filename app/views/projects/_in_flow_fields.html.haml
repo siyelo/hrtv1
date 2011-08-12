@@ -1,20 +1,16 @@
-.fields
-  .edit_block
-    = f.input :data_response_id, :as => :hidden, :value => @response.id, :required => false
-    = f.input :organization_id_to, :as => :hidden, :value => @response.organization.id, :required => false
-    .ff_from_container
+- error_class = ""
+- error_class = "error" unless f.object.errors.empty?
+
+%tr.overflow_fix.fields{:class => error_class}
+  %td
+    = f.hidden_field :data_response_id, :value => @response.id
+    = f.hidden_field :organization_id_to, :value => @response.organization.id
+    .f_from_container
       .implementer_container
         .ui_widget
-          = f.input :updated_at, :as => :hidden
-          = f.input :from, :as => :select, :collection => funding_organizations_select, :hint => "The organization funding the Project", :required => false, :input_html => {:class => 'js_implementer_select js_combobox ff_from'}
+          = f.hidden_field :updated_at
+          = f.select :organization_id_from, options_for_select(funding_organizations_select, f.object.organization_id_from), {:prompt => true}, :class => 'js_implementer_select js_combobox f_from'
 
-    = f.input :spend, :label => "Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'js_spend'}
-    = render 'shared/spend_quarters', :f => f
-
-    = f.input :budget, :label => "Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => 'js_budget'}
-    = render 'shared/budget_quarters', :f => f
-
-  .preview_block{:style => "display: none;"}
-
-  .manage_block
-    = link_to_remove_fields "x", f, :class => 'delete_button'
+  %td= f.text_field :spend, :class => 'js_spend'
+  %td= f.text_field :budget, :class => 'js_budget'
+  %td= link_to_remove_fields "x", f, :class => 'delete_button'

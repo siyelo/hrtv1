@@ -19,7 +19,12 @@ function add_fields(link, association, content) {
 
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
-  $(link).parent().before(content.replace(regexp, new_id));
+
+  if (association === 'in_flows') {
+    $(link).parents('tr:first').before(content.replace(regexp, new_id));
+  } else {
+    $(link).parent().before(content.replace(regexp, new_id));
+  }
 
   after_add_fields_callback(association);
 };
@@ -89,29 +94,6 @@ var build_activity_funding_source_row = function (edit_block) {
   )
 };
 
-
-var close_project_in_flow_fields = function (fields) {
-  $.each(fields, function () {
-    var element = $(this);
-    var edit_block = element.find('.edit_block');
-    var preview_block = element.find('.preview_block');
-    var manage_block = element.find('.manage_block');
-
-    edit_block.hide();
-    preview_block.html('');
-
-    preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
-    preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
-
-    preview_block.show();
-
-    manage_block.find('.edit_button').remove();
-    manage_block.prepend(
-      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
-    )
-  });
-};
-
 var close_activity_funding_sources_fields = function (fields) {
   $.each(fields, function () {
     var element = $(this);
@@ -132,9 +114,6 @@ var close_activity_funding_sources_fields = function (fields) {
 };
 
 var before_add_fields_callback = function (association) {
-  if (association === 'in_flows') {
-    close_project_in_flow_fields($('.funding_flows .fields'));
-  }
   if (association === 'funding_sources') {
     close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
@@ -1642,20 +1621,10 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    $('.edit_button').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
+    $( ".js_combobox" ).combobox();
     commentsInit();
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
   }
 }
 

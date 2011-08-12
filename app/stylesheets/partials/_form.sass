@@ -284,11 +284,9 @@ h3.form_heading
     text-transform: uppercase
 
 .fields
-  overflow: hidden
   border-bottom: 4px solid $lightest-blue
   margin-bottom: 10px
   padding: 10px 0
-
   .preview_block
     ul
       +horizontal-list
@@ -324,7 +322,6 @@ h3.form_heading
           font-weight: normal
           color: $blue
 
-
   .edit_block, .preview_block
     width: 90%
     float: left
@@ -334,9 +331,8 @@ h3.form_heading
     text-align: right
     width: 10%
 
-.add
-  a
-
+#projects_edit .fields
+  overflow: none !important
 
 .delete_aside
   background: $filler
@@ -593,8 +589,8 @@ strong
   font-weight: bold
 
 .implementer_container
-  border-bottom: 1px solid $lightest-blue
-  margin-bottom: 7px
+  //border-bottom: 1px solid $lightest-blue
+  //margin-bottom: 7px
   .ui-autocomplete-input
     border: 1px solid $light-blue
     padding: 5px
@@ -605,5 +601,5 @@ strong
     margin-top: 2px
     width: 100%
 
-td.error
+td.error, tr.error td
   background-color: #ffbaba !important

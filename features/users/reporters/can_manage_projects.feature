@@ -18,6 +18,7 @@ Feature: Reporter can manage projects
       And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
       And I follow "Projects"
 
+@run
     Scenario: Reporter can CRUD projects
       When I follow "Project"
         And I fill in "Name" with "Project1"
@@ -26,20 +27,14 @@ Feature: Reporter can manage projects
         And I fill in "End date" with "2011-12-01"
         And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
-
       Then I should see "Project was successfully created"
-        And I should see "Project1"
-
-      When I follow "Project1"
-        And I fill in "Name" with "Project2"
-        And I fill in "Description" with "Project2 description"
-        And I press "Update Project"
+      Then show me the page
+      When I fill in "Name" with "Project2"
+      And I fill in "Description" with "Project2 description"
+      And I press "Update Project"
       Then I should see "Project was successfully updated"
-
-      When I follow "Project2"
-        And I follow "Delete this Project"
+      When I follow "Delete this Project"
       Then I should see "Project was successfully destroyed"
-
 
     Scenario Outline: Edit project dates, see feedback messages for start and end dates
       When I follow "Project"

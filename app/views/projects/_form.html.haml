@@ -7,16 +7,7 @@
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation."
 
-  %li.last
-    %h3 Project Funding Sources
-    %ul.dashboard_section
-      %p.heading_hint The sources from which your organization receives funding for its Projects.
-
-      .funding_flows
-        - f.semantic_fields_for :in_flows do |ff|
-          = render "projects/in_flow_fields", :f => ff
-        .add
-          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
+  = render 'in_flows', :f => f
 
   %li.last
     %h3 Other

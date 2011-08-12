@@ -116,6 +116,8 @@ class ClassificationsController < Reporter::BaseController
         [CodingBudget, CodingSpend]
       when 'inputs'
         [CodingBudgetCostCategorization, CodingSpendCostCategorization]
+      when 'locations'
+        [CodingBudgetDistrict, CodingSpendDistrict]
       else
         raise "Invalid type #{params[:id]}".to_yaml
       end

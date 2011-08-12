@@ -19,10 +19,14 @@
     %li
       .dummy
         %span 2
-        Purposes
+        Locations
     %li
       .dummy
         %span 3
+        Purposes
+    %li
+      .dummy
+        %span 4
         Inputs
   - else
     - link = activity.class == OtherCost ? edit_response_other_cost_path(activity.data_response, activity) : edit_response_activity_path(activity.data_response, activity)
@@ -31,12 +35,17 @@
         %span 1
         Details
 
+    %li{:class => params[:id] == 'locations' ? 'selected' : nil}
+      - link_to edit_activity_classification_path(activity, 'locations') do
+        %span 2
+        Locations
+
     %li{:class => params[:id] == 'purposes' ? 'selected' : nil}
       - link_to edit_activity_classification_path(activity, 'purposes') do
-        %span 2
+        %span 3
         Purposes
 
     %li{:class => params[:id] == 'inputs' ? 'selected' : nil}
       - link_to edit_activity_classification_path(activity, 'inputs') do
-        %span 3
+        %span 4
         Inputs

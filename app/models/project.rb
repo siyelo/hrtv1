@@ -50,10 +50,9 @@ class Project < ActiveRecord::Base
     :message => "Start date must come before End date."
 
   ### Attributes
-  attr_accessible :name, :description, :spend,
+  attr_accessible :name, :description, :spend, :user_id,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :in_flows_attributes, :am_approved, :am_approved_date,
-                  :user_id, :budget2, :budget3, :budget4, :budget5
+                  :in_flows_attributes, :am_approved, :am_approved_date
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -370,6 +369,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -384,9 +384,5 @@ end
 #  currency         :string(255)
 #  data_response_id :integer         indexed
 #  comments_count   :integer         default(0)
-#  budget2          :decimal(, )
-#  budget3          :decimal(, )
-#  budget4          :decimal(, )
-#  budget5          :decimal(, )
 #
 

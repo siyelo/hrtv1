@@ -26,10 +26,6 @@ describe Project do
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
     it { should allow_mass_assignment_of(:in_flows_attributes) }
-    it { should allow_mass_assignment_of(:budget2) }
-    it { should allow_mass_assignment_of(:budget3) }
-    it { should allow_mass_assignment_of(:budget4) }
-    it { should allow_mass_assignment_of(:budget5) }
   end
 
   describe "Validations" do
@@ -43,14 +39,6 @@ describe Project do
     it { should_not allow_value('2010-12-41').for(:start_date) }
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
-    it { should_not allow_value('abcd').for(:budget2) }
-    it { should_not allow_value('abcd').for(:budget3) }
-    it { should_not allow_value('abcd').for(:budget4) }
-    it { should_not allow_value('abcd').for(:budget5) }
-    it { should validate_numericality_of(:budget2) }
-    it { should validate_numericality_of(:budget3) }
-    it { should validate_numericality_of(:budget4) }
-    it { should validate_numericality_of(:budget5) }
 
     context "subject" do
       subject { basic_setup_project; @project }

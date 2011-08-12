@@ -4,38 +4,13 @@ require File.dirname(__FILE__) + '/../helpers/response_validation_helper'
 describe DataResponse do #validations
   before :each do
     @organization = Factory(:organization)
-    @request  = Factory.create(:data_request, :organization => @organization,
-                               :budget => true, :spend => true)
+    @request  = Factory.create(:data_request, :organization => @organization)
     @response = @organization.latest_response
     @project  = Factory(:project, :data_response => @response)
     @response.reload
   end
 
-  describe "Request for only spend" do
-    before :each do
-      @request.budget = false; @request.save
-      @activity   = Factory(:activity_w_spend_coding, :data_response => @response, :project => @project)
-      @other_cost = Factory(:other_cost_w_spend_coding, :data_response => @response, :project => @project)
-    end
-
-    it_should_behave_like "activity spend checker"
-    it_should_behave_like "coded Activities checker"
-    it_should_behave_like "coded OtherCosts checker"
-  end
-
-  describe "Request for only budget" do
-    before :each do
-      @request.spend = false; @request.save
-      @activity   = Factory(:activity_w_budget_coding, :data_response => @response, :project => @project)
-      @other_cost = Factory(:other_cost_w_budget_coding, :data_response => @response, :project => @project)
-    end
-
-    it_should_behave_like "activity budget checker"
-    it_should_behave_like "coded Activities checker"
-    it_should_behave_like "coded OtherCosts checker"
-  end
-
-  describe "Requesting both budget and spend" do
+  describe "Request" do
     before :each do
       @activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
       @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)

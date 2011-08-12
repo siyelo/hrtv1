@@ -8,17 +8,15 @@
   %span= render 'help'
 
 %ul.response-notice
-  - if @response.data_request.spend?
-    - if !@other_cost.spend?
-      %li= "Enter the Past Expenditure for this activity."
-    - else
-      %li= "Please classify the Past Expenditure for this activity." if !@other_cost.spend_classified?
+  - if !@other_cost.spend?
+    %li= "Enter the Past Expenditure for this activity."
+  - else
+    %li= "Please classify the Past Expenditure for this activity." if !@other_cost.spend_classified?
 
-  - if @response.data_request.budget?
-    - if !@other_cost.budget?
-      %li= "Enter the Current Budget for this activity."
-    - else
-      %li= "Please classify the Current Budget for this activity." if !@other_cost.budget_classified?
+  - if !@other_cost.budget?
+    %li= "Enter the Current Budget for this activity."
+  - else
+    %li= "Please classify the Current Budget for this activity." if !@other_cost.budget_classified?
 
 = render 'activities/tab_nav', :activity => @other_cost
 

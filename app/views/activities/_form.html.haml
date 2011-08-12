@@ -3,9 +3,7 @@
 :javascript
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
-  var _funding_sources = #{get_funding_sources(current_user.organization.projects)}
-  var _budget = #{@response.data_request.budget.to_json};
-  var _spend = #{@response.data_request.spend.to_json};
+  var _funding_sources = #{get_funding_sources(current_user.organization.projects)};
 
 - f.inputs :class => 'inputs' do
   %li.last
@@ -19,31 +17,29 @@
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Activity’s implementation."
 
 
-  - if @response.data_request.spend?
-    %li.last
-      %h3== Past Activity Expenditure (#{@activity.currency})
-      %ul.dashboard_section
-        = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_spend"}
+  %li.last
+    %h3== Past Activity Expenditure (#{@activity.currency})
+    %ul.dashboard_section
+      = f.input :spend, :label => "Past Expenditure", :hint => "The total amount that you have spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => {:class => "js_spend"}
 
-        = render 'shared/spend_quarters', :f => f
+      = render 'shared/spend_quarters', :f => f
 
-  - if @response.data_request.budget?
-    %li.last
-      %h3== Current Budget (#{@activity.currency})
-      %ul.dashboard_section
-        - if @response.request.budget_by_quarter?
-          = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_budget"}
+  %li.last
+    %h3== Current Budget (#{@activity.currency})
+    %ul.dashboard_section
+      - if @response.request.budget_by_quarter?
+        = f.input :budget, :label => "Current Budget", :hint => "The total amount that you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? 'OR below in the quarterly fields' : ''}", :required => false, :input_html => {:class => "js_budget"}
 
-          = render 'shared/budget_quarters', :f => f
+        = render 'shared/budget_quarters', :f => f
 
-        - unless @response.request.no_long_term_budgets?
-          %li.amounts
-            %label Long-term
-            %ul
-              = f.input :budget2, :label => "#{budget_fy_start + 2}", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "#{budget_fy_start + 3}", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "#{budget_fy_start + 4}", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "#{budget_fy_start + 5}", :required => false if @response.request.year_5?
+      - unless @response.request.no_long_term_budgets?
+        %li.amounts
+          %label Long-term
+          %ul
+            = f.input :budget2, :label => "#{budget_fy_start + 2}", :required => false if @response.request.year_2?
+            = f.input :budget3, :label => "#{budget_fy_start + 3}", :required => false if @response.request.year_3?
+            = f.input :budget4, :label => "#{budget_fy_start + 4}", :required => false if @response.request.year_4?
+            = f.input :budget5, :label => "#{budget_fy_start + 5}", :required => false if @response.request.year_5?
 
   %li.last
     %h3 Activity Funding Sources
@@ -113,8 +109,7 @@
     %ul.horizontal.borderless
       - f.buttons :class => 'buttons1' do
         = f.commit_button "Save", :button_html => {:class => "last big_button"}
-        - if @response.data_request.spend? || @response.data_request.budget?
-          = f.commit_button "Save & Classify >", :button_html => {:class => "last big_button"}
+        = f.commit_button "Save & Classify >", :button_html => {:class => "last big_button"}
 
 - unless @activity.new_record?
   .delete_section

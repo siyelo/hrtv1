@@ -59,16 +59,6 @@ Factory.define :activity_w_budget_coding, :class => Activity, :parent => :_budge
   f.after_create { |a| Factory(:coding_budget, :cached_amount => 50, :activity => a) }
 end
 
-# An activity that has no spend yet (e.g. a newly started activity)
-Factory.define :activity_w_only_budget_coding, :class => Activity, :parent => :activity_w_budget_coding  do |f|
-  f.spend           { nil }
-end
-
-Factory.define :activity_w_only_spend_coding, :class => Activity, :parent => :activity_w_spend_coding  do |f|
-  f.budget           { nil }
-end
-
-
 Factory.define :activity_fully_coded, :class => Activity, :parent => :activity_w_spend_coding  do |f|
   # Not DRY. Need to figure out how to mix two factories together
   f.after_create { |a| Factory(:coding_budget, :cached_amount => 50, :activity => a) }

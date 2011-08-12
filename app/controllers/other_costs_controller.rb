@@ -104,7 +104,6 @@ class OtherCostsController < Reporter::BaseController
 
     def html_redirect
       if params[:commit] == "Save & Classify >"
-        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
         redirect_to edit_activity_classification_path(@other_cost, 'purposes')
       else
         redirect_to edit_response_other_cost_path(@response, @other_cost)

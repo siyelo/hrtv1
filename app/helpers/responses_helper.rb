@@ -23,8 +23,4 @@ module ResponsesHelper
       @response.activities_have_implementers? &&
       @response.projects_funding_sources_ok?)
   end
-
-  def requested_amounts(response)
-    response.request.requested_amounts.join(" or ")
-  end
 end

@@ -7,10 +7,8 @@
     = f.input :provider_id, :as => :hidden, :value => f.object.provider.try(:id)
     = f.object.provider.try(:name) || "< n/a >"
   %td.amount
-    - if @response.data_request.spend?
-      = f.input :spend_mask, :required => false, :label => false
+    = f.input :spend_mask, :required => false, :label => false
   %td.amount
-    - if @response.data_request.budget?
-      = f.input :budget_mask, :required => false, :label => false
+    = f.input :budget_mask, :required => false, :label => false
   %td.action
     = link_to_remove_fields "x", f, :class => 'delete_button'

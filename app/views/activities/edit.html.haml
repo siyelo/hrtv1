@@ -8,12 +8,12 @@
 %h1.main_heading
   Edit Activity
   %span= render 'help'
-  
+
 = render 'getting_started'
 
 %ul.response-notice
   - unless @response.activities_without_amounts.select{|e| e == @activity}.empty?
-    %li= "Please enter at least one amount (#{requested_amounts(@response)}) for this Activity"
+    %li= "Please enter spend && budget for this Activity"
 
   - unless @activity.spend_classified?
     %li= "Please classify the Past Expenditure for this activity."

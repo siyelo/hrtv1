@@ -366,9 +366,7 @@ class DataResponse < ActiveRecord::Base
 
   private
     def reject_uncoded(activities)
-      activities.select{ |a|
-        (request.budget? && !a.budget_classified?) ||
-        (request.spend? && !a.spend_classified?)}
+      activities.select{ |a| !a.budget_classified? || !a.spend_classified? }
     end
 
     # Find all complete Activities
@@ -381,11 +379,7 @@ class DataResponse < ActiveRecord::Base
     end
 
     def select_without_amounts(items)
-      items.select do |a|
-        (!a.spend_entered? && !a.budget_entered? && request.spend_and_budget?) ||
-        (!a.spend_entered? && request.only_spend?) ||
-        (!a.budget_entered? && request.only_budget?)
-      end
+      items.select { |a| !a.spend_entered? && !a.budget_entered? }
     end
 end
 

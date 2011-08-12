@@ -32,13 +32,7 @@ class OtherCostsController < Reporter::BaseController
     @other_cost.data_response = @response
     if @other_cost.save
       respond_to do |format|
-        format.html do
-          @new_project = true if params[:other_cost][:project_id] == "-1"  
-          flash[:notice] = "Other Cost #{@new_project ? "and Project were" : "was"} successfully created. 
-                            #{"<a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a> 
-                            to enter the funding sources for the new project." if @new_project}"
-          html_redirect
-        end
+        format.html {success_flash("created"); html_redirect}
         format.js { js_redirect }
       end
     else
@@ -53,10 +47,7 @@ class OtherCostsController < Reporter::BaseController
     @activity = resource # needed in js_redirect
     update! do |success, failure|
       @new_project = true if params[:other_cost][:project_id] == "-1" 
-      success.html { flash[:notice] = "Other Cost was successfully updated#{" and a new project was created.  
-                                       <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a> 
-                                       to enter the funding sources for the new project." if @new_project}"; 
-                                       html_redirect }
+      success.html { success_flash("updated"); html_redirect }
       success.js   { js_redirect }
       failure.html { load_comment_resources(resource); render :action => 'edit'}
       failure.js   { js_redirect }
@@ -100,6 +91,14 @@ class OtherCostsController < Reporter::BaseController
 
 
   private
+  
+    def success_flash(action)
+      flash[:notice] = "Other Cost was successfully #{action}."
+      if params[:other_cost][:project_id] == "-1"
+        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a> 
+                           to enter the funding sources for the automatically created project."
+      end
+    end
      
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"

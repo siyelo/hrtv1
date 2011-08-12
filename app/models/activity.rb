@@ -132,7 +132,7 @@ class Activity < ActiveRecord::Base
   before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
-  validates_presence_of :name
+  validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
@@ -539,7 +539,6 @@ class Activity < ActiveRecord::Base
                                                  :start_date => start_date, 
                                                  :end_date   => end_date, 
                                                  :data_response => data_response)
-        project.save
         self.project = project
     end
   end

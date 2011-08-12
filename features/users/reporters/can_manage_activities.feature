@@ -102,13 +102,13 @@ Feature: Reporter can manage activities
       And I fill in "End date" with "2010-12-01"
       And I select "<Automatically create a project for me>" from "Project"
       And I press "Save & Classify >"
-    Then I should see "Activity and Project were successfully created. Click here to enter the funding sources for the new project"
+    Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
     When I follow "1ctivity1 description"
       And I fill in "Name" with "activity2"
       And I fill in "Description" with "activity2 description"
       And I select "<Automatically create a project for me>" from "Project"
       And I press "Save & Classify >"
-    Then I should see "Activity was successfully updated and a new project was created. Click here to enter the funding sources for the new project."
+    Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
   Scenario Outline: Reporter can CRUD activities and see errors
     When I follow "Add Activities now"
@@ -139,7 +139,7 @@ Feature: Reporter can manage activities
       And I select "project1" from "Project"
       And I fill in "Budget" with "10000"
       And I press "Save & Classify >"
-    Then I should see "Activity was successfully created"
+    Then I should see "Activity was successfully created."
 
 
   Scenario: Reporter can upload activities

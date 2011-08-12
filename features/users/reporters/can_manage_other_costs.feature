@@ -1,5 +1,5 @@
 # TODO: fix these - the multiple responses i think are the cause
-
+@run
 Feature: Reporter can manage other costs
   In order to track information
   As a reporter
@@ -47,7 +47,7 @@ Feature: Reporter can manage other costs
       And I fill in "End date" with "2010-12-01"
       And I select "<Automatically create a project for me>" from "Project"
       And I press "Save & Classify >"
-    Then I should see "Other Cost and Project were successfully created. Click here to enter the funding sources for the new project."
+    Then I should see "Other Cost was successfully created. Click here to enter the funding sources for the automatically created project."
 
   Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
     When I follow "Add Other Costs now"
@@ -71,6 +71,7 @@ Feature: Reporter can manage other costs
     Then I should see "Comment was successfully created"
       And I should see "Comment body"
 
+  @wip
   Scenario: If the data_request budget is not checked the budget should not show up in the other costs screen
     Given I follow "Sign Out"
       And an organization exists with name: "organization5"

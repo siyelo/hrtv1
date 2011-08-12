@@ -30,7 +30,7 @@ describe OtherCostsController do
                                  :data_response => @data_response)
        put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                     :commit => 'Save', :response_id => @data_response.id
-       flash[:notice].should == "Other Cost was successfully updated"
+       flash[:notice].should == "Other Cost was successfully updated."
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
 
@@ -39,7 +39,7 @@ describe OtherCostsController do
                                  :data_response => @data_response, :spend => nil)
        put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                     :commit => 'Save', :response_id => @data_response.id
-       flash[:notice].should == "Other Cost was successfully updated"
+       flash[:notice].should == "Other Cost was successfully updated."
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
      

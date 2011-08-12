@@ -104,6 +104,7 @@ class Activity < ActiveRecord::Base
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_save   :auto_create_project
   after_save    :update_counter_cache
   after_destroy :update_counter_cache
 
@@ -134,8 +135,6 @@ class Activity < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
-  validates_exclusion_of :project_id, :in => [-1], :message => 'could not be automatically created', 
-                         :if => Proc.new { |model| model.start_date.present? && model.end_date.present? && model.name.present?}
   validates_presence_of :data_response_id
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?
@@ -533,6 +532,17 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
+    
+   def auto_create_project  
+    if project_id == -1
+        project = Project.find_or_create_by_name(:name       => name, 
+                                                 :start_date => start_date, 
+                                                 :end_date   => end_date, 
+                                                 :data_response => data_response)
+        project.save
+        self.project = project
+    end
+  end
 end
 
 # == Schema Information

@@ -21,15 +21,12 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def create
-    if params[:activity][:project_id] == "-1" then
-      create_project
-    end
-    
     @activity = @response.activities.new(params[:activity])
     if @activity.save
       respond_to do |format|
+        @new_project = true if params[:activity][:project_id] == "-1"  
         format.html { flash[:notice] = "Activity #{@new_project ? "and Project were" : "was"} successfully created. 
-                                        #{"<a href=#{edit_response_project_path(@response, @project)}>Click here</a> 
+                                        #{"<a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a> 
                                         to enter the funding sources for the new project." if @new_project}"; html_redirect }
         format.js   { js_redirect }
       end
@@ -44,15 +41,12 @@ class ActivitiesController < Reporter::BaseController
   def update
     @activity = Activity.find(params[:id])
     
-    if !@activity.am_approved? && params[:activity][:project_id] == "-1" then
-      create_project
-    end
-    
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html do
+          @new_project = true if params[:activity][:project_id] == "-1"  
           flash[:notice] = "Activity was successfully updated #{"and a new project was created.  
-                            <a href=#{edit_response_project_path(@response, @project)}>Click here</a> 
+                            <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a> 
                             to enter the funding sources for the new project." if @new_project}"
           html_redirect
         end
@@ -136,22 +130,6 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
-  
-    def create_project
-      @project =  @response.projects.find_by_name(params[:activity][:name])
-      unless @project
-        @project = Project.new(:name       => params[:activity][:name], 
-                               :start_date => params[:activity][:start_date], 
-                               :end_date   => params[:activity][:end_date], 
-                               :data_response => @response)
-        if @project.save
-          params[:activity][:project_id] = @project.id
-          @new_project = true
-        end
-      else
-        params[:activity][:project_id] = @project.id
-      end
-    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"

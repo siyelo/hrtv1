@@ -89,7 +89,6 @@ Feature: Reporter can manage activities
       And I fill in "Description" with "activity2 description"
       And I press "Save & Classify >"
     Then I should see "Activity was successfully updated"
-
     When I follow "activity2"
       And I confirm the popup dialog
       And I follow "Delete this Activity"

@@ -452,3 +452,11 @@ end
 Given /^now is "([^"]*)"$/ do |time|
   Timecop.freeze(Date.parse(time))
 end
+
+When /^I confirm the js popup$/ do
+  page.driver.browser.switch_to.alert.accept
+end
+
+When /^I dismiss the js popup$/ do
+  page.driver.browser.switch_to.alert.dismiss
+end

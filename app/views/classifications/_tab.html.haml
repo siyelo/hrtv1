@@ -1,5 +1,7 @@
 .upload
   %ul.horizontal
+    %li= link_to 'Show mine', edit_activity_classification_path(@activity, params[:id], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_new' : 'create_new')
+    %li= link_to 'Show all', edit_activity_classification_path(@activity, params[:id], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_new' : 'create_new')
     %li
       - link_to "#", :class => "create_new js_upload_btn" do
         = image_tag "new.png"
@@ -19,3 +21,4 @@
         = link_to "Download template", download_template_activity_classification_path(@activity, params[:id]), :class => "create_alt right"
 
 = render 'classification'
+

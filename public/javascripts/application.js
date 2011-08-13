@@ -849,20 +849,24 @@ var classifications_edit = {
       $(this).next('.ajax-loader').show();
     });
 
-    $('#budget_to_spend').click(function (e) {
+    $('#js_budget_to_spend').click(function (e) {
       e.preventDefault();
-      $('.js_budget input').each(function () {
-        var element = $(this);
-        element.parents('.js_values').find('.js_spend input').val(element.val());
-      });
+      if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
+        $('.js_budget input').each(function () {
+          var element = $(this);
+          element.parents('.js_values').find('.js_spend input').val(element.val());
+        });
+      };
     });
 
-    $('#spend_to_budget').click(function (e) {
+    $('#js_spend_to_budget').click(function (e) {
       e.preventDefault();
-      $('.js_spend input').each(function () {
-        var element = $(this);
-        element.parents('.js_values').find('.js_budget input').val(element.val());
-      });
+      if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
+        $('.js_spend input').each(function () {
+          var element = $(this);
+          element.parents('.js_values').find('.js_budget input').val(element.val());
+        });
+      };
     });
   }
 };

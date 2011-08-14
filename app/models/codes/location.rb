@@ -34,6 +34,10 @@ class Location < Code
 
               }}
 
+  named_scope :national_level, { :conditions => "lower(codes.short_display) = 'national level'" }
+  named_scope :without_national_level, { :conditions => "lower(codes.short_display) != 'national level'" }
+  named_scope :sorted, { :order => "codes.short_display" }
+
 end
 
 

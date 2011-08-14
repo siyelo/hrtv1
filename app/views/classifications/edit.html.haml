@@ -11,17 +11,6 @@
 = render 'activities/tab_nav', :activity => @activity
 
 #classification
-  %ul#activity_description.status{:class => (@classified ? 'go' : 'stop')}
-
-    %li
-      %span Current Budget Amount:
-      = c(@activity.budget, @activity.currency)
-    %li
-      %span Past Expenditure Amount:
-      = c(@activity.spend, @activity.currency)
-
-    = render  'progress_bar', :activity => @activity
-
   #activity_classification
     %div.tab1{:style => 'display: block'}
       = render 'tab'

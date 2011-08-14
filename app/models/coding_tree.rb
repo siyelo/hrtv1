@@ -91,7 +91,7 @@ class CodingTree
     when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
       CostCategory.roots
     when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-      Location.all
+      Location.national_level + Location.without_national_level.sorted.all
     when 'HsspBudget', 'HsspSpend'
       @activity.class.to_s == "OtherCost" ? [] : HsspStratObj.all + HsspStratProg.all
     else

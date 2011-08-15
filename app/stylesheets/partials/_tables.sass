@@ -247,6 +247,8 @@ table.workplan
       width: 50%
     &.wrap-60
       width: 60%
+  ul
+    margin-bottom: 0px
   .total_amount
     text-align: right
   .total, .actions
@@ -280,6 +282,8 @@ table.workplan
         +border-top-radius
         +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
         +text-shadow(#000, 0, 1px, 0)
+      &.hidden
+        display: none
   .name
     vertical-align: top
     padding-top: 14px

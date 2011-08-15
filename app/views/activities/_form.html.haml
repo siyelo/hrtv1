@@ -1,3 +1,5 @@
+- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
+
 :javascript
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
@@ -7,9 +9,9 @@
   %li.last
     %h3 Basics
     %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => @response.projects, :hint => "The Project this activity correlates to"
+      = f.input :project_id, :label => "Project", :as => :select, :collection => sorted_projects.insert(0,["<Automatically create a project for me>", -1]) , :hint => "The Project this activity correlates to", :prompt => 'Select a project...'
 
-      = f.input :name, :required => false, :hint => "A short name for this Activity."
+      = f.input :name, :hint => "A short name for this Activity."
       = f.input :description, :input_html => { :rows => 2 }, :hint => "A longer description of this Activity."
       = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The date when the Activity started."
       = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Activity’s implementation."

@@ -76,7 +76,7 @@ describe Activity do
     it { should validate_numericality_of(:spend_q2) }
     it { should validate_numericality_of(:spend_q3) }
     it { should validate_numericality_of(:spend_q4) }
-
+    
     it "will return false if the activity start date is before the project start date" do
       basic_setup_response
       @project  = Factory(:project, :data_response => @response,

@@ -19,7 +19,7 @@ Feature: Reporter can manage projects
       And I follow "Projects"
 
     Scenario: Reporter can CRUD projects
-      When I follow "Create Project"
+      When I follow "Project"
         And I fill in "Name" with "Project1"
         And I fill in "Description" with "Project1 description"
         And I fill in "Start date" with "2011-01-01"
@@ -42,7 +42,7 @@ Feature: Reporter can manage projects
 
 
     Scenario Outline: Edit project dates, see feedback messages for start and end dates
-      When I follow "Create Project"
+      When I follow "Project"
         And I fill in "Name" with "Some Project"
         And I fill in "Start date" with "<start_date>"
         And I fill in "End date" with "<end_date>"
@@ -81,7 +81,7 @@ Feature: Reporter can manage projects
 
     @javascript @wip
     Scenario: A reporter can create in flows for a project
-      When I follow "Create Project"
+      When I follow "Project"
         And I fill in "Name" with "Project1"
         And I fill in "Description" with "Project1 description"
         And I fill in "Start date" with "2011-01-01"

@@ -30,7 +30,7 @@ describe OtherCostsController do
                                  :data_response => @data_response)
        put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                     :commit => 'Save', :response_id => @data_response.id
-       flash[:notice].should == "Other Cost was successfully updated"
+       flash[:notice].should == "Other Cost was successfully updated."
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
 
@@ -39,8 +39,31 @@ describe OtherCostsController do
                                  :data_response => @data_response, :spend => nil)
        put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                     :commit => 'Save', :response_id => @data_response.id
-       flash[:notice].should == "Other Cost was successfully updated"
+       flash[:notice].should == "Other Cost was successfully updated."
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
+     end
+     
+     it "should allow a project to be created automatically on update" do
+       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+       put :update, :id => @other_cost.id, :response_id => @data_response.id,
+           :other_cost => {:project_id => '-1', :name => @other_cost.name, :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
+       @other_cost.reload
+       @other_cost.project.name.should == @other_cost.name
+     end
+
+     it "should allow a project to be created automatically on create" do
+       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+       put :create, :response_id => @data_response.id,
+           :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description", :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
+       @new_other_cost = Activity.find_by_name('new other_cost')
+       @new_other_cost.project.name.should == @new_other_cost.name
+     end
+
+     it "should assign the activity to an existing project if a project exists with the same name as the activity" do
+       put :update, :id => @other_cost.id, :response_id => @data_response.id,
+           :other_cost => {:name => @project.name, :project_id => '-1'}
+       @other_cost.reload
+       @other_cost.project.name.should == @project.name
      end
    end
 end

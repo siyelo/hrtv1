@@ -46,7 +46,7 @@ describe OtherCost do
 
   describe "Validations" do
     subject { basic_setup_other_cost; @other_cost }
-    it { should_not validate_presence_of(:name) }
+    it { should validate_presence_of(:name) }
   end
 
 

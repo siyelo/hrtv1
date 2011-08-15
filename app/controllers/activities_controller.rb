@@ -23,10 +23,9 @@ class ActivitiesController < Reporter::BaseController
 
   def create
     @activity = @response.activities.new(params[:activity])
-
     if @activity.save
       respond_to do |format|
-        format.html { flash[:notice] = 'Activity was successfully created'; html_redirect }
+        format.html{success_flash("created"); html_redirect}
         format.js   { js_redirect }
       end
     else
@@ -39,12 +38,10 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     @activity = Activity.find(params[:id])
+    
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
-        format.html do
-          flash[:notice] = 'Activity was successfully updated'
-          html_redirect
-        end
+        format.html {success_flash("updated"); html_redirect}
         format.js   { js_redirect }
       end
     else
@@ -125,6 +122,14 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
+  
+    def success_flash(action)
+      flash[:notice] = "Activity was successfully #{action}."
+      if params[:activity][:project_id] == "-1"
+        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a> 
+                           to enter the funding sources for the automatically created project."
+      end
+    end
 
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"

@@ -104,6 +104,7 @@ class Activity < ActiveRecord::Base
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_save   :auto_create_project
   after_save    :update_counter_cache
   after_destroy :update_counter_cache
 
@@ -131,7 +132,7 @@ class Activity < ActiveRecord::Base
   before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
 
-  validates_presence_of :name, :if => :is_activity?
+  validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
@@ -531,6 +532,16 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
+    
+   def auto_create_project  
+    if project_id == -1
+        project = Project.find_or_create_by_name(:name       => name, 
+                                                 :start_date => start_date, 
+                                                 :end_date   => end_date, 
+                                                 :data_response => data_response)
+        self.project = project
+    end
+  end
 end
 
 # == Schema Information

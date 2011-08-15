@@ -1250,6 +1250,17 @@ var projects_index = {
 
     // use click() not toggle() here, as toggle() doesnt
     // work when menu items are also toggling it
+    
+    $('.js_project_row').hover( 
+      function(e){
+        $(this).find('.js_am_approve').show();  
+      },
+      function(e){
+        $(this).find('.js_am_approve').fadeOut(300);        
+      }
+      
+    );
+    
     $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
       menu = dropdown.menu($(this));

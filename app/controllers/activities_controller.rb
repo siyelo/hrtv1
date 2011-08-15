@@ -27,7 +27,7 @@ class ActivitiesController < Reporter::BaseController
     @activity = @response.activities.new(params[:activity])
     if @activity.save
       respond_to do |format|
-        format.html{success_flash("created"); html_redirect}
+        format.html { success_flash("created"); html_redirect }
         format.js   { js_redirect }
       end
     else

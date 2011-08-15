@@ -23,17 +23,25 @@ class Activity < ActiveRecord::Base
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
 
-
   ### Associations
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
-  belongs_to :data_response
+  #TODO: provider now only used for sub-activities, so should be removed from activity altogether
+  # implementer is better, more generic. (Service) Provider is too specific.
+  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization" # deprecate plox k thx
+  belongs_to :data_response #deprecated
+  belongs_to :response, :foreign_key => :data_response_id, :class_name => "DataResponse" #TODO: rename class
   belongs_to :project
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
+  has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
+    :dependent => :destroy #TODO - use non-sti model
+  has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
+
+  # deprecated
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
+  #deprecated
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
@@ -105,6 +113,7 @@ class Activity < ActiveRecord::Base
   after_save    :update_counter_cache, :unless => :is_sub_activity?
   after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
+
   ### Attribute Accessor
   attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
@@ -131,10 +140,10 @@ class Activity < ActiveRecord::Base
   validates_presence_of :data_response_id
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-  
+
   ### Class Methods
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
@@ -223,37 +232,34 @@ class Activity < ActiveRecord::Base
 
       activity.project       = project if project
       activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      provider               = Organization.find(:first,
+      implementer            = Organization.find(:first,
                                  :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-      activity.provider      = provider if provider
+      activity.implementer_splits.build(:provider_id => implementer.id,
+        :data_response_id => activity.data_response_id) if implementer
       activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
                                  map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
       activity.targets       = activity.csv_targets.to_s.split(';').
                                  map{|o| Target.find_or_create_by_description(o.strip)}.compact
-
       activity.save
-
       activities << activity
     end
-
     activities
   end
 
-
   ### Instance Methods
-  
+
   # to create subactivities for activities
   def initialize(*params)
     super(*params)
     unless is_sub_activity?
       #needed to fully initialize an activity with default (self-)implementer split
-      self.sub_activities.build(:provider_id => self.organization.id, 
+      self.sub_activities.build(:provider_id => self.organization.id,
         :data_response_id => self.data_response_id) if self.data_response_id && self.sub_activities.empty?
       cache_budget_spend
     end
   end
-  
-  def update_attributes(params)    
+
+  def update_attributes(params)
     # intercept the classifications and process using the bulk classification update API
     #
     # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
@@ -274,10 +280,10 @@ class Activity < ActiveRecord::Base
     SubActivity.after_save.reject! {|callback| callback.method.to_s == 'update_activity_cache'}
     result = super(params)
     SubActivity.send :after_save, :update_activity_cache #re-enable callback
-    
+
     if result
     # if sub activities were passed, update Activity amount cache
-      unless is_sub_activity?        
+      unless is_sub_activity?
         cache_budget_spend
         result = self.save # must let caller know if this failed too...
       end
@@ -290,7 +296,7 @@ class Activity < ActiveRecord::Base
   def sub_activities_totals(method)
     sub_activities.map { |sa| sa.send(method) }.compact.sum || 0
   end
-  
+
   #saves the subactivities totals into the buget/spend fields
   def cache_budget_spend
     unless is_sub_activity? # to be doubly sure!
@@ -314,13 +320,16 @@ class Activity < ActiveRecord::Base
     name
   end
 
+  def human_name
+    "Activity"
+  end
+
   def provider_mask
     @provider_mask || provider_id
   end
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-
     if is_number?(the_provider_mask)
       self.provider_id = the_provider_mask
     else
@@ -328,17 +337,11 @@ class Activity < ActiveRecord::Base
       organization.save(false) # ignore any errors e.g. on currency or contact details
       self.provider_id = organization.id
     end
-
     @provider_mask   = self.provider_id
   end
 
   def possible_duplicate?
     self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
-  end
-
-  # convenience
-  def implementer
-    provider
   end
 
   def organization_name
@@ -438,10 +441,10 @@ class Activity < ActiveRecord::Base
       find(:all, :include => :code).map{|ca| ca.code }.uniq
   end
 
-  def sub_activites_total(amount_method)
+  def sub_activities_total(amount_method)
     smart_sum(sub_activities, amount_method)
   end
-  
+
   private
 
   ### Class methods

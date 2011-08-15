@@ -11,6 +11,8 @@ class SubActivity < Activity
 
   ### Associations
   belongs_to :activity, :counter_cache => true
+  # implementer is better, more generic. (Service) Provider is too specific.
+  belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
   ### Attributes
   attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask, :provider_id
@@ -36,6 +38,7 @@ class SubActivity < Activity
    :text_for_beneficiaries, :beneficiaries, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
+  delegate :name, :to => :implementer, :prefix => true, :allow_nil => true # gives you implementer_name
 
 
   ### Class Methods
@@ -98,25 +101,25 @@ class SubActivity < Activity
   end
 
   ### Instance Methods
-  
+
   def initialize(*params)
     super
     set_budget_amount
     set_spend_amount
   end
-  
+
   def budget
     read_attribute(:budget)
   end
-  
+
   def spend
     read_attribute(:spend)
   end
-  
+
   def budget=(amount)
     write_attribute(:budget, amount)
   end
-  
+
   def spend=(amount)
     write_attribute(:spend, amount)
   end
@@ -183,7 +186,7 @@ class SubActivity < Activity
     adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
   memoize :coding_spend_cost_categorization
-  
+
   def update_activity_cache
     self.reload
     self.activity.cache_budget_spend # just calls write_attribute... so....
@@ -201,7 +204,7 @@ class SubActivity < Activity
     def adjusted_district_assignments(klass, sub_activity_amount, activity_amount)
       sub_activity_amount ||= 0
       activity_amount ||= 0
-      if provider.location && sub_activity_amount > 0
+      if provider && provider.location && sub_activity_amount > 0
         [fake_ca(klass, provider.location, sub_activity_amount)]
       else
         adjusted_assignments(klass, sub_activity_amount, activity_amount)

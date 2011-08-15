@@ -7,8 +7,10 @@ describe Activity do
     it { should belong_to :project }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
-    it { should have_many(:sub_activities).dependent(:destroy) }
-    it { should have_many(:sub_implementers) }
+    it { should have_many(:implementer_splits).dependent(:destroy) }
+    it { should have_many(:sub_activities).dependent(:destroy) } #TODO deprecate
+    it { should have_many(:implementers) }
+    it { should have_many(:sub_implementers) } #TODO deprecate
     it { should have_many(:codes) }
     it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
@@ -484,16 +486,22 @@ describe Activity do
         @organization   = Factory(:organization)
         @request        = Factory(:data_request, :organization => @organization)
         @response       = @organization.latest_response
-        @project        = Factory(:project, :data_response => @response)
+        @project        = Factory(:project, :data_response => @response, :name => "project1",
+                          :start_date => '2012-01-01', :end_date => '2012-12-12')
         @activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
         @doc            = FasterCSV.open(@activities_csv, {:headers => true})
         @implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
         @activities     = Activity.find_or_initialize_from_file(@response, @doc, @project.id)
       end
 
+      it "recognizes the correct project" do
+        @activities[0].should be_valid
+        @activities[0].project.should == @project
+      end
+
       it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
         @activities.count.should == 1
-        @activities[0].implementer.should == @implementer
+        @activities[0].implementer_splits.first.implementer.should == @implementer
       end
 
       it "recognizes non-standard dates" do

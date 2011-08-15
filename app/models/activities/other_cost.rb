@@ -2,9 +2,9 @@ class OtherCost < Activity
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure]
-                           
+
   ### Delegates
-  
+
   delegate :currency, :to => :data_response, :allow_nil => true
 
   ### Class Methods
@@ -35,6 +35,11 @@ class OtherCost < Activity
   def currency
     project ? project.currency : data_response.currency
   end
+
+  def human_name
+    "Other Cost"
+  end
+
 end
 
 

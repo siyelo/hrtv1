@@ -29,9 +29,9 @@
 
 - unless activity.new_record?
   .delete_section
-    = link_to "Delete this #{activity.class}", form_path, :confirm => "Are you sure you want to delete this Activity?", :method => :delete, :class => "delete_button", :class => 'delete_action'
+    = link_to "Delete this #{activity.human_name}", form_path, :confirm => "Are you sure you want to delete this Activity?", :method => :delete, :class => "delete_button", :class => 'delete_action'
     %p
       %strong Warning:
-      ="Once you delete an #{activity.class}, you will lose all data associated with it, and there is no undo."
+      ="Once you delete an #{activity.human_name}, you will lose all data associated with it, and there is no undo."
 
 = render 'shared/comments', :comments => @comments

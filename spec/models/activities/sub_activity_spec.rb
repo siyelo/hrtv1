@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe SubActivity do
   describe "Associations:" do
     it { should belong_to :activity }
+    it { should belong_to :implementer }
   end
 
   describe "Attributes:" do
@@ -378,5 +379,10 @@ describe SubActivity do
 
       end
     end
+  end
+
+  it "should respond to implementer_name" do
+    basic_setup_sub_activity
+    @sub_activity.implementer_name.should == @organization.name
   end
 end

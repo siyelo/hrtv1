@@ -24,12 +24,13 @@
       = f.label :end_date, "End date"
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) The date when the #{klass} finishes.", :class => 'tooltip' do
-        =image_tag"tooltip.png"
+        =image_tag "tooltip.png"
     = f.text_field :end_date, :class => 'date_picker'
   %li.select.required
     .name
       = f.label :currency, "Currency"
-      = link_to "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip'
+      - link_to "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip' do
+        = image_tag "tooltip.png"
     %span.noedit= f.object.currency.nil? ? @response.currency : f.object.currency
   %li#activity_project_id_input.select.required
     .name

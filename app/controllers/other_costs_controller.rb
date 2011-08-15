@@ -33,8 +33,8 @@ class OtherCostsController < Reporter::BaseController
     @other_cost = @response.other_costs.new(params[:other_cost])
     if @other_cost.save
       respond_to do |format|
-        format.html{success_flash("created"); html_redirect}
-        format.js   { js_redirect }
+        format.html { success_flash("created"); html_redirect }
+        format.js { js_redirect }
       end
     else
       respond_to do |format|
@@ -123,7 +123,7 @@ class OtherCostsController < Reporter::BaseController
       return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end
-    
+
     def prepare_classifications(other_cost)
       # if we're viewing classification 'tabs'
       if ['locations', 'purposes', 'inputs'].include? params[:mode]

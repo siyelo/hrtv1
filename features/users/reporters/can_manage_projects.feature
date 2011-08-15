@@ -5,9 +5,9 @@ Feature: Reporter can manage projects
 
   Background:
     Given an organization "organization3" exists with name: "organization3"
-      And a data_request "data_request1" exists with title: "data_request1"
-      And a data_request "data_request2" exists with title: "data_request2"
-      And an organization "organization2" exists with name: "organization2"
+    And a data_request "data_request1" exists with title: "data_request1"
+    And a data_request "data_request2" exists with title: "data_request2"
+    And an organization "organization2" exists with name: "organization2"
     Then data_response "data_response" should exist with data_request: data_request "data_request1", organization: organization "organization2"
       And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
       And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
@@ -91,4 +91,3 @@ Feature: Reporter can manage projects
         And I press "Update Project"
         And I follow "Project1"
       Then the "Budget" field within ".fields" should contain "7778"
-

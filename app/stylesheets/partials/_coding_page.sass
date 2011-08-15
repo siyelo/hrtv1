@@ -26,7 +26,7 @@ body #content #main .activity_tree a
 
 .edit_activity
   position: relative
-  
+
 #expl
   color: $mid-blue + #222
   float: right
@@ -46,12 +46,12 @@ body #content #main .activity_tree a
       width: 143px
       img
         float: right
-    
+
   a
     text-decoration: none
   img
     margin: 0 3px
-    
+
 body.app
   ul.activity_tree, #activity_description
     label
@@ -75,7 +75,7 @@ body.app
         width: 141px
         +border-radius
         +pie-clearfix
-        
+
       input
         font-family: Arial, sans-serif
         font-size: 11px
@@ -96,19 +96,12 @@ body.app
 
 .tooltip
   &.info
-    background: $light-blue
-    color: #fff
-    display: inline-block
-    font-size: 14px
-    font-weight: bold
-    margin: 1px 0 0 2px
-    padding: 4px 5px 1px 5px
+    font-size: 10px
     text-decoration: none
-    text-shadow: none
-    +border-radius(20px)
-    &:hover
-      background: $mid-blue
-      color: #fff
+
+    &:hover, &:focus, &:active
+      text-decoration: underline
+
     &.help_tip
       font-size: 11px
       font-weight: normal

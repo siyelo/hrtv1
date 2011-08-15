@@ -11,17 +11,20 @@
     %ul.dashboard_section.condensed_form
       %li#activity_name_input.string.required
         .name
-          = f.label :name, "Name*"
+          = f.label :name, "Name"
+          %span.required *
           = link_to "(?)", "#", :title => "A short name for this activity", :class => 'tooltip'
         = f.text_field :name
       %li#activity_start_date_input.string.required
         .name
-          = f.label :start_date, "Start Date*"
+          = f.label :start_date, "Start date"
+          %span.required *
           = link_to "(?)", "#", :title => "(YYYY-MM-DD) The date when the Activity started.", :class => 'tooltip'
         = f.text_field :start_date, :class => 'date_picker'
       %li#activity_end_date_input.string.required
         .name
-          = f.label :end_date, "End Date*"
+          = f.label :end_date, "End date"
+          %span.required *
           = link_to "(?)", "#", :title => "(YYYY-MM-DD) The date when the Activity finishes.", :class => 'tooltip'
         = f.text_field :end_date, :class => 'date_picker'
       %li#activity_currency_input.select.required

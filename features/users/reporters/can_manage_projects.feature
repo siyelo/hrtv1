@@ -27,7 +27,6 @@ Feature: Reporter can manage projects
         And I select "Euro (EUR)" from "Currency override"
         And I press "Create Project"
       Then I should see "Project was successfully created"
-      Then show me the page
       When I fill in "Name" with "Project2"
       And I fill in "Description" with "Project2 description"
       And I press "Update Project"

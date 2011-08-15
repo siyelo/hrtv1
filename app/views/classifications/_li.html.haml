@@ -2,7 +2,7 @@
   .left
     = check_box_tag "activity[code_assignment_tree][]", code.id, classified
     = label_tag code.short_display
-    = link_to "?", "#", :title => code.description, :class => "tooltip info" if code.description
+    = link_to "(?)", "#", :title => code.description, :class => "tooltip info" if code.description
   .values.js_values.right
     .spend.js_spend
       - spend_assignment = @spend_assignments[code.id]

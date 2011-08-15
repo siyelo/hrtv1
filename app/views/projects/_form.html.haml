@@ -4,24 +4,27 @@
     %ul.dashboard_section.condensed_form
       %li#project_name_input.string.required
         .name
-          = f.label :name, "Name*"
+          = f.label :name, "Name"
+          %span.required *
           = link_to "(?)", "#", :title => "A short name for this project", :class => 'tooltip'
         = f.text_field :name
 
       %li#project_start_date_input.string.required
         .name
-          = f.label :start_date, "Start Date*"
+          = f.label :start_date, "Start date"
+          %span.required *
           = link_to "(?)", "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip'
         = f.text_field :start_date, :class => 'date_picker'
       %li#project_end_date_input.string.required
         .name
-          = f.label :end_date, "End Date*"
+          = f.label :end_date, "End date"
+          %span.required *
           = link_to "(?)", "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip'
         = f.text_field :end_date, :class => 'date_picker'
       %li#project_currency_input.select.required
         .name
-          = f.label :currency, "Currency Override (optional)"
-          = link_to "(?)", "#", :title => " Override the currency for this Project only. (Your default is #{@response.currency})", :class => 'tooltip'
+          = f.label :currency, "Currency override"
+          = link_to "(?)", "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip'
         = f.select :currency, currency_options_for_select, { :include_blank => true }
       %br
       %li#project_description_input.text

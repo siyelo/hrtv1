@@ -656,8 +656,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 };
 
 var build_data_response_review_screen = function () {
-
-  $('.tooltip').tipsy({gravity: 'w'});
+  $('.tooltip').tipsy({gravity: 's'});
   $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
   $('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
@@ -1640,7 +1639,7 @@ $(function () {
   });
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', fade: true, live: true, html: true});
+  $('.tooltip').tipsy({gravity: 's', fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

@@ -180,7 +180,7 @@
 .inputs
   li
     margin-bottom: 20px
-  label
+  label, span.required
     color: $mid-blue + #222 !important
     font-size: 12px
     font-weight: bold
@@ -606,7 +606,6 @@ td.error, tr.error td
 
 
 // New form styles
-
 .condensed_form
   li
     border: none !important
@@ -635,11 +634,13 @@ td.error, tr.error td
         padding-left: 4px
 
   #activity_currency_input span
-    font-size: 11px
+    font-size: 12px
+    font-weight: normal
 
   a.tooltip
     font-size: 11px
     text-decoration: none
+    font-weight: bold
 
     &:hover, &:focus, &:active
       text-decoration: underline

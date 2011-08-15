@@ -1,25 +1,42 @@
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
-    %ul.dashboard_section
-      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
-      = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the Project.", :required => false
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation."
+    %ul.dashboard_section.condensed_form
+      %li#project_name_input.string.required
+        .name
+          = f.label :name, "Name*"
+          = link_to "(?)", "#", :title => "A short name for this project", :class => 'tooltip'
+        = f.text_field :name
+
+      %li#project_start_date_input.string.required
+        .name
+          = f.label :start_date, "Start Date*"
+          = link_to "(?)", "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip'
+        = f.text_field :start_date, :class => 'date_picker'
+      %li#project_end_date_input.string.required
+        .name
+          = f.label :end_date, "End Date*"
+          = link_to "(?)", "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip'
+        = f.text_field :end_date, :class => 'date_picker'
+      %li#project_currency_input.select.required
+        .name
+          = f.label :currency, "Currency Override (optional)"
+          = link_to "(?)", "#", :title => " Override the currency for this Project only. (Your default is #{@response.currency})", :class => 'tooltip'
+        = f.select :currency, currency_options_for_select, { :include_blank => true }
+      %br
+      %li#project_description_input.text
+        .name
+          = f.label :description, "Description"
+          = link_to "(?)", "#", :title => "A general 1-2 sentence description of the purpose of the Project.", :class => 'tooltip'
+        = f.text_area :description, :rows => 2
+      //= f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false
 
   = render 'in_flows', :f => f
 
-  %li.last
-    %h3 Other
-    %ul.dashboard_section
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false
-      
+- f.buttons :class => 'buttons', :style => 'float: none' do
+  = f.commit_button :button_html => {:class => "last big_button"}
   %li
-    %ul.horizontal.borderless
-      - f.buttons :class => 'buttons1' do
-        = f.commit_button :button_html => {:class => "last big_button"}
-        %li
-          = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
+    = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
 
 - unless @project.new_record?
   .delete_section

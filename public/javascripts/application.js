@@ -812,12 +812,6 @@ var classifications_edit = {
     //collapsible checkboxes for tab1
     addCollabsibleButtons('tab1');
 
-    // prevent going to top on click on tool
-    $('.tooltip').live('click', function (e) {
-      if ($(this).attr('href') === '#') {
-        e.preventDefault();
-      }
-    });
 
     $('.js_upload_btn').click(function (e) {
       e.preventDefault();
@@ -1203,17 +1197,17 @@ var projects_index = {
 
     // use click() not toggle() here, as toggle() doesnt
     // work when menu items are also toggling it
-    
-    $('.js_project_row').hover( 
+
+    $('.js_project_row').hover(
       function(e){
-        $(this).find('.js_am_approve').show();  
+        $(this).find('.js_am_approve').show();
       },
       function(e){
-        $(this).find('.js_am_approve').fadeOut(300);        
+        $(this).find('.js_am_approve').fadeOut(300);
       }
-      
+
     );
-    
+
     $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
       menu = dropdown.menu($(this));
@@ -1245,33 +1239,33 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-    
+
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
-    });    
-    
+    });
+
     $('.js_toggle_activity_form').click(function (e) {
       e.preventDefault();
       hideAll();
       $('#new_activity_form').fadeIn();
     });
-    
+
     $('.js_toggle_other_cost_form').click(function (e) {
       e.preventDefault();
       hideAll();
       $('#new_other_cost_form').fadeIn();
     });
-    
+
     $('.js_toggle_projects_listing').click(function (e) {
       e.preventDefault();
       hideAll();
       $( "form" )[ 0 ].reset()
-      $('#projects_listing').show();
+      $('#projects_listing').fadeIn();
       $("html, body").animate({ scrollTop: 0 }, 0);
     });
-    
+
     var hideAll = function() {
       $('#projects_listing').hide();
       $('#new_project_form').hide();
@@ -1638,8 +1632,15 @@ var projects_new = projects_create = projects_edit = projects_update = {
 
 $(function () {
 
+  // prevent going to top when tooltip clicked
+  $('.tooltip').live('click', function (e) {
+    if ($(this).attr('href') === '#') {
+      e.preventDefault();
+    }
+  });
+
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', delayOut: 800, fade: true, live: true, html: true});
+  $('.tooltip').tipsy({gravity: 'w', fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

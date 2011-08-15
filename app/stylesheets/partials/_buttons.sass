@@ -45,10 +45,10 @@ a.remove_nested
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
+      +linear-gradient(color-stops($green, $green - #222))
     &:active
       outline: none
       position: relative
@@ -72,11 +72,11 @@ a.remove_nested
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #222, 0, 0, 1px)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
     &:active
       outline: none
       position: relative
@@ -101,11 +101,11 @@ a.remove_nested
       position: relative
       top: 2px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #222, 0, 0, 1px)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
     &:active
       outline: none
       position: relative
@@ -159,10 +159,10 @@ a.remove_nested
       position: relative
     &.persist
       color: #fff
-      background: green - #222 !important
-      border: 1px solid green - #222 !important
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #444, 0, 1px, 0)
+      background: $green - #222 !important
+      border: 1px solid $green - #222 !important
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #444, 0, 1px, 0)
 
 .next, .big_button
   +border-radius
@@ -208,6 +208,7 @@ a.remove_nested
 #buttons, .buttons
   margin-bottom: 5px !important
   padding: 5px 0px
+  
   button, a
     border: none
     background: $lightest-blue
@@ -240,7 +241,7 @@ a.remove_nested
   display: inline-block
   font-size: 1em
   &.respond
-    background: green
+    background: $green
     color: #fff
     font-size: 9px
     font-weight: bold
@@ -298,11 +299,11 @@ a, input[type=submit]
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #444, 0, 1px, 0)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #444, 0, 1px, 0)
     &:active
       outline: none
       position: relative
@@ -369,11 +370,11 @@ a, input[type=submit]
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff !important
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #333, 0, 1px, 0)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #333, 0, 1px, 0)
     &:active
       outline: none
       position: relative

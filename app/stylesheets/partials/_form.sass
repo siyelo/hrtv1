@@ -20,7 +20,7 @@
           width: 14%
       input[type=text]
         &.date_picker
-          width: 14%
+          width: 80px !important
       &.amounts
         display: block
         li
@@ -40,7 +40,7 @@
           width: 82%
 
         input[type=text], textarea
-          width: 75px
+          width: 140px
 
     h3
       background: image_url("bg-blue.jpg")
@@ -603,3 +603,43 @@ strong
 
 td.error, tr.error td
   background-color: #ffbaba !important
+
+
+// New form styles
+
+.condensed_form
+  li
+    border: none !important
+    display: inline-block !important
+    margin-right: 1%
+
+    label
+      display: block !important
+      float: none
+      width: auto !important
+
+    input, select
+      width: auto !important
+
+    input[type=text]
+      width: 300px !important
+    textarea
+      width: 510px !important
+
+  li
+    .name
+      label
+        margin-top: 4px
+        float: left
+      a
+        padding-left: 4px
+
+  #activity_currency_input span
+    font-size: 11px
+
+  a.tooltip
+    font-size: 11px
+    text-decoration: none
+
+    &:hover, &:focus, &:active
+      text-decoration: underline

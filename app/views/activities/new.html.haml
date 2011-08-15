@@ -3,9 +3,6 @@
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
 
-
-= render 'breadcrumb', :response => @response, :activity => @activity
-
 %h1.main_heading
   New Activity
   %span= render 'help'

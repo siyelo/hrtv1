@@ -2,10 +2,6 @@
 
 = render 'shared/data_responses/javascript', :projects => @projects, :data_response => @response
 
-%ul.breadcrumb
-  %li= @response.organization.name
-  %li= @response.request.title
-
 %h1.main_heading= "Review Response"
 
 %h3 Executive Summary

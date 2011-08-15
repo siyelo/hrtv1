@@ -7,11 +7,6 @@
   var _code_spent_values  = #{js_safe(@code_spent_values)};
   var _code_budget_values = #{js_safe(@code_budget_values)};
 
-%ul.breadcrumb
-  %li= link_to 'Reports', user_report_dashboard_path
-  %li= link_to 'National', reports_country_path
-  %li= link_to 'Activities', reports_country_activities_path
-
 %h1.main_heading= "Activity: #{h(friendly_name(@activity))}"
 
 = render 'reports/shared/activity_summary'

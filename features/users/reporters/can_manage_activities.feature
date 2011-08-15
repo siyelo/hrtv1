@@ -292,7 +292,6 @@ Feature: Reporter can manage activities
       And I press "Import" within "#sub_activities_upload_box"
     Then I should see "Your CSV file does not seem to be properly formatted."
 
-
   Scenario: Reporter can see message when no file attached for implementers
     Given an activity exists with description: "activity1", project: the project, data_response: the data_response
     When I follow "Projects"

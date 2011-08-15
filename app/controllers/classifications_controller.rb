@@ -4,6 +4,7 @@ class ClassificationsController < Reporter::BaseController
 
   before_filter :load_activity_and_data_response
   before_filter :load_klasses, :only => [:edit, :update, :download_template, :bulk_create]
+  before_filter :warn_if_not_classified, :only => [:edit]
 
   def edit
     @budget_coding_tree = CodingTree.new(@activity, @budget_klass)
@@ -12,7 +13,6 @@ class ClassificationsController < Reporter::BaseController
                             map_to_hash{ |b| {b.code_id => b} }
     @spend_assignments  = @spend_klass.with_activity(@activity).all.
                             map_to_hash{ |b| {b.code_id => b} }
-    set_classification_errors
 
     # set default to 'my' view if there are code assignments present
     if params[:view].blank?
@@ -27,7 +27,6 @@ class ClassificationsController < Reporter::BaseController
       flash[:notice] = "Activity classification was successfully updated."
     end
 
-    set_classification_errors
     redirect_to edit_activity_classification_url(@activity, params[:id])
   end
 
@@ -122,12 +121,4 @@ class ClassificationsController < Reporter::BaseController
       end
     end
 
-    def set_classification_errors
-      if @activity.approved? || @activity.am_approved?
-        flash[:error] = "Classification for approved activity cannot be changed."
-      else
-        errors = @activity.classification_errors_by_type(params[:id])
-        flash[:error] = errors.join(" and ") if errors.present?
-      end
-    end
 end

@@ -100,8 +100,18 @@ Feature: Reporter can enter a code breakdown for each activity
     And I fill in "classifications[spend][1]" with "99"
     And I press "Save"
     Then I should see "Activity classification was successfully updated."
-    And I should see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
+    And the "spend_purposes" checkbox should not be checked
+    And the "budget_purposes" checkbox should not be checked
 
+    When I follow "Projects"
+    And I follow "activity1"
+    And I follow "Purposes" within ".ordered_nav"
+    And I fill in "classifications[budget][1]" with "100"
+    And I fill in "classifications[spend][1]" with "100"
+    And I press "Save"
+    Then I should see "Activity classification was successfully updated."
+    And the "spend_purposes" checkbox should be checked
+    And the "budget_purposes" checkbox should be checked
 
   Scenario: Reporter can download Purposes classification template
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
@@ -149,7 +159,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "classifications[budget][1]" field should contain "40"
     And the "classifications[spend][1]" field should contain "40"
 
-  @javascript @run
+  @javascript
   Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
@@ -201,8 +211,18 @@ Feature: Reporter can enter a code breakdown for each activity
     And I fill in "classifications[spend][3]" with "99"
     And I press "Save"
     Then I should see "Activity classification was successfully updated."
-    And I should see "Inputs by Current Budget are not classified and Inputs by Past Expenditure are not classified"
+    And the "spend_inputs" checkbox should not be checked
+    And the "budget_inputs" checkbox should not be checked
 
+    When I follow "Projects"
+    And I follow "activity1"
+    And I follow "Inputs" within ".ordered_nav"
+    And I fill in "classifications[budget][3]" with "100"
+    And I fill in "classifications[spend][3]" with "100"
+    And I press "Save"
+    Then I should see "Activity classification was successfully updated."
+    And the "spend_inputs" checkbox should be checked
+    And the "budget_inputs" checkbox should be checked
 
   Scenario: Reporter can download Inputs classification template
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000

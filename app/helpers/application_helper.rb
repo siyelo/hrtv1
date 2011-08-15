@@ -253,7 +253,7 @@ module ApplicationHelper
     unless flash[:error]
       if @activity.approved? || @activity.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif (@response.data_request.budget? && !@activity.budget_classified?) || (@response.data_request.spend? && !@activity.spend_classified?)
+      elsif (!@activity.budget_classified? || !@activity.spend_classified?)
         flash.now[:error] = "This #{@activity.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.  
                              #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a> 
                              to see what still needs to be classified"}"

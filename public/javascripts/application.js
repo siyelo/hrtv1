@@ -1249,6 +1249,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_activity_form').fadeIn();
+      activity_form();
     });
 
     $('.js_toggle_other_cost_form').click(function (e) {
@@ -1440,6 +1441,12 @@ var activities_new = activities_create = activities_edit = activities_update = {
 var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
+  });
+  
+  $('#activity_name').live('keyup', function() {
+    var parent = $(this).parent('li')
+    var remaining = $(this).attr('data-maxlength') - $(this).val().length;
+    $('.remaining_characters').html("(?) <span class=\"red\">" + remaining + " Characters Remaining</span>")
   });
 
   $('.js_implementer_select').live('change', function(e) {

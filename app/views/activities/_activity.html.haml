@@ -3,6 +3,6 @@
     = link_to activity.name.presence || 'Unnamed Activity', edit_response_activity_path(@response, activity), :title => activity.description, :class => 'tooltip'
   %td= n2crs(activity.spend, activity.currency)
   %td= n2crs(activity.budget, activity.currency)
-  %td.wrap-10
+  %td.wrap-14
     %ul
       = render 'activities/approve_budget', :activity => activity

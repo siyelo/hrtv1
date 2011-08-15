@@ -3,81 +3,84 @@
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
 
-%h1.main_heading
-  = render 'search'
-  Projects & Activities
+= render :partial => 'new_forms'
 
-= render 'getting_started'
+#projects_listing
+  %h1.main_heading
+    = render 'search'
+    Projects & Activities
 
-%ul.horizontal.right.plain
-  %li
-    - link_to "#comments" do
-      %span
-        View Comments
+  = render 'getting_started'
 
-%ul#nav.horizontal
-  %li.js_dropdown_menu
-    - link_to '#', :class => 'js_dropdown_trigger create_new' do
-      = image_tag "new_white.png"
-      Create New...
-      = image_tag "icon_arrow_down.gif"
+  %ul.horizontal.right.plain
+    %li
+      - link_to "#comments" do
+        %span
+          View Comments
 
-    %ul.menu_items{:style => 'display: none'}
-      %li= link_to 'Project', new_response_project_path(@response)
-      %li= link_to 'Activity', new_response_activity_path(@response)
-      %li= link_to 'Other Cost', new_response_other_cost_path(@response)
+  %ul#nav.horizontal
+    %li.js_dropdown_menu
+      - link_to '#', :class => 'js_dropdown_trigger create_new' do
+        = image_tag "new_white.png"
+        Create New...
+        = image_tag "icon_arrow_down.gif"
+
+      %ul.menu_items{:style => 'display: none'}
+        %li= link_to 'Project', new_response_project_path(@response), :class => 'js_toggle_project_form'
+        %li= link_to 'Activity', new_response_activity_path(@response), :class => 'js_toggle_activity_form'
+        %li= link_to 'Other Cost', new_response_other_cost_path(@response), :class => 'js_toggle_other_cost_form'
           
-  %li.js_dropdown_menu
-    - link_to '#', :class => 'js_dropdown_trigger create_new' do
-      Import / Export
-      = image_tag "icon_arrow_down.gif"
+    %li.js_dropdown_menu
+      - link_to '#', :class => 'js_dropdown_trigger create_new' do
+        Import / Export
+        = image_tag "icon_arrow_down.gif"
 
-    %ul.menu_items{:style => 'display: none'}
-      %li= link_to 'Import Activities', '#', :id => "import_export"
-      %li= link_to 'Export Workplan', download_workplan_response_projects_path(@response)
-      %li= link_to 'Export All', export_response_activities_path(@response)
+      %ul.menu_items{:style => 'display: none'}
+        %li= link_to 'Import Activities', '#', :id => "import_export"
+        %li= link_to 'Export Workplan', download_workplan_response_projects_path(@response)
+        %li= link_to 'Export All', export_response_activities_path(@response)
 
-  %li
-    = link_to "Link to Funders", bulk_edit_response_projects_path, :class => 'create_new'
+    %li
+      = link_to "Link to Funders", bulk_edit_response_projects_path, :class => 'create_new'
 
-#import_export_box
-  = render 'activities_import', :project => nil, :can_export => @response.activities.present?
+  #import_export_box
+    = render 'activities_import', :project => nil, :can_export => @response.activities.present?
 
-- if params[:query]
-  %p
-    = "Projects with names containing #{params[:query]}"
-    = link_to "(Back to complete project listing)", response_projects_path(@response)
+  - if params[:query]
+    %p
+      = "Projects with names containing #{params[:query]}"
+      = link_to "(Back to complete project listing)", response_projects_path(@response)
 
-%table.workplan
-  %thead
-    %tr.head
-      %th{:colspan => 3}
-      %th= current_fy(@response)
-      %th{:colspan => 10}= next_fy(@response)
-    %tr.head
-      %th= sortable "name", "Project"
-      %th{:colspan => 2} Activity / Other Cost
-      %th= sortable "spend", "Past Expenditure"
-      %th= sortable "budget", "Current Budget"
-      %th
+  %table.workplan
+    %thead
+      %tr.head
+        %th{:colspan => 3}
+        %th= current_fy(@response)
+        %th{:colspan => 10}= next_fy(@response)
+      %tr.head
+        %th= sortable "name", "Project"
+        %th{:colspan => 2} Activity / Other Cost
+        %th= sortable "spend", "Past Expenditure"
+        %th= sortable "budget", "Current Budget"
+        %th
 
-  %tbody
-    - unless @projects.empty?
-      - @projects.each do |project|
-        = render "project", :project => project
-      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+    %tbody
+      - unless @projects.empty?
+        - @projects.each do |project|
+          = render "project", :project => project
+        = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
 
-    - else
-      %tr
-        %td{:colspan => 100}
-          = render 'no_projects_yet'
-    %tr.filler
-      %td{:colspan => 2}
-      %td.total TOTAL
-      %td.wrap-12= n2crs(@response.spend, @response.currency)
-      %td.wrap-12= n2crs(@response.budget, @response.currency)
-      %td
+      - else
+        %tr
+          %td{:colspan => 100}
+            = render 'no_projects_yet'
+      %tr.filler
+        %td{:colspan => 2}
+        %td.total TOTAL
+        %td.wrap-12= n2crs(@response.spend, @response.currency)
+        %td.wrap-12= n2crs(@response.budget, @response.currency)
+        %td
 
-= will_paginate @projects
-%br
-= render 'shared/comments', :comments => @comments
+  = will_paginate @projects
+  %br
+  = render 'shared/comments', :comments => @comments

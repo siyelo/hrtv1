@@ -5,7 +5,7 @@ describe CodeAssignment do
     subject { basic_setup_activity; Factory(:code_assignment, :activity => @activity) }
     it { should validate_presence_of :activity_id }
     it { should validate_presence_of :code_id }
-    it { should ensure_inclusion_of(:percentage).in_range(1..100) }
+    it { should ensure_inclusion_of(:percentage).in_range(1..100).with_message("must be between 1 and 100") }
 
     it "does not validate percentage when it is not present" do
       subject.percentage = nil

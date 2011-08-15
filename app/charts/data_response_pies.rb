@@ -13,7 +13,11 @@ module Charts::DataResponsePies
         scope = scope.scoped({:conditions => ["code_assignments.type = ?", codings_type]}) if codings_type
         scope = scope.scoped({:conditions => ["codes.type = ?", code_type]}) if code_type
         codes = scope.find(:all,
-              :select => "codes.id as code_id, codes.parent_id as parent_id, codes.short_display, codes.short_display AS name, SUM(code_assignments.cached_amount) AS value",
+              :select => "codes.id AS code_id, 
+                          codes.parent_id AS parent_id, 
+                          codes.short_display, 
+                          codes.short_display AS name, 
+                          SUM(code_assignments.cached_amount) AS value",
               :joins => {:code_assignments => {:activity => :data_response}},
               :group => "codes.short_display, codes.id, codes.parent_id",
               :order => 'value DESC')

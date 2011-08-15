@@ -14,7 +14,7 @@ class CodeAssignment < ActiveRecord::Base
   ### Validations
   validates_presence_of :activity_id, :code_id
   validates_inclusion_of :percentage, :in => 1..100,
-    :if => Proc.new { |model| model.percentage.present? }
+    :if => Proc.new { |model| model.percentage.present? }, :message => "must be between 1 and 100"
 
   ### Named scopes
   named_scope :with_code_id,

@@ -2,6 +2,14 @@ class Reporter::ReportsController < Reporter::BaseController
   include ReportsControllerHelpers
 
   def index
+    @response = @data_response    = current_response
+    @projects                     = @data_response.projects.find(:all, :order => "name ASC")
+    @activities_without_projects  = @data_response.activities.roots.without_a_project
+    @other_costs_without_projects = @data_response.other_costs.without_a_project
+    @code_roots                   = Code.purposes.roots
+    @cost_cat_roots               = CostCategory.roots
+    @other_cost_roots             = OtherCostCode.roots
+    @policy_maker                 = true #view helper
   end
 
   def show

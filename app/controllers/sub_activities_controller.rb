@@ -19,6 +19,7 @@ class SubActivitiesController < Reporter::BaseController
         message = @sa.empty? ? "Implementers were successfully uploaded." : "Not all Implementers could be resolved."
         flash[:notice] = message
         if all_ok
+          Activity.update_cache_amounts
           redirect_to edit_response_activity_path(@activity.data_response, @activity)
         else
           render :action => :create

@@ -67,7 +67,7 @@ class Reports::ActivitiesByNha
 
         project = activity.project
         unless project.nil?
-          row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.gor_spend})"}.join(";")
+          row << project.in_flows.collect{|f| "#{f.from.try(:name)}(#{f.spend})"}.join(";")
         else
           row << "No FS info; project was not entered"
         end
@@ -80,7 +80,7 @@ class Reports::ActivitiesByNha
         row << activity.name
         row << activity.description
         row << activity.currency
-        row << activity.gor_spend
+        row << activity.spend
         row << activity.spend_in_usd
 
         build_code_assignment_rows(csv, activity, row, funding_source_ratio)

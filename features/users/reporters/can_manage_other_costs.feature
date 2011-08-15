@@ -4,7 +4,7 @@ Feature: Reporter can manage other costs
   I want to be able to manage other costs
 
   Background:
-  
+
   Given an organization exists with name: "organization1"
   And a data_request exists with title: "data_request1"
   And an organization "my_organization" exists with name: "organization2"
@@ -14,7 +14,7 @@ Feature: Reporter can manage other costs
   And I am signed in as "reporter@hrtapp.com"
   And I follow "data_request1"
   And I follow "Projects"
-  
+
   Scenario: Reporter can CRUD other costs
     When I follow "Add Other Costs now"
     Then I should see "New Other Cost"
@@ -24,12 +24,11 @@ Feature: Reporter can manage other costs
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-03-01"
       And I press "Save"
-      Then show me the page
     Then I should see "Other Cost was successfully created"
       And I fill in "Name" with "other_cost2"
       And I press "Save"
     Then I should see "Other Cost was successfully updated"
-    When I follow "Projects"
+      And I follow "Projects"
       And I should see "other_cost2"
       And I should not see "other_cost1"
     When I follow "other_cost2"
@@ -37,7 +36,7 @@ Feature: Reporter can manage other costs
     Then I should see "Other Cost was successfully destroyed"
       And I should not see "other_cost1"
       And I should not see "other_cost2"
-  
+
   Scenario: Reported can create other cost with automatically created project
     When I follow "Add Other Costs now"
       And I fill in "Name" with "other_cost1"

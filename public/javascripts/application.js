@@ -1454,15 +1454,6 @@ var projects_index = {
           hideAll();
           $('/new_project_form').fadeIn();
         }
-        else if (hash == '/new_activity'){
-          hideAll();
-          $('/new_activity_form').fadeIn();
-          activity_form();
-        }
-        else if (hash == '/new_other cost'){
-          hideAll();
-          $('/new_other_cost_form').fadeIn();
-        }
       };
     });
     
@@ -1470,13 +1461,6 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
-    });
-
-    $('.js_toggle_activity_form').click(function (e) {
-      e.preventDefault();
-      hideAll();
-      $('#new_activity_form').fadeIn();
-      activity_form();
     });
 
     $('.js_toggle_other_cost_form').click(function (e) {

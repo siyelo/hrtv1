@@ -25,10 +25,11 @@ Feature: Reporter can manage activities
     And I follow "Add Output"
     And I fill in "output_field" with "Output description"
     And I press "Save"
-    Then I should see "Activity was successfully updated"
-    And the "target_field" field should contain "Target description"
-    And the "output_field" field should contain "Output description"
-  
+    Then I should see "Activity was successfully created"
+    And the "Target" field should contain "Target description"
+    And the "Output" field should contain "Output description"
+
+  @javascript 
   Scenario: Reporter can add implementers (normal values)
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
@@ -42,8 +43,9 @@ Feature: Reporter can manage activities
     And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "99"
     And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "19"
 
+  #combobox
   @javascript 
-  Scenario: Reporter can CRUD activities
+  Scenario: Reporter can add sub-activities (percentage values)
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
@@ -52,14 +54,27 @@ Feature: Reporter can manage activities
     And I select "project1" from "Project"
     And I press "Save"
     Then I should see "Activity was successfully created."
-    
-    And I fill in "Name" with "activity2"
-    And I fill in "Description" with "activity2 description"
-    And I press "Save"
+    And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "20"
+    And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "30"
+
+  @javascript 
+  Scenario: Reporter can CRUD activities
+    When I follow "Add Activities now"
+    And I fill in "activity_name" with "activity1"
+    And I fill in "activity_description" with "activity1 description"
+    And I fill in "activity_start_date" with "2010-01-01"
+    And I fill in "activity_end_date" with "2010-12-01"
+      And I select "project1" from "Project"
+      And I press "Save"
+    Then I should see "Activity was successfully created."
+      And I fill in "Name" with "activity2"
+      And I fill in "Description" with "activity2 description"
+      And I press "Save & Classify >"
     Then I should see "Activity was successfully updated"
-    
-    And I confirm the popup dialog
-    And I follow "Delete this Activity"
+    And I follow "Projects"
+    When I follow "activity2"
+      And I confirm the popup dialog
+      And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
 
   Scenario: Reported can create activity with automatically created project
@@ -94,7 +109,6 @@ Feature: Reporter can manage activities
          |      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
          | a1   |            | 2011-12-01 | project1 | Start date can't be blank |
          | a1   | 2011-01-01 |            | project1 | End date can't be blank   |
-         #| a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"

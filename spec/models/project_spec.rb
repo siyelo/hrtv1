@@ -39,6 +39,19 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
 
+
+    it "should validates length of name" do
+      @project = Factory.build(:project, 
+                  :name => nil)
+
+      @project.save.should be_false
+
+      @project = Factory.build(:project,
+      :name => "alskfjalsdkfjalksdfhalksjhfakljhflkashflkajshdflkajshflkasjhdflkasjhdflkasjhflkasjhflkasjhflkasjhflkasjhdflaksjhdflkasjhdflkasjhdflkasjhdflaksjhdflkasjhdflkasj,hdflaksjhdflaksdjhflaksjhdflaksjdhflkasjhflksajhflksjfh")
+      @project.save.should be_false
+    end
+
+
     context "subject" do
       subject { basic_setup_project; @project }
       it { should validate_uniqueness_of(:name).scoped_to(:data_response_id) }

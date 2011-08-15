@@ -172,6 +172,7 @@ describe FundingFlow do
 
       context "USG FY" do
         it "sets budget_in_usd and spend_in_usd amounts" do
+          pending #expected to be removed in next merge
           @organization = Factory(:organization, :currency => 'RWF',
                                  :fiscal_year_start_date => "2010-10-01",
                                  :fiscal_year_end_date => "2011-09-30")

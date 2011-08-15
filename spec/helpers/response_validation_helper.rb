@@ -1,13 +1,13 @@
 shared_examples_for "activity spend checker" do
   it "succeeds with only activity spend entered" do
-    @activity.budget = nil; @activity.save
+    @activity.write_attribute(:budget, nil); @activity.save
     @response.activity_amounts_entered?.should == true
   end
 end
 
 shared_examples_for "activity budget checker" do
   it "succeeds with only activity budget entered" do
-    @activity.spend = nil; @activity.save
+    @activity.write_attribute(:spend, nil); @activity.save
     @response.activity_amounts_entered?.should == true
   end
 end

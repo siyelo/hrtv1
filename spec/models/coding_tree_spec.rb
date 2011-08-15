@@ -19,28 +19,28 @@ describe CodingTree do
     #                   - code2221
 
     # first level
-    @code1    = Factory.create(:code, :short_display => 'code1')
-    @code2    = Factory.create(:code, :short_display => 'code2')
+    @code1    = Factory(:code, :short_display => 'code1')
+    @code2    = Factory(:code, :short_display => 'code2')
 
     # second level
-    @code11    = Factory.create(:code, :short_display => 'code11')
-    @code12    = Factory.create(:code, :short_display => 'code12')
-    @code21    = Factory.create(:code, :short_display => 'code21')
-    @code22    = Factory.create(:code, :short_display => 'code22')
+    @code11    = Factory(:code, :short_display => 'code11')
+    @code12    = Factory(:code, :short_display => 'code12')
+    @code21    = Factory(:code, :short_display => 'code21')
+    @code22    = Factory(:code, :short_display => 'code22')
     @code11.move_to_child_of(@code1)
     @code12.move_to_child_of(@code1)
     @code21.move_to_child_of(@code2)
     @code22.move_to_child_of(@code2)
 
     # third level
-    @code111   = Factory.create(:code, :short_display => 'code111')
-    @code112   = Factory.create(:code, :short_display => 'code112')
-    @code121   = Factory.create(:code, :short_display => 'code121')
-    @code122   = Factory.create(:code, :short_display => 'code122')
-    @code211   = Factory.create(:code, :short_display => 'code211')
-    @code212   = Factory.create(:code, :short_display => 'code212')
-    @code221   = Factory.create(:code, :short_display => 'code221')
-    @code222   = Factory.create(:code, :short_display => 'code222')
+    @code111   = Factory(:code, :short_display => 'code111')
+    @code112   = Factory(:code, :short_display => 'code112')
+    @code121   = Factory(:code, :short_display => 'code121')
+    @code122   = Factory(:code, :short_display => 'code122')
+    @code211   = Factory(:code, :short_display => 'code211')
+    @code212   = Factory(:code, :short_display => 'code212')
+    @code221   = Factory(:code, :short_display => 'code221')
+    @code222   = Factory(:code, :short_display => 'code222')
     @code111.move_to_child_of(@code11)
     @code112.move_to_child_of(@code11)
     @code121.move_to_child_of(@code12)
@@ -51,20 +51,22 @@ describe CodingTree do
     @code222.move_to_child_of(@code22)
 
     # fourth level
-    @code1221   = Factory.create(:code, :short_display => 'code1221')
+    @code1221   = Factory(:code, :short_display => 'code1221')
     @code1221.move_to_child_of(@code122)
-    @code2221   = Factory.create(:code, :short_display => 'code2221')
+    @code2221   = Factory(:code, :short_display => 'code2221')
     @code2221.move_to_child_of(@code222)
 
     basic_setup_project
-    @activity = Factory.create(:activity, :data_response => @response, :project => @project,
-                               :budget => 100, :spend => 200)
+    @activity = Factory(:activity, :data_response => @response, :project => @project)
+    @sa       = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                        :budget => 100, :spend => 200)
+    @activity.reload
 
   end
 
   describe "Tree" do
     it "has code associated" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.roots.length.should == 1
@@ -72,7 +74,7 @@ describe CodingTree do
     end
 
     it "has code assignment associated" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.roots.length.should == 1
@@ -80,8 +82,8 @@ describe CodingTree do
     end
 
     it "has children associated (children of root)" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11)
+      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1)
+      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.roots[0].children.length.should == 1
@@ -90,9 +92,9 @@ describe CodingTree do
     end
 
     it "has children associated (children of a children of a root)" do
-      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
-      ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11)
-      ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111)
+      ca1   = Factory(:coding_budget, :activity => @activity, :code => @code1)
+      ca11  = Factory(:coding_budget, :activity => @activity, :code => @code11)
+      ca111 = Factory(:coding_budget, :activity => @activity, :code => @code111)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.roots[0].children[0].children.length.should == 1
@@ -103,8 +105,8 @@ describe CodingTree do
 
   describe "root" do
     it "has roots" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1)
-      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1)
+      ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.roots.length.should == 2
@@ -115,48 +117,48 @@ describe CodingTree do
 
   describe "coding tree" do
     it "is valid when activity amount is nil and classifications amount is 0" do
-      @activity.budget = nil
+      @activity.write_attribute(:budget, nil)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is valid when activity amount is 0 and classifications amount is 0" do
-      @activity.budget = nil
+      @activity.write_attribute(:budget, nil)
       ct  = CodingTree.new(@activity, CodingBudget)
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 0)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 0)
       ct.stub(:root_codes).and_return([@code1]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is not valid when activity amount is 0 and classifications amount greater than 0" do
-      @activity.budget = nil
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
+      @activity.write_attribute(:budget, nil)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1]) # stub root_codes
       ct.valid?.should == false
     end
 
     it "is valid when there are only roots" do
-      ca1 = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
-      ca2 = Factory.create(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60)
+      ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40)
+      ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60)
       ct  = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is valid when sum_of_children is same as parent cached_sum (2 level)" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100)
+      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is valid when sum_of_children is same as parent cached_sum (3 level)" do
-      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
-      ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
-      ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
+      ca1   = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+      ca11  = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
+      ca111 = Factory(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
@@ -165,7 +167,7 @@ describe CodingTree do
     # looks like the amount from a child is only bubbling up 3 levels
     # something happens as moves up from 3 to 4 that it loses amounts
     it "is valid when there is one 4 levels down coding of 100% (4 level)" do
-      ca1221 = Factory.create(:coding_budget, :activity => @activity, :code => @code1221, :amount => 100)
+      ca1221 = Factory(:coding_budget, :activity => @activity, :code => @code1221, :amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.set_cached_amounts!
@@ -173,32 +175,32 @@ describe CodingTree do
     end
 
     it "is valid when root children has lower amount" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
+      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 99)
+      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 99)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is not valid when root children has greated amount" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
+      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
+      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == false
     end
 
     it "is valid when root children has no amounts and type is CodingBudgetDistrict" do
-      ca1  = Factory.create(:coding_budget_district, :activity => @activity, :code => @code1, :cached_amount => 50, :sum_of_children => 0)
-      ca2  = Factory.create(:coding_budget_district, :activity => @activity, :code => @code2, :cached_amount => 50, :sum_of_children => 0)
+      ca1  = Factory(:coding_budget_district, :activity => @activity, :code => @code1, :cached_amount => 50, :sum_of_children => 0)
+      ca2  = Factory(:coding_budget_district, :activity => @activity, :code => @code2, :cached_amount => 50, :sum_of_children => 0)
       ct   = CodingTree.new(@activity, CodingBudgetDistrict)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
     end
 
     it "is valid when root children has no amounts and type is CodingSpendDistrict" do
-      ca1  = Factory.create(:coding_spend_district, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 0)
-      ca2  = Factory.create(:coding_spend_district, :activity => @activity, :code => @code2, :cached_amount => 100, :sum_of_children => 0)
+      ca1  = Factory(:coding_spend_district, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 0)
+      ca2  = Factory(:coding_spend_district, :activity => @activity, :code => @code2, :cached_amount => 100, :sum_of_children => 0)
       ct   = CodingTree.new(@activity, CodingSpendDistrict)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid?.should == true
@@ -207,9 +209,9 @@ describe CodingTree do
 
   describe "code assignment" do
     it "all code assignments are valid when coding tree is valid" do
-      ca1   = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
-      ca11  = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
-      ca111 = Factory.create(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
+      ca1   = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+      ca11  = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
+      ca111 = Factory(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
       ct    = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid_ca?(ca1).should == true
@@ -218,8 +220,8 @@ describe CodingTree do
     end
 
     it "detects invalid node when coding tree is not valid" do
-      ca1  = Factory.create(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
-      ca11 = Factory.create(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
+      ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 101)
+      ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 101)
       ct   = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
       ct.valid_ca?(ca1).should == false
@@ -366,7 +368,7 @@ describe CodingTree do
   describe "set_cached_amounts" do
     context "root code assignment" do
       it "sets cached_amount and sum_of_children for code assignment with amount" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+        Factory(:coding_budget, :activity => @activity, :code => @code1,
                        :amount => 10, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -381,7 +383,7 @@ describe CodingTree do
       end
 
       it "sets cached_amount and sum_of_children for code assignment with percentage" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+        Factory(:coding_budget, :activity => @activity, :code => @code1,
                        :percentage => 20, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -398,11 +400,11 @@ describe CodingTree do
 
     context "root and children code assignment" do
       it "sets cached_amount and sum_of_children for 2 level code assignments with amount" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+        Factory(:coding_budget, :activity => @activity, :code => @code1,
                        :amount => 10, :cached_amount => nil, :sum_of_children => nil)
-        Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+        Factory(:coding_budget, :activity => @activity, :code => @code11,
                        :amount => 5, :cached_amount => nil, :sum_of_children => nil)
-        Factory.create(:coding_budget, :activity => @activity, :code => @code12,
+        Factory(:coding_budget, :activity => @activity, :code => @code12,
                        :amount => 5, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -423,11 +425,11 @@ describe CodingTree do
       end
 
       it "sets cached_amount and sum_of_children for 2 level code assignments with percentage" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+        Factory(:coding_budget, :activity => @activity, :code => @code1,
                        :percentage => 20, :cached_amount => nil, :sum_of_children => nil)
-        Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+        Factory(:coding_budget, :activity => @activity, :code => @code11,
                        :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
-        Factory.create(:coding_budget, :activity => @activity, :code => @code12,
+        Factory(:coding_budget, :activity => @activity, :code => @code12,
                        :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -450,7 +452,7 @@ describe CodingTree do
 
     context "children without root code assignment" do
       it "sets cached_amount and sum_of_children when children has amount" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+        Factory(:coding_budget, :activity => @activity, :code => @code11,
                        :amount => 5, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -468,7 +470,7 @@ describe CodingTree do
       end
 
       it "sets cached_amount and sum_of_children when children has percentage" do
-        Factory.create(:coding_budget, :activity => @activity, :code => @code11,
+        Factory(:coding_budget, :activity => @activity, :code => @code11,
                        :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(@activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -487,9 +489,10 @@ describe CodingTree do
 
       it "sets cached_amount and sum_of_children when children has percentage and activity amount is 0" do
         basic_setup_project
-        activity = Factory.create(:activity, :data_response => @response, :project => @project,
-                                  :budget => 0, :spend => 200)
-        Factory.create(:coding_budget, :activity => activity, :code => @code11,
+        activity = Factory(:activity, :data_response => @response, :project => @project)
+        sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
+                           :budget => 0, :spend => 200)
+        Factory(:coding_budget, :activity => activity, :code => @code11,
                        :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(activity, CodingBudget)
         ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
@@ -510,9 +513,9 @@ describe CodingTree do
 
   describe "total" do
     it "should return total for the tree" do
-      Factory.create(:coding_budget, :activity => @activity, :code => @code1,
+      Factory(:coding_budget, :activity => @activity, :code => @code1,
                      :amount => 10, :cached_amount => nil, :sum_of_children => nil)
-      Factory.create(:coding_budget, :activity => @activity, :code => @code2,
+      Factory(:coding_budget, :activity => @activity, :code => @code2,
                      :amount => 10, :cached_amount => nil, :sum_of_children => nil)
       ct = CodingTree.new(@activity, CodingBudget)
       ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes

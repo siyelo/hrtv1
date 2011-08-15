@@ -6,6 +6,14 @@ GIT
     email_spec (0.6.6)
       rspec
 
+GIT
+  remote: git://github.com/thoughtbot/akephalos.git
+  revision: b2f056db59844209dac4c77ca386e7ef36f8f560
+  specs:
+    akephalos (0.2.4)
+      capybara (~> 0.3.8)
+      jruby-jars
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -96,6 +104,7 @@ GEM
       responders (~> 0.4.6)
     interactive_editor (0.0.8)
       spoon (>= 0.0.1)
+    jruby-jars (1.6.3)
     json (1.5.3)
     json_pure (1.5.3)
     launchy (0.3.7)
@@ -189,6 +198,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_tree
+  akephalos!
   annotate
   ar_strip_commas
   authlogic

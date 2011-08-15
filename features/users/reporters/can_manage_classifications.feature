@@ -21,6 +21,7 @@ Feature: Reporter can enter a code breakdown for each activity
   # level 1
   Given a mtef_code "mtef1" exists with id: 1, short_display: "mtef1"
     And a mtef_code "mtef2" exists with id: 2, short_display: "mtef2"
+
     # level 1
     And a cost_category_code exists with id: 3, short_display: "cost_category1"
     And an organization exists with name: "organization1"
@@ -36,7 +37,8 @@ Feature: Reporter can enter a code breakdown for each activity
   ### PURPOSES
   ############
   Scenario: Reporter can classify Purposes for activity (first level)
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
@@ -49,7 +51,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_spend][1]" field should contain "100"
 
   Scenario: Reporter can classify Purposes for activity (second level)
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     When I follow "Projects"
@@ -68,7 +71,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_spend][12]" field should contain "40"
 
   Scenario: Reporter can classify Purposes for activity (third level)
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -89,8 +93,9 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_spend][112]" field should contain "40"
 
   @javascript 
-  Scenario: Reporter can see errors when classifying purposes
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+  Scenario: Reporter can classify Purposes for activity (third level)
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -98,7 +103,6 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
-    And I press "tab1_expand"
     
     When I fill in "activity[classifications][coding_budget][111]" with "40"
     Then the "activity[classifications][coding_budget][11]" field should contain "40"
@@ -121,7 +125,8 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should not see "Activity classification was successfully updated."
 
   Scenario: Reporter classify Purposes for activity and see flash error
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
@@ -143,7 +148,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "budget_purposes" checkbox should be checked
 
   Scenario: Reporter can download Purposes classification template
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
@@ -152,7 +158,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And I should not see "cost_category1"
   
   Scenario: Reporter can upload Purposes classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
@@ -163,7 +170,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_spend][1]" field should contain "30"
   
   Scenario: Reporter cannot upload Purposes classification for already approved activity
-    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, budget: 5, spend: 6, am_approved: true
+    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
+    And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity2"
     And I follow "Purposes" within ".section_nav"
@@ -172,38 +180,39 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Classification for approved activity cannot be changed."
 
 
-  @javascript
+  @javascript 
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
     #And I click element "#budget_to_spend"
     And I follow "Copy Current Budget to Past Expenditure"
-    And I confirm the js popup
     And I press "Save"
-    Then I should see "Activity was successfully updated."
+    Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
     And the "activity[classifications][coding_spend][1]" field should contain "100"
 
   @javascript 
   Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_spend][1]" with "100"
     #And I click element "#js_spend_to_budget"
     And I follow "Copy Past Expenditure to Current Budget"
-    And I confirm the js popup
     And I press "Save"
-    Then I should see "Activity was successfully updated."
+    Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
     And the "activity[classifications][coding_spend][1]" field should contain "100"
   
   Scenario: Reporter cannot clasify approved Activity
-    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, budget: 5, spend: 6, am_approved: true
+    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
+    And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity2"
     And I follow "Purposes" within ".section_nav"
@@ -216,7 +225,8 @@ Feature: Reporter can enter a code breakdown for each activity
   ### INPUTS
   ############
   Scenario: Reporter can enter Inputs for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"
@@ -229,7 +239,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "100"
 
   Scenario: Reporter can enter Inputs for activity and see flash error
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"
@@ -251,7 +262,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "budget_inputs" checkbox should be checked
 
   Scenario: Reporter can download Inputs classification template
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"
@@ -260,7 +272,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And I should not see "mtef1"
 
   Scenario: Reporter can upload Inputs classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"

@@ -28,8 +28,8 @@
 
       %ul.menu_items{:style => 'display: none'}
         %li= link_to 'Project', new_response_project_path(@response), :class => 'js_toggle_project_form js_address'
-        %li= link_to 'Activity', new_response_activity_path(@response), :class => 'js_toggle_activity_form js_address'
-        %li= link_to 'Other Cost', new_response_other_cost_path(@response), :class => 'js_toggle_other_cost_form js_address'
+        %li= link_to 'Activity', new_response_activity_path(@response, :project_id => -1)
+        %li= link_to 'Other Cost', new_response_other_cost_path(@response)
 
     %li.js_dropdown_menu
       - link_to '#', :class => 'js_dropdown_trigger dropdown' do

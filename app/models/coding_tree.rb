@@ -121,7 +121,6 @@ class CodingTree
       max           = 0 if max.nil?
       cached_amount = 0
       descendants   = false
-
       root_codes.each do |code|
         ca = @coding_klass.with_activity(activity).with_code_id(code.id).first
         children = cached_children(code)
@@ -139,7 +138,7 @@ class CodingTree
             cached_amount = bucket[:amount]
             sum_of_children = bucket[:amount]
           end
-
+          
           ca.update_attributes(:cached_amount => cached_amount,
                                :sum_of_children => sum_of_children)
           descendants = true # tell parents that it has descendants

@@ -14,12 +14,55 @@ describe SubActivity do
   describe "Validations:" do
     it { should validate_numericality_of(:spend_mask) }
     it { should validate_numericality_of(:budget_mask) }
+    
+    describe "implementer uniqueness" do
+      
+      #TODO - fix. Yes this is gonna break the build, but lets not leave this a pending and forget about it
+      it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
+        basic_setup_activity
+        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+          "sub_activities_attributes"=>
+            {"0"=>
+              {"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
+            "1"=>                                                                                                                        
+              {"spend_mask"=>"30", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"40.0"}
+            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+        @activity.reload
+        @activity.update_attributes(attributes).should be_false
+        @activity.sub_activities[1].errors.on(:provider_id).should == "must be unique"
+      end
+      
+      it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
+        basic_setup_sub_activity
+        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+          "sub_activities_attributes"=>
+            {"0"=>
+              {"spend_mask"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
+            "1"=>                                                                                                                        
+              {"spend_mask"=>"30", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"40.0"}
+            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+        @activity.reload
+        @activity.update_attributes(attributes).should be_false
+        @activity.sub_activities[1].errors.on(:provider_id).should == "must be unique"
+      end
+
+      it "should enforce uniqueness via SubActivity api" do
+        basic_setup_sub_activity
+        @sub_activity.should be_valid #sanity
+        @sub_activity1 = Factory.build(:sub_activity, :data_response => @response,
+                                :activity => @activity, :provider => @organization)
+        @sub_activity1.should_not be_valid
+        @sub_activity1.errors.on(:provider_id).should == "must be unique"
+      end
+    end
+    
 
     context "spend_mask:" do
       before :each do
         basic_setup_project
-        @activity = Factory(:activity, :data_response => @response, :project => @project,
-                      :spend => 10, :budget => 10)
+        @activity = Factory.build(:activity, :data_response => @response, :project => @project)
+        @activity.write_attribute(:spend, 10); @activity.write_attribute(:budget, 10);
+        @activity.save
       end
 
       it "does not allow > 100 percentage for spend_mask" do
@@ -48,8 +91,9 @@ describe SubActivity do
     context "budget_mask:" do
       before :each do
         basic_setup_project
-        @activity = Factory(:activity, :data_response => @response, :project => @project,
-                      :spend => 10, :budget => 10)
+        @activity = Factory.build(:activity, :data_response => @response, :project => @project)
+        @activity.write_attribute(:spend, 10); @activity.write_attribute(:budget, 10);
+        @activity.save
       end
 
       it "does not allow < 0 percentage for budget_mask" do
@@ -75,6 +119,26 @@ describe SubActivity do
       end
     end
   end
+  
+
+  
+  describe "saving sub activity updates the activity" do
+    before :each do 
+      basic_setup_activity
+    end
+    
+    it "should update the spend field on the parent activity" do
+      @sa = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :spend => 74)
+      @sa.save; @activity.reload
+      @activity.spend.should == 74
+    end
+    
+    it "should update the budget field on the parent activity" do
+      @sa = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :budget => 74)
+      @sa.save; @activity.reload
+      @activity.budget.should == 74
+    end
+  end
 
   it "returns the correct fields in the activity template" do
     header_row = SubActivity.download_template
@@ -85,113 +149,123 @@ describe SubActivity do
     before :each do
       donor          = Factory(:donor, :name => 'Donor')
       ngo            = Factory(:ngo,   :name => 'Ngo')
-      @implementer   = Factory(:ngo,   :name => 'Implementer')
+      @location      = Factory(:location, :name => "tehlocation")
+      @implementer   = Factory(:ngo,   :name => 'Implementer', :location => @location)
       @data_request  = Factory(:data_request, :organization => donor)
       @response      = ngo.latest_response
       project        = Factory(:project, :data_response => @response)
       in_flow        = Factory(:funding_flow, :project => project, :from => donor, :to => ngo,
-                          :budget => 10, :spend => 10)
-      out_flow       = Factory(:funding_flow, :project => project, :from => ngo, :to => @implementer,
-                          :budget => 7, :spend => 7)
-      @activity      = Factory(:activity, :name => 'Activity 1',
-                          :budget => 100, :spend => 100, :data_response => @response,
-                          :provider => ngo, :project => project)
+                        :budget => 10, :spend => 10)
+      out_flow       = Factory(:funding_flow, :project => project, :from => ngo, 
+                        :to => @implementer, :budget => 7, :spend => 7)
+      @activity      = Factory.build(:activity, :name => 'Activity 1',
+                         :data_response => @response, :provider => ngo, :project => project)
+      @sa            = Factory(:sub_activity, :activity => @activity, 
+                        :data_response => @response, :budget => 100, :spend => 100,
+                        :provider => @implementer)
+      @activity.save
+      @activity.reload
     end
 
-    it "returns sub_activity budget" do
-      @implementer_split = Factory(:sub_activity, :activity => @activity,
-                         :provider => @implementer, :data_response => @response, :budget => 4)
-      @implementer_split.budget.should == 4
-    end
-
-    it "returns sub_activity spend" do
-      @implementer_split = Factory(:sub_activity, :activity => @activity,
-                         :provider => @implementer, :data_response => @response, :spend => 3)
-      @implementer_split.spend.should == 3
-    end
-
-    it "returns code assignments for all types of codings" do
+    it "should return code assignments for all types of codings" do
       @location = Factory(:location, :short_display => 'Location 1')
-      @implementer.location = @location
-      Factory(:coding_budget, :activity => @activity, :amount => 10, :cached_amount => 10)
-      Factory(:coding_budget_cost_categorization, :activity => @activity,
-        :amount => 10, :cached_amount => 10)
-      Factory(:coding_spend, :activity => @activity, :amount => 10, :cached_amount => 10)
-      Factory(:coding_spend_cost_categorization, :activity => @activity,
-        :amount => 10, :cached_amount => 10)
-      sub_activity =  Factory(:sub_activity, :activity => @activity,
-                        :provider => @implementer, :data_response => @response, :budget => 4,
-                        :spend => 5)
-      sub_activity.code_assignments[0].cached_amount.should == 0.4
-      sub_activity.code_assignments[0].type.should == 'CodingBudget'
-      sub_activity.code_assignments[1].cached_amount.should == 0.4
-      sub_activity.code_assignments[1].type.should == 'CodingBudgetCostCategorization'
-      sub_activity.code_assignments[2].cached_amount.should == 4
-      sub_activity.code_assignments[2].type.should == 'CodingBudgetDistrict'
-      sub_activity.code_assignments[3].cached_amount.should == 0.5
-      sub_activity.code_assignments[3].type.should == 'CodingSpend'
-      sub_activity.code_assignments[4].cached_amount.should == 0.5
-      sub_activity.code_assignments[4].type.should == 'CodingSpendCostCategorization'
-      sub_activity.code_assignments[5].cached_amount.should == 5
-      sub_activity.code_assignments[5].type.should == 'CodingSpendDistrict'
+      @implementer.location = @location        
+      CodingBudget.update_classifications(@activity, { Factory(:mtef_code).id => 10 })
+      CodingBudgetCostCategorization.update_classifications(@activity, { 
+        Factory(:cost_category_code).id => 10 })
+      CodingSpend.update_classifications(@activity, { Factory(:mtef_code).id => 20 }) # 20%
+      CodingSpendCostCategorization.update_classifications(@activity, { 
+        Factory(:cost_category_code).id => 20 })
+      @sa.code_assignments[0].cached_amount.to_f.should == 10
+      @sa.code_assignments[0].type.should == 'CodingBudget'
+      @sa.code_assignments[1].cached_amount.to_f.should == 10
+      @sa.code_assignments[1].type.should == 'CodingBudgetCostCategorization'
+      @sa.code_assignments[2].cached_amount.to_f.should == 100
+      @sa.code_assignments[2].type.should == 'CodingBudgetDistrict'
+      @sa.code_assignments[3].cached_amount.to_f.should == 20
+      @sa.code_assignments[3].type.should == 'CodingSpend'
+      @sa.code_assignments[4].cached_amount.to_f.should == 20
+      @sa.code_assignments[4].type.should == 'CodingSpendCostCategorization'
+      @sa.code_assignments[5].cached_amount.to_f.should == 100
+      @sa.code_assignments[5].type.should == 'CodingSpendDistrict'
     end
-
-    it "returns adjusted activity coding_budget" do
-      Factory(:coding_budget, :activity => @activity, :amount => 10, :cached_amount => 10)
-      sub_activity  = Factory(:sub_activity, :activity => @activity,
-                        :provider => @implementer, :data_response => @response, :budget => 6)
-      sub_activity.coding_budget.length.should == 1
-      sub_activity.coding_budget[0].cached_amount.should == 0.6
-      sub_activity.coding_budget[0].type.should == 'CodingBudget'
+    
+    it "caches sub activities count" do
+      @implementer2 = Factory(:organization, :location => Factory(:location))
+      @implementer_split2 = Factory(:sub_activity, :activity => @activity,
+                        :provider => @implementer2, :data_response => @response, :budget => 4)
+      @activity.reload.sub_activities_count.should == 2
+      @response.reload.sub_activities_count.should == 2
+      @implementer3 = Factory(:organization, :location => Factory(:location))
+      @implementer_split3 = Factory(:sub_activity, :activity => @activity,
+                        :provider => @implementer3, :data_response => @response, :budget => 4)
+      @response.reload.sub_activities_count.should == 3
+      @activity.reload.sub_activities_count.should == 3
     end
+    
+    [:budget_district_coding_adjusted, :spend_district_coding_adjusted].each do |method|
+      describe "#{method.to_s}" do
+        before :each do
+          @field = :budget
+          @coding = :coding_budget
+          @district_coding = :coding_budget_district
+          @input_coding = :coding_budget_cost_categorization
+          if method == :spend_district_coding_adjusted
+            @field = :spend 
+            @coding = :coding_spend
+            @district_coding = :coding_spend_district
+            @input_coding = :coding_spend_cost_categorization
+          end
+        end
+      
+        describe "#{@coding}" do
+          it "should return adjusted activity code_assignments" do
+            klass = @coding.to_s.camelcase.constantize
+            klass.update_classifications(@activity, { Factory(:mtef_code).id => 10 })
+            @sa.send(@coding).length.should == 1
+            @sa.send(@coding)[0].cached_amount.to_f.should == 10
+            @sa.send(@coding)[0].type.should == @coding.to_s.camelcase
+          end
+        end
 
-    it "returns adjusted activity coding_budget_cost_categorization" do
-      Factory(:coding_budget_cost_categorization, :activity => @activity,
-        :amount => 10, :cached_amount => 10)
-      sub_activity  =   Factory(:sub_activity, :activity => @activity,
-                          :provider => @implementer, :data_response => @response, :budget => 6)
-      sub_activity.coding_budget_cost_categorization.length.should == 1
-      sub_activity.coding_budget_cost_categorization[0].cached_amount.should == 0.6
-      sub_activity.coding_budget_cost_categorization[0].type.should == 'CodingBudgetCostCategorization'
-    end
+        describe "#{@input_coding}" do
+          it "should return adjusted activity code_assignments" do
+            Factory(@input_coding, :activity => @activity, :amount => 10, :cached_amount => 10)
+            @sa.send(@input_coding).length.should == 1
+            @sa.send(@input_coding)[0].cached_amount.to_f.should == 10
+            @sa.send(@input_coding)[0].type.should == @input_coding.to_s.camelcase
+          end
+        end
 
-    it "returns adjusted activity coding_spend:" do
-      Factory(:coding_spend, :activity => @activity, :amount => 10, :cached_amount => 10)
-      sub_activity  = Factory(:sub_activity, :activity => @activity, :provider => @implementer,
-                        :data_response => @response, :spend => 6)
-      sub_activity.coding_spend.length.should == 1
-      sub_activity.coding_spend[0].cached_amount.should == 0.6
-      sub_activity.coding_spend[0].type.should == 'CodingSpend'
-    end
-
-    it "returns adjusted activity coding_spend_cost_categorization" do
-      Factory(:coding_spend_cost_categorization, :activity => @activity,
-        :amount => 10, :cached_amount => 10)
-      sub_activity  = Factory(:sub_activity, :activity => @activity,
-        :provider => @implementer, :data_response => @response, :spend => 6)
-      sub_activity.coding_spend_cost_categorization.length.should == 1
-      sub_activity.coding_spend_cost_categorization[0].cached_amount.should == 0.6
-      sub_activity.coding_spend_cost_categorization[0].type.should == 'CodingSpendCostCategorization'
-    end
-
-    shared_examples_for "an autosplit that equals the sub-activity total" do
-      it "returns adjusted total equal to the SubAct's actual #{@amount_sym.to_s}" do
-        @implementer_split.send(@district_adjust_method_sym).inject(0) do |sum, ca|
-          sum += ca.cached_amount
-        end.to_f.should == @implementer_split.send(@amount_sym).to_f
+        it "should return autogenerated code assignments when #{@field} has an amount and sub_activity has 1 location" do
+          autosplit = @sa.send(method)[0]
+          autosplit.cached_amount.to_f.should == 100
+          autosplit.code.should == @location
+          autosplit.type.should == @district_coding.to_s.camelcase #e.g. CodingSpendDistrict
+        end
       end
-    end
+   end
+   
+   ### Shared examples for the next part
+   
+   shared_examples_for "an autosplit that equals the sub-activity total" do
+     it "returns adjusted total equal to the SubAct's actual #{@amount_sym.to_s}" do
+       @implementer_split.send(@district_adjust_method_sym).inject(0) do |sum, ca|
+         sum += ca.cached_amount
+       end.to_f.should == @implementer_split.send(@amount_sym).to_f
+     end
+   end
 
-    shared_examples_for "an autosplit for a single location" do
-      it "returns adjusted coding split (for #{@amount_sym.to_s}) using only the Implementer location" do
-        autosplit = @implementer_split.send(@district_adjust_method_sym)
-        autosplit.length.should == 1
-        ca = autosplit[0]
-        ca.code.should == @location
-        ca.cached_amount.to_f.should == 100
-        ca.type.should == @coding_class
-      end
-    end
+   shared_examples_for "an autosplit for a single location" do
+     it "returns adjusted coding split (for #{@amount_sym.to_s}) using only the Implementer location" do
+       autosplit = @implementer_split.send(@district_adjust_method_sym)
+       autosplit.length.should == 1
+       ca = autosplit[0]
+       ca.code.should == @location
+       ca.cached_amount.to_f.should == 100
+       ca.type.should == @coding_class
+     end
+   end
 
     [ [:budget, :coding_budget_district, 'CodingBudgetDistrict', :budget_district_coding_adjusted],
       [:spend, :coding_spend_district, 'CodingSpendDistrict', :spend_district_coding_adjusted]
@@ -201,10 +275,7 @@ describe SubActivity do
           @district_adjust_method_sym = district_adjust_method_sym # then we can use shared_examples
           @amount_sym = amount_sym # then we can use shared_examples
           @coding_class = coding_class # then we can use shared_examples
-          @implementer_split = Factory(:sub_activity, :activity => @activity,
-                            :provider => @implementer, :data_response => @response,
-                            amount_sym => 100)
-          @location = Factory(:location, :short_display => 'Location 1')
+          @implementer_split = @sa
         end
 
         context "without any existing location splits (code assignments):" do
@@ -215,17 +286,14 @@ describe SubActivity do
 
           context "implementer without location:" do # edge case
             it "should do nothing if implementer has no location" do
-              @implementer.location.should be_nil
-              autosplit =  @implementer_split.send(@district_adjust_method_sym)
+              @implementer.location = nil
+              @implementer.save!
+              autosplit = @implementer_split.send(@district_adjust_method_sym)
               autosplit.should be_empty
             end
           end
 
           context "implementer with a location:" do
-            before :each do
-              @implementer.location = @location; @implementer.save!; @implementer_split.reload
-            end
-
             context "with no existing Location split:" do
               it_should_behave_like "an autosplit for a single location"
               it_should_behave_like "an autosplit that equals the sub-activity total"
@@ -289,7 +357,7 @@ describe SubActivity do
               # the fly, instead of persisting the actual split to the database. This behaviour
               # must be deprecated.
               #
-              # The desired API is one where
+              # A better API would be one where
               #  a) the autosplit method is used manually by the user
               #     to ONLY return a suggested set of splits (which are then saved & persisted)
               #  b) whenever the autosplit method is called, it should never look at existing
@@ -297,7 +365,8 @@ describe SubActivity do
               #     if its still needed.
               #
               #
-              @implementer.location.should be_nil
+              @implementer.location = nil
+              @implementer.save
               autosplit =  @implementer_split.send(@district_adjust_method_sym)
               autosplit[0].code.should == @location
               autosplit[0].cached_amount.to_f.should == 40
@@ -308,17 +377,6 @@ describe SubActivity do
         end
 
       end
-    end
-
-    it "caches sub activities count" do
-      @activity.sub_activities_count.should == 0
-      @implementer_split = Factory(:sub_activity, :activity => @activity,
-                        :provider => @implementer, :data_response => @response, :budget => 4)
-      @activity.reload.sub_activities_count.should == 1
-      @response.reload.sub_activities_count.should == 1
-      Factory(:sub_activity, :activity => @activity, :data_response => @response)
-      @response.reload.sub_activities_count.should == 2
-      @activity.reload.sub_activities_count.should == 2
     end
   end
 end

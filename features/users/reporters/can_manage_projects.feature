@@ -80,65 +80,15 @@ Feature: Reporter can manage projects
         And I fill in "Start date" with "2011-01-01"
         And I fill in "End date" with "2011-12-01"
         And I follow "Add funding source"
-        And I fill in "Spent" with "11" within ".fields"
-        And I fill in "Q4 08-09" with "22" within ".fields .spend"
-        And I fill in "Q1 09-10" with "33" within ".fields .spend"
-        And I fill in "Q2 09-10" with "44" within ".fields .spend"
-        And I fill in "Q3 09-10" with "55" within ".fields .spend"
-        And I fill in "Q4 09-10" with "66" within ".fields .spend"
-        And I fill in "Budget" with "11" within ".fields"
-        And I fill in "Q4 08-09" with "22" within ".fields .budget"
-        And I fill in "Q1 09-10" with "33" within ".fields .budget"
-        And I fill in "Q2 09-10" with "44" within ".fields .budget"
-        And I fill in "Q3 09-10" with "55" within ".fields .budget"
-        And I fill in "Q4 09-10" with "66" within ".fields .budget"
         And I press "Create Project"
       Then I should see "Project was successfully created"
 
       When I follow "Project1"
       Then the "Spent" field within ".fields" should contain "11"
-        And the "Q4 08-09" field within ".fields .spend" should contain "22"
-        And the "Q1 09-10" field within ".fields .spend" should contain "33"
-        And the "Q2 09-10" field within ".fields .spend" should contain "44"
-        And the "Q3 09-10" field within ".fields .spend" should contain "55"
-        And the "Q4 09-10" field within ".fields .spend" should contain "66"
-
-        And the "Budget" field within ".fields" should contain "11"
-        And the "Q4 08-09" field within ".fields .budget" should contain "22"
-        And the "Q1 09-10" field within ".fields .budget" should contain "33"
-        And the "Q2 09-10" field within ".fields .budget" should contain "44"
-        And the "Q3 09-10" field within ".fields .budget" should contain "55"
-        And the "Q4 09-10" field within ".fields .budget" should contain "66"
 
       When I follow "Edit" within ".funding_flows"
         And I fill in "Budget" with "7778" within ".fields"
         And I press "Update Project"
         And I follow "Project1"
       Then the "Budget" field within ".fields" should contain "7778"
-    
-    @wip
-    Scenario: A Reporter can bulk link their projects to those from other organizations
-      Then I should see "Project5"
-      When I follow "Link to Funders"
-      Then I should see "Project5"
-      When select "Project6" from "funding_flows_3"
-        And I press "Update"
-      Then I should see "Your projects have been successfully updated"
 
-    @wip
-    Scenario: A Reporter can bulk unlink their projects to those from other organizations
-      Then I should see "Project5"
-      When I follow "Link to Funders"
-      Then I should see "Project5"
-      When select "" from "funding_flows_3"
-        And I press "Update"
-      Then I should see "Your projects have been successfully updated"
-    
-    @wip
-    Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
-      Then I should see "Project5"
-      When I follow "Link to Funders"
-      Then I should see "Project5"
-      When select "<Project not listed or unknown>" from "funding_flows_3"
-        And I press "Update"
-      Then I should see "Your projects have been successfully updated"

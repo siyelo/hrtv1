@@ -8,6 +8,7 @@ class Project < ActiveRecord::Base
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name description currency start_date end_date]
+  MAX_NAME_LENGTH = 64
 
   strip_commas_from_all_numbers
 
@@ -46,6 +47,7 @@ class Project < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date,
     :message => "Start date must come before End date."
+  validates_length_of :name, :within => 1..MAX_NAME_LENGTH
 
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,

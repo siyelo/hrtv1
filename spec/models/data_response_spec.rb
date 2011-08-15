@@ -75,8 +75,10 @@ describe DataResponse do
       @project      = Factory(:project, :data_response => @response,
                               :currency => nil)
       @activity     = Factory(:activity, :data_response => @response,
-                              :project => @project,
+                              :project => @project)
+      @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
                               :budget => 1000, :spend => 2000)
+      @activity.reload
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -112,12 +114,15 @@ describe DataResponse do
     context "same currency" do
       it "returns total" do
         project      = Factory(:project, :data_response => @response)
-        Factory(:activity, :data_response => @response, :project => project,
-                :spend => 100, :budget => 200)
-        Factory(:other_cost, :data_response => @response, :project => project,
-                :spend => 100, :budget => 200)
-        Factory(:other_cost, :data_response => @response,
-                :spend => 100, :budget => 200)
+        @activity    = Factory(:activity, :data_response => @response, :project => project)
+        @sa          = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                               :budget => 200, :spend => 100)
+        @oc1         = Factory(:other_cost, :data_response => @response, :project => project)
+        @sa2         = Factory(:sub_activity, :activity => @oc1, :data_response => @response,
+                               :budget => 200, :spend => 100)
+        @oc2         = Factory(:other_cost, :data_response => @response)
+        @sa          = Factory(:sub_activity, :activity => @oc2, :data_response => @response,
+                               :budget => 200, :spend => 100)
         @response.budget.should == 600
         @response.spend.should == 300
       end
@@ -128,12 +133,16 @@ describe DataResponse do
         Money.default_bank.add_rate(:RWF, :USD, 0.5)
         Money.default_bank.add_rate(:USD, :RWF,  2)
         project      = Factory(:project, :data_response => @response, :currency => 'RWF')
-        Factory(:activity, :data_response => @response, :project => project,
-                :spend => 100, :budget => 200)
-        Factory(:other_cost, :data_response => @response, :project => project,
-                :spend => 100, :budget => 200)
-        Factory(:other_cost, :data_response => @response,
-                :spend => 100, :budget => 200)
+        @activity1 = Factory(:activity, :data_response => @response, :project => project)
+        @sa1       = Factory(:sub_activity, :data_response => @response, :activity => @activity1,
+                             :spend => 100, :budget => 200)
+        @other_cost1 = Factory(:other_cost, :data_response => @response, :project => project)
+        @sa2         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost1,
+                               :spend => 100, :budget => 200)
+        @other_cost2 = Factory(:other_cost, :data_response => @response)
+        @sa3         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost2,
+                               :spend => 100, :budget => 200)
+
         @response.budget.should == 400 # 100 + 100 + 200
         @response.spend.should == 200 # 50 + 50 + 100
       end
@@ -141,6 +150,14 @@ describe DataResponse do
   end
 end
 
+        #Factory(:activity, :data_response => @response, :project => project,
+                #:spend => 100, :budget => 200)
+        #Factory(:other_cost, :data_response => @response, :project => project,
+                #:spend => 100, :budget => 200)
+        #Factory(:other_cost, :data_response => @response,
+                #:spend => 100, :budget => 200)
+        #@response.budget.should == 400 # 100 + 100 + 200
+        #@response.spend.should == 200 # 50 + 50 + 100
 
 # == Schema Information
 #

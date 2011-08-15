@@ -21,6 +21,7 @@ class SubActivity < Activity
   before_save     :set_budget_amount
   before_save     :set_spend_amount
   before_validation :strip_mask_fields
+  after_save      :update_activity_cache
 
   ### Validations
   validates_presence_of :provider_mask
@@ -36,11 +37,8 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
 
-  ### Class Methods
 
-  def initialize(*params)
-    super(*params)
-  end
+  ### Class Methods
 
   def self.human_attribute_name(attr)
     IMPLEMENTER_HUMANIZED_ATTRIBUTES[attr.to_sym] || super
@@ -100,6 +98,28 @@ class SubActivity < Activity
   end
 
   ### Instance Methods
+  
+  def initialize(*params)
+    super
+    set_budget_amount
+    set_spend_amount
+  end
+  
+  def budget
+    read_attribute(:budget)
+  end
+  
+  def spend
+    read_attribute(:spend)
+  end
+  
+  def budget=(amount)
+    write_attribute(:budget, amount)
+  end
+  
+  def spend=(amount)
+    write_attribute(:spend, amount)
+  end
 
   def spend_mask
     @spend_mask || spend
@@ -163,9 +183,14 @@ class SubActivity < Activity
     adjusted_assignments(CodingSpendCostCategorization, spend, activity.spend)
   end
   memoize :coding_spend_cost_categorization
+  
+  def update_activity_cache
+    self.reload
+    self.activity.cache_budget_spend # just calls write_attribute... so....
+    self.activity.save               # ...dont forget to save
+  end
 
   private
-
     def update_counter_cache
       self.data_response.sub_activities_count = data_response.sub_activities.count
       self.data_response.save(false)

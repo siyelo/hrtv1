@@ -12,9 +12,8 @@ class ActivitiesController < Reporter::BaseController
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
-    @activity = Activity.new(:data_response_id => @response.id, 
-                 :project => @response.projects.find(params[:project_id]))
-    # @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity = Activity.new(:data_response_id => @response.id)
+    @activity.project = @response.projects.find_by_id(params[:project_id])
     @activity.provider = current_user.organization
   end
 

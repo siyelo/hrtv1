@@ -22,8 +22,11 @@ describe Activity, "Currency" do
       @dr           = @organization.latest_response
       project       = Factory(:project, :data_response => @dr)
       @a            = Factory(:activity, :data_response => @dr,
-                              :project => project, :budget => 123.45, :spend => 123.45)
+                              :project => project)
+      @sa           = Factory(:sub_activity, :data_response => @dr, :activity => @a,
+                              :budget => 123.45, :spend => 123.45)
       @organization.reload # needs reload for dr_activities association to work
+      @a.reload
     end
 
     it "should update spend in USD on creation" do
@@ -31,8 +34,9 @@ describe Activity, "Currency" do
     end
 
     it "should update spend in USD on update" do
-      @a.spend = 456.78
-      @a.save
+      @sa.spend = 456.78
+      @sa.save
+      @a.reload
       @a.spend_in_usd.should == 456.78
     end
 
@@ -56,7 +60,7 @@ describe Activity, "Currency" do
       @p.currency = 'RWF'
       @p.save
       @a.reload
-      @a.spend = 7893.10
+      @a.write_attribute(:spend, 7893.10)
       @a.save
       @a.spend_in_usd.should == 15.7862
     end
@@ -66,7 +70,7 @@ describe Activity, "Currency" do
     end
 
     it "should update budget in USD on update" do
-      @a.budget = 456.79
+      @a.write_attribute(:budget, 456.79)
       @a.save
       @a.budget_in_usd.should == 456.79
     end
@@ -76,7 +80,7 @@ describe Activity, "Currency" do
       @p.currency = 'RWF'
       @p.save
       @a.reload
-      @a.budget = 789.10
+      @a.write_attribute(:budget, 789.10)
       @a.save
       @a.budget_in_usd.should ==  789.10 * 0.002
     end

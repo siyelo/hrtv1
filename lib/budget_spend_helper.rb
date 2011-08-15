@@ -6,10 +6,15 @@ module BudgetSpendHelper
     base.class_eval do
 
       ### Callbacks
-      if base.eql?(Activity) || base.eql?(FundingFlow)
+      if base.eql?(FundingFlow)
+        before_save :set_total_amounts
         before_save :update_cached_usd_amounts
       end
-      
+
+      if base.eql?(Activity)
+        before_save :update_cached_usd_amounts
+      end
+
       if base.eql?(FundingFlow)
         before_save :set_total_amounts
         validates_numericality_of :spend_q1, :if => Proc.new { |m| m.spend_q1.present?}
@@ -71,7 +76,7 @@ module BudgetSpendHelper
 
     def update_cached_usd_amounts
       rate = currency_rate(self.currency, :USD)
-      self.budget_in_usd = (gor_budget || 0) * rate
-      self.spend_in_usd  = (gor_spend || 0)  * rate
+      self.spend_in_usd  = (spend || 0)  * rate
+      self.budget_in_usd = (budget || 0) * rate
     end
 end

@@ -1,10 +1,27 @@
 Factory.define :activity, :class => Activity do |f|
   f.sequence(:name) { |i| "activity_name_#{i}_#{rand(100_000_000)}" }
   f.description     { 'activity_description' }
-  f.budget          { 50.00 }
-  f.spend           { 40.00 }
   f.start_date      { "2010-01-01" }
   f.end_date        { "2010-12-31" }
+end
+
+
+Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :activity do |f|
+  f.coding_budget_valid           { true }
+  f.coding_budget_cc_valid        { true }
+  f.coding_budget_district_valid  { true }
+  f.coding_spend_valid            { true }
+  f.coding_spend_cc_valid         { true }
+  f.coding_spend_district_valid   { true }
+end
+
+Factory.define :other_cost_budget_spend_coded, :class => OtherCost, :parent => :activity do |f|
+  f.coding_budget_valid           { true }
+  f.coding_budget_cc_valid        { true }
+  f.coding_budget_district_valid  { true }
+  f.coding_spend_valid            { true }
+  f.coding_spend_cc_valid         { true }
+  f.coding_spend_district_valid   { true }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|

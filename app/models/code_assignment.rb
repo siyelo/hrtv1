@@ -6,7 +6,9 @@ class CodeAssignment < ActiveRecord::Base
   ### Attributes
   attr_accessible :activity, :code, :amount, :percentage,
                   :sum_of_children, :cached_amount, :cached_amount_in_usd
-
+                  #FIXME!!: deprecate :sum_of_children, :cached_amount, :cached_amount_in_usd
+                  # we only use percentage API now...
+                  
   ### Associations
   belongs_to :activity
   belongs_to :code

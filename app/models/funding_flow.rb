@@ -1,6 +1,6 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
-  include GorAmountHelpers
+
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",

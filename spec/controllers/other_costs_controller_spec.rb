@@ -9,8 +9,7 @@ describe OtherCostsController do
       @user          = Factory(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
       @project       = Factory(:project, :data_response => @data_response)
-      @other_cost    = Factory(:other_cost, :project => @project,
-                                :data_response => @data_response)
+      @other_cost    = Factory(:other_cost, :project => @project, :data_response => @data_response)
       login @user
     end
 
@@ -22,26 +21,26 @@ describe OtherCostsController do
 
      it "redirects to the location classifications page when Save & Add Locations is clicked" do
        @data_request.save
-       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+       put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
          :commit => 'Save & Add Locations >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'locations')
      end
 
      it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
        @data_request.save
-       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+       put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
          :commit => 'Save & Add Purposes >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'purposes')
      end
      it "redirects to the input classifications page when Save & Add Inputs is clicked" do
        @data_request.save
-       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+       put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
          :commit => 'Save & Add Inputs >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'inputs')
      end
      it "redirects to the output classifications page when Save & Add Outputs is clicked" do
        @data_request.save
-       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+       put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
          :commit => 'Save & Add Outputs >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'outputs')
      end
@@ -57,7 +56,8 @@ describe OtherCostsController do
 
      it "correctly updates when an othercost doesn't have a project or a spend" do
        @other_cost    = Factory(:other_cost, :project => nil,
-                                 :data_response => @data_response, :spend => nil)
+                                 :data_response => @data_response)
+       @other_cost.write_attribute(:spend, nil); @other_cost.save
        put :update, :other_cost => {:description => "some description"}, :id => @other_cost.id,
                                     :commit => 'Save', :response_id => @data_response.id
        flash[:notice].should == "Other Cost was successfully updated."
@@ -66,7 +66,7 @@ describe OtherCostsController do
 
      it "should allow a project to be created automatically on update" do
        #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-       put :update, :id => @other_cost.id, :response_id => @data_response.id,
+       put :update, :id => @other_cost.id, :response_id => @data_response.id, 
            :other_cost => {:project_id => '-1', :name => @other_cost.name, :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
        @other_cost.reload
        @other_cost.project.name.should == @other_cost.name
@@ -74,7 +74,7 @@ describe OtherCostsController do
 
      it "should allow a project to be created automatically on create" do
        #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-       put :create, :response_id => @data_response.id,
+       post :create, :response_id => @data_response.id,
            :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description", :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
        @new_other_cost = Activity.find_by_name('new other_cost')
        @new_other_cost.project.name.should == @new_other_cost.name

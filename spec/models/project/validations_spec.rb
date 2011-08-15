@@ -36,8 +36,9 @@ describe Project, "Validations" do
   describe "#validation_errors" do
     context "project has no error" do
       it "returns no response errors" do
-        Factory(:activity, :data_response => @response, :project => @project,
-                :budget => 10, :spend => 10)
+        @activity = Factory(:activity, :data_response => @response, :project => @project)
+        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+                          :budget => 10, :spend => 10)
         Factory(:funding_flow, :from => @organization, :to => @organization,
                 :project => @project, :project_from => @project, :budget => 10, :spend => 10)
         @project.validation_errors.should == []
@@ -48,14 +49,17 @@ describe Project, "Validations" do
   describe "#matches_in_flow_amount?" do
     context "activity amounts and in flow amounts are equal" do
       it "returns true" do
-        Factory(:activity, :data_response => @response, :project => @project,
-                :budget => 1, :spend => 9)
-        Factory(:activity, :data_response => @response, :project => @project,
-                :budget => 9, :spend => 1)
+        @activity = Factory(:activity, :data_response => @response, :project => @project)
+        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+                          :budget => 1, :spend => 9)
+        @activity2 = Factory(:activity, :data_response => @response, :project => @project)
+        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity2,
+                            :budget => 9, :spend => 1)
         Factory(:funding_flow, :from => @donor1, :to => @organization,
                 :project => @project, :budget => 3, :spend => 7)
         Factory(:funding_flow, :from => @donor2, :to => @organization,
                 :project => @project, :budget => 7, :spend => 3)
+
         @project.matches_in_flow_amount?(:budget).should be_true
         @project.matches_in_flow_amount?(:spend).should be_true
       end
@@ -63,8 +67,9 @@ describe Project, "Validations" do
 
     context "activity amounts and in flow amounts are not equal" do
       it "returns false" do
-        Factory(:activity, :data_response => @response, :project => @project,
-                :budget => 5, :spend => 5)
+        @activity = Factory(:activity, :data_response => @response, :project => @project)
+        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+                          :budget => 1, :spend => 9)
         Factory(:funding_flow, :from => @organization, :to => @organization,
                 :project => @project, :budget => 4, :spend => 4)
         @project.matches_in_flow_amount?(:budget).should be_false

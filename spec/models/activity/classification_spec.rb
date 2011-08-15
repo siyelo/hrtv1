@@ -2,19 +2,14 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Activity, "Classification" do
   describe "coding_budget_classified?" do
-    it "is classified when activity budget is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => nil)
-      activity.coding_budget_classified?.should be_true
-    end
-
     it "is classified when activity budget is equal to coded budget" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
-
+      activity.reload
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudget.update_classifications(activity, params)
@@ -23,9 +18,11 @@ describe Activity, "Classification" do
 
     it "is not classified when activity budget is not equal to coded budget" do
       basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+      activity = Factory(:activity, :data_response => @response, :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
+      activity.reload
 
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -35,18 +32,14 @@ describe Activity, "Classification" do
   end
 
   describe "coding_budget_cc_classified?" do
-    it "is classified when activity budget is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => nil)
-      activity.coding_budget_cc_classified?.should be_true
-    end
-
     it "is classified when activity budget is equal to coded cost category budget" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
+      activity.reload
 
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 100}
@@ -57,8 +50,11 @@ describe Activity, "Classification" do
     it "is not classified when activity budget is not equal to coded cost category budget" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
+      activity.reload
 
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -68,19 +64,15 @@ describe Activity, "Classification" do
   end
 
   describe "coding_budget_district_classified?" do
-    it "is classified when activity budget is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => nil)
-      activity.coding_budget_district_classified?.should be_true
-    end
-
     it "is classified when activity budget is equal to coded location budget" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
 
+      activity.reload
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudgetDistrict.update_classifications(activity, params)
@@ -91,8 +83,11 @@ describe Activity, "Classification" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :budget => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :budget => 100)
 
+      activity.reload
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingBudgetDistrict.update_classifications(activity, params)
@@ -101,19 +96,15 @@ describe Activity, "Classification" do
   end
 
   describe "coding_spend_classified?" do
-    it "is classified when activity spend is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => nil)
-      activity.coding_spend_classified?.should be_true
-    end
-
     it "is classified when activity spend is equal to coded spend" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
 
+      activity.reload
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpend.update_classifications(activity, params)
@@ -123,8 +114,11 @@ describe Activity, "Classification" do
     it "is not classified when activity spend is not equal to coded spend" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
+      activity.reload
 
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -134,19 +128,14 @@ describe Activity, "Classification" do
   end
 
   describe "coding_spend_cc_classified?" do
-    it "is classified when activity spend is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => nil)
-
-      activity.coding_spend_cc_classified?.should be_true
-    end
-
     it "is classified when activity spend is equal to coded cost category spend" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
+      activity.reload
 
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 100}
@@ -157,9 +146,12 @@ describe Activity, "Classification" do
     it "is not classified when activity spend is not equal to coded cost category spend" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
 
+      activity.reload
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendCostCategorization.update_classifications(activity, params)
@@ -168,20 +160,15 @@ describe Activity, "Classification" do
   end
 
   describe "coding_spend_district_classified?" do
-    it "is classified when activity spend is nil" do
-      basic_setup_project
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => nil)
-
-      activity.coding_spend_district_classified?.should be_true
-    end
-
     it "is classified when activity spend is equal to coded location spend" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
 
+      activity.reload
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendDistrict.update_classifications(activity, params)
@@ -192,8 +179,11 @@ describe Activity, "Classification" do
       basic_setup_project
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
-                         :project => @project, :spend => 100)
+                         :project => @project)
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => activity, :spend => 100)
 
+      activity.reload
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendDistrict.update_classifications(activity, params)
@@ -204,6 +194,9 @@ describe Activity, "Classification" do
   describe "budget_classified?" do
     before :each do
       basic_setup_activity
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => @activity, :spend => 100, :budget => 100)
+      @activity.reload
     end
 
     it "is budget_classified? when all budgets are classified" do
@@ -238,6 +231,9 @@ describe Activity, "Classification" do
   describe "spend_classified?" do
     before :each do
       basic_setup_activity
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => @activity, :spend => 100, :budget => 100)
+      @activity.reload
     end
 
     it "is spend_classified? when all spends are classified" do
@@ -269,20 +265,12 @@ describe Activity, "Classification" do
     end
   end
 
-  describe "classified? (with factories)" do
-    before :each do
-      basic_setup_project
-    end
-
-    it "is classified? when both budget and spend are classified" do
-      @activity = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-      @activity.classified?.should be_true
-    end
-  end
-
   describe "classified?" do
     before :each do
       basic_setup_activity
+      sa       = Factory(:sub_activity, :data_response => @response,
+                         :activity => @activity, :spend => 100, :budget => 100)
+      @activity.reload
     end
 
     it "is classified? when both budget and spend are classified" do
@@ -338,177 +326,119 @@ describe Activity, "Classification" do
     end
   end
 
-  describe "budget_district_coding_adjusted" do
-    before :each do
-      basic_setup_project
-      @activity = Factory(:activity, :data_response => @response, :project => @project,
-                          :name => 'Activity 1', :budget => 100)
-    end
+  [:budget_district_coding_adjusted, :spend_district_coding_adjusted].each do |method|
+    describe "#{method.to_s}" do
+      before :each do
+        @field = :budget
+        @coding = :coding_budget_district
+        if method == :spend_district_coding_adjusted
+          @field = :spend 
+          @coding = :coding_spend_district
+        end
+        basic_setup_project
+        @activity = Factory(:activity, :data_response => @response, :project => @project,
+                            :name => 'Activity 1')
+      end
 
-    context "activity has budget district code assignments" do
-      it "returns activity budget district code assignments" do
-        code_assignment = Factory(:coding_budget_district, :activity => @activity,
+      it "returns empty array when sole implementer doesn't have a location " do
+        # this spec assumes the Factory didnt create a provider
+        # with a location
+        sa       = Factory(:sub_activity, :data_response => @response,
+                           :activity => @activity, @field => 100,
+                           :provider => Factory(:provider, :location => nil))
+        @activity.reload
+        @activity.send(method).should == []
+      end
+
+      it "returns existing activity #{@field} district code assignments" do
+        code_assignment = Factory(@coding, :activity => @activity,
                                   :amount => 10, :cached_amount => 10)
-
-        @activity.budget_district_coding_adjusted.should == [code_assignment]
-      end
-    end
-
-    context "activity does not have budget district code assignments" do
-      it "returns sub_activity budget district code assignments" do
-        @location1    = Factory(:location, :short_display => 'Location1')
-        @location2    = Factory(:location, :short_display => 'Location2')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
-        implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
-                                                  :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :budget => 4)
-        @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
-                                                  :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :budget => 3)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
-                                                  :activity => @activity,
-                                                  :provider => implementer2,
-                                                  :data_response => @response,
-                                                  :budget => 40)
-
-        @activity.budget_district_coding_adjusted.length.should == 2
-        location1_coding = @activity.budget_district_coding_adjusted.detect{|c| c.code == @location1}
-        location2_coding = @activity.budget_district_coding_adjusted.detect{|c| c.code == @location2}
-        location1_coding.type.should == "CodingBudgetDistrict"
-        location1_coding.cached_amount.should == 7
-        location1_coding.sum_of_children.should == 0
-        location2_coding.type.should == "CodingBudgetDistrict"
-        location2_coding.cached_amount.should == 40
-        location2_coding.sum_of_children.should == 0
+        @activity.send(method).should == [code_assignment]
       end
 
-      it "returns empty array unless all sub implementers have locations" do
-        @location1    = Factory(:location, :short_display => 'Location1')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
-        implementer2  = Factory(:ngo, :name => 'Implementer2')# , :location => @location2)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :budget => 4)
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :budget => 3)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer2,
-                                                  :data_response => @response,
-                                                  :budget => 40)
-
-        @activity.budget_district_coding_adjusted.should be_empty
-      end
-
-      context "sub_activities does not have budget district code assignments" do
-        it "returns even split on activity locations when activity has locations" do
+      context "when activity does not have #{@field} district code assignments" do
+        it "returns sub_activity #{@field} district code assignments" do
           @location1    = Factory(:location, :short_display => 'Location1')
           @location2    = Factory(:location, :short_display => 'Location2')
-          Factory(:coding_spend_district, :activity => @activity, :code => @location1)
-          Factory(:coding_spend_district, :activity => @activity, :code => @location2)
+          implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
+          implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
 
-          @activity.budget_district_coding_adjusted.length.should == 2
-          @activity.budget_district_coding_adjusted[0].type.should == "CodingBudgetDistrict"
-          @activity.budget_district_coding_adjusted[0].cached_amount.should == 50
-          @activity.budget_district_coding_adjusted[0].sum_of_children.should == 0
-          @activity.budget_district_coding_adjusted[1].type.should == "CodingBudgetDistrict"
-          @activity.budget_district_coding_adjusted[1].cached_amount.should == 50
-          @activity.budget_district_coding_adjusted[1].sum_of_children.should == 0
+          @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
+                                                    :activity => @activity,
+                                                    :provider => implementer1,
+                                                    :data_response => @response,
+                                                    @field => 4)
+          @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
+                                                    :activity => @activity,
+                                                    :provider => implementer2,
+                                                    :data_response => @response,
+                                                    @field => 3)
+
+          @activity.save!
+          adjusted_split = @activity.send(method)
+          adjusted_split.length.should == 2
+          location1_coding = adjusted_split.detect{|c| c.code == @location1}
+          location2_coding = adjusted_split.detect{|c| c.code == @location2}
+          location1_coding.type.should ==  @coding.to_s.camelcase #e.g. "CodingBudgetDistrict"
+          location1_coding.cached_amount.to_f.should == 4
+          location1_coding.sum_of_children.should == 0
+          location2_coding.type.should == @coding.to_s.camelcase
+          location2_coding.cached_amount.to_f.should == 3
+          location2_coding.sum_of_children.should == 0
         end
 
-        it "returns empty array when activity does not have locations" do
-          @activity.budget_district_coding_adjusted.should be_empty
+        it "returns empty array unless all sub implementers have locations" do
+          @location1    = Factory(:location, :short_display => 'Location1')
+          implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
+          implementer2  = Factory(:ngo, :name => 'Implementer2')# , :location => @location2)
+          @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                    :provider => implementer1,
+                                                    :data_response => @response,
+                                                    @field => 4)
+          @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+                                                    :provider => implementer2,
+                                                    :data_response => @response,
+                                                    @field => 3)
+          @activity.send(method).should be_empty
+        end
+
+        context "when sub_activities does not have #{@field} district code assignments" do
+          it "returns even split on activity locations when activity has locations" do
+            sa       = Factory(:sub_activity, :data_response => @response,
+                               :activity => @activity, @field => 100,
+                               :provider => Factory(:provider, :location => nil))
+            @activity.reload # get updated budget/spend cache 
+            @location1    = Factory(:location, :short_display => 'Location1')
+            @location2    = Factory(:location, :short_display => 'Location2')
+            klass = @coding.to_s.camelcase.constantize #e.g. CodingBudgetDistrict
+            klass.update_classifications(@activity, { @location1.id => 50, 
+              @location2.id => 50})
+            adjusted_split = @activity.send(method)
+            adjusted_split.length.should == 2
+            adjusted_split[0].type.should == @coding.to_s.camelcase
+            adjusted_split[0].cached_amount.to_f.should == 50
+            adjusted_split[0].sum_of_children.should == 0
+            adjusted_split[1].type.should == @coding.to_s.camelcase
+            adjusted_split[1].cached_amount.to_f.should == 50
+            adjusted_split[1].sum_of_children.should == 0
+          end
+
+          it "returns empty array when activity does not have locations" do
+            @activity.send(method).should be_empty
+          end
         end
       end
     end
   end
 
-  describe "spend_district_coding_adjusted" do
-    before :each do
-      basic_setup_project
-      @activity = Factory(:activity, :data_response => @response, :project => @project,
-                          :name => 'Activity 1', :spend => 100)
-    end
-
-    context "activity has spend district code assignments" do
-      it "returns activity spend district code assignments" do
-        code_assignment = Factory(:coding_spend_district, :activity => @activity,
-                                         :amount => 10, :cached_amount => 10)
-
-        @activity.spend_district_coding_adjusted.should == [code_assignment]
-      end
-    end
-
-    context "activity does not have spend district code assignments" do
-      it "returns sub_activity spend district code assignments" do
-        @location1    = Factory(:location, :short_display => 'Location1')
-        @location2    = Factory(:location, :short_display => 'Location2')
-        implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
-        implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :spend => 4)
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer1,
-                                                  :data_response => @response,
-                                                  :spend => 5)
-
-        @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
-                                                  :provider => implementer2,
-                                                  :data_response => @response,
-                                                  :spend => 50)
-
-        @activity.spend_district_coding_adjusted.length.should == 2
-        location1_coding = @activity.spend_district_coding_adjusted.detect{|c| c.code == @location1}
-        location2_coding = @activity.spend_district_coding_adjusted.detect{|c| c.code == @location2}
-        location1_coding.type.should == "CodingSpendDistrict"
-        location1_coding.cached_amount.should == 9
-        location1_coding.sum_of_children.should == 0
-        location2_coding.type.should == "CodingSpendDistrict"
-        location2_coding.cached_amount.should == 50
-        location2_coding.sum_of_children.should == 0
-      end
-
-      context "sub_activities does not have spend district code assignments" do
-        it "returns even split on activity locations when activity has locations" do
-          @location1    = Factory(:location, :short_display => 'Location1')
-          @location2    = Factory(:location, :short_display => 'Location2')
-          Factory(:coding_budget_district, :activity => @activity, :code => @location1)
-          Factory(:coding_budget_district, :activity => @activity, :code => @location2)
-          @activity.spend_district_coding_adjusted.length.should == 2
-          @activity.spend_district_coding_adjusted[0].type.should == "CodingSpendDistrict"
-          @activity.spend_district_coding_adjusted[0].cached_amount.should == 50
-          @activity.spend_district_coding_adjusted[0].sum_of_children.should == 0
-          @activity.spend_district_coding_adjusted[1].type.should == "CodingSpendDistrict"
-          @activity.spend_district_coding_adjusted[1].cached_amount.should == 50
-          @activity.spend_district_coding_adjusted[1].sum_of_children.should == 0
-        end
-
-        it "returns empty array when activity does not have locations" do
-          @activity.spend_district_coding_adjusted.should be_empty
-        end
-      end
-    end
-  end
 
   describe "Strat Coding" do
     before :each do
       basic_setup_project
       @activity = Factory(:activity, :data_response => @response, :project => @project,
-                          :name => 'Activity 1', :budget => 100)
+                          :name => 'Activity 1')
+      @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+                          :budget => 100)
       @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)
@@ -615,8 +545,9 @@ describe Activity, "Classification" do
       out_flow       = Factory(:funding_flow, :project => project, :from => ngo, :to => @implementer1,
                                :budget => 7, :spend => 7)
       @activity      = Factory(:activity, :data_response => @response, :project => project,
-                               :name => 'Activity 1', :budget => 100, :spend => 100,
-                               :provider => ngo, :project => project)
+                               :name => 'Activity 1', :provider => ngo, :project => project)
+      @sa            = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                               :spend => 100, :budget => 100)
       @sub_activity1 = Factory(:sub_activity, :data_response => @response, :activity => @activity,
                                :provider => @implementer1, :data_response => @response,
                                :budget => 2, :spend => 2)
@@ -642,6 +573,7 @@ describe Activity, "Classification" do
         it "derives only classifications for the locations of the implementers" do
           @implementer1.location = @location1; @implementer1.save
           @implementer2.location = @location2; @implementer2.save
+          @activity.reload
           @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
           @activity.code_assignments.length.should == 2
           @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase
@@ -654,6 +586,7 @@ describe Activity, "Classification" do
         it "sums derived classifications when 2 sub implementers in same location" do
           @implementer1.location = @location1; @implementer1.save
           @implementer2.location = @location1; @implementer2.save
+          @activity.reload
           @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
           @activity.code_assignments.length.should == 1
           @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase

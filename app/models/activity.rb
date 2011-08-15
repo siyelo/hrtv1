@@ -3,7 +3,6 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include NumberHelper
   include BudgetSpendHelper
-  include GorAmountHelpers
   include Activity::Classification
   include Activity::Validations
 
@@ -102,10 +101,9 @@ class Activity < ActiveRecord::Base
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
-  before_save   :auto_create_project
-  after_save    :update_counter_cache
-  after_destroy :update_counter_cache
-
+  before_save   :auto_create_project, :unless => :is_sub_activity?
+  after_save    :update_counter_cache, :unless => :is_sub_activity?
+  after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
   ### Attribute Accessor
   attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
@@ -136,15 +134,7 @@ class Activity < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-
-  def initialize(*params)
-    super(*params)
-    unless is_sub_activity?
-      #needed for sub activity initialization
-      self.sub_activities.build(:provider_id => self.organization.id) if self.data_response_id && self.sub_activities.empty?
-    end
-  end
-
+  
   ### Class Methods
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
@@ -155,17 +145,17 @@ class Activity < ActiveRecord::Base
   end
 
   def self.canonical
-      #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
-      a = Activity.all(:joins =>
-        "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
-        LEFT JOIN data_responses provider_dr ON provider_dr.organization_id = activities.provider_id
-        LEFT JOIN (SELECT organization_id, count(*) as num_users
-                     FROM users
-                  GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id ",
-       :conditions => ["activities.provider_id = data_responses.organization_id
-                        OR (provider_dr.id IS NULL
-                        OR org_users_count.organization_id IS NULL)"])
-      a.uniq
+    #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
+    a = Activity.all(:joins =>
+      "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
+      LEFT JOIN data_responses provider_dr ON provider_dr.organization_id = activities.provider_id
+      LEFT JOIN (SELECT organization_id, count(*) as num_users
+                   FROM users
+                GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id ",
+     :conditions => ["activities.provider_id = data_responses.organization_id
+                      OR (provider_dr.id IS NULL
+                      OR org_users_count.organization_id IS NULL)"])
+    a.uniq
   end
 
   def self.unclassified
@@ -217,8 +207,6 @@ class Activity < ActiveRecord::Base
       activity.name                    = row["Activity Name"].try(:strip)
       activity.description             = row["Activity Description"].try(:strip)
       activity.csv_provider            = row["Provider"].try(:strip)
-      activity.spend                   = row["Spend"].try(:strip)
-      activity.budget                  = row["Budget"].try(:strip)
       activity.csv_beneficiaries       = row["Beneficiaries"].try(:strip)
       activity.csv_targets             = row["Targets"].try(:strip)
       activity.start_date              = DateHelper::flexible_date_parse(row["Start Date"].try(:strip))
@@ -253,6 +241,74 @@ class Activity < ActiveRecord::Base
 
 
   ### Instance Methods
+  
+  # to create subactivities for activities
+  def initialize(*params)
+    super(*params)
+    unless is_sub_activity?
+      #needed to fully initialize an activity with default (self-)implementer split
+      self.sub_activities.build(:provider_id => self.organization.id, 
+        :data_response_id => self.data_response_id) if self.data_response_id && self.sub_activities.empty?
+      cache_budget_spend
+    end
+  end
+  
+  def update_attributes(params)    
+    # intercept the classifications and process using the bulk classification update API
+    #
+    # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
+    #
+    if params[:classifications]
+      params[:classifications].each_pair do |association, values|
+        begin
+          klass = association.camelcase.constantize
+        rescue NameError
+          return false
+        end
+        klass.update_classifications(self, values)
+      end
+      params.delete(:classifications)
+      params.delete(:code_assignment_tree) #not sure why this is a param?
+    end
+
+    SubActivity.after_save.reject! {|callback| callback.method.to_s == 'update_activity_cache'}
+    result = super(params)
+    SubActivity.send :after_save, :update_activity_cache #re-enable callback
+    
+    if result
+    # if sub activities were passed, update Activity amount cache
+      unless is_sub_activity?        
+        cache_budget_spend
+        result = self.save # must let caller know if this failed too...
+      end
+    end
+    result
+  end
+
+  # This method calculates the totals of the sub-activities budget/spend
+  # This is done because an activities budget/spend is the total of their sub_activities budget/spend
+  def sub_activities_totals(method)
+    sub_activities.map { |sa| sa.send(method) }.compact.sum || 0
+  end
+  
+  #saves the subactivities totals into the buget/spend fields
+  def cache_budget_spend
+    unless is_sub_activity? # to be doubly sure!
+      [:budget, :spend].each do |method|
+        write_attribute(method, sub_activities_totals(method))
+      end
+    end
+  end
+
+  #preventing user from writing
+  def budget=(amount)
+    raise Hrt::FieldDeprecated
+  end
+
+  #preventing user from writing
+  def spend=(amount)
+    raise Hrt::FieldDeprecated
+  end
 
   def to_s
     name
@@ -309,6 +365,7 @@ class Activity < ActiveRecord::Base
       end
     end
   end
+
 
   def deep_clone
     clone = self.clone
@@ -384,26 +441,7 @@ class Activity < ActiveRecord::Base
   def sub_activites_total(amount_method)
     smart_sum(sub_activities, amount_method)
   end
-  # intercept the classifications and process using the bulk classification update API
-  #
-  # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
-  #
-  def update_attributes(params)
-    if params[:classifications]
-      params[:classifications].each_pair do |association, values|
-        begin
-          klass = association.camelcase.constantize
-        rescue NameError
-          return false
-        end
-        klass.update_classifications(self, values)
-      end
-      params.delete(:classifications)
-      params.delete(:code_assignment_tree) #not sure why this is a param?
-    end
-    super(params)
-  end
-
+  
   private
 
   ### Class methods
@@ -412,18 +450,16 @@ class Activity < ActiveRecord::Base
        "Activity Name",
        "Activity Description",
        "Provider",
-       "Past Expenditure",
        "#{response.quarter_label(:spend, 'q4_prev')} Spend",
        "#{response.quarter_label(:spend, 'q1')} Spend",
        "#{response.quarter_label(:spend, 'q2')} Spend",
        "#{response.quarter_label(:spend, 'q3')} Spend",
        "#{response.quarter_label(:spend, 'q4')} Spend",
-       "Current Budget",
-        "#{response.quarter_label(:budget, 'q4_prev')} Budget",
-        "#{response.quarter_label(:budget, 'q1')} Budget",
-        "#{response.quarter_label(:budget, 'q2')} Budget",
-        "#{response.quarter_label(:budget, 'q3')} Budget",
-        "#{response.quarter_label(:budget, 'q4')} Budget",
+       "#{response.quarter_label(:budget, 'q4_prev')} Budget",
+       "#{response.quarter_label(:budget, 'q1')} Budget",
+       "#{response.quarter_label(:budget, 'q2')} Budget",
+       "#{response.quarter_label(:budget, 'q3')} Budget",
+       "#{response.quarter_label(:budget, 'q4')} Budget",
        "Beneficiaries",
        "Targets",
        "Start Date",
@@ -513,7 +549,7 @@ class Activity < ActiveRecord::Base
     end
 
    def auto_create_project
-    if project_id == -1
+     if project_id == -1
       project = data_response.projects.find_by_name(name)
       unless project
         project= Project.create(:name => name,

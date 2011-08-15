@@ -18,9 +18,9 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def new
-    @other_cost = OtherCost.new
-    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
-    @other_cost.data_response = @response
+    @other_cost = OtherCost.new(:data_response_id => @response.id)
+    @other_cost.project = @response.projects.find_by_id(params[:project_id])
+    @other_cost.provider = current_user.organization
   end
 
   def edit
@@ -31,31 +31,30 @@ class OtherCostsController < Reporter::BaseController
 
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
-    @other_cost.data_response = @response
     if @other_cost.save
       respond_to do |format|
-        format.html {success_flash("created"); html_redirect}
-        format.js { js_redirect }
+        format.html{success_flash("created"); html_redirect}
+        format.js   { js_redirect }
       end
     else
       respond_to do |format|
-        format.html { render :action => :new }
-        format.js { js_redirect }
+        format.html { render :action => 'new' }
+        format.js   { js_redirect }
       end
     end
   end
 
   def update
-     @activity = OtherCost.find(params[:id])
+     @other_cost = OtherCost.find(params[:id])
 
-      if !@activity.am_approved? && @activity.update_attributes(params[:other_cost])
+      if !@other_cost.am_approved? && @other_cost.update_attributes(params[:other_cost])
         respond_to do |format|
           format.html { success_flash("updated"); html_redirect }
           format.js   { js_redirect }
         end
       else
         respond_to do |format|
-          format.html { flash[:error] = "Other Cost was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+          format.html { flash[:error] = "Other Cost was already approved by #{@other_cost.user.try(:full_name)} (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}" if @other_cost.am_approved?
                         prepare_classifications(resource)
                         load_comment_resources(resource)
                         render :action => 'edit'

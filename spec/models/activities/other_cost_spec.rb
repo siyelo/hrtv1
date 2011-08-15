@@ -48,6 +48,17 @@ describe OtherCost do
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:other_cost_fully_coded,
                               :data_response => @response, :project => @project)
+      @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                              :budget => 50, :spend => 40)
+      @activity.stub(:coding_budget_valid?) { true }
+      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:coding_budget_district_valid?) { true }
+      @activity.stub(:coding_spend_valid?) { true }
+      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.save
+      @activity.reload
     end
 
     it "is classified? when both budget and spend are classified with factories" do

@@ -3,6 +3,6 @@
     = link_to other_cost.name.presence || 'Unnamed Other Cost', edit_response_other_cost_path(@response, other_cost), :title => other_cost.description, :class => 'tooltip'
   %td= n2cndrs(other_cost.spend, other_cost.currency)
   %td= n2cndrs(other_cost.budget, other_cost.currency)
-  %td
+  %td.wrap-14
     %ul
       = render 'activities/approve_budget', :activity => other_cost

@@ -42,10 +42,12 @@
       = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :label => "Other beneficiaries", :as => :text, :required => false, :hint => "Beneficiaries of your Other Cost that are not listed above."
 
   %li
-    %ul.horizontal
-      - f.buttons :class => 'buttons' do
-        = f.commit_button "Save", :class => "last", :button_html => {:class => "last big_button"}
-        = f.commit_button "Save & Classify >", :class => "last", :button_html => {:class => "last big_button"}
+    %ul.horizontal.borderless
+      - f.buttons :class => 'buttons1' do
+        = f.commit_button "Save", :button_html => {:class => "last big_button"}
+        = f.commit_button "Save & Classify >", :button_html => {:class => "last big_button"}
+        %li
+          = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
 
 - unless @other_cost.new_record?
   .delete_section

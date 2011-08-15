@@ -535,11 +535,14 @@ class Activity < ActiveRecord::Base
     
    def auto_create_project  
     if project_id == -1
-        project = Project.find_or_create_by_name(:name       => name, 
-                                                 :start_date => start_date, 
-                                                 :end_date   => end_date, 
-                                                 :data_response => data_response)
-        self.project = project
+      project = data_response.projects.find_by_name(name)
+      unless project
+        project= Project.create(:name => name, 
+                                :start_date => start_date,  
+                                :end_date   => end_date,  
+                                :data_response => data_response)
+      end
+      self.project = project
     end
   end
 end

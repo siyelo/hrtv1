@@ -9,4 +9,4 @@
   %tr.none
     %td{:colspan => 100}
       No other costs found.
-      = link_to "Add Other Costs now.", new_response_other_cost_path(response, :project_id => project.id)
+      = link_to "Add Other Costs now.", new_response_other_cost_path(response, :project_id => project.id), :class => 'js_toggle_other_cost_form'

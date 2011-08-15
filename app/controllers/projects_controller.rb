@@ -23,6 +23,16 @@ class ProjectsController < Reporter::BaseController
     @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
+    
+    @project = Project.new(:data_response => @response)                                            
+    
+    @activity = Activity.new
+    @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity.provider = current_user.organization
+    
+    @other_cost = OtherCost.new
+    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
+    @other_cost.data_response = @response
   end
 
   def edit

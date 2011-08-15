@@ -12,7 +12,7 @@
 
 %ul.ordered_nav
   - if activity.new_record?
-    %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' ? 'selected' : nil)}
+    %li{:class => (params[:controller] == 'activities' || params[:controller] == 'other_costs' || params[:controller] == 'projects' ? 'selected' : nil)}
       .dummy
         %span 1
         Details

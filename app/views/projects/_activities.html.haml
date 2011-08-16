@@ -2,13 +2,6 @@
   %td{:colspan => 100}
     %h4
       Activities
-      %span
-        - link_to "#", :class => "add_row js_upload_btn" do
-          = image_tag "icon_import_export.png"
-          Import / Export
-%tr.upload_box
-  %td{:colspan => 100}
-    = render 'activities_import', :project => project, :can_export =>project.activities.present?
 - if activities.present?
   - activities.each do |activity|
     = render "activities/activity", :activity => activity

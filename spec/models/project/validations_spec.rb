@@ -38,7 +38,7 @@ describe Project, "Validations" do
       it "returns 'Project is not currently linked.' error" do
         Factory(:funding_flow, :from => @organization, :to => @organization,
                 :project => @project, :budget => 10, :spend => 10)
-        @project.validation_errors.should include('Project is not currently linked.')
+        # @project.validation_errors.should include('Project is not currently linked.') TODO: Uncomment when link to funders is re-added
         @project.validation_errors.should include("Project Past Expenditure Total (USD 0) does not match the Funding Source Past Expenditure Total (USD 10). Please update Past Expenditures accordingly.")
         @project.validation_errors.should include("Project Current Budget Total (USD 0) does not match the Funding Source Current Budget Total (USD 10). Please update Current Budgets accordingly.")
       end

@@ -19,14 +19,24 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
     t.text     "description"
     t.string   "type"
     t.decimal  "budget"
+    t.decimal  "spend_q1"
+    t.decimal  "spend_q2"
+    t.decimal  "spend_q3"
+    t.decimal  "spend_q4"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "spend"
     t.text     "text_for_provider"
     t.text     "text_for_beneficiaries"
+    t.decimal  "spend_q4_prev"
     t.integer  "data_response_id"
     t.integer  "activity_id"
     t.boolean  "approved"
+    t.decimal  "budget_q1"
+    t.decimal  "budget_q2"
+    t.decimal  "budget_q3"
+    t.decimal  "budget_q4"
+    t.decimal  "budget_q4_prev"
     t.integer  "comments_count",               :default => 0
     t.integer  "sub_activities_count",         :default => 0
     t.decimal  "spend_in_usd",                 :default => 0.0
@@ -73,6 +83,7 @@ ActiveRecord::Schema.define(:version => 20110812124050) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|

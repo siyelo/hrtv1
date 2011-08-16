@@ -20,7 +20,7 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
 
-  if (association === 'in_flows') {
+  if (association === 'in_flows' || association === 'sub_activities' ) {
     $(link).parents('tr:first').before(content.replace(regexp, new_id));
   } else {
     $(link).parent().before(content.replace(regexp, new_id));
@@ -641,7 +641,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     });
 
     // manual tipsy
-    chart_element.tipsy({gravity: 'e', trigger: 'manual'})
+    chart_element.tipsy({gravity: $.fn.tipsy.autoWE, trigger: 'manual'})
 
     google.visualization.events.addListener(tree, 'onmouseover', function (e) {
       chart_element.attr('title', data_rows[e.row][0]);
@@ -656,7 +656,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 };
 
 var build_data_response_review_screen = function () {
-  $('.tooltip').tipsy({gravity: 's'});
+  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
   $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
   $('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
@@ -950,7 +950,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
   // manual tipsy
   if (typeof(treemap_gravity) === "undefined") {
-    treemap_gravity = 'e'
+    treemap_gravity = $.fn.tipsy.autoWE
   }
   chart_element.tipsy({gravity: treemap_gravity, trigger: 'manual'})
 
@@ -1253,7 +1253,7 @@ var projects_index = {
       $('#import_export_box .upload_box').slideToggle();
     });
 
-    $('.tooltip_projects').tipsy({gravity: 'e', live: true, html: true});
+    $('.tooltip_projects').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
 
     commentsInit();
 
@@ -1459,6 +1459,7 @@ var activities_new = activities_create = activities_edit = activities_update = {
 };
 
 var activity_form = function () {
+
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
   });
@@ -1530,6 +1531,9 @@ var activity_form = function () {
     element.find('.preview_block').hide();
     close_activity_funding_sources_fields(fields);
   });
+
+
+  $( ".js_combobox" ).combobox();   //render implementers using pretty combo box
 
   approveBudget();
   approveAsAdmin();
@@ -1666,7 +1670,7 @@ $(function () {
   });
 
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 's', fade: true, live: true, html: true});
+  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

@@ -71,28 +71,8 @@
         = render 'shared/budget_quarters', :f => f
 
   %li.last.sub_activities
-    %h3 Implementers
-    .dashboard_section
-      %p.heading_hint
-        %strong Optional.
-        Used if you fund a large number of different partners (for example, 20 health centers in a number of locations), that implement identical or very similar Activities.
-      %span.add
-        = link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"
-      %span
-        - unless @activity.new_record?
-          - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
-            = image_tag "icon_import_export.png"
-            Import / Export
-      %br
-      %table.nested
-        %thead
-          %th Implementer
-          %th Past Expenditure
-          %th Current Budget
-          %th
-        %tbody
-          - f.semantic_fields_for :sub_activities do |sa|
-            = render "activities/sub_activity_row", :f => sa
+    = render 'activities/implementers', :f => f
+
 
   %li.last.targets.js_targets
     %h3 Activity Targets

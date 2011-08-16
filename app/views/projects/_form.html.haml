@@ -34,7 +34,8 @@
         = f.text_area :description, :rows => 2
       //= f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false
 
-  = render 'in_flows', :f => f
+  %li.last
+    = render 'in_flows', :f => f
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button :button_html => {:class => "last big_button"}

@@ -1,28 +1,29 @@
-%li.last
-  %h3 Project Funding Sources
-  %ul.dashboard_section
-    %p.heading_hint The sources from which your organization receives funding for its Projects.
+%h3
+  Project Funding Sources
+  %span= link_to "(?)", "#", :title => "The sources from which your organization receives funding for its Projects.", :class => 'tooltip'
+%ul.dashboard_section
+  %table.input_table
+    %thead
+      %tr
+        %th Funding Organization
+        %th
+          .right_justified Disbursements Received
+        %th
+          .right_justified Planned Disbursements
+        %th
+    %tbody
+      - f.semantic_fields_for :in_flows do |ff|
+        = render "projects/in_flow_fields", :f => ff
 
-    %table.input_table
-      %thead
-        %tr
-          %th Organization
-          %th Expenditure
-          %th Budget
-          %th
-      %tbody
-        - f.semantic_fields_for :in_flows do |ff|
-          = render "projects/in_flow_fields", :f => ff
-
-        %tr
-          %td= link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
-          %td
-            %p.total
-              %span.label.left Total
-              %span.amount.right= @project.in_flows_total(:spend)
-              %span.currency.right= @project.currency
-          %td
-            %p.total
-              %span.label.left Total
-              %span.amount.right= @project.in_flows_total(:budget)
-              %span.currency.right= @project.currency
+      %tr
+        %td= link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
+        %td
+          %p.total
+            %span.label.left Total
+            %span.amount.right= @project.in_flows_total(:spend)
+            %span.currency.right= @project.currency
+        %td
+          %p.total
+            %span.label.left Total
+            %span.amount.right= @project.in_flows_total(:budget)
+            %span.currency.right= @project.currency

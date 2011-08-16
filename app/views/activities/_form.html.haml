@@ -1,62 +1,14 @@
-- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
-
 :javascript
   var _response_id = "#{@response.id}";
   var _activity_id = "#{@activity.id}";
-  var _funding_sources = #{get_funding_sources(current_user.organization.projects)};
 
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
-    %ul.dashboard_section.condensed_fields
-      %li#activity_name_input.string.required
-        .name
-          = f.label :name, "Name"
-          %span.required *
-          = link_to "(?)", "#", :title => "A short name for this activity", :class => 'tooltip remaining_characters'
-        = f.text_field :name, "data-maxlength" => "#{Activity::MAX_NAME_LENGTH}"
-      %li#activity_start_date_input.string.required
-        .name
-          = f.label :start_date, "Start date"
-          %span.required *
-          = link_to "(?)", "#", :title => "(YYYY-MM-DD) The date when the Activity started.", :class => 'tooltip'
-        = f.text_field :start_date, :class => 'date_picker'
-      %li#activity_end_date_input.string.required
-        .name
-          = f.label :end_date, "End date"
-          %span.required *
-          = link_to "(?)", "#", :title => "(YYYY-MM-DD) The date when the Activity finishes.", :class => 'tooltip'
-        = f.text_field :end_date, :class => 'date_picker'
-      %li#activity_currency_input.select.required
-        .name
-          = f.label :currency, "Currency"
-          = link_to "(?)", "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip'
-        %span.noedit= f.object.currency
-      %li#activity_project_id_input.select.required
-        .name
-          = f.label :project_id, "Project"
-          = link_to "(?)", "#", :title => "The Project which this Activity belongs to", :class => 'tooltip'
-        = f.select :project_id, [['Select a project...', '']] + sorted_projects.insert(0,["<Automatically create a project for me>", -1])
-      //hack
-      %br
-      %li#activity_description_input.text
-        .name
-          = f.label :description, "Description"
-          = link_to "(?)", "#", :title => "A general 1-2 sentence description of the purpose of the Activity.", :class => 'tooltip'
-        = f.text_area :description, :rows => 2
-
-
-      // Old code for reference
-      //
-      //= f.input :project_id, :label => "Project", :as => :select, :collection => sorted_projects.insert(0,["<Automatically create a project for me>", -1]) , :hint => "The Project this activity correlates to", :prompt => 'Select a project...'
-      //= f.input :name, :hint => "A short name for this Activity."
-      //= f.input :description, :input_html => { :rows => 2 }, :hint => "A longer description of this Activity."
-      //= f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The date when the Activity started."
-      //= f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Activity’s implementation."
+    = render 'activities/activity_basic_fields', :f => f
 
   %li.last.sub_activities
-    = render 'activities/implementers', :f => f
-
+    = render 'activities/implementers', :f => f, :activity_or_ocost => @activity
 
   %li.last.targets.js_targets
     %h3 Activity Targets

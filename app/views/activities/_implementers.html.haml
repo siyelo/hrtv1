@@ -1,10 +1,11 @@
+- klass = f.object.class.to_s
 %h3
   Implementers
-  %span= link_to "(?)", "#", :title => "Direct service provider for this activity. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip'
+  %span= link_to "(?)", "#", :title => "Direct service provider for this #{klass}. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip'
 
 %ul.dashboard_section
   %span
-    - unless @activity.new_record?
+    - unless activity_or_ocost.new_record?
       - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
         = image_tag "icon_import_export.png"
         Import / Export
@@ -27,10 +28,10 @@
         %td
           %p.total
             %span.label.left Total
-            %span.amount.right= @activity.spend
-            %span.currency.right= @activity.currency
+            %span.amount.right= activity_or_ocost.spend
+            %span.currency.right= activity_or_ocost.currency
         %td
           %p.total
             %span.label.left Total
-            %span.amount.right= @activity.budget
-            %span.currency.right= @activity.currency
+            %span.amount.right= activity_or_ocost.budget
+            %span.currency.right= activity_or_ocost.currency

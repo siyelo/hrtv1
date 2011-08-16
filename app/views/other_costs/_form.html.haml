@@ -1,25 +1,11 @@
-- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
 
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
-    %ul.dashboard_section
-      = f.input :project_id, :label => "Project", :as => :select, :collection => sorted_projects.insert(0,["<Automatically create a project for me>", -1], ["<No project>", nil]) , :hint => "The Project this Other Cost correlates to", :prompt => 'Select a project...'
-      = f.input :name, :hint => "The name of this Other Cost."
-      = f.input :description, :input_html => { :rows => 2 }, :required => false, :hint => "A description of this Other Cost."
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :required => true
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation.", :required => true
+    = render 'activities/activity_basic_fields', :f => f
 
-  %li.last
-    %h3== Implementers
-    %ul.dashboard_section
-      %p.hint Service Providers and partners you work with
-      - hint = "Service Providers who implement activities for your organization's projects/activities. E.g. a NGO, a Health Facility Institution, Government office, or a District."
-      - hint = hint + "<br>NOTE: You uploaded \"#{@other_cost.text_for_provider}\"" if !@other_cost.text_for_provider.blank? && @activity.provider.nil?
-      .implementer_container
-        = f.input :provider, :label => "Implementer", :as => :select, :collection => funding_organizations_select, :hint => hint, :required => false, :input_html => {:class => 'js_implementer_select'}
-      / not sure what this partial was doing, the routes don't even work
-      =# render :partial => 'shared/add_organizations'
+  %li.last.sub_activities
+    = render 'activities/implementers', :f => f, :activity_or_ocost => @other_cost
 
   %li.last
     %h3== Other

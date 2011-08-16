@@ -780,12 +780,6 @@ var responses_review = {
   }
 };
 
-var organizations_edit = {
-  run: function () {
-    $( ".js_combobox" ).combobox(); // for pretty currency select
-  }
-};
-
 var policy_maker_data_responses_show = {
   run: function () {
     build_data_response_review_screen();
@@ -1408,8 +1402,6 @@ var activities_bulk_create = {
         activityBox.find(".js_combobox").combobox();
       });
     });
-
-    $(".js_combobox").combobox(); // for pretty currency select
   }
 }
 
@@ -1530,9 +1522,6 @@ var activity_form = function () {
     close_activity_funding_sources_fields(fields);
   });
 
-
-  $( ".js_combobox" ).combobox();   //render implementers using pretty combo box
-
   approveBudget();
   approveAsAdmin();
   commentsInit();
@@ -1573,9 +1562,6 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
     $('#user_roles').change(function () {
       toggleMultiselect($(this));
     });
-
-    $( ".js_combobox" ).combobox();
-
   }
 }
 
@@ -1650,7 +1636,6 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
 
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    $( ".js_combobox" ).combobox();
     commentsInit();
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
@@ -1666,6 +1651,9 @@ $(function () {
       e.preventDefault();
     }
   });
+
+  //combobox everywhere!
+  $( ".js_combobox" ).combobox();
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, fade: true, live: true, html: true});

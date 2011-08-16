@@ -82,7 +82,13 @@
       margin-left: 17%
       padding-left: 10px
       width: 70%
-
+  .other_beneficiaries
+    label
+      display: block
+      width: 96%
+    textarea
+      width: 96%
+      
   .check_boxes
     fieldset
       float: left
@@ -284,9 +290,7 @@ h3.form_heading
     text-transform: uppercase
 
 .fields
-  border-bottom: 4px solid $lightest-blue
-  margin-bottom: 10px
-  padding: 10px 0
+
   .preview_block
     ul
       +horizontal-list
@@ -325,6 +329,10 @@ h3.form_heading
   .edit_block, .preview_block
     width: 90%
     float: left
+
+  .edit_block
+    input[type=text]
+      width: 100% !important
 
   .manage_block
     float: right

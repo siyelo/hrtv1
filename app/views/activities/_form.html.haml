@@ -37,7 +37,7 @@
   %li.last.clear
     %h3== Beneficiaries
     %ul.dashboard_section
-      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'column2 borderless' }
+      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'column2 borderless beneficiaries_boxes' }
       = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'column2 last other_beneficiaries' }
       
   %li.clear

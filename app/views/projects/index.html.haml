@@ -21,10 +21,10 @@
 
   %ul#nav.horizontal
     %li.js_dropdown_menu
-      - link_to '#', :class => 'js_dropdown_trigger create_new' do
-        = image_tag "new_white.png"
+      - link_to '#', :class => 'js_dropdown_trigger dropdown' do
+        = image_tag "new.png"
         Create New...
-        = image_tag "icon_arrow_down.gif"
+        = image_tag "icon_dropdown.png"
 
       %ul.menu_items{:style => 'display: none'}
         %li= link_to 'Project', new_response_project_path(@response), :class => 'js_toggle_project_form js_address'
@@ -32,9 +32,9 @@
         %li= link_to 'Other Cost', new_response_other_cost_path(@response), :class => 'js_toggle_other_cost_form js_address'
 
     %li.js_dropdown_menu
-      - link_to '#', :class => 'js_dropdown_trigger create_new' do
+      - link_to '#', :class => 'js_dropdown_trigger dropdown' do
         Import / Export
-        = image_tag "icon_arrow_down.gif"
+        = image_tag "icon_dropdown.png"
 
       %ul.menu_items{:style => 'display: none'}
         %li= link_to 'Import Activities', '#', :id => "import_export"

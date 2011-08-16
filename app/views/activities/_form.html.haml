@@ -1,56 +1,30 @@
 :javascript
   var _response_id = "#{@response.id}";
-  var _activity_id = "#{@activity.id}";
+  var _activity_id = "#{activity.id}";
 
 - f.inputs :class => 'inputs' do
   %li.last
-    %h3 Basics
     = render 'activities/activity_basic_fields', :f => f
 
-  %li.last.sub_activities
-    = render 'activities/implementers', :f => f, :activity_or_ocost => @activity
+  %li.last= render 'activities/tab_nav', :activity => activity
 
-  %li.column2.borderless.targets.js_targets
-    %h3 Activity Targets
-    .dashboard_section.no_spacing
-      %p.heading_hint
-        %strong Optional.
-        Describe planned targets for this activity.
+  - if ['locations', 'purposes', 'inputs'].include? params[:mode]
+    = yield :classification
 
-      - f.semantic_fields_for :targets do |ca|
-        = render "activities/target_fields", :f => ca
-      .add
-        = link_to_add_fields "Add Target", f, :targets, "activities/", :class => "create_alt marginless js_add_nested"
+  - elsif params[:mode].nil?
+    %li.last.sub_activities
+      = render 'activities/implementers', :f => f, :activity_or_ocost => activity
 
-  %li.column2.last.borderless.targets.js_targets
-    %h3 Activity Outputs
-    .dashboard_section.spacing
-      %p.heading_hint
-        %strong Optional.
-        Describe actual outputs for this activity.
+  - elsif params[:mode] == 'outputs'
+    = render 'activities/outputs_targets_benefs', :f => f
 
-      - f.semantic_fields_for :outputs do |ca|
-        = render "activities/output_fields", :f => ca
-      .add
-        = link_to_add_fields "Add Output", f, :outputs, "activities/", :class => "create_alt marginless js_add_nested"
-
-  %li.last.clear
-    %h3== Beneficiaries
-    %ul.dashboard_section
-      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'column2 borderless beneficiaries_boxes' }
-      = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'column2 last other_beneficiaries' }
-      
+  %br
   %li.clear
     %ul.horizontal.borderless
       - f.buttons :class => 'buttons1' do
-        = f.commit_button "Save", :button_html => {:class => "last big_button"}
-        = f.commit_button "Save & Classify >", :button_html => {:class => "last big_button"}
+        = f.commit_button "Save", :button_html => {:class => "last big_button js_submit_btn"}
+        = f.commit_button "Save & Add Locations >", :button_html => {:class => "last big_button js_submit_btn"}
         %li
           = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
-
-- unless @activity.new_record?
-  .delete_section
-    = link_to "Delete this Activity", response_activity_path(@response, @activity), :confirm => "Are you sure you want to delete this Activity?", :method => :delete, :class => "delete_button", :class => 'delete_action'
-    %p
-      %strong Warning:
-      Once you delete an Activity, you will lose all data associated with it, and there is no undo.
+        %li
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

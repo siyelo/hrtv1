@@ -14,77 +14,52 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-  @javascript
+  @javascript 
   Scenario: Reporter can add targets & outputs
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I fill in "activity_start_date" with "2010-01-01"
-    And I fill in "activity_end_date" with "2010-12-01"
-    And I select "project1" from "Project"
+    Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
+    When I follow "Projects"
+    And I follow "existing description"
+    And I follow "Targets, Outputs & Beneficiaries"
     And I follow "Add Target"
-    And I fill in "Target" with "Target description"
+    And I fill in "target_field" with "Target description"
     And I follow "Add Output"
-    And I fill in "Output" with "Output description"
+    And I fill in "output_field" with "Output description"
     And I press "Save"
-    Then I should see "Activity was successfully created"
-    And the "Target" field should contain "Target description"
-    And the "Output" field should contain "Output description"
-
-   #combobox
-  @javascript
+    Then I should see "Activity was successfully updated"
+    And the "target_field" field should contain "Target description"
+    And the "output_field" field should contain "Output description"
+  
   Scenario: Reporter can add implementers (normal values)
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I fill in "activity_start_date" with "2010-01-01"
-    And I fill in "activity_end_date" with "2010-12-01"
-    And I select "project1" from "Project"
-    And I follow "Add Implementer"
-    And I fill in "Implementer" with "organization2"
-    And I fill in "Implementer Past Expenditure" with "99"
-    And I fill in "Implementer Current Budget" with "19"
+    Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
+    When I follow "Projects"
+    And I follow "existing description"
+    And I follow "Implementers" within ".section_nav"
+    And I select "organization2" from "activity_sub_activities_attributes_0_provider_mask"
+    And I fill in "activity[sub_activities_attributes][0][spend_mask]" with "99"
+    And I fill in "activity[sub_activities_attributes][0][budget_mask]" with "19"
     And I press "Save"
-    Then I should see "Activity was successfully created."
+    Then I should see "Activity was successfully updated."
     And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "99"
     And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "19"
 
-  #combobox
-  @javascript
-  Scenario: Reporter can add sub-activities (percentage values)
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I fill in "activity_start_date" with "2010-01-01"
-    And I fill in "activity_end_date" with "2010-12-01"
-    And I select "project1" from "Project"
-    And I follow "Add Implementer"
-    And I fill in "Implementer" with "organization1"
-    And I fill in "Implementer Past Expenditure" with "10%"
-    And I fill in "Implementer Current Budget" with "10%"
-    And I press "Save"
-    Then I should see "Activity was successfully created."
-    And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "20"
-    And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "30"
-
-  @javascript
+  @javascript 
   Scenario: Reporter can CRUD activities
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-      And I select "project1" from "Project"
-      And I press "Save & Classify >"
+    And I select "project1" from "Project"
+    And I press "Save"
     Then I should see "Activity was successfully created."
-    When I follow "activity1 description"
-      And I fill in "Name" with "activity2"
-      And I fill in "Description" with "activity2 description"
-      And I press "Save & Classify >"
+    
+    And I fill in "Name" with "activity2"
+    And I fill in "Description" with "activity2 description"
+    And I press "Save"
     Then I should see "Activity was successfully updated"
-    When I follow "activity2"
-      And I confirm the popup dialog
-      And I follow "Delete this Activity"
+    
+    And I confirm the popup dialog
+    And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
 
   Scenario: Reported can create activity with automatically created project
@@ -93,14 +68,14 @@ Feature: Reporter can manage activities
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-      And I select "<Automatically create a project for me>" from "Project"
-      And I press "Save & Classify >"
+    And I select "<Automatically create a project for me>" from "Project"
+    And I press "Save"
     Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
-    When I follow "activity1 description"
-      And I fill in "Name" with "activity2"
-      And I fill in "Description" with "activity2 description"
-      And I select "<Automatically create a project for me>" from "Project"
-      And I press "Save & Classify >"
+
+    When I fill in "Name" with "activity2"
+    And I fill in "Description" with "activity2 description"
+    And I select "<Automatically create a project for me>" from "Project"
+    And I press "Save"
     Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
   Scenario Outline: Reporter can CRUD activities and see errors
@@ -110,7 +85,7 @@ Feature: Reporter can manage activities
       And I fill in "Start date" with "<start_date>"
       And I fill in "End date" with "<end_date>"
       And I select "<project>" from "Project"
-      And I press "Save & Classify >"
+      And I press "Save"
     Then I should see "Oops, we couldn't save your changes."
       And I should see "<message>"
 
@@ -121,16 +96,15 @@ Feature: Reporter can manage activities
          | a1   | 2011-01-01 |            | project1 | End date can't be blank   |
          #| a1   | 2011-01-01 | 2011-12-01 |          | Project can't be blank        |
 
-
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
-      And I press "Import"
+      And I press "Import" within ".activities_upload_box"
     Then I should see "Activities Bulk Create"
 
 
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
-      And I press "Import"
+      And I press "Import" within ".activities_upload_box"
     Then I should not see "is not a valid date"
 
 
@@ -141,7 +115,7 @@ Feature: Reporter can manage activities
      And I follow "activity1"
      And I follow "import_implementers"
     When I attach the file "spec/fixtures/implementers_update.csv" to "File"
-      And I press "Import"
+      And I press "Import"  within ".activities_upload_box"
     Then I should see "Sub-Implementers Upload"
 
 
@@ -149,16 +123,15 @@ Feature: Reporter can manage activities
     When I press "Import" within ".activities_upload_box"
     Then I should see "Please select a file to upload activities"
 
-
   Scenario: Adding malformed CSV file doesn't throw exception
-    When I attach the file "spec/fixtures/malformed.csv" to "File"
-      And I press "Import"
+    When I attach the file "spec/fixtures/malformed.csv" to "File" within ".activities_upload_box"
+      And I press "Import" within ".activities_upload_box"
     Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
 
   Scenario: Reporter can download Activities
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
     When I follow "Projects"
-      And I follow "Export" within ".upload_box"
+      And I follow "Export" within ".activities_upload_box"
     Then I should see "Activity1"
       And I should see "Activity1 description"
 

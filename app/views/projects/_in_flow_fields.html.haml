@@ -2,7 +2,7 @@
 - error_class = "error" unless f.object.errors.empty?
 
 %tr.overflow_fix.fields{:class => error_class}
-  %td
+  %td.title
     = f.hidden_field :data_response_id, :value => @response.id
     = f.hidden_field :organization_id_to, :value => @response.organization.id
     .f_from_container
@@ -11,6 +11,6 @@
           = f.hidden_field :updated_at
           = f.select :organization_id_from, options_for_select(funding_organizations_select, f.object.organization_id_from), {:prompt => true}, :class => 'js_implementer_select js_combobox f_from'
 
-  %td= f.text_field :spend, :class => 'js_spend'
-  %td= f.text_field :budget, :class => 'js_budget'
-  %td= link_to_remove_fields "x", f, :class => 'delete_button'
+  %td= f.text_field :spend, :class => 'js_spend no_style'
+  %td= f.text_field :budget, :class => 'js_budget no_style'
+  %td.delete= link_to_remove_fields "x", f, :class => 'delete_row'

@@ -312,7 +312,7 @@ var ajaxifyResources = function (resources) {
   var editBtn = block.find(".edit_btn");
   var cancelBtn = block.find(".cancel_btn");
   var searchBtn = block.find(".search_btn");
-  var submitBtn = block.find(".js_submit_btn");
+  var submitBtn = block.find(".js_submit_comment_btn");
   var destroyBtn = block.find(".destroy_btn");
 
   // new
@@ -459,6 +459,20 @@ var quartersInit = function () {
 var updateTotalsValuesCallback = function (el) {
   updateTotalValues($(el).parents('tr').find('.js_spend'));
   updateTotalValues($(el).parents('tr').find('.js_budget'));
+};
+
+var dynamicUpdateTotalsInit = function () {
+  $('.js_spend, .js_budget').live('keyup', function () {
+    var total_value = 0;
+
+    if ($(this).hasClass('js_spend')) {
+      var input_fields = $(this).parents('table').find('.js_spend');
+      var total_field = $('.js_total_spend .amount');
+    } else if ($(this).hasClass('js_budget')) {
+      var input_fields = $(this).parents('table').find('.js_budget');
+      var total_field = $('.js_total_budget .amount');
+    }
+  });
 };
 
 var updateTotalValues = function (el) {
@@ -628,7 +642,7 @@ var get_pie_chart_element_endpoint = function (element_type, options) {
 var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
-  
+
   var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#F3F7F9");
   so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
@@ -823,179 +837,179 @@ var policy_maker_data_responses_show = {
   }
 };
 
-var classifications_edit = {
-  run: function () {
+var activity_classification = function () {
 
-    /*
-     * Adds collapsible checkbox tree functionality for a tab and validates classification tree
-     * @param {String} tab
-     *
-     */
-    var addCollabsibleButtons = function (tab) {
-      $('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
-      $('.' + tab + ' ul.activity_tree').validateClassificationTree();
-    };
+  /*
+   * Adds collapsible checkbox tree functionality for a tab and validates classification tree
+   * @param {String} tab
+   *
+   */
+  var addCollabsibleButtons = function (tab) {
+    $('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
+    $('.' + tab + ' ul.activity_tree').validateClassificationTree();
+  };
 
-    //collapsible checkboxes for tab1
-    addCollabsibleButtons('tab1');
-    checkRootNodes('.budget:first');
+  //collapsible checkboxes for tab1
+  addCollabsibleButtons('tab1');
+  checkRootNodes('.budget:first');
+  checkRootNodes('.spend:first');
+
+  $('.js_upload_btn').click(function (e) {
+    e.preventDefault();
+    $(this).parents('.upload').find('.upload_box').toggle();
+  });
+
+  $('.js_submit_btn').click(function (e) {
+    var ajaxLoader = $(this).closest('ol').find('.ajax-loader');
+    ajaxLoader.show();
     checkRootNodes('.spend:first');
-
-    $('.js_upload_btn').click(function (e) {
+    checkRootNodes('.budget:first');
+    if ($('.invalid_node').size() > 0){
       e.preventDefault();
-      $(this).parents('.upload').find('.upload_box').toggle();
-    });
+      alert('The classification tree could not be saved.  Please correct all errors and try again')
+      ajaxLoader.hide();
+    };
+  });
 
-    $('.js_submit_btn').click(function (e) {
-      $(this).next('.ajax-loader').show();
-      checkRootNodes('.spend:first');
-      checkRootNodes('.budget:first');
-      if ($('.invalid_node').size() > 0){
-        e.preventDefault();
-        alert('The classification tree could not be saved.  Please clear all errors and try again')
-        $(this).next('.ajax-loader').hide();
-      };
-    });
 
-    $('#js_budget_to_spend').click(function (e) {
-      e.preventDefault();
-      if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
-        $('.js_budget input').each(function () {
-          var element = $(this);
-          element.parents('.js_values').find('.js_spend input').val(element.val());
-        });
-      };
-    });
-
-    $('#js_spend_to_budget').click(function (e) {
-      e.preventDefault();
-      if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
-        $('.js_spend input').each(function () {
-          var element = $(this);
-          element.parents('.js_values').find('.js_budget input').val(element.val());
-        });
-      };
-    });
-    
-    $(".percentage_box").keyup(function(event) {
-      var element = $(this);
-      var isSpend = element.parents('div:first').hasClass('spend')
-      var type = (isSpend) ? '.spend:first' : '.budget:first';
-      var isRoot = element.parents('ul:first').hasClass('activity_tree');
-      updateSubTotal(element);
-      
-      //check whether siblings are equal our parent's total
-      var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
-      var siblingLi = element.parents('ul:first').children('li');
-      
-      if (element.val().length == 0) {
-        clearChildNodes(element, event,type);
-      }
-      if (event.keyCode != 9){
-        updateParentNodes(siblingLi, type, parentTotal)
-      }
-
-      //check whether children (1 level deep) are equal to my total
-      childLi = element.parents('li:first').children('ul:first').children('li');
-      if (childLi.size() > 0){
-        compareChildrenToParent(element, childLi, type);
-      };
-
-      //check whether root nodes are = 100%
-      checkRootNodes(type);
-      
-    });
-    
-    // restrict input to only numbers
-    $(".percentage_box").keydown(function(event) {
-      // Allow backspace and delete, enter and tab
-      var bksp = 46;
-      var del = 8;
-      var enter = 13;
-      var tab = 9;
-      
-      if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
-          // let it happen, don't do anything
-      } else {
-        // Ensure that it is a number or a '.' and stop the keypress
-        var period = 190;
-        if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
-          // let it happen
-        }else{
-          event.preventDefault();
-        };
-      };
-    });
-
-    var updateParentNodes = function(siblingLi, type, parentTotal){
-      var siblingValue = 0;
-      var siblingTotal = 0;
-      siblingLi.each(function (){
-        siblingValue = parseFloat($(this).find(type).find('input:first').val());
-        if (!isNaN(siblingValue)) {
-          siblingTotal = siblingTotal + siblingValue;
-        }; 
+  $('#js_budget_to_spend').click(function (e) {
+    e.preventDefault();
+    if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
+      $('.js_budget input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_spend input').val(element.val());
       });
-      siblingTotal = siblingTotal == 0 ? '' : siblingTotal
-      parentTotal.val(siblingTotal);
-      parentTotal.trigger('keyup');
-    }
-    
-    var clearChildNodes = function(element, event, type){
-      var bksp = 46;
-      var del = 8;
-      if ((event.keyCode == bksp || event.keyCode == del)){
-        childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
-        if (confirm('Would you like to clear the value of all child nodes?')){
-          childNodes.each(function(){
-            if ($(this).val !== ''){
-              $(this).val(' ');
-              updateSubTotal($(this));
-            } 
-          });
-        }
-      }
-    }
-    
-    var compareChildrenToParent = function(parentTotal, childLi, type){
-           
-      var childValue = 0;
-      var childTotal = 0;
-      
-      childLi.each(function (){
-        childValue = parseFloat($(this).find(type).find('input:first').val())
-        if (!isNaN(childValue)) {
-          childTotal = childTotal + childValue
-        };
+    };
+  });
+
+  $('#js_spend_to_budget').click(function (e) {
+    e.preventDefault();
+    if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
+      $('.js_spend input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_budget input').val(element.val());
       });
-      
-      var parentValue = parseFloat(parentTotal.val()).toFixed(2)
-      childTotal = childTotal.toFixed(2)
-      
-      if (childTotal != parentValue && childTotal > 0){
-        parentTotal.addClass('invalid_node tooltip')
-        var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
-        message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
-        parentTotal.attr('original-title', message) ;
+    };
+  });
+
+  $(".percentage_box").keyup(function(event) {
+    var element = $(this);
+    var isSpend = element.parents('div:first').hasClass('spend')
+    var type = (isSpend) ? '.spend:first' : '.budget:first';
+    var isRoot = element.parents('ul:first').hasClass('activity_tree');
+    updateSubTotal(element);
+
+    //check whether siblings are equal our parent's total
+    var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
+    var siblingLi = element.parents('ul:first').children('li');
+
+    if (element.val().length == 0) {
+      clearChildNodes(element, event,type);
+    }
+    if (event.keyCode != 9){
+      updateParentNodes(siblingLi, type, parentTotal)
+    }
+
+    //check whether children (1 level deep) are equal to my total
+    childLi = element.parents('li:first').children('ul:first').children('li');
+    if (childLi.size() > 0){
+      compareChildrenToParent(element, childLi, type);
+    };
+
+    //check whether root nodes are = 100%
+    checkRootNodes(type);
+
+  });
+
+  // restrict input to only numbers
+  $(".percentage_box").keydown(function(event) {
+    // Allow backspace and delete, enter and tab
+    var bksp = 46;
+    var del = 8;
+    var enter = 13;
+    var tab = 9;
+
+    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
+        // let it happen, don't do anything
+    } else {
+      // Ensure that it is a number or a '.' and stop the keypress
+      var period = 190;
+      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
+        // let it happen
       }else{
-        parentTotal.removeClass('invalid_node tooltip')
+        event.preventDefault();
       };
     };
-    
-    var updateSubTotal = function(element){
-      var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
-      var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
-      var elementValue = parseFloat(element.val());
-      var subtotal = element.siblings('.subtotal');
-      var isSpend = element.parents('div:first').hasClass('spend')
-      
-      if(isSpend){
-        elementValue > 0 ? subtotal.html((activity_spend * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
-      }else{
-        elementValue > 0 ? subtotal.html((activity_budget * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
-      }
-    };
+  });
+
+  var updateParentNodes = function(siblingLi, type, parentTotal){
+    var siblingValue = 0;
+    var siblingTotal = 0;
+    siblingLi.each(function (){
+      siblingValue = parseFloat($(this).find(type).find('input:first').val());
+      if (!isNaN(siblingValue)) {
+        siblingTotal = siblingTotal + siblingValue;
+      }; 
+    });
+    siblingTotal = siblingTotal == 0 ? '' : siblingTotal
+    parentTotal.val(siblingTotal);
+    parentTotal.trigger('keyup');
   }
+
+  var clearChildNodes = function(element, event, type){
+    var bksp = 46;
+    var del = 8;
+    if ((event.keyCode == bksp || event.keyCode == del)){
+      childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
+      if (confirm('Would you like to clear the value of all child nodes?')){
+        childNodes.each(function(){
+          if ($(this).val !== ''){
+            $(this).val(' ');
+            updateSubTotal($(this));
+          }
+        });
+      }
+    }
+  }
+
+  var compareChildrenToParent = function(parentTotal, childLi, type){
+
+    var childValue = 0;
+    var childTotal = 0;
+
+    childLi.each(function (){
+      childValue = parseFloat($(this).find(type).find('input:first').val())
+      if (!isNaN(childValue)) {
+        childTotal = childTotal + childValue
+      };
+    });
+
+    var parentValue = parseFloat(parentTotal.val()).toFixed(2)
+    childTotal = childTotal.toFixed(2)
+
+    if (childTotal != parentValue && childTotal > 0){
+      parentTotal.addClass('invalid_node tooltip')
+      var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
+      message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
+      parentTotal.attr('original-title', message) ;
+    }else{
+      parentTotal.removeClass('invalid_node tooltip')
+    };
+  };
+
+  var updateSubTotal = function(element){
+    var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
+    var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
+    var elementValue = parseFloat(element.val());
+    var subtotal = element.siblings('.subtotal');
+    var isSpend = element.parents('div:first').hasClass('spend')
+
+    if(isSpend){
+      elementValue > 0 ? subtotal.html((activity_spend * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    }else{
+      elementValue > 0 ? subtotal.html((activity_budget * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    }
+  };
 }
 
 var checkRootNodes = function(type){
@@ -1007,7 +1021,7 @@ var checkRootNodes = function(type){
     value = $(this).find(type).find('input').val();
     if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
   });
-  
+
   if (total != 100 && total >0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
@@ -1022,7 +1036,7 @@ var checkRootNodes = function(type){
       rootNode = $(this).find(type).find('input');
       if (rootNode.attr('original-title') != undefined && rootNode.attr('original-title') == "The root nodes do not add up to 100%"){
         rootNode.removeClass('invalid_node tooltip');
-        rootNode.attr('original-title', '')          
+        rootNode.attr('original-title', '')
       }
     });
 
@@ -1312,7 +1326,7 @@ var commentsInit = function () {
   })
 
   // remove demo text when submiting comment
-  $('.js_submit_btn').live('click', function (e) {
+  $('.js_submit_comment_btn').live('click', function (e) {
     e.preventDefault();
     removeDemoText($('*[data-hint]'));
 
@@ -1424,34 +1438,11 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-    
-    $('.js_address').address(function() {
-      return 'new_' + $(this).html().toLowerCase();
+
+    $('.js_address').click(function() {
+      (window).location.hash = 'new_' + $(this).html().toLowerCase();
     });
-    
-    $.address.externalChange(function() {
-      var hash = $.address.path();
-      if (hash == '/'){
-        if (!($('#projects_listing').is(":visible"))){
-          $('.js_toggle_projects_listing').click();
-        }
-      }else{
-        if (hash == '/new_project'){
-          hideAll();
-          $('/new_project_form').fadeIn();
-        }
-        else if (hash == '/new_activity'){
-          hideAll();
-          $('/new_activity_form').fadeIn();
-          activity_form();
-        }
-        else if (hash == '/new_other cost'){
-          hideAll();
-          $('/new_other_cost_form').fadeIn();
-        }
-      };
-    });
-    
+
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();
@@ -1646,8 +1637,9 @@ var approveActivity = function (element, approval_type, success_text) {
    })
 };
 
-var activities_new = activities_create = activities_edit = activities_update = {
+var activities_new = activities_create = activities_edit = activities_update = other_costs_edit = other_costs_new = other_costs_create = other_costs_update = {
   run: function () {
+    activity_classification();
     activity_form();
   }
 };
@@ -1790,53 +1782,6 @@ var dashboard_index = {
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
     $( ".js_combobox" ).combobox();
-  }
-};
-
-
-var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
-  run: function () {
-    validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
-
-    $('.js_implementer_select').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      if(element.val() == "-1"){
-        $('.implementer_container').hide();
-        $('.add_organization').show();
-      }
-    });
-
-    $('.cancel_organization_link').live('click', function(e) {
-      e.preventDefault();
-      $('.organization_name').attr('value', '');
-      $('.add_organization').hide();
-      $('.implementer_container').show();
-      $('.js_implementer_select').val(null);
-    });
-
-    $('.add_organization_link').live('click', function(e) {
-      e.preventDefault();
-      var name = $('.organization_name').val();
-      $.post("/organizations.js", { "name" : name }, function(data){
-        var data = $.parseJSON(data);
-        $('.implementer_container').show();
-        $('.add_organization').hide();
-        if(isNaN(data.organization.id)){
-          $('.js_implementer_select').val(null);
-        }else{
-          $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-          $('.js_implementer_select').val(data.organization.id);
-        }
-      });
-      $('.organization_name').attr('value', '');
-      $('.add_organization').slideToggle();
-    });
-
-    approveBudget();
-    approveAsAdmin();
-    quartersInit();
-    dynamicUpdateTotalsInit();
   }
 };
 

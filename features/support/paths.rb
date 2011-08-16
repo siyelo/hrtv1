@@ -27,9 +27,6 @@ module NavigationHelpers
     when /the activities page/
       activities_path
 
-    when /the classifications page/
-      classifications_path
-
     when /the admin comments page/
       admin_comments_path
 
@@ -47,7 +44,7 @@ module NavigationHelpers
 
     when /the purposes classification page for "(.+)"/
       activity = Activity.find_by_name($1)
-      edit_activity_classification_path(activity, 'purposes')
+      edit_activity_or_ocost_path(activity, :mode => 'purposes')
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

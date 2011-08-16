@@ -50,4 +50,4 @@
               %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
           - if @data_request.inputs?
             %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
-          %td= link_to 'Classify', edit_activity_classification_path(activity, 'purposes')
+          %td= link_to 'Classify', edit_activity_or_ocost_path(activity, :mode => 'purposes')

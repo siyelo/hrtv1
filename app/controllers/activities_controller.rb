@@ -9,6 +9,7 @@ class ActivitiesController < Reporter::BaseController
   before_filter :require_admin, :only => [:sysadmin_approve]
   before_filter :warn_if_not_classified, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
+  before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
     @activity = Activity.new(:data_response_id => @response.id, 
@@ -18,6 +19,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def edit
+    prepare_classifications(resource)
     load_comment_resources(resource)
     edit!
   end
@@ -39,15 +41,16 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     @activity = Activity.find(params[:id])
-    
+
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
-        format.html {success_flash("updated"); html_redirect}
+        format.html { success_flash("updated"); html_redirect }
         format.js   { js_redirect }
       end
     else
       respond_to do |format|
-        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+        format.html { flash[:error] = "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+                      prepare_classifications(resource)
                       load_comment_resources(resource)
                       render :action => 'edit'
                     }
@@ -123,11 +126,11 @@ class ActivitiesController < Reporter::BaseController
   end
 
   private
-  
+
     def success_flash(action)
       flash[:notice] = "Activity was successfully #{action}."
       if params[:activity][:project_id] == "-1"
-        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a> 
+        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end
     end
@@ -140,18 +143,27 @@ class ActivitiesController < Reporter::BaseController
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
 
-    def html_redirect
-      if params[:commit] == "Save & Classify >"
-        return redirect_to edit_activity_classification_path(@activity, 'purposes')
-      else
-        return redirect_to edit_response_activity_path(@response, @activity)
-      end
-    end
-
     def confirm_activity_type
       @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
+
+    def prepare_classifications(activity)
+      # if we're viewing classification 'tabs'
+      if ['locations', 'purposes', 'inputs'].include? params[:mode]
+        load_klasses :mode
+        @budget_coding_tree = CodingTree.new(activity, @budget_klass)
+        @spend_coding_tree  = CodingTree.new(activity, @spend_klass)
+        @budget_assignments = @budget_klass.with_activity(activity).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        @spend_assignments  = @spend_klass.with_activity(activity).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        # set default to 'my' view if there are code assignments present
+        if params[:view].blank?
+          params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
+        end
+      end
     end
 
 end

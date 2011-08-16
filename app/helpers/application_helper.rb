@@ -263,4 +263,11 @@ module ApplicationHelper
       end
     end
   end
+
+  def edit_activity_or_ocost_path(activity_or_other_cost, opts = nil)
+    response = activity_or_other_cost.data_response
+    activity_or_other_cost.class == Activity ?
+      edit_response_activity_path(response, activity_or_other_cost, opts) :
+      edit_response_other_cost_path(response, activity_or_other_cost, opts)
+  end
 end

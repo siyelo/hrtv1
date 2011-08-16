@@ -19,10 +19,10 @@ class Activity < ActiveRecord::Base
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :beneficiary_ids, :provider_id, :data_response_id, 
-    :sub_activities_attributes, :organization_ids, :csv_project_name, 
-    :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes, 
-    :outputs_attributes, :am_approved_date, :user_id, :provider_mask
+    :beneficiary_ids, :provider_id,
+    :sub_activities_attributes, :organization_ids, :csv_project_name,
+    :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
 
 
   ### Associations
@@ -384,6 +384,25 @@ class Activity < ActiveRecord::Base
   def sub_activites_total(amount_method)
     smart_sum(sub_activities, amount_method)
   end
+  # intercept the classifications and process using the bulk classification update API
+  #
+  # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
+  #
+  def update_attributes(params)
+    if params[:classifications]
+      params[:classifications].each_pair do |association, values|
+        begin
+          klass = association.camelcase.constantize
+        rescue NameError
+          return false
+        end
+        klass.update_classifications(self, values)
+      end
+      params.delete(:classifications)
+      params.delete(:code_assignment_tree) #not sure why this is a param?
+    end
+    super(params)
+  end
 
   private
 
@@ -493,14 +512,14 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
-    
-   def auto_create_project  
+
+   def auto_create_project
     if project_id == -1
       project = data_response.projects.find_by_name(name)
       unless project
-        project= Project.create(:name => name, 
-                                :start_date => start_date,  
-                                :end_date   => end_date,  
+        project= Project.create(:name => name,
+                                :start_date => start_date,
+                                :end_date   => end_date,
                                 :data_response => data_response)
       end
       self.project = project

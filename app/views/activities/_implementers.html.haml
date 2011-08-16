@@ -1,35 +1,39 @@
 - klass = f.object.class.to_s
-%h3
-  Implementers
-  %span= link_to "(?)", "#", :title => "Direct service provider for this #{klass}. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip'
+//%h3.wrapped
+//  Implementers
+//  %span= link_to "(?)", "#", :title => "Direct service provider for this #{klass}. i.e. your own organization or another organization that carried out this work e.g. a NGO, a Health Facility Institution, Government office, or a District.", :class => 'tooltip'
 
-%ul.dashboard_section
-  %span
-    - unless activity_or_ocost.new_record?
-      - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
-        = image_tag "icon_import_export.png"
-        Import / Export
+= render 'activities/sub_activities_import_export', :activity => activity_or_ocost
+
+%ul.section_form.wrapped.last
   %table.input_table
     %thead
       %tr
-        %th Implementer
+        %th.title Implementer
         %th
           .right_justified Past Expenditure
         %th
           .right_justified Current Budget
-        %th
+        %th.delete
     %tbody
       - f.semantic_fields_for :sub_activities do |sa|
-        -# TODO: fix performance by putting this back = render "activities/sub_activity_row", :f => sa 
+        -# TODO: fix performance by putting this back = render "activities/sub_activity_row", :f => sa
         = render "activities/sub_activity_fields", :f => sa
-      - 3.times do 
+      - 3.times do
         - f.object.sub_activities.build unless f.object.sub_activities.length > 0
         - new_object = f.object.class.reflect_on_association(:sub_activities).klass.new
         - f.fields_for(:sub_activities, new_object) do |builder|
           = render("activities/sub_activity_fields", :f => builder)
 
       %tr
-        %td= link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"
+        %td
+          %span= link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"
+          %span
+            - unless activity_or_ocost.new_record?
+              - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
+                = image_tag "icon_import_export.png"
+                Import / Export
+
         %td
           %p.total.js_total_spend
             %span.label.left Total

@@ -6,18 +6,15 @@
 %h1.main_heading
   Edit Project
   %span= render 'help'
+  %span.right
+    - link_to "#comments", :class => "add_row" do
+      View Comments
 
 = render 'getting_started'
 
 %ul.response-notice
   - @project.validation_errors.each do |error|
     %li= error
-
-%ul.horizontal.right.plain
-  %li
-    - link_to "#comments" do
-      %span
-        View Comments
 
 = error_messages_for :project,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 

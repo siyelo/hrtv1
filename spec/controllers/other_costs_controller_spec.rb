@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+include ApplicationHelper
 
 describe OtherCostsController do
   describe "Redirects to budget or spend depending on datarequest" do
@@ -19,10 +20,30 @@ describe OtherCostsController do
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
 
-     it "redirects to the spend classifications page when Save & Go to Classify is clicked" do
-       put :update, :other_cost => { :description => "some description"}, :id => @other_cost.id,
-         :commit => 'Save & Classify >', :response_id => @data_response.id
-       response.should redirect_to(edit_activity_classification_path(@project.other_costs.first, 'purposes'))
+     it "redirects to the location classifications page when Save & Add Locations is clicked" do
+       @data_request.save
+       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+         :commit => 'Save & Add Locations >', :response_id => @data_response.id
+       response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'locations')
+     end
+
+     it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
+       @data_request.save
+       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+         :commit => 'Save & Add Purposes >', :response_id => @data_response.id
+       response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'purposes')
+     end
+     it "redirects to the input classifications page when Save & Add Inputs is clicked" do
+       @data_request.save
+       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+         :commit => 'Save & Add Inputs >', :response_id => @data_response.id
+       response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'inputs')
+     end
+     it "redirects to the output classifications page when Save & Add Outputs is clicked" do
+       @data_request.save
+       put :update, :other_cost => { :budget => 89, :spend => 0}, :id => @other_cost.id,
+         :commit => 'Save & Add Outputs >', :response_id => @data_response.id
+       response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'outputs')
      end
 
      it "correctly updates when an othercost doesn't have a project" do
@@ -42,7 +63,7 @@ describe OtherCostsController do
        flash[:notice].should == "Other Cost was successfully updated."
        response.should redirect_to(edit_response_other_cost_path(@data_response.id, @other_cost.id))
      end
-     
+
      it "should allow a project to be created automatically on update" do
        #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
        put :update, :id => @other_cost.id, :response_id => @data_response.id,

@@ -13,7 +13,7 @@ class SubActivity < Activity
   belongs_to :activity, :counter_cache => true
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask
+  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask, :provider_id
 
   ### Callbacks
   after_create    :update_counter_cache

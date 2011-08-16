@@ -2,20 +2,24 @@
   a
     font-weight: normal
     font-size: 12px
+    
   table#activity_description
     margin-top: 15px
     padding: 10px
     td
-      color: $mid-blue
+      color: $primary_dark
       padding: 4px 8px
       font-size: 0.85em
       &.title
         color: #aaaaaa
         font-size: 0.7em
         text-transform: uppercase
+  #buttons
+    position: absolute
+    left: 270px
+    top: 19px
 
 #activity_classification
-  padding: 10px
   form
     input[type=submit]
       margin-top: 10px
@@ -28,12 +32,13 @@ body #content #main .activity_tree a
   position: relative
 
 #expl
-  color: $mid-blue + #222
+  color: $primary
   float: right
   font-size: 11px
-  position: relative
-  width: 335px
-  margin-right: 210px
+  position: absolute
+  right: 15px
+  top: 35px
+  width: 310px
   span
     &.budget
       float: right
@@ -57,7 +62,7 @@ body.app
     label
       display: inline
     .values
-      width: 336px
+      width: 300px
 
       .budget
         background: $lightest-blue
@@ -70,7 +75,7 @@ body.app
       .spend
         background: $lightest-blue
         float: left
-        margin-right: 50px
+        margin-right: 14px
         position: relative
         width: 141px
         +border-radius

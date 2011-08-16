@@ -24,6 +24,7 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def edit
+    prepare_classifications(resource)
     load_comment_resources(resource)
     edit!
   end
@@ -45,14 +46,23 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def update
-    @activity = resource # needed in js_redirect
-    update! do |success, failure|
-      @new_project = true if params[:other_cost][:project_id] == "-1" 
-      success.html { success_flash("updated"); html_redirect }
-      success.js   { js_redirect }
-      failure.html { load_comment_resources(resource); render :action => 'edit'}
-      failure.js   { js_redirect }
-    end
+     @activity = OtherCost.find(params[:id])
+
+      if !@activity.am_approved? && @activity.update_attributes(params[:other_cost])
+        respond_to do |format|
+          format.html { success_flash("updated"); html_redirect }
+          format.js   { js_redirect }
+        end
+      else
+        respond_to do |format|
+          format.html { flash[:error] = "Other Cost was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+                        prepare_classifications(resource)
+                        load_comment_resources(resource)
+                        render :action => 'edit'
+                      }
+          format.js   { js_redirect }
+        end
+      end
   end
 
   def destroy
@@ -92,15 +102,15 @@ class OtherCostsController < Reporter::BaseController
 
 
   private
-  
+
     def success_flash(action)
       flash[:notice] = "Other Cost was successfully #{action}."
       if params[:other_cost][:project_id] == "-1"
-        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a> 
+        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end
     end
-     
+
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "activities.name"
     end
@@ -109,19 +119,26 @@ class OtherCostsController < Reporter::BaseController
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
 
-    def html_redirect
-      if params[:commit] == "Save & Classify >"
-        redirect_to edit_activity_classification_path(@other_cost, 'purposes')
-      else
-        redirect_to edit_response_other_cost_path(@response, @other_cost)
-      end
-    end
-
-
     def confirm_activity_type
       @activity = Activity.find(params[:id])
       return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end
-
+    
+    def prepare_classifications(other_cost)
+      # if we're viewing classification 'tabs'
+      if ['locations', 'purposes', 'inputs'].include? params[:mode]
+        load_klasses :mode
+        @budget_coding_tree = CodingTree.new(other_cost, @budget_klass)
+        @spend_coding_tree  = CodingTree.new(other_cost, @spend_klass)
+        @budget_assignments = @budget_klass.with_activity(other_cost).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        @spend_assignments  = @spend_klass.with_activity(other_cost).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        # set default to 'my' view if there are code assignments present
+        if params[:view].blank?
+          params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
+        end
+      end
+    end
 end

@@ -9,14 +9,14 @@
 
   %li.last
     %h3 Basics
-    %ul.dashboard_section
+    %ul.section_form
       = f.input :currency, :label => "Default Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "You can override the currency for individual projects should you deem it necessary."
       = f.input :fiscal_year_start_date, :as => :string, :label => "Start of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc."
       = f.input :fiscal_year_end_date, :as => :string, :label => "End of Fiscal Year", :input_html => {:class => 'date_picker'}, :hint => "The End of the Fiscal Year"
 
   %li.last
     %h3 Contact Details
-    %ul.dashboard_section
+    %ul.section_form.last
       = f.input :contact_name, :as => :string, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process."
       = f.input :contact_position, :as => :string, :hint => "The position of the contact at your organization."
       = f.input :contact_phone_number, :as => :string, :label => "Phone number", :hint => "A telephone number that can be used to contact the contact person."

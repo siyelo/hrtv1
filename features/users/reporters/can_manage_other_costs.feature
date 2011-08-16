@@ -1,4 +1,3 @@
-# TODO: fix these - the multiple responses i think are the cause
 Feature: Reporter can manage other costs
   In order to track information
   As a reporter
@@ -15,21 +14,22 @@ Feature: Reporter can manage other costs
   And I am signed in as "reporter@hrtapp.com"
   And I follow "data_request1"
   And I follow "Projects"
-
+  
   Scenario: Reporter can CRUD other costs
     When I follow "Add Other Costs now"
-    Then I should see "Create Other Cost"
+    Then I should see "New Other Cost"
     When I fill in "Name" with "other_cost1"
       And I fill in "Description" with "other_cost2 description"
       And I select "project1" from "Project"
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-03-01"
-      And I press "Save & Classify >"
+      And I press "Save"
+      Then show me the page
     Then I should see "Other Cost was successfully created"
-    When I follow "other_cost1"
       And I fill in "Name" with "other_cost2"
-      And I press "Save & Classify >"
+      And I press "Save"
     Then I should see "Other Cost was successfully updated"
+    When I follow "Projects"
       And I should see "other_cost2"
       And I should not see "other_cost1"
     When I follow "other_cost2"
@@ -45,7 +45,7 @@ Feature: Reporter can manage other costs
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-12-01"
       And I select "<Automatically create a project for me>" from "Project"
-      And I press "Save & Classify >"
+      And I press "Save"
     Then I should see "Other Cost was successfully created. Click here to enter the funding sources for the automatically created project."
 
   Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
@@ -54,7 +54,7 @@ Feature: Reporter can manage other costs
       And I fill in "Description" with "other_cost1"
       And I fill in "Start date" with "2010-01-01"
       And I fill in "End date" with "2010-03-01"
-      And I press "Save & Classify >"
+      And I press "Save"
     Then I should see "Other Cost was successfully created"
 
   @wip

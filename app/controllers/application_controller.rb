@@ -212,4 +212,29 @@ class ApplicationController < ActionController::Base
         current_request
       end
     end
+
+    def load_klasses(field = :id) #TODO: deprecate id field - use only :mode
+      @budget_klass, @spend_klass = case params[field]
+      when 'purposes'
+        [CodingBudget, CodingSpend]
+      when 'inputs'
+        [CodingBudgetCostCategorization, CodingSpendCostCategorization]
+      when 'locations'
+        [CodingBudgetDistrict, CodingSpendDistrict]
+      else
+        raise "Invalid type #{params[field]}".to_yaml
+      end
+    end
+
+    def load_klasses_from_mode
+      load_klasses(:mode)
+    end
+    
+    # http://stackoverflow.com/questions/4244507/headers-in-rails-cache-firefox-impropriety
+    def prevent_browser_cache
+      headers["Pragma"] = "no-cache"
+      headers["Cache-Control"] = "must-revalidate"   
+      headers["Cache-Control"] = "no-cache"   
+      headers["Cache-Control"] = "no-store"       
+    end
 end

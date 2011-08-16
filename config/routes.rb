@@ -74,7 +74,7 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :activities do |activity|
     activity.resources :classifications,
-      :only => [:edit, :update],
+      :except => [:index, :new, :create, :edit, :update, :destroy], #TODO - stop being lazy..
       :member => {:derive_classifications_from_sub_implementers => :put,
                   :download_template => :get, :bulk_create => :put}
     activity.resources :sub_activities,

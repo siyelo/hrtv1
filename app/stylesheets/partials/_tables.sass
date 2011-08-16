@@ -2,24 +2,24 @@
 // IMPORTANT: if thead doesn't contain links then add class "static"!!!
 
 table.standard
-  color: $mid-blue
+  color: $primary
   font-size: 11px
   line-height: 14px
   width: 100%
 
   thead
-    color: $mid-blue
+    color: $primary_dark
 
     th
-      background: $mid-blue
+      background: $primary_dark
       color: white
       padding-left: 5px
       height: 25px
       &.dummy
-        padding: 9px 7px 7px
+        padding: 5px
       a
-        background: $mid-blue
-        color: $lightest-blue
+        background: $primary_dark
+        color: $primary_lighter
         display: block
         font-size: 11px
         font-weight: bold
@@ -30,9 +30,9 @@ table.standard
           color: #FFF
           //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
         &.asc
-          background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
+          background: image_url("icon_arrow_up.gif") no-repeat right center $primary_dark - #111
         &.desc
-          background: image_url("icon_arrow_down.gif") no-repeat right center $mid-blue - #111
+          background: image_url("icon_arrow_down.gif") no-repeat right center $primary_dark - #111
       &:first-child a
         +border-top-left-radius
       &:last-child a
@@ -47,8 +47,8 @@ table.standard
     border-spacing: 0
 
     &.odd
-      background: $lightest-blue + #090909
-      +linear-gradient(color-stops(white, $lightest-blue + #090909))
+      background: $primary_lightest
+      +linear-gradient(color-stops(white, $primary_lightest))
 
     &.activity
       td
@@ -74,17 +74,21 @@ table.standard
     font-weight: normal
     padding: 5px 10px 5px
 
-  th, td
-    min-width: 100px
-
   td
     border-bottom: 1px dashed $light_blue
-    padding: 9px 7px 9px
+    padding: 5px
     vertical-align: middle
     &.alt
       border: none
     &.padding
       padding-top: 0
+  th, td
+    min-width: 60px
+    &:first-child
+      padding-left: 0
+    &:last-child
+      padding-left: 0
+      padding-right: 0
 
   .wrap_30
     min-width: 30%
@@ -180,11 +184,11 @@ table.sum
 
 //
 table.workplan
-  color: $mid-blue
+  color: $primary_dark
   width: 100%
 
   th
-    color: $lightest-blue
+    color: $primary_lighter
     font-size: 11px
     font-weight: bold
     padding: 10px 10px 5px
@@ -192,7 +196,7 @@ table.workplan
     &.amount
       text-align: right
     a
-      color: $lightest-blue
+      color: $primary_lighter
       display: inline-block
       text-decoration: none
       padding-right: 22px
@@ -263,7 +267,7 @@ table.workplan
         opacity: 0.7
 
   .head th
-    background: $mid-blue
+    background: $primary_dark
     &.no-bg
       background: none
   .tabs
@@ -271,18 +275,18 @@ table.workplan
       display: inline-block
       float: left
     a
-      color: $mid-blue + #222
+      color: $primary_dark
       display: inline-block
       font-size: 12px
       padding: 8px 10px 4px
       text-decoration: none
       +text-shadow(#fff, 0, 1px, 0)
       &.active
-        background: $mid-blue
+        background: $primary_dark
         color: #fff
         font-weight: bold
         +border-top-radius
-        +linear-gradient(color-stops($mid-blue - #222, $mid-blue))
+        +linear-gradient(color-stops($primary_dark - #222, $primary_dark))
         +text-shadow(#000, 0, 1px, 0)
       &.hidden
         display: none
@@ -308,15 +312,16 @@ table.workplan
 
   tbody
     tr td
-      border-bottom: 1px solid $lightest-blue
+      border-bottom: 1px solid $primary_border4
       &.borderless
         border: none
       &.total
-        color: $light-blue - #222
+        color: $primary_border
         font-size: 11px
         text-align: right
+        +text-shadow(#fff, 0, 1px, 0)
         li span
-          color: $mid-blue
+          color: $primary_dark
           font-weight: bold
 
   .row_cancel
@@ -333,7 +338,7 @@ table.workplan
       text-align: left
 
   .new_activity, .new_project, .new_funder, .new_implementer
-    background: $filler
+    background: $primary_lighter
     .inline-errors
       clear: both
       margin-left: 0
@@ -356,12 +361,12 @@ table.workplan
   .nested
     width: 98%
     td
-      background: $filler
+      background: $primary_lighter
 
     tr:last-child td
       border: none
     tr:hover td
-      background: $lightest-blue
+      background: $primary_lighter
   .classification_destroy
     opacity: 0.6
     &:hover, &:focus
@@ -373,19 +378,19 @@ table.workplan
 
   .add_purpose_form
     td
-      background: $lightest-blue
+      background: $primary_lighter
   .context
-    color: $blue
+    color: $primary
     font-size: 11px
     font-style: italic
     margin-left: 10px
 
 tr.filler th, tr.filler td
-  background: $lightest-blue
+  background: $primary_lighter
   font-weight: bold
 
 tr.filler2 th, tr.filler2 td
-  background: $filler
+  background: $primary_lightest
   font-weight: bold
 
 tr.filler_warning th, tr.filler_warning td
@@ -394,7 +399,7 @@ tr.filler_warning th, tr.filler_warning td
 
 tr.activity_subheading
   color: #888
-  background: $filler
+  background: $primary_lighter
   font-weight: normal
   text-transform: uppercase
   td
@@ -407,9 +412,9 @@ tr.activity_subheading
   +border-radius
   +box-shadow(#ddd, 0, 0, 4px)
   th
-    background: $filler + #050505
-    border-bottom: 1px solid $lightest-blue
-    color: $mid-blue + #333
+    background: $primary_lightest
+    border-bottom: 1px solid $primary_border3
+    color: $primary
     padding: 7px
     +text-shadow(#fff, 0, 1px)
     &:first-child
@@ -417,11 +422,11 @@ tr.activity_subheading
     &:last-child
       +border-top-right-radius
   tbody
-    border: 1px solid $lightest-blue
+    border: 1px solid $primary_border3
   td
     background: #fff
-    border-bottom: 1px solid $lightest-blue
-    color: $mid-blue
+    border-bottom: 1px solid $primary_border3
+    color: $primary_dark
     padding: 5px 7px
 
     li
@@ -442,7 +447,7 @@ tr.activity_subheading
       +border-bottom-right-radius
 
   input[type="text"]
-    background: $filler
+    background: $primary_lightest
     padding: 2px !important
     text-align: right
     width: 75% !important
@@ -451,24 +456,33 @@ tr.activity_subheading
 
 .input_table
   width: 100%
-
+    
   tr
     position: relative
-
+    
+    &:last-child td
+      background: none
+      border: none
+      padding: 8px 0 0
 
   th
     background: $primary_lightest
     border: 1px solid $primary_border3
-    border-bottom: 1px solid $primary_border
     border-left: none
     color: $primary
     font-size: 11px
     padding: 6px
-    //+linear-gradient(color-stops($primary_lightest + #050505, $primary_lightest))
+    +linear-gradient(color-stops($primary_lightest + #050505, $primary_lightest))
     +text-shadow(#fff, 0, 1px, 0)
+    -webkit-box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
+    -moz-box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
+    box-shadow: rgba(0,0,0,0.06) 1px 1px 4px inset
     &:last-child
       background: none
       border: none
+      -webkit-box-shadow: none
+      -moz-box-shadow: none
+      box-shadow: none
     &:first-child
       border-left: 1px solid $primary_border3
 
@@ -486,11 +500,26 @@ tr.activity_subheading
     &:last-child
       background: none
       border: none
-
+      
+  // outline for the actual amounts
+  tr:first-child
+    td
+      border-top: 1px solid $primary_border
+      &:last-child
+        border-top: none
+  tr td
+    &:first-child
+      border-left: 1px solid $primary_border
+    &:nth-last-child(2)
+      border-right: 1px solid $primary_border
+  tr:nth-last-child(2) td
+    border-bottom: 1px solid $primary_border
+    &:last-child
+      border-bottom: none
   tr:last-child td
-    background: none
-    border: none
-    padding: 8px 0 0
+    border-left: none
+    border-right: none
+  //
 
   input
     background: none
@@ -500,12 +529,22 @@ tr.activity_subheading
     padding: 0 !important
     text-align: right
     width: 100% !important
+    -webkit-box-shadow: none
+    -moz-box-shadow: none
+    box-shadow: none
     +border-radius(0)
-
     &:hover, &:focus
       border: none !important
       +box-shadow(none)
-
+      -webkit-box-shadow: none
+      -moz-box-shadow: none
+      box-shadow: none
+  .ui_widget 
+    input
+      background: #fff image_url("icon_search.png") no-repeat right
+      &:hover, &:focus
+        background: #fff image_url("icon_search2.png") no-repeat right
+    
   .total
     border-bottom: 2px solid $primary_light
     font-size: 13px
@@ -524,8 +563,15 @@ tr.activity_subheading
       font-size: 11px
       padding: 1px 4px 1px 0
 
+  .title
+    width: 50%
+  .delete
+    padding-right: 0
+    width: 2%
+
 .right_justified
   float: right
+  white-space: nowrap
   // override fix
   a
     padding-right: 0px !important

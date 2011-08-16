@@ -39,15 +39,14 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][1]" with "100"
-    And I fill in "classifications[spend][1]" with "100"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][1]" with "100"
+    And I fill in "activity[classifications][coding_spend][1]" with "100"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-    And the "classifications[budget][1]" field should contain "100"
-    And the "classifications[spend][1]" field should contain "100"
-
+    And the "activity[classifications][coding_budget][1]" field should contain "100"
+    And the "activity[classifications][coding_spend][1]" field should contain "100"
 
   Scenario: Reporter can classify Purposes for activity (second level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
@@ -55,19 +54,18 @@ Feature: Reporter can enter a code breakdown for each activity
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][11]" with "40"
-    And I fill in "classifications[spend][11]" with "60"
-    And I fill in "classifications[budget][12]" with "60"
-    And I fill in "classifications[spend][12]" with "40"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][11]" with "40"
+    And I fill in "activity[classifications][coding_spend][11]" with "60"
+    And I fill in "activity[classifications][coding_budget][12]" with "60"
+    And I fill in "activity[classifications][coding_spend][12]" with "40"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-    And the "classifications[budget][11]" field should contain "40"
-    And the "classifications[spend][11]" field should contain "60"
-    And the "classifications[budget][12]" field should contain "60"
-    And the "classifications[spend][12]" field should contain "40"
-
+    And the "activity[classifications][coding_budget][11]" field should contain "40"
+    And the "activity[classifications][coding_spend][11]" field should contain "60"
+    And the "activity[classifications][coding_budget][12]" field should contain "60"
+    And the "activity[classifications][coding_spend][12]" field should contain "40"
 
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
@@ -77,21 +75,21 @@ Feature: Reporter can enter a code breakdown for each activity
     And a mtef_code "mtef112" exists with id: 112, short_display: "mtef112", parent: mtef_code "mtef11"
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][111]" with "40"
-    And I fill in "classifications[spend][111]" with "60"
-    And I fill in "classifications[budget][112]" with "60"
-    And I fill in "classifications[spend][112]" with "40"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][111]" with "40"
+    And I fill in "activity[classifications][coding_spend][111]" with "60"
+    And I fill in "activity[classifications][coding_budget][112]" with "60"
+    And I fill in "activity[classifications][coding_spend][112]" with "40"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-    And the "classifications[budget][111]" field should contain "40"
-    And the "classifications[spend][111]" field should contain "60"
-    And the "classifications[budget][112]" field should contain "60"
-    And the "classifications[spend][112]" field should contain "40"
+    And the "activity[classifications][coding_budget][111]" field should contain "40"
+    And the "activity[classifications][coding_spend][111]" field should contain "60"
+    And the "activity[classifications][coding_budget][112]" field should contain "60"
+    And the "activity[classifications][coding_spend][112]" field should contain "40"
 
-  @javascript
-  Scenario: Reporter can classify Purposes for activity (third level)
+  @javascript 
+  Scenario: Reporter can see errors when classifying purposes
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
@@ -99,23 +97,23 @@ Feature: Reporter can enter a code breakdown for each activity
     And a mtef_code "mtef112" exists with id: 112, short_display: "mtef112", parent: mtef_code "mtef11"
     And I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
+    And I follow "Purposes" within ".section_nav"
     And I press "tab1_expand"
     
-    When I fill in "classifications[budget][111]" with "40"
-    Then the "classifications[budget][11]" field should contain "40"
-    And the "classifications[budget][1]" field should contain "40"
+    When I fill in "activity[classifications][coding_budget][111]" with "40"
+    Then the "activity[classifications][coding_budget][11]" field should contain "40"
+    And the "activity[classifications][coding_budget][1]" field should contain "40"
     
-    When I fill in "classifications[spend][111]" with "40"
-    Then the "classifications[spend][11]" field should contain "40"
-    And the "classifications[spend][1]" field should contain "40"
+    When I fill in "activity[classifications][coding_spend][111]" with "40"
+    Then the "activity[classifications][coding_spend][11]" field should contain "40"
+    And the "activity[classifications][coding_spend][1]" field should contain "40"
     
-    When I fill in "classifications[spend][1]" with "100"
-    And I fill in "classifications[budget][1]" with "100"
+    When I fill in "activity[classifications][coding_spend][1]" with "100"
+    And I fill in "activity[classifications][coding_budget][1]" with "100"
     And I hover over ".tooltip" within ".values"
     Then I should see "Amount of this node is not same as the sum of children amounts underneath (100.00% - 40.00% = 60%)"
     
-    When I fill in "classifications[spend][1]" with "10"
+    When I fill in "activity[classifications][coding_spend][1]" with "10"
     And I hover over ".tooltip" within ".values"
     Then I should see "The root nodes do not add up to 100%"
     When I press "Save"
@@ -126,21 +124,21 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][1]" with "99"
-    And I fill in "classifications[spend][1]" with "99"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][1]" with "99"
+    And I fill in "activity[classifications][coding_spend][1]" with "99"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And the "spend_purposes" checkbox should not be checked
     And the "budget_purposes" checkbox should not be checked
 
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][1]" with "100"
-    And I fill in "classifications[spend][1]" with "100"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][1]" with "100"
+    And I fill in "activity[classifications][coding_spend][1]" with "100"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And the "spend_purposes" checkbox should be checked
     And the "budget_purposes" checkbox should be checked
 
@@ -148,28 +146,27 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
+    And I follow "Purposes" within ".section_nav"
     And I follow "Download template"
     Then I should see "mtef1"
     And I should not see "cost_category1"
-
-
+  
   Scenario: Reporter can upload Purposes classification for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
+    And I follow "Purposes" within ".section_nav"
     And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
     And I press "Upload"
     Then I should see "Activity classification was successfully uploaded."
-    And the "classifications[budget][1]" field should contain "40"
-    And the "classifications[spend][1]" field should contain "30"
-
+    And the "activity[classifications][coding_budget][1]" field should contain "40"
+    And the "activity[classifications][coding_spend][1]" field should contain "30"
+  
   Scenario: Reporter cannot upload Purposes classification for already approved activity
     Given an activity exists with name: "activity2", data_response: the data_response, project: the project, budget: 5, spend: 6, am_approved: true
     When I follow "Projects"
     And I follow "activity2"
-    And I follow "Purposes" within ".ordered_nav"
+    And I follow "Purposes" within ".section_nav"
     And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
     And I press "Upload"
     Then I should see "Classification for approved activity cannot be changed."
@@ -180,40 +177,39 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][1]" with "100"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget][1]" with "100"
     #And I click element "#budget_to_spend"
     And I follow "Copy Current Budget to Past Expenditure"
     And I confirm the js popup
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
-    And the "classifications[budget][1]" field should contain "100"
-    And the "classifications[spend][1]" field should contain "100"
+    Then I should see "Activity was successfully updated."
+    And the "activity[classifications][coding_budget][1]" field should contain "100"
+    And the "activity[classifications][coding_spend][1]" field should contain "100"
 
-  @javascript
+  @javascript 
   Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[spend][1]" with "100"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_spend][1]" with "100"
     #And I click element "#js_spend_to_budget"
     And I follow "Copy Past Expenditure to Current Budget"
     And I confirm the js popup
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
-    And the "classifications[budget][1]" field should contain "100"
-    And the "classifications[spend][1]" field should contain "100"
-
-
+    Then I should see "Activity was successfully updated."
+    And the "activity[classifications][coding_budget][1]" field should contain "100"
+    And the "activity[classifications][coding_spend][1]" field should contain "100"
+  
   Scenario: Reporter cannot clasify approved Activity
     Given an activity exists with name: "activity2", data_response: the data_response, project: the project, budget: 5, spend: 6, am_approved: true
     When I follow "Projects"
     And I follow "activity2"
-    And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[spend][1]" with "100"
+    And I follow "Purposes" within ".section_nav"
+    And I fill in "activity[classifications][coding_spend][1]" with "100"
     And I press "Save"
-    Then I should see "Classification for approved activity cannot be changed."
+    Then I should see "Activity was already approved "
 
 
   ############
@@ -223,35 +219,34 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Inputs" within ".ordered_nav"
-    And I fill in "classifications[budget][3]" with "100"
-    And I fill in "classifications[spend][3]" with "100"
+    And I follow "Inputs" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "100"
+    And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "100"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And I should not see "Purposes by Current Budget are not classified and Purposes by Past Expenditure are not classified"
-    And the "classifications[budget][3]" field should contain "100"
-    And the "classifications[spend][3]" field should contain "100"
-
+    And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "100"
+    And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "100"
 
   Scenario: Reporter can enter Inputs for activity and see flash error
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Inputs" within ".ordered_nav"
-    And I fill in "classifications[budget][3]" with "99"
-    And I fill in "classifications[spend][3]" with "99"
+    And I follow "Inputs" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "99"
+    And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "99"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And the "spend_inputs" checkbox should not be checked
     And the "budget_inputs" checkbox should not be checked
 
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Inputs" within ".ordered_nav"
-    And I fill in "classifications[budget][3]" with "100"
-    And I fill in "classifications[spend][3]" with "100"
+    And I follow "Inputs" within ".section_nav"
+    And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "100"
+    And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "100"
     And I press "Save"
-    Then I should see "Activity classification was successfully updated."
+    Then I should see "Activity was successfully updated."
     And the "spend_inputs" checkbox should be checked
     And the "budget_inputs" checkbox should be checked
 
@@ -259,19 +254,18 @@ Feature: Reporter can enter a code breakdown for each activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Inputs" within ".ordered_nav"
+    And I follow "Inputs" within ".section_nav"
     And I follow "Download template"
     Then I should see "cost_category1"
     And I should not see "mtef1"
-
 
   Scenario: Reporter can upload Inputs classification for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
     When I follow "Projects"
     And I follow "activity1"
-    And I follow "Inputs" within ".ordered_nav"
+    And I follow "Inputs" within ".section_nav"
     And I attach the file "spec/fixtures/classifications_inputs.csv" to "File" within ".upload_box"
     And I press "Upload"
     Then I should see "Activity classification was successfully uploaded."
-    And the "classifications[budget][3]" field should contain "44"
-    And the "classifications[spend][3]" field should contain "55"
+    And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
+    And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"

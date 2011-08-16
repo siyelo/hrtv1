@@ -1,16 +1,7 @@
-:javascript
-  var _activity_id = "#{@activity.id}";
+- content_for :classification do
+  #classification
+    #activity_classification
+      %div.tab1{:style => 'display: block'}
+        = render '/classifications/tab'
 
-%h1.main_heading
-  = "Edit #{@activity.class.to_s.underscore.humanize.titleize} "
-  %span= @activity.name.present? ? @activity.name : "Unnamed #{@activity.class.to_s.titleize}"
-
-
-= render 'uncoded_overlay', :activity => @activity
-= render 'getting_started'
-= render 'activities/tab_nav', :activity => @activity
-
-#classification
-  #activity_classification
-    %div.tab1{:style => 'display: block'}
-      = render 'tab'
+= render "/activities/edit", :activity => @activity

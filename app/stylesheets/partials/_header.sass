@@ -2,7 +2,7 @@
 /* SHARED HEADER STYLES */
 
 #header, #header_app
-  background: image_url("bg-blue.jpg")
+  background: $primary_dark
   color: $lightest-blue
   +pie-clearfix
 
@@ -26,14 +26,13 @@
       top: -3px
 
     p
-      color: white
+      color: $org_name
       font-size: 0.6em
       letter-spacing: 0.02em
       padding-left: 55px
-      text-transform: uppercase
 
   .right
-    margin-top: 15px
+    margin-top: 13px
 
   #admin
     float: right
@@ -41,7 +40,7 @@
     width: 550px
 
     span
-      color: $light-blue
+      color: $nav_font
       font-size: 11px
       float: right
       padding-top: 14px
@@ -50,12 +49,11 @@
       text-transform: uppercase
       +text-shadow(#111, 0, 1px, 1px)
 
-
     ul
       +horizontal-list
-      border: 1px solid $dark-blue
+      border: 1px solid $nav
       float: right
-      +box-shadow(rgba(0, 0, 0, 0.2), 0, 2px, 2px)
+      +box-shadow(rgba(255, 255, 255, 0.1), 0, 1px, 0)
       +border-radius(6px)
 
       li
@@ -63,33 +61,32 @@
         padding: 0
 
         &:first-child
-          border-right: 1px solid $mid-blue
+          border-right: 1px solid $nav
           a
             +border-left-radius
-            border-right: 1px solid $dark-blue
+            border-right: 1px solid $nav
         &:last-child
-          border-left: 1px solid $mid-blue
+          border-left: 1px solid $nav
           a
             +border-right-radius
-            border-left: 1px solid $dark-blue
+            border-left: 1px solid $nav
 
         a
-          background: $dark-blue
-          border-top: 1px solid $mid-blue + #222
-          color: $light-blue
+          background: $nav
+          color: $nav_font
           display: inline-block
           float: left
           font-size: 11px
-          height: 14px
           padding: 11px 12px 12px
           text-decoration: none
-          +linear-gradient(color-stops($mid-blue, $dark-blue))
-          +text-shadow(#111, 0, 1px, 1px)
+          +linear-gradient(color-stops($nav_alt, $nav))
+          +text-shadow($nav - #222, 0, 1px, 1px)
           img
             margin: 0 2px -2px 0
           &:hover, &:focus
-            background: $mid-blue
+            background: $nav
             color: #fff
+            +text-shadow($nav - #333, 0, 1px, 1px)
           &.signin
             text-transform: uppercase
             img
@@ -134,7 +131,7 @@ body.promo.landing #admin p
 /* APP HEADER STYLES */
 
 #header_app
-  height: 40px
+  height: 34px
 
   .wrapper
     +pie-clearfix
@@ -142,26 +139,26 @@ body.promo.landing #admin p
   /* app logo styles - overriding the shared logo style */
   #logo
     height: 25px
-    padding: 10px 0
+    padding: 7px 0
     position: absolute
     width: auto
 
     p
       float: left
-      font-size: 14px
-      font-weight: normal
-      margin-top: 2px
+      font-family: 'Avenir Black', sans-serif
+      font-size: 12px
+      margin-top: 5px
       padding: 0
-      text-transform: none
-      +text-shadow(#000, 0, 1px, 1px)
+      text-transform: uppercase
+      +text-shadow($nav - #222, 0, 1px, 1px)
 
   /* app logo styles end */
 
   #admin
-    margin-top: 18px
+    margin-top: 16px
     p
       clear: both
-      color: $light-blue - #222
+      color: $nav_font
       float: right
       font-size: 11px
       font-weight: normal
@@ -174,11 +171,12 @@ body.promo.landing #admin p
 
 /* APP MAIN-NAV STYLES */
 #main-nav
-  background: image_url("bg-blue.jpg")
+  background: $primary_dark
 
   a
-    color: $lighter-blue
-    font-size: 0.8em
+    color: $nav_font
+    font-family: 'Avenir', sans-serif
+    font-size: 12px
 
   ul
     display: block
@@ -196,52 +194,50 @@ body.promo.landing #admin p
 
       &.active
         a
-          background: $filler
+          background: $subnav
           border-bottom: 1px solid #FFF
           border-left: none
           background: white
-          color: $dark-blue
+          color: $secondary
+          font-family: 'Avenir Black', sans-serif
           letter-spacing: 0.05em
           margin: 0
           padding-top: 15px
           position: relative
           top: 1px
           +border-top-radius(3px)
-          +linear-gradient(color-stops(white, $filler))
+          +linear-gradient(color-stops(#fff, $subnav))
           +text-shadow(#fff, 0, 1px, 1px)
 
           // dont want hover background on active tab
           &:hover
-            background: white
-            color: $mid-blue + #222
-            +linear-gradient(color-stops($lightest-blue, white))
+            background: $subnav
+            border-left: none
+            color: $secondary
+            +linear-gradient(color-stops(#fff, $subnav))
             +text-shadow(#fff, 0, 1px, 1px)
 
-
-
       a
-        border: 1px solid $mid-blue
-        border-left: 1px solid $light-blue - #222
-        border-right: 1px solid $mid-blue + #222
+        border: 1px solid $nav
         margin: 3px 0 0
-        background: $light-blue
-        color: $mid-blue
+        background: $nav
+        color: $nav_font
         display: inline
         float: left
-        font-size: 12px
+        font-size: 14px
         height: 15px
-        font-weight: bold
-        padding: 12px 15px 8px 17px
+        padding: 12px 20px 11px
         text-decoration: none
         +transition(hover, 1s, ease, 0)
-        +linear-gradient(color-stops($light-blue - #111, $light-blue - #555))
-        +text-shadow($light-blue, 0, 1px, 1px)
+        +linear-gradient(color-stops($nav_alt, $nav))
+        +text-shadow($nav - #222, 0, 1px, 1px)
 
         &:hover
-          background: $lightest-blue
-          color: $mid-blue
-          +linear-gradient(color-stops($lightest-blue, $lighter-blue - #111))
-          +text-shadow(#fff, 0, 1px, 1px)
+          background: $nav
+          border: 1px solid $nav - #111
+          color: $filler
+          +linear-gradient(color-stops($nav_alt - #111, $nav - #111))
+          +text-shadow($nav - #333, 0, 1px, 1px)
 
       &.home_tab
         a
@@ -258,7 +254,6 @@ body.promo.landing #admin p
             span
               background-position: 0 0
 
-
   img
     float: right
     margin-top: -35px
@@ -266,34 +261,39 @@ body.promo.landing #admin p
 
 /* sub-nav styles */
 #sub-nav
-  background: $filler
+  background: $subnav
   border-bottom: 1px solid #ddd
   padding-top: 4px
+  +box-shadow(#f3f3f3, 0, 2px, 3px)
+  +pie-clearfix
 
   ul
-    +horizontal-list
-    padding: 0 8px 5px 0px
-    margin-top: 2px !important
+    +pie-clearfix
+    li
+      display: inline
+      float: left
     
   a
-    +border-radius
+    color: $subnav_font
     display: inline-block
-    font-size: 12px
-    padding: 7px 10px 6px 10px
+    font-family: 'Avenir', sans-serif
+    font-size: 13px
+    padding: 11px 10px 11px
     text-decoration: none
     +text-shadow(#fff, 0, 1px, 0)
     &:hover, &:focus
-      background: $mid-blue
-      color: white
-      +text-shadow(#000, 0, 1px, 0)
+      color: $subnav_font
+      
   &.alt
     margin: 10px -15px
 
   .active
     a
-      background: $mid-blue
-      color: white
-      +text-shadow(#000, 0, 1px, 0)
+      background: image_url("subnav_active.png") no-repeat center 26px
+      font-weight: bold
+      padding: 9px 10px 13px
+      position: relative
+      bottom: -2px
   .inactive
     a
       color: grey
@@ -307,7 +307,7 @@ body.login
       padding: 16px 0 1px
       text-decoration: none
       color: $dark-orange
-      font-family: 'Avenir'
+      font-family: 'Avenir', sans-serif
       font-size: 24px
       font-weight: normal
       text-decoration: none

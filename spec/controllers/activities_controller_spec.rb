@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+include ApplicationHelper
 
 describe ActivitiesController do
 
@@ -131,7 +132,7 @@ describe ActivitiesController do
                           :data_response => @data_response, :am_approved => false)
       login @user
     end
-    
+
     it "should allow a project to be created automatically on update" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       put :update, :id => @activity.id, :response_id => @data_response.id,
@@ -139,7 +140,7 @@ describe ActivitiesController do
       @activity.reload
       @activity.project.name.should == @activity.name
     end
-    
+
     it "should allow a project to be created automatically on create" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       put :create, :response_id => @data_response.id,
@@ -147,7 +148,7 @@ describe ActivitiesController do
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name
     end
-    
+
     it "should assign the activity to an existing project if a project exists with the same name as the activity" do
       put :update, :id => @activity.id, :response_id => @data_response.id,
           :activity => {:name => @project.name, :project_id => '-1'}
@@ -168,15 +169,35 @@ describe ActivitiesController do
       put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
       @activity.reload
       @activity.budget.should_not == 9999993
-      flash[:error].should == "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
+      flash[:error].should == "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
     end
 
-    it "redirects to the budget classifications page when Save & Classify is clicked" do
+    it "redirects to the location classifications page when Save & Add Locations is clicked" do
       @data_request.save
       put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(edit_activity_classification_path(@project.activities.first, 'purposes'))
+        :commit => 'Save & Add Locations >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'locations')
     end
+
+    it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
+      @data_request.save
+      put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Add Purposes >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'purposes')
+    end
+    it "redirects to the input classifications page when Save & Add Inputs is clicked" do
+      @data_request.save
+      put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Add Inputs >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'inputs')
+    end
+    it "redirects to the output classifications page when Save & Add Outputs is clicked" do
+      @data_request.save
+      put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
+        :commit => 'Save & Add Outputs >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'outputs')
+    end
+
 
     it "should NOT approve the project as a reporter" do
       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true

@@ -3,32 +3,7 @@ class ClassificationsController < Reporter::BaseController
   include NumberHelper
 
   before_filter :load_activity_and_data_response
-  before_filter :load_klasses, :only => [:edit, :update, :download_template, :bulk_create]
-  before_filter :warn_if_not_classified, :only => [:edit]
-
-  def edit
-    @budget_coding_tree = CodingTree.new(@activity, @budget_klass)
-    @spend_coding_tree  = CodingTree.new(@activity, @spend_klass)
-    @budget_assignments = @budget_klass.with_activity(@activity).all.
-                            map_to_hash{ |b| {b.code_id => b} }
-    @spend_assignments  = @spend_klass.with_activity(@activity).all.
-                            map_to_hash{ |b| {b.code_id => b} }
-
-    # set default to 'my' view if there are code assignments present
-    if params[:view].blank?
-      params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
-    end
-  end
-
-  def update
-    unless (@activity.approved? || @activity.am_approved?)
-      @budget_klass.update_classifications(@activity, params[:classifications][:budget])
-      @spend_klass.update_classifications(@activity, params[:classifications][:spend])
-      flash[:notice] = "Activity classification was successfully updated."
-    end
-
-    redirect_to edit_activity_classification_url(@activity, params[:id])
-  end
+  before_filter :load_klasses_from_mode, :only => [:download_template, :bulk_create]
 
   def derive_classifications_from_sub_implementers
     if @activity.derive_classifications_from_sub_implementers!(params[:coding_type])
@@ -37,7 +12,7 @@ class ClassificationsController < Reporter::BaseController
       flash[:error] = "We could not derive classification from implementers."
     end
 
-    redirect_to edit_activity_classification_url(@activity, params[:id], :view => params[:view])
+    redirect_to edit_activity_or_ocost_path(@activity, :mode => params[:mode], :view => params[:view])
   end
 
   def bulk_create
@@ -55,13 +30,13 @@ class ClassificationsController < Reporter::BaseController
       end
     end
 
-    redirect_to edit_activity_classification_url(@activity, params[:id], :view => params[:view])
+    redirect_to edit_activity_or_ocost_path(@activity, :mode => params[:mode], :view => params[:view])
   end
 
   def download_template
-    code_klass = get_code_klass_for_classification_type(params[:id])
+    code_klass = get_code_klass_for_classification_type(params[:mode])
     template = CodeAssignment.download_template(code_klass)
-    send_csv(template, "#{params[:id]}_template.csv")
+    send_csv(template, "#{params[:mode]}_template.csv")
   end
 
   private
@@ -107,18 +82,4 @@ class ClassificationsController < Reporter::BaseController
         Location
       end
     end
-
-    def load_klasses
-      @budget_klass, @spend_klass = case params[:id]
-      when 'purposes'
-        [CodingBudget, CodingSpend]
-      when 'inputs'
-        [CodingBudgetCostCategorization, CodingSpendCostCategorization]
-      when 'locations'
-        [CodingBudgetDistrict, CodingSpendDistrict]
-      else
-        raise "Invalid type #{params[:id]}".to_yaml
-      end
-    end
-
 end

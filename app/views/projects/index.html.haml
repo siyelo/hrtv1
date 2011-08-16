@@ -40,9 +40,6 @@
         %li= link_to 'Export Workplan', download_workplan_response_projects_path(@response)
         %li= link_to 'Export All', export_response_activities_path(@response)
 
-    %li
-      = link_to "Link to Funders", bulk_edit_response_projects_path, :class => 'create_new'
-
   #import_export_box
     = render 'activities_import', :project => nil, :can_export => @response.activities.present?
 

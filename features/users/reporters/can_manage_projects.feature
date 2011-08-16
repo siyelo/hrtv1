@@ -115,7 +115,8 @@ Feature: Reporter can manage projects
         And I press "Update Project"
         And I follow "Project1"
       Then the "Budget" field within ".fields" should contain "7778"
-
+    
+    @wip
     Scenario: A Reporter can bulk link their projects to those from other organizations
       Then I should see "Project5"
       When I follow "Link to Funders"
@@ -124,6 +125,7 @@ Feature: Reporter can manage projects
         And I press "Update"
       Then I should see "Your projects have been successfully updated"
 
+    @wip
     Scenario: A Reporter can bulk unlink their projects to those from other organizations
       Then I should see "Project5"
       When I follow "Link to Funders"
@@ -131,7 +133,8 @@ Feature: Reporter can manage projects
       When select "" from "funding_flows_3"
         And I press "Update"
       Then I should see "Your projects have been successfully updated"
-
+    
+    @wip
     Scenario: A Reporter can select project missing or project unknown for their FS from the bulk edit page
       Then I should see "Project5"
       When I follow "Link to Funders"

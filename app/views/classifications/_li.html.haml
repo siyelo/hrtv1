@@ -1,7 +1,8 @@
 %div.clearfix
   .left
-    = check_box_tag "activity[code_assignment_tree][]", code.id, classified
-    = label_tag code.short_display
+    - id = "activity[code_assignment_tree][#{code.id}]"
+    = check_box_tag id, code.id, classified
+    = label_tag id, code.short_display
     = link_to "(?)", "#", :title => code.description, :class => "tooltip info" if code.description
   .values.js_values.right
     .spend.js_spend

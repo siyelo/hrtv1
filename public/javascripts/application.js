@@ -840,6 +840,26 @@ var classifications_edit = {
         });
       };
     });
+
+    // restrict input to only numbers
+    $(".percentage_box").keydown(function(event) {
+      // Allow backspace and delete, enter and tab
+      var bksp = 46;
+      var del = 8;
+      var enter = 13;
+      var tab = 9;
+      if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
+          // let it happen, don't do anything
+      } else {
+        // Ensure that it is a number or a '.' and stop the keypress
+        var period = 190;
+        if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period)  {
+          // let it happen
+        }else{
+          event.preventDefault();
+        };
+      };
+    });
   }
 };
 
@@ -1442,7 +1462,7 @@ var activity_form = function () {
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
   });
-  
+
   $('#activity_name').live('keyup', function() {
     var parent = $(this).parent('li')
     var remaining = $(this).attr('data-maxlength') - $(this).val().length;

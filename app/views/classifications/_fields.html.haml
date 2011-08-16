@@ -5,6 +5,6 @@
 - cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
 - options = percentage_field_options(code, assignment, valid)
 
-= text_field_tag "classifications[#{type}][#{code.id}]", h(percentage), {:size => 5}.merge(options)
+= text_field_tag "classifications[#{type}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box"}.merge(options)
 .inline_ratio %
 .subtotal= cached_label

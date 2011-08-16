@@ -1,7 +1,7 @@
 %div.clearfix
   .left
     - id = "activity[code_assignment_tree][#{code.id}]"
-    = check_box_tag id, code.id, classified
+    = check_box_tag id, code.id, classified, {:tabindex => -1}
     = label_tag id, code.short_display
     = link_to "(?)", "#", :title => code.description, :class => "tooltip info" if code.description
   .values.js_values.right

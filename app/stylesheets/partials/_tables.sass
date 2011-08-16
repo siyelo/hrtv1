@@ -451,11 +451,11 @@ tr.activity_subheading
 
 .input_table
   width: 100%
-  
+
   tr
     position: relative
 
-    
+
   th
     background: $primary_lightest
     border: 1px solid $primary_border3
@@ -471,7 +471,7 @@ tr.activity_subheading
       border: none
     &:first-child
       border-left: 1px solid $primary_border3
-  
+
   td
     background: #fff
     border: 1px solid $primary_border2
@@ -501,7 +501,7 @@ tr.activity_subheading
     text-align: right
     width: 100% !important
     +border-radius(0)
-    
+
     &:hover, &:focus
       border: none !important
       +box-shadow(none)
@@ -523,3 +523,9 @@ tr.activity_subheading
       color: $primary
       font-size: 11px
       padding: 1px 4px 1px 0
+
+.right_justified
+  float: right
+  // override fix
+  a
+    padding-right: 0px !important

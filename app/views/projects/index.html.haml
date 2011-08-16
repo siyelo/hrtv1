@@ -29,7 +29,7 @@
         %li= link_to 'Project', new_response_project_path(@response), :class => 'js_toggle_project_form'
         %li= link_to 'Activity', new_response_activity_path(@response), :class => 'js_toggle_activity_form'
         %li= link_to 'Other Cost', new_response_other_cost_path(@response), :class => 'js_toggle_other_cost_form'
-          
+
     %li.js_dropdown_menu
       - link_to '#', :class => 'js_dropdown_trigger create_new' do
         Import / Export
@@ -55,13 +55,18 @@
     %thead
       %tr.head
         %th{:colspan => 3}
-        %th= current_fy(@response)
-        %th{:colspan => 10}= next_fy(@response)
+        %th
+          .right_justified= current_fy(@response)
+        %th
+          .right_justified= next_fy(@response)
+        %th{:colspan => 10}
       %tr.head
         %th= sortable "name", "Project"
         %th{:colspan => 2} Activity / Other Cost
-        %th= sortable "spend", "Past Expenditure"
-        %th= sortable "budget", "Current Budget"
+        %th
+          .right_justified= sortable "spend", "Past Expenditure"
+        %th
+          .right_justified= sortable "budget", "Current Budget"
         %th
 
     %tbody
@@ -77,8 +82,10 @@
       %tr.filler
         %td{:colspan => 2}
         %td.total TOTAL
-        %td.wrap-12= n2crs(@response.spend, @response.currency)
-        %td.wrap-12= n2crs(@response.budget, @response.currency)
+        %td.wrap-12
+          .right_justified= n2cs(@response.spend, @response.currency)
+        %td.wrap-12
+          .right_justified= n2cs(@response.budget, @response.currency)
         %td
 
   = will_paginate @projects

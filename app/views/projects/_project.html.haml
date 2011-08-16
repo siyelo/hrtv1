@@ -17,8 +17,10 @@
       %ul.horizontal
         %li
     %td.total Project Total
-    %td.wrap-12= n2crs(project.spend, project.currency)
-    %td.wrap-12= n2crs(project.budget, project.currency)
+    %td.wrap-12
+      .right_justified= n2cs(project.spend, project.currency)
+    %td.wrap-12
+      .right_justified= n2cs(project.budget, project.currency)
     %td
 
   %tr.filler2
@@ -26,8 +28,10 @@
       %ul.horizontal
         %li
     %td.total Funding Sources Total
-    %td.wrap-12= n2crs(project.in_flows_total(:spend), project.currency)
-    %td.wrap-12= n2crs((project.in_flows_total(:budget)), project.currency)
+    %td.wrap-12
+      .right_justified= n2cs(project.in_flows_total(:spend), project.currency)
+    %td.wrap-12
+      .right_justified= n2cs((project.in_flows_total(:budget)), project.currency)
     %td
 
   - if(!@response.project_and_activities_matching_amounts?(project, :spend) || !@response.project_and_activities_matching_amounts?(project, :budget))
@@ -35,6 +39,8 @@
       %td{:colspan => 1}
 
       %td.total Project Total - (Activities + Other Costs)
-      %td.wrap-12= n2crs(project.spend - project.subtotals(:spend), project.currency)
-      %td.wrap-12= n2crs(project.budget - project.subtotals(:budget), project.currency)
+      %td.wrap-12
+        .right_justified= n2cs(project.spend - project.subtotals(:spend), project.currency)
+      %td.wrap-12
+        .right_justified= n2cs(project.budget - project.subtotals(:budget), project.currency)
       %td= image_tag "warning_12.png", :title => get_project_total_differences(project), :class => 'tooltip_projects'

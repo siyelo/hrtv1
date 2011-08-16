@@ -17,7 +17,7 @@ module NumberHelper
                       :separator => ".",
                       :unit => "<span class=\"currency\">#{unit}</span>",
                       :delimiter => ",",
-                      :format => "%u %u")
+                      :format => "%u %n")
   end
 
   def n2crs(value, unit = "")

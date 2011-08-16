@@ -31,16 +31,6 @@ describe Activity do
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:budget_q4_prev) }
-    it { should allow_mass_assignment_of(:budget_q1) }
-    it { should allow_mass_assignment_of(:budget_q2) }
-    it { should allow_mass_assignment_of(:budget_q3) }
-    it { should allow_mass_assignment_of(:budget_q4) }
-    it { should allow_mass_assignment_of(:spend_q4_prev) }
-    it { should allow_mass_assignment_of(:spend_q1) }
-    it { should allow_mass_assignment_of(:spend_q2) }
-    it { should allow_mass_assignment_of(:spend_q3) }
-    it { should allow_mass_assignment_of(:spend_q4) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
@@ -62,18 +52,8 @@ describe Activity do
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
     it { should validate_numericality_of(:budget) }
-    it { should validate_numericality_of(:budget_q4_prev) }
-    it { should validate_numericality_of(:budget_q1) }
-    it { should validate_numericality_of(:budget_q2) }
-    it { should validate_numericality_of(:budget_q3) }
-    it { should validate_numericality_of(:budget_q4) }
     it { should validate_numericality_of(:spend) }
-    it { should validate_numericality_of(:spend_q4_prev) }
-    it { should validate_numericality_of(:spend_q1) }
-    it { should validate_numericality_of(:spend_q2) }
-    it { should validate_numericality_of(:spend_q3) }
-    it { should validate_numericality_of(:spend_q4) }
-    
+
     it "will return false if the activity start date is before the project start date" do
       basic_setup_response
       @project  = Factory(:project, :data_response => @response,
@@ -105,28 +85,6 @@ describe Activity do
   end
 
   describe "Callbacks" do
-    describe "#set_total_amounts" do
-      before :each do
-        basic_setup_project
-      end
-
-      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
-        activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :budget => nil, :budget_q4_prev => 5,
-                         :budget_q1 => 10, :budget_q2 => 10,
-                         :budget_q3 => 10, :budget_q4 => 10)
-        activity.budget.should == 40
-      end
-
-      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
-        activity = Factory(:activity, :data_response => @response, :project => @project,
-                         :spend => nil, :spend_q4_prev => 5,
-                         :spend_q1 => 10, :spend_q2 => 10,
-                         :spend_q3 => 10, :spend_q4 => 10)
-        activity.spend.should == 40
-      end
-    end
-
     describe "#update_cached_usd_amounts" do
       before :each do
         Money.default_bank.add_rate(:RWF, :USD, 0.1)
@@ -138,18 +96,6 @@ describe Activity do
           setup_activity_in_fiscal_year("2010-07-01", "2011-06-30", attributes, 'RWF')
           @activity.budget_in_usd.should == 12.3
           @activity.spend_in_usd.should == 45.6
-        end
-      end
-
-      context "USG FY" do
-        it "sets budget_in_usd and spend_in_usd amounts from quarterly fields" do
-          attributes = {:budget_q4_prev => 10, :budget_q1 => 10,
-                        :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
-                        :spend_q4_prev => 11, :spend_q1 => 11,
-                        :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999}
-          setup_activity_in_fiscal_year("2010-10-01", "2011-09-30", attributes, 'RWF')
-          @activity.budget_in_usd.should == 4
-          @activity.spend_in_usd.should == 4.4
         end
       end
     end
@@ -207,21 +153,11 @@ describe Activity do
       rows[1][2].should == @activity.description
       rows[1][3].should == @activity.provider.try(:name)
       rows[1][4].to_s.should == @activity.spend.to_s
-      rows[1][5].to_s.should == @activity.spend_q4_prev.to_s
-      rows[1][6].to_s.should == @activity.spend_q1.to_s
-      rows[1][7].to_s.should == @activity.spend_q2.to_s
-      rows[1][8].to_s.should == @activity.spend_q3.to_s
-      rows[1][9].to_s.should == @activity.spend_q4.to_s
-      rows[1][10].to_s.should == @activity.budget.to_s
-      rows[1][11].to_s.should == @activity.budget_q4_prev.to_s
-      rows[1][12].to_s.should == @activity.budget_q1.to_s
-      rows[1][13].to_s.should == @activity.budget_q2.to_s
-      rows[1][14].to_s.should == @activity.budget_q3.to_s
-      rows[1][15].to_s.should == @activity.budget_q4.to_s
-      rows[1][16].should == @activity.beneficiaries.map{|l| l.short_display}.join(',')
-      rows[1][17].should == @activity.targets.map{|o| o.description}.join("")
-      rows[1][18].should == @activity.start_date.to_s
-      rows[1][19].should == @activity.end_date.to_s
+      rows[1][5].to_s.should == @activity.budget.to_s
+      rows[1][6].should == @activity.beneficiaries.map{|l| l.short_display}.join(',')
+      rows[1][7].should == @activity.targets.map{|o| o.description}.join("")
+      rows[1][8].should == @activity.start_date.to_s
+      rows[1][9].should == @activity.end_date.to_s
     end
   end
 

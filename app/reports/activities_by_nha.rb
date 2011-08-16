@@ -35,14 +35,6 @@ class Reports::ActivitiesByNha
       row << 'Activity name'
       row << 'Activity description'
       row << 'Activity currency'
-      row << 'Q1'
-      row << 'Q2'
-      row << 'Q3'
-      row << 'Q4'
-      row << 'Q1 (USD)'
-      row << 'Q2 (USD)'
-      row << 'Q3 (USD)'
-      row << 'Q4 (USD)'
       row << 'Total Past Expenditure'
       row << 'Converted Total Past Expenditure (USD)'
       row << 'Classified Past Expenditure'
@@ -88,14 +80,6 @@ class Reports::ActivitiesByNha
         row << activity.name
         row << activity.description
         row << activity.currency
-        row << activity.spend_q1
-        row << activity.spend_q2
-        row << activity.spend_q3
-        row << activity.spend_q4
-        row << (activity.spend_q1 ? activity.spend_q1 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-        row << (activity.spend_q2 ? activity.spend_q2 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-        row << (activity.spend_q3 ? activity.spend_q3 * Money.default_bank.get_rate(activity.currency, :USD) : '')
-        row << (activity.spend_q4 ? activity.spend_q4 * Money.default_bank.get_rate(activity.currency, :USD) : '')
         row << activity.gor_spend
         row << activity.spend_in_usd
 

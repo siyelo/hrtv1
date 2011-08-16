@@ -17,9 +17,8 @@ class Activity < ActiveRecord::Base
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description, :start_date, :end_date, :approved, :am_approved,
-    :budget, :spend, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
+    :name, :description, :start_date, :end_date,
+    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
     :beneficiary_ids, :provider_id,
     :sub_activities_attributes, :organization_ids, :csv_project_name, 
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes, 
@@ -128,7 +127,6 @@ class Activity < ActiveRecord::Base
   # also see validations in BudgetSpendHelper
   before_validation :strip_input_fields
   validate :approved_activity_cannot_be_changed
-
   validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
@@ -178,17 +176,7 @@ class Activity < ActiveRecord::Base
         row << activity.description
         row << activity.provider.try(:name)
         row << activity.spend
-        row << activity.spend_q4_prev
-        row << activity.spend_q1
-        row << activity.spend_q2
-        row << activity.spend_q3
-        row << activity.spend_q4
         row << activity.budget
-        row << activity.budget_q4_prev
-        row << activity.budget_q1
-        row << activity.budget_q2
-        row << activity.budget_q3
-        row << activity.budget_q4
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
         row << activity.targets.map{|o| o.description}.join(",")
         row << activity.start_date
@@ -218,24 +206,16 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
-      activity.csv_project_name  = row[col_names[0]].try(:strip)
-      activity.name              = row[col_names[1]].try(:strip)
-      activity.description       = row[col_names[2]].try(:strip)
-      activity.csv_provider      = row[col_names[3]].try(:strip)
-      activity.spend             = row[4].try(:strip) # "<MMM 'YY - MMM 'YY> Spend"
-      activity.spend_q1          = row[5].try(:strip)
-      activity.spend_q2          = row[6].try(:strip)
-      activity.spend_q3          = row[7].try(:strip)
-      activity.spend_q4          = row[8].try(:strip)
-      activity.budget            = row[9].try(:strip) # "<MMM 'YY - MMM 'YY> Budget"
-      activity.budget_q1         = row[10].try(:strip)
-      activity.budget_q2         = row[11].try(:strip)
-      activity.budget_q3         = row[12].try(:strip)
-      activity.budget_q4         = row[13].try(:strip)
-      activity.csv_beneficiaries = row['Beneficiaries'].try(:strip)
-      activity.csv_targets       = row['Targets'].try(:strip)
-      activity.start_date        = DateHelper::flexible_date_parse(row['Start Date'].try(:strip))
-      activity.end_date          = DateHelper::flexible_date_parse(row['End Date'].try(:strip))
+      activity.csv_project_name        = row["Project Name"].try(:strip)
+      activity.name                    = row["Activity Name"].try(:strip)
+      activity.description             = row["Activity Description"].try(:strip)
+      activity.csv_provider            = row["Provider"].try(:strip)
+      activity.spend                   = row["Spend"].try(:strip)
+      activity.budget                  = row["Budget"].try(:strip)
+      activity.csv_beneficiaries       = row["Beneficiaries"].try(:strip)
+      activity.csv_targets             = row["Targets"].try(:strip)
+      activity.start_date              = DateHelper::flexible_date_parse(row["Start Date"].try(:strip))
+      activity.end_date                = DateHelper::flexible_date_parse(row["End Date"].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -367,22 +347,6 @@ class Activity < ActiveRecord::Base
     (budget || 0 )
   end
 
-  def actual_quarterly_spend_check?
-    return true if (spend_q1 || 0) <= (project.spend_q1 || 0) &&
-                   (spend_q2 || 0) <= (project.spend_q2 || 0) &&
-                   (spend_q3 || 0) <= (project.spend_q3 || 0) &&
-                   (spend_q4 || 0) <= (project.spend_q1 || 0)
-    return false
-  end
-
-  def actual_quarterly_budget_check?
-    return true if (budget_q1 || 0) <= (project.budget_q1 || 0) &&
-                   (budget_q2 || 0) <= (project.budget_q2 || 0) &&
-                   (budget_q3 || 0) <= (project.budget_q3 || 0) &&
-                   (budget_q4 || 0) <= (project.budget_q4 || 0)
-    return false
-  end
-
   def sub_activities_each_have_defined_districts?(coding_type)
     !sub_activity_district_code_assignments_if_complete(coding_type).empty?
   end
@@ -412,8 +376,7 @@ class Activity < ActiveRecord::Base
 
   private
 
-    ### Class methods
-
+  ### Class methods
     def self.file_upload_columns(response)
       ["Project Name",
        "Activity Name",
@@ -534,6 +497,8 @@ class Activity < ActiveRecord::Base
   end
 end
 
+
+
 # == Schema Information
 #
 # Table name: activities
@@ -546,24 +511,14 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
-#  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)

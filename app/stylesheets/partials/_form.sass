@@ -606,7 +606,7 @@ td.error, tr.error td
 
 
 // New form styles
-.condensed_form
+.condensed_fields
   li
     border: none !important
     display: inline-block !important
@@ -633,9 +633,14 @@ td.error, tr.error td
       a
         padding-left: 4px
 
-  #activity_currency_input span
+  .noedit
+    border: 1px solid $lightest-blue
+    display: block
     font-size: 12px
     font-weight: normal
+    margin-top: 3px
+    padding: 6px
+    +border-radius
 
   a.tooltip
     font-size: 11px

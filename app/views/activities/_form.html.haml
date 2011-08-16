@@ -8,7 +8,7 @@
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
-    %ul.dashboard_section.condensed_form
+    %ul.dashboard_section.condensed_fields
       %li#activity_name_input.string.required
         .name
           = f.label :name, "Name"
@@ -31,7 +31,7 @@
         .name
           = f.label :currency, "Currency"
           = link_to "(?)", "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip'
-        %span= f.object.currency
+        %span.noedit= f.object.currency
       %li#activity_project_id_input.select.required
         .name
           = f.label :project_id, "Project"

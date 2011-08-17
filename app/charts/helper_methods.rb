@@ -98,7 +98,7 @@ module Charts::HelperMethods
       def row.name
         self[0]
       end
-      codes << row
+      codes << row if row.value > 0
     end
     codes
   end

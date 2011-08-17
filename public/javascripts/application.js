@@ -855,6 +855,18 @@ var classifications_edit = {
         });
       };
     });
+    $(".percentage_box").keyup(function(event) {
+      var element = $(this);
+      var activity_budget = element.parents('ul:last').attr('activity_budget');
+      var activity_spend = element.parents('ul:last').attr('activity_spend');
+      var subtotal = element.siblings('.subtotal');
+      
+      if(element.parents('div:first').hasClass('spend')){
+        subtotal.html((parseFloat(activity_spend) * (parseFloat(element.val())/100)).toFixed(2))
+      }else{
+        subtotal.val(activity_budget * (element.val/100))
+      };
+    });
 
     // restrict input to only numbers
     $(".percentage_box").keydown(function(event) {
@@ -863,12 +875,13 @@ var classifications_edit = {
       var del = 8;
       var enter = 13;
       var tab = 9;
+      
       if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
           // let it happen, don't do anything
       } else {
         // Ensure that it is a number or a '.' and stop the keypress
         var period = 190;
-        if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period)  {
+        if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
           // let it happen
         }else{
           event.preventDefault();

@@ -1,10 +1,10 @@
 %div.clearfix
-  .left
+  .grid-50
     - id = "activity[code_assignment_tree][#{code.id}]"
     = check_box_tag id, code.id, classified, {:tabindex => -1}
     = label_tag id, code.short_display
     = link_to "(?)", "#", :title => code.description, :class => "tooltip info" if code.description
-  .values.js_values.right
+  .values.js_values.left{:style => "margin-left: #{margin}px;"}
     .spend.js_spend
       - spend_assignment = @spend_assignments[code.id]
       - valid = spend_assignment && !@spend_coding_tree.valid_ca?(spend_assignment)

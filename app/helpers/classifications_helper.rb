@@ -50,7 +50,7 @@ module ClassificationsHelper
   end
 
   def percentage_field_options(code, assignment, valid)
-    valid ? {:title => node_error(code, assignment), :class => "tooltip invalid_node"} : {}
+    valid ? {:title => node_error(code, assignment), :class => "percentage_box tooltip invalid_node"} : {}
   end
   
   def derive_percentage_from_amount(type, assignment)

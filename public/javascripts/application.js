@@ -452,6 +452,29 @@ var quartersInit = function () {
   quartersSum($('.js_fy_quarter'));
 };
 
+var dynamicUpdateTotalsInit = function () { 
+  $('.js_spend, .js_budget').live('keyup', function () {
+    var total_value = 0;
+
+    if ($(this).hasClass('js_spend')) {
+      var input_fields = $(this).parents('table').find('.js_spend');
+      var total_field = $('.js_total_spend .amount');
+    } else if ($(this).hasClass('js_budget')) {
+      var input_fields = $(this).parents('table').find('.js_budget');
+      var total_field = $('.js_total_budget .amount');
+    }
+    
+    for (var i = 0; i < input_fields.length; i++) {
+      var input_field_value = Number(input_fields[i].value);
+      if (!isNaN(input_field_value)) {
+        total_value += input_field_value;
+      }
+    }
+
+    total_field.html(total_value.toFixed(1));
+  });
+};
+
 var admin_responses_index = {
   run: function () {
     // destroy
@@ -1526,6 +1549,7 @@ var activity_form = function () {
   approveAsAdmin();
   commentsInit();
   quartersInit();
+  dynamicUpdateTotalsInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
@@ -1631,6 +1655,7 @@ var other_costs_new = other_costs_create = other_costs_edit = other_costs_update
     approveBudget();
     approveAsAdmin();
     quartersInit();
+    dynamicUpdateTotalsInit();
   }
 };
 
@@ -1639,6 +1664,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     commentsInit();
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
+    dynamicUpdateTotalsInit();
   }
 }
 

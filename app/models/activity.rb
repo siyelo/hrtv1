@@ -112,7 +112,7 @@ class Activity < ActiveRecord::Base
 
 
   ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id'].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
 

@@ -19,7 +19,7 @@ class Activity < ActiveRecord::Base
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :beneficiary_ids, :provider_id,
+    :beneficiary_ids, :provider_id, :data_response_id, 
     :sub_activities_attributes, :organization_ids, :csv_project_name, 
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes, 
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask
@@ -137,6 +137,12 @@ class Activity < ActiveRecord::Base
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
+  def initialize(*params)
+    super(*params)
+    debugger
+    #needed for sub activity initialization
+    self.sub_activities.build(:provider_id => self.organization.id) if self.data_response_id && self.sub_activities.empty?
+  end
 
   ### Class Methods
   def self.human_attribute_name(attr)

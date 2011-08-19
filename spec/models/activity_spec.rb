@@ -172,6 +172,15 @@ describe Activity do
     end
   end
 
+  describe "sub-activities" do
+    it "creates a sub activitiy in the initialization of the activity" do
+      basic_setup_project
+      @activity = Activity.new(:data_response_id => @response.id, :project_id => @project_id)
+      @activity.sub_activities.size.should == 1
+      @activity.sub_activities.first.provider.should == @organization
+    end
+  end
+
   describe "can show who we provided money to (providers)" do
     context "on a single project" do
       it "should have at least 1 provider" do

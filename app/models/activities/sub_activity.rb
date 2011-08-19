@@ -38,6 +38,10 @@ class SubActivity < Activity
 
   ### Class Methods
 
+  def initialize(*params)
+    super(*params)
+  end
+
   def self.human_attribute_name(attr)
     IMPLEMENTER_HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end

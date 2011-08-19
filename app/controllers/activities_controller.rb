@@ -11,8 +11,9 @@ class ActivitiesController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
   def new
-    @activity = Activity.new
-    @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity = Activity.new(:data_response_id => @response.id, 
+                 :project => @response.projects.find(params[:project_id]))
+    # @activity.project = @response.projects.find_by_id(params[:project_id])
     @activity.provider = current_user.organization
   end
 

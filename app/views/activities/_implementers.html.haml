@@ -20,8 +20,13 @@
         %th
     %tbody
       - f.semantic_fields_for :sub_activities do |sa|
-        -# TODO: fix performance by putting this back = render "activities/sub_activity_row", :f => sa
+        -# TODO: fix performance by putting this back = render "activities/sub_activity_row", :f => sa 
         = render "activities/sub_activity_fields", :f => sa
+      - 3.times do 
+        - f.object.sub_activities.build unless f.object.sub_activities.length > 0
+        - new_object = f.object.class.reflect_on_association(:sub_activities).klass.new
+        - f.fields_for(:sub_activities, new_object, :child_index => "new_#{:sub_activities}") do |builder|
+          = render("activities/sub_activity_fields", :f => builder)
 
       %tr
         %td= link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"

@@ -1411,7 +1411,13 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-
+    
+    $('.js_address').click(function() {
+      (window).location.hash = 'new_' + $(this).html().toLowerCase();
+    });
+    
+    checkExistingHash();
+    
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();
@@ -1434,20 +1440,46 @@ var projects_index = {
     $('.js_toggle_projects_listing').click(function (e) {
       e.preventDefault();
       hideAll();
+      $.address.path('/');
       $( "form" )[ 0 ].reset()
       $('#projects_listing').fadeIn();
       $("html, body").animate({ scrollTop: 0 }, 0);
     });
 
-    var hideAll = function() {
-      $('#projects_listing').hide();
-      $('#new_project_form').hide();
-      $('#new_activity_form').hide();
-      $('#new_other_cost_form').hide();
-    };
+
 
     dynamicUpdateTotalsInit();
   }
+};
+
+var checkExistingHash = function(){
+  var hash = (window).location.hash
+  if (hash == '#'){
+    if (!($('#projects_listing').is(":visible"))){
+      $('.js_toggle_projects_listing').click();
+    }
+  }else{
+    if (hash == '#new_project'){
+      hideAll();
+      $('#new_project_form').fadeIn();
+    }
+    else if (hash == '#new_activity'){
+      hideAll();
+      $('#new_activity_form').fadeIn();
+      activity_form();
+    }
+    else if (hash == '#new_other cost'){
+      hideAll();
+      $('#new_other_cost_form').fadeIn();
+    }
+  };
+};
+
+var hideAll = function() {
+  $('#projects_listing').hide();
+  $('#new_project_form').hide();
+  $('#new_activity_form').hide();
+  $('#new_other_cost_form').hide();
 };
 
 var projects_bulk_edit = {

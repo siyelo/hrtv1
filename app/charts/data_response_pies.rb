@@ -22,11 +22,10 @@ module Charts::DataResponsePies
               :group => "codes.short_display, codes.id, codes.parent_id",
               :order => 'value DESC')
 
-        parent_ids = codes.collect{|n| n.parent_id} - [nil]
+        parent_ids = codes.collect{|n| n.parent_id.to_i} - [nil]
         parent_ids.uniq!
-
         # remove cached (parent) codes
-        codes.reject{|ca| parent_ids.include?(ca.code_id)}
+        codes.reject{|ca| parent_ids.include?(ca.code_id.to_i)}
       end
     end
   end

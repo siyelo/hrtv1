@@ -23,7 +23,7 @@ class Project < ActiveRecord::Base
   has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 and
-                            organization_id_to = #{organization.id}' ]
+                            organization_id_to = #{organization.id}' ] 
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true
+  accepts_nested_attributes_for :in_flows, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id'].blank? }
   before_validation_on_create :assign_project_to_funding_flows
   before_validation :strip_leading_spaces
 

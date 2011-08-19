@@ -20,7 +20,7 @@ class SubActivity < Activity
   after_destroy   :update_counter_cache
   before_save     :set_budget_amount
   before_save     :set_spend_amount
-  before_validation :strip_amount_mask_fields
+  before_validation :strip_mask_fields
 
   ### Validations
   validates_presence_of :provider_mask
@@ -259,7 +259,8 @@ class SubActivity < Activity
     end
 
     # remove any leading/trailing spaces from the percentage/amount input
-    def strip_amount_mask_fields
+    def strip_mask_fields
+      provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
       budget_mask = budget_mask.strip if budget_mask && !is_number?(budget_mask)
       spend_mask = spend_mask.strip if spend_mask && !is_number?(spend_mask)
     end

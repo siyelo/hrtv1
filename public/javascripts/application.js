@@ -1438,11 +1438,34 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-
-    $('.js_address').click(function() {
-      (window).location.hash = 'new_' + $(this).html().toLowerCase();
+    
+    $('.js_address').address(function() {
+      return 'new_' + $(this).html().toLowerCase();
     });
-
+    
+    $.address.externalChange(function() {
+      var hash = $.address.path();
+      if (hash == '/'){
+        if (!($('#projects_listing').is(":visible"))){
+          $('.js_toggle_projects_listing').click();
+        }
+      }else{
+        if (hash == '/new_project'){
+          hideAll();
+          $('/new_project_form').fadeIn();
+        }
+        else if (hash == '/new_activity'){
+          hideAll();
+          $('/new_activity_form').fadeIn();
+          activity_form();
+        }
+        else if (hash == '/new_other cost'){
+          hideAll();
+          $('/new_other_cost_form').fadeIn();
+        }
+      };
+    });
+    
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();

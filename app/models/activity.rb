@@ -125,7 +125,7 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  before_validation :strip_input_fields
+  before_validation :strip_input_fields, :unless => :is_sub_activity?
   validate :approved_activity_cannot_be_changed
   validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
@@ -497,7 +497,6 @@ class Activity < ActiveRecord::Base
     def strip_input_fields
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
-      self.provider_mask = self.provider_mask.strip if self.provider_mask && !is_number?(self.provider_mask)
     end
 
     def get_valid_attribute_name(type)

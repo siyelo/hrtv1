@@ -380,6 +380,10 @@ class Activity < ActiveRecord::Base
       find(:all, :include => :code).map{|ca| ca.code }.uniq
   end
 
+  def sub_activites_total(amount_method)
+    smart_sum(sub_activities, amount_method)
+  end
+
   private
 
   ### Class methods

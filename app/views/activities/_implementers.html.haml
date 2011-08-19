@@ -33,10 +33,10 @@
         %td
           %p.total.js_total_spend
             %span.label.left Total
-            %span.amount.right= activity_or_ocost.spend
+            %span.amount.right= activity_or_ocost.sub_activites_total(:spend)
             %span.currency.right= activity_or_ocost.currency
         %td
           %p.total.js_total_budget
             %span.label.left Total
-            %span.amount.right= activity_or_ocost.budget
+            %span.amount.right= activity_or_ocost.sub_activites_total(:budget)
             %span.currency.right= activity_or_ocost.currency

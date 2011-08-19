@@ -7,10 +7,14 @@ function inspect (obj) {
         alert(str);
 }
 
-function remove_fields(link) {
+function remove_fields(link, callback) {
   $(link).prev("input[type=hidden]").val("1");
   $(link).closest(".fields").hide();
   //$(link).parent().next().hide();
+
+  if (callback !== null) {
+    callback(link);
+  }
 };
 
 function add_fields(link, association, content) {
@@ -452,26 +456,35 @@ var quartersInit = function () {
   quartersSum($('.js_fy_quarter'));
 };
 
+var updateTotalsValuesCallback = function (el) {
+  updateTotalValues($(el).parents('tr').find('.js_spend'));
+  updateTotalValues($(el).parents('tr').find('.js_budget'));
+};
+
+var updateTotalValues = function (el) {
+  var total_value = 0;
+
+  if ($(el).hasClass('js_spend')) {
+    var input_fields = $(el).parents('table').find('.js_spend:visible');
+    var total_field = $('.js_total_spend .amount');
+  } else if ($(el).hasClass('js_budget')) {
+    var input_fields = $(el).parents('table').find('.js_budget:visible');
+    var total_field = $('.js_total_budget .amount');
+  }
+
+  for (var i = 0; i < input_fields.length; i++) {
+    var input_field_value = Number(input_fields[i].value);
+    if (!isNaN(input_field_value)) {
+      total_value += input_field_value;
+    }
+  }
+
+  total_field.html(total_value.toFixed(1));
+};
+
 var dynamicUpdateTotalsInit = function () { 
   $('.js_spend, .js_budget').live('keyup', function () {
-    var total_value = 0;
-
-    if ($(this).hasClass('js_spend')) {
-      var input_fields = $(this).parents('table').find('.js_spend');
-      var total_field = $('.js_total_spend .amount');
-    } else if ($(this).hasClass('js_budget')) {
-      var input_fields = $(this).parents('table').find('.js_budget');
-      var total_field = $('.js_total_budget .amount');
-    }
-
-    for (var i = 0; i < input_fields.length; i++) {
-      var input_field_value = Number(input_fields[i].value);
-      if (!isNaN(input_field_value)) {
-        total_value += input_field_value;
-      }
-    }
-
-    total_field.html(total_value.toFixed(1));
+    updateTotalValues(this);
   });
 };
 

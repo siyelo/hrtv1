@@ -48,6 +48,9 @@ class ProjectsController < Reporter::BaseController
   end
 
   def update
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+    p params
+    puts "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
     success = FundingFlow.create_flows(params)
     update! do |success, failure|
       success.html {

@@ -31,7 +31,7 @@ class Project < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id'].blank? }
+  accepts_nested_attributes_for :in_flows, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
   before_validation_on_create :assign_project_to_funding_flows
   before_validation :strip_leading_spaces
 

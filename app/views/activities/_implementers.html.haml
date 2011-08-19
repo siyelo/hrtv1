@@ -25,7 +25,7 @@
       - 3.times do 
         - f.object.sub_activities.build unless f.object.sub_activities.length > 0
         - new_object = f.object.class.reflect_on_association(:sub_activities).klass.new
-        - f.fields_for(:sub_activities, new_object, :child_index => "new_#{:sub_activities}") do |builder|
+        - f.fields_for(:sub_activities, new_object) do |builder|
           = render("activities/sub_activity_fields", :f => builder)
 
       %tr

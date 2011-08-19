@@ -153,7 +153,8 @@ module ApplicationHelper
   # Helper for adding remove link to nested form models
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
-    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)
+    callback = options[:callback] || 'null'
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this, #{callback})", :class => class_name)
   end
 
   # Helper for adding new nested form models

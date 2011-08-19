@@ -50,6 +50,18 @@ module ClassificationsHelper
   end
 
   def percentage_field_options(code, assignment, valid)
-    valid ? {:title => node_error(code, assignment), :class => "tooltip invalid_node"} : {}
+    valid ? {:title => node_error(code, assignment), :class => "percentage_box tooltip invalid_node"} : {}
+  end
+  
+  def derive_percentage_from_amount(type, assignment)
+    if assignment
+      if assignment.percentage.nil? && !assignment.nil?
+        percentage = (100 / (@activity.send(type).to_f / assignment.cached_amount.to_f)).to_s
+      else
+        percentage = assignment.percentage
+      end
+    else
+      percentage = ''
+    end
   end
 end

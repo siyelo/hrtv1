@@ -90,6 +90,37 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "classifications[budget][112]" field should contain "60"
     And the "classifications[spend][112]" field should contain "40"
 
+  @javascript
+  Scenario: Reporter can classify Purposes for activity (third level)
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
+    And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
+    And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
+    And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
+    And a mtef_code "mtef112" exists with id: 112, short_display: "mtef112", parent: mtef_code "mtef11"
+    And I follow "Projects"
+    And I follow "activity1"
+    And I follow "Purposes" within ".ordered_nav"
+    And I press "tab1_expand"
+    
+    When I fill in "classifications[budget][111]" with "40"
+    Then the "classifications[budget][11]" field should contain "40"
+    And the "classifications[budget][1]" field should contain "40"
+    
+    When I fill in "classifications[spend][111]" with "40"
+    Then the "classifications[spend][11]" field should contain "40"
+    And the "classifications[spend][1]" field should contain "40"
+    
+    When I fill in "classifications[spend][1]" with "100"
+    And I fill in "classifications[budget][1]" with "100"
+    And I hover over ".tooltip" within ".values"
+    Then I should see "Amount of this node is not same as the sum of children amounts underneath (100.00% - 40.00% = 60%)"
+    
+    When I fill in "classifications[spend][1]" with "10"
+    And I hover over ".tooltip" within ".values"
+    Then I should see "The root nodes do not add up to 100%"
+    When I press "Save"
+    And I confirm the popup dialog
+    Then I should not see "Activity classification was successfully updated."
 
   Scenario: Reporter classify Purposes for activity and see flash error
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project, budget: 5000000, spend: 6000000
@@ -150,14 +181,14 @@ Feature: Reporter can enter a code breakdown for each activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[budget][1]" with "40"
+    And I fill in "classifications[budget][1]" with "100"
     #And I click element "#budget_to_spend"
     And I follow "Copy Current Budget to Past Expenditure"
     And I confirm the js popup
     And I press "Save"
     Then I should see "Activity classification was successfully updated."
-    And the "classifications[budget][1]" field should contain "40"
-    And the "classifications[spend][1]" field should contain "40"
+    And the "classifications[budget][1]" field should contain "100"
+    And the "classifications[spend][1]" field should contain "100"
 
   @javascript
   Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
@@ -165,14 +196,14 @@ Feature: Reporter can enter a code breakdown for each activity
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[spend][1]" with "40"
+    And I fill in "classifications[spend][1]" with "100"
     #And I click element "#js_spend_to_budget"
     And I follow "Copy Past Expenditure to Current Budget"
     And I confirm the js popup
     And I press "Save"
     Then I should see "Activity classification was successfully updated."
-    And the "classifications[budget][1]" field should contain "40"
-    And the "classifications[spend][1]" field should contain "40"
+    And the "classifications[budget][1]" field should contain "100"
+    And the "classifications[spend][1]" field should contain "100"
 
 
   Scenario: Reporter cannot clasify approved Activity
@@ -180,7 +211,7 @@ Feature: Reporter can enter a code breakdown for each activity
     When I follow "Projects"
     And I follow "activity2"
     And I follow "Purposes" within ".ordered_nav"
-    And I fill in "classifications[spend][1]" with "40"
+    And I fill in "classifications[spend][1]" with "100"
     And I press "Save"
     Then I should see "Classification for approved activity cannot be changed."
 

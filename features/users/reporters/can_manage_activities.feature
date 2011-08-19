@@ -33,7 +33,6 @@ Feature: Reporter can manage activities
 
    #combobox
   @javascript
-  @run
   Scenario: Reporter can add implementers (normal values)
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"

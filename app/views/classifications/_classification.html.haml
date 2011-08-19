@@ -1,6 +1,5 @@
 - if @budget_coding_tree.root_codes.present?
   - form_tag activity_classification_path(@activity, params[:id], :view => params[:view]), :method => :put do
-
     %p#expl
       %span.spend
         - link_to '#', :id => 'js_spend_to_budget' do
@@ -11,9 +10,9 @@
           = image_tag "icon_b2s.png", :alt => "Copy Current Budget to Past Expenditure", :title => "Copy Current Budget to Past Expenditure"
           Current Budget %
 
-    %ul.activity_tree
+    %ul.activity_tree{:activity_budget => @activity.budget, :activity_spend => @activity.spend}
       - @budget_coding_tree.root_codes.each do |code|
-        = render 'code_row', :code => code
+        = render 'code_row', :code => code, :margin => 0
 
     = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

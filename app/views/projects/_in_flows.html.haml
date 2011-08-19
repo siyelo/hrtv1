@@ -18,12 +18,12 @@
       %tr
         %td= link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
         %td
-          %p.total
+          %p.total.js_total_spend
             %span.label.left Total
             %span.amount.right= @project.in_flows_total(:spend)
             %span.currency.right= @project.currency
         %td
-          %p.total
+          %p.total.js_total_budget
             %span.label.left Total
             %span.amount.right= @project.in_flows_total(:budget)
             %span.currency.right= @project.currency

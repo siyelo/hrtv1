@@ -463,8 +463,7 @@ var dynamicUpdateTotalsInit = function () {
       var input_fields = $(this).parents('table').find('.js_budget');
       var total_field = $('.js_total_budget .amount');
     }
-   console.info(input_fields)
-    console.info(total_field)
+
     for (var i = 0; i < input_fields.length; i++) {
       var input_field_value = Number(input_fields[i].value);
       if (!isNaN(input_field_value)) {

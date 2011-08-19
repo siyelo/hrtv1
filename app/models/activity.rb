@@ -139,7 +139,6 @@ class Activity < ActiveRecord::Base
 
   def initialize(*params)
     super(*params)
-    debugger
     #needed for sub activity initialization
     self.sub_activities.build(:provider_id => self.organization.id) if self.data_response_id && self.sub_activities.empty?
   end

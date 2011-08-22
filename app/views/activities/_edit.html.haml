@@ -1,24 +1,24 @@
 - form_path = activity.class == Activity ? response_activity_path(@response, activity, :mode => params[:mode]) : response_other_cost_path(@response, activity, :mode => params[:mode])
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
-  
-%ul.horizontal.right.plain
-  %li
-    -if !activity.new_record? && params[:controller] != 'code_assignments'
-      - link_to "#comments" do
-        %span
-          View Comments
-  - if current_user.sysadmin?
-    = render 'activities/approve_as_admin', :activity => activity
-
-  - if current_user.activity_manager?
-    = render 'activities/approve_budget', :activity => activity
 
 = render '/classifications/uncoded_overlay', :activity => activity
 
 %h1.main_heading
   = activity.class == Activity ? "Edit Activity" : "Edit Other Cost"
   %span= render 'activities/help'
+
+  %ul.horizontal.right
+    %li
+      -if !activity.new_record? && params[:controller] != 'code_assignments'
+        - link_to "#comments" do
+          %span
+            View Comments
+    - if current_user.sysadmin?
+      = render 'activities/approve_as_admin', :activity => activity
+
+    - if current_user.activity_manager?
+      = render 'activities/approve_budget', :activity => activity
 
 = render '/activities/getting_started'
 

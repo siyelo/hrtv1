@@ -11,4 +11,4 @@
 
   %td= f.text_field :spend, :class => 'js_spend no_style'
   %td= f.text_field :budget, :class => 'js_budget no_style'
-  %td.delete= link_to_remove_fields "x", f, :class => 'delete_row'
+  %td.delete= link_to_remove_fields "x", f, {:class => 'delete_row', :callback => 'updateTotalsValuesCallback'}

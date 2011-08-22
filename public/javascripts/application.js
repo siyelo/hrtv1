@@ -527,7 +527,7 @@ var updateTotalValues = function (el) {
     }
   }
 
-  total_field.html(total_value.toFixed(1));
+  total_field.html(total_value.toFixed(2));
 };
 
 var dynamicUpdateTotalsInit = function () {

@@ -643,21 +643,30 @@ var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#F3F7F9");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "300", "2", "#FFF");
   so.addVariable("path", "/ampie/");
-  so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
+  so.addVariable("settings_file", escape("/ampie/ampie_settings.xml,/ampie/additional_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
   so.addVariable("additional_chart_settings", encodeURIComponent(
     '<settings>' +
-      '<labels>' +
-        '<label lid="0">' +
-          '<text>' + options.title + '</title>' +
-        '</label>' +
-      '</labels>' +
+      '<pie>' +
+        '<colors>'  +
+          get_random_color() + 
+        '</colors>' +
+      '</pie>' +
     '</settings>')
   );
   so.write(domId);
 };
+
+function get_random_color() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;  //return random color so that two charts next to each other don't have the same colors for different slices
+}
 
 var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
   return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;

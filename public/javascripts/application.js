@@ -1064,6 +1064,8 @@ var checkRootNodes = function(type){
     if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
   });
 
+  $('.totals').find(type).find('.amount').html(total);
+  
   if (total != 100 && total >0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');

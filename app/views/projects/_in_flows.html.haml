@@ -27,10 +27,10 @@
         %td
           %p.total.js_total_spend
             %span.label.left Total
-            %span.amount.right= @project.in_flows_total(:spend)
+            %span.amount.right= number_with_precision(@project.in_flows_total(:spend), :precision => 2)
             %span.currency.right= @project.currency
         %td
           %p.total.js_total_budget
             %span.label.left Total
-            %span.amount.right= @project.in_flows_total(:budget)
+            %span.amount.right= number_with_precision(@project.in_flows_total(:budget), :precision => 2)
             %span.currency.right= @project.currency

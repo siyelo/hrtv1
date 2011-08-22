@@ -17,3 +17,14 @@
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay
+ 
+    %li.input_table.totals
+      .values.right
+        %p.spend
+          %span.amount.right= 0
+          %span.percentage.right= '%'
+        %p.budget
+          %span.amount.right= 0
+          %span.percentage.right= '%'
+    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
+    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

@@ -39,6 +39,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
+    it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:csv_project_name) }
     it { should allow_mass_assignment_of(:csv_provider) }

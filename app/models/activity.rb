@@ -24,7 +24,7 @@ class Activity < ActiveRecord::Base
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :beneficiary_ids, :provider_id,
+    :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :sub_activities_attributes, :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
@@ -143,9 +143,32 @@ class Activity < ActiveRecord::Base
   named_scope :sorted_by_id,               { :order => "activities.id" }
 
 
+  ### Callbacks
+  # also see callbacks in BudgetSpendHelper
+  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_save   :auto_create_project, :unless => :is_sub_activity?
+  after_save    :update_counter_cache, :unless => :is_sub_activity?
+  after_destroy :update_counter_cache, :unless => :is_sub_activity?
+
+
+  ### Attribute Accessor
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
+
+
+  ### Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  accepts_nested_attributes_for :implementer_splits, :allow_destroy => true
+  accepts_nested_attributes_for :targets, :allow_destroy => true
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
+
+
+  ### Delegates
+  delegate :currency, :to => :project, :allow_nil => true
+  delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
+
+
   ### Class Methods
-
-
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
@@ -213,6 +236,8 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
+      #clear the default sub_activity that is created in the initializer
+      activity.sub_activities = [] if activity.new_record?
       activity.csv_project_name        = row["Project Name"].try(:strip)
       activity.name                    = row["Activity Name"].try(:strip)
       activity.description             = row["Activity Description"].try(:strip)

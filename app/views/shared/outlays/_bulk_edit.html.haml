@@ -52,7 +52,7 @@
           = f.input :end_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
 
       %li
-        - unless f.object.provider
+        - unless f.object.implementer_splits
           %ul.response-notice
             %li= "We couldn't find the implementer #{outlay.csv_provider} in the list, please select the correct one"
             %br
@@ -63,9 +63,9 @@
             %li= "We didn't find all the beneficiaries #{outlay.csv_beneficiaries} in the list, please check the correct ones"
             %br
 
-
-        %ul
-          = f.input :provider_mask, :label => "Implementer", :as => :select, :collection => Organization.reporting.ordered, :required => false, :input_html => {:class => 'js_implementer_select js_combobox'}, :wrapper_html => {:class => 'fourth'}
+        %ul  
+          - f.semantic_fields_for :implementer_splits do |is|
+            = is.input :provider_mask, :label => "Implementer", :as => :select, :collection => Organization.reporting.ordered, :required => false, :input_html => {:class => 'js_implementer_select js_combobox'}, :wrapper_html => {:class => 'fourth'}
 
           = f.input :text_for_beneficiaries, :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => {:class => 'fourth'}, :label => "Beneficiary details / Other beneficiaries"
           = f.input :beneficiaries, :as => :check_boxes, :label => "Beneficiaries", :wrapper_html => {:class => 'fourth'}

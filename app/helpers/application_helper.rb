@@ -270,4 +270,14 @@ module ApplicationHelper
       edit_response_activity_path(response, activity_or_other_cost, opts) :
       edit_response_other_cost_path(response, activity_or_other_cost, opts)
   end
+
+  def save_and_add_button_text(current_step)
+    case current_step
+    when nil;         "Save & Add Locations >"
+    when 'locations'; "Save & Add Purposes >"
+    when 'purposes';  "Save & Add Inputs >"
+    when 'inputs';    "Save & Add Outputs >"
+    when 'outputs';   "Save & Go To Project >"
+    end
+  end
 end

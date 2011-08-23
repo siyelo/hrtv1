@@ -1,4 +1,6 @@
 module NavigationHelpers
+  include ApplicationHelper
+
   # Maps a name to a path. Used by the
   #
   #   When /^I go to (.+)$/ do |page_name|
@@ -42,9 +44,25 @@ module NavigationHelpers
     when /the implementers page/
       implementers_path
 
-    when /the purposes classification page for "(.+)"/
+    when /the purpose split page for "(.+)"/
       activity = Activity.find_by_name($1)
       edit_activity_or_ocost_path(activity, :mode => 'purposes')
+
+    when /the location split page for "(.+)"/
+      activity = Activity.find_by_name($1)
+      edit_activity_or_ocost_path(activity, :mode => 'locations')
+
+    when /the input split page for "(.+)"/
+      activity = Activity.find_by_name($1)
+      edit_activity_or_ocost_path(activity, :mode => 'inputs')
+
+    when /the output edit page for "(.+)"/
+      activity = Activity.find_by_name($1)
+      edit_activity_or_ocost_path(activity, :mode => 'outputs')
+
+   when /the edit project page for related activity "(.+)"/
+      activity = Activity.find_by_name($1)
+      edit_response_project_path(activity.response, activity.project)
 
     when /the admin review data response page for organization "(.+)", request "(.+)"/
       response = get_data_response($2, $1)

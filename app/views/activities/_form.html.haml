@@ -23,7 +23,7 @@
     %ul.horizontal.borderless
       - f.buttons :class => 'buttons1' do
         = f.commit_button "Save", :button_html => {:class => "last big_button js_submit_btn"}
-        = f.commit_button "Save & Add Locations >", :button_html => {:class => "last big_button js_submit_btn"}
+        = f.commit_button save_and_add_button_text(params[:mode]), :button_html => {:class => "last big_button js_submit_btn"}
         %li
           = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
         %li

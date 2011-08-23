@@ -92,7 +92,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_budget][112]" field should contain "60"
     And the "activity[classifications][coding_spend][112]" field should contain "40"
 
-  @javascript 
+  @javascript
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -103,20 +103,20 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
-    
+
     When I fill in "activity[classifications][coding_budget][111]" with "40"
     Then the "activity[classifications][coding_budget][11]" field should contain "40"
     And the "activity[classifications][coding_budget][1]" field should contain "40"
-    
+
     When I fill in "activity[classifications][coding_spend][111]" with "40"
     Then the "activity[classifications][coding_spend][11]" field should contain "40"
     And the "activity[classifications][coding_spend][1]" field should contain "40"
-    
+
     When I fill in "activity[classifications][coding_spend][1]" with "100"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
     And I hover over ".tooltip" within ".values"
     Then I should see "Amount of this node is not same as the sum of children amounts underneath (100.00% - 40.00% = 60%)"
-    
+
     When I fill in "activity[classifications][coding_spend][1]" with "10"
     And I hover over ".tooltip" within ".values"
     Then I should see "The root nodes do not add up to 100%"
@@ -156,7 +156,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "Download template"
     Then I should see "mtef1"
     And I should not see "cost_category1"
-  
+
   Scenario: Reporter can upload Purposes classification for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -168,7 +168,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Activity classification was successfully uploaded."
     And the "activity[classifications][coding_budget][1]" field should contain "40"
     And the "activity[classifications][coding_spend][1]" field should contain "30"
-  
+
   Scenario: Reporter cannot upload Purposes classification for already approved activity
     Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
     And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
@@ -180,7 +180,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Classification for approved activity cannot be changed."
 
 
-  @javascript 
+  @javascript
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -195,7 +195,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_budget][1]" field should contain "100"
     And the "activity[classifications][coding_spend][1]" field should contain "100"
 
-  @javascript 
+  @javascript
   Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -209,7 +209,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
     And the "activity[classifications][coding_spend][1]" field should contain "100"
-  
+
   Scenario: Reporter cannot clasify approved Activity
     Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
     And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
@@ -282,3 +282,16 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Activity classification was successfully uploaded."
     And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
     And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"
+
+  @run
+  Scenario: Reporter can follow workflow with the Save and Add Blah buttons
+    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
+    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+    When I follow "Projects"
+    And I follow "activity1"
+    When I press "Save & Add Locations >"
+    And I press "Save & Add Purposes >"
+    And I press "Save & Add Inputs >"
+    And I press "Save & Add Outputs >"
+    And I press "Save & Go To Project >"
+    Then I should be on the edit project page for related activity "activity1"

@@ -5,8 +5,8 @@ class FundingFlow < ActiveRecord::Base
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",
     :organization_id_to => "The Funding Source 'to' organization",
-    :budget => "The Funding Source budget",
-    :spend => "The Funding Source spend" }
+    :budget => "The Funding Source Planned Disbursements",
+    :spend => "The Funding Source Disbursements Received" }
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
@@ -28,7 +28,7 @@ class FundingFlow < ActiveRecord::Base
   validates_presence_of :organization_id_to
   # either budget or spend must be present
   validates_presence_of :spend, :if => lambda {|ff| !ff.budget? && !ff.spend?},
-    :message => "Actual and/or Planned must be present"
+    :message => " and/or Planned must be present"
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list

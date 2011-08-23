@@ -759,18 +759,19 @@ a.tooltip
     margin-bottom: 0 !important
     padding-bottom: 0 !important
     +pie-clearfix
-    
-  .selected a, .selected .dummy, .active
-    background: image_url("subnav_active2.png") no-repeat center 29px
-    color: $primary - #111
-    font-weight: bold
-    padding: 10px 10px 12px
-    position: relative
-    top: 2px
-    +text-shadow(#FFF, 0, 1px, 0)
-    span
-      background: $primary
-      color: $primary_light
+
+    &.selected
+      a, .dummy
+        background: image_url("subnav_active2.png") no-repeat center 29px
+        color: $secondary
+        font-weight: bold
+        padding: 10px 10px 12px
+        position: relative
+        top: 2px
+        +text-shadow(#FFF, 0, 1px, 0)
+        span
+          background: $secondary
+          color: $primary_light
     
   a, .dummy
     color: $primary

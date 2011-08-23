@@ -862,6 +862,8 @@ var activity_classification = function () {
   addCollabsibleButtons('tab1');
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
+  
+  showSubtotalIcons();
 
   $('.js_upload_btn').click(function (e) {
     e.preventDefault();
@@ -1016,14 +1018,17 @@ var activity_classification = function () {
   var updateSubTotal = function(element){
     var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
     var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
+    var activity_currency = element.parents('ul:last').attr('activity_currency');
     var elementValue = parseFloat(element.val());
-    var subtotal = element.siblings('.subtotal');
+    var subtotal = element.siblings('.subtotal_icon');
     var isSpend = element.parents('div:first').hasClass('spend')
 
-    if(isSpend){
-      elementValue > 0 ? subtotal.html((activity_spend * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    if (elementValue > 0){
+      subtotal.removeClass('hidden')
+      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency)
     }else{
-      elementValue > 0 ? subtotal.html((activity_budget * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+      subtotal.attr('title','') && element.val('')
+      subtotal.addClass('hidden')
     }
   };
 }
@@ -1058,6 +1063,14 @@ var checkRootNodes = function(type){
 
   };
 };
+
+var showSubtotalIcons = function(){
+  $('.tab1').find('.percentage_box').each(function(){
+    if($(this).val().length > 0){
+      $(this).siblings('.subtotal_icon').removeClass('hidden')
+    }   
+  });
+}
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
   if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {

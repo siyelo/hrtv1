@@ -447,20 +447,22 @@ ul.ordered_nav
 
 // CODING TREE //
 ul.activity_tree
-  background: #fff
+  background: $primary_lighter
   border: $primary_border3 1px solid
   clear: both
   font-size: 12px
-
+  border-left: 0px
+  border-bottom: 0px
   li
-    border-bottom: $primary_border4 1px solid
+    background: #fff
     font-size: 11px
     list-style: none
     margin-bottom: 0 !important
     padding-bottom: 0 !important
     position: relative
     &:hover
-      background: $primary_lightest
+      background: $primary_lighter + #050505
+      color: $primary_dark
     > div
       padding: 5px 0
     div.invalid
@@ -471,7 +473,7 @@ ul.activity_tree
       float: left
     label
       font-size: 11px
-      width: 91%
+      width: 85%
     input, textarea
       background: white
       margin-bottom: 6px
@@ -484,29 +486,35 @@ ul.activity_tree
       display: block
       font-size: 1.4em
       font-weight: bold
-      height: 12px
+      height: 13px
       line-height: 1
       margin: 0 3px 0 5px !important
       padding: 2px
       text-align: center
-      width: 11px !important
+      width: 12px !important
       &.expanded
-        background: #eee
+        background: #fff
         color: red
         position: relative
         top: 8px
         +border-radius(10px)
       &.collapsed
-        background: #eee
+        background: #fff
         color: green
         position: relative
         top: 8px
         +border-radius(10px)
+    
     ul
-      margin: 0 0 0 10px
+      background: $primary_lightest
+      padding: 0 0 0 22px
       li
         padding-bottom: 0
-        border-top: $lightest-blue unquote(" 1px dashed ")
+  > li
+    background: none
+  .clearfix
+    border-bottom: $primary_border3 1px solid
+    border-left: $primary_border3 1px solid
   .tooltip
     float: left
     margin: 7px 4px 0 3px
@@ -537,9 +545,6 @@ ul.activity_tree
     &.expanded, &.collapsed
       cursor: pointer
 
-.grid-50
+.code_label
   float: left
-  width: 55%
-.grid-60
-  float: left
-  width: 60%
+  width: 54%

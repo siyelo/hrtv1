@@ -13,7 +13,7 @@ class Reporter::BaseController < ApplicationController
         return redirect_to edit_activity_or_ocost_path(activity, :mode => 'purposes')
       elsif params[:commit] == "Save & Add Inputs >"
         return redirect_to edit_activity_or_ocost_path(activity, :mode => 'inputs')
-      elsif params[:commit] == "Save & Add Outputs >"
+      elsif params[:commit] == "Save & Add Targets >"
         return redirect_to edit_activity_or_ocost_path(activity, :mode => 'outputs')
       elsif params[:commit] == "Save & Go To Project >"
         return redirect_to edit_response_project_path(activity.response, activity.project)

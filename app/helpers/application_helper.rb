@@ -276,7 +276,7 @@ module ApplicationHelper
     when nil;         "Save & Add Locations >"
     when 'locations'; "Save & Add Purposes >"
     when 'purposes';  "Save & Add Inputs >"
-    when 'inputs';    "Save & Add Outputs >"
+    when 'inputs';    "Save & Add Targets >"
     when 'outputs';   "Save & Go To Project >"
     end
   end

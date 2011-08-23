@@ -38,10 +38,10 @@ describe OtherCostsController do
          :commit => 'Save & Add Inputs >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'inputs')
      end
-     it "redirects to the output classifications page when Save & Add Outputs is clicked" do
+     it "redirects to the output classifications page when Save & Add Targets is clicked" do
        @data_request.save
        put :update, :other_cost => { :name => "prewprew" }, :id => @other_cost.id,
-         :commit => 'Save & Add Outputs >', :response_id => @data_response.id
+         :commit => 'Save & Add Targets >', :response_id => @data_response.id
        response.should redirect_to edit_activity_or_ocost_path(@project.other_costs.first, :mode => 'outputs')
      end
 

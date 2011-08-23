@@ -70,7 +70,7 @@ describe FundingFlow do
                               :from => @donor, :to => @organization,
                               :budget => nil, :spend => nil)
       @funding_flow.save.should == false
-      @funding_flow.errors.on(:spend).should include('Actual and/or Planned must be present')
+      @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
     it "should validate Expenditure and/or Budget is present if blank" do
@@ -78,7 +78,7 @@ describe FundingFlow do
                               :from => @donor, :to => @organization,
                               :budget => "", :spend => "")
       @funding_flow.save.should == false
-      @funding_flow.errors.on(:spend).should include('Actual and/or Planned must be present')
+      @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
     it "should validate one OR the other" do

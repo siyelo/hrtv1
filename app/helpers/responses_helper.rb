@@ -20,7 +20,6 @@ module ResponsesHelper
   def data_verification_class
     ready(@response.projects_linked? &&
       @response.check_projects_funding_sources_have_organizations? &&
-      @response.activities_have_implementers? &&
       @response.projects_funding_sources_ok?)
   end
 end

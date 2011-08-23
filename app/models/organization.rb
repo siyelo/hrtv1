@@ -18,11 +18,11 @@ class Organization < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
     :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location
+    :contact_main_office_phone_number, :contact_office_location, :location_id
 
   ### Associations
   has_and_belongs_to_many :activities # activities that target / aid this org
-  has_and_belongs_to_many :locations
+  belongs_to :location
   has_many :users # people in this organization
   has_and_belongs_to_many :managers, :join_table => "organizations_managers", :class_name => "User" # activity managers
 
@@ -53,6 +53,9 @@ class Organization < ActiveRecord::Base
   ### Callbacks
   after_save :update_cached_currency_amounts
   after_create :create_data_responses
+
+  ### Delegates
+  delegate :name, :to => :location, :prefix => true, :allow_nil => true # gives you location_name - oh lordy!
 
   ### Named scopes
   named_scope :without_users, :conditions => 'users_count = 0'
@@ -118,7 +121,7 @@ class Organization < ActiveRecord::Base
     target.out_flows << duplicate.out_flows
     target.in_flows << duplicate.in_flows
     target.provider_for << duplicate.provider_for
-    target.locations << duplicate.locations
+    target.location = duplicate.location
     target.users << duplicate.users
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
     ActiveRecord::Base.enable_validation!
@@ -150,7 +153,7 @@ class Organization < ActiveRecord::Base
   ### Instance Methods
 
   def is_empty?
-    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && locations.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false
@@ -181,7 +184,7 @@ class Organization < ActiveRecord::Base
   # TODO: write spec
   def short_name
     #TODO remove district name in (), capitalized, and as below
-    n = name.gsub("| "+locations.first.to_s, "") unless locations.empty?
+    n = name.gsub("| "+ location_name, "") if location
     n ||= name
     tidy_name(n)
   end

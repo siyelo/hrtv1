@@ -1,12 +1,12 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
-  include GorAmountHelpers
+
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",
     :organization_id_to => "The Funding Source 'to' organization",
-    :budget => "The Funding Source budget",
-    :spend => "The Funding Source spend" }
+    :budget => "The Funding Source Planned Disbursements",
+    :spend => "The Funding Source Disbursements Received" }
 
   ### Attributes
   attr_accessible :organization_text, :project_id, :from, :to,
@@ -19,22 +19,28 @@ class FundingFlow < ActiveRecord::Base
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"
   belongs_to :to, :class_name => "Organization", :foreign_key => "organization_id_to"
   belongs_to :project
-  belongs_to :project_from # funder's project
+  belongs_to :project_from, :class_name => 'Project' # funder's project
 
   ### Validations
   # also see validations in BudgetSpendHelper
   # validates_presence_of :project # FIXME
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
+  # either budget or spend must be present
+  validates_presence_of :spend, :if => lambda {|ff| !ff.budget? && !ff.spend?},
+    :message => " and/or Planned must be present"
 
   # if project from id == nil => then the user hasnt linked them
   # if project from id == 0 => then the user can't find Funder project in a list
   # if project from id > 0 => user has selected a Funder project
   #
-  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0, :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0,
+    :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_uniqueness_of :organization_id_from, :scope => :project_id
+
 
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
@@ -107,11 +113,20 @@ class FundingFlow < ActiveRecord::Base
     ["Donor",  "Multilateral", "Bilateral"].include?(from.raw_type)
   end
 
+  def in_flow?
+    self.organization == self.to
+  end
+
+  def out_flow?
+    self.organization == self.from
+  end
+
   private
     def spend_is_greater_than_zero
       errors.add(:spend, "for funding must be greater than 0") unless (spend || 0) > 0
     end
 end
+
 
 
 
@@ -142,5 +157,7 @@ end
 #  budget_q4            :decimal(, )
 #  budget_q4_prev       :decimal(, )
 #  project_from_id      :integer
+#  budget_in_usd        :decimal(, )     default(0.0)
+#  spend_in_usd         :decimal(, )     default(0.0)
 #
 

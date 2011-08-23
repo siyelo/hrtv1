@@ -153,10 +153,13 @@ module ApplicationHelper
   # Helper for adding remove link to nested form models
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
-    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)
+    callback = options[:callback] || 'null'
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this, #{callback})", :class => class_name)
   end
 
   # Helper for adding new nested form models
+  # looks for partial with _<model>_fields
+  # e.g. _sub_activity_fields.html.haml
   def link_to_add_fields(name, f, association, subfolder, options = {})
     class_name = options[:class] || 'add_nested'
     new_object = f.object.class.reflect_on_association(association).klass.new
@@ -247,5 +250,34 @@ module ApplicationHelper
   # find namespace of given class
   def namespace(klass)
     klass.to_s.split("::").first
+  end
+
+  def warn_if_not_classified
+    unless flash[:error]
+      if @activity.approved? || @activity.am_approved?
+        flash.now[:error] = "Classification for approved activity cannot be changed."
+      elsif (!@activity.budget_classified? || !@activity.spend_classified?)
+        flash.now[:error] = "This #{@activity.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
+                             #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
+                             to see what still needs to be classified"}"
+      end
+    end
+  end
+
+  def edit_activity_or_ocost_path(activity_or_other_cost, opts = nil)
+    response = activity_or_other_cost.data_response
+    activity_or_other_cost.class == Activity ?
+      edit_response_activity_path(response, activity_or_other_cost, opts) :
+      edit_response_other_cost_path(response, activity_or_other_cost, opts)
+  end
+
+  def save_and_add_button_text(current_step)
+    case current_step
+    when nil;         "Save & Add Locations >"
+    when 'locations'; "Save & Add Purposes >"
+    when 'purposes';  "Save & Add Inputs >"
+    when 'inputs';    "Save & Add Outputs >"
+    when 'outputs';   "Save & Go To Project >"
+    end
   end
 end

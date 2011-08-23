@@ -1,7 +1,6 @@
 .fields
-  .edit_block
-    %ul
-      = f.input :description, :label => "Target", :input_html => {:class => 'js_target_field'}, :wrapper_html => {:class => 'wrap-80'}
 
-  .manage_block
-    = link_to_remove_fields "x", f, :class => 'delete_button'
+  %ul.edit_block.clearfix
+    %li
+      = f.text_field :description, :class => 'js_target_field', :id => 'target_field'
+      %span= link_to_remove_fields "x", f, :class => 'delete_inline'

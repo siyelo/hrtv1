@@ -1,10 +1,27 @@
 Factory.define :activity, :class => Activity do |f|
   f.sequence(:name) { |i| "activity_name_#{i}_#{rand(100_000_000)}" }
   f.description     { 'activity_description' }
-  f.budget          { 50.00 }
-  f.spend           { 40.00 }
   f.start_date      { "2010-01-01" }
   f.end_date        { "2010-12-31" }
+end
+
+
+Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :activity do |f|
+  f.coding_budget_valid           { true }
+  f.coding_budget_cc_valid        { true }
+  f.coding_budget_district_valid  { true }
+  f.coding_spend_valid            { true }
+  f.coding_spend_cc_valid         { true }
+  f.coding_spend_district_valid   { true }
+end
+
+Factory.define :other_cost_budget_spend_coded, :class => OtherCost, :parent => :activity do |f|
+  f.coding_budget_valid           { true }
+  f.coding_budget_cc_valid        { true }
+  f.coding_budget_district_valid  { true }
+  f.coding_spend_valid            { true }
+  f.coding_spend_cc_valid         { true }
+  f.coding_spend_district_valid   { true }
 end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
@@ -58,16 +75,6 @@ end
 Factory.define :activity_w_budget_coding, :class => Activity, :parent => :_budget_coded  do |f|
   f.after_create { |a| Factory(:coding_budget, :cached_amount => 50, :activity => a) }
 end
-
-# An activity that has no spend yet (e.g. a newly started activity)
-Factory.define :activity_w_only_budget_coding, :class => Activity, :parent => :activity_w_budget_coding  do |f|
-  f.spend           { nil }
-end
-
-Factory.define :activity_w_only_spend_coding, :class => Activity, :parent => :activity_w_spend_coding  do |f|
-  f.budget           { nil }
-end
-
 
 Factory.define :activity_fully_coded, :class => Activity, :parent => :activity_w_spend_coding  do |f|
   # Not DRY. Need to figure out how to mix two factories together

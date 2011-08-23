@@ -4,59 +4,59 @@ describe Admin::OrganizationsController do
   before :each do
     login_as_admin
   end
-  
+
   describe "index" do
     before :each do
       @request1 = Factory(:data_request)
       @admin.set_current_response_to_latest!
       @organization = Factory(:organization)
       @data_response = @organization.responses.find_by_data_request_id(@request1.id)
-      @all_organizations = [@admin.organization, @request1.organization, @organization] 
+      @all_organizations = [@admin.organization, @request1.organization, @organization]
     end
-    
+
     it " should return all organizations" do
       get :index
-      assigns(:organizations).should == @all_organizations  
+      assigns(:organizations).should == @all_organizations
     end
-    
+
     it "should filter by submitted response" do
       @data_response.submitted = true
       @data_response.save(false)
       get :index, :filter => 'Submitted'
       assigns(:organizations).should == [@organization]
     end
-    
+
     it "should filter by submitted for final response" do
       @data_response.submitted_for_final = true
       @data_response.save(false)
       get :index, :filter => 'Submitted for Final Review'
       assigns(:organizations).should == [@organization]
     end
-    
+
     it "should filter by complete response" do
       @data_response.complete = true
       @data_response.save(false)
       get :index, :filter => 'Complete'
       assigns(:organizations).should == [@organization]
     end
-    
+
     it "should filter by empty response" do
       get :index, :filter => 'Not Started'
-      assigns(:organizations).should == @all_organizations    
+      assigns(:organizations).should == @all_organizations
     end
-    
+
     it "should filter by in progress response" do
       @project = Factory(:project, :data_response => @data_response)
       @activity = Factory(:activity, :project => @project, :data_response => @data_response)
       get :index, :filter => 'In Progress'
-      assigns(:organizations).should == [@organization]    
+      assigns(:organizations).should == [@organization]
     end
-        
+
     it "should ignore unrecognized filters" do
       get :index, :filter => 'Blah'
-      assigns(:organizations).should == @all_organizations 
+      assigns(:organizations).should == @all_organizations
     end
-    
+
   end
 
   describe "show organization" do
@@ -71,7 +71,7 @@ describe Admin::OrganizationsController do
     context "when organization is empty" do
       before :each do
         # empty organization
-        @organization = Factory.build(:organization, :users => [], :locations => [], :activities => [], :data_responses => [])
+        @organization = Factory.build(:organization, :users => [], :location => nil, :activities => [], :data_responses => [])
         @organization.save(false)
         @organization.stub!(:to_label).and_return('org label')
         @organization.stub!(:destroy).and_return(true)

@@ -129,11 +129,6 @@ namespace :reports do
     update_report(t)
   end
 
-  desc "Caches 'activities_by_nha_subimps' report"
-  task :activities_by_nha_subimps => :environment do |t|
-    update_report(t)
-  end
-
   desc "Caches 'activities_by_all_codes_budget' report"
   task :activities_by_all_codes_budget => :environment do |t|
     update_report(t)

@@ -58,11 +58,10 @@ ActionController::Routing::Routes.draw do |map|
                       :export => :get,
                       :bulk_update => :put}
     response.resources :activities, :except => [:index, :show],
-      :member => {:sysadmin_approve => :put, :activity_manager_approve => :put, :classifications => :get},
+      :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
       :collection => {:bulk_create => :post,
                       :template => :get,
-                      :export => :get,
-                      :project_sub_form => :get}
+                      :export => :get}
     response.resources :other_costs, :except => [:index, :show],
       :collection => {:create_from_file => :post, :download_template => :get}
     response.resources :districts, :only => [:index, :show] do |district|
@@ -74,11 +73,10 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   map.resources :activities do |activity|
-    activity.resource :code_assignments,
-      :only => [:show, :update],
-      :member => {:copy_spend_to_budget => :put,
-      :derive_classifications_from_sub_implementers => :put},
-      :collection => {:bulk_create => :put, :download_template => :get}
+    activity.resources :classifications,
+      :except => [:index, :new, :create, :edit, :update, :destroy], #TODO - stop being lazy..
+      :member => {:derive_classifications_from_sub_implementers => :put,
+                  :download_template => :get, :bulk_create => :put}
     activity.resources :sub_activities,
       :only => [:index, :create],
       :collection => {:template => :get, :bulk_create => :post}

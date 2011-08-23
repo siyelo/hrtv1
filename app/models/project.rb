@@ -4,18 +4,16 @@ class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include BudgetSpendHelper
   include NumberHelper
+  include Project::Validations
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name description currency
-                         budget budget_q4_prev budget_q1 budget_q2 budget_q3
-                         budget_q4 spend spend_q4_prev spend_q1 spend_q2
-                         spend_q3 spend_q4 start_date end_date]
+  FILE_UPLOAD_COLUMNS = %w[name description currency start_date end_date]
+  MAX_NAME_LENGTH = 64
 
   strip_commas_from_all_numbers
 
   ### Associations
   belongs_to :data_response, :counter_cache => true
-  has_and_belongs_to_many :locations
   belongs_to :user
   has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy
@@ -26,17 +24,15 @@ class Project < ActiveRecord::Base
   has_many :funding_streams, :dependent => :destroy
   has_many :in_flows, :class_name => "FundingFlow",
            :conditions => [ 'self_provider_flag = 0 and
-                            organization_id_to = #{organization.id}' ]
+                            organization_id_to = #{organization.id}' ] 
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
-  has_many :funding_sources, :through => :funding_flows, :class_name => "Organization",
-            :source => :from, :conditions => "funding_flows.self_provider_flag = 0"
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
            :source => :to
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true
+  accepts_nested_attributes_for :in_flows, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
   before_validation_on_create :assign_project_to_funding_flows
   before_validation :strip_leading_spaces
 
@@ -51,15 +47,12 @@ class Project < ActiveRecord::Base
   validates_date :end_date
   validates_dates_order :start_date, :end_date,
     :message => "Start date must come before End date."
+  validates_length_of :name, :within => 1..MAX_NAME_LENGTH
 
   ### Attributes
-  attr_accessible :name, :description, :spend,
+  attr_accessible :name, :description, :spend, :user_id,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :location_ids, :in_flows_attributes, :budget,
-                  :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-                  :spend_q1, :spend_q4_prev, :spend_q2, :spend_q3, :spend_q4,
-                  :budget2, :budget3, :budget4, :budget5, :am_approved, :am_approved_date,
-                  :user_id
+                  :in_flows_attributes, :am_approved, :am_approved_date
 
   ### Delegates
   delegate :organization, :to => :data_response
@@ -86,6 +79,16 @@ class Project < ActiveRecord::Base
     organization.name
   end
 
+  # TODO: spec
+  def budget
+    activities.only_simple.map{ |a| a.budget || 0 }.sum
+  end
+
+  # TODO: spec
+  def spend
+    activities.only_simple.map{ |a| a.spend || 0 }.sum
+  end
+
   # Returns DR.currency if no project currency specified
   def currency
     c = read_attribute(:currency)
@@ -103,7 +106,7 @@ class Project < ActiveRecord::Base
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations user].each do |assoc|
+    %w[user].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
 
@@ -188,29 +191,12 @@ class Project < ActiveRecord::Base
     true
   end
 
-  def total_matches_quarters?(type)
-    (self.send(type) || 0) == (total_amount_of_quarters(type) || 0)
-  end
-
-  def linked?
-     return false if self.in_flows.empty?
-     self.in_flows.each do |in_flow|
-       return false unless in_flow.project_from_id
-     end
-     true
-   end
-
   def has_activities?
     !normal_activities.empty?
   end
 
   def has_other_costs?
     !activities.with_type("OtherCost").empty?
-  end
-
-  #checks if the project amount == the inflows amount
-  def amounts_matches_funders?(amount_method)
-    (self.send(amount_method) || 0) == in_flows_total(amount_method)
   end
 
   # calculates the activity totals for budget/spent
@@ -247,21 +233,8 @@ class Project < ActiveRecord::Base
     smart_sum(other_costs, amount_type)
   end
 
-  def errors_from_response
-    errors = []
-
-    [:budget, :spend].each do |m| # TODO replace with something like response.request.amounts_required ?
-      if !response.project_and_activities_matching_amounts?(self, m)
-        st = m == :budget ? "Current Budget" : "Past Expenditure"
-        errors << "The Project #{st} (#{n2cndrs(self.send(m), self.currency)}) should match
-         the total #{st.downcase} for Activities plus Other Costs (#{n2cndrs(self.direct_activities_total(m) + self.other_costs_total(m), self.currency)}).
-         Please update your activities/other costs for this project accordingly."
-      end
-    end
-    if !linked?
-      errors << "The Project is not currently linked."
-    end
-    errors
+  def locations
+    activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
   private
@@ -395,6 +368,8 @@ end
 
 
 
+
+
 # == Schema Information
 #
 # Table name: projects
@@ -406,24 +381,8 @@ end
 #  end_date         :date
 #  created_at       :datetime
 #  updated_at       :datetime
-#  budget           :decimal(, )
-#  spend            :decimal(, )
 #  currency         :string(255)
-#  spend_q1         :decimal(, )
-#  spend_q2         :decimal(, )
-#  spend_q3         :decimal(, )
-#  spend_q4         :decimal(, )
-#  spend_q4_prev    :decimal(, )
 #  data_response_id :integer         indexed
-#  budget_q1        :decimal(, )
-#  budget_q2        :decimal(, )
-#  budget_q3        :decimal(, )
-#  budget_q4        :decimal(, )
-#  budget_q4_prev   :decimal(, )
 #  comments_count   :integer         default(0)
-#  budget2          :decimal(, )
-#  budget3          :decimal(, )
-#  budget4          :decimal(, )
-#  budget5          :decimal(, )
 #
 

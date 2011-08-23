@@ -11,16 +11,19 @@ class SubActivity < Activity
 
   ### Associations
   belongs_to :activity, :counter_cache => true
+  # implementer is better, more generic. (Service) Provider is too specific.
+  belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask
+  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask, :provider_id
 
   ### Callbacks
   after_create    :update_counter_cache
   after_destroy   :update_counter_cache
   before_save     :set_budget_amount
   before_save     :set_spend_amount
-  before_validation :strip_amount_mask_fields
+  before_validation :strip_mask_fields
+  after_save      :update_activity_cache
 
   ### Validations
   validates_presence_of :provider_mask
@@ -35,6 +38,8 @@ class SubActivity < Activity
    :text_for_beneficiaries, :beneficiaries, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end
+  delegate :name, :to => :implementer, :prefix => true, :allow_nil => true # gives you implementer_name
+
 
   ### Class Methods
 
@@ -97,6 +102,28 @@ class SubActivity < Activity
 
   ### Instance Methods
 
+  def initialize(*params)
+    super
+    set_budget_amount
+    set_spend_amount
+  end
+
+  def budget
+    read_attribute(:budget)
+  end
+
+  def spend
+    read_attribute(:spend)
+  end
+
+  def budget=(amount)
+    write_attribute(:budget, amount)
+  end
+
+  def spend=(amount)
+    write_attribute(:spend, amount)
+  end
+
   def spend_mask
     @spend_mask || spend
   end
@@ -115,9 +142,9 @@ class SubActivity < Activity
     @budget_mask = the_budget_mask
   end
 
-  def locations
-    if provider && provider.locations.present?
-      provider.locations
+  def locations # TODO: deprecate
+    if provider && provider.location.present?
+      [provider.location] # TODO - return without array
     else
       activity.locations
     end
@@ -160,6 +187,12 @@ class SubActivity < Activity
   end
   memoize :coding_spend_cost_categorization
 
+  def update_activity_cache
+    self.reload
+    self.activity.cache_budget_spend # just calls write_attribute... so....
+    self.activity.save               # ...dont forget to save
+  end
+
   private
     def update_counter_cache
       self.data_response.sub_activities_count = data_response.sub_activities.count
@@ -169,20 +202,18 @@ class SubActivity < Activity
     # if the provider is a clinic or hospital it has only one location
     # so put all the money towards that location
     def adjusted_district_assignments(klass, sub_activity_amount, activity_amount)
-      sub_activity_amount = 0 if sub_activity_amount.blank?
-      activity_amount = 0 if activity_amount.blank?
-
-      if locations.size == 1 && sub_activity_amount > 0
-        [fake_ca(klass, locations.first, sub_activity_amount)]
+      sub_activity_amount ||= 0
+      activity_amount ||= 0
+      if provider && provider.location && sub_activity_amount > 0
+        [fake_ca(klass, provider.location, sub_activity_amount)]
       else
         adjusted_assignments(klass, sub_activity_amount, activity_amount)
       end
     end
 
     def adjusted_assignments(klass, sub_activity_amount, activity_amount)
-      sub_activity_amount = 0 if sub_activity_amount.blank?
-      activity_amount = 0 if activity_amount.blank?
-
+      sub_activity_amount ||= 0
+      activity_amount ||= 0
       old_assignments = activity.code_assignments.with_type(klass.to_s)
       new_assignments = []
 
@@ -256,11 +287,11 @@ class SubActivity < Activity
     end
 
     # remove any leading/trailing spaces from the percentage/amount input
-    def strip_amount_mask_fields
+    def strip_mask_fields
+      provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
       budget_mask = budget_mask.strip if budget_mask && !is_number?(budget_mask)
       spend_mask = spend_mask.strip if spend_mask && !is_number?(spend_mask)
     end
-
 end
 
 

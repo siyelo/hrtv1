@@ -5,7 +5,6 @@ class Foo
 end
 
 describe CurrencyHelper do
-
   before :each do
     Money.default_bank.set_rate(:RWF, :USD, 1)
     Money.default_bank.set_rate(:USD, :USD, 1)

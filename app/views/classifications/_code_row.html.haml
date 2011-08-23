@@ -1,0 +1,11 @@
+- classified = code_classified?(@budget_assignments, @spend_assignments, code)
+
+- if all_view? || classified
+  %li
+    = render 'classifications/li', :code => code, :classified => classified, :margin => margin
+
+    - unless code.leaf?
+      %ul
+        - @budget_coding_tree.cached_children(code).each do |child|
+          = render 'classifications/code_row', :code => child, :margin => margin + 15
+

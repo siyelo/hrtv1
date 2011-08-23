@@ -5,6 +5,7 @@ describe Project do
 
   describe "#ultimate_funding_sources" do
     before :each do
+      pending
       ufs_test_setup
     end
 

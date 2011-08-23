@@ -1,5 +1,5 @@
 =normal_link()
-  color: $orange
+  color: $primary
   background: none
   font-size: 0.8em
   padding-left: 10px
@@ -17,29 +17,12 @@
 
 body.app
   .wrapper
-    min-width: 960px
-    max-width: 1280px
+    //min-width: 960px
+    //max-width: 1280px
     margin: 0 auto
     padding: 0 15px
     position: relative
-  #content .wrapper
-    //+box-shadow(#eee, 0, 2px, 5px)
-
-  h1
-    font: bold 24px/30px Arial,sans-serif
-    color: $mid-blue
-    a
-      text-decoration: none
-
-  p
-    line-height: 1.2em
-    +clearfix
-
-  /* adding properties to the shared flashes styles */
-  #flashes
-    #notice a
-      text-transform: uppercase
-  /* end */
+    width: 960px
 
   /* adding properties to the shared admin style */
   #admin
@@ -50,7 +33,7 @@ body.app
     span
       padding-top: 10px !important
     a
-      padding: 5px 10px !important
+      padding: 6px 10px 5px !important
 
   #page_tips
     .nav
@@ -62,29 +45,6 @@ body.app
         +normal_link
 
   #content .wrapper
-    padding: 0 0 20px 0
-
-    #crumbs
-      padding: 0 0 0 10px
-      overflow: hidden
-
-      ul, a
-        color: #999
-        font-size: 0.7em
-
-      ul
-        float: left
-
-      a
-        +border-radius
-        color: $mid-blue
-        margin-left: 5px
-        padding: 5px 7px
-        &:hover
-          background: $light-blue
-          color: $mid-blue
-          text-decoration: none
-
 
     #main
       float: left
@@ -93,7 +53,7 @@ body.app
       width: 70%
 
       a
-        color: $orange
+        color: $primary
         font-size: 0.8em
         text-decoration: none
         &:hover
@@ -107,16 +67,8 @@ body.app
         font-size: 0.9em
         padding: 10px 0 0 10px
 
-
-
       .nav2 a
         font-size: 1em
-
-      // fix the tiny AS links.
-      table
-        .actions
-          a
-            font-size: 1em
 
       .link_like
         color: #09c
@@ -170,7 +122,7 @@ body.app
           padding-top: 10px
           padding-bottom: 8px
         a
-          color: $orange
+          color: $primary
           font-size: 0.8em
           text-decoration: none
           text-transform: uppercase
@@ -287,37 +239,7 @@ body#static_page_submit #content .wrapper #main
       &:hover
         background: $lightest-blue
 
-.main_heading
-  +box-shadow(#eee, 0, 2px, 3px)
-  border-bottom: 1px solid #eee
-  clear: both
-  margin: 0 -15px 15px
-  padding: 5px 15px 10px
-  +clearfix
-  span
-    display: inline
-    font-size: 12px
-  .sub
-    color: $light-blue - #222
-    display: block
-    line-height: 1
-  .overlay
-    margin-left: 4px
-    opacity: 0.6
-    &:hover
-      opacity: 1
 
-  a
-    font-size: 0.8em
-    text-decoration: none
-
-.sub_heading
-  clear: both
-  +clearfix
-  font-size: 15px !important
-
-.heading_icon
-  margin: 0 3px -3px 0
 .link_list
   border: 1px solid $lightest-blue
   padding: 7px 0 12px
@@ -334,6 +256,10 @@ body#static_page_submit #content .wrapper #main
   padding: 7px 10px 12px 10px
   +border-bottom-radius
   +clearfix
+  &.less_spacing
+    margin-bottom: 10px
+  &.no_spacing
+    margin-bottom: 0
   .first-half, .second-half
     margin: 0 !important
   .view-all
@@ -377,7 +303,7 @@ body#static_page_submit #content .wrapper #main
         margin-left: 0
 
   ul.review li:hover a
-    color: $orange
+    color: $primary
     &:hover
       color: $mid-blue
   ul.report_actions
@@ -682,12 +608,14 @@ body#static_page_submit #content .wrapper #main
 .gravatar
   float: left
 
-#import_export_box
-  margin-bottom: 10px
-
 #filter_help
   p
     font-size: 12px
     color: #425160
     padding-bottom: 10px
     margin-left: 10px
+
+.app #footer
+  background: #f9f9f9
+  border-top: $primary_border4 1px solid
+  padding-top: 30px

@@ -1,0 +1,36 @@
+%h3
+  Project Funding Sources
+  %span
+    - link_to "#", :title => "The sources from which your organization receives funding for its Projects.", :class => 'tooltip' do
+      = image_tag "tooltip.png"
+%ul.section_form.last
+  %table.input_table
+    %thead
+      %tr
+        %th Funding Organization
+        %th
+          .right_justified Disbursements Received
+        %th
+          .right_justified Planned Disbursements
+        %th
+    %tbody
+      - f.semantic_fields_for :in_flows do |ff|
+        = render "projects/in_flow_fields", :f => ff
+      - 3.times do
+        - f.object.in_flows.build unless f.object.in_flows.length > 0
+        - new_object = f.object.class.reflect_on_association(:in_flows).klass.new
+        - f.fields_for(:in_flows, new_object) do |builder|
+          = render("projects/in_flow_fields", :f => builder)
+
+      %tr
+        %td= link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
+        %td
+          %p.total.js_total_spend
+            %span.label.left Total
+            %span.amount.right= @project.in_flows_total(:spend)
+            %span.currency.right= @project.currency
+        %td
+          %p.total.js_total_budget
+            %span.label.left Total
+            %span.amount.right= @project.in_flows_total(:budget)
+            %span.currency.right= @project.currency

@@ -3,8 +3,8 @@ require 'validators'
 class Activity < ActiveRecord::Base
   include NumberHelper
   include BudgetSpendHelper
-  include GorAmountHelpers
   include Activity::Classification
+  include Activity::Validations
 
   ### Constants
   MAX_NAME_LENGTH = 64
@@ -18,27 +18,31 @@ class Activity < ActiveRecord::Base
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :name, :description, :start_date, :end_date,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :spend_q1, :spend_q2, :spend_q3, :spend_q4, :spend_q4_prev,
-    :budget_q1, :budget_q2, :budget_q3, :budget_q4, :budget_q4_prev,
-    :beneficiary_ids, :location_ids, :provider_id,
-    :sub_activities_attributes, :organization_ids, :funding_sources_attributes,
-    :csv_project_name, :csv_provider, :csv_districts, :csv_beneficiaries, :csv_targets,
-    :targets_attributes, :outputs_attributes, :am_approved_date, :user_id, :provider_mask
-
+    :beneficiary_ids, :provider_id,
+    :sub_activities_attributes, :organization_ids, :csv_project_name,
+    :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
 
   ### Associations
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization"
-  belongs_to :data_response
+  #TODO: provider now only used for sub-activities, so should be removed from activity altogether
+  # implementer is better, more generic. (Service) Provider is too specific.
+  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization" # deprecate plox k thx
+  belongs_to :data_response #deprecated
+  belongs_to :response, :foreign_key => :data_response_id, :class_name => "DataResponse" #TODO: rename class
   belongs_to :project
   belongs_to :user
-  has_and_belongs_to_many :locations
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
+  has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
+    :dependent => :destroy #TODO - use non-sti model
+  has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
+
+  # deprecated
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
                             :dependent => :destroy
+  #deprecated
   has_many :sub_implementers, :through => :sub_activities, :source => :provider
-  has_many :funding_sources, :dependent => :destroy
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
@@ -65,17 +69,19 @@ class Activity < ActiveRecord::Base
                                              ["activities.type = ?", type]} }
   named_scope :only_simple,          { :conditions => ["activities.type IS NULL
                                     OR activities.type IN (?)", ["OtherCost"]] }
-  named_scope :only_simple_with_request, lambda {|request| { :select => 'DISTINCT activities.*',
-                                                             :joins => 'INNER JOIN data_responses ON
-                                                                        data_responses.id = activities.data_response_id',
-                                                             :conditions => ['(activities.type IS NULL
-                                                                              OR activities.type IN (?)) AND
-                                                                              data_responses.data_request_id = ?',
-                                                                              'OtherCost', request.id]}}
-  named_scope :with_request, lambda {|request| {  :select => 'DISTINCT activities.*',
-                                                  :joins => 'INNER JOIN data_responses ON
-                                                             data_responses.id = activities.data_response_id',
-                                                  :conditions => ['data_responses.data_request_id = ?', request.id]}}
+  named_scope :only_simple_with_request, lambda {|request| {
+                :select => 'DISTINCT activities.*',
+                :joins => 'INNER JOIN data_responses ON
+                           data_responses.id = activities.data_response_id',
+                :conditions => ['(activities.type IS NULL
+                                 OR activities.type IN (?)) AND
+                                 data_responses.data_request_id = ?',
+                                 'OtherCost', request.id]}}
+  named_scope :with_request, lambda {|request| {
+              :select => 'DISTINCT activities.*',
+              :joins => 'INNER JOIN data_responses ON
+                         data_responses.id = activities.data_response_id',
+              :conditions => ['data_responses.data_request_id = ?', request.id]}}
   named_scope :with_a_project,       { :conditions => "project_id IS NOT NULL" }
   named_scope :without_a_project,    { :conditions => "project_id IS NULL" }
   named_scope :with_organization,    { :joins => "INNER JOIN data_responses
@@ -102,21 +108,18 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
-  before_update :remove_district_codings
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
-  after_save    :update_counter_cache
-  after_destroy :update_counter_cache
+  before_save   :auto_create_project, :unless => :is_sub_activity?
+  after_save    :update_counter_cache, :unless => :is_sub_activity?
+  after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
 
   ### Attribute Accessor
-  attr_accessor :csv_project_name, :csv_provider, :csv_districts,
-                :csv_beneficiaries, :csv_targets
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
 
   ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true
-  accepts_nested_attributes_for :funding_sources, :allow_destroy => true,
-    :reject_if => lambda {|fs| fs["funding_flow_id"].blank? }
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
 
@@ -129,19 +132,17 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  before_validation :strip_input_fields
+  before_validation :strip_input_fields, :unless => :is_sub_activity?
   validate :approved_activity_cannot_be_changed
-
-  validates_presence_of :name, :if => :is_activity?
+  validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
   validates_date :start_date, :unless => :is_sub_activity?
   validates_date :end_date, :unless => :is_sub_activity?
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date.", :unless => :is_sub_activity?
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-
 
   ### Class Methods
   def self.human_attribute_name(attr)
@@ -153,17 +154,17 @@ class Activity < ActiveRecord::Base
   end
 
   def self.canonical
-      #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
-      a = Activity.all(:joins =>
-        "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
-        LEFT JOIN data_responses provider_dr ON provider_dr.organization_id = activities.provider_id
-        LEFT JOIN (SELECT organization_id, count(*) as num_users
-                     FROM users
-                  GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id ",
-       :conditions => ["activities.provider_id = data_responses.organization_id
-                        OR (provider_dr.id IS NULL
-                        OR org_users_count.organization_id IS NULL)"])
-      a.uniq
+    #note due to a data issue, we are getting some duplicates here, so i added uniq. we should fix data issue tho
+    a = Activity.all(:joins =>
+      "INNER JOIN data_responses ON activities.data_response_id = data_responses.id
+      LEFT JOIN data_responses provider_dr ON provider_dr.organization_id = activities.provider_id
+      LEFT JOIN (SELECT organization_id, count(*) as num_users
+                   FROM users
+                GROUP BY organization_id) org_users_count ON org_users_count.organization_id = provider_dr.organization_id ",
+     :conditions => ["activities.provider_id = data_responses.organization_id
+                      OR (provider_dr.id IS NULL
+                      OR org_users_count.organization_id IS NULL)"])
+    a.uniq
   end
 
   def self.unclassified
@@ -172,10 +173,7 @@ class Activity < ActiveRecord::Base
 
   def self.download_template(response, activities = [])
     FasterCSV.generate do |csv|
-      header_row = file_upload_columns(response)
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      csv << header_row
+      csv << file_upload_columns_with_id_col(response)
 
       activities.each do |activity|
         row = []
@@ -184,27 +182,13 @@ class Activity < ActiveRecord::Base
         row << activity.description
         row << activity.provider.try(:name)
         row << activity.spend
-        row << activity.spend_q4_prev
-        row << activity.spend_q1
-        row << activity.spend_q2
-        row << activity.spend_q3
-        row << activity.spend_q4
         row << activity.budget
-        row << activity.budget_q4_prev
-        row << activity.budget_q1
-        row << activity.budget_q2
-        row << activity.budget_q3
-        row << activity.budget_q4
-        row << activity.locations.map{|l| l.short_display}.join(',')
         row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << activity.text_for_beneficiaries
         row << activity.targets.map{|o| o.description}.join(",")
         row << activity.start_date
         row << activity.end_date
-
         (100 - row.length).times{ row << nil}
         row << activity.id
-
         csv << row
       end
     end
@@ -212,10 +196,10 @@ class Activity < ActiveRecord::Base
 
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
+    col_names = file_upload_columns(response)
 
     doc.each do |row|
       activity_id = row['Id']
-
       if activity_id.present?
         # reset the activity id if it is already found in previous rows
         # this can happen when user edits existing activities but copies
@@ -228,28 +212,14 @@ class Activity < ActiveRecord::Base
       else
         activity = response.activities.new
       end
-      activity.csv_project_name        = row[0].try(:strip)
-      activity.name                    = row[1].try(:strip)
-      activity.description             = row[2].try(:strip)
-      activity.csv_provider            = row[3].try(:strip)
-      activity.spend                   = row[4].try(:strip)
-      activity.spend_q4_prev           = row[5].try(:strip)
-      activity.spend_q1                = row[6].try(:strip)
-      activity.spend_q2                = row[7].try(:strip)
-      activity.spend_q3                = row[8].try(:strip)
-      activity.spend_q4                = row[9].try(:strip)
-      activity.budget                  = row[10].try(:strip)
-      activity.budget_q4_prev          = row[11].try(:strip)
-      activity.budget_q1               = row[12].try(:strip)
-      activity.budget_q2               = row[13].try(:strip)
-      activity.budget_q3               = row[14].try(:strip)
-      activity.budget_q4               = row[15].try(:strip)
-      activity.csv_districts           = row[16].try(:strip)
-      activity.csv_beneficiaries       = row[17].try(:strip)
-      activity.text_for_beneficiaries  = row[18].try(:strip)
-      activity.csv_targets             = row[19].try(:strip)
-      activity.start_date              = flexible_date_parse(row[20].try(:strip))
-      activity.end_date                = flexible_date_parse(row[21].try(:strip))
+      activity.csv_project_name        = row["Project Name"].try(:strip)
+      activity.name                    = row["Activity Name"].try(:strip)
+      activity.description             = row["Activity Description"].try(:strip)
+      activity.csv_provider            = row["Provider"].try(:strip)
+      activity.csv_beneficiaries       = row["Beneficiaries"].try(:strip)
+      activity.csv_targets             = row["Targets"].try(:strip)
+      activity.start_date              = DateHelper::flexible_date_parse(row["Start Date"].try(:strip))
+      activity.end_date                = DateHelper::flexible_date_parse(row["End Date"].try(:strip))
 
       # associations
       if activity.csv_project_name.present?
@@ -260,31 +230,98 @@ class Activity < ActiveRecord::Base
         project = project_id.present? ? Project.find_by_id(project_id) : nil
       end
 
-      activity.project             = project if project
-      activity.name                = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      provider                     = Organization.find(:first,
-                                     :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-      activity.provider            = provider if provider
-      activity.locations           = activity.csv_districts.to_s.split(',').
-                                      map{|l| Location.find_by_short_display(l.strip)}.compact
-      activity.beneficiaries       = activity.csv_beneficiaries.to_s.split(',').
-                                      map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
-      activity.targets             = activity.csv_targets.to_s.split(';').
-                                      map{|o| Target.find_or_create_by_description(o.strip)}.compact
-
+      activity.project       = project if project
+      activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
+      implementer            = Organization.find(:first,
+                                 :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
+      activity.implementer_splits.build(:provider_id => implementer.id,
+        :data_response_id => activity.data_response_id) if implementer
+      activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
+                                 map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
+      activity.targets       = activity.csv_targets.to_s.split(';').
+                                 map{|o| Target.find_or_create_by_description(o.strip)}.compact
       activity.save
-
       activities << activity
     end
-
     activities
   end
 
-
   ### Instance Methods
+
+  # to create subactivities for activities
+  def initialize(*params)
+    super(*params)
+    unless is_sub_activity?
+      #needed to fully initialize an activity with default (self-)implementer split
+      self.sub_activities.build(:provider_id => self.organization.id,
+        :data_response_id => self.data_response_id) if self.data_response_id && self.sub_activities.empty?
+      cache_budget_spend
+    end
+  end
+
+  def update_attributes(params)
+    # intercept the classifications and process using the bulk classification update API
+    #
+    # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
+    #
+    if params[:classifications]
+      params[:classifications].each_pair do |association, values|
+        begin
+          klass = association.camelcase.constantize
+        rescue NameError
+          return false
+        end
+        klass.update_classifications(self, values)
+      end
+      params.delete(:classifications)
+      params.delete(:code_assignment_tree) #not sure why this is a param?
+    end
+
+    SubActivity.after_save.reject! {|callback| callback.method.to_s == 'update_activity_cache'}
+    result = super(params)
+    SubActivity.send :after_save, :update_activity_cache #re-enable callback
+
+    if result
+    # if sub activities were passed, update Activity amount cache
+      unless is_sub_activity?
+        cache_budget_spend
+        result = self.save # must let caller know if this failed too...
+      end
+    end
+    result
+  end
+
+  # This method calculates the totals of the sub-activities budget/spend
+  # This is done because an activities budget/spend is the total of their sub_activities budget/spend
+  def sub_activities_totals(method)
+    sub_activities.map { |sa| sa.send(method) }.compact.sum || 0
+  end
+
+  #saves the subactivities totals into the buget/spend fields
+  def cache_budget_spend
+    unless is_sub_activity? # to be doubly sure!
+      [:budget, :spend].each do |method|
+        write_attribute(method, sub_activities_totals(method))
+      end
+    end
+  end
+
+  #preventing user from writing
+  def budget=(amount)
+    raise Hrt::FieldDeprecated
+  end
+
+  #preventing user from writing
+  def spend=(amount)
+    raise Hrt::FieldDeprecated
+  end
 
   def to_s
     name
+  end
+
+  def human_name
+    "Activity"
   end
 
   def provider_mask
@@ -293,7 +330,6 @@ class Activity < ActiveRecord::Base
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-
     if is_number?(the_provider_mask)
       self.provider_id = the_provider_mask
     else
@@ -301,22 +337,11 @@ class Activity < ActiveRecord::Base
       organization.save(false) # ignore any errors e.g. on currency or contact details
       self.provider_id = organization.id
     end
-
     @provider_mask   = self.provider_id
-  end
-
-  def has_budget_or_spend?
-    return true if self.spend.present?
-    return true if self.budget.present?
   end
 
   def possible_duplicate?
     self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
-  end
-
-  # convenience
-  def implementer
-    provider
   end
 
   def organization_name
@@ -344,14 +369,15 @@ class Activity < ActiveRecord::Base
     end
   end
 
+
   def deep_clone
     clone = self.clone
     # HABTM's
-    %w[locations organizations beneficiaries].each do |assoc|
+    %w[organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
     # has-many's
-    %w[code_assignments sub_activities funding_sources targets].each do |assoc|
+    %w[code_assignments sub_activities targets].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
     end
     clone
@@ -370,30 +396,14 @@ class Activity < ActiveRecord::Base
 
   def funding_streams
     return [] if project.nil?
-
     budget_ratio = budget && project.budget ? budget / project.budget : 0
     spend_ratio  = spend && project.spend ? spend / project.spend : 0
-
     ufs = project.cached_ultimate_funding_sources
-
     ufs.each do |fs|
       fs[:budget] = fs[:budget] * budget_ratio if fs[:budget]
       fs[:spend]  = fs[:spend] * spend_ratio if fs[:spend]
     end
-
     ufs
-  end
-
-  def check_projects_budget_and_spend?
-    return true if budget.nil? && spend.nil?
-    return true if has_budget_or_spend? &&
-                   type == "OtherCost" && project.nil?
-    return true if actual_budget <= (project.budget || 0) &&
-                   actual_spend <= (project.spend || 0) &&
-                   actual_quarterly_spend_check? &&
-                   actual_quarterly_budget_check?
-
-    return false
   end
 
   def actual_spend
@@ -402,23 +412,6 @@ class Activity < ActiveRecord::Base
 
   def actual_budget
     (budget || 0 )
-  end
-
-  def actual_quarterly_spend_check?
-    return true if (spend_q1 || 0) <= (project.spend_q1 || 0) &&
-                   (spend_q2 || 0) <= (project.spend_q2 || 0) &&
-                   (spend_q3 || 0) <= (project.spend_q3 || 0) &&
-                   (spend_q4 || 0) <= (project.spend_q1 || 0)
-    return false
-  end
-
-  def actual_quarterly_budget_check?
-    return true if (budget_q1 || 0) <= (project.budget_q1 || 0) &&
-                   (budget_q2 || 0) <= (project.budget_q2 || 0) &&
-                   (budget_q3 || 0) <= (project.budget_q3 || 0) &&
-                   (budget_q4 || 0) <= (project.budget_q4 || 0)
-
-    return false
   end
 
   def sub_activities_each_have_defined_districts?(coding_type)
@@ -443,36 +436,46 @@ class Activity < ActiveRecord::Base
     0
   end
 
+  def locations
+    code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
+      find(:all, :include => :code).map{|ca| ca.code }.uniq
+  end
+
+  def sub_activities_total(amount_method)
+    smart_sum(sub_activities, amount_method)
+  end
+
   private
 
-    ### Class methods
+  ### Class methods
     def self.file_upload_columns(response)
-      ["Project Name", "Activity Name", "Activity Description",
-       "Provider", "Past Expenditure",
+      ["Project Name",
+       "Activity Name",
+       "Activity Description",
+       "Provider",
        "#{response.quarter_label(:spend, 'q4_prev')} Spend",
        "#{response.quarter_label(:spend, 'q1')} Spend",
        "#{response.quarter_label(:spend, 'q2')} Spend",
        "#{response.quarter_label(:spend, 'q3')} Spend",
        "#{response.quarter_label(:spend, 'q4')} Spend",
-       "Current Budget",
-        "#{response.quarter_label(:budget, 'q4_prev')} Budget",
-        "#{response.quarter_label(:budget, 'q1')} Budget",
-        "#{response.quarter_label(:budget, 'q2')} Budget",
-        "#{response.quarter_label(:budget, 'q3')} Budget",
-        "#{response.quarter_label(:budget, 'q4')} Budget",
-       "Districts", "Beneficiaries",
-       "Beneficiary details / Other beneficiaries", "Targets",
-       "Start Date", "End Date"]
+       "#{response.quarter_label(:budget, 'q4_prev')} Budget",
+       "#{response.quarter_label(:budget, 'q1')} Budget",
+       "#{response.quarter_label(:budget, 'q2')} Budget",
+       "#{response.quarter_label(:budget, 'q3')} Budget",
+       "#{response.quarter_label(:budget, 'q4')} Budget",
+       "Beneficiaries",
+       "Targets",
+       "Start Date",
+       "End Date"]
     end
 
-    def self.flexible_date_parse(datestr)
-      begin
-        Date.parse(datestr.gsub('/', '-'))
-      rescue
-        Date.strptime(datestr.gsub('/', '-'), '%d-%m-%Y') rescue datestr
-      end
+    # adds a 'hidden' id column at the end of the row
+    def self.file_upload_columns_with_id_col(response)
+      header_row = file_upload_columns(response)
+      (100 - header_row.length).times{ header_row << nil}
+      header_row << 'Id'
+      header_row
     end
-
 
     ### Instance methods
 
@@ -507,24 +510,6 @@ class Activity < ActiveRecord::Base
       cas.flatten
     end
 
-    # removes code assignments for non-existing locations for this activity
-    def remove_district_codings
-      activity_id           = self.id
-      location_ids          = locations.map(&:id)
-      code_assignment_types = [CodingBudgetDistrict, CodingSpendDistrict]
-      deleted_count = CodeAssignment.delete_all(["activity_id = :activity_id AND type IN (:code_assignment_types) AND code_id NOT IN (:location_ids)",
-                        {:activity_id => activity_id,
-                         :code_assignment_types => code_assignment_types.map{|ca| ca.to_s},
-                         :location_ids => location_ids}])
-
-      # only if there are deleted code assignments, update the district cached amounts
-      if deleted_count > 0
-        code_assignment_types.each do |type|
-          set_classified_amount_cache(type)
-        end
-      end
-    end
-
     def approved_activity_cannot_be_changed
       errors.add(:base, "Activity was approved by SysAdmin and cannot be changed") if changed? and approved and changed != ["approved"]
     end
@@ -551,7 +536,6 @@ class Activity < ActiveRecord::Base
     def strip_input_fields
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
-      self.provider_mask = self.provider_mask.strip if self.provider_mask && !is_number?(self.provider_mask)
     end
 
     def get_valid_attribute_name(type)
@@ -566,7 +550,22 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
+
+   def auto_create_project
+     if project_id == -1
+      project = data_response.projects.find_by_name(name)
+      unless project
+        project= Project.create(:name => name,
+                                :start_date => start_date,
+                                :end_date   => end_date,
+                                :data_response => data_response)
+      end
+      self.project = project
+    end
+  end
 end
+
+
 
 # == Schema Information
 #
@@ -580,24 +579,14 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
-#  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)

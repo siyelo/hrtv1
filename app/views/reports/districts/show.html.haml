@@ -6,11 +6,6 @@
   var _budget_i_values        = #{js_safe(@budget_i_values)};
   var _spend_i_values         = #{js_safe(@spend_i_values)};
 
-- unless current_user.district_manager?
-  %ul.breadcrumb
-    %li= link_to "Reports", user_report_dashboard_path
-    %li= link_to "Districts", reports_districts_path
-
 %h1.main_heading
   = h @location.name
 

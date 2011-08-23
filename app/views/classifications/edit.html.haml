@@ -1,0 +1,7 @@
+- content_for :classification do
+  #classification
+    #activity_classification
+      %div.tab1{:style => 'display: block'}
+        = render '/classifications/tab'
+
+= render "/activities/edit", :activity => @activity

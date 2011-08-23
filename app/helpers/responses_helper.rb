@@ -5,7 +5,6 @@ module ResponsesHelper
 
   def your_projects_class
     ready(@response.projects_entered? &&
-    @response.project_amounts_entered? &&
     @response.projects_have_activities? &&
     @response.projects_have_other_costs?)
   end
@@ -22,11 +21,6 @@ module ResponsesHelper
     ready(@response.projects_linked? &&
       @response.check_projects_funding_sources_have_organizations? &&
       @response.activities_have_implementers? &&
-      @response.projects_funding_sources_ok? &&
-      @response.projects_activities_ok?)
-  end
-
-  def requested_amounts(response)
-    response.request.requested_amounts.join(" or ")
+      @response.projects_funding_sources_ok?)
   end
 end

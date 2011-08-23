@@ -26,10 +26,11 @@ describe FundingFlow do
     it { should belong_to :from }
     it { should belong_to :to }
     it { should belong_to :project }
+    it { should belong_to :project_from }
   end
 
   describe "Validations" do
-    ### these break with  shoulda 2.11.3 "translation missing"
+    ### these break with shoulda 2.11.3 "translation missing"
     #it { should validate_presence_of(:organization_id_to) }
     #it { should validate_presence_of(:organization_id_from) }
     # and this breaks too
@@ -47,6 +48,50 @@ describe FundingFlow do
     it { should validate_numericality_of(:spend_q3) }
     it { should validate_numericality_of(:spend_q4) }
     it { should validate_numericality_of(:spend_q4_prev) }
+  end
+
+  describe "Validations that require a record" do
+    before{ basic_setup_funding_flow }
+    subject { @funding_flow }
+    it { should validate_uniqueness_of(:organization_id_from).scoped_to(:project_id) }
+  end
+
+  describe "Custom validations" do
+    before :all do
+      @donor        = Factory(:organization)
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+    end
+
+    it "should validate Expenditure and/or Budget is present if nil" do
+      @funding_flow = Factory.build(:funding_flow, :project => @project,
+                              :from => @donor, :to => @organization,
+                              :budget => nil, :spend => nil)
+      @funding_flow.save.should == false
+      @funding_flow.errors.on(:spend).should include('Actual and/or Planned must be present')
+    end
+
+    it "should validate Expenditure and/or Budget is present if blank" do
+      @funding_flow = Factory.build(:funding_flow, :project => @project,
+                              :from => @donor, :to => @organization,
+                              :budget => "", :spend => "")
+      @funding_flow.save.should == false
+      @funding_flow.errors.on(:spend).should include('Actual and/or Planned must be present')
+    end
+
+    it "should validate one OR the other" do
+       @donor        = Factory(:organization)
+       @organization = Factory(:organization)
+       @request      = Factory(:data_request, :organization => @organization)
+       @response     = @organization.latest_response
+       @project      = Factory(:project, :data_response => @response)
+       @funding_flow = Factory.build(:funding_flow, :project => @project,
+                               :from => @donor, :to => @organization,
+                               :budget => "", :spend => "123.00")
+       @funding_flow.save.should == true
+     end
   end
 
   describe "Callbacks" do
@@ -105,7 +150,7 @@ describe FundingFlow do
     end
 
     describe "#update_cached_usd_amounts" do
-      before :each do
+      before :all do
         Money.default_bank.add_rate(:RWF, :USD, 0.1)
       end
 
@@ -127,6 +172,7 @@ describe FundingFlow do
 
       context "USG FY" do
         it "sets budget_in_usd and spend_in_usd amounts" do
+          pending #expected to be removed in next merge
           @organization = Factory(:organization, :currency => 'RWF',
                                  :fiscal_year_start_date => "2010-10-01",
                                  :fiscal_year_end_date => "2011-09-30")

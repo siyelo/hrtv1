@@ -29,13 +29,16 @@ describe Reports::OrganizationWorkplan do
         @location2 = Factory(:location, :short_display => "loc2")
         @input1    = Factory(:input, :short_display => 'input1', :external_id => 1)
         @input2    = Factory(:input, :short_display => 'input2', :external_id => 2)
-        @activity = Factory :activity, :name => 'a name', :description => 'a descr',
-          :budget => "20000.01", :locations => [@location1, @location2],
-          :project => @project, :data_response => @response
+        @activity = Factory.build(:activity, :name => 'a name', :description => 'a descr',
+         :project => @project, :data_response => @response)
+        @activity.write_attribute(:budget, "20000.01"); @activity.save; @activity.reload
+
         Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input1,
           :amount => 5, :cached_amount => 5)
         Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input2,
           :amount => 15, :cached_amount => 15)
+        Factory(:coding_budget_district, :activity => @activity, :code => @location1)
+        Factory(:coding_budget_district, :activity => @activity, :code => @location2)
       end
 
       it "should include a project + activity details" do
@@ -45,15 +48,14 @@ describe Reports::OrganizationWorkplan do
       end
 
       it "should not repeat project details on consecutive lines" do
-        @activity2 = Factory :activity, :name => 'a2 name', :description => 'a2 descr',
-          :budget => "10.00", :locations => [@location1],
-          :project => @project, :data_response => @response
+        @activity2 = Factory(:activity, :name => 'a2 name', :description => 'a2 descr',
+                             :project => @project, :data_response => @response)
+        @sa2       = Factory(:sub_activity, :budget => 10, :activity => @activity2, :data_response => @response)
+        Factory(:coding_budget_district, :activity => @activity2, :code => @location1)
         Factory(:coding_budget_cost_categorization, :activity => @activity2, :code => @input1,
           :amount => 10, :cached_amount => 10)
         Reports::OrganizationWorkplan.new(@response).csv.should == @header +
-          'p name,p descr,' +
-          'a name,a descr,20000.01,"loc1, loc2","input1, input2"' + "\n" +
-          '"","",a2 name,a2 descr,10.00,loc1,input1' + "\n"
+          "p name,p descr,a name,a descr,20000.01,\"loc1, loc2\",\"input1, input2\"\n\"\",\"\",a2 name,a2 descr,10.00,loc1,input1\n"
       end
     end
   end

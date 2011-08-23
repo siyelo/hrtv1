@@ -1,6 +1,7 @@
 .full-width ul
-  margin-bottom: 10px
-  +border-bottom-radius
+  //margin-bottom: 10px
+  &.rounded
+    +border-bottom-radius
 
   &.horizontal
     margin-bottom: 0
@@ -445,36 +446,31 @@ ul.ordered_nav
 
 // CODING TREE //
 ul.activity_tree
-  border-bottom: $filler 4px solid
+  background: #fff
+  border: $primary_border3 1px solid
   clear: both
   font-size: 12px
-  ul
-    border-left: 1px dotted $lightest-blue
-    border-right: 1px dotted $lightest-blue
-    padding: 0 5px
+
   li
-    border-top: $filler 4px solid
+    border-bottom: $primary_border4 1px solid
     font-size: 11px
     list-style: none
+    margin-bottom: 0 !important
+    padding-bottom: 0 !important
+    position: relative
     &:hover
-      background: $filler + #030303
+      background: $primary_lightest
     > div
       padding: 5px 0
     div.invalid
       background: #f7eeec
       .subtotal
         background: $lighter-blue
-    a.invalid_node
-      background: #FF0000
-      color: #FFF
-      font-weight: bold
-      text-align: center
-      width: 8px
-      +border-radius(30px)
     > span
       float: left
     label
       font-size: 11px
+      width: 91%
     input, textarea
       background: white
       margin-bottom: 6px
@@ -484,33 +480,52 @@ ul.activity_tree
       display: inline
       width: 10px
     span
+      display: block
       font-size: 1.4em
       font-weight: bold
+      height: 12px
+      line-height: 1
+      margin: 0 3px 0 5px !important
+      padding: 2px
+      text-align: center
+      width: 11px !important
       &.expanded
+        background: #eee
         color: red
-        padding-top: 7px
+        position: relative
+        top: 8px
+        +border-radius(10px)
       &.collapsed
+        background: #eee
         color: green
-        padding-top: 7px
+        position: relative
+        top: 8px
+        +border-radius(10px)
     ul
-      margin: 0 10px
+      margin: 0 0 0 10px
       li
         padding-bottom: 0
         border-top: $lightest-blue unquote(" 1px dashed ")
-
+  .tooltip
+    float: left
+    margin: 7px 4px 0 3px
+  input[type=checkbox]
+    float: left
+    margin-top: 5px
   .values input
     margin-bottom: 0 !important
+  .values
+    margin-right: 5px
 
   .subtotal
-    background: $lightest-blue
+    color: $primary
     display: inline-block !important
-    float: right
-    height: 12px
-    margin-left: 3px
-    overflow: hidden
-    padding: 5px 2px
-    width: 115px
-    +border-radius
+    height: 11px
+    position: absolute
+    right: 3px
+    text-align: right
+    top: 7px
+    width: 80px
 
   .hide
     display: none
@@ -520,3 +535,10 @@ ul.activity_tree
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
+
+.grid-50
+  float: left
+  width: 55%
+.grid-60
+  float: left
+  width: 60%

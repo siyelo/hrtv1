@@ -1,5 +1,5 @@
 - if params[:query].blank?
   You have no projects yet.
-  = link_to "Add your first project now.", new_response_project_path(@response)
+  = link_to "Add your first project now.", new_response_project_path(@response), :class => 'js_toggle_project_form'
 - else
   Your search did not return any results

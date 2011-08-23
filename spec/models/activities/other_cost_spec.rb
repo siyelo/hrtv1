@@ -5,7 +5,6 @@ describe OtherCost do
     it { should belong_to :provider }
     it { should belong_to :data_response }
     it { should belong_to :project }
-    it { should have_and_belong_to_many :locations }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
     it { should have_many :sub_implementers }
@@ -27,17 +26,6 @@ describe OtherCost do
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:budget_q4_prev) }
-    it { should allow_mass_assignment_of(:budget_q1) }
-    it { should allow_mass_assignment_of(:budget_q2) }
-    it { should allow_mass_assignment_of(:budget_q3) }
-    it { should allow_mass_assignment_of(:budget_q4) }
-    it { should allow_mass_assignment_of(:spend_q4_prev) }
-    it { should allow_mass_assignment_of(:spend_q1) }
-    it { should allow_mass_assignment_of(:spend_q2) }
-    it { should allow_mass_assignment_of(:spend_q3) }
-    it { should allow_mass_assignment_of(:spend_q4) }
-    it { should allow_mass_assignment_of(:location_ids) }
     it { should allow_mass_assignment_of(:beneficiary_ids) }
     it { should allow_mass_assignment_of(:provider_id) }
     it { should allow_mass_assignment_of(:text_for_provider) }
@@ -48,7 +36,7 @@ describe OtherCost do
 
   describe "Validations" do
     subject { basic_setup_other_cost; @other_cost }
-    it { should_not validate_presence_of(:name) }
+    it { should validate_presence_of(:name) }
   end
 
 
@@ -60,6 +48,17 @@ describe OtherCost do
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:other_cost_fully_coded,
                               :data_response => @response, :project => @project)
+      @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                              :budget => 50, :spend => 40)
+      @activity.stub(:coding_budget_valid?) { true }
+      @activity.stub(:coding_budget_cc_valid?) { true }
+      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:coding_budget_district_valid?) { true }
+      @activity.stub(:coding_spend_valid?) { true }
+      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.save
+      @activity.reload
     end
 
     it "is classified? when both budget and spend are classified with factories" do

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110805133157) do
+ActiveRecord::Schema.define(:version => 20110822123733) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -44,10 +44,6 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.integer  "project_id"
     t.decimal  "ServiceLevelBudget_amount",    :default => 0.0
     t.decimal  "ServiceLevelSpend_amount",     :default => 0.0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
     t.boolean  "am_approved"
     t.integer  "user_id"
     t.date     "am_approved_date"
@@ -69,11 +65,6 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.integer "beneficiary_id"
   end
 
-  create_table "activities_locations", :id => false, :force => true do |t|
-    t.integer "activity_id"
-    t.integer "location_id"
-  end
-
   create_table "activities_organizations", :id => false, :force => true do |t|
     t.integer "activity_id"
     t.integer "organization_id"
@@ -92,7 +83,6 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -153,13 +143,7 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.date     "due_date"
     t.date     "start_date"
     t.date     "end_date"
-    t.boolean  "budget",            :default => true,  :null => false
-    t.boolean  "spend",             :default => true,  :null => false
     t.boolean  "final_review",      :default => false
-    t.boolean  "year_2",            :default => true
-    t.boolean  "year_3",            :default => true
-    t.boolean  "year_4",            :default => true
-    t.boolean  "year_5",            :default => true
     t.boolean  "purposes",          :default => true
     t.boolean  "locations",         :default => true
     t.boolean  "inputs",            :default => true
@@ -223,15 +207,6 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
-  create_table "funding_sources", :force => true do |t|
-    t.integer  "activity_id"
-    t.integer  "funding_flow_id"
-    t.decimal  "spend"
-    t.decimal  "budget"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "funding_streams", :force => true do |t|
     t.integer  "project_id"
     t.integer  "organization_ufs_id"
@@ -251,16 +226,6 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.datetime "updated_at"
   end
 
-  create_table "locations_organizations", :id => false, :force => true do |t|
-    t.integer "location_id"
-    t.integer "organization_id"
-  end
-
-  create_table "locations_projects", :id => false, :force => true do |t|
-    t.integer "location_id"
-    t.integer "project_id"
-  end
-
   create_table "organizations", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -276,6 +241,7 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.string   "contact_phone_number"
     t.string   "contact_main_office_phone_number"
     t.string   "contact_office_location"
+    t.integer  "location_id"
   end
 
   create_table "organizations_managers", :id => false, :force => true do |t|
@@ -297,25 +263,9 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "budget"
-    t.decimal  "spend"
     t.string   "currency"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
-    t.decimal  "spend_q4_prev"
     t.integer  "data_response_id"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
     t.integer  "comments_count",   :default => 0
-    t.decimal  "budget2"
-    t.decimal  "budget3"
-    t.decimal  "budget4"
-    t.decimal  "budget5"
   end
 
   add_index "projects", ["data_response_id"], :name => "index_projects_on_data_response_id"
@@ -345,8 +295,7 @@ ActiveRecord::Schema.define(:version => 20110805133157) do
   add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
   add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
-  create_table "targets", :id => false, :force => true do |t|
-    t.integer  "id",          :null => false
+  create_table "targets", :force => true do |t|
     t.integer  "activity_id"
     t.string   "description"
     t.datetime "created_at"

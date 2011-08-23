@@ -56,6 +56,7 @@ end
 group :test do
   gem 'capybara', '0.3.9'     # latest capy fails with "undefined method `fillable_field' for HTML:Module"
   gem 'selenium-webdriver', '~>0.2.2'
+  gem 'akephalos', :git => 'git://github.com/thoughtbot/akephalos.git', :require => nil
   gem 'cucumber'
   gem 'cucumber-rails', '0.3.2'
   gem 'database_cleaner'

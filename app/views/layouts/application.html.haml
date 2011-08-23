@@ -11,8 +11,9 @@
         = yield :sub_nav
 
     #content
+      = render 'layouts/flashes'
       .wrapper
-        = render 'layouts/flashes'
+        
         .full-width
           = yield
 

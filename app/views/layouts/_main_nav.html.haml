@@ -13,7 +13,7 @@
         %li{:class => ([Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController].include?(controller.class) ? 'active' : nil)}
           = link_to 'Reports', reports_district_path(current_user.location)
       - else
-        %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, CodeAssignmentsController, ResponsesController].include?(controller.class) ? "active" : nil)}
+        %li{:class => ([ProjectsController, ActivitiesController, OtherCostsController, ClassificationsController, ResponsesController].include?(controller.class) ? "active" : nil)}
           = link_to 'Projects', response_projects_path(current_or_last_response)
 
         %li{:class => ([Reporter::ReportsController, Reports::DistrictsController, Reports::Districts::ActivitiesController, Reports::Districts::OrganizationsController, Reports::CountriesController, Reports::Countries::OrganizationsController, Reports::Countries::ActivitiesController].include?(controller.class) ? 'active' : nil)}

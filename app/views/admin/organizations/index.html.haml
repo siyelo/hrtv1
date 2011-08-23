@@ -7,18 +7,18 @@
 
 %ul.horizontal
   %li
-    - link_to new_admin_organization_path, :class => "create_new" do
-      = image_tag "new_white.png"
+    - link_to new_admin_organization_path, :class => "create_alt" do
+      = image_tag "new.png"
       Create Organization
   %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_alt'
   %li
-    - link_to duplicate_admin_organizations_path, :class => 'create_new' do
+    - link_to duplicate_admin_organizations_path, :class => 'create_alt' do
       Fix duplicate organizations
 
 #import
   %h3.title_bar Import a CSV file
-  .dashboard_section
+  .section_form
     %p Create one or more organizations from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
 
     #import_csv
@@ -49,6 +49,7 @@
         %th Response Status
         %th= sortable "raw_type", "Type"
         %th= sortable "fosaid", "Fosaid"
+        %th Location
         %th
     %tbody
       = render :partial => '/organizations/organization', :collection => @organizations

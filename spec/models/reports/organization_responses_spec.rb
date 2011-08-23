@@ -28,77 +28,86 @@ describe Reports::OrganizationResponses do
 
   context 'with projects/activities in USD' do
     before :each do
-      @project1 = Factory :project, :spend => "5", :budget => "10", :data_response => @response1
+      @project1 = Factory :project, :data_response => @response1
+      @act = Factory(:activity, :project => @project1, :data_response => @response1)
+      @sact = Factory(:sub_activity, :activity => @act, :data_response => @response1,
+                      :budget => 10, :spend => 5)
     end
 
     it "should show project totals" do
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-        'org1,In Progress,5.00,0.00,5.00,10.00,0.00,10.00'
+        'org1,In Progress,5.00,5.00,0.00,10.00,10.00,0.00'
     end
 
     it "should show project totals with cents if present" do
-      @project1.spend = 5.20
+      @act1 = Factory(:activity, :project => @project1, :data_response => @response1)
+      @sact1 = Factory(:sub_activity, :activity => @act1, :data_response => @response1,
+                       :spend => "0.20", :budget => "0")
       @project1.save(false)
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-        'org1,In Progress,5.20,0.00,5.20,10.00,0.00,10.00'
+        'org1,In Progress,5.20,5.20,0.00,10.00,10.00,0.00'
     end
 
     context "with activities" do
       before :each do
-        @activity1 = Factory :activity, :spend => "12", :budget => "6", :project => @project1,
-          :data_response => @response1
+        @activity1 = Factory(:activity, :project => @project1, :data_response => @response1)
+        @sactivit1 = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
+                             :budget => "6", :spend => "12")
       end
 
       it "should show activity totals" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
+          'org1,In Progress,17.00,17.00,0.00,16.00,16.00,0.00'
       end
-
 
       it "should show differences as negative if activity exceeds project" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-        'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
+          'org1,In Progress,17.00,17.00,0.00,16.00,16.00,0.00'
       end
 
       it "should show differences as positive if project exceeds activity" do
-        @activity1.spend = 2
-        @activity1.save(false)
+        #@activity1.write_attribute(:spend, 2)
+        @sactivit1.spend = 2; @sactivit1.save; @activity1.reload
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,5.00,2.00,3.00,10.00,6.00,4.00'
+          'org1,In Progress,7.00,7.00,0.00,16.00,16.00,0.00'
       end
     end
 
-     context "with other costs" do
-        before :each do
-          @other_cost1 = Factory :other_cost, :spend => "12", :budget => "6", :data_response => @response1
-        end
-
-        it "should show other costs totals" do
-          @other_cost1.project = @project1
-          @other_cost1.save(false)
-          Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-            'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
-        end
-
-        it "should show other costs without a project" do
-          Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-           'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
-        end
+    context "with other costs" do
+      before :each do
+        @other_cost1 = Factory(:other_cost, :data_response => @response1)
+        @osa1        = Factory(:sub_activity, :activity => @other_cost1, 
+                        :data_response => @response1, :budget => "6", :spend => "12")
       end
+
+      it "should show other costs totals" do
+        Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
+          'org1,In Progress,5.00,17.00,-12.00,10.00,16.00,-6.00'
+      end
+
+      it "should show other costs without a project" do
+        Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
+         'org1,In Progress,5.00,17.00,-12.00,10.00,16.00,-6.00'
+      end
+    end
   end
 
   context 'with projects/activities in USD and RWF' do
     before :each do
-      @project1 = Factory :project,   :spend => "5",  :budget => "10", :data_response => @response1
-      @activity1 = Factory :activity, :spend => "12", :budget => "6", :project => @project1, :data_response => @response1
-      @project2 = Factory :project,   :spend => "8",  :budget => "16", :data_response => @response2
-      @activity2 = Factory :activity, :spend => "18", :budget => "9",  :project => @project2, :data_response => @response2
+      @project1  = Factory(:project, :data_response => @response1)
+      @activity1 = Factory(:activity, :project => @project1, :data_response => @response1)
+      @sa1       = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
+                           :budget => 6, :spend => 12)
+      @project2  = Factory(:project, :data_response => @response2)
+      @activity2 = Factory(:activity, :project => @project2, :data_response => @response2)
+      @sa2       = Factory(:sub_activity, :activity => @activity2, :data_response => @response2,
+                           :budget => 9, :spend => 18)
     end
 
     it "should print totals in USD for simple comparison" do
       report = Reports::OrganizationResponses.new(@request).csv
-      report.split("\n")[1].should == 'org1,In Progress,5.00,12.00,-7.00,10.00,6.00,4.00'
-      report.split("\n")[2].should == 'org2,Submitted,4.00,9.00,-5.00,8.00,4.50,3.50'
+      report.split("\n")[1].should == 'org1,In Progress,12.00,12.00,0.00,6.00,6.00,0.00'
+      report.split("\n")[2].should == 'org2,Submitted,9.00,9.00,0.00,4.50,4.50,0.00'
     end
   end
 end

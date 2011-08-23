@@ -23,6 +23,16 @@ class ProjectsController < Reporter::BaseController
     @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
+
+    @project = Project.new(:data_response => @response)
+
+    @activity = Activity.new
+    @activity.project = @response.projects.find_by_id(params[:project_id])
+    @activity.provider = current_user.organization
+
+    @other_cost = OtherCost.new
+    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
+    @other_cost.data_response = @response
   end
 
   def edit
@@ -33,7 +43,7 @@ class ProjectsController < Reporter::BaseController
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
     create! do |success, failure|
-      success.html { redirect_to response_projects_url(@response) }
+      success.html { redirect_to edit_response_project_url(@response, @project) }
     end
   end
 
@@ -42,7 +52,7 @@ class ProjectsController < Reporter::BaseController
     update! do |success, failure|
       success.html {
         flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
-        redirect_to response_projects_url(@response)
+        redirect_to edit_response_project_url(@response, @project)
       }
       failure.html do
         load_comment_resources(resource)

@@ -16,17 +16,19 @@ Feature: Activity Manager can approve a code breakdown for each activity
       And organization "reporter_org" is one of the activity_manager's organizations
       And I am signed in as "activity_manager@hrtapp.com"
 
-  @javascript
+  @javascript @wip
   Scenario: Approve an Activity from listing
     Given I follow "reporter_org"
-    When I follow "Approve Budget"
+    When I hover over ".js_project_row" within ".workplan"
+    And wait a few moments
+    And I follow "Approve Budget"
     And wait a few moments
     Then I should see "Budget Approved"
 
-    @javascript
-    Scenario: Approve an Activity
-      Given I follow "reporter_org"
-        And I follow "activity1"
-      When I follow "Approve Budget"
-        And wait a few moments
-      Then I should see "Budget Approved"
+  @javascript
+  Scenario: Approve an Activity
+    Given I follow "reporter_org"
+    And I follow "activity1"
+    When I follow "Approve Budget"
+    And wait a few moments
+    Then I should see "Budget Approved"

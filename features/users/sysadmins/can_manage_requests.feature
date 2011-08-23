@@ -29,7 +29,7 @@ Feature: Admin can manage data requests
        And I should see "My new data response title"
 
       When I follow "Delete"
-      Then I should see "Request was successfully deleted"
+      Then I should see "Request was successfully deleted."
        And I should not see "My data response title"
 
     Scenario Outline: See errors when creating data request

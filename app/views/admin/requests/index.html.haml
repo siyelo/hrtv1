@@ -15,8 +15,6 @@
       %th Final review
       %th Start date
       %th End date
-      %th Current Budget
-      %th Expenditure
       %th.action Manage
   %tbody
     - @requests.each do |request|
@@ -26,8 +24,6 @@
         %td= request.final_review
         %td= request.start_date
         %td= request.end_date
-        %td= request.budget
-        %td= request.spend
         %td.action
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_request_path(request)

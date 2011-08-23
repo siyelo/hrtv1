@@ -1,7 +1,7 @@
 Money.default_bank  = Money::Bank::VariableExchange.new
 begin
   @cur = Currency.all
-  currency_config     = Currency.special_yaml(@cur)
+  currency_config = Currency.currencies_to_yaml
   Money.default_bank.import_rates(:yaml, currency_config)
 rescue
   print "currency table not found, please seed your database"

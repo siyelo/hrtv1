@@ -29,7 +29,7 @@
       var $root = this;
 
       // Add button
-      $(this).before('<div id="buttons"><button id="' + defaults.tab + 'expand">Expand All</button><button id="' + defaults.tab + 'collapse">Collapse All</button><button id="' + defaults.tab + 'default">Default View</button></div>');
+      $(this).before('<div id="buttons"><button class="create_inline" id="' + defaults.tab + 'expand">Expand All</button><button class="create_inline" id="' + defaults.tab + 'collapse">Collapse All</button><button class="create_inline" id="' + defaults.tab + 'default">Default View</button></div>');
 
       // Hide all except top level
       $("ul", $(this)).addClass('hide');

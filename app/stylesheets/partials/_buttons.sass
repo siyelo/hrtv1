@@ -26,7 +26,7 @@ a.remove_nested
   width: 80px
   +pie-clearfix
 
-.app a
+.app a, button
   &.create_new
     background: $orange
     border: 1px solid $orange - #222
@@ -45,10 +45,10 @@ a.remove_nested
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
+      +linear-gradient(color-stops($green, $green - #222))
     &:active
       outline: none
       position: relative
@@ -57,30 +57,57 @@ a.remove_nested
   &.create_alt
     background: #eee
     border: 1px solid $light-blue
-    color: $mid-blue
+    color: $primary
     display: inline-block
     font-size: 12px
     font-weight: bold
     margin-bottom: 10px
+    min-height: 13px
     padding: 7px 12px 5px
     text-decoration: none
     +border-radius(2px)
-    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +text-shadow(#fff, 0, 0, 1px)
     img
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #222, 0, 0, 1px)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
     &:active
       outline: none
       position: relative
       top: 1px
+      
+  &.dropdown
+    background: #eee
+    border: 1px solid $light-blue
+    color: $primary
+    display: inline-block
+    font-size: 12px
+    font-weight: bold
+    margin-bottom: 10px
+    min-height: 13px
+    padding: 7px 4px 5px 12px
+    position: relative
+    text-decoration: none
+    z-index: 20
+    +border-radius(2px)
+    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
+    +text-shadow(#fff, 0, 1px, 0)
+    img
+      position: relative
+      top: 1px
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
+
 
   &.create_inline
     background: #eee
@@ -95,17 +122,16 @@ a.remove_nested
     text-decoration: none
     +border-radius(2px)
     +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
-    +linear-gradient(color-stops(#f8f8f8, #e8e8e8))
     +text-shadow(#fff, 0, 0, 1px)
     img
       position: relative
       top: 2px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #222, 0, 0, 1px)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
     &:active
       outline: none
       position: relative
@@ -139,34 +165,9 @@ a.remove_nested
     &:hover, &:focus
       opacity: 1
 
-  &.js_dropdown_trigger
-    background: $orange
-    border: 1px solid $orange - #222
-    color: #fff
-    display: inline-block
-    font-size: 12px
-    font-weight: bold
-    margin-bottom: 10px
-    padding: 7px 4px 5px 12px
-    position: relative
-    text-decoration: none
-    z-index: 20
-    +border-radius
-    +box-shadow(#999, 0, 1px, 3px)
-    +linear-gradient(color-stops($orange, $orange - #222))
-    +text-shadow($orange - #444, 0, 1px, 0)
-    img
-      position: relative
-    &.persist
-      color: #fff
-      background: green - #222 !important
-      border: 1px solid green - #222 !important
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #444, 0, 1px, 0)
-
 .next, .big_button
   +border-radius
-  border: 1px solid $green - #222
+  border: 1px solid $green - #191919
   background: $green
   color: white
   cursor: pointer
@@ -174,7 +175,7 @@ a.remove_nested
   font-weight: bold
   padding: 9px 15px 7px 15px
   text-decoration: none
-  +linear-gradient(color-stops($green, $green - #222))
+  +linear-gradient(color-stops($green, $green - #111))
   +box-shadow(#999, 0, 1px, 3px)
   +text-shadow($green - #444, 0, 1px, 0)
   &:hover, &:focus
@@ -208,18 +209,6 @@ a.remove_nested
 #buttons, .buttons
   margin-bottom: 5px !important
   padding: 5px 0px
-  button, a
-    border: none
-    background: $lightest-blue
-    cursor: pointer
-    font-family: Arial, sans-serif
-    margin-right: 5px
-    padding: 3px 5px
-    text-decoration: none
-    +border-radius(5px)
-    &:hover, &.active
-      background: $mid-blue
-      color: white
 
   li
     display: inline
@@ -240,7 +229,7 @@ a.remove_nested
   display: inline-block
   font-size: 1em
   &.respond
-    background: green
+    background: $green
     color: #fff
     font-size: 9px
     font-weight: bold
@@ -277,7 +266,7 @@ body.login .buttons li:last-child
 
 /* NEW BUTTON STYLES */
 
-a, input[type=submit]
+a, input[type=submit], button
 
   &.create_button, &.create_new
     background: $orange
@@ -298,11 +287,11 @@ a, input[type=submit]
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #444, 0, 1px, 0)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #444, 0, 1px, 0)
     &:active
       outline: none
       position: relative
@@ -313,8 +302,8 @@ a, input[type=submit]
     border: 1px solid $light-blue
     color: $mid-blue + #222 !important
     display: inline-block
+    font-family: 'Avenir Black', sans-serif
     font-size: 11px
-    font-weight: bold
     line-height: 1 !important
     margin: 0 0 0 3px
     padding: 4px 6px 3px
@@ -340,10 +329,24 @@ a, input[type=submit]
       color: $light-grey + #222 !important
       pointer-events: none
       cursor: default
+    &.cancel_button
+      font-size: 14px !important
+      padding: 12px 15px 8px 15px
+      margin-top: 1px
+      +border-radius
 
   &.delete_button
     &:hover, &:focus
       color: $red !important
+      
+  &.delete_row
+    +replace-text("delete_row.png")
+    display: inline-block
+    height: 17px
+    opacity: 0.6
+    width: 17px
+    &:hover, &:focus
+      opacity: 1
 
   &.small_submit_button
     background: #eee
@@ -364,12 +367,23 @@ a, input[type=submit]
       position: relative
       top: 1px
     &:hover, &:focus
-      background: green
-      border: 1px solid green - #222
+      background: $green
+      border: 1px solid $green - #222
       color: #fff !important
-      +linear-gradient(color-stops(green, green - #222))
-      +text-shadow(green - #333, 0, 1px, 0)
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #333, 0, 1px, 0)
     &:active
       outline: none
       position: relative
       top: 1px
+.delete_inline
+  display: inline-block
+  opacity: 0.2
+  position: absolute
+  right: 0
+  top: 8px
+  +replace-text("icon_close_flash.png")
+  height: 12px
+  width: 12px
+  &:hover, &:focus
+    opacity: 0.6

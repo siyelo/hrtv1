@@ -3,6 +3,24 @@ class Reporter::BaseController < ApplicationController
   before_filter :require_user
   before_filter :warn_if_not_current_request
 
+  protected
+
+    def html_redirect
+      activity = @activity || @other_cost
+      if params[:commit] == "Save & Add Locations >"
+        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'locations')
+      elsif params[:commit] == "Save & Add Purposes >"
+        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'purposes')
+      elsif params[:commit] == "Save & Add Inputs >"
+        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'inputs')
+      elsif params[:commit] == "Save & Add Outputs >"
+        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'outputs')
+      elsif params[:commit] == "Save & Go To Project >"
+        return redirect_to edit_response_project_path(activity.response, activity.project)
+      else
+        return redirect_to edit_activity_or_ocost_path(activity, :mode => params[:mode])
+      end
+    end
 
   private
     def js_redirect

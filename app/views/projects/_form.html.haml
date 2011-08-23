@@ -1,64 +1,51 @@
-- budget_fy_start = @response.organization.gor_fiscal_year_start(:budget)[0]
-
-:javascript
-  var _budget = #{@response.data_request.budget.to_json};
-  var _spend = #{@response.data_request.spend.to_json};
-
 - f.inputs :class => 'inputs' do
   %li.last
     %h3 Basics
-    %ul.dashboard_section
-      = f.input :name, :hint => "Using a name that is specified on a contract or formal agreement is strongly recommended"
-      = f.input :description, :input_html => { :rows => 2 }, :hint => "A general 1-2 sentence description of the purpose of the Project.", :required => false
-      = f.input :start_date, :as => :string, :label => "Start date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) When the Project (and it's related Activities) started."
-      = f.input :end_date, :as => :string, :label => "End date", :input_html => {:class => 'date_picker'}, :hint => "(YYYY-MM-DD) The end date for the Project’s implementation."
+    %ul.section_form.condensed_fields
+      %li#project_name_input.string.required
+        .name
+          = f.label :name, "Name"
+          %span.required *
+          - link_to "#", :title => "A short name for this project", :class => 'tooltip' do
+            = image_tag "tooltip.png"
+        = f.text_field :name
 
-  - if @response.data_request.spend?
-    %li.last
-      %h3 Past Project Expenditure
-      %ul.dashboard_section
-        = f.input :spend, :label => "Past Expenditure", :hint => "Total amount spent in the past fiscal year. You can enter the total amount here OR below in the quarterly fields", :required => false, :input_html => { :class => 'js_budget' }
-
-        = render 'shared/spend_quarters', :f => f
-
-  - if @response.data_request.budget?
-    %li.last
-      %h3 Project Current Budget
-      %ul.dashboard_section
-        %br
-        = f.input :budget, :label => "Current Budget", :hint => "Total amount you are planning to spend in the upcoming fiscal year. You can enter the total amount here #{@response.request.budget_by_quarter? ? "OR below in the quarterly fields" : ""}", :required => false, :input_html => { :class => 'js_budget' }
-
-        = render 'shared/budget_quarters', :f => f
-
-        %br
-        - unless @response.request.no_long_term_budgets?
-          %li.amounts
-            %label Long-term
-            %ul
-              = f.input :budget2, :label => "#{budget_fy_start + 1}", :required => false if @response.request.year_2?
-              = f.input :budget3, :label => "#{budget_fy_start + 2}", :required => false if @response.request.year_3?
-              = f.input :budget4, :label => "#{budget_fy_start + 3}", :required => false if @response.request.year_4?
-              = f.input :budget5, :label => "#{budget_fy_start + 4}", :required => false if @response.request.year_5?
-
-  %li.last
-    %h3 Project Funding Sources
-    %ul.dashboard_section
-      %p.heading_hint The sources from which your organization receives funding for its Projects.
-
-      .funding_flows
-        - f.semantic_fields_for :in_flows do |ff|
-          = render "projects/in_flow_fields", :f => ff
-        .add
-          = link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'
+      %li#project_start_date_input.string.required
+        .name
+          = f.label :start_date, "Start date"
+          %span.required *
+          - link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
+            = image_tag "tooltip.png"
+        = f.text_field :start_date, :class => 'date_picker'
+      %li#project_end_date_input.string.required
+        .name
+          = f.label :end_date, "End date"
+          %span.required *
+          - link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
+            = image_tag "tooltip.png"
+        = f.text_field :end_date, :class => 'date_picker'
+      %li#project_currency_input.select.required
+        .name
+          = f.label :currency, "Currency override"
+          - link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
+            = image_tag "tooltip.png"
+        = f.select :currency, currency_options_for_select, { :include_blank => true }
+      %br
+      %li#project_description_input.text
+        .name
+          = f.label :description, "Description"
+          - link_to "#", :title => "A general 1-2 sentence description of the purpose of the Project.", :class => 'tooltip' do
+            = image_tag "tooltip.png"
+        = f.text_area :description, :rows => 2
+      //= f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false
 
   %li.last
-    %h3 Other
-    %ul.dashboard_section
-      = f.input :currency, :label => "Currency override", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => " Override the currency for this Project only. (Your default is #{@response.currency})", :required => false, :input_html => { :class => "js_combobox" }
-      = f.input :locations, :as => :check_boxes, :collection => ordered_locations(Location.ordered_by_short_display), :label => "Locations worked in", :hint => 'Check the box next to each district/province in which this Project was (or is currently being) implemented. If the Project is focused at the central level and not in any specific district or region, check the box next to the "National Level" option.', :required => false
+    = render 'in_flows', :f => f
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
   = f.commit_button :button_html => {:class => "last big_button"}
+  %li
+    = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
 
 - unless @project.new_record?
   .delete_section

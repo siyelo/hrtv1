@@ -9,11 +9,6 @@
   var _spend_ufs_values       = #{js_safe(@spend_ufs_values)};
   var _spend_fa_values        = #{js_safe(@spend_fa_values)};
 
-- unless current_user.district_manager?
-  %ul.breadcrumb
-    %li= link_to "Reports", user_report_dashboard_path
-    %li= link_to "Districts", reports_districts_path
-
 %h1.main_heading
   = h @location.name
 

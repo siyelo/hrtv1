@@ -4,7 +4,6 @@
 en:
   hello: "Hello world"
 
-
   date:
     formats:
       short: "%d %b '%y"
@@ -31,6 +30,13 @@ en:
     errors:
       full_messages:
         format: "%{attribute} %{message}"
+
+    attributes:
+      sub_activity:
+        provider_id: "Implementer"
+      funding_flow:
+        spend: "Disbursements Received"
+        budget: "Planned Disbursements"
 
   # Used in distance_of_time_in_words(), distance_of_time_in_words_to_now(), time_ago_in_words()
   datetime:

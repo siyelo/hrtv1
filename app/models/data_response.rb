@@ -132,7 +132,6 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      errors.add_to_base("Project expenditures and/or current budgets are not yet entered.") unless project_amounts_entered?
       errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
@@ -141,8 +140,6 @@ class DataResponse < ActiveRecord::Base
       errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
       errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
       errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
-      errors.add_to_base("Project budget and sum of Activities and Other Costs budgets are not equal.") unless projects_and_activities_have_matching_budgets?
-      errors.add_to_base("Project expenditure and sum of Activities and Other Costs expenditures are not equal.") unless projects_and_activities_have_matching_spends?
       return false
     end
   end
@@ -155,30 +152,24 @@ class DataResponse < ActiveRecord::Base
 
   def basics_done?
     projects_entered? &&
-    project_amounts_entered? &&
     projects_have_activities? &&
     projects_have_other_costs? &&
     projects_and_funding_sources_have_matching_budgets? &&
     projects_and_funding_sources_have_correct_spends? &&
     activity_amounts_entered? &&
     activities_coded? &&
-    other_costs_coded? &&
-    projects_and_activities_have_matching_budgets? &&
-    projects_and_activities_have_matching_spends?
+    other_costs_coded?
   end
 
   def basics_done_to_h
     {:projects_entered =>                                  projects_entered?,
-    :project_amounts_entered =>                            project_amounts_entered?,
     :projects_have_activities =>                           projects_have_activities?,
     :projects_have_other_costs =>                          projects_have_other_costs?,
     :projects_and_funding_sources_have_matching_budgets => projects_and_funding_sources_have_matching_budgets?,
     :projects_and_funding_sources_have_correct_spends =>   projects_and_funding_sources_have_correct_spends?,
     :activity_amounts_entered =>                           activity_amounts_entered?,
     :activities_coded =>                                   activities_coded?,
-    :other_costs_coded =>                                  other_costs_coded?,
-    :projects_and_activities_have_matching_budgets =>       projects_and_activities_have_matching_budgets?,
-    :projects_and_activities_have_matching_spends? =>       projects_and_activities_have_matching_spends? }
+    :other_costs_coded =>                                  other_costs_coded?}
   end
 
 
@@ -194,11 +185,6 @@ class DataResponse < ActiveRecord::Base
     !projects.empty?
   end
   memoize :projects_entered?
-
-  def project_amounts_entered?
-    projects_entered? && projects_without_amounts.empty?
-  end
-  memoize :project_amounts_entered?
 
   def projects_without_amounts
     select_without_amounts(self.projects)
@@ -290,18 +276,12 @@ class DataResponse < ActiveRecord::Base
   memoize :projects_have_other_costs?
 
   def projects_and_funding_sources_have_matching_budgets?
-    projects.each do |project|
-      return false unless project.amounts_matches_funders?(:budget)
-    end
-    true
+    projects.all?{ |project| project.matches_in_flow_amount?(:budget) }
   end
   memoize :projects_and_funding_sources_have_matching_budgets?
 
   def projects_and_funding_sources_have_correct_spends?
-    projects.each do |project|
-      return false unless project.amounts_matches_funders?(:spend)
-    end
-    true
+    projects.all?{ |project| project.matches_in_flow_amount?(:spend) }
   end
   memoize :projects_and_funding_sources_have_correct_spends?
 
@@ -311,27 +291,6 @@ class DataResponse < ActiveRecord::Base
   end
   memoize :projects_funding_sources_ok?
 
-  def projects_and_activities_have_matching_budgets?
-    projects_and_activities_matching_amounts?(:budget)
-  end
-
-  def projects_and_activities_have_matching_spends?
-    projects_and_activities_matching_amounts?(:spend)
-  end
-
-  def projects_activities_ok?
-    projects_and_activities_have_matching_budgets? &&
-    projects_and_activities_have_matching_spends?
-  end
-  memoize :projects_activities_ok?
-
-  def projects_and_activities_matching_amounts?(amount_method)
-    projects.each do |project|
-      return false if !project_and_activities_matching_amounts?(project, amount_method)
-    end
-    true
-  end
-
   def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method
     p_total = (project.send(m) || 0)
@@ -339,10 +298,6 @@ class DataResponse < ActiveRecord::Base
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
     p_total + leeway >= a_total + o_total && p_total - leeway <= a_total + o_total
-  end
-
-  def projects_with_activities_not_matching_amounts(amount_method)
-    select_failing(projects, :project_and_activities_matching_amounts?, amount_method)
   end
 
   def uncoded_activities
@@ -379,6 +334,18 @@ class DataResponse < ActiveRecord::Base
     projects.inject(0) {|sum,p| p.budget.nil? ? sum : sum + universal_currency_converter(p.budget, p.currency, "USD")}
   end
 
+  def budget
+    activities.only_simple.inject(0) do |sum, activity|
+      sum + (activity.budget || 0) * currency_rate(activity.currency, currency)
+    end
+  end
+
+  def spend
+    activities.only_simple.inject(0) do |sum, activity|
+      sum + (activity.spend || 0) * currency_rate(activity.currency, currency)
+    end
+  end
+
   def total_activities_and_other_costs_spend_in_usd
     total_activities_and_other_costs_in_usd("spend")
   end
@@ -399,9 +366,7 @@ class DataResponse < ActiveRecord::Base
 
   private
     def reject_uncoded(activities)
-      activities.select{ |a|
-        (request.budget? && !a.budget_classified?) ||
-        (request.spend? && !a.spend_classified?)}
+      activities.select{ |a| !a.budget_classified? || !a.spend_classified? }
     end
 
     # Find all complete Activities
@@ -414,11 +379,7 @@ class DataResponse < ActiveRecord::Base
     end
 
     def select_without_amounts(items)
-      items.select do |a|
-        (!a.spend_entered? && !a.budget_entered? && request.spend_and_budget?) ||
-        (!a.spend_entered? && request.only_spend?) ||
-        (!a.budget_entered? && request.only_budget?)
-      end
+      items.select { |a| !a.spend_entered? && !a.budget_entered? }
     end
 end
 

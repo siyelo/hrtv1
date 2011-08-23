@@ -1,6 +1,5 @@
 /* Nested model forms BEGIN */
-function inspect(obj)
-{
+function inspect (obj) {
         var str;
         for(var i in obj)
         str+=i+";\n"
@@ -8,10 +7,14 @@ function inspect(obj)
         alert(str);
 }
 
-function remove_fields(link) {
+function remove_fields(link, callback) {
   $(link).prev("input[type=hidden]").val("1");
   $(link).closest(".fields").hide();
   //$(link).parent().next().hide();
+
+  if (callback !== null) {
+    callback(link);
+  }
 };
 
 function add_fields(link, association, content) {
@@ -20,7 +23,12 @@ function add_fields(link, association, content) {
 
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
-  $(link).parent().before(content.replace(regexp, new_id));
+
+  if (association === 'in_flows' || association === 'sub_activities' ) {
+    $(link).parents('tr:first').before(content.replace(regexp, new_id));
+  } else {
+    $(link).parent().before(content.replace(regexp, new_id));
+  }
 
   after_add_fields_callback(association);
 };
@@ -70,19 +78,15 @@ var build_activity_funding_source_row = function (edit_block) {
   var spend = '';
   var budget = '';
 
-  if (_spend) {
-    spend = $('<li/>').append(
-      $('<span/>').text('Expenditure'),
-      edit_block.find('.ff_spend').val() || 'N/A'
-    )
-  }
+  spend = $('<li/>').append(
+    $('<span/>').text('Expenditure'),
+    edit_block.find('.ff_spend').val() || 'N/A'
+  )
 
-  if (_budget) {
-    budget = $('<li/>').append(
-      $('<span/>').text('Current Budget'),
-      edit_block.find('.ff_budget').val() || 'N/A'
-    )
-  }
+  budget = $('<li/>').append(
+    $('<span/>').text('Current Budget'),
+    edit_block.find('.ff_budget').val() || 'N/A'
+  )
 
   return $('<ul/>').append(
     $('<li/>').append(
@@ -92,35 +96,6 @@ var build_activity_funding_source_row = function (edit_block) {
     spend,
     budget
   )
-};
-
-
-var close_project_in_flow_fields = function (fields) {
-  $.each(fields, function () {
-    var element = $(this);
-    var edit_block = element.find('.edit_block');
-    var preview_block = element.find('.preview_block');
-    var manage_block = element.find('.manage_block');
-
-    edit_block.hide();
-    preview_block.html('');
-
-    if (_budget && _spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
-      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', false))
-    } else if (_spend) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'spend', 'Spend', true))
-    } else if (_budget) {
-      preview_block.append(build_project_in_flow_row(edit_block, 'budget', 'Budget', true))
-    }
-
-    preview_block.show();
-
-    manage_block.find('.edit_button').remove();
-    manage_block.prepend(
-      $('<a/>').attr({'class': 'edit_button', 'href': '#'}).text('Edit')
-    )
-  });
 };
 
 var close_activity_funding_sources_fields = function (fields) {
@@ -143,9 +118,6 @@ var close_activity_funding_sources_fields = function (fields) {
 };
 
 var before_add_fields_callback = function (association) {
-  if (association === 'in_flows') {
-    close_project_in_flow_fields($('.funding_flows .fields'));
-  }
   if (association === 'funding_sources') {
     close_activity_funding_sources_fields($('.funding_sources .fields'));
   }
@@ -340,7 +312,7 @@ var ajaxifyResources = function (resources) {
   var editBtn = block.find(".edit_btn");
   var cancelBtn = block.find(".cancel_btn");
   var searchBtn = block.find(".search_btn");
-  var submitBtn = block.find(".js_submit_btn");
+  var submitBtn = block.find(".js_submit_comment_btn");
   var destroyBtn = block.find(".destroy_btn");
 
   // new
@@ -484,6 +456,52 @@ var quartersInit = function () {
   quartersSum($('.js_fy_quarter'));
 };
 
+var updateTotalsValuesCallback = function (el) {
+  updateTotalValues($(el).parents('tr').find('.js_spend'));
+  updateTotalValues($(el).parents('tr').find('.js_budget'));
+};
+
+var dynamicUpdateTotalsInit = function () {
+  $('.js_spend, .js_budget').live('keyup', function () {
+    var total_value = 0;
+
+    if ($(this).hasClass('js_spend')) {
+      var input_fields = $(this).parents('table').find('.js_spend');
+      var total_field = $('.js_total_spend .amount');
+    } else if ($(this).hasClass('js_budget')) {
+      var input_fields = $(this).parents('table').find('.js_budget');
+      var total_field = $('.js_total_budget .amount');
+    }
+  });
+};
+
+var updateTotalValues = function (el) {
+  var total_value = 0;
+
+  if ($(el).hasClass('js_spend')) {
+    var input_fields = $(el).parents('table').find('.js_spend:visible');
+    var total_field = $('.js_total_spend .amount');
+  } else if ($(el).hasClass('js_budget')) {
+    var input_fields = $(el).parents('table').find('.js_budget:visible');
+    var total_field = $('.js_total_budget .amount');
+  }
+
+  for (var i = 0; i < input_fields.length; i++) {
+    var input_field_value = Number(input_fields[i].value);
+    if (!isNaN(input_field_value)) {
+      total_value += input_field_value;
+    }
+  }
+
+  total_field.html(total_value.toFixed(1));
+};
+
+var dynamicUpdateTotalsInit = function () { 
+  $('.js_spend, .js_budget').live('keyup', function () {
+    updateTotalValues(this);
+  });
+};
+
 var admin_responses_index = {
   run: function () {
     // destroy
@@ -625,7 +643,7 @@ var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#FFFFFF");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#F3F7F9");
   so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
@@ -673,7 +691,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
     });
 
     // manual tipsy
-    chart_element.tipsy({gravity: 'e', trigger: 'manual'})
+    chart_element.tipsy({gravity: $.fn.tipsy.autoWE, trigger: 'manual'})
 
     google.visualization.events.addListener(tree, 'onmouseover', function (e) {
       chart_element.attr('title', data_rows[e.row][0]);
@@ -688,8 +706,7 @@ var drawTreemap = function (element_type, element_id, chart_type, chart_element)
 };
 
 var build_data_response_review_screen = function () {
-
-  $('.tooltip').tipsy({gravity: 'w'});
+  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
   $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
   $('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
 
@@ -785,38 +802,24 @@ var build_data_response_review_screen = function () {
   createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
   createPieChart("data_response", {id: _dr_id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
   createPieChart("data_response", {id: _dr_id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
-
-  // Project charts
-  $.each(_projects, function (i, id) {
-    createPieChart("project", {id: id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-    createPieChart("project", {id: id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
-    createPieChart("project", {id: id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-    createPieChart("project", {id: id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
-  createPieChart("project", {id: id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("project", {id: id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
-    //createPieChart("project", {id: id, title: "HSSPII Strat Program Budget", chart_type: 'stratprog_budget', codings_type: 'HsspBudget', code_type: 'HsspStratProg'});
-    //createPieChart("project", {id: id, title: "HSSPII Strat Objective Budget", chart_type: 'stratobj_budget', codings_type: 'HsspBudget', code_type: 'HsspStratObj'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Program Expenditure", chart_type: 'stratprog_spend', codings_type: 'HsspSpend', code_type: 'HsspStratProg'});
-    //createPieChart("project", {id: id, title: "HSSPII Strategic Objective Expenditure", chart_type: 'stratobj_spend', codings_type: 'HsspSpend', code_type: 'HsspStratObj'});
-  });
-
-  // Ajax load of classifications for activities
-  $.each($('.activity_classifications'), function (i, element) {
-    element = $(element);
-    var activity_id = element.attr('data-activity_id');
-    var response_id = element.attr('data-response_id');
-    var other_cost = element.attr('data-other_costs');
-    var url =  '/responses/' + response_id + '/activities/' +
-      activity_id + '/classifications?other_costs=' + other_cost;
-    $.get(url, function (data) {element.html(data)});
-  });
-
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Budget", chart_type: 'stratprog_budget', codings_type: 'budget_stratprog_coding', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Spend", chart_type: 'stratprog_spend', codings_type: 'spend_stratprog_coding', code_type: 'HsspStratProg'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Budget", chart_type: 'stratobj_budget', codings_type: 'budget_stratobj_coding', code_type: 'HsspStratObj'});
+  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Spend", chart_type: 'stratobj_spend', codings_type: 'spend_stratobj_coding', code_type: 'HsspStratObj'});
 };
 
 var admin_responses_show = {
   run: function (){
     build_data_response_review_screen();
     ajaxifyResources('comments');
+  }
+};
+
+var reporter_reports_index = {
+  run: function () {
+    build_data_response_review_screen();
+    ajaxifyResources('comments');
+    $('#tab1').find('a').click();
   }
 };
 
@@ -827,12 +830,6 @@ var responses_review = {
   }
 };
 
-var organizations_edit = {
-  run: function () {
-    $( ".js_combobox" ).combobox(); // for pretty currency select
-  }
-};
-
 var policy_maker_data_responses_show = {
   run: function () {
     build_data_response_review_screen();
@@ -840,38 +837,210 @@ var policy_maker_data_responses_show = {
   }
 };
 
-var code_assignments_show = {
-  run: function () {
+var activity_classification = function () {
 
-    /*
-     * Adds collapsible checkbox tree functionality for a tab and validates classification tree
-     * @param {String} tab
-     *
-     */
-    var addCollabsibleButtons = function (tab) {
-      $('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
-      $('.' + tab + ' ul.activity_tree').validateClassificationTree();
+  /*
+   * Adds collapsible checkbox tree functionality for a tab and validates classification tree
+   * @param {String} tab
+   *
+   */
+  var addCollabsibleButtons = function (tab) {
+    $('.' + tab + ' ul.activity_tree').collapsibleCheckboxTree({tab: tab});
+    $('.' + tab + ' ul.activity_tree').validateClassificationTree();
+  };
+
+  //collapsible checkboxes for tab1
+  addCollabsibleButtons('tab1');
+  checkRootNodes('.budget:first');
+  checkRootNodes('.spend:first');
+
+  $('.js_upload_btn').click(function (e) {
+    e.preventDefault();
+    $(this).parents('.upload').find('.upload_box').toggle();
+  });
+
+  $('.js_submit_btn').click(function (e) {
+    var ajaxLoader = $(this).closest('ol').find('.ajax-loader');
+    ajaxLoader.show();
+    checkRootNodes('.spend:first');
+    checkRootNodes('.budget:first');
+    if ($('.invalid_node').size() > 0){
+      e.preventDefault();
+      alert('The classification tree could not be saved.  Please correct all errors and try again')
+      ajaxLoader.hide();
+    };
+  });
+
+
+  $('#js_budget_to_spend').click(function (e) {
+    e.preventDefault();
+    if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
+      $('.js_budget input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_spend input').val(element.val());
+      });
+    };
+  });
+
+  $('#js_spend_to_budget').click(function (e) {
+    e.preventDefault();
+    if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
+      $('.js_spend input').each(function () {
+        var element = $(this);
+        element.parents('.js_values').find('.js_budget input').val(element.val());
+      });
+    };
+  });
+
+  $(".percentage_box").keyup(function(event) {
+    var element = $(this);
+    var isSpend = element.parents('div:first').hasClass('spend')
+    var type = (isSpend) ? '.spend:first' : '.budget:first';
+    var isRoot = element.parents('ul:first').hasClass('activity_tree');
+    updateSubTotal(element);
+
+    //check whether siblings are equal our parent's total
+    var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
+    var siblingLi = element.parents('ul:first').children('li');
+
+    if (element.val().length == 0) {
+      clearChildNodes(element, event,type);
+    }
+    if (event.keyCode != 9){
+      updateParentNodes(siblingLi, type, parentTotal)
+    }
+
+    //check whether children (1 level deep) are equal to my total
+    childLi = element.parents('li:first').children('ul:first').children('li');
+    if (childLi.size() > 0){
+      compareChildrenToParent(element, childLi, type);
     };
 
-    //collapsible checkboxes for tab1
-    addCollabsibleButtons('tab1');
+    //check whether root nodes are = 100%
+    checkRootNodes(type);
 
-    // prevent going to top on click on tool
-    $('.tooltip').live('click', function (e) {
-      if ($(this).attr('href') === '#') {
-        e.preventDefault();
+  });
+
+  // restrict input to only numbers
+  $(".percentage_box").keydown(function(event) {
+    // Allow backspace and delete, enter and tab
+    var bksp = 46;
+    var del = 8;
+    var enter = 13;
+    var tab = 9;
+
+    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
+        // let it happen, don't do anything
+    } else {
+      // Ensure that it is a number or a '.' and stop the keypress
+      var period = 190;
+      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
+        // let it happen
+      }else{
+        event.preventDefault();
+      };
+    };
+  });
+
+  var updateParentNodes = function(siblingLi, type, parentTotal){
+    var siblingValue = 0;
+    var siblingTotal = 0;
+    siblingLi.each(function (){
+      siblingValue = parseFloat($(this).find(type).find('input:first').val());
+      if (!isNaN(siblingValue)) {
+        siblingTotal = siblingTotal + siblingValue;
+      }; 
+    });
+    siblingTotal = siblingTotal == 0 ? '' : siblingTotal
+    parentTotal.val(siblingTotal);
+    parentTotal.trigger('keyup');
+  }
+
+  var clearChildNodes = function(element, event, type){
+    var bksp = 46;
+    var del = 8;
+    if ((event.keyCode == bksp || event.keyCode == del)){
+      childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
+      if (confirm('Would you like to clear the value of all child nodes?')){
+        childNodes.each(function(){
+          if ($(this).val !== ''){
+            $(this).val(' ');
+            updateSubTotal($(this));
+          }
+        });
+      }
+    }
+  }
+
+  var compareChildrenToParent = function(parentTotal, childLi, type){
+
+    var childValue = 0;
+    var childTotal = 0;
+
+    childLi.each(function (){
+      childValue = parseFloat($(this).find(type).find('input:first').val())
+      if (!isNaN(childValue)) {
+        childTotal = childTotal + childValue
+      };
+    });
+
+    var parentValue = parseFloat(parentTotal.val()).toFixed(2)
+    childTotal = childTotal.toFixed(2)
+
+    if (childTotal != parentValue && childTotal > 0){
+      parentTotal.addClass('invalid_node tooltip')
+      var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
+      message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
+      parentTotal.attr('original-title', message) ;
+    }else{
+      parentTotal.removeClass('invalid_node tooltip')
+    };
+  };
+
+  var updateSubTotal = function(element){
+    var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
+    var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
+    var elementValue = parseFloat(element.val());
+    var subtotal = element.siblings('.subtotal');
+    var isSpend = element.parents('div:first').hasClass('spend')
+
+    if(isSpend){
+      elementValue > 0 ? subtotal.html((activity_spend * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    }else{
+      elementValue > 0 ? subtotal.html((activity_budget * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    }
+  };
+}
+
+var checkRootNodes = function(type){
+  var topNodes =  $('.activity_tree').find('li:first').siblings().andSelf();
+  var total = 0;
+  var value = 0;
+
+  topNodes.each(function(){
+    value = $(this).find(type).find('input').val();
+    if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
+  });
+
+  if (total != 100 && total >0){
+    topNodes.each(function(){
+      rootNode = $(this).find(type).find('input');
+      if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){
+        rootNode.addClass('invalid_node tooltip');
+      }
+      var message = "The root nodes do not add up to 100%";
+      rootNode.attr('original-title', message) ;
+    });
+  }else{
+    topNodes.each(function(){
+      rootNode = $(this).find(type).find('input');
+      if (rootNode.attr('original-title') != undefined && rootNode.attr('original-title') == "The root nodes do not add up to 100%"){
+        rootNode.removeClass('invalid_node tooltip');
+        rootNode.attr('original-title', '')
       }
     });
 
-    $('.js_upload_btn').click(function (e) {
-      e.preventDefault();
-      $(this).parents('.upload').find('.upload_box').toggle();
-    });
-
-    $('.js_submit_btn').click(function (e) {
-      $(this).next('.ajax-loader').show();
-    });
-  }
+  };
 };
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
@@ -961,7 +1130,7 @@ var drawTreemapChart = function (id, data_rows, treemap_gravity) {
 
   // manual tipsy
   if (typeof(treemap_gravity) === "undefined") {
-    treemap_gravity = 'e'
+    treemap_gravity = $.fn.tipsy.autoWE
   }
   chart_element.tipsy({gravity: treemap_gravity, trigger: 'manual'})
 
@@ -1107,32 +1276,6 @@ var reports_countries_activities_show = {
   }
 };
 
-var update_funding_source_selects = function () {
-  var project_id = $('#activity_project_id').val();
-  var fs_selects = $('.ff_organization');
-  if (project_id) {
-    var options = ['<option value=""></option>'];
-    $.each(_funding_sources[project_id], function (i) {
-      options.push('<option value="' + this[1] + '">' + this[0] + '</option>');
-    });
-    var options_string = options.join('\n');
-
-    $.each(fs_selects, function (i) {
-      var element = $(this);
-      if (element.html() !== options_string) {
-        var value = element.val();
-        element.html(options_string);
-        element.val(value);
-      }
-    });
-  } else {
-    $.each(fs_selects, function (i) {
-      var element = $(this);
-      $(this).html('<option value=""></option>');
-    })
-  }
-};
-
 var validateDates = function (startDate, endDate) {
   var checkDates = function (e) {
     var element = $(e.target);
@@ -1183,7 +1326,7 @@ var commentsInit = function () {
   })
 
   // remove demo text when submiting comment
-  $('.js_submit_btn').live('click', function (e) {
+  $('.js_submit_comment_btn').live('click', function (e) {
     e.preventDefault();
     removeDemoText($('*[data-hint]'));
 
@@ -1253,6 +1396,17 @@ var projects_index = {
 
     // use click() not toggle() here, as toggle() doesnt
     // work when menu items are also toggling it
+
+    $('.js_project_row').hover(
+      function(e){
+        $(this).find('.js_am_approve').show();
+      },
+      function(e){
+        $(this).find('.js_am_approve').fadeOut(300);
+      }
+
+    );
+
     $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
       menu = dropdown.menu($(this));
@@ -1279,12 +1433,60 @@ var projects_index = {
       $('#import_export_box .upload_box').slideToggle();
     });
 
-    $('.tooltip_projects').tipsy({gravity: 'e', live: true, html: true});
+    $('.tooltip_projects').tipsy({gravity: $.fn.tipsy.autoWE, live: true, html: true});
 
     commentsInit();
 
     approveBudget();
+    
+    $('.js_address').address(function() {
+      return 'new_' + $(this).html().toLowerCase();
+    });
+    
+    $.address.externalChange(function() {
+      var hash = $.address.path();
+      if (hash == '/'){
+        if (!($('#projects_listing').is(":visible"))){
+          $('.js_toggle_projects_listing').click();
+        }
+      }else{
+        if (hash == '/new_project'){
+          hideAll();
+          $('/new_project_form').fadeIn();
+        }
+      };
+    });
+    
+    $('.js_toggle_project_form').click(function (e) {
+      e.preventDefault();
+      hideAll();
+      $('#new_project_form').fadeIn();
+    });
+
+    $('.js_toggle_other_cost_form').click(function (e) {
+      e.preventDefault();
+      hideAll();
+      $('#new_other_cost_form').fadeIn();
+    });
+
+    $('.js_toggle_projects_listing').click(function (e) {
+      e.preventDefault();
+      hideAll();
+      $.address.path('/');
+      $( "form" )[ 0 ].reset()
+      $('#projects_listing').fadeIn();
+      $("html, body").animate({ scrollTop: 0 }, 0);
+    });
+
+    dynamicUpdateTotalsInit();
   }
+};
+
+var hideAll = function() {
+  $('#projects_listing').hide();
+  $('#new_project_form').hide();
+  $('#new_activity_form').hide();
+  $('#new_other_cost_form').hide();
 };
 
 var projects_bulk_edit = {
@@ -1402,39 +1604,6 @@ var activities_bulk_create = {
         activityBox.find(".js_combobox").combobox();
       });
     });
-
-
-    // NOTE: project sub form is disabled because in CSV files
-    // project was not selected, but only locations, and when
-    // changing the project it was removing these locations
-
-    //$('.activity_project_id').live('change', function () {
-      //var element = $(this);
-      //var _project_id = element.val();
-      //var form = element.parents('form');
-      //var matches = form.attr('action').match(/responses\/(.*)\/activities\/?(.*)/);
-      //var activityBox = element.parents('.activity_box');
-      //_response_id = matches[1];
-      //_activity_id = matches[2];
-
-      //if (_project_id) {
-        //var url = '/responses/' + _response_id +
-        //'/activities/project_sub_form?' + 'project_id=' + _project_id;
-        //if (_activity_id) {
-          //url += '&activity_id=' + _activity_id;
-        //}
-        //$.get(url, function (data) {
-          //activityBox.find('.project_sub_form_fields').html(data)
-          //activityBox.find('.project_sub_form_fields').show();
-          //activityBox.find('.project_sub_form_hint').hide();
-        //});
-      //} else {
-        //activityBox.find('.project_sub_form_fields').hide();
-        //activityBox.find('.project_sub_form_hint').show();
-      //}
-    //});
-
-    $(".js_combobox").combobox(); // for pretty currency select
   }
 }
 
@@ -1475,40 +1644,24 @@ var approveActivity = function (element, approval_type, success_text) {
    })
 };
 
-var activities_new = activities_create = activities_edit = activities_update = {
+var activities_new = activities_create = activities_edit = activities_update = other_costs_edit = other_costs_new = other_costs_create = other_costs_update = {
   run: function () {
+    activity_classification();
     activity_form();
   }
 };
 
 var activity_form = function () {
+
   $('#activity_project_id').change(function () {
     update_funding_source_selects();
-
-    var element = $('#project_sub_form');
-    var _project_id = $(this).val();
-    if (_project_id) {
-      var url = '/responses/' + _response_id +
-      '/activities/project_sub_form?' + 'project_id=' + _project_id;
-      if (_activity_id) {
-        url += '&activity_id=' + _activity_id;
-      }
-      $.get(url, function (data) {
-        $('#project_sub_form_fields').html(data)
-        $('#project_sub_form_fields').show();
-        $('#project_sub_form_hint').hide();
-      });
-    } else {
-      $('#project_sub_form_fields').hide();
-      $('#project_sub_form_hint').show();
-    }
   });
 
-  // show the jquery autocomplete combobox instead of
-  // standard dropdown
-  // setting the id for cucumber tests
-  $( ".js_combobox" ).combobox();
-  $( ".ui-autocomplete-input" ).attr('id', 'theCombobox');
+  $('#activity_name').live('keyup', function() {
+    var parent = $(this).parent('li')
+    var remaining = $(this).attr('data-maxlength') - $(this).val().length;
+    $('.remaining_characters').html("(?) <span class=\"red\">" + remaining + " Characters Remaining</span>")
+  });
 
   $('.js_implementer_select').live('change', function(e) {
     e.preventDefault();
@@ -1548,7 +1701,6 @@ var activity_form = function () {
   if (typeof(namespace) === 'undefined') {
     validateDates($('#activity_start_date'), $('#activity_end_date'));
   } else {
-    // namespace is from project_sub_form,
     // it injects the namespace in the activity form !?
     validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
   }
@@ -1577,6 +1729,7 @@ var activity_form = function () {
   approveAsAdmin();
   commentsInit();
   quartersInit();
+  dynamicUpdateTotalsInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
 
@@ -1613,9 +1766,6 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
     $('#user_roles').change(function () {
       toggleMultiselect($(this));
     });
-
-    $( ".js_combobox" ).combobox();
-
   }
 }
 
@@ -1635,11 +1785,6 @@ var dashboard_index = {
   }
 };
 
-var sub_activities_create = {
-  run: function () {
-    $( ".js_combobox" ).combobox();
-  }
-};
 
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
@@ -1647,82 +1792,30 @@ var admin_organizations_create = admin_organizations_edit = {
   }
 };
 
-
-var other_costs_new = other_costs_create = other_costs_edit = other_costs_update = {
-  run: function () {
-    validateDates($('#other_cost_start_date'), $('#other_cost_end_date'));
-
-    $('.js_implementer_select').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      if(element.val() == "-1"){
-        $('.implementer_container').hide();
-        $('.add_organization').show();
-      }
-    });
-
-    $('.cancel_organization_link').live('click', function(e) {
-      e.preventDefault();
-      $('.organization_name').attr('value', '');
-      $('.add_organization').hide();
-      $('.implementer_container').show();
-      $('.js_implementer_select').val(null);
-    });
-
-    $('.add_organization_link').live('click', function(e) {
-      e.preventDefault();
-      var name = $('.organization_name').val();
-      $.post("/organizations.js", { "name" : name }, function(data){
-        var data = $.parseJSON(data);
-        $('.implementer_container').show();
-        $('.add_organization').hide();
-        if(isNaN(data.organization.id)){
-          $('.js_implementer_select').val(null);
-        }else{
-          $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
-          $('.js_implementer_select').val(data.organization.id);
-        }
-      });
-      $('.organization_name').attr('value', '');
-      $('.add_organization').slideToggle();
-    });
-
-    approveBudget();
-    approveAsAdmin();
-    quartersInit();
-  }
-};
-
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
-    // show the jquery autocomplete combobox instead of standard dropdown
-    $( ".js_combobox" ).combobox(); // for currency dropdown
-                                // the nested funding source init should be
-                                // handled by the "add row" js callback
-    $( ".ui-autocomplete-input" ).attr('id', 'theCombobox'); //cucumber
-
-    $('.edit_button').live('click', function (e) {
-      e.preventDefault();
-      var element = $(this).parents('.fields');
-      var fields = $.merge(element.prevAll('.fields'), element.nextAll('.fields'));
-
-      element.find('.edit_block').show();
-      element.find('.preview_block').hide();
-      close_project_in_flow_fields(fields);
-    });
-
     commentsInit();
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
-    close_project_in_flow_fields($('.funding_flows .fields'));
+    dynamicUpdateTotalsInit();
   }
 }
 
 
 $(function () {
 
+  // prevent going to top when tooltip clicked
+  $('.tooltip').live('click', function (e) {
+    if ($(this).attr('href') === '#') {
+      e.preventDefault();
+    }
+  });
+
+  //combobox everywhere!
+  $( ".js_combobox" ).combobox();
+
   // tipsy tooltips everywhere!
-  $('.tooltip').tipsy({gravity: 'w', delayOut: 800, fade: true, live: true, html: true});
+  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, fade: true, live: true, html: true});
 
   //jquery tools overlays
   $(".overlay").overlay();

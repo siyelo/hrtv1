@@ -1,21 +1,19 @@
-.tabs_nav.two-thirds
+.tabs_nav.full
 
   %ul.inline_tab
-
-    %li MTEF:
+  
     %li{:id => 'tab1', :class => 'selected'}
-      = link_to "Current Budget", "#"
+      = link_to "MTEF", "#"
+    
     %li{:id => 'tab2'}
-      = link_to "Expenditure", "#"
+      = link_to "NSP", "#"
 
-    %li NSP:
     %li{:id => 'tab3'}
-      = link_to "Current Budget", "#"
-    %li{:id => 'tab4'}
-      = link_to "Expenditure", "#"
+      = link_to "Inputs", "#"
 
-    %li Inputs:
+    %li{:id => 'tab4'}
+      = link_to "HSSPII Strategic Program", "#"
+
     %li{:id => 'tab5'}
-      = link_to "Current Budget", "#"
-    %li{:id => 'tab6'}
-      = link_to "Expenditure", "#"
+      = link_to "HSSPII Strategic Objective", "#"
+

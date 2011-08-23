@@ -1,0 +1,48 @@
+- klass = f.object.class.to_s
+
+- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
+- sorted_projects = sorted_projects.insert(0,["<Automatically create a project for me>", -1])
+- sorted_projects = sorted_projects.insert(1,["<No project>", nil]) if klass == "OtherCost"
+
+%ul.section_form.main.first.condensed_fields
+  %li#activity_name_input.string.required
+    .name
+      = f.label :name, "Name"
+      %span.required *
+      - link_to "#", :title => "A short name for this #{klass}", :class => 'tooltip remaining_characters' do
+        =image_tag"tooltip.png"
+    = f.text_field :name, "data-maxlength" => "#{Activity::MAX_NAME_LENGTH}"
+  %li#activity_start_date_input.string.required
+    .name
+      = f.label :start_date, "Start date"
+      %span.required *
+      - link_to "#", :title => "(YYYY-MM-DD) The date when the #{klass} started.", :class => 'tooltip' do
+        =image_tag"tooltip.png"
+    = f.text_field :start_date, :class => 'date_picker'
+  %li#activity_end_date_input.string.required
+    .name
+      = f.label :end_date, "End date"
+      %span.required *
+      - link_to "#", :title => "(YYYY-MM-DD) The date when the #{klass} finishes.", :class => 'tooltip' do
+        =image_tag "tooltip.png"
+    = f.text_field :end_date, :class => 'date_picker'
+  %li.select.required
+    .name
+      = f.label :currency, "Currency"
+      - link_to "#", :title => "The default (Organization) currency or the Project currency, if selected", :class => 'tooltip' do
+        = image_tag "tooltip.png"
+    %span.noedit= f.object.currency.nil? ? @response.currency : f.object.currency
+  %li#activity_project_id_input.select.required
+    .name
+      = f.label :project_id, "Project"
+      - link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
+        =image_tag"tooltip.png"
+    = f.select :project_id, [['Select a project...', '']] + sorted_projects
+  //hack
+  %br
+  %li#activity_description_input.text
+    .name
+      = f.label :description, "Description"
+      - link_to "#", :title => "A general 1-2 sentence description of the purpose of the #{klass}.", :class => 'tooltip' do
+        =image_tag"tooltip.png"
+    = f.text_area :description, :rows => 1

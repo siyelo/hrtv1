@@ -113,11 +113,11 @@ class Reports::ActivityReport
     # the aggregate column to the correct type, since AR doesnt always do this
     # http://www.ruby-forum.com/topic/852228
     non_zero_results = []
-    results.each do |r| 
-      def r.spent_sum 
-        BigDecimal.new(spent_sum_raw.to_s) 
+    results.each do |r|
+      def r.spent_sum
+        BigDecimal.new(spent_sum_raw.to_s)
       end
-      non_zero_results << r if r.spent_sum > 0 
+      non_zero_results << r if r.spent_sum > 0
     end
     results = non_zero_results
   end

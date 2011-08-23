@@ -6,32 +6,34 @@ module BudgetSpendHelper
     base.class_eval do
 
       ### Callbacks
-      before_save :set_total_amounts
-      if base.eql?(Activity) || base.eql?(FundingFlow)
+      if base.eql?(FundingFlow)
+        before_save :set_total_amounts
         before_save :update_cached_usd_amounts
       end
 
-      ### Validations
-      validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
-      validates_numericality_of :spend_q4_prev, :if => Proc.new {|model| model.spend_q4_prev.present?}
-      validates_numericality_of :spend_q1, :if => Proc.new {|model| model.spend_q1.present?}
-      validates_numericality_of :spend_q2, :if => Proc.new {|model| model.spend_q2.present?}
-      validates_numericality_of :spend_q3, :if => Proc.new {|model| model.spend_q3.present?}
-      validates_numericality_of :spend_q4, :if => Proc.new {|model| model.spend_q4.present?}
-      validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
-      validates_numericality_of :budget_q4_prev, :if => Proc.new {|model| model.budget_q4_prev.present?}
-      validates_numericality_of :budget_q1, :if => Proc.new {|model| model.budget_q1.present?}
-      validates_numericality_of :budget_q2, :if => Proc.new {|model| model.budget_q2.present?}
-      validates_numericality_of :budget_q3, :if => Proc.new {|model| model.budget_q3.present?}
-      validates_numericality_of :budget_q4, :if => Proc.new {|model| model.budget_q4.present?}
-
-      if base.eql?(Project) || base.eql?(Activity)
-        validates_numericality_of :budget2, :if => Proc.new{|model| model.budget2.present?}
-        validates_numericality_of :budget3, :if => Proc.new{|model| model.budget3.present?}
-        validates_numericality_of :budget4, :if => Proc.new{|model| model.budget4.present?}
-        validates_numericality_of :budget5, :if => Proc.new{|model| model.budget5.present?}
+      if base.eql?(Activity)
+        before_save :update_cached_usd_amounts
       end
 
+      if base.eql?(FundingFlow)
+        before_save :set_total_amounts
+        validates_numericality_of :spend_q1, :if => Proc.new { |m| m.spend_q1.present?}
+        validates_numericality_of :spend_q2, :if => Proc.new { |m| m.spend_q2.present?}
+        validates_numericality_of :spend_q3, :if => Proc.new { |m| m.spend_q3.present?}
+        validates_numericality_of :spend_q4, :if => Proc.new { |m| m.spend_q4.present?}
+        validates_numericality_of :spend_q4_prev, :if => Proc.new { |m| m.spend_q4_prev.present?}
+        validates_numericality_of :budget_q1, :if => Proc.new { |m| m.budget_q1.present?}
+        validates_numericality_of :budget_q2, :if => Proc.new { |m| m.budget_q2.present?}
+        validates_numericality_of :budget_q3, :if => Proc.new { |m| m.budget_q3.present?}
+        validates_numericality_of :budget_q4, :if => Proc.new { |m| m.budget_q4.present?}
+        validates_numericality_of :budget_q4_prev, :if => Proc.new { |m| m.budget_q4_prev.present?}
+      end
+
+      ### Validations
+      unless base.eql?(Project)
+        validates_numericality_of :spend, :if => Proc.new {|model| model.spend.present?}
+        validates_numericality_of :budget, :if => Proc.new {|model| model.budget.present?}
+      end
     end
   end
 
@@ -44,13 +46,11 @@ module BudgetSpendHelper
   end
 
   def spend_entered?
-    spend.present? || spend_q1.present? || spend_q2.present? ||
-      spend_q3.present? || spend_q4.present? || spend_q4_prev.present?
+    spend.present?
   end
 
   def budget_entered?
-    budget.present? || budget_q1.present? || budget_q2.present? ||
-      budget_q3.present? || budget_q4.present? || budget_q4_prev.present?
+    budget.present?
   end
 
   def smart_sum(collection, method)
@@ -76,7 +76,7 @@ module BudgetSpendHelper
 
     def update_cached_usd_amounts
       rate = currency_rate(self.currency, :USD)
-      self.budget_in_usd = (gor_budget || 0) * rate
-      self.spend_in_usd  = (gor_spend || 0)  * rate
+      self.spend_in_usd  = (spend || 0)  * rate
+      self.budget_in_usd = (budget || 0) * rate
     end
 end

@@ -7,25 +7,27 @@ class ActivitiesController < Reporter::BaseController
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
+  before_filter :warn_if_not_classified, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
+  before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
-    @activity = Activity.new
+    @activity = Activity.new(:data_response_id => @response.id)
     @activity.project = @response.projects.find_by_id(params[:project_id])
     @activity.provider = current_user.organization
   end
 
   def edit
+    prepare_classifications(resource)
     load_comment_resources(resource)
     edit!
   end
 
   def create
     @activity = @response.activities.new(params[:activity])
-
     if @activity.save
       respond_to do |format|
-        format.html { flash[:notice] = 'Activity was successfully created'; html_redirect }
+        format.html { success_flash("created"); html_redirect }
         format.js   { js_redirect }
       end
     else
@@ -38,21 +40,16 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     @activity = Activity.find(params[:id])
+
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
-        format.html do
-          if @activity.check_projects_budget_and_spend?
-            flash[:notice] = 'Activity was successfully updated'
-          else
-            flash[:error] = 'Please be aware that your activities past expenditure/current budget exceeded that of your projects'
-          end
-          html_redirect
-        end
+        format.html { success_flash("updated"); html_redirect }
         format.js   { js_redirect }
       end
     else
       respond_to do |format|
-        format.html { flash[:error] = "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+        format.html { flash[:error] = "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+                      prepare_classifications(resource)
                       load_comment_resources(resource)
                       render :action => 'edit'
                     }
@@ -94,21 +91,6 @@ class ActivitiesController < Reporter::BaseController
     end
   end
 
-  # TODO refactor
-  def classifications
-    activity = Activity.find(params[:id])
-    other_costs = params[:other_costs] == '1' ? true : false
-    code_roots =  other_costs ? OtherCostCode.roots : Code.purposes.roots
-    render :partial => '/shared/data_responses/classifications', :locals => {:activity => activity, :other_costs => other_costs, :cost_cat_roots => CostCategory.roots, :code_roots => (other_costs ? OtherCostCode.roots : Code.purposes.roots)}
-  end
-
-  def project_sub_form
-    @activity = @response.activities.find_by_id(params[:activity_id])
-    @project  = @response.projects.find(params[:project_id])
-    render :partial => "project_sub_form",
-           :locals => {:activity => (@activity || :activity)}
-  end
-
   def template
     template = Activity.download_template(@response)
     send_csv(template, 'activities_template.csv')
@@ -128,11 +110,11 @@ class ActivitiesController < Reporter::BaseController
         @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
       else
         flash[:error] = 'Please select a file to upload activities'
-        redirect_to response_projects_path(@response)
+        redirect_to response_projects_url(@response)
       end
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_path(@response)
+      redirect_to response_projects_url(@response)
     end
   end
 
@@ -144,6 +126,14 @@ class ActivitiesController < Reporter::BaseController
 
   private
 
+    def success_flash(action)
+      flash[:notice] = "Activity was successfully #{action}."
+      if params[:activity][:project_id] == "-1"
+        flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a>
+                           to enter the funding sources for the automatically created project."
+      end
+    end
+
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "projects.name"
     end
@@ -152,19 +142,27 @@ class ActivitiesController < Reporter::BaseController
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "desc"
     end
 
-    def html_redirect
-      if params[:commit] == "Save & Classify >"
-        coding_type = @response.data_request.spend? ? 'CodingSpend' : 'CodingBudget'
-        return redirect_to activity_code_assignments_path(@activity, :coding_type => coding_type)
-      else
-        return redirect_to edit_response_activity_path(@response, @activity)
-      end
-    end
-
     def confirm_activity_type
       @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
       return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+    end
+
+    def prepare_classifications(activity)
+      # if we're viewing classification 'tabs'
+      if ['locations', 'purposes', 'inputs'].include? params[:mode]
+        load_klasses :mode
+        @budget_coding_tree = CodingTree.new(activity, @budget_klass)
+        @spend_coding_tree  = CodingTree.new(activity, @spend_klass)
+        @budget_assignments = @budget_klass.with_activity(activity).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        @spend_assignments  = @spend_klass.with_activity(activity).all.
+                                map_to_hash{ |b| {b.code_id => b} }
+        # set default to 'my' view if there are code assignments present
+        if params[:view].blank?
+          params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
+        end
+      end
     end
 
 end

@@ -3,6 +3,12 @@
 %h1.main_heading 
   Reports
 
+%h2
+  =image_tag "icon_lightning.png", :class => "heading_icon" 
+  Your response
+.dashboard_section
+  = render :partial => 'shared/data_responses/show'
+
 .first-half
   %h2
     =image_tag "icon_lightning.png", :class => "heading_icon"

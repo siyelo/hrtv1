@@ -1,14 +1,14 @@
 class Location < Code
-
   # Associations
-  has_and_belongs_to_many :projects
   has_and_belongs_to_many :activities
-  has_and_belongs_to_many :organizations
+  has_many :organizations
   has_one :district, :foreign_key => 'old_location_id'
+
+  alias_attribute :name, :short_display
 
   # Named scopes
   named_scope :all_with_counters,
-              lambda { |request_id| { 
+              lambda { |request_id| {
                 :select => "codes.id, codes.short_display, codes.type,
                   (SELECT COUNT(DISTINCT(organizations.id)) FROM organizations
                     INNER JOIN data_responses ON organizations.id = data_responses.organization_id
@@ -16,11 +16,11 @@ class Location < Code
                     INNER JOIN activities ON data_responses.id = activities.data_response_id
                     INNER JOIN code_assignments on activities.id = code_assignments.activity_id
                     WHERE code_assignments.code_id = codes.id) AS organizations_count,
-                  (SELECT COUNT(*) FROM activities
+                  (SELECT COUNT(DISTINCT(activities.id)) FROM activities
                     INNER JOIN data_responses ON activities.data_response_id = data_responses.id
                     INNER JOIN data_requests ON data_responses.data_request_id = data_requests.id AND data_responses.data_request_id = #{request_id}
-                    INNER JOIN activities_locations ON activities.id = activities_locations.activity_id
-                    WHERE activities_locations.location_id = codes.id) AS activities_count,
+                    INNER JOIN code_assignments on activities.id = code_assignments.activity_id
+                    WHERE code_assignments.code_id = codes.id) AS activities_count,
                   SUM(ca1.cached_amount) as spent_sum,
                   SUM(ca2.cached_amount) as budget_sum",
                 :joins => "
@@ -34,6 +34,10 @@ class Location < Code
                 :group => "codes.id, codes.short_display, codes.type"
 
               }}
+
+  named_scope :national_level, { :conditions => "lower(codes.short_display) = 'national level'" }
+  named_scope :without_national_level, { :conditions => "lower(codes.short_display) != 'national level'" }
+  named_scope :sorted, { :order => "codes.short_display" }
 
 end
 

@@ -2,6 +2,9 @@
 body
   background: image_url("bg-white.jpg")
   font-family: sans-serif
+  
+  &.app
+    background: #fff
 
   /* shared heading styles */
   h1, h2, h3, h4, h5, h6
@@ -23,7 +26,7 @@ body
   #content .wrapper
     +border-bottom-radius
     +clearfix
-    background: white
+    //background: white
     margin: 0 auto
     padding: 0 10px
 
@@ -92,7 +95,7 @@ body
       margin-bottom: 10px
 
   .wrapper > .full-width
-    padding: 5px 15px 0
+    padding: 5px 0 0
 
   .like_a_h2
     font-size: 12px
@@ -118,11 +121,11 @@ body
   width: 8%
 
 h3.title_bar
-  background: image_url("bg-blue.jpg")
+  background: $primary_dark
   color: #fff !important
   margin-top: 5px
   padding: 10px 10px 7px !important
-  +border-top-radius(3px)
+  +border-top-radius(2px)
 
 hr
   border: none
@@ -130,9 +133,25 @@ hr
 
 .clearfix
   +pie-clearfix
+  
+.clear
+  clear: both
 
 .marginless
   margin: 0 !important
 
 .push-12
   margin-top: 12px !important
+  
+.column3
+  float: left
+  margin-right: 1%
+  width: 32.66%
+  &.last
+    margin-right: 0
+.column2
+  float: left
+  margin-right: 1%
+  width: 49.5%
+  &.last
+    margin-right: 0

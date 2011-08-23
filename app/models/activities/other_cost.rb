@@ -1,11 +1,10 @@
 class OtherCost < Activity
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure
-                           spend_q4_prev spend_q1 spend_q2 spend_q3 spend_q4]
-                           
+  FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure]
+
   ### Delegates
-  
+
   delegate :currency, :to => :data_response, :allow_nil => true
 
   ### Class Methods
@@ -36,7 +35,14 @@ class OtherCost < Activity
   def currency
     project ? project.currency : data_response.currency
   end
+
+  def human_name
+    "Other Cost"
+  end
+
 end
+
+
 
 
 
@@ -63,24 +69,14 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  spend_q1                     :decimal(, )
-#  spend_q2                     :decimal(, )
-#  spend_q3                     :decimal(, )
-#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
-#  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  budget_q1                    :decimal(, )
-#  budget_q2                    :decimal(, )
-#  budget_q3                    :decimal(, )
-#  budget_q4                    :decimal(, )
-#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)

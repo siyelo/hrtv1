@@ -1,0 +1,20 @@
+%li.section_form.wrapped.marginless
+  .column2.borderless.targets.js_targets
+    %h3.simple Targets
+    - f.semantic_fields_for :targets do |ca|
+      = render "activities/target_fields", :f => ca
+    .add
+      = link_to_add_fields "Add Target", f, :targets, "activities/", :class => "create_alt marginless js_add_nested"
+
+  .column2.last.borderless.targets.js_targets
+    %h3.simple Outputs
+    - f.semantic_fields_for :outputs do |ca|
+      = render "activities/output_fields", :f => ca
+    .add
+      = link_to_add_fields "Add Output", f, :outputs, "activities/", :class => "create_alt marginless js_add_nested"
+
+%li.last.clear
+  %h3== Beneficiaries
+  %ul.section_form.last
+    = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'column2 borderless beneficiaries_boxes' }
+    = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'column2 last other_beneficiaries' }

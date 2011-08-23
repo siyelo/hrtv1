@@ -1,0 +1,51 @@
+- @data_request = @response.data_request
+- colspan = 0
+- ["purposes", "locations", "inputs"].each do |request|
+  - colspan += 1 if @data_request.send(request.to_sym)
+  - if @data_request.locations?
+    - colspan -= 1 if request == "locations" && activity.class == OtherCost
+    
+#uncoded_overlay.simple_overlay
+
+  %ul.review
+    %li
+      %h3{:class => ready(false)}
+        - if activity.class == OtherCost
+          Other Cost Classification
+        - else
+          Activity Classification
+        %span.info
+          Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+                  
+  .simple_table.push
+    %table
+      %thead
+        %tr
+          %th
+          %th Locations
+          %th Purposes
+          %th Inputs
+      %tbody
+        %tr
+          %td Past Expenditure
+        
+          - if @data_request.locations?
+            %td
+              = check_box_tag "spend_locations", "", activity.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          - if @data_request.purposes?
+            %td 
+              =check_box_tag "spend_purposes", "", activity.coding_spend_classified?, {:disabled => "disabled", :label => false} if @data_request.purposes?
+          - if @data_request.inputs?
+            %td
+              = check_box_tag "spend_inputs", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+        %tr
+          %td Current Budget
+          - if @data_request.locations?
+            %td
+              = check_box_tag "budget_locations", "", activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          - if @data_request.purposes?
+            %td
+              = check_box_tag "budget_purposes", "", activity.coding_budget_classified?, {:disabled => "disabled", :label => false}
+          - if @data_request.inputs?
+            %td
+              = check_box_tag "budget_inputs", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?

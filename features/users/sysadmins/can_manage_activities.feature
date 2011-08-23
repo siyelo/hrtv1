@@ -12,7 +12,8 @@ Feature: Reporter can manage activities
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with name: "project2", data_response: the data_response
-      And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response, spend: 2, budget: 2
+      And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response
+      And a sub_activity exists with budget: "2", spend: "2", data_response: the data_response, activity: the activity
       And I am signed in as "sysadmin@hrtapp.com"
 
     Scenario: An admin can review activities

@@ -1,8 +1,5 @@
 #flashes, .flashes
   font-size: 12px
-  //Hack to make the flashes push down the content less. Inconsistent placement of flashes prevents using this hack.
-  //margin-bottom: -20px
-  margin-top: 10px
   position: relative
   text-align: center
 
@@ -19,12 +16,10 @@
     margin: 10px 0
 
   .notify-close
-    margin: -6px 0 0 15px
-    position: absolute
-    right: 10px
-    top: 50%
+    display: inline
+    margin: 0 0 0 5px
     a
-      display: block
+      display: inline-block
       cursor: pointer
       height: 12px
       opacity: 0.5
@@ -34,42 +29,45 @@
         opacity: 1
 
   #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-    padding: 10px 29px 9px 15px
     background-position: 15px 7px
     background-repeat: no-repeat
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05)
     display: inline-block
+    padding: 10px 5% 9px
     position: relative
-    text-align: left
-    +border-radius(5px)
+    text-align: center
+    width: 90%
     +box-shadow($very-light-grey, 0, 2px, 5px)
-    +text-shadow($filler, 0, 1px, 1px)
-    max-width: 60%
-    margin: 5px auto
+    +text-shadow(rgba(255, 255, 255, 0.4), 0, 1px, 0)
+    a
+      color: #444
+      font-style: italic
+      padding-right: 1px
 
   #success, #info, .success, .info
-    border-color: #99cc99
+    //border-color: #99cc99
     color: #4f8a10
     //background-image: url(/images/alertsuccess_icon.png)
     background-color: #dff2bf
   #notice, .notice
-    border-color: #99cc99
+    //border-color: #99cc99
     color: #00529b
     background-color: #bde5f8
     //background-image: url(/images/alertinfo_icon.png)
   #warning, .warning
-    border-color: #99cc99
+    //border-color: #99cc99
     color: #9f6000
     background-color: #feefb3
     //background-image: url(/images/alertwarning_icon.png)
   #validation_error, .validation_error
-    border-color: #cc9999
+    //border-color: #cc9999
     color: #d63301
     background-color: #ffccba
     //background-image: url(/images/alertvalidation_error_icon.png)
   #error, .error
-    border-color: #cc9999
+    //border-color: #cc9999
     color: #d8000c
-    background-color: #ffbaba
+    background-color: #ffc0c0
     font-size: 12px
     //background-image: url(/images/alerterror_icon.png)
   a:hover
@@ -90,18 +88,18 @@
     &.error
       background-color: #ffbaba
       //background-image: url(/images/alerterror_icon.png)
-      border-color: #cc9999
+      //border-color: #cc9999
       color: #d8000c
     &.notice
       background-color: #bde5f8
       //background-image: url(/images/alertinfo_icon.png)
-      border-color: #99cc99
+      //border-color: #99cc99
       color: #00529b
 
 // DR Settings Page
 .errorExplanation
   background-color: #ffccba
-  border-color: #cc9999
+  //border-color: #cc9999
   color: #d63301
   margin-bottom: 20px
   padding: 10px

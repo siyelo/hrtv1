@@ -2,20 +2,24 @@
   a
     font-weight: normal
     font-size: 12px
+    
   table#activity_description
     margin-top: 15px
     padding: 10px
     td
-      color: $mid-blue
+      color: $primary_dark
       padding: 4px 8px
       font-size: 0.85em
       &.title
         color: #aaaaaa
         font-size: 0.7em
         text-transform: uppercase
+  #buttons
+    position: absolute
+    right: 15px
+    top: 0px
 
 #activity_classification
-  padding: 10px
   form
     input[type=submit]
       margin-top: 10px
@@ -26,37 +30,84 @@ body #content #main .activity_tree a
 
 .edit_activity
   position: relative
+
 #expl
-  color: $mid-blue + #222
+  color: $primary
   float: right
-  font-size: 11px
-  position: relative
-  top: 15px
+  position: absolute
+  right: 15px
+  top: 33px
+  width: 310px
+  a
+    font-size: 11px
   span
-    padding: 0 48px 0 3px
+    &.budget
+      float: right
+      text-align: right
+      width: 143px
+      img
+        float: left
+    &.spend
+      float: left
+      width: 143px
+      img
+        float: right
+
+  a
+    text-decoration: none
+  img
+    margin: 0 3px
 
 body.app
   ul.activity_tree, #activity_description
     label
       display: inline
     .values
-      min-width: 310px
+      width: 300px
+
+      .budget
+        background: $lightest-blue
+        float: right
+        position: relative
+        width: 141px
+        +border-radius
+        +pie-clearfix
+
+      .spend
+        background: $lightest-blue
+        float: left
+        margin-right: 14px
+        position: relative
+        width: 141px
+        +border-radius
+        +pie-clearfix
+
+      input
+        font-family: Arial, sans-serif
+        font-size: 11px
+        height: 13px
+        margin: 0
+        padding-top: 4px !important
+        padding-right: 12px !important
+        text-align: right
+        width: 29px
+        +border-right-radius(0)
+
+.inline_ratio
+  display: inline-block !important
+  font-size: 10px !important
+  left: 34px
+  position: absolute
+  top: 7px
 
 .tooltip
   &.info
-    background: $light-blue
-    color: #fff
-    display: inline-block
-    font-size: 14px
-    font-weight: bold
-    margin: 1px 0 0 2px
-    padding: 4px 5px 1px 5px
+    font-size: 10px
     text-decoration: none
-    text-shadow: none
-    +border-radius(20px)
-    &:hover
-      background: $mid-blue
-      color: #fff
+
+    &:hover, &:focus, &:active
+      text-decoration: underline
+
     &.help_tip
       font-size: 11px
       font-weight: normal
@@ -104,3 +155,6 @@ body.app
         border-width: 1px 1px 0
         color: $mid-blue
         font-weight: bold
+
+.invalid_node
+  background: #FFDDDD !important

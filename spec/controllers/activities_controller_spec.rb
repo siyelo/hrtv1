@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+include ApplicationHelper
 
 describe ActivitiesController do
 
@@ -120,11 +121,10 @@ describe ActivitiesController do
     end
   end
 
-  describe "Update" do
+  describe "Update / Create" do
     before :each do
       @organization = Factory(:organization)
-      @data_request = Factory(:data_request, :organization => @organization,
-                              :spend => false, :budget => false)
+      @data_request = Factory(:data_request, :organization => @organization)
       @user = Factory(:reporter, :organization => @organization)
       @data_response = @organization.latest_response
       @project = Factory(:project, :data_response => @data_response)
@@ -133,64 +133,74 @@ describe ActivitiesController do
       login @user
     end
 
+    it "should allow a project to be created automatically on update" do
+      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+      put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:project_id => '-1', :name => @activity.name, :start_date => @activity.start_date, :end_date => @activity.end_date}
+      @activity.reload
+      @activity.project.name.should == @activity.name
+    end
+
+    it "should allow a project to be created automatically on create" do
+      #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+      post :create, :response_id => @data_response.id, 
+        :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+        :start_date => @activity.start_date, :end_date => @activity.end_date }
+      
+      response.should be_redirect
+      @new_activity = Activity.find_by_name('new activity')
+      @new_activity.project.name.should == @new_activity.name
+    end
+
+    it "should assign the activity to an existing project if a project exists with the same name as the activity" do
+      put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:name => @project.name, :project_id => '-1'}
+      @activity.reload
+      @activity.project.name.should == @project.name
+    end
+
     it "should allow a reporter to update an activity if it's not am approved" do
       put :update, :id => @activity.id, :response_id => @data_response.id,
-          :activity => {:budget => "9999993", :project_id => @project.id}
+          :activity => {:description => "thedesc", :project_id => @project.id}
       @activity.reload
-      @activity.budget.should == 9999993
+      @activity.description.should == "thedesc"
     end
 
     it "should not allow a reporter to update a project once it has been am_approved" do
       @activity.am_approved = true
       @activity.save
-      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:budget => 9999993, :project_id => @project.id}
+      put :update, :id => @activity.id, :response_id => @data_response.id, :activity => {:description => "meh", :project_id => @project.id}
       @activity.reload
-      @activity.budget.should_not == 9999993
-      flash[:error].should == "Activity was approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
+      @activity.description.should_not == "meh"
+      flash[:error].should == "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}"
     end
 
-    it "redirects to the budget classifications page when Save & Classify is clicked EVEN if there is no budget or spend" do
-      put :update, :activity => { :budget => 0, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
-    end
-
-    it "redirects to the budget classifications page when Save & Classify is clicked and the datarequest spend is false and budget is true" do
-      @data_request.spend = false
-      @data_request.budget = true
+    it "redirects to the location classifications page when Save & Add Locations is clicked" do
       @data_request.save
-      put :update, :activity => { :budget => 89, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+      put :update, :activity => { :name => "new name" }, :id => @activity.id,
+        :commit => 'Save & Add Locations >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'locations')
     end
 
-    it "redirects to the budget classifications page Save & Go to Classify is clicked and the datarequest spend is false and budget is true but the activity budget is greater than project budget" do
-      @data_request.spend = false
-      @data_request.budget = true
+    it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
       @data_request.save
-      @project.budget = 100
-      put :update, :activity => { :budget => 110, :spend => 0}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingBudget'))
+      put :update, :activity => { :name => "new name" }, :id => @activity.id,
+        :commit => 'Save & Add Purposes >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'purposes')
+    end
+    it "redirects to the input classifications page when Save & Add Inputs is clicked" do
+      @data_request.save
+      put :update, :activity => { :name => "new name" }, :id => @activity.id,
+        :commit => 'Save & Add Inputs >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'inputs')
+    end
+    it "redirects to the output classifications page when Save & Add Outputs is clicked" do
+      @data_request.save
+      put :update, :activity => { :name => "new name" }, :id => @activity.id,
+        :commit => 'Save & Add Outputs >', :response_id => @data_response.id
+      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'outputs')
     end
 
-    it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is false" do
-      @data_request.spend = true
-      @data_request.budget = false
-      @data_request.save
-      put :update, :activity => { :budget => 0, :spend => 89}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-    end
-
-    it "redircts to the spend classifications page Save & Go to Classify is clicked and the datarequest spend is true and budget is true" do
-      @data_request.spend = true
-      @data_request.budget = true
-      @data_request.save
-      put :update, :activity => { :budget => 89, :spend => 89}, :id => @activity.id,
-        :commit => 'Save & Classify >', :response_id => @data_response.id
-      response.should redirect_to(activity_code_assignments_path(@project.activities.first, :coding_type => 'CodingSpend'))
-    end
 
     it "should NOT approve the project as a reporter" do
       put :activity_manager_approve, :id => @activity.id, :response_id => @data_response.id, :approve => true

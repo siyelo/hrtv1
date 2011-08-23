@@ -8,15 +8,6 @@ class OtherCostsController < Reporter::BaseController
   before_filter :warn_if_not_classified, :only => [:edit]
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
 
-  def index
-    scope = @response.other_costs.scoped({})
-    scope = scope.scoped(:conditions => ["UPPER(activities.name) LIKE UPPER(:q) OR
-                                         UPPER(activities.description) LIKE UPPER(:q)",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
-    @other_costs = scope.paginate(:page => params[:page], :per_page => 10,
-                    :order => "#{sort_column} #{sort_direction}")
-  end
-
   def new
     self.load_other_cost_new
   end
@@ -43,23 +34,24 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def update
-     @other_cost = OtherCost.find(params[:id])
-
-      if !@other_cost.am_approved? && @other_cost.update_attributes(params[:other_cost])
-        respond_to do |format|
-          format.html { success_flash("updated"); html_redirect }
-          format.js   { js_redirect }
-        end
-      else
-        respond_to do |format|
-          format.html { flash[:error] = "Other Cost was already approved by #{@other_cost.user.try(:full_name)} (#{@other_cost.user.try(:email)}) on #{@other_cost.am_approved_date}" if @other_cost.am_approved?
-                        prepare_classifications(resource)
-                        load_comment_resources(resource)
-                        render :action => 'edit'
-                      }
-          format.js   { js_redirect }
-        end
-      end
+    @other_cost = OtherCost.find(params[:id])
+    if !@other_cost.am_approved? && @other_cost.update_attributes(params[:other_cost])
+     respond_to do |format|
+       format.html { success_flash("updated"); html_redirect }
+       format.js   { js_redirect }
+     end
+    else
+     respond_to do |format|
+       format.html { flash[:error] = ("Other Cost was already approved by #{@other_cost.user.try(:full_name)} " +
+                                      "(#{@other_cost.user.try(:email)}) " +
+                                      "on #{@other_cost.am_approved_date}") if @other_cost.am_approved?
+                     prepare_classifications(resource)
+                     load_comment_resources(resource)
+                     render :action => 'edit'
+                   }
+       format.js   { js_redirect }
+     end
+    end
   end
 
   def destroy
@@ -117,9 +109,9 @@ class OtherCostsController < Reporter::BaseController
     end
 
     def confirm_activity_type
-      @activity = Activity.find(params[:id])
-      return redirect_to edit_response_activity_path(@response, @activity) if @activity.class.eql? Activity
-      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
+      @other_cost = OtherCost.find(params[:id])
+      return redirect_to edit_response_activity_path(@response, @other_cost) if @other_cost.class.eql? Activity
+      return redirect_to edit_response_activity_path(@response, @other_cost.activity) if @other_cost.class.eql? SubActivity
     end
 
     def prepare_classifications(other_cost)

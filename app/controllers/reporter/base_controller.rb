@@ -25,19 +25,19 @@ class Reporter::BaseController < ApplicationController
     end
 
     def html_redirect
-      activity = @activity || @other_cost
+      outlay = @activity || @other_cost
       if params[:commit] == "Save & Add Locations >"
-        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'locations')
+        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'locations')
       elsif params[:commit] == "Save & Add Purposes >"
-        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'purposes')
+        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'purposes')
       elsif params[:commit] == "Save & Add Inputs >"
-        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'inputs')
+        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'inputs')
       elsif params[:commit] == "Save & Add Targets >"
         return redirect_to edit_activity_or_ocost_path(activity, :mode => 'outputs')
       elsif params[:commit] == "Save & Review >"
         return redirect_to review_response_path(activity.response)
       else
-        return redirect_to edit_activity_or_ocost_path(activity, :mode => params[:mode])
+        return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end
     end
 

@@ -1,10 +1,10 @@
 - first_tab_class = ((params[:controller] == 'activities' || params[:controller] == 'other_costs' || params[:controller] == 'projects') && params[:mode].nil?) ? 'selected' : nil
-- unless activity.new_record?
-  - is_activity = activity.class == Activity ? true : false
+- unless outlay.new_record?
+  - is_activity = outlay.class == Activity ? true : false
 
 .section_overlap
   %ul.section_nav
-    - if activity.new_record?
+    - if outlay.new_record?
       %li{:class => first_tab_class}
         .dummy
           %span 1
@@ -28,25 +28,25 @@
     - else
       -# TODO: add ".finished" class to spans to indicate this tab is "done"
       %li{:class => first_tab_class}
-        - link_to edit_activity_or_ocost_path(activity) do
+        - link_to edit_activity_or_ocost_path(outlay) do
           %span 1
           Implementers
 
       %li{:class => params[:mode] == 'locations' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(activity, :mode => 'locations') do
+        - link_to edit_activity_or_ocost_path(outlay, :mode => 'locations') do
           %span 2
           Locations
 
       %li{:class => params[:mode] == 'purposes' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(activity, :mode => 'purposes') do
+        - link_to edit_activity_or_ocost_path(outlay, :mode => 'purposes') do
           %span 3
           Purposes
 
       %li{:class => params[:mode] == 'inputs' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(activity, :mode => 'inputs') do
+        - link_to edit_activity_or_ocost_path(outlay, :mode => 'inputs') do
           %span 4
           Inputs
       %li{:class => params[:mode] == 'outputs' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(activity, :mode => 'outputs') do
+        - link_to edit_activity_or_ocost_path(outlay, :mode => 'outputs') do
           %span 5
           Targets, Outputs & Beneficiaries

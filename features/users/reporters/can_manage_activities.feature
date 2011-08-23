@@ -14,7 +14,7 @@ Feature: Reporter can manage activities
     And I follow "data_request1"
     And I follow "Projects"
 
-  @javascript 
+  @javascript
   Scenario: Reporter can add targets & outputs
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
@@ -25,11 +25,10 @@ Feature: Reporter can manage activities
     And I follow "Add Output"
     And I fill in "output_field" with "Output description"
     And I press "Save"
-    Then I should see "Activity was successfully created"
-    And the "Target" field should contain "Target description"
-    And the "Output" field should contain "Output description"
+    Then I should see "Activity was successfully updated"
+    And the "target_field" field should contain "Target description"
+    And the "output_field" field should contain "Output description"
 
-  @javascript 
   Scenario: Reporter can add implementers (normal values)
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
@@ -57,24 +56,22 @@ Feature: Reporter can manage activities
     And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "20"
     And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "30"
 
-  @javascript 
   Scenario: Reporter can CRUD activities
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
     And I fill in "activity_start_date" with "2010-01-01"
     And I fill in "activity_end_date" with "2010-12-01"
-      And I select "project1" from "Project"
-      And I press "Save"
-    Then I should see "Activity was successfully created."
-      And I fill in "Name" with "activity2"
-      And I fill in "Description" with "activity2 description"
-      And I press "Save & Classify >"
+    And I select "project1" from "Project"
+    And I press "Save"
+    Then I should see "Activity was successfully created"
+    And I fill in "Name" with "activity2"
+    And I fill in "Description" with "activity2 description"
+    And I press "Save"
     Then I should see "Activity was successfully updated"
     And I follow "Projects"
     When I follow "activity2"
-      And I confirm the popup dialog
-      And I follow "Delete this Activity"
+    And I follow "Delete this Activity"
     Then I should see "Activity was successfully destroyed"
 
   Scenario: Reported can create activity with automatically created project
@@ -92,7 +89,7 @@ Feature: Reporter can manage activities
     And I select "<Automatically create a project for me>" from "Project"
     And I press "Save"
     Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
-
+    
   Scenario Outline: Reporter can CRUD activities and see errors
     When I follow "Add Activities now"
       And I fill in "Name" with "<name>"
@@ -115,12 +112,10 @@ Feature: Reporter can manage activities
       And I press "Import" within ".activities_upload_box"
     Then I should see "Activities Bulk Create"
 
-
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
       And I press "Import" within ".activities_upload_box"
     Then I should not see "is not a valid date"
-
 
   @javascript @wip
   Scenario: Reporter can upload Implementers

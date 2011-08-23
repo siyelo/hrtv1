@@ -9,7 +9,7 @@
 
 - @activities.each_with_index do |activity, index|
   .activity_box
-    = render 'bulk_edit', :activity => activity, :response => @response
+    = render 'shared/outlays/bulk_edit', :outlay => activity, :response => @response
 
 %br
 

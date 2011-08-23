@@ -7,6 +7,6 @@
 - options = percentage_field_options(code, assignment, valid)
 
 - association_name = type.to_s.underscore # CodingBudget becomes :coding_budget
-= text_field_tag "activity[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box"}.merge(options)
+= text_field_tag "#{@activity.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box"}.merge(options)
 .inline_ratio %
 .subtotal= cached_label

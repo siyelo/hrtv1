@@ -2,16 +2,16 @@
   .column2.borderless.targets.js_targets
     %h3.simple Targets
     - f.semantic_fields_for :targets do |ca|
-      = render "activities/target_fields", :f => ca
+      = render "shared/outlays/target_fields", :f => ca
     .add
-      = link_to_add_fields "Add Target", f, :targets, "activities/", :class => "create_alt marginless js_add_nested"
+      = link_to_add_fields "Add Target", f, :targets, "shared/outlays/", :class => "create_alt marginless js_add_nested"
 
   .column2.last.borderless.targets.js_targets
     %h3.simple Outputs
     - f.semantic_fields_for :outputs do |ca|
-      = render "activities/output_fields", :f => ca
+      = render "shared/outlays/output_fields", :f => ca
     .add
-      = link_to_add_fields "Add Output", f, :outputs, "activities/", :class => "create_alt marginless js_add_nested"
+      = link_to_add_fields "Add Output", f, :outputs, "shared/outlays/", :class => "create_alt marginless js_add_nested"
 
 %li.last.clear
   %h3== Beneficiaries

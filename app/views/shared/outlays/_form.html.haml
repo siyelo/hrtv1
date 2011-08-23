@@ -1,22 +1,22 @@
 :javascript
   var _response_id = "#{@response.id}";
-  var _activity_id = "#{activity.id}";
+  var _activity_id = "#{outlay.id}";
 
 - f.inputs :class => 'inputs' do
   %li.last
-    = render 'activities/activity_basic_fields', :f => f
+    = render 'shared/outlays/activity_basic_fields', :f => f, :outlay => outlay
 
-  %li.last= render 'activities/tab_nav', :activity => activity
+  %li.last= render 'shared/outlays/tab_nav', :outlay => outlay
 
   - if ['locations', 'purposes', 'inputs'].include? params[:mode]
     = yield :classification
 
   - elsif params[:mode].nil?
     %li.last.sub_activities
-      = render 'activities/implementers', :f => f, :activity_or_ocost => activity
+      = render 'shared/outlays/implementers', :f => f, :outlay => outlay
 
   - elsif params[:mode] == 'outputs'
-    = render 'activities/outputs_targets_benefs', :f => f
+    = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay
 
   %br
   %li.clear

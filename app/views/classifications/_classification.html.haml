@@ -9,6 +9,6 @@
         = image_tag "icon_b2s.png", :alt => "Copy Current Budget to Past Expenditure", :title => "Copy Current Budget to Past Expenditure"
         Current Budget %
 
-  %ul.activity_tree{:activity_budget => @activity.budget, :activity_spend => @activity.spend}
+  %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0

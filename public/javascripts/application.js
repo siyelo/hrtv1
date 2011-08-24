@@ -496,7 +496,7 @@ var updateTotalValues = function (el) {
   total_field.html(total_value.toFixed(1));
 };
 
-var dynamicUpdateTotalsInit = function () { 
+var dynamicUpdateTotalsInit = function () {
   $('.js_spend, .js_budget').live('keyup', function () {
     updateTotalValues(this);
   });
@@ -651,7 +651,7 @@ var createPieChart = function (element_type, options) {
     '<settings>' +
       '<pie>' +
         '<colors>'  +
-          get_random_color() + 
+          get_random_color() +
         '</colors>' +
       '</pie>' +
     '</settings>')
@@ -1454,11 +1454,11 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-    
+
     $('.js_address').address(function() {
       return 'new_' + $(this).html().toLowerCase();
     });
-    
+
     $.address.externalChange(function() {
       var hash = $.address.path();
       if (hash == '/'){
@@ -1469,14 +1469,30 @@ var projects_index = {
         if (hash == '/new_project'){
           hideAll();
           $('/new_project_form').fadeIn();
+        }else if (hash == '/new_activity'){
+          hideAll();
+          $('/new_activity_form').fadeIn();
+          activity_form();
+        }
+        else if (hash == '/new_other cost'){
+          hideAll();
+          $('/new_other_cost_form').fadeIn();
         }
       };
     });
-    
+
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
+    });
+
+
+    $('.js_toggle_activity_form').click(function (e) {
+      e.preventDefault();
+      hideAll();
+      $('#new_activity_form').fadeIn();
+      activity_form();
     });
 
     $('.js_toggle_other_cost_form').click(function (e) {

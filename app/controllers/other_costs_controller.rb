@@ -18,9 +18,7 @@ class OtherCostsController < Reporter::BaseController
   end
 
   def new
-    @other_cost = OtherCost.new(:data_response_id => @response.id)
-    @other_cost.project = @response.projects.find_by_id(params[:project_id])
-    @other_cost.provider = current_user.organization
+    self.load_other_cost_new
   end
 
   def edit

@@ -33,6 +33,30 @@ function add_fields(link, association, content) {
   after_add_fields_callback(association);
 };
 
+//prevents non-numeric characters to be entered in the input field
+var numericInputField = function (input) {
+  
+  $(input).keydown(function(event) {
+    // Allow backspace and delete, enter and tab
+    var bksp = 46;
+    var del = 8;
+    var enter = 13;
+    var tab = 9;
+
+    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
+      // let it happen, don't do anything
+    } else {
+      // Ensure that it is a number or a '.' and stop the keypress
+      var period = 190;
+      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
+        // let it happen
+      } else {
+       event.preventDefault();
+      };
+    };
+  });
+}
+
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
   var total = edit_block.find('.js_' + type).val();
 
@@ -453,26 +477,12 @@ var quartersSum = function (quarters) {
 
 var quartersInit = function () {
   quartersSplit($(".js_budget, .js_spend"));
-  quartersSum($('.js_fy_quarter'));
+  quartersSum($('.js_fy_quarter')); 
 };
 
 var updateTotalsValuesCallback = function (el) {
   updateTotalValues($(el).parents('tr').find('.js_spend'));
   updateTotalValues($(el).parents('tr').find('.js_budget'));
-};
-
-var dynamicUpdateTotalsInit = function () {
-  $('.js_spend, .js_budget').live('keyup', function () {
-    var total_value = 0;
-
-    if ($(this).hasClass('js_spend')) {
-      var input_fields = $(this).parents('table').find('.js_spend');
-      var total_field = $('.js_total_spend .amount');
-    } else if ($(this).hasClass('js_budget')) {
-      var input_fields = $(this).parents('table').find('.js_budget');
-      var total_field = $('.js_total_budget .amount');
-    }
-  });
 };
 
 var updateTotalValues = function (el) {
@@ -930,26 +940,7 @@ var activity_classification = function () {
 
   });
 
-  // restrict input to only numbers
-  $(".percentage_box").keydown(function(event) {
-    // Allow backspace and delete, enter and tab
-    var bksp = 46;
-    var del = 8;
-    var enter = 13;
-    var tab = 9;
-
-    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
-        // let it happen, don't do anything
-    } else {
-      // Ensure that it is a number or a '.' and stop the keypress
-      var period = 190;
-      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
-        // let it happen
-      }else{
-        event.preventDefault();
-      };
-    };
-  });
+  numericInputField(".percentage_boxi, .js_spend, .js_budget");
 
   var updateParentNodes = function(siblingLi, type, parentTotal){
     var siblingValue = 0;
@@ -1524,6 +1515,7 @@ var projects_index = {
     });
 
     dynamicUpdateTotalsInit();
+    numericInputField(".js_spend, .js_budget");
   }
 };
 
@@ -1843,6 +1835,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
     dynamicUpdateTotalsInit();
+    numericInputField(".js_spend, .js_budget");
   }
 }
 

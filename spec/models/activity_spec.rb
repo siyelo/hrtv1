@@ -499,6 +499,12 @@ describe Activity do
         @activities[0].project.should == @project
       end
 
+      it "should create a budget and spend automatically for the activities" do
+        @activities[0].sub_activities.count.should == 1
+        @activities[0].sub_activities[0].data_response.should == @response
+        @activities[0].sub_activities[0].organization.should == @organization
+      end
+
       it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
         @activities.count.should == 1
         @activities[0].implementer_splits.first.implementer.should == @implementer

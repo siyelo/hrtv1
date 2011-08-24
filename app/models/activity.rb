@@ -234,8 +234,12 @@ class Activity < ActiveRecord::Base
       activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
       implementer            = Organization.find(:first,
                                  :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-      activity.implementer_splits.build(:provider_id => implementer.id,
-        :data_response_id => activity.data_response_id) if implementer
+
+      if implementer #done like this because the initialize method creates a sub activity by default
+        sub = SubActivity.new(:provider_id => implementer.id, :data_response_id => activity.data_response_id,
+                        :budget => row["Budget"], :spend => row["Spend"])
+        activity.sub_activities = [sub]
+      end
       activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
                                  map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
       activity.targets       = activity.csv_targets.to_s.split(';').

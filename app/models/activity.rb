@@ -104,6 +104,7 @@ class Activity < ActiveRecord::Base
   }
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,               { :order => "activities.name" }
+  named_scope :sorted_by_id,               { :order => "activities.id" }
 
 
   ### Callbacks

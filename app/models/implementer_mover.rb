@@ -33,9 +33,9 @@ class ImplementerMover
 
       if @debug
         if split.new_record?
-          puts "  => creating adjusted split with Implementer: #{provider_or_self.name}, Spend: #{split.spend}, Budget: #{split.budget}"
+          print "  => creating adjusted split with Implementer: #{provider_or_self.name}, Spend: #{split.spend}, Budget: #{split.budget}\n"
         else
-          puts "  => adjusting existing split with Implementer: #{provider_or_self.name}, Spend: #{split.spend}, Budget: #{split.budget}"
+          print "  => adjusting existing split with Implementer: #{provider_or_self.name}, Spend: #{split.spend}, Budget: #{split.budget}\n"
         end
       end
       split.save!
@@ -62,7 +62,7 @@ class ImplementerMover
     end
 
     def create_new_split!(provider_or_self)
-      puts "  => creating cloned split with Implementer: #{provider_or_self.name}, Spend: #{@activity.spend}, Budget: #{@activity.budget}" if @debug
+      print "  => creating cloned split with Implementer: #{provider_or_self.name}, Spend: #{@activity.spend}, Budget: #{@activity.budget}\n" if @debug
       new_implementer_split = SubActivity.new(:provider_id => provider_or_self.id,
                                 :spend => @activity.spend, :budget => @activity.budget,
                                 :data_response_id => @activity.response.id, :activity_id => @activity.id)

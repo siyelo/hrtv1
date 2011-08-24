@@ -24,6 +24,8 @@ class FundingFlow < ActiveRecord::Base
   ### Validations
   # also see validations in BudgetSpendHelper
   # validates_presence_of :project # FIXME
+  validates_numericality_of :spend, :if => Proc.new {|ff| ff.spend.present?}
+  validates_numericality_of :budget, :if => Proc.new {|ff| ff.budget.present?}
   validates_presence_of :organization_id_from
   validates_presence_of :organization_id_to
   # either budget or spend must be present

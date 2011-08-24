@@ -37,17 +37,7 @@ describe FundingFlow do
     #it { should validate_numericality_of(:organization_id_from) }
     it { should validate_numericality_of(:project_from_id) }
     it { should validate_numericality_of(:budget) }
-    it { should validate_numericality_of(:budget_q1) }
-    it { should validate_numericality_of(:budget_q2) }
-    it { should validate_numericality_of(:budget_q3) }
-    it { should validate_numericality_of(:budget_q4) }
-    it { should validate_numericality_of(:budget_q4_prev) }
     it { should validate_numericality_of(:spend) }
-    it { should validate_numericality_of(:spend_q1) }
-    it { should validate_numericality_of(:spend_q2) }
-    it { should validate_numericality_of(:spend_q3) }
-    it { should validate_numericality_of(:spend_q4) }
-    it { should validate_numericality_of(:spend_q4_prev) }
   end
 
   describe "Validations that require a record" do
@@ -103,24 +93,6 @@ describe FundingFlow do
         @project      = Factory(:project, :data_response => @response)
         @organization.reload # reload in_flows
         @project.reload      # reload in_flows
-      end
-
-      it "sets budget amount as sum of budget quarters (Q1-Q4)" do
-        funding_flow = Factory(:funding_flow, :project => @project,
-                               :from => @organization, :to => @organization,
-                               :budget => nil, :budget_q4_prev => 5,
-                               :budget_q1 => 10, :budget_q2 => 10,
-                               :budget_q3 => 10, :budget_q4 => 10)
-        funding_flow.budget.should == 40
-      end
-
-      it "sets spend amount as sum of spend quarters (Q1-Q4)" do
-        funding_flow = Factory(:funding_flow, :project => @project,
-                               :from => @organization, :to => @organization,
-                               :spend => nil, :spend_q4_prev => 5,
-                               :spend_q1 => 10, :spend_q2 => 10,
-                               :spend_q3 => 10, :spend_q4 => 10)
-        funding_flow.spend.should == 40
       end
 
       describe "keeping Money amounts in-sync" do

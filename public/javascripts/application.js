@@ -905,14 +905,13 @@ var activity_classification = function () {
     var element = $(this);
     var isSpend = element.parents('div:first').hasClass('spend')
     var type = (isSpend) ? '.spend:first' : '.budget:first';
-    var isRoot = element.parents('ul:first').hasClass('activity_tree');
-    updateSubTotal(element);
-
-    //check whether siblings are equal our parent's total
     var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
     var siblingLi = element.parents('ul:first').children('li');
+    var childLi = element.parents('li:first').children('ul:first').children('li');
 
-    if (element.val().length == 0) {
+    updateSubTotal(element);
+
+    if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
     }
     if (event.keyCode != 9){
@@ -920,7 +919,6 @@ var activity_classification = function () {
     }
 
     //check whether children (1 level deep) are equal to my total
-    childLi = element.parents('li:first').children('ul:first').children('li');
     if (childLi.size() > 0){
       compareChildrenToParent(element, childLi, type);
     };
@@ -970,7 +968,16 @@ var activity_classification = function () {
     var del = 8;
     if ((event.keyCode == bksp || event.keyCode == del)){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
-      if (confirm('Would you like to clear the value of all child nodes?')){
+      
+      var childTotal = 0;
+      childNodes.each(function (){
+        childValue = parseFloat($(this).val())
+        if (!isNaN(childValue)) {
+          childTotal = childTotal + childValue
+        };
+      });
+      
+      if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
         childNodes.each(function(){
           if ($(this).val !== ''){
             $(this).val(' ');

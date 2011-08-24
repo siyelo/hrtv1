@@ -55,8 +55,8 @@ module ClassificationsHelper
 
   def derive_percentage_from_amount(amount_field, assignment)
     if assignment
-      if assignment.percentage.nil? && !assignment.nil?
-        percentage = (100 / (@activity.send(amount_field).to_f / assignment.cached_amount.to_f)).to_s
+      if assignment.percentage.nil?
+        percentage = @activity.send(amount_field) > 0 ? (100 / (@activity.send(amount_field).to_f / assignment.cached_amount.to_f)).to_s : 0
       else
         percentage = assignment.percentage
       end

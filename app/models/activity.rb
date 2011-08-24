@@ -236,7 +236,7 @@ class Activity < ActiveRecord::Base
       implementer            = Organization.find(:first,
                                  :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
 
-      if implementer 
+      if implementer
         sub = SubActivity.new(:provider_id => implementer.id, :data_response_id => activity.data_response_id,
                         :budget => row["Budget"], :spend => row["Spend"])
         activity.sub_activities = [sub] #done like this because the initialize method creates a sub activity by default
@@ -441,6 +441,7 @@ class Activity < ActiveRecord::Base
     0
   end
 
+  # FIXME performance killer ?
   def locations
     code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
       find(:all, :include => :code).map{|ca| ca.code }.uniq

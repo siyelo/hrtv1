@@ -1,10 +1,10 @@
 - response = current_user.responses.find_by_data_request_id(request)
 
-%tr{:class => (request.final_review? ? "final_review" : nil)}
+%tr{:class => (current_request == request ? "final_review" : nil)}
   %td.title
-    = link_to request.title, set_request_path(request.id), :class => "title"
     - if current_user.reporter? && response && request.final_review?
       = image_tag "warning_12.png", :title => "This Request is in the Final Review stage. #{link_to "Please re-check, then (re)submit", response_projects_path(@response || current_user.current_response) } your response.", :class => 'tooltip'
+    = link_to request.title, set_request_path(request.id), :class => "title"
   %td= request.organization.name
   %td= request.due_date.strftime('%d %b %y')
   - if current_user.reporter? && response

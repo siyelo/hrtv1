@@ -277,7 +277,7 @@ module ApplicationHelper
     when 'locations'; "Save & Add Purposes >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Go To Project >"
+    when 'outputs';   "Save & Review >"
     end
   end
 end

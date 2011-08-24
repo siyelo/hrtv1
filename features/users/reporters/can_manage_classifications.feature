@@ -293,5 +293,5 @@ Feature: Reporter can enter a code breakdown for each activity
     And I press "Save & Add Purposes >"
     And I press "Save & Add Inputs >"
     And I press "Save & Add Targets >"
-    And I press "Save & Go To Project >"
-    Then I should be on the edit project page for related activity "activity1"
+    And I press "Save & Review >"
+    Then I should see "HSSPII Strategic Program"

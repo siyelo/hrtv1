@@ -1,5 +1,6 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
+  default_scope :order => "id ASC"
 
 
   HUMANIZED_ATTRIBUTES = {

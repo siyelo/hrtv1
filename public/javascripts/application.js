@@ -35,7 +35,7 @@ function add_fields(link, association, content) {
 
 //prevents non-numeric characters to be entered in the input field
 var numericInputField = function (input) {
-  
+
   $(input).keydown(function(event) {
     // Allow backspace and delete, enter and tab
     var bksp = 46;
@@ -56,6 +56,28 @@ var numericInputField = function (input) {
     };
   });
 }
+
+var observeFormChanges = function (form) {
+  var catcher = function () {
+    var changed = false;
+
+    if ($(form).data('initialForm') != $(form).serialize()) {
+      changed = true;
+    }
+
+    if (changed) {
+      return 'You have unsaved changes!';
+    }
+  };
+
+  $('input[type=submit]').click(function (e) {
+    $(form).data('initialForm', $(form).serialize());
+  });
+
+  $(form).data('initialForm', $(form).serialize());
+  $(window).bind('beforeunload', catcher);
+}
+
 
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
   var total = edit_block.find('.js_' + type).val();
@@ -477,7 +499,7 @@ var quartersSum = function (quarters) {
 
 var quartersInit = function () {
   quartersSplit($(".js_budget, .js_spend"));
-  quartersSum($('.js_fy_quarter')); 
+  quartersSum($('.js_fy_quarter'));
 };
 
 var updateTotalsValuesCallback = function (el) {
@@ -872,7 +894,7 @@ var activity_classification = function () {
   addCollabsibleButtons('tab1');
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
-  
+
   showSubtotalIcons();
 
   $('.js_upload_btn').click(function (e) {
@@ -961,7 +983,7 @@ var activity_classification = function () {
     var del = 8;
     if ((event.keyCode == bksp || event.keyCode == del)){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
-      
+
       var childTotal = 0;
       childNodes.each(function (){
         childValue = parseFloat($(this).val())
@@ -969,7 +991,7 @@ var activity_classification = function () {
           childTotal = childTotal + childValue
         };
       });
-      
+
       if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
         childNodes.each(function(){
           if ($(this).val !== ''){
@@ -1059,7 +1081,7 @@ var showSubtotalIcons = function(){
   $('.tab1').find('.percentage_box').each(function(){
     if($(this).val().length > 0){
       $(this).siblings('.subtotal_icon').removeClass('hidden')
-    }   
+    }
   });
 }
 
@@ -1806,6 +1828,7 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
   }
 }
 
+
 var dashboard_index = {
   run: function () {
     $('.dropdown_trigger').click(function (e) {e.preventDefault()});
@@ -1825,7 +1848,7 @@ var dashboard_index = {
 
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
-    $( ".js_combobox" ).combobox();
+    $(".js_combobox" ).combobox();
   }
 };
 
@@ -1857,6 +1880,9 @@ $(function () {
 
   //jquery tools overlays
   $(".overlay").overlay();
+
+  //observe form changes and alert user if form has unsaved data
+  observeFormChanges($('.basic_form'));
 
   var id = $('body').attr("id");
   if (id) {

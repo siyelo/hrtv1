@@ -33,9 +33,9 @@ class Reporter::BaseController < ApplicationController
       elsif params[:commit] == "Save & Add Inputs >"
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'inputs')
       elsif params[:commit] == "Save & Add Targets >"
-        return redirect_to edit_activity_or_ocost_path(activity, :mode => 'outputs')
+        return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'outputs')
       elsif params[:commit] == "Save & Review >"
-        return redirect_to review_response_path(activity.response)
+        return redirect_to review_response_path(outlay.response)
       else
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end

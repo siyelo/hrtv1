@@ -1,5 +1,6 @@
 require 'validation_disabler'
 require 'validators'
+
 class Organization < ActiveRecord::Base
   include ActsAsDateChecker
   include Organization::FiscalYear
@@ -24,17 +25,16 @@ class Organization < ActiveRecord::Base
   has_and_belongs_to_many :activities # activities that target / aid this org
   belongs_to :location
   has_many :users # people in this organization
-  has_and_belongs_to_many :managers, :join_table => "organizations_managers", :class_name => "User" # activity managers
-
+  has_and_belongs_to_many :managers, :join_table => "organizations_managers",
+    :class_name => "User" # activity managers
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
-  # TODO: rename organization_id_from -> from_id, organization_id_to -> to_id
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from", :dependent => :nullify
-  has_many :in_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_to", :dependent => :nullify
+  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from",
+    :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
-  has_many :implementor_for, :through => :in_flows, :source => :project
-  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id, :dependent => :nullify
+  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id,
+    :dependent => :nullify
   has_many :projects, :through => :data_responses
 
   ### Validations
@@ -61,9 +61,6 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  # works only on postgres
-  #named_scope :with_users, :joins => :users, :select => 'DISTINCT ON (organizations.id) *'
-
   named_scope :with_submitted_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
                  :conditions => ["data_responses.data_request_id = ? AND
@@ -71,20 +68,17 @@ class Organization < ActiveRecord::Base
                                  (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND
                                  (data_responses.complete IS NULL OR data_responses.complete = ?)",
                                   request.id, true, false, false]} }
-
   named_scope :with_submitted_for_final_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
                  :conditions => ["data_responses.data_request_id = ? AND
                                  data_responses.submitted_for_final = ? AND
                                  (data_responses.complete IS NULL OR data_responses.complete = ?)",
                                   request.id, true, false]} }
-
   named_scope :with_complete_responses_for, lambda { |request|
                  {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
                  :conditions => ["data_responses.data_request_id = ? AND
                                  data_responses.complete = ?",
                                   request.id, true]} }
-
   named_scope :with_empty_responses_for, lambda { |request|
                 {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
                              LEFT JOIN activities ON data_responses.id = activities.data_response_id
@@ -93,7 +87,6 @@ class Organization < ActiveRecord::Base
                                   projects.data_response_id IS NULL AND
                                   data_responses.data_request_id = ?", request.id],
                  :from => ["organizations"]}}
-
   named_scope :with_in_progress_responses_for, lambda { |request|
                  {:conditions => ["organizations.id in (
                      SELECT organizations.id
@@ -107,11 +100,12 @@ class Organization < ActiveRecord::Base
   named_scope :reporting, :conditions => "raw_type != 'Non-Reporting'"
   named_scope :nonreporting, :conditions => "raw_type = 'Non-Reporting'"
 
+
+  ### Class Methods
+
   def self.with_users
     find(:all, :joins => :users, :order => 'organizations.name ASC').uniq
   end
-
-  ### Class Methods
 
   def self.merge_organizations!(target, duplicate)
     ActiveRecord::Base.disable_validation!
@@ -119,7 +113,6 @@ class Organization < ActiveRecord::Base
     target.data_requests << duplicate.data_requests
     target.data_responses << duplicate.data_responses
     target.out_flows << duplicate.out_flows
-    target.in_flows << duplicate.in_flows
     target.provider_for << duplicate.provider_for
     target.location = duplicate.location
     target.users << duplicate.users
@@ -130,7 +123,6 @@ class Organization < ActiveRecord::Base
   def self.download_template(organizations = [])
     FasterCSV.generate do |csv|
       csv << Organization::FILE_UPLOAD_COLUMNS
-
       if organizations
         organizations.each do |org|
           row = [org.name, org.raw_type, org.fosaid, org.currency]
@@ -153,18 +145,10 @@ class Organization < ActiveRecord::Base
   ### Instance Methods
 
   def is_empty?
-    if users.empty? && in_flows.empty? && out_flows.empty? && provider_for.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && out_flows.empty? && provider_for.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false
-    end
-  end
-
-  def referenced?
-    if in_flows.empty? && out_flows.empty? && provider_for.empty? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
-      false
-    else
-      true
     end
   end
 
@@ -192,19 +176,6 @@ class Organization < ActiveRecord::Base
   def display_name(length = 100)
     n = self.name || "Unnamed organization"
     n.first(length)
-  end
-
-  def has_provider?(organization)
-    projects.map(&:activities).flatten.map(&:provider).include?(organization)
-  end
-
-  def projects_in_request(request)
-      r = data_responses.select{|dr| dr.data_request = request}.first
-      unless r.nil?
-        r.projects
-      else
-        []
-      end
   end
 
   def funding_chains(request)
@@ -285,8 +256,8 @@ class Organization < ActiveRecord::Base
           a.save
         end
 
-        in_flows.each do |in_flow|
-          in_flow.save
+        self.projects.each do |project|
+          project.update_cached_currency_amounts
         end
       end
     end

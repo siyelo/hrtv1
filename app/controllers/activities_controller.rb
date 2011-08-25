@@ -127,7 +127,7 @@ class ActivitiesController < Reporter::BaseController
 
     def success_flash(action)
       flash[:notice] = "Activity was successfully #{action}."
-      if params[:activity][:project_id] == "-1"
+      if params[:activity][:project_id] == Activity::AUTOCREATE.to_s
         flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end

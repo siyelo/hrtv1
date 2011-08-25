@@ -332,7 +332,7 @@ describe Activity, "Classification" do
         @field = :budget
         @coding = :coding_budget_district
         if method == :spend_district_coding_adjusted
-          @field = :spend 
+          @field = :spend
           @coding = :coding_spend_district
         end
         basic_setup_project
@@ -407,11 +407,11 @@ describe Activity, "Classification" do
             sa       = Factory(:sub_activity, :data_response => @response,
                                :activity => @activity, @field => 100,
                                :provider => Factory(:provider, :location => nil))
-            @activity.reload # get updated budget/spend cache 
+            @activity.reload # get updated budget/spend cache
             @location1    = Factory(:location, :short_display => 'Location1')
             @location2    = Factory(:location, :short_display => 'Location2')
             klass = @coding.to_s.camelcase.constantize #e.g. CodingBudgetDistrict
-            klass.update_classifications(@activity, { @location1.id => 50, 
+            klass.update_classifications(@activity, { @location1.id => 50,
               @location2.id => 50})
             adjusted_split = @activity.send(method)
             adjusted_split.length.should == 2
@@ -540,10 +540,6 @@ describe Activity, "Classification" do
       @data_request  = Factory(:data_request, :organization => donor)
       @response      = ngo.latest_response
       project        = Factory(:project, :data_response => @response)
-      in_flow        = Factory(:funding_flow, :project => project, :from => donor, :to => ngo,
-                               :budget => 10, :spend => 10)
-      out_flow       = Factory(:funding_flow, :project => project, :from => ngo, :to => @implementer1,
-                               :budget => 7, :spend => 7)
       @activity      = Factory(:activity, :data_response => @response, :project => project,
                                :name => 'Activity 1', :provider => ngo, :project => project)
       @sa            = Factory(:sub_activity, :activity => @activity, :data_response => @response,

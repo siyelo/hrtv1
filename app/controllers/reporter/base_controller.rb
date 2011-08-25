@@ -11,7 +11,7 @@ class Reporter::BaseController < ApplicationController
       @activity.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
       # if you cant find an existing project with given params
       # then set it to -1 (i.e. Create a project for me)
-      @activity.project_id = -1 unless @activity.project
+      @activity.project_id = Activity::AUTOCREATE unless @activity.project
       @activity.provider = current_user.organization
     end
 

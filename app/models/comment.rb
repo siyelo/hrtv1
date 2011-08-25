@@ -23,11 +23,6 @@ class Comment < ActiveRecord::Base
         :conditions => ["p.data_response_id IN (?)", organization.data_responses.map(&:id) ]
       }
     }
-  named_scope :on_funding_sources_for, lambda { |organization|
-      { :joins => "JOIN funding_flows f ON f.id = comments.commentable_id ",
-        :conditions => ["f.organization_id_to = ? AND f.data_response_id IN (?)", organization.id, organization.data_responses.map(&:id) ]
-      }
-    }
   named_scope :on_implementers_for, lambda { |organization|
       { :joins => "JOIN funding_flows f ON f.id = comments.commentable_id ",
         :conditions => ["f.organization_id_from = ? AND f.data_response_id IN (?)", organization.id, organization.data_responses.map(&:id) ]

@@ -38,10 +38,9 @@ describe DataResponse do #validations
 
     it "succeeds if projects are linked" do
       #TODO link the projects
-      funder = Factory(:funding_source, :to => @project.organization,
-        :project => @project,
-        :from => @funder_response.organization,
-        :project_from_id => @funder_project.id)
+      @project.funding_flows = [Factory.build(:funding_source,
+        :from => @funder_response.organization, :project_from_id => @funder_project.id)]
+      @project.save!; @response.reload
       @response.projects_linked?.should == true
     end
 
@@ -52,9 +51,7 @@ describe DataResponse do #validations
     end
 
     it "fails if projects not linked" do
-      funder = Factory(:funding_source, :to => @project.organization,
-        :project => @project,
-        :from => @funder_response.organization)
+      @project.in_flows.count.should == 1 # the autocreated one
       @response.projects_linked?.should == false
     end
   end
@@ -63,9 +60,8 @@ describe DataResponse do #validations
     before :each do
       @activity        = Factory(:activity_budget_spend_coded, :data_response => @response,
                                  :project => @project)
-      @sa              = Factory(:sub_activity, :activity => @activity, 
+      @sa              = Factory(:sub_activity, :activity => @activity,
                                  :data_response => @response, :budget => 100, :spend => 80)
-
       @activity.save
       @other_cost      = Factory(:other_cost_fully_coded, :data_response => @response,
                                  :project => @project)
@@ -73,11 +69,11 @@ describe DataResponse do #validations
       @request         = Factory(:data_request, :organization => @organization)
       @funder_response = @organization.latest_response
       @funder_project  = Factory(:project, :data_response => @funder_response)
-      @funder = Factory(:funding_flow, :to => @project.organization,
-        :project => @project,
-        :from => @funder_org,
-        :project_from_id => @funder_project.id,
-        :budget => 100, :spend => 80)
+      # the factory should autocreate an in-flow, so we must overwrite it
+      @project.in_flows = [Factory.build(:funding_flow, :from => @funder_org,
+                            :project_from_id => @funder_project.id, :budget => 100, :spend => 80)]
+      @project.save!
+      @funder = @project.in_flows.first
     end
 
     it "is OK if everything is entered" do
@@ -173,14 +169,14 @@ describe DataResponse do #validations
         @impl_response = @implementer.latest_response
         @project       = Factory.create(:project, :data_response => @impl_response)
         @activity      = Factory(:activity, :project => @project, :data_response => @impl_response)
-        @sa            = Factory(:sub_activity, :activity => @activity, 
+        @sa            = Factory(:sub_activity, :activity => @activity,
                                  :data_response => @impl_response, :budget => 10000)
         @project.reload
       end
 
       it "is true when budget in flow equals to project budget" do
-        Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                       :project => @project, :budget => 10000)
+        @project.in_flows = [Factory.build(:funding_flow, :from => @funder1, :budget => 10000)]
+        @project.save!
         @impl_response.projects_and_funding_sources_have_matching_budgets?.should == true
       end
 
@@ -212,8 +208,8 @@ describe DataResponse do #validations
     end
 
     it "is true when spend in flow equals to project spend" do
-      Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-                     :project => @project, :spend => 10000)
+      @project.in_flows = [Factory.build(:funding_flow, :from => @funder1, :spend => 10000)]
+      @project.save!
       @impl_response.projects_and_funding_sources_have_correct_spends?.should == true
     end
 
@@ -249,14 +245,10 @@ end
 
 # quick setup a spend/budget(field) with amounts (activity1, activity2, othercost1)
 def setup_project(field, amounts)
-  Factory.create(:activity, :data_response => @response,
-                 :project => @project, field => amounts[0])
-  Factory.create(:activity, :data_response => @response,
-                 :project => @project, field => amounts[1])
-  Factory.create(:other_cost, :data_response => @response,
-                 :project => @project, field => amounts[2])
+  Factory(:activity, :data_response => @response, :project => @project, field => amounts[0])
+  Factory(:activity, :data_response => @response, :project => @project, field => amounts[1])
+  Factory(:other_cost, :data_response => @response, :project => @project, field => amounts[2])
 end
-
 
 #assumes project total is 10
 def setup_funder_equal_to_project(field)
@@ -273,8 +265,7 @@ end
 
 # quick setup a spend/budget(field) with amounts (funder1, funder2)
 def setup_funders(field, amounts)
-  Factory.create(:funding_flow, :from => @funder1, :to => @implementer,
-   :project => @project, field => amounts[0])
-  Factory.create(:funding_flow, :from => @funder2, :to => @implementer,
-   :project => @project, field => amounts[1])
+  @project.in_flows = [Factory.build(:funding_flow, :from => @funder1, field => amounts[0]),
+                       Factory.build(:funding_flow, :from => @funder2, field => amounts[1])]
+  @project.save!
 end

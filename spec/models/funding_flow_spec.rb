@@ -5,10 +5,8 @@ describe FundingFlow do
     it { should allow_mass_assignment_of(:organization_text) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:from) }
-    it { should allow_mass_assignment_of(:to) }
     it { should allow_mass_assignment_of(:self_provider_flag) }
     it { should allow_mass_assignment_of(:organization_id_from) }
-    it { should allow_mass_assignment_of(:organization_id_to) }
     it { should allow_mass_assignment_of(:spend) }
     it { should allow_mass_assignment_of(:spend_q4_prev) }
     it { should allow_mass_assignment_of(:spend_q1) }
@@ -24,14 +22,12 @@ describe FundingFlow do
 
   describe "Associations" do
     it { should belong_to :from }
-    it { should belong_to :to }
     it { should belong_to :project }
     it { should belong_to :project_from }
   end
 
   describe "Validations" do
     ### these break with shoulda 2.11.3 "translation missing"
-    #it { should validate_presence_of(:organization_id_to) }
     #it { should validate_presence_of(:organization_id_from) }
     # and this breaks too
     #it { should validate_numericality_of(:organization_id_from) }
@@ -47,7 +43,7 @@ describe FundingFlow do
   end
 
   describe "Custom validations" do
-    before :all do
+    before :each do
       @donor        = Factory(:organization)
       @organization = Factory(:organization)
       @request      = Factory(:data_request, :organization => @organization)
@@ -57,29 +53,21 @@ describe FundingFlow do
 
     it "should validate Expenditure and/or Budget is present if nil" do
       @funding_flow = Factory.build(:funding_flow, :project => @project,
-                              :from => @donor, :to => @organization,
-                              :budget => nil, :spend => nil)
+                              :from => @donor, :budget => nil, :spend => nil)
       @funding_flow.save.should == false
       @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
     it "should validate Expenditure and/or Budget is present if blank" do
       @funding_flow = Factory.build(:funding_flow, :project => @project,
-                              :from => @donor, :to => @organization,
-                              :budget => "", :spend => "")
+                              :from => @donor, :budget => "", :spend => "")
       @funding_flow.save.should == false
       @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
     it "should validate one OR the other" do
-       @donor        = Factory(:organization)
-       @organization = Factory(:organization)
-       @request      = Factory(:data_request, :organization => @organization)
-       @response     = @organization.latest_response
-       @project      = Factory(:project, :data_response => @response)
        @funding_flow = Factory.build(:funding_flow, :project => @project,
-                               :from => @donor, :to => @organization,
-                               :budget => "", :spend => "123.00")
+                               :from => @donor, :budget => "", :spend => "123.00")
        @funding_flow.save.should == true
      end
   end
@@ -98,27 +86,25 @@ describe FundingFlow do
       describe "keeping Money amounts in-sync" do
         before :each do
           Money.default_bank.add_rate(:RWF, :USD, 0.002)
-          @funding_flow = Factory(:funding_flow, :project => @project,
-                                  :from => @organization, :to => @organization,
-                                  :spend => 123.45, :budget => 123.45)
+          @project.in_flows = [Factory.build(:funding_flow, :from => @organization, :spend => 123.45,
+                                :budget => 123.45)]
+          @project.save!
+          @funding_flow = @project.in_flows.first
         end
 
         it "should update spend in USD after project currency change" do
           @p = @funding_flow.project
-          @p.currency = 'RWF'
-          @p.save
+          @p.currency = 'RWF'; @p.save
           @funding_flow.reload
-          @funding_flow.spend_in_usd.should == 0.2469
+          @funding_flow.spend_in_usd.to_f.should == 0.2469
         end
 
         it "should update spend in USD after organization currency change" do
-          @organization.currency = "RWF"
-          @organization.save
+          @organization.currency = "RWF"; @organization.save!
           @funding_flow.reload
-          @funding_flow.spend_in_usd.should == 0.2469
+          @funding_flow.spend_in_usd.to_f.should == 0.2469
         end
       end
-
     end
 
     describe "#update_cached_usd_amounts" do
@@ -135,8 +121,7 @@ describe FundingFlow do
           @response     = @organization.latest_response
           @project      = Factory(:project, :data_response => @response)
           funding_flow = Factory(:funding_flow, :project => @project,
-                                 :from => @organization, :to => @organization,
-                                 :budget => 123, :spend => 456)
+                                 :from => @organization, :budget => 123, :spend => 456)
           funding_flow.budget_in_usd.should == 12.3
           funding_flow.spend_in_usd.should == 45.6
         end
@@ -152,8 +137,7 @@ describe FundingFlow do
           @response     = @organization.latest_response
           @project      = Factory(:project, :data_response => @response)
           funding_flow = Factory(:funding_flow, :project => @project,
-                                 :from => @organization, :to => @organization,
-                                 :budget_q4_prev => 10, :budget_q1 => 10,
+                                 :from => @organization, :budget_q4_prev => 10, :budget_q1 => 10,
                                  :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
                                  :spend_q4_prev => 11, :spend_q1 => 11,
                                  :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999)
@@ -172,14 +156,14 @@ describe FundingFlow do
     it "should validate the spend fields" do
       @funding_flow = Factory.build(:funding_flow,
                                     :project => @project, :spend => 'abcd',
-                                    :from => @organization, :to => @organization)
+                                    :from => @organization)
       @funding_flow.save.should be_false
     end
 
     it "should validate the budget fields" do
       @funding_flow = Factory.build(:funding_flow,
                                     :project => @project, :budget => 'abcd',
-                                    :from => @organization, :to => @organization)
+                                    :from => @organization)
       @funding_flow.save.should be_false
     end
   end
@@ -191,7 +175,7 @@ describe FundingFlow do
       @project.save
       funding_flow = Factory.build(:funding_flow,
                                     :project => @project,
-                                    :from => @organization, :to => @organization)
+                                    :from => @organization)
       funding_flow.currency.should == "RWF"
     end
   end
@@ -199,13 +183,11 @@ describe FundingFlow do
   describe "#name" do
     it "returns from and to organizations in the name" do
       basic_setup_project
-      from = Factory.create(:organization, :name => 'Organization 1')
-      to   = Factory.create(:organization, :name => 'Organization 2')
-      funding_flow = Factory.create(:funding_flow,
-                                    :project => @project,
-                                    :from => from, :to => to)
-
-      funding_flow.name.should == "From: #{from} - To: #{to}"
+      from = Factory(:organization, :name => 'Organization 1')
+      @organization.name = 'Organization 2'
+      @organization.save
+      funding_flow = Factory(:funding_flow, :project => @project, :from => from)
+      funding_flow.name.should == "From: #{from} - To: #{@organization}"
     end
   end
 
@@ -214,9 +196,7 @@ describe FundingFlow do
       basic_setup_project
       from = Factory.create(:organization, :name => 'Organization 1')
       to   = Factory.create(:organization, :name => 'Organization 2')
-      funding_flow = Factory.create(:funding_flow,
-                                    :project => @project,
-                                    :from => from, :to => to)
+      funding_flow = Factory.create(:funding_flow, :project => @project, :from => from)
       funding_flow.response.should == @response
       funding_flow.data_response.should == @response
     end

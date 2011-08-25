@@ -12,7 +12,13 @@ class Activity < ActiveRecord::Base
     :sub_activities => "Implementers",
     :budget => "Current Budget",
     :spend => "Past Expenditure" }
+  AUTOCREATE = -1
 
+  ### Class-Level Method Invocations
+  strip_commas_from_all_numbers
+
+  ### Attribute Accessor
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
@@ -36,7 +42,6 @@ class Activity < ActiveRecord::Base
   has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
     :dependent => :destroy #TODO - use non-sti model
   has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
-
   # deprecated
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
@@ -58,8 +63,39 @@ class Activity < ActiveRecord::Base
   has_many :outputs, :dependent => :destroy
 
 
-  ### Class-Level Method Invocations
-  strip_commas_from_all_numbers
+  ### Callbacks
+  # also see callbacks in BudgetSpendHelper
+  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_save   :auto_create_project, :unless => :is_sub_activity?
+  after_save    :update_counter_cache, :unless => :is_sub_activity?
+  after_destroy :update_counter_cache, :unless => :is_sub_activity?
+
+
+  ### Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  accepts_nested_attributes_for :targets, :allow_destroy => true
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
+
+
+  ### Delegates
+  delegate :currency, :to => :project, :allow_nil => true
+  delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
+
+
+  ### Validations
+  # also see validations in BudgetSpendHelper
+  before_validation :strip_input_fields, :unless => :is_sub_activity?
+  validate :approved_activity_cannot_be_changed
+  validates_presence_of :name, :unless => :is_sub_activity?
+  validates_presence_of :description, :if => :is_activity?
+  validates_presence_of :project_id, :if => :is_activity?
+  validates_presence_of :data_response_id
+  validates_date :start_date, :unless => :is_sub_activity?
+  validates_date :end_date, :unless => :is_sub_activity?
+  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
+  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
+  validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
 
   ### Scopes
@@ -107,45 +143,9 @@ class Activity < ActiveRecord::Base
   named_scope :sorted_by_id,               { :order => "activities.id" }
 
 
-  ### Callbacks
-  # also see callbacks in BudgetSpendHelper
-  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
-  before_save   :auto_create_project, :unless => :is_sub_activity?
-  after_save    :update_counter_cache, :unless => :is_sub_activity?
-  after_destroy :update_counter_cache, :unless => :is_sub_activity?
-
-
-  ### Attribute Accessor
-  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
-
-
-  ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
-  accepts_nested_attributes_for :targets, :allow_destroy => true
-  accepts_nested_attributes_for :outputs, :allow_destroy => true
-
-
-  ### Delegates
-  delegate :currency, :to => :project, :allow_nil => true
-  delegate :data_request, :to => :data_response
-  delegate :organization, :to => :data_response
-
-
-  ### Validations
-  # also see validations in BudgetSpendHelper
-  before_validation :strip_input_fields, :unless => :is_sub_activity?
-  validate :approved_activity_cannot_be_changed
-  validates_presence_of :name, :unless => :is_sub_activity?
-  validates_presence_of :description, :if => :is_activity?
-  validates_presence_of :project_id, :if => :is_activity?
-  validates_presence_of :data_response_id
-  validates_date :start_date, :unless => :is_sub_activity?
-  validates_date :end_date, :unless => :is_sub_activity?
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
-  validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-
   ### Class Methods
+
+
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
@@ -558,13 +558,15 @@ class Activity < ActiveRecord::Base
     end
 
    def auto_create_project
-     if project_id == -1
+
+     if project_id == AUTOCREATE
       project = data_response.projects.find_by_name(name)
       unless project
-        project= Project.create(:name => name,
-                                :start_date => start_date,
-                                :end_date   => end_date,
-                                :data_response => data_response)
+        self_funder = FundingFlow.new(:from => self.organization,
+                        :spend => self.spend, :budget => self.budget)
+        project = Project.create(:name => name, :start_date => start_date,
+                                :end_date => end_date, :data_response => data_response,
+                                :in_flows => [self_funder])
       end
       self.project = project
     end

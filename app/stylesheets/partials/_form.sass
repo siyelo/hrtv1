@@ -56,7 +56,11 @@
         border: none
         margin: 0 0 10px !important
         padding: 0 !important
-        
+      &.underlined
+        border: none
+        border-bottom: 1px solid $primary_border4
+        margin: 0 0 10px !important
+        padding: 0 0 10px !important
     label
       float: left
       margin-top: 9px
@@ -721,6 +725,14 @@ h3 a.tooltip
   font-size: 12px !important
   color: $light-orange
   font-weight: normal !important
+
+a.tooltip
+  font-size: 11px
+  text-decoration: none
+  font-weight: bold
+  
+#filter_help p
+  color: $secondary
     
 // form section navigation
 
@@ -733,30 +745,32 @@ h3 a.tooltip
   background: #EEE
   border: 1px solid $primary_light
   border-bottom: none
+  min-height: 36px
   padding: 0 17px
   +linear-gradient(color-stops($primary_lightest, $primary_lighter))
   +pie-clearfix
   -webkit-box-shadow: $primary_light 0 1px 7px inset
   -moz-box-shadow: $primary_light 0 1px 7px inset
   box-shadow: $primary_light 0 1px 7px inset
+  
   li
     display: inline-block
     float: left
     margin-bottom: 0 !important
     padding-bottom: 0 !important
     +pie-clearfix
-    &.selected
-      a, .dummy
-        background: image_url("subnav_active2.png") no-repeat center 29px
-        color: $primary - #111
-        font-weight: bold
-        padding: 10px 10px 12px
-        position: relative
-        top: 2px
-        +text-shadow(#FFF, 0, 1px, 0)
-        span
-          background: $primary
-          color: $primary_light
+    
+  .selected a, .selected .dummy, .active
+    background: image_url("subnav_active2.png") no-repeat center 29px
+    color: $primary - #111
+    font-weight: bold
+    padding: 10px 10px 12px
+    position: relative
+    top: 2px
+    +text-shadow(#FFF, 0, 1px, 0)
+    span
+      background: $primary
+      color: $primary_light
     
   a, .dummy
     color: $primary

@@ -188,85 +188,201 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified?}
   end
 
-  def self.download_template(response, activities = [])
+  def self.download_template(response)
     FasterCSV.generate do |csv|
-      csv << file_upload_columns_with_id_col(response)
-
-      activities.each do |activity|
+      csv << file_upload_columns
+      response.projects.sorted.each do |project|
         row = []
-        row << activity.project.try(:name)
-        row << activity.name
-        row << activity.description
-        row << activity.provider.try(:name)
-        row << activity.spend
-        row << activity.budget
-        row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << activity.targets.map{|o| o.description}.join(",")
-        row << activity.start_date
-        row << activity.end_date
-        (100 - row.length).times{ row << nil}
-        row << activity.id
-        csv << row
+        row << project.name
+        row << project.description
+        if project.activities.empty?
+          csv << row
+        else
+          project.activities.roots.sorted.each_with_index do |activity, index|
+            row << "" if index > 0 # dont re-print project details on each line
+            row << "" if index > 0
+            row << activity.name
+            row << activity.description
+            row << activity.start_date
+            row << activity.end_date
+            if activity.sub_activities.empty?
+              csv << row
+            else
+              activity.sub_activities.sorted.each_with_index do |sub_activity, index|
+                row << "" if index > 0 # dont re-print activity details on each line
+                row << "" if index > 0
+                row << "" if index > 0
+                row << "" if index > 0
+                row << "" if index > 0
+                row << "" if index > 0
+                row << sub_activity.id
+                row << sub_activity.provider.try(:name)
+                row << sub_activity.spend
+                row << sub_activity.budget
+                csv << row
+                row = []
+              end
+            end
+          end
+        end
       end
     end
   end
 
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
-    col_names = file_upload_columns(response)
+    sub_activities = []
+    col_names = file_upload_columns
+    activity_name = project_name = sub_activity_name = ''
+    activity_start_date = activity_end_date = ''
+    project_description = activity_description = ''
+    activity_in_memory = false
+    existing_sa = nil
 
     doc.each do |row|
-      activity_id = row['Id']
-      if activity_id.present?
-        # reset the activity id if it is already found in previous rows
-        # this can happen when user edits existing activities but copies
+      activity_name = row['Activity Name'].blank? ? activity_name : row['Activity Name']
+
+      if row['Activity Description'].blank? && row['Activity Name'].blank?
+        activity_description =  activity_description
+      else
+        activity_description = row['Activity Description']
+      end
+
+      if row['Start Date'].blank? && row['Activity Name'].blank?
+        activity_start_date  = activity_start_date
+      else
+        activity_start_date  = row['Start Date']
+      end
+
+      if row['End Date'].blank? && row['Activity Name'].blank?
+        activity_end_date = activity_end_date
+      else
+        activity_end_date = row['End Date']
+      end
+
+      project_name = row['Project Name'] || project_name
+      project_description  = row['Project Description'] || project_description unless row['Project Name'].blank?
+
+      sub_activity_name    = row['Implementer']
+      sub_activity_id      = row['Id']
+      csv_provider  = row["Implementer"].try(:strip)
+
+      if csv_provider.nil?
+        implementer = response.organization
+      else
+        implementer = Organization.find(:first,:conditions => ["LOWER(name) LIKE ?", "%#{csv_provider.downcase}%"])
+      end
+
+      if sub_activity_id.present?
+        # reset the sub_activity id if it is already found in previous rows
+        # this can happen when user edits existing sub_activities but copies
         # the whole row (then the activity id is also copied)
-        if activities.map(&:id).include?(activity_id.to_i)
-          activity = response.activities.new
-        else
-          activity = response.activities.find(activity_id)
+        unless response.sub_activities.map(&:id).include?(sub_activity_id.to_i)
+          begin
+            sub_activity = response.sub_activities.find(sub_activity_id)
+          rescue
+            sub_activity = nil
+          end
+        end
+      end
+
+      unless sub_activity
+        sub_activities.each do |sa|
+          if sa.provider.name.downcase == csv_provider.downcase && sa.activity.name == activity_name && sa.activity.project.name == project_name
+            sub_activity = sa
+            existing_sa = sa
+          end
+        end
+      end
+
+      if sub_activity
+        #sub_activity ID is present - any changes to the
+        #project/activity name/description will change the existing project/activity
+
+        activity = sub_activity.activity
+        project  = activity.project
+      else
+        #sub_activity ID not present or invalid - considered to be a new row.
+        #If the project/activity doesn't exist, a new one is created
+        activities.each do |a|
+          if a.name == activity_name && a.project.name == project_name
+            activity = a
+            project = a.project
+            activity_in_memory = true
+          end
+        end
+
+        project = (response.projects.find_by_name(project_name) || response.projects.new) unless project
+        activity = (project.activities.find_by_name(activity_name) || project.activities.new) unless activity
+
+        existing_sa = SubActivity.find(:first, :conditions => {:provider_id => implementer.id, :activity_id => activity.id, :data_response_id => response.id})
+        sub_activity = existing_sa || activity.sub_activities.new
+      end
+
+      project.data_response       = response
+      project.name                = project_name.try(:strip)
+      project.description         = project_description.try(:strip)
+      if project.new_record?
+        project.start_date        = DateHelper::flexible_date_parse(activity_start_date.try(:strip))
+        project.end_date          = DateHelper::flexible_date_parse(activity_end_date.try(:strip))
+        ff                        = project.funding_flows.new
+        ff.organization_id_from   = project.organization.id
+        ff.spend                  = 0
+        ff.budget                 = 0
+        project.funding_flows << ff
+      end
+
+      unless response.projects.include?(project)
+        response.projects << project
+      end
+
+      activity.data_response     = response
+      activity.project           = project
+      activity.name              = activity_name.try(:strip)
+      activity.description       = activity_description.try(:strip)
+      activity.start_date        = DateHelper::flexible_date_parse(activity_start_date.try(:strip))
+      activity.end_date          = DateHelper::flexible_date_parse(activity_end_date.try(:strip))
+
+      sub_activity.provider      = implementer
+      sub_activity.activity      = activity
+      sub_activity.data_response = response
+
+      if existing_sa
+        if sub_activity.spend && row["Past Expenditure"]
+          sub_activity.spend += row["Past Expenditure"].to_i
+        end
+        if sub_activity.budget && row["Current Budget"]
+          sub_activity.budget += row["Current Budget"].to_i
         end
       else
-        activity = response.activities.new
-      end
-      #clear the default sub_activity that is created in the initializer
-      activity.sub_activities = [] if activity.new_record?
-      activity.csv_project_name        = row["Project Name"].try(:strip)
-      activity.name                    = row["Activity Name"].try(:strip)
-      activity.description             = row["Activity Description"].try(:strip)
-      activity.csv_provider            = row["Provider"].try(:strip)
-      activity.csv_beneficiaries       = row["Beneficiaries"].try(:strip)
-      activity.csv_targets             = row["Targets"].try(:strip)
-      activity.start_date              = DateHelper::flexible_date_parse(row["Start Date"].try(:strip))
-      activity.end_date                = DateHelper::flexible_date_parse(row["End Date"].try(:strip))
-
-      # associations
-      if activity.csv_project_name.present?
-        # find project by name
-        project = response.projects.find_by_name(activity.csv_project_name)
-      else
-        # find project by project id if present (when uploading activities for project)
-        project = project_id.present? ? Project.find_by_id(project_id) : nil
+        sub_activity.spend  = row["Past Expenditure"]
+        sub_activity.budget = row["Current Budget"]
       end
 
-      activity.project       = project if project
-      activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      implementer            = Organization.find(:first,
-                                 :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-
-      if implementer
-        sub = SubActivity.new(:provider_id => implementer.id, :data_response_id => activity.data_response_id,
-                        :budget => row["Budget"], :spend => row["Spend"])
-        activity.sub_activities = [sub] #done like this because the initialize method creates a sub activity by default
+      unless sub_activities.include?(sub_activity)
+        activity.sub_activities << sub_activity
       end
-      activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
-                                 map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
-      activity.targets       = activity.csv_targets.to_s.split(';').
-                                 map{|o| Target.find_or_create_by_description(o.strip)}.compact
-      activity.save
-      activities << activity
+
+      if activity.new_record? && !activity_in_memory
+        activity.sub_activities = [sub_activity] #done like this because the initialize method creates a sub activity by default
+      end
+
+      unless activities.include?(activity)
+        activities << activity
+      end
+
+      unless sub_activities.include?(sub_activity) && !existing_sa
+        sub_activities << sub_activity
+      end
+      activity_in_memory = false
     end
     activities
+  end
+
+  def self.download_header
+    FasterCSV.generate do |csv|
+      csv << file_upload_columns
+    end
   end
 
   ### Instance Methods
@@ -465,33 +581,17 @@ class Activity < ActiveRecord::Base
   private
 
   ### Class methods
-    def self.file_upload_columns(response)
+    def self.file_upload_columns
       ["Project Name",
+       "Project Description",
        "Activity Name",
        "Activity Description",
-       "Provider",
-       "#{response.quarter_label(:spend, 'q4_prev')} Spend",
-       "#{response.quarter_label(:spend, 'q1')} Spend",
-       "#{response.quarter_label(:spend, 'q2')} Spend",
-       "#{response.quarter_label(:spend, 'q3')} Spend",
-       "#{response.quarter_label(:spend, 'q4')} Spend",
-       "#{response.quarter_label(:budget, 'q4_prev')} Budget",
-       "#{response.quarter_label(:budget, 'q1')} Budget",
-       "#{response.quarter_label(:budget, 'q2')} Budget",
-       "#{response.quarter_label(:budget, 'q3')} Budget",
-       "#{response.quarter_label(:budget, 'q4')} Budget",
-       "Beneficiaries",
-       "Targets",
        "Start Date",
-       "End Date"]
-    end
-
-    # adds a 'hidden' id column at the end of the row
-    def self.file_upload_columns_with_id_col(response)
-      header_row = file_upload_columns(response)
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      header_row
+       "End Date",
+       "Id",
+       "Implementer",
+       "Past Expenditure",
+       "Current Budget"]
     end
 
     ### Instance methods
@@ -571,6 +671,15 @@ class Activity < ActiveRecord::Base
         raise "Unknown type #{type}".to_yaml
       end
     end
+
+   def self.add_implementer_to_csv(sub_activity, row)
+     row << sub_activity.id
+     row << sub_activity.provider.try(:name)
+     row << sub_activity.spend
+     row << sub_activity.budget
+     row << sub_activity.start_date
+     row << sub_activity.end_date
+   end
 
    def auto_create_project
      if project_id == AUTOCREATE

@@ -122,6 +122,7 @@ describe Activity do
         @implementer2 = Factory :organization
         @sub_activity2 = Factory(:sub_activity, :data_response => @response,
                                  :activity => @activity, :provider => @implementer2)
+
         attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>
@@ -237,59 +238,54 @@ describe Activity do
   end
 
   describe "download activity template" do
-    it "returns the correct fields in the activity template" do
-      organization  = Factory(:organization, :fiscal_year_start_date => "2009-10-01",
-                              :fiscal_year_end_date => "2010-09-30")
-      data_request  = Factory(:data_request, :organization => organization)
-      data_response = organization.latest_response
-      Timecop.freeze(Date.parse("2009-10-15"))
-      header_row = Activity.download_template(data_response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
-    end
-
     it "should return csv header" do
       organization  = Factory(:organization)
       request        = Factory(:data_request, :organization => organization)
       response      = organization.latest_response
-      Activity.file_upload_columns(response).should == [
+      Activity.file_upload_columns.should == [
         'Project Name',
+        'Project Description',
         'Activity Name',
         'Activity Description',
-        'Provider',
-        "Apr '10 - Jun '10 Spend",
-        "Jul '10 - Sep '10 Spend",
-        "Oct '10 - Dec '10 Spend",
-        "Jan '11 - Mar '11 Spend",
-        "Apr '11 - Jun '11 Spend",
-        "Apr '11 - Jun '11 Budget",
-        "Jul '11 - Sep '11 Budget",
-        "Oct '11 - Dec '11 Budget",
-        "Jan '12 - Mar '12 Budget",
-        "Apr '12 - Jun '12 Budget",
-        'Beneficiaries',
-        'Targets',
         'Start Date',
-        'End Date']
+        'End Date',
+        'Id',
+        'Implementer',
+        'Past Expenditure',
+        'Current Budget']
     end
   end
 
   describe "#download_template" do
-    it "should return template" do
+    it "should return template with blank cells for repeated project & activity" do
       basic_setup_activity
+      sub_activity = Factory(:sub_activity, :activity => @activity, :data_response => @response)
+      sub_activity2 = Factory(:sub_activity, :activity => @activity, :data_response => @response)
       #@activity.targets << Factory(:target)
-      csv = Activity.download_template(@response, [@activity])
+      csv = Activity.download_template(@response)
       rows = FasterCSV.parse(csv)
-      rows[0].should == Activity.file_upload_columns_with_id_col(@response)
-      rows[1][0].should == @activity.project.try(:name)
-      rows[1][1].should == @activity.name
-      rows[1][2].should == @activity.description
-      rows[1][3].should == @activity.provider.try(:name)
-      rows[1][4].to_s.should == @activity.spend.to_s
-      rows[1][5].to_s.should == @activity.budget.to_s
-      rows[1][6].should == @activity.beneficiaries.map{|l| l.short_display}.join(',')
-      rows[1][7].should == @activity.targets.map{|o| o.description}.join("")
-      rows[1][8].should == @activity.start_date.to_s
-      rows[1][9].should == @activity.end_date.to_s
+      rows[0].should == Activity.file_upload_columns
+      rows[1][0].should == sub_activity.activity.project.try(:name)
+      rows[1][1].should == sub_activity.activity.project.try(:description)
+      rows[1][2].should == sub_activity.activity.name
+      rows[1][3].should == sub_activity.activity.description
+      rows[1][4].should == sub_activity.activity.start_date.to_s
+      rows[1][5].should == sub_activity.activity.end_date.to_s
+      rows[1][6].should == sub_activity.id.to_s
+      rows[1][7].should == sub_activity.provider.try(:name)
+      rows[1][8].to_s.should == sub_activity.spend.to_s
+      rows[1][9].to_s.should == sub_activity.budget.to_s
+
+      rows[2][0].should == ""
+      rows[2][1].should == ""
+      rows[2][2].should == ""
+      rows[2][3].should == ""
+      rows[2][4].should == ""
+      rows[2][5].should == ""
+      rows[2][6].should == sub_activity2.id.to_s
+      rows[2][7].should == sub_activity2.provider.try(:name)
+      rows[2][8].to_s.should == sub_activity2.spend.to_s
+      rows[2][9].to_s.should == sub_activity2.budget.to_s
     end
   end
 

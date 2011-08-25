@@ -43,9 +43,9 @@ class Reporter::BaseController < ApplicationController
 
   private
     def js_redirect
-      render :json => {:html => render_to_string(:partial => 'activities/bulk_edit',
+      render :json => {:html => render_to_string(:partial => 'shared/outlays/bulk_edit',
                                        :layout => false,
-                                       :locals => {:activity => @activity,
+                                       :locals => {:outlay => @activity,
                                                    :response => @response})}
     end
 end

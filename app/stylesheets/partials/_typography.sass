@@ -42,18 +42,22 @@ body.app
 
 #content
   h2
-    padding: 10px
-    +border-top-radius
-    background: $lighter-blue
-    border: 1px solid $lightest-blue
-    border-bottom: none
+    padding: 10px 10px 10px 18px
+    background: #FBFBFB
+    border: 1px solid $primary_border4
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_lightest
     clear: both
-    color: $blue
-    font-size: 12px
+    color: $secondary
+    font-family: 'Avenir Black', sans-serif
+    font-size: 14px
+    font-weight: normal
     letter-spacing: 0.05em
     line-height: 1
-    +linear-gradient(color-stops($lightest-blue, $filler))
     +text-shadow(#fff, 0, 1px, 0)
+    -webkit-box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
+    -moz-box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
+    box-shadow: rgba(0,0,0,0.02) 0 -3px 4px inset
     &.welcome_msg
       background: none
       border: none
@@ -63,6 +67,10 @@ body.app
       margin-top: 3px
       padding: 20px 0 5px
       +text-shadow(#fff, 0, 1px, 0)
+    &.contextual
+      background: $primary_lightest
+      border: 1px solid $primary_border2
+      
 
 .full-width
   h2

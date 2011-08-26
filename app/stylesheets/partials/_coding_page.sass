@@ -2,7 +2,7 @@
   a
     font-weight: normal
     font-size: 12px
-    
+
   table#activity_description
     margin-top: 15px
     padding: 10px
@@ -37,19 +37,26 @@ body #content #main .activity_tree a
   position: absolute
   right: 15px
   top: 33px
-  width: 310px
-  a
-    font-size: 11px
+  width: 323px
+
   span
+    font-size: 11px
     &.budget
+      display: inline-block
       float: right
       text-align: right
-      width: 143px
+      width: 163px
+      span
+        padding-left: 3px
+      span, a.tooltip
+        float: left
       img
         float: left
     &.spend
       float: left
-      width: 143px
+      width: 153px
+      span, a.tooltip
+        float: left
       img
         float: right
 

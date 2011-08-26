@@ -35,7 +35,7 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
-  #before_validation_on_create :assign_project_to_funding_flows
+  before_validation_on_create :assign_project_to_funding_flows
   before_validation :strip_leading_spaces
 
   ### Validations
@@ -69,7 +69,26 @@ class Project < ActiveRecord::Base
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }
 
-  ### Public methods
+  ### Class methods
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Project::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = data_response.projects.new(attributes)
+      project.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
+
+  ### Instance methods
   #
   def implementers
     providers
@@ -125,22 +144,6 @@ class Project < ActiveRecord::Base
       clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.project_id = nil; obj.clone })
     end
     clone
-  end
-
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = data_response.projects.new(attributes)
-      project.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
   end
 
   def amount_for_provider(provider, field)

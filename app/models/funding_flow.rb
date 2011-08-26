@@ -20,7 +20,8 @@ class FundingFlow < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  #validates_presence_of :project
+  #validates_presence_of :project_id # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
+                                     # and workaround is in project.rb
   validates_numericality_of :spend, :if => Proc.new {|ff| ff.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|ff| ff.budget.present?}
   validates_presence_of :organization_id_from
@@ -35,13 +36,11 @@ class FundingFlow < ActiveRecord::Base
   validates_numericality_of :project_from_id, :greater_than_or_equal_to => 0,
     :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
-  validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0,
-    :unless => lambda {|fs| fs["project_from_id"].blank?}
+  validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0
   validates_uniqueness_of :organization_id_from, :scope => :project_id
 
-
   ### Callbacks
-  # also see callbacks in BudgetSpendHelper
+  # see callbacks in BudgetSpendHelper
 
   ### Delegates
   delegate :organization, :to => :project  #allowing nil as a workaround for nested object creation via project
@@ -55,16 +54,6 @@ class FundingFlow < ActiveRecord::Base
 
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
-  def self.create_flows(params)
-    unless params[:funding_flows].blank?
-      params[:funding_flows].each_pair do |flow_id, project_id|
-        ff = self.find(flow_id)
-        ff.project_from_id = project_id
-        ff.save
-      end
-    end
   end
 
   ### Instance Methods

@@ -86,7 +86,7 @@ class Activity < ActiveRecord::Base
   ### Validations
   # also see validations in BudgetSpendHelper
   before_validation :strip_input_fields, :unless => :is_sub_activity?
-  validate :approved_activity_cannot_be_changed
+  validate :approved_activity_cannot_be_changed, :unless => :is_sub_activity?
   validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?

@@ -38,10 +38,8 @@ class ProjectsController < Reporter::BaseController
   end
 
   def update
-    success = FundingFlow.create_flows(params)
     update! do |success, failure|
       success.html {
-        flash[:error] = "We were unable to save your funding flows, please check your data and try again" if !success
         redirect_to edit_response_project_url(@response, @project)
       }
       failure.html do
@@ -56,7 +54,6 @@ class ProjectsController < Reporter::BaseController
   end
 
   def bulk_update
-    success = FundingFlow.create_flows(params)
     flash[:notice] = "Your projects have been successfully updated"
     redirect_to response_projects_url
   end
@@ -109,11 +106,12 @@ class ProjectsController < Reporter::BaseController
       @response
     end
 
+    #TODO: this should be handled in in model instead
     def strip_commas_from_in_flows
       if params[:project].present? && params[:project][:in_flows_attributes].present?
         in_flows = params[:project][:in_flows_attributes]
         in_flows.each_pair do |id, in_flow|
-          [:spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4, :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3, :budget_q4].each do |field|
+          [:budget, :spend].each do |field|
             in_flows[id][field] = convert_number_column_value(in_flows[id][field])
           end
         end

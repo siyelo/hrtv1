@@ -163,9 +163,17 @@ Spork.each_run do
   end
 
   def basic_setup_response
+    basic_setup_response_for_controller
+    @request = @data_request
+    @response = @data_response
+  end
+
+  #controller specs don't like you setting @request, @response
+  def basic_setup_response_for_controller
     @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
-    @response     = @organization.latest_response
+    request      = Factory(:data_request, :organization => @organization)
+    @data_request = request
+    @data_response     = @organization.latest_response
   end
 
   def basic_setup_project

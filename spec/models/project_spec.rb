@@ -39,7 +39,6 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
 
-
     it "should validate length of name" do
       @project = Factory.build(:project, :name => nil)
       @project.save.should be_false
@@ -69,6 +68,12 @@ describe Project do
       end
 
       it " should only create in_flow record on save" do
+        subject.in_flows.should have(1).items
+        subject.in_flows.first.to.should == @project.organization
+      end
+
+      it " should only create in_flow record on save" do
+        subject.reload
         subject.funding_flows.should have(1).items
         subject.funding_flows.first.to.should == @project.organization
       end

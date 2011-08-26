@@ -14,7 +14,6 @@
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
       - alt_txt = "Copy Current Budget to Past Expenditure"
 
-
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0

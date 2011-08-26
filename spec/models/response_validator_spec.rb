@@ -37,8 +37,7 @@ describe DataResponse do #validations
     end
 
     it "succeeds if projects are linked" do
-      #TODO link the projects
-      @project.funding_flows = [Factory.build(:funding_source,
+      @project.in_flows = [Factory.build(:funding_source,
         :from => @funder_response.organization, :project_from_id => @funder_project.id)]
       @project.save!; @response.reload
       @response.projects_linked?.should == true

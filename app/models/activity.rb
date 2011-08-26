@@ -104,6 +104,7 @@ class Activity < ActiveRecord::Base
   }
   named_scope :manager_approved,     { :conditions => ["am_approved = ?", true] }
   named_scope :sorted,               { :order => "activities.name" }
+  named_scope :sorted_by_id,               { :order => "activities.id" }
 
 
   ### Callbacks
@@ -234,8 +235,12 @@ class Activity < ActiveRecord::Base
       activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
       implementer            = Organization.find(:first,
                                  :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
-      activity.implementer_splits.build(:provider_id => implementer.id,
-        :data_response_id => activity.data_response_id) if implementer
+
+      if implementer
+        sub = SubActivity.new(:provider_id => implementer.id, :data_response_id => activity.data_response_id,
+                        :budget => row["Budget"], :spend => row["Spend"])
+        activity.sub_activities = [sub] #done like this because the initialize method creates a sub activity by default
+      end
       activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
                                  map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
       activity.targets       = activity.csv_targets.to_s.split(';').
@@ -436,6 +441,7 @@ class Activity < ActiveRecord::Base
     0
   end
 
+  # FIXME performance killer ?
   def locations
     code_assignments.with_types(['CodingBudgetDistrict', 'CodingSpendDistrict']).
       find(:all, :include => :code).map{|ca| ca.code }.uniq

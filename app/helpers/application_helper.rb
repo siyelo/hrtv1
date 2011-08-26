@@ -253,22 +253,23 @@ module ApplicationHelper
   end
 
   def warn_if_not_classified
+    outlay = @activity || @other_cost
     unless flash[:error]
-      if @activity.approved? || @activity.am_approved?
+      if outlay.approved? || outlay.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif (!@activity.budget_classified? || !@activity.spend_classified?)
-        flash.now[:error] = "This #{@activity.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
+      elsif (!outlay.budget_classified? || !outlay.spend_classified?)
+        flash.now[:error] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
                              #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
                              to see what still needs to be classified"}"
       end
     end
   end
 
-  def edit_activity_or_ocost_path(activity_or_other_cost, opts = nil)
-    response = activity_or_other_cost.data_response
-    activity_or_other_cost.class == Activity ?
-      edit_response_activity_path(response, activity_or_other_cost, opts) :
-      edit_response_other_cost_path(response, activity_or_other_cost, opts)
+  def edit_activity_or_ocost_path(outlay, opts = nil)
+    response = outlay.data_response
+    outlay.class == Activity ?
+      edit_response_activity_path(response, outlay, opts) :
+      edit_response_other_cost_path(response, outlay, opts)
   end
 
   def save_and_add_button_text(current_step)
@@ -276,8 +277,8 @@ module ApplicationHelper
     when nil;         "Save & Add Locations >"
     when 'locations'; "Save & Add Purposes >"
     when 'purposes';  "Save & Add Inputs >"
-    when 'inputs';    "Save & Add Outputs >"
-    when 'outputs';   "Save & Go To Project >"
+    when 'inputs';    "Save & Add Targets >"
+    when 'outputs';   "Save & Review >"
     end
   end
 end

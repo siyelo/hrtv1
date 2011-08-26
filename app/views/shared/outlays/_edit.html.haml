@@ -1,0 +1,39 @@
+- klass = outlay.class
+- form_path = klass == Activity ? response_activity_path(@response, outlay, :mode => params[:mode]) : response_other_cost_path(@response, outlay, :mode => params[:mode])
+
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
+
+= render '/classifications/uncoded_overlay', :outlay => outlay
+
+%h1.main_heading
+  = klass == Activity ? "Edit Activity" : "Edit Other Cost"
+  %span= render 'activities/help'
+
+  %ul.horizontal.right
+    %li
+      -if !outlay.new_record? && params[:controller] != 'code_assignments'
+        - link_to "#comments" do
+          %span
+            View Comments
+    - if current_user.sysadmin?
+      = render 'shared/outlays/approve_as_admin', :outlay => outlay
+
+    - if current_user.activity_manager?
+      = render 'shared/outlays/approve_budget', :outlay => outlay
+
+= render '/activities/getting_started'
+
+= error_messages_for controller_name.singularize.to_sym, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form"} do |f|
+  = render '/shared/outlays/form', :f => f, :outlay => outlay
+
+- unless outlay.new_record?
+  .delete_section
+    = link_to "Delete this #{outlay.human_name}", form_path, :confirm => "Are you sure you want to delete this Activity?", :method => :delete, :class => "delete_button", :class => 'delete_action'
+    %p
+      %strong Warning:
+      ="Once you delete an #{outlay.human_name}, you will lose all data associated with it, and there is no undo."
+
+= render 'shared/comments', :comments => @comments

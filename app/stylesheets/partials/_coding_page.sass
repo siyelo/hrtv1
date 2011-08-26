@@ -63,23 +63,21 @@ body.app
     label
       display: inline
     .values
-      width: 300px
+      width: 320px
 
       .budget
-        background: $lightest-blue
+        background: $primary_light
         float: right
         position: relative
         width: 141px
-        +border-radius
         +pie-clearfix
 
       .spend
-        background: $lightest-blue
-        float: left
+        background: $primary_light
+        float: right
         margin-right: 14px
         position: relative
         width: 141px
-        +border-radius
         +pie-clearfix
 
       input
@@ -92,6 +90,14 @@ body.app
         text-align: right
         width: 29px
         +border-right-radius(0)
+        
+      .classification_input_right
+        float: right
+        width: 152px
+      
+      .classification_input_left
+        float: left
+        width: 152px
 
 .inline_ratio
   display: inline-block !important
@@ -107,6 +113,8 @@ body.app
 
     &:hover, &:focus, &:active
       text-decoration: underline
+  &.subtotal_icon
+    float: right !important
 
     &.help_tip
       font-size: 11px

@@ -223,13 +223,6 @@ class DataResponse < ActiveRecord::Base
   end
   memoize :activities_entered?
 
-  def activities_have_implementers?
-    self.normal_activities.each do |activity|
-      return false if activity.provider_id.nil?
-    end
-    true
-  end
-
   def activity_amounts_entered?
     activities_without_amounts.empty?
   end

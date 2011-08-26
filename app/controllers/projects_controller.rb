@@ -9,7 +9,6 @@ class ProjectsController < Reporter::BaseController
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
 
-
   def index
     scope = @response.projects.scoped({})
     scope = scope.scoped(:conditions => ["UPPER(name) LIKE UPPER(:q)",
@@ -17,22 +16,13 @@ class ProjectsController < Reporter::BaseController
     @projects = scope.paginate(:page => params[:page], :per_page => 10,
                                :order => "#{sort_column} #{sort_direction}",
                                :include => :activities)
-
     @comment = Comment.new
     @comment.commentable = @response
     @comments = Comment.on_all([@response.id]).roots.paginate :per_page => 20,
                                                 :page => params[:page],
                                                 :order => 'created_at DESC'
-
     @project = Project.new(:data_response => @response)
-
-    @activity = Activity.new
-    @activity.project = @response.projects.find_by_id(params[:project_id])
-    @activity.provider = current_user.organization
-
-    @other_cost = OtherCost.new
-    @other_cost.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
-    @other_cost.data_response = @response
+    self.load_inline_forms
   end
 
   def edit
@@ -144,5 +134,10 @@ class ProjectsController < Reporter::BaseController
       else
         value
       end
+    end
+
+    def load_inline_forms
+      self.load_activity_new
+      self.load_other_cost_new
     end
 end

@@ -1,6 +1,6 @@
 - klass = f.object.class.to_s
 
-= render 'activities/sub_activities_import_export', :activity => activity_or_ocost
+= render 'shared/outlays/sub_activities_import_export', :outlay => outlay
 
 %ul.section_form.wrapped.last
   %table.input_table
@@ -18,18 +18,18 @@
         %th.delete
     %tbody
       - f.semantic_fields_for :sub_activities do |sa|
-        = render "activities/sub_activity_row", :f => sa
+        = render "shared/outlays/sub_activity_row", :f => sa
       - 3.times do
         - f.object.sub_activities.build unless f.object.sub_activities.length > 0
         - new_object = f.object.class.reflect_on_association(:sub_activities).klass.new
         - f.fields_for(:sub_activities, new_object) do |builder|
-          = render("activities/sub_activity_fields", :f => builder)
+          = render "shared/outlays/sub_activity_fields", :f => builder
 
       %tr
         %td
-          %span= link_to_add_fields "Add Implementer", f, :sub_activities, "activities/", :class => "create_alt marginless"
+          %span= link_to_add_fields "Add Implementer", f, :sub_activities, "shared/outlays/", :class => "create_alt marginless"
           %span
-            - unless activity_or_ocost.new_record?
+            - unless outlay.new_record?
               - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
                 = image_tag "icon_import_export.png"
                 Import / Export
@@ -37,10 +37,10 @@
         %td
           %p.total.js_total_spend
             %span.label.left Total
-            %span.amount.right= activity_or_ocost.sub_activities_total(:spend)
-            %span.currency.right= activity_or_ocost.currency
+            %span.amount.right= outlay.sub_activities_total(:spend)
+            %span.currency.right= outlay.currency
         %td
           %p.total.js_total_budget
             %span.label.left Total
-            %span.amount.right= activity_or_ocost.sub_activities_total(:budget)
-            %span.currency.right= activity_or_ocost.currency
+            %span.amount.right= outlay.sub_activities_total(:budget)
+            %span.currency.right= outlay.currency

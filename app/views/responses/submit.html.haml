@@ -139,16 +139,6 @@
               - @projects.each do |project|
                 %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
-
-      %li
-        %h3{:class => ready(@response.activities_have_implementers?)}
-          All Activities have Providers
-          - unless @response.activities_have_implementers?
-            %span.info The activities below are missing their provider(s).
-            - @response.normal_activities.each do |activity|
-              - if activity.provider_id.nil?
-                %li= link_to nice_name(activity, 100), edit_response_activity_path(@response, activity)
-
       %li
         %h3{:class => ready(@response.projects_funding_sources_ok?)}
           Projects Amounts = Totals for Funding Sources

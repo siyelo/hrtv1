@@ -12,9 +12,7 @@ class ActivitiesController < Reporter::BaseController
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
-    @activity = Activity.new(:data_response_id => @response.id)
-    @activity.project = @response.projects.find_by_id(params[:project_id])
-    @activity.provider = current_user.organization
+    self.load_activity_new
   end
 
   def edit
@@ -40,7 +38,6 @@ class ActivitiesController < Reporter::BaseController
 
   def update
     @activity = Activity.find(params[:id])
-
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html { success_flash("updated"); html_redirect }
@@ -48,7 +45,9 @@ class ActivitiesController < Reporter::BaseController
       end
     else
       respond_to do |format|
-        format.html { flash[:error] = "Activity was already approved by #{@activity.user.try(:full_name)} (#{@activity.user.try(:email)}) on #{@activity.am_approved_date}" if @activity.am_approved?
+        format.html { flash[:error] = ("Activity was already approved by #{@activity.user.try(:full_name)} " +
+                                      "(#{@activity.user.try(:email)}) on " +
+                                      "#{@activity.am_approved_date}") if @activity.am_approved?
                       prepare_classifications(resource)
                       load_comment_resources(resource)
                       render :action => 'edit'

@@ -1,9 +1,9 @@
 .upload
   %ul.horizontal
     -# FIXME to work for other costs
-    %li= link_to 'Show mine', edit_activity_or_ocost_path(activity, :mode => params[:mode], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
+    %li= link_to 'Show mine', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
 
-    %li= link_to 'Show all', edit_activity_or_ocost_path(activity, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
+    %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
     %li
       - link_to "#", :class => "create_alt js_upload_btn" do
         = image_tag "new.png"
@@ -14,12 +14,12 @@
     .section_form.main.wrapped.last
       %p Create one or more classifications from a CSV file. You can save an Excel spreadsheet as a CSV file through File -> Save As, then select comma separated values (CSV) in the file format box under the file name.
       %br
-      - form_tag(bulk_create_activity_classification_path(activity, params[:id], :mode => params[:mode]), :multipart => true, :method => 'put') do
+      - form_tag(bulk_create_activity_classification_path(outlay, params[:id], :mode => params[:mode]), :multipart => true, :method => 'put') do
         .upbox
           = label_tag :file, "File"
           = file_field_tag :file
         = submit_tag "Upload", :class => 'small_submit_button'
-        = link_to "Download template", download_template_activity_classification_path(activity, params[:id], :mode => params[:mode]), :class => "create_alt right"
+        = link_to "Download template", download_template_activity_classification_path(outlay, params[:id], :mode => params[:mode]), :class => "create_alt right"
 
-= render '/classifications/classification'
+= render '/classifications/classification', :outlay => outlay
 

@@ -496,7 +496,7 @@ var updateTotalValues = function (el) {
   total_field.html(total_value.toFixed(1));
 };
 
-var dynamicUpdateTotalsInit = function () { 
+var dynamicUpdateTotalsInit = function () {
   $('.js_spend, .js_budget').live('keyup', function () {
     updateTotalValues(this);
   });
@@ -643,21 +643,30 @@ var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "600", "300", "8", "#F3F7F9");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "300", "2", "#FFF");
   so.addVariable("path", "/ampie/");
-  so.addVariable("settings_file", encodeURIComponent("/ampie/ampie_settings.xml"));
+  so.addVariable("settings_file", escape("/ampie/ampie_settings.xml,/ampie/additional_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
   so.addVariable("additional_chart_settings", encodeURIComponent(
     '<settings>' +
-      '<labels>' +
-        '<label lid="0">' +
-          '<text>' + options.title + '</title>' +
-        '</label>' +
-      '</labels>' +
+      '<pie>' +
+        '<colors>'  +
+          get_random_color() +
+        '</colors>' +
+      '</pie>' +
     '</settings>')
   );
   so.write(domId);
 };
+
+function get_random_color() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.round(Math.random() * 15)];
+    }
+    return color;  //return random color so that two charts next to each other don't have the same colors for different slices
+}
 
 var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
   return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;
@@ -853,6 +862,8 @@ var activity_classification = function () {
   addCollabsibleButtons('tab1');
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
+  
+  showSubtotalIcons();
 
   $('.js_upload_btn').click(function (e) {
     e.preventDefault();
@@ -896,14 +907,13 @@ var activity_classification = function () {
     var element = $(this);
     var isSpend = element.parents('div:first').hasClass('spend')
     var type = (isSpend) ? '.spend:first' : '.budget:first';
-    var isRoot = element.parents('ul:first').hasClass('activity_tree');
-    updateSubTotal(element);
-
-    //check whether siblings are equal our parent's total
     var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
     var siblingLi = element.parents('ul:first').children('li');
+    var childLi = element.parents('li:first').children('ul:first').children('li');
 
-    if (element.val().length == 0) {
+    updateSubTotal(element);
+
+    if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
     }
     if (event.keyCode != 9){
@@ -911,7 +921,6 @@ var activity_classification = function () {
     }
 
     //check whether children (1 level deep) are equal to my total
-    childLi = element.parents('li:first').children('ul:first').children('li');
     if (childLi.size() > 0){
       compareChildrenToParent(element, childLi, type);
     };
@@ -961,7 +970,16 @@ var activity_classification = function () {
     var del = 8;
     if ((event.keyCode == bksp || event.keyCode == del)){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
-      if (confirm('Would you like to clear the value of all child nodes?')){
+      
+      var childTotal = 0;
+      childNodes.each(function (){
+        childValue = parseFloat($(this).val())
+        if (!isNaN(childValue)) {
+          childTotal = childTotal + childValue
+        };
+      });
+      
+      if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
         childNodes.each(function(){
           if ($(this).val !== ''){
             $(this).val(' ');
@@ -1000,14 +1018,17 @@ var activity_classification = function () {
   var updateSubTotal = function(element){
     var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
     var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
+    var activity_currency = element.parents('ul:last').attr('activity_currency');
     var elementValue = parseFloat(element.val());
-    var subtotal = element.siblings('.subtotal');
+    var subtotal = element.siblings('.subtotal_icon');
     var isSpend = element.parents('div:first').hasClass('spend')
 
-    if(isSpend){
-      elementValue > 0 ? subtotal.html((activity_spend * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+    if (elementValue > 0){
+      subtotal.removeClass('hidden')
+      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency)
     }else{
-      elementValue > 0 ? subtotal.html((activity_budget * (elementValue/100)).toFixed(2)) : subtotal.html('') && element.val('')
+      subtotal.attr('title','') && element.val('')
+      subtotal.addClass('hidden')
     }
   };
 }
@@ -1042,6 +1063,14 @@ var checkRootNodes = function(type){
 
   };
 };
+
+var showSubtotalIcons = function(){
+  $('.tab1').find('.percentage_box').each(function(){
+    if($(this).val().length > 0){
+      $(this).siblings('.subtotal_icon').removeClass('hidden')
+    }   
+  });
+}
 
 var update_use_budget_codings_for_spend = function (e, activity_id, checked) {
   if (!checked || checked && confirm('All your expenditure codings will be deleted and replaced with copies of your budget codings, adjusted for the difference between your budget and spend. Your expenditure codings will also automatically update if you change your budget codings. Are you sure?')) {
@@ -1438,11 +1467,11 @@ var projects_index = {
     commentsInit();
 
     approveBudget();
-    
+
     $('.js_address').address(function() {
       return 'new_' + $(this).html().toLowerCase();
     });
-    
+
     $.address.externalChange(function() {
       var hash = $.address.path();
       if (hash == '/'){
@@ -1453,14 +1482,30 @@ var projects_index = {
         if (hash == '/new_project'){
           hideAll();
           $('/new_project_form').fadeIn();
+        }else if (hash == '/new_activity'){
+          hideAll();
+          $('/new_activity_form').fadeIn();
+          activity_form();
+        }
+        else if (hash == '/new_other cost'){
+          hideAll();
+          $('/new_other_cost_form').fadeIn();
         }
       };
     });
-    
+
     $('.js_toggle_project_form').click(function (e) {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
+    });
+
+
+    $('.js_toggle_activity_form').click(function (e) {
+      e.preventDefault();
+      hideAll();
+      $('#new_activity_form').fadeIn();
+      activity_form();
     });
 
     $('.js_toggle_other_cost_form').click(function (e) {

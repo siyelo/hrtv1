@@ -1,0 +1,16 @@
+<settings> 
+  <pie> 
+    <x>120</x> 
+    <height>0</height>
+    <inner_radius>0</inner_radius>
+    <gradient>none</gradient>
+    <angle>90</angle>
+  </pie> 
+  <legend> 
+    <x>230</x> 
+    <width>200</width> 
+    <values> 
+      <width>30</width> 
+    </values> 
+  </legend> 
+</settings>

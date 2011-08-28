@@ -241,11 +241,11 @@ class Activity < ActiveRecord::Base
         activity_description = row['Activity Description']
       end
 
-      project_name = row['Project Name'] || project_name
-      project_description  = row['Project Description'] || project_description unless row['Project Name'].blank?
-      sub_activity_name    = row['Implementer']
-      sub_activity_id      = row['Id']
-      csv_provider  = row["Implementer"].try(:strip)
+      project_name        = row['Project Name'] || project_name
+      project_description = row['Project Description'] || project_description unless row['Project Name'].blank?
+      sub_activity_name   = row['Implementer']
+      sub_activity_id     = row['Id']
+      csv_provider        = row["Implementer"].try(:strip)
 
       if csv_provider.nil?
         implementer = response.organization

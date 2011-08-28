@@ -5,6 +5,8 @@
 
 %h1.main_heading Submit Response
 
+= error_messages_for :response, :header_message  => nil, :message => "Oops, we couldn't process your submission."
+
 %ul.status.stop
   %li
     %span Request:
@@ -23,7 +25,7 @@
     %h2 Settings
   %li.dashboard_section
     %h3{:class => ready(@response.valid?)}
-      Your Settings
+      Organization Settings Complete
       - unless @response.valid?
         %span.info
           = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
@@ -40,6 +42,17 @@
           - unless @response.projects_entered?
             %span.info
               = render 'projects/no_projects_yet'
+
+      %li
+        %h3{:class => ready(@response.check_projects_funding_sources_have_organizations?)}
+          All Projects have Funding Sources
+          - unless @response.check_projects_funding_sources_have_organizations?
+            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
+            %ul
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
       %li
         %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
@@ -64,7 +77,7 @@
 
       %li
         %h3{:class => ready(@response.projects_have_other_costs?)}
-          Other Costs Entered
+          (Other Costs Entered)
           - unless @response.projects_have_other_costs?
             - unless @response.projects_entered?
               %span.info
@@ -97,11 +110,9 @@
           - unless @response.uncoded_activities.empty?
             = render 'uncoded_table', :activities => @response.uncoded_activities
 
-
-
       %li
         %h3{:class => ready(@response.other_costs_coded?)}
-          Other Costs Classified
+          (Other Costs Classified)
           - unless @response.other_costs_coded?
             - unless @response.uncoded_other_costs.empty?
               %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
@@ -113,54 +124,10 @@
         - unless @response.other_costs_coded?
           - unless @response.uncoded_other_costs.empty?
             = render 'uncoded_table', :activities => @response.uncoded_other_costs
-  %li.alt
-    %h2 Data entry
-  %li.dashboard_section
-    %h3{:class => (data_verification_class())}
-      Data Verification
-    %ul.review
-      %li
-        %h3{:class => projects_linked_class()}
-          Projects Linked to Funders' Projects
-          - unless @response.projects_linked?
-            %span.info
-              Please
-              = link_to "link your projects", bulk_edit_response_projects_path(@response)
-              to each Funder project respectively.
-
-      %li
-        %h3{:class => ready(@response.check_projects_funding_sources_have_organizations?)}
-          All Projects have Funding Sources
-          - unless @response.check_projects_funding_sources_have_organizations?
-            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
-            %ul
-              - @projects.each do |project|
-                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
-              - @projects.each do |project|
-                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
-
-      %li
-        %h3{:class => ready(@response.projects_funding_sources_ok?)}
-          Projects Amounts = Totals for Funding Sources
-          - unless @response.projects_funding_sources_ok?
-            %span.info The Project amounts do not match their Funding Source amount totals. Please update your projects and/or funding sources.
-
-        - unless @response.projects_funding_sources_ok?
-          .simple_table.push
-            %table
-              %thead
-                %tr
-                  %th Project
-                  %th Project Amount
-                  %th Funding Sources Amount Total
-                  %th Diff
-                  %th.manage Manage
-              %tbody
-                = render :partial => 'project_funding_sources'
 
 //%hr.divider
 %p
-  = link_to "Submit", send_data_response_response_path(current_user.current_response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+  = link_to "Submit", send_data_response_response_path(@response), :method => :put, :confirm => "Are you sure?", :class => "next big"
 
 
 

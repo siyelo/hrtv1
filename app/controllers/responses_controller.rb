@@ -26,7 +26,7 @@ class ResponsesController < Reporter::BaseController
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      redirect_to review_response_url(@response)
+      redirect_to submit_response_url(@response)
     else
       render :submit
     end

@@ -239,7 +239,7 @@ class Organization < ActiveRecord::Base
   end
 
   def currency
-    read_attribute(:currency) || "USD"
+    read_attribute(:currency).blank? ? "USD" : read_attribute(:currency)
   end
 
   protected

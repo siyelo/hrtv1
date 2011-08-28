@@ -113,7 +113,7 @@ describe ActivitiesController do
     it "downloads csv template" do
       data_response = mock_model(DataResponse)
       DataResponse.stub(:find).and_return(data_response)
-      Activity.should_receive(:download_template).and_return('csv')
+      Activity.should_receive(:download_header).and_return('csv')
       get :template, :response_id => 1
       response.should be_success
       response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
@@ -143,10 +143,10 @@ describe ActivitiesController do
 
     it "should allow a project to be created automatically on create" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-      post :create, :response_id => @data_response.id, 
+      post :create, :response_id => @data_response.id,
         :activity => {:project_id => '-1', :name => "new activity", :description => "description",
         :start_date => @activity.start_date, :end_date => @activity.end_date }
-      
+
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name

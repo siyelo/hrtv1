@@ -50,7 +50,6 @@ describe Organization do
 
       # try updating with invalid attributes
       organization.update_attributes(attributes).should be_false
-      organization.errors.on(:currency).should_not be_blank
       organization.errors.on(:contact_name).should_not be_blank
       organization.errors.on(:contact_position).should_not be_blank
       organization.errors.on(:contact_phone_number).should_not be_blank

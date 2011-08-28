@@ -238,6 +238,10 @@ class Organization < ActiveRecord::Base
     raw_type == 'Non-Reporting'
   end
 
+  def currency
+    read_attribute(:currency) || "USD"
+  end
+
   protected
 
     def tidy_name(n)

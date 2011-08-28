@@ -36,7 +36,6 @@ Feature: Reporter can manage other costs
     And I should not see "other_cost1"
     And I should not see "other_cost2"
 
-  @run
   Scenario: Reported can create other cost with automatically created project
     When I follow "Add Other Costs now"
     And I fill in "Name" with "other_cost1"
@@ -45,7 +44,6 @@ Feature: Reporter can manage other costs
     And I fill in "End date" with "2010-12-01"
     And I select "<Automatically create a project for me>" from "Project"
     And I press "Save"
-    Then show me the page
     Then I should see "Other Cost was successfully created. Click here to enter the funding sources for the automatically created project."
 
   Scenario: Reporter can create an other costs at an Org level (i.e. without a project)

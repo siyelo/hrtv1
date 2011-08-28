@@ -677,7 +677,7 @@ var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "300", "2", "#FFF");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "220", "2", "#FFF");
   so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", escape("/ampie/ampie_settings.xml,/ampie/additional_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
@@ -778,30 +778,7 @@ var build_data_response_review_screen = function () {
     //root.find(".activity_classification > div::nth-child(" + (element.index() + 1) + ")").show();
   });
 
-  // bind click events for tabs
-  // Assumes this convention
-  //  .tabs_nav
-  //    ul > li, li, li
-  // tab content
-  //  .tabs > .tab1, .tab2, .tab3
-  // BUT if you supply an id (e.g. tab1), it will use that
-  // (useful if tab nav has non-clickable items in the list)
-  $(".tabs_nav ul li").live('click', function (e) {
-    e.preventDefault();
-    var element = $(this);
-    var target_tab = 'tab1'
 
-    if (element.attr("id")) {
-      target_tab = element.attr("id");
-    } else {
-      target_tab = "tab" + (element.index() + 1); //there is no tab0
-    }
-    element.parents('.tabs_nav').find("li").removeClass('selected');
-    element.addClass('selected');
-    var tabs = element.parents(".tabs_nav").next(".tabs")
-    tabs.find("> div").hide();
-    tabs.find('> div.' + target_tab).show();
-  });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
   $(".tabs ul.inline_tab li").live('click', function (e) {
@@ -837,6 +814,35 @@ var build_data_response_review_screen = function () {
       }
     }
    });
+
+   build_flash_charts();
+};
+
+var build_flash_charts = function () {
+  // bind click events for tabs
+  // Assumes this convention
+  //  .tabs_nav
+  //    ul > li, li, li
+  // tab content
+  //  .tabs > .tab1, .tab2, .tab3
+  // BUT if you supply an id (e.g. tab1), it will use that
+  // (useful if tab nav has non-clickable items in the list)
+  $(".tabs_nav ul li").live('click', function (e) {
+    e.preventDefault();
+    var element = $(this);
+    var target_tab = 'tab1'
+
+    if (element.attr("id")) {
+      target_tab = element.attr("id");
+    } else {
+      target_tab = "tab" + (element.index() + 1); //there is no tab0
+    }
+    element.parents('.tabs_nav').find("li").removeClass('selected');
+    element.addClass('selected');
+    var tabs = element.parents(".tabs_nav").next(".tabs")
+    tabs.find("> div").hide();
+    tabs.find('> div.' + target_tab).show();
+  });
 
   // Data Response charts
   createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
@@ -1834,6 +1840,9 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
 var dashboard_index = {
   run: function () {
     $('.dropdown_trigger').click(function (e) {e.preventDefault()});
+
+    build_flash_charts();
+    $('#tab1').find('a').click();
 
     $('.dropdown_menu').hover(function (e){
       e.preventDefault();

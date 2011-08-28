@@ -1,9 +1,9 @@
 class Reporter::ReportsController < Reporter::BaseController
   include ReportsControllerHelpers
 
+  before_filter :load_charts, :only => :index
+
   def index
-    @response = @data_response    = current_response
-    @projects                     = @data_response.projects.find(:all, :order => "name ASC")
     @activities_without_projects  = @data_response.activities.roots.without_a_project
     @other_costs_without_projects = @data_response.other_costs.without_a_project
     @code_roots                   = Code.purposes.roots

@@ -180,7 +180,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Classification for approved activity cannot be changed."
 
 
-  @javascript
+  @javascript @run
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -188,8 +188,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
-    #And I click element "#budget_to_spend"
-    And I follow "Copy Current Budget to Past Expenditure"
+    And I follow "#js_budget_to_spend"  #And I follow "Copy Current Budget to Past Expenditure"
     And I press "Save"
     Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
@@ -283,7 +282,6 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
     And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"
 
-
   Scenario: Reporter can follow workflow with the Save and Add Blah buttons
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
@@ -294,4 +292,4 @@ Feature: Reporter can enter a code breakdown for each activity
     And I press "Save & Add Inputs >"
     And I press "Save & Add Targets >"
     And I press "Save & Go to Overview >"
-    Then I should see "HSSPII Strategic Program"
+    Then I should see "Projects & Activities" within "h1"

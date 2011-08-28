@@ -1,13 +1,9 @@
 - title 'Reports'
 
-%h1.main_heading 
+%h1.main_heading
   Reports
 
-%h2
-  =image_tag "icon_lightning.png", :class => "heading_icon" 
-  Your response
-.dashboard_section
-  = render :partial => 'shared/data_responses/show'
+= render 'shared/summary_charts'
 
 .first-half
   %h2
@@ -47,7 +43,7 @@
     %ul.admin_reports
       %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
       %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
-      
+
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Organizations
@@ -97,5 +93,4 @@
       %h3 Facilities
       %ul
         %li N/A
-        
-  
+

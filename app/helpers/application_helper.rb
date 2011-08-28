@@ -280,7 +280,7 @@ module ApplicationHelper
     when 'locations'; "Save & Add Purposes >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Review >"
+    when 'outputs';   "Save & Go to Overview >"
     end
   end
 end

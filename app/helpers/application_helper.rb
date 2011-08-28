@@ -231,20 +231,22 @@ module ApplicationHelper
     @response || current_response || last_response
   end
 
-  def month_year(date, i = 0)
-    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
+  # simply returns the year of the given date
+  # intended for 'fuzzy' FY's (e.g. "2010/2011")
+  def rough_fiscal_year(date, i = 0)
+    "#{date.strftime('%Y').to_i + i}"
   end
 
   def prev_fy(response)
-    "#{month_year(response.request.start_date, -1)} - #{month_year(response.request.end_date, -1)}"
+    "FY #{rough_fiscal_year(response.request.start_date, -1)} / #{rough_fiscal_year(response.request.end_date, -1)}"
   end
 
   def current_fy(response)
-    "#{month_year(response.request.start_date)} - #{month_year(response.request.end_date)}"
+    "FY #{rough_fiscal_year(response.request.start_date)} / #{rough_fiscal_year(response.request.end_date)}"
   end
 
   def next_fy(response)
-    "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
+    "FY #{rough_fiscal_year(response.request.start_date, 1)} / #{rough_fiscal_year(response.request.end_date, 1)}"
   end
 
   # find namespace of given class

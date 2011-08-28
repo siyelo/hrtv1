@@ -352,7 +352,7 @@ class Activity < ActiveRecord::Base
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-    self.provider_id = self.assign_or_create_organization(id_or_name)
+    self.provider_id = self.assign_or_create_organization(the_provider_mask)
     @provider_mask   = self.provider_id
   end
 

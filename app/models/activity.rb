@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
   include BudgetSpendHelper
   include Activity::Classification
   include Activity::Validations
+  include AutocreateHelper
 
   ### Constants
   MAX_NAME_LENGTH = 64

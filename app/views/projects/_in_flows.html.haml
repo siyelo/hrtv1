@@ -9,9 +9,9 @@
       %tr
         %th Funding Organization
         %th
-          .right_justified Disbursements Received
+          .right_justified= "Disbursements Received (#{current_fy(@response)})"
         %th
-          .right_justified Planned Disbursements
+          .right_justified= "Planned Disbursements (#{next_fy(@response)})"
         %th
     %tbody
       - f.semantic_fields_for :in_flows do |ff|

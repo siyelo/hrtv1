@@ -123,13 +123,13 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: funding_flows
 #
 #  id                   :integer         not null, primary key
 #  organization_id_from :integer
-#  organization_id_to   :integer
 #  project_id           :integer         indexed
 #  created_at           :datetime
 #  updated_at           :datetime

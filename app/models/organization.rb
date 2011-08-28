@@ -285,6 +285,7 @@ class Organization < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: organizations
@@ -304,5 +305,6 @@ end
 #  contact_phone_number             :string(255)
 #  contact_main_office_phone_number :string(255)
 #  contact_office_location          :string(255)
+#  location_id                      :integer
 #
 

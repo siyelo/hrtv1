@@ -28,8 +28,6 @@ describe Activity do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
@@ -47,6 +45,10 @@ describe Activity do
     it { should allow_mass_assignment_of(:targets_attributes) }
     it { should allow_mass_assignment_of(:outputs_attributes) }
     it { should allow_mass_assignment_of(:am_approved_date) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q1) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q2) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q3) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q4) }
   end
 
   describe "Validations" do
@@ -54,45 +56,17 @@ describe Activity do
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
-    it "will return false if the activity start date is before the project start date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2010-01-01", :end_date => "2011-03-01")
-      @activity.should_not be_valid
-    end
-
-    it "will return false if the activity end date is after the project end date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2001-03-01", :end_date => "2011-08-01")
-
-      @activity.should_not be_valid
-    end
-
-    it "will return true if the activity start and end date are within the project start and end date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2011-02-01", :end_date => "2011-03-01")
-
-      @activity.should be_valid
-    end
   end
 
   describe "update attributes" do
     context "when one sub_activity" do
       before :each do
         basic_setup_activity
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+            }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
@@ -123,13 +97,13 @@ describe Activity do
         @sub_activity2 = Factory(:sub_activity, :data_response => @response,
                                  :activity => @activity, :provider => @implementer2)
 
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        attributes = {"name"=>"dsf",  "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>
               {"spend_mask"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
             "1"=>
               {"spend_mask"=>"20", "id"=>"#{@sub_activity2.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget_mask"=>"40.0"}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+            }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
@@ -162,11 +136,11 @@ describe Activity do
     context "when creating one sub activity" do
       before :each do
         basic_setup_project
-        @attributes = { "name"=>"new activity", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04", "data_response_id"=>"#{@response.id}"}
+            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
 
@@ -193,7 +167,7 @@ describe Activity do
         basic_setup_project
         @implementer2 = Factory :organization
         @implementer3 = Factory :organization
-        @attributes = { "name"=>"new activity", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""},
@@ -201,7 +175,7 @@ describe Activity do
             "budget_mask"=>"40.0", "_destroy"=>""},
             "2"=>{"spend_mask"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}",
             "budget_mask"=>"60.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04", "data_response_id"=>"#{@response.id}"}
+            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
 
@@ -247,8 +221,6 @@ describe Activity do
         'Project Description',
         'Activity Name',
         'Activity Description',
-        'Start Date',
-        'End Date',
         'Id',
         'Implementer',
         'Past Expenditure',
@@ -269,23 +241,19 @@ describe Activity do
       rows[1][1].should == sub_activity.activity.project.try(:description)
       rows[1][2].should == sub_activity.activity.name
       rows[1][3].should == sub_activity.activity.description
-      rows[1][4].should == sub_activity.activity.start_date.to_s
-      rows[1][5].should == sub_activity.activity.end_date.to_s
-      rows[1][6].should == sub_activity.id.to_s
-      rows[1][7].should == sub_activity.provider.try(:name)
-      rows[1][8].to_s.should == sub_activity.spend.to_s
-      rows[1][9].to_s.should == sub_activity.budget.to_s
+      rows[1][4].should == sub_activity.id.to_s
+      rows[1][5].should == sub_activity.provider.try(:name)
+      rows[1][6].to_s.should == sub_activity.spend.to_s
+      rows[1][7].to_s.should == sub_activity.budget.to_s
 
       rows[2][0].should == ""
       rows[2][1].should == ""
       rows[2][2].should == ""
       rows[2][3].should == ""
-      rows[2][4].should == ""
-      rows[2][5].should == ""
-      rows[2][6].should == sub_activity2.id.to_s
-      rows[2][7].should == sub_activity2.provider.try(:name)
-      rows[2][8].to_s.should == sub_activity2.spend.to_s
-      rows[2][9].to_s.should == sub_activity2.budget.to_s
+      rows[2][4].should == sub_activity2.id.to_s
+      rows[2][5].should == sub_activity2.provider.try(:name)
+      rows[2][6].to_s.should == sub_activity2.spend.to_s
+      rows[2][7].to_s.should == sub_activity2.budget.to_s
     end
   end
 
@@ -482,8 +450,7 @@ describe Activity do
         @organization   = Factory(:organization)
         @request        = Factory(:data_request, :organization => @organization)
         @response       = @organization.latest_response
-        @project        = Factory(:project, :data_response => @response, :name => "project1",
-                          :start_date => '2012-01-01', :end_date => '2012-12-12')
+        @project        = Factory(:project, :data_response => @response, :name => "project1")
         @activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
         @doc            = FasterCSV.open(@activities_csv, {:headers => true})
         @implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
@@ -508,10 +475,6 @@ describe Activity do
         @activities[0].implementer_splits.first.implementer.should == @implementer
       end
 
-      it "recognizes non-standard dates" do
-        @activities[0].start_date.to_s.should  == '2012-01-01'
-        @activities[0].end_date.to_s.should    == '2012-12-12'
-      end
     end
 
     context "when CSV has an existing project" do

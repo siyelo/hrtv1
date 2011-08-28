@@ -249,6 +249,22 @@ module ApplicationHelper
     "FY #{rough_fiscal_year(response.request.start_date, 1)} / #{rough_fiscal_year(response.request.end_date, 1)}"
   end
 
+  def next_fy_q1(response)
+    "Jul #{rough_fiscal_year(response.request.start_date, 1)} - Sep #{rough_fiscal_year(response.request.start_date, 1)}"
+  end
+
+  def next_fy_q2(response)
+    "Oct #{rough_fiscal_year(response.request.start_date, 1)} - Dec #{rough_fiscal_year(response.request.start_date, 1)}"
+  end
+
+  def next_fy_q3(response)
+    "Jan #{rough_fiscal_year(response.request.start_date, 2)} - Mar #{rough_fiscal_year(response.request.start_date, 2)}"
+  end
+
+  def next_fy_q4(response)
+    "Apr #{rough_fiscal_year(response.request.start_date, 2)} - Jun #{rough_fiscal_year(response.request.start_date, 2)}"
+  end
+
   # find namespace of given class
   def namespace(klass)
     klass.to_s.split("::").first

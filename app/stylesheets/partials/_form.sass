@@ -48,7 +48,7 @@ input[type="text"], textarea, select
       &.numeric
         input[type=text]
           width: 14%
-          
+
       &.amounts
         display: block
         li
@@ -96,12 +96,10 @@ input[type="text"], textarea, select
       float: left
       margin-top: 9px
       width: 18%
+
     select, input[type=text], input[type=password], textarea
-      
       float: left
-      
       margin: 0
-      
       width: 35%
 
     select
@@ -123,7 +121,7 @@ input[type="text"], textarea, select
       margin-left: 17%
       padding-left: 10px
       width: 70%
-      
+
   .other_beneficiaries
     label
       display: block
@@ -131,19 +129,25 @@ input[type="text"], textarea, select
       white-space: no-wrap
     textarea
       width: 96%
-      
-  .beneficiaries_boxes
+
+  .beneficiaries_boxes, .planned_dates_boxes
     fieldset
       width: 100% !important
     ol
       width: 100% !important
-    li
-      width: 33% !important
     label
       float: left
       white-space: no-wrap
       width: 50%
-      
+
+  .beneficiaries_boxes
+    li
+      width: 33% !important
+  .planned_dates_boxes
+    li
+      width: 50% !important
+
+
   .check_boxes
     fieldset
       float: left
@@ -190,7 +194,7 @@ input[type="text"], textarea, select
     -webkit-box-shadow: rgba(0,0,0,0.1) 1px 1px 4px inset
     -moz-box-shadow: rgba(0,0,0,0.1) 1px 1px 4px inset
     box-shadow: rgba(0,0,0,0.13) 1px 1px 4px inset
-    
+
 .checkbox_push
   float: left
 
@@ -471,12 +475,12 @@ h3.form_heading
     font-size: 12px
   input[type='submit']
     margin-top: 0 !important
-    
+
 .upload
   li
     margin-bottom: 0 !important
     padding-bottom: 0 !important
-    
+
 .activity_box
   margin: 0 !important
 
@@ -727,17 +731,17 @@ a.tooltip
   font-size: 11px
   text-decoration: none
   font-weight: bold
-  
+
 #filter_help p
   color: $secondary
-    
+
 // form section navigation
 
 .section_overlap
   background: image_url("overlap.png") no-repeat bottom
   padding-bottom: 5px
   margin: 0 -6px
-  
+
 .section_nav
   background: #EEE
   border: 1px solid $primary_light
@@ -749,7 +753,7 @@ a.tooltip
   -webkit-box-shadow: $primary_light 0 1px 7px inset
   -moz-box-shadow: $primary_light 0 1px 7px inset
   box-shadow: $primary_light 0 1px 7px inset
-  
+
   li
     display: inline-block
     float: left
@@ -769,7 +773,7 @@ a.tooltip
         span
           background: $secondary
           color: $primary_light
-    
+
   a, .dummy
     color: $primary
     display: inline-block
@@ -778,7 +782,7 @@ a.tooltip
     padding: 12px 10px 10px
     text-decoration: none
     +text-shadow(#FFF, 0, 1px, 0)
-    
+
     span
       background: $primary_light
       color: $primary
@@ -825,5 +829,11 @@ a.tooltip
     -webkit-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
-    
+
 .section_comments
+
+#activity_name_input
+  width: 50% !important
+
+#project_name_input
+  width: 50% !important

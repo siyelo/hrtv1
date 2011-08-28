@@ -41,7 +41,7 @@ class ApplicationController < ActionController::Base
     # load vars for pretty charts
     def load_charts
       @response = @data_response    = current_response
-      @projects                     = @data_response.projects.find(:all, :order => "name ASC")
+      @projects                     = @data_response.projects.find(:all, :order => "name ASC") if @data_response
     end
 
   private

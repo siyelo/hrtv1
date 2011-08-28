@@ -23,12 +23,13 @@ class Activity < ActiveRecord::Base
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description, :start_date, :end_date,
+    :name, :description,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
     :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :sub_activities_attributes, :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
-    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id,
+    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
 
   ### Associations
   #TODO: provider now only used for sub-activities, so should be removed from activity altogether
@@ -89,11 +90,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :description, :if => :is_activity?
   validates_presence_of :project_id, :if => :is_activity?
   validates_presence_of :data_response_id
-  validates_date :start_date, :unless => :is_sub_activity?
-  validates_date :end_date, :unless => :is_sub_activity?
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
-  validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
   ### Scopes
   named_scope :roots,                { :conditions => "activities.type IS NULL" }
@@ -203,8 +200,6 @@ class Activity < ActiveRecord::Base
             row << "" if index > 0
             row << activity.name
             row << activity.description
-            row << activity.start_date
-            row << activity.end_date
             if activity.sub_activities.empty?
               csv << row
             else
@@ -234,35 +229,20 @@ class Activity < ActiveRecord::Base
     sub_activities = []
     col_names = file_upload_columns
     activity_name = project_name = sub_activity_name = ''
-    activity_start_date = activity_end_date = ''
     project_description = activity_description = ''
     activity_in_memory = false
     existing_sa = nil
 
     doc.each do |row|
       activity_name = row['Activity Name'].blank? ? activity_name : row['Activity Name']
-
       if row['Activity Description'].blank? && row['Activity Name'].blank?
         activity_description =  activity_description
       else
         activity_description = row['Activity Description']
       end
 
-      if row['Start Date'].blank? && row['Activity Name'].blank?
-        activity_start_date  = activity_start_date
-      else
-        activity_start_date  = row['Start Date']
-      end
-
-      if row['End Date'].blank? && row['Activity Name'].blank?
-        activity_end_date = activity_end_date
-      else
-        activity_end_date = row['End Date']
-      end
-
       project_name = row['Project Name'] || project_name
       project_description  = row['Project Description'] || project_description unless row['Project Name'].blank?
-
       sub_activity_name    = row['Implementer']
       sub_activity_id      = row['Id']
       csv_provider  = row["Implementer"].try(:strip)
@@ -340,8 +320,6 @@ class Activity < ActiveRecord::Base
       activity.project           = project
       activity.name              = activity_name.try(:strip)
       activity.description       = activity_description.try(:strip)
-      activity.start_date        = DateHelper::flexible_date_parse(activity_start_date.try(:strip))
-      activity.end_date          = DateHelper::flexible_date_parse(activity_end_date.try(:strip))
 
       sub_activity.provider      = implementer
       sub_activity.activity      = activity
@@ -586,8 +564,6 @@ class Activity < ActiveRecord::Base
        "Project Description",
        "Activity Name",
        "Activity Description",
-       "Start Date",
-       "End Date",
        "Id",
        "Implementer",
        "Past Expenditure",
@@ -634,14 +610,6 @@ class Activity < ActiveRecord::Base
       errors.add(:base, message) if changed? and approved and changed != ["approved"]
     end
 
-    def dates_within_project_date_range
-      if project.present? && project.start_date && project.end_date
-        message = "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})"
-        errors.add(:start_date, message) if start_date < project.start_date
-        errors.add(:end_date, message) if end_date > project.end_date
-      end
-    end
-
     def is_simple?
       self.class.eql?(Activity) || self.class.eql?(OtherCost)
     end
@@ -672,15 +640,6 @@ class Activity < ActiveRecord::Base
       end
     end
 
-   def self.add_implementer_to_csv(sub_activity, row)
-     row << sub_activity.id
-     row << sub_activity.provider.try(:name)
-     row << sub_activity.spend
-     row << sub_activity.budget
-     row << sub_activity.start_date
-     row << sub_activity.end_date
-   end
-
    def auto_create_project
      if project_id == AUTOCREATE
       project = data_response.projects.find_by_name(name)
@@ -698,6 +657,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -710,14 +670,24 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
+#  spend_q1                     :decimal(, )
+#  spend_q2                     :decimal(, )
+#  spend_q3                     :decimal(, )
+#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
+#  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
+#  budget_q1                    :decimal(, )
+#  budget_q2                    :decimal(, )
+#  budget_q3                    :decimal(, )
+#  budget_q4                    :decimal(, )
+#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
@@ -725,10 +695,6 @@ end
 #  project_id                   :integer
 #  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

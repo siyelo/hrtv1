@@ -8,7 +8,7 @@
           %span.required *
           - link_to "#", :title => "A short name for this project", :class => 'tooltip' do
             = image_tag "tooltip.png"
-        = f.text_field :name
+        = f.text_field :name, :size => "80"
 
       %li#project_start_date_input.string.required
         .name

@@ -34,7 +34,7 @@ class SubActivity < Activity
   validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
 
   ### Delegates
-  [:projects, :name, :description, :start_date, :end_date, :approved,
+  [:projects, :name, :description, :approved,
    :text_for_beneficiaries, :beneficiaries, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end

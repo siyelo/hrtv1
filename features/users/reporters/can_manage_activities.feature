@@ -46,8 +46,6 @@ Feature: Reporter can manage activities
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
-    And I fill in "activity_start_date" with "2010-01-01"
-    And I fill in "activity_end_date" with "2010-12-01"
     And I select "project1" from "Project"
     And I press "Save"
     Then I should see "Activity was successfully created"
@@ -64,8 +62,6 @@ Feature: Reporter can manage activities
     When I follow "Add Activities now"
     And I fill in "activity_name" with "activity1"
     And I fill in "activity_description" with "activity1 description"
-    And I fill in "activity_start_date" with "2010-01-01"
-    And I fill in "activity_end_date" with "2010-12-01"
     And I select "<Automatically create a project for me>" from "Project"
     And I press "Save"
     Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
@@ -75,33 +71,10 @@ Feature: Reporter can manage activities
     And I press "Save"
     Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
-  Scenario Outline: Reporter can CRUD activities and see errors
-    When I follow "Add Activities now"
-    And I fill in "Name" with "<name>"
-    And I fill in "Description" with "activity description"
-    And I fill in "Start date" with "<start_date>"
-    And I fill in "End date" with "<end_date>"
-    And I select "<project>" from "Project"
-    And I press "Save"
-    Then I should see "Oops, we couldn't save your changes."
-    And I should see "<message>"
-
-    Examples:
-       | name | start_date | end_date   | project  | message                       |
-       |      | 2011-01-01 | 2011-12-01 | project1 | Name can't be blank           |
-       | a1   |            | 2011-12-01 | project1 | Start date can't be blank |
-       | a1   | 2011-01-01 |            | project1 | End date can't be blank   |
-
-  #'
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
     Then I should see "Activities Bulk Create"
-
-  Scenario: Reporter can upload activities
-    When I attach the file "spec/fixtures/different_date_activities.csv" to "File" within ".activities_upload_box"
-    And I press "Import" within ".activities_upload_box"
-    Then I should not see "is not a valid date"
 
   @javascript @wip
   Scenario: Reporter can upload Implementers
@@ -159,8 +132,6 @@ Feature: Reporter can manage activities
     And I fill in "Description" with "Activity1 description"
     And I select "organization1" from "Implementer"
     And I select "project1" from "Project"
-    And I fill in "Start date" with "2010-01-01"
-    And I fill in "End date" with "2010-12-01"
     And I fill in "Budget" with "999"
     And I fill in "Expenditure" with "2000"
     And I press "Save & Classify >"
@@ -214,8 +185,6 @@ Feature: Reporter can manage activities
     When I follow "Add Activities now"
     And I fill in "Name" with "Activity1"
     And I fill in "Description" with "Activity1 description"
-    And I fill in "Start date" with "2010-01-01"
-    And I fill in "End date" with "2010-12-01"
     And I select "project1" from "Project"
     And I follow "Add funding source"
     And I select "funding_organization1" from "Organization" within ".fields"

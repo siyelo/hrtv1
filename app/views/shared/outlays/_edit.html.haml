@@ -8,7 +8,7 @@
 
 %h1.main_heading
   = klass == Activity ? "Edit Activity" : "Edit Other Cost"
-  %span= klass == Activity ? render 'activities/help' : render 'other_costs/help'
+  %span= klass == Activity ? render('activities/help') : render('other_costs/help')
 
   %ul.horizontal.right
     %li

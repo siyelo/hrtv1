@@ -1,0 +1,8 @@
+%h1.main_heading
+  New Activity
+  %span= render 'activities/help'
+
+= error_messages_for :activity, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @activity, :url => response_activities_path(@response), :html => {:class => "basic_form js_form"} do |f|
+  = render 'shared/outlays/form', :f => f, :outlay => @activity

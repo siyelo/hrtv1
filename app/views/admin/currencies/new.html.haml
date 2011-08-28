@@ -4,7 +4,7 @@
 
 %h2 New currency information
 .dashboard_section
-  - semantic_form_for :currency, @currency, :url => admin_currencies_path, :html => {:class => 'basic_form'} do |f|
+  - semantic_form_for :currency, @currency, :url => admin_currencies_path, :html => {:class => 'basic_form js_form'} do |f|
     - f.inputs :class => 'wrap-80 inputs' do
       = f.input :from, :label => 'From', :hint => 'From currency'
       = f.input :to, :label => 'To', :hint => 'To currency'

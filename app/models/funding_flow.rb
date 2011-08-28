@@ -1,5 +1,6 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
+  include AutocreateHelper
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",
@@ -62,8 +63,10 @@ class FundingFlow < ActiveRecord::Base
     "From: #{from.name} - To: #{to.name}"
   end
 
-  def updated_at
-    Time.now
+  def organization_id_from=(id_or_name)
+    self.organization_id_from_will_change! # trigger saving of this model
+    new_id = self.assign_or_create_organization(id_or_name)
+    super(new_id)
   end
 
   def funding_chains

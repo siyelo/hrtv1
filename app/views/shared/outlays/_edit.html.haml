@@ -26,7 +26,7 @@
 
 = error_messages_for controller_name.singularize.to_sym, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-- semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form"} do |f|
+- semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form js_form"} do |f|
   = render '/shared/outlays/form', :f => f, :outlay => outlay
 
 - unless outlay.new_record?

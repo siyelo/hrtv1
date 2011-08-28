@@ -70,12 +70,14 @@ var observeFormChanges = function (form) {
     }
   };
 
-  $('input[type=submit]').click(function (e) {
-    $(form).data('initialForm', $(form).serialize());
-  });
+  if($(form).length){ //# dont bind unless you find the form element on the page
+    $('input[type=submit]').click(function (e) {
+      $(form).data('initialForm', $(form).serialize());
+    });
 
-  $(form).data('initialForm', $(form).serialize());
-  $(window).bind('beforeunload', catcher);
+    $(form).data('initialForm', $(form).serialize());
+    $(window).bind('beforeunload', catcher);
+  };
 }
 
 
@@ -1882,7 +1884,7 @@ $(function () {
   $(".overlay").overlay();
 
   //observe form changes and alert user if form has unsaved data
-  observeFormChanges($('.basic_form'));
+  observeFormChanges($('.js_form'));
 
   var id = $('body').attr("id");
   if (id) {

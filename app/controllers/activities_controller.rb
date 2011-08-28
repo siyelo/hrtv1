@@ -3,12 +3,12 @@ class ActivitiesController < Reporter::BaseController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   inherit_resources
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
   before_filter :warn_if_not_classified, :only => [:edit]
-  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new

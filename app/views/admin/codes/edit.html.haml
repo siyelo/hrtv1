@@ -4,5 +4,5 @@
 
 = error_messages_for :code,  :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-- semantic_form_for :code, @code, :url => admin_code_path(@code), :html => {:method => :put, :class => "basic_form"} do |f|
+- semantic_form_for :code, @code, :url => admin_code_path(@code), :html => {:method => :put, :class => "basic_form js_form"} do |f|
   = render 'form', :f => f

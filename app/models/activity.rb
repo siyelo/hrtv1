@@ -62,30 +62,27 @@ class Activity < ActiveRecord::Base
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
 
-
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
-  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_validation :strip_input_fields, :unless => :is_sub_activity?
   before_save   :auto_create_project, :unless => :is_sub_activity?
   after_save    :update_counter_cache, :unless => :is_sub_activity?
+  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
   after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
-
   ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
+    :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
-
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
   delegate :organization, :to => :data_response
 
-
   ### Validations
   # also see validations in BudgetSpendHelper
-  before_validation :strip_input_fields, :unless => :is_sub_activity?
   validate :approved_activity_cannot_be_changed, :unless => :is_sub_activity?
   validates_presence_of :name, :unless => :is_sub_activity?
   validates_presence_of :description, :if => :is_activity?
@@ -96,7 +93,6 @@ class Activity < ActiveRecord::Base
   validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
   validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
-
 
   ### Scopes
   named_scope :roots,                { :conditions => "activities.type IS NULL" }
@@ -142,7 +138,6 @@ class Activity < ActiveRecord::Base
   named_scope :sorted,               { :order => "activities.name" }
   named_scope :sorted_by_id,               { :order => "activities.id" }
 
-
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
@@ -150,17 +145,14 @@ class Activity < ActiveRecord::Base
   after_save    :update_counter_cache, :unless => :is_sub_activity?
   after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
-
   ### Attribute Accessor
   attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
-
 
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
   accepts_nested_attributes_for :implementer_splits, :allow_destroy => true
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
-
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -360,13 +352,7 @@ class Activity < ActiveRecord::Base
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-    if is_number?(the_provider_mask)
-      self.provider_id = the_provider_mask
-    else
-      organization = Organization.find_or_create_by_name(the_provider_mask)
-      organization.save(false) # ignore any errors e.g. on currency or contact details
-      self.provider_id = organization.id
-    end
+    self.provider_id = self.assign_or_create_organization(id_or_name)
     @provider_mask   = self.provider_id
   end
 
@@ -398,7 +384,6 @@ class Activity < ActiveRecord::Base
       end
     end
   end
-
 
   def deep_clone
     clone = self.clone
@@ -519,7 +504,9 @@ class Activity < ActiveRecord::Base
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
         dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
-        dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count if dr.respond_to?(:unclassified_activities_count)
+        if dr.respond_to?(:unclassified_activities_count)
+          dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count
+        end
         dr.save(false)
       end
     end
@@ -542,13 +529,15 @@ class Activity < ActiveRecord::Base
     end
 
     def approved_activity_cannot_be_changed
-      errors.add(:base, "Activity was approved by SysAdmin and cannot be changed") if changed? and approved and changed != ["approved"]
+      message = "Activity was approved by SysAdmin and cannot be changed"
+      errors.add(:base, message) if changed? and approved and changed != ["approved"]
     end
 
     def dates_within_project_date_range
       if project.present? && project.start_date && project.end_date
-        errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date
-        errors.add(:end_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if end_date > project.end_date
+        message = "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})"
+        errors.add(:start_date, message) if start_date < project.start_date
+        errors.add(:end_date, message) if end_date > project.end_date
       end
     end
 
@@ -583,7 +572,6 @@ class Activity < ActiveRecord::Base
     end
 
    def auto_create_project
-
      if project_id == AUTOCREATE
       project = data_response.projects.find_by_name(name)
       unless project

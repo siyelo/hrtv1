@@ -4,10 +4,7 @@
 - sub_activities_total =  assignment.nil? ? "" : "#{assignment.activity.sub_activities_total(type)}"
 - percentage = derive_percentage_from_amount(outlay, type, assignment)
 - options = percentage_field_options(code, assignment, valid)
-- subtotal_label = sub_activities_total.empty? ? "" : "#{n2c((sub_activities_total.to_f / 100) * percentage)}"
 - association_name = type.to_s.underscore # CodingBudget becomes :coding_budget
 = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box"}.merge(options)
 .inline_ratio %
 = link_to image_tag("amount.png"), "#", :title => "#{cached_amount} #{assignment.activity.currency if assignment}", :class => "tooltip subtotal_icon hidden"
-
-.subtotal= subtotal_label

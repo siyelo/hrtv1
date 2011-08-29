@@ -18,15 +18,17 @@
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay
  
-    %li
-      .values.right
-        %p.classifications_total.spend_total
-          %span.label.left Total
-          %span.amount.right= 0
-          %span.percentage.right= '%'
-        %p.classifications_total.budget_total
-          %span.label.left Total
-          %span.amount.right= 0
-          %span.percentage.right= '%'
-    = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'
-    = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'
+  .coding_total.right
+    %p.value.left
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= 0
+      
+    %p.value.right
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= 0
+      
+
+  = submit_tag 'Save', :class => 'submit_btn js_submit_btn big next'
+  = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

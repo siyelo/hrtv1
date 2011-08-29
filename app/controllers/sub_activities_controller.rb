@@ -44,7 +44,7 @@ class SubActivitiesController < Reporter::BaseController
     if @activity.save
       redirect_to edit_response_activity_path(@activity.data_response, @activity)
     else
-      flash[:error] = "Please ensure all Implementers have providers"
+      flash[:error] = "Please ensure all Implementers are specified"
       redirect_to :back
     end
   end

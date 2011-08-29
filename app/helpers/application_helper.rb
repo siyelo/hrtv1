@@ -290,10 +290,12 @@ module ApplicationHelper
       edit_response_other_cost_path(response, outlay, opts)
   end
 
-  def save_and_add_button_text(current_step)
+  # other costs do not show Purposes/Inputs/Outputs tabs
+  def save_and_add_button_text(current_step, activity_or_other_cost)
+    is_activity = activity_or_other_cost.class == Activity ? true : false
     case current_step
     when nil;         "Save & Add Locations >"
-    when 'locations'; "Save & Add Purposes >"
+    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Go to Overview >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
     when 'outputs';   "Save & Go to Overview >"

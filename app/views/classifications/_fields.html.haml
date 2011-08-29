@@ -1,3 +1,5 @@
+- cached_amount = assignment.nil? ? '' : assignment.cached_amount
+- cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
 - association = klass.to_s.underscore.to_sym
 - sub_activities_total =  assignment.nil? ? "" : "#{assignment.activity.sub_activities_total(type)}"
 - percentage = derive_percentage_from_amount(outlay, type, assignment)

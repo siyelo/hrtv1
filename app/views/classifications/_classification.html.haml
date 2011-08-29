@@ -18,12 +18,14 @@
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay
  
-    %li.input_table.totals
+    %li
       .values.right
-        %p.spend
+        %p.classifications_total.spend_total
+          %span.label.left Total
           %span.amount.right= 0
           %span.percentage.right= '%'
-        %p.budget
+        %p.classifications_total.budget_total
+          %span.label.left Total
           %span.amount.right= 0
           %span.percentage.right= '%'
     = submit_tag 'Save', :class => 'submit_btn js_submit_btn next big'

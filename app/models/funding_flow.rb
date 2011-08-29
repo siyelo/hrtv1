@@ -1,6 +1,7 @@
 class FundingFlow < ActiveRecord::Base
   include BudgetSpendHelper
   include AutocreateHelper
+  default_scope :order => "id ASC"
 
   HUMANIZED_ATTRIBUTES = {
     :organization_id_from => "The Funding Source 'from' organization",

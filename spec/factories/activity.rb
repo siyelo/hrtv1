@@ -16,11 +16,7 @@ Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :act
 end
 
 Factory.define :other_cost_budget_spend_coded, :class => OtherCost, :parent => :activity do |f|
-  f.coding_budget_valid           { true }
-  f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }
-  f.coding_spend_valid            { true }
-  f.coding_spend_cc_valid         { true }
   f.coding_spend_district_valid   { true }
 end
 

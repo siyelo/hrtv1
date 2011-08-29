@@ -38,7 +38,7 @@ class SubActivitiesController < Reporter::BaseController
     params.each_key do |key|
       if key.to_i > 0
         @sa = SubActivity.new(params[key]) if key.to_i > 0
-        @activity.sub_activities << @sa
+        @activity.implementer_splits << @sa
       end
     end
     if @activity.save

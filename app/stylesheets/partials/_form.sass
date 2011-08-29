@@ -500,7 +500,7 @@ h3.form_heading
 
 .ajax-loader
   margin: 10px 5px 0
-  
+
 .activity_box
   margin: 0 !important
 
@@ -702,6 +702,8 @@ strong
 td.error, tr.error td
   background-color: #ffebeb !important
 
+.error
+  border: 1px solid #ffbaba !important
 
 // New form styles
 .condensed_fields
@@ -851,6 +853,41 @@ a.tooltip
     -webkit-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
+
+.bulk_edit_form
+  .section_form
+    width: 900px
+    border-left: 0px
+    border-right: 0px
+    h3
+      border-top:  1px solid $primary_border4 !important
+  .activities_form
+    width: 862px !important
+    border-left: 1px solid $primary_border4
+    border-right: 1px solid $primary_border4
+    border-bottom: 1px solid $primary_border
+    .input_table
+      width: 880px
+  .project_heading
+    color: $secondary !important
+    font-family: Avenir, sans-serif
+    font-weight: normal
+    padding: 10px 20px 0 !important
+  .basic_form
+    ol
+      textarea
+        margin: 0 5px !important
+  .condensed_fields
+    li
+      min-width: 0px
+      margin-right: 0px
+      textarea
+        width: 700px !important
+  .activity_wrapper
+    display: inline-block
+    border-top: 1px solid $primary_border
+    margin-left: -19px
+    padding: 10px 0px 10px 20px
 
 #activity_name_input
   width: 50% !important

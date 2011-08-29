@@ -7,7 +7,14 @@ class Project < ActiveRecord::Base
   include Project::Validations
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name description currency start_date end_date]
+  FILE_UPLOAD_COLUMNS = ["Project Name",
+                         "Project Description",
+                         "Activity Name",
+                         "Activity Description",
+                         "Id",
+                         "Implementer",
+                         "Past Expenditure",
+                         "Current Budget"]
   MAX_NAME_LENGTH = 64
 
   strip_commas_from_all_numbers
@@ -24,8 +31,7 @@ class Project < ActiveRecord::Base
   has_many :funding_streams, :dependent => :destroy
 
   #FIXME - cant initialize nested in_flows because of the :conditions statement
-  has_many :in_flows, :class_name => "FundingFlow",
-           :conditions => [ 'self_provider_flag = 0' ]
+  has_many :in_flows, :class_name => "FundingFlow"
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -35,7 +41,10 @@ class Project < ActiveRecord::Base
   # Nested attributes
   accepts_nested_attributes_for :in_flows, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
-  before_validation_on_create :assign_project_to_funding_flows
+  accepts_nested_attributes_for :activities
+
+  before_validation :assign_project_to_in_flows
+  before_validation :assign_project_to_activities
   before_validation :strip_leading_spaces
 
   ### Validations
@@ -55,8 +64,8 @@ class Project < ActiveRecord::Base
     attrs['organization_id_from'].blank? || attrs.marked_for_destruction? }.empty?}
 
   ### Attributes
-  attr_accessible :name, :description, :spend, :user_id,
-                  :start_date, :end_date, :currency, :data_response, :activities,
+  attr_accessible :name, :description, :spend, :user_id,:data_response_id,
+                  :start_date, :end_date, :currency, :data_response, :activities, :activities_attributes,
                   :in_flows_attributes, :am_approved, :am_approved_date, :in_flows
 
   ### Delegates
@@ -71,20 +80,46 @@ class Project < ActiveRecord::Base
 
   ### Class methods
 
+  def self.export_all(response)
+    FasterCSV.generate do |csv|
+      csv << Project::FILE_UPLOAD_COLUMNS
+      response.projects.sorted.each do |project|
+        row = []
+        row << project.name.slice(0..MAX_NAME_LENGTH-1)
+        row << project.description
+        if project.activities.empty?
+          csv << row
+        else
+          project.activities.roots.sorted.each_with_index do |activity, index|
+            row << "" if index > 0 # dont re-print project details on each line
+            row << "" if index > 0
+            row << activity.name.slice(0..MAX_NAME_LENGTH-1)
+            row << activity.description
+            if activity.implementer_splits.empty?
+              csv << row
+            else
+              activity.implementer_splits.sorted.each_with_index do |split, index|
+                4.times do
+                  row << "" if index > 0 # dont re-print activity details on each line
+                end
+                row << split.id
+                row << split.provider.try(:name)
+                row << split.spend
+                row << split.budget
+                csv << row
+                row = []
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
   def self.download_template
     FasterCSV.generate do |csv|
       csv << Project::FILE_UPLOAD_COLUMNS
     end
-  end
-
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = data_response.projects.new(attributes)
-      project.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
   end
 
 
@@ -375,10 +410,14 @@ class Project < ActiveRecord::Base
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id
     # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
-    def assign_project_to_funding_flows
-      funding_flows.each {|ff| ff.project = self}
+    def assign_project_to_in_flows
+      in_flows.each {|ff| ff.project = self}
     end
 
+    #assign project object so nested attributes for activities pass the project_id validation
+    def assign_project_to_activities
+      activities.each {|a| a.project = self}
+    end
 end
 
 

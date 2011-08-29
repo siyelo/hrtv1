@@ -10,7 +10,7 @@
 Organization.ordered.each do |org|
   org.data_responses.each do |dr|
     dr.activities.only_simple.each do |a|
-      unless a.sub_activities.empty?
+      unless a.implementer_splits.empty?
         sab_total = a.implementer_splits.reject{|sa| sa.budget.nil?}.sum(&:budget)
         sae_total = a.implementer_splits.reject{|sa| sa.spend.nil?}.sum(&:spend)
         spends_match = (a.spend.to_f == sae_total)

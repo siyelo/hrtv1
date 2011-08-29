@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
     c.validates_confirmation_of_password_field_options = {:minimum => 6,
       :if => (password_salt_field ? "#{password_salt_field}_changed?".to_sym : nil)}
     c.validates_length_of_password_confirmation_field_options = {:minimum => 6,
-      :if => :require_password? }
+      :if => :require_password?}
   end
 
   ### Constants
@@ -30,7 +30,6 @@ class User < ActiveRecord::Base
   validates_presence_of :full_name, :email, :organization_id
   validates_presence_of :location_id, :message => "can't be blank", :if => Proc.new{ |model| model.roles.include?('district_manager') }
   validates_uniqueness_of :email, :case_sensitive => false
-  validates_confirmation_of :password, :on => :create
   validate :validate_inclusion_of_roles
   validate :validate_organization
 
@@ -228,9 +227,11 @@ class User < ActiveRecord::Base
       end
     end
 
+    # allow user to be created without a password
+    # allow user to be updated without a password
+    # but dont allow them to go active with an empty password
     def require_password?
-      self.crypted_password.blank?
-      #TODO: self.active? && self.crypted_password.blank?
+      self.active? && (!self.password.blank? || self.crypted_password.nil?)
     end
 end
 

@@ -27,12 +27,12 @@ describe User do
     it { should validate_presence_of(:full_name) }
     it { should validate_presence_of(:email) }
     it { should validate_presence_of(:organization_id) }
-    
+
     context "should not validate the presence of a location id if the user is not an activity manager" do
       subject { Factory(:reporter) }
       it { should_not validate_presence_of(:location_id)}
     end
-    
+
     context "validate the presence of a location id if the user is not an activity manager" do
       subject { Factory(:district_manager) }
       it { should validate_presence_of(:location_id)}
@@ -120,49 +120,101 @@ describe User do
     end
   end
 
-  describe "passwords" do
+  describe "password validations" do
+    before :each do
+      @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
+        :password => "", :password_confirmation => "", :organization => Factory(:organization),
+        :roles => ['reporter'])
+    end
+
+    # this is fine provided you send an invitation too!!
+    it "should not ask on (admin) creation" do
+      @user.save.should == true
+    end
+
+    it "should reject empty pw on registration" do
+      @user.save
+      @user.attributes = {"password"=>"", "password_confirmation"=>""}
+      @user.activate.should == false
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+    end
+
+    it "should reject short pw on registration" do
+      @user.save
+      @user.password = "123"; @user.password_confirmation = "123"
+      @user.activate.should == false
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+    end
+
+    it "should accept valid pw on registration" do
+      @user.save
+      @user.password = "123456"; @user.password_confirmation = "123456"
+      @user.activate.should == true
+    end
+
+    it "should validate on update if modified" do
+      @user.save
+      @user.password = "123456"; @user.password_confirmation = "123456"
+      @user.activate.should == true
+      @user.password = ""; @user.password_confirmation = ""
+      @user.full_name = "new name"
+      @user.save.should == false
+      @user.errors.on(:password_confirmation).should == "is too short (minimum is 6 characters)"
+    end
+
+    it "should not validate on update if not modified" do
+      @user.save
+      @user.password = "123456"; @user.password_confirmation = "123456"
+      @user.activate.should == true
+      @user.reload
+      params = {"full_name"=>"new name", "password"=>"", "password_confirmation"=>"",
+        "email"=>'blah@blah.com', "tips_shown"=>"1"}
+      User.first.update_attributes(params).should == true
+    end
+
+    it "should reject short pw on update" do
+      @user.save
+      @user.password = "123456"; @user.password_confirmation = "123456"
+      @user.activate.should == true
+      @user.password = "123"; @user.password_confirmation = "123"
+      @user.save.should == false
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
+    end
+  end
+
+  describe "passwords using save & invite API" do
+    before :each do
+      @user = User.new(:email => 'blah@blah.com', :full_name => 'blah',
+        :password => "", :password_confirmation => "", :organization => Factory(:organization),
+        :roles => ['reporter'])
+      @user.save_and_invite(Factory :admin)
+    end
+
     it "should allow (admin) to create a user w/out a password" do
-      pending #TODO - add 'active'
-      lambda {Factory(:user, :password => nil, :password_confirmation => nil,
-        :active => false)}.should_not raise_error(ActiveRecord::RecordInvalid)
+      @user.id.should_not be_nil #was saved
     end
 
     it "should allow (admin) to update a user before they have registered" do
-      pending #TODO - add 'active'
-      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
       @user.full_name = "bob rob"
       @user.save.should == true
     end
 
     it "should NOT allow (user) to accept invitation (go active) w/out a password" do
-      pending #TODO - add 'active'
-      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
       @user.activate.should == false
       @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
     end
 
     it "should NOT allow (user) to accept invitation (go active) with a short password" do
-      pending #seems to be skipping the length validation.
-      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
       @user.password = '123'
       @user.password_confirmation = '123'
       @user.activate.should == false
-      @user.errors.on(:password).should == "too short!"
+      @user.errors.on(:password).should == "is too short (minimum is 6 characters)"
     end
 
     it "should allow (user) to accept invitation (go active) with a good password" do
-      pending #TODO - add 'active'
-      @user = Factory(:user, :password => nil, :password_confirmation => nil, :active => false)
       @user.password = '123456'
       @user.password_confirmation = '123456'
       @user.activate.should == true
-    end
-
-    it "should allow (user) to update w/out a password" do
-      pending #TODO - add 'active'
-      @user = Factory(:user, :password => 'abcdef', :password_confirmation => 'abcdef', :active => true)
-      @user.full_name = "bob rob"
-      @user.save.should == true
     end
   end
 

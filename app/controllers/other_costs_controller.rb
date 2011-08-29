@@ -23,12 +23,10 @@ class OtherCostsController < Reporter::BaseController
     if @other_cost.save
       respond_to do |format|
         format.html { success_flash("created"); html_redirect }
-        format.js { js_redirect }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
-        format.js   { js_redirect }
       end
     end
   end
@@ -38,7 +36,6 @@ class OtherCostsController < Reporter::BaseController
     if !@other_cost.am_approved? && @other_cost.update_attributes(params[:other_cost])
      respond_to do |format|
        format.html { success_flash("updated"); html_redirect }
-       format.js   { js_redirect }
      end
     else
      respond_to do |format|
@@ -49,7 +46,6 @@ class OtherCostsController < Reporter::BaseController
                      load_comment_resources(resource)
                      render :action => 'edit'
                    }
-       format.js   { js_redirect }
      end
     end
   end

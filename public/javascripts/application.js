@@ -24,7 +24,7 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
 
-  if (association === 'in_flows' || association === 'sub_activities' ) {
+  if (association === 'in_flows' || association === 'implementer_splits' ) {
     $(link).parents('tr:first').before(content.replace(regexp, new_id));
   } else {
     $(link).parent().before(content.replace(regexp, new_id));
@@ -1572,11 +1572,12 @@ var blurDemoText = function (elements) {
   });
 };
 
-
-var activities_bulk_create = {
+var projects_bulk_create = {
   run: function () {
 
     initDemoText($('*[data-hint]'));
+
+    $('.header:first').parents('.activity_box').find('.main').toggle();
 
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
@@ -1590,6 +1591,14 @@ var activities_bulk_create = {
 
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
+
+    $('.js_finish').live('click', function (e){
+      if($('.js_unsaved').length > 0){
+        if (!(confirm('You have projects that have not been saved.  Saved projects show a green checkmark next to them.  Are you sure you want to leave this page?'))){
+          e.preventDefault();
+        }
+      }
+    })
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
@@ -1614,6 +1623,15 @@ var activities_bulk_create = {
         activityBox.html(data.html);
         initDemoText(activityBox.find('*[data-hint]'));
         activityBox.find(".js_combobox").combobox();
+        ajaxLoader.hide();
+        if (data.status == 'success') {
+           activityBox.find('.saved_tick').show();
+           activityBox.find('.saved_tick').removeClass('js_unsaved');
+           activityBox.find('.saved_tick').addClass('js_saved');
+
+           activityBox.find('.main').toggle();
+           $('.js_unsaved:first').parents('.activity_box').find('.main').toggle();
+         }
       });
     });
   }

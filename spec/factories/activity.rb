@@ -24,10 +24,14 @@ Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
   f.sequence(:name) { |i| "other_cost_name_#{i}" }
 end
 
-Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
-  f.sequence(:name) { |i| "sub_activity_name_#{i}" }
-  f.description     { 'sub_activity_description' }
+Factory.define :implementer_split, :class => SubActivity, :parent => :activity do |f|
+  f.sequence(:name) { |i| "implementer_split_name_#{i}" }
+  f.description     { 'implementer_split_descr' }
   f.provider        { Factory.create(:provider) }
+end
+
+#deprecated
+Factory.define :sub_activity, :class => SubActivity, :parent => :implementer_split do |f|
 end
 
 

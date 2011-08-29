@@ -4,8 +4,8 @@ class SubActivity < Activity
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Implementer", "Past Expenditure", "Current Budget"]
   IMPLEMENTER_HUMANIZED_ATTRIBUTES = {
-    :budget_mask => "Implementer Current Budget",
-    :spend_mask => "Implementer Past Expenditure",
+    :budget => "Implementer Current Budget",
+    :spend => "Implementer Past Expenditure",
     :provider_mask => "Implementer"
   }
 
@@ -15,23 +15,18 @@ class SubActivity < Activity
   belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask, :provider_id
+  attr_accessible :activity_id, :data_response_id, :provider_id, :budget, :spend
+
+  ### Validations
+  validates_presence_of :provider_mask
+  validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
+  validates_numericality_of :spend, :if => Proc.new {|is|is.spend.present?}
+  validates_numericality_of :budget, :if => Proc.new {|is| is.budget.present?}
 
   ### Callbacks
   before_validation :strip_mask_fields
   after_create    :update_counter_cache
-  before_save     :set_budget_amount
-  before_save     :set_spend_amount
-  after_save      :update_activity_cache
   after_destroy   :update_counter_cache
-
-  ### Validations
-  validates_presence_of :provider_mask
-  validate :budget_mask_percentage
-  validate :spend_mask_percentage
-  validate :numericality_of_budget_mask
-  validate :numericality_of_spend_mask
-  validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
 
   ### Delegates
   [:projects, :name, :description, :approved,
@@ -39,7 +34,6 @@ class SubActivity < Activity
     delegate method, :to => :activity, :allow_nil => true
   end
   delegate :name, :to => :implementer, :prefix => true, :allow_nil => true # gives you implementer_name
-
 
   ### Class Methods
 
@@ -55,7 +49,7 @@ class SubActivity < Activity
       csv << header_row
 
       if activity
-        activity.sub_activities.each do |sa|
+        activity.implementer_splits.each do |sa|
           row = [sa.provider.try(:name), sa.spend, sa.budget]
 
           (100 - row.length).times{ row << nil}
@@ -68,12 +62,12 @@ class SubActivity < Activity
 
   def self.create_sa(activity, doc)
     all_ok = true
-    sub_activities = {}
+    implementer_splits = {}
     counter = 1
     doc.each do |row|
       provider_id = Organization.find_by_name(row['Implementer']).try(:id)
       if provider_id
-        row['id'] ? sa = activity.sub_activities.find_by_id(row['Id']) : sa = activity.sub_activities.find_by_provider_id(provider_id)
+        row['id'] ? sa = activity.implementer_splits.find_by_id(row['Id']) : sa = activity.implementer_splits.find_by_provider_id(provider_id)
         attributes = {:budget => row['Current Budget'],
                       :spend => row['Past Expenditure'],
                       :provider_id => provider_id,
@@ -83,7 +77,7 @@ class SubActivity < Activity
           sa.update_attributes(attributes)
           attributes = {}
         else
-          activity.sub_activities.create(attributes)
+          activity.implementer_splits.create(attributes)
           attributes = {}
         end
       else
@@ -94,19 +88,13 @@ class SubActivity < Activity
                       :data_response_id => activity.data_response.id}}
         all_ok = false
       end
-      sub_activities.merge! attributes
+      implementer_splits.merge! attributes
       counter += 1
     end
-    return all_ok, sub_activities
+    return all_ok, implementer_splits
   end
 
   ### Instance Methods
-
-  def initialize(*params)
-    super
-    set_budget_amount
-    set_spend_amount
-  end
 
   def budget
     read_attribute(:budget)
@@ -122,24 +110,6 @@ class SubActivity < Activity
 
   def spend=(amount)
     write_attribute(:spend, amount)
-  end
-
-  def spend_mask
-    @spend_mask || spend
-  end
-
-  def spend_mask=(the_spend_mask)
-    attribute_will_change!(:spend_mask)
-    @spend_mask = the_spend_mask
-  end
-
-  def budget_mask
-    @budget_mask || budget
-  end
-
-  def budget_mask=(the_budget_mask)
-    attribute_will_change!(:budget_mask)
-    @budget_mask = the_budget_mask
   end
 
   def locations # TODO: deprecate
@@ -187,15 +157,11 @@ class SubActivity < Activity
   end
   memoize :coding_spend_cost_categorization
 
-  def update_activity_cache
-    self.reload
-    self.activity.cache_budget_spend # just calls write_attribute... so....
-    self.activity.save               # ...dont forget to save
-  end
-
   private
+
+    # TODO - move this to a rails counter_cache once STI removed
     def update_counter_cache
-      self.data_response.sub_activities_count = data_response.sub_activities.count
+      self.data_response.sub_activities_count = data_response.implementer_splits.count
       self.data_response.save(false)
     end
 
@@ -232,65 +198,9 @@ class SubActivity < Activity
       return new_assignments
     end
 
-    def budget_mask_percentage
-      if budget_mask.to_s.last == '%'
-        budget_percent = budget_mask.to_s.delete('%').to_f
-        errors.add(:budget_mask, "must be between 0% - 100%") if budget_percent < 0 || budget_percent > 100
-      end
-    end
-
-    def spend_mask_percentage
-      if spend_mask.to_s.last == '%'
-        spend_percent = spend_mask.to_s.delete('%').to_f
-        errors.add(:spend_mask, "must be between 0% - 100%") if spend_percent < 0 || spend_percent > 100
-      end
-    end
-
-    # validate only if it was supplied - the implementer might not have a budget for the
-    # coming period
-    def numericality_of_budget_mask
-      unless budget_mask.blank?
-        budget_mask_number = budget_mask.to_s.last == '%' ?
-          budget_mask.to_s.delete('%') : budget_mask
-        errors.add(:budget_mask, "is not a number") unless is_number?(budget_mask_number)
-      end
-    end
-
-    # validate only if it was supplied - the implementer might not only have a budget for the
-    # coming period (no expenditure)
-    def numericality_of_spend_mask
-      unless spend_mask.blank?
-        spend_mask_number = spend_mask.to_s.last == '%' ?
-          spend_mask.to_s.delete('%') : spend_mask
-        errors.add(:spend_mask, "is not a number") unless is_number?(spend_mask_number)
-      end
-    end
-
-    def set_spend_amount
-      unless spend_mask.nil?
-        if spend_mask.to_s.last == '%'
-          self.spend = activity.spend.to_f * spend_mask.to_s.delete('%').to_f / 100
-        else
-          self.spend = spend_mask
-        end
-      end
-    end
-
-    def set_budget_amount
-      unless budget_mask.nil?
-        if budget_mask.to_s.last == '%'
-          self.budget = activity.budget.to_f * budget_mask.to_s.delete('%').to_f / 100
-        else
-          self.budget = budget_mask
-        end
-      end
-    end
-
     # remove any leading/trailing spaces from the percentage/amount input
     def strip_mask_fields
       provider_mask = provider_mask.strip if provider_mask && !is_number?(provider_mask)
-      budget_mask = budget_mask.strip if budget_mask && !is_number?(budget_mask)
-      spend_mask = spend_mask.strip if spend_mask && !is_number?(spend_mask)
     end
 end
 

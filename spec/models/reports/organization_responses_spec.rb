@@ -32,6 +32,7 @@ describe Reports::OrganizationResponses do
       @act = Factory(:activity, :project => @project1, :data_response => @response1)
       @sact = Factory(:sub_activity, :activity => @act, :data_response => @response1,
                       :budget => 10, :spend => 5)
+      @act.reload; @act.save!;
     end
 
     it "should show project totals" do
@@ -43,6 +44,7 @@ describe Reports::OrganizationResponses do
       @act1 = Factory(:activity, :project => @project1, :data_response => @response1)
       @sact1 = Factory(:sub_activity, :activity => @act1, :data_response => @response1,
                        :spend => "0.20", :budget => "0")
+      @act1.reload; @act1.save!;
       @project1.save(false)
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
         'org1,In Progress,5.20,5.20,0.00,10.00,10.00,0.00'
@@ -53,6 +55,7 @@ describe Reports::OrganizationResponses do
         @activity1 = Factory(:activity, :project => @project1, :data_response => @response1)
         @sactivit1 = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
                              :budget => "6", :spend => "12")
+        @activity1.reload; @activity1.save!;
       end
 
       it "should show activity totals" do
@@ -67,7 +70,7 @@ describe Reports::OrganizationResponses do
 
       it "should show differences as positive if project exceeds activity" do
         #@activity1.write_attribute(:spend, 2)
-        @sactivit1.spend = 2; @sactivit1.save; @activity1.reload
+        @sactivit1.spend = 2; @sactivit1.save; @activity1.reload; @activity1.save!;
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
           'org1,In Progress,7.00,7.00,0.00,16.00,16.00,0.00'
       end
@@ -76,8 +79,9 @@ describe Reports::OrganizationResponses do
     context "with other costs" do
       before :each do
         @other_cost1 = Factory(:other_cost, :data_response => @response1)
-        @osa1        = Factory(:sub_activity, :activity => @other_cost1, 
+        @osa1        = Factory(:sub_activity, :activity => @other_cost1,
                         :data_response => @response1, :budget => "6", :spend => "12")
+        @other_cost1.reload; @other_cost1.save!;
       end
 
       it "should show other costs totals" do
@@ -102,6 +106,8 @@ describe Reports::OrganizationResponses do
       @activity2 = Factory(:activity, :project => @project2, :data_response => @response2)
       @sa2       = Factory(:sub_activity, :activity => @activity2, :data_response => @response2,
                            :budget => 9, :spend => 18)
+      @activity1.reload; @activity1.save!;
+      @activity2.reload; @activity2.save!;
     end
 
     it "should print totals in USD for simple comparison" do

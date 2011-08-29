@@ -47,10 +47,5 @@ describe ProjectMover do
     it "should barf if one of the AR objects are somehow invalid" do
       lambda { @clone_project = @mover.move! }.should raise_error
     end
-
-    it "should allow you to forcibly save invalid AR objects" do
-      pending
-      lambda { @clone_project = @mover.move_without_validations! }.should_not raise_error
-    end
   end
 end

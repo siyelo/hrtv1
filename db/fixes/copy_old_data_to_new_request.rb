@@ -83,7 +83,7 @@ def zero_out_activity(activity)
     zero_out_assignment(ca)
   end
 
-  activity.sub_activities.each do |sa|
+  activity.implementer_splits.each do |sa|
     zero_out_activity(sa)
   end
 

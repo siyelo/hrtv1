@@ -18,6 +18,13 @@ class CodeAssignment < ActiveRecord::Base
   validates_inclusion_of :percentage, :in => 1..100,
     :if => Proc.new { |model| model.percentage.present? }, :message => "must be between 1 and 100"
 
+  ### Callbacks
+  before_save :update_cached_amount_in_usd
+
+  ### Delegates
+  delegate :data_response, :to => :activity
+  delegate :currency, :to => :activity, :allow_nil => true
+
   ### Named scopes
   named_scope :with_code_id,
               lambda { |code_id| { :conditions =>
@@ -58,12 +65,6 @@ class CodeAssignment < ActiveRecord::Base
               }}
 
 
-  ### Callbacks
-  before_save :update_cached_amount_in_usd
-
-  ### Delegates
-  delegate :data_response, :to => :activity
-  delegate :currency, :to => :activity, :allow_nil => true
 
   ### Class Methods
 

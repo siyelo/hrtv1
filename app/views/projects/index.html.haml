@@ -37,9 +37,9 @@
         = image_tag "icon_dropdown.png"
 
       %ul.menu_items{:style => 'display: none'}
-        %li= link_to 'Import Activities', '#', :id => "import_export"
+        %li= link_to 'Import', '#', :id => "import_export"
+        %li= link_to 'Export', export_response_projects_path(@response)
         %li= link_to 'Export Workplan', download_workplan_response_projects_path(@response)
-        %li= link_to 'Export All', export_response_activities_path(@response)
 
   #import_export_box
     = render 'activities_import', :project => nil, :can_export => @response.activities.present?

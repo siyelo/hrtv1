@@ -173,17 +173,17 @@ module Activity::Classification
       def sub_activity_district_code_assignments(coding_type)
         case coding_type
         when 'CodingBudgetDistrict'
-          sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
+          implementer_splits.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
         when 'CodingSpendDistrict'
-          sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
+          implementer_splits.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
         end.flatten
       end
 
       def district_coding_adjusted(klass, assignments, amount)
         if assignments.present?
           assignments
-        elsif sub_activities.present?
-          district_codings_from_sub_activities(klass)
+        elsif implementer_splits.present?
+          district_codings_from_implementer_splits(klass)
         elsif amount
           locations.map{|location| fake_ca(klass, location, amount / locations.size)}
         else
@@ -191,8 +191,8 @@ module Activity::Classification
         end
       end
 
-      def district_codings_from_sub_activities(klass)
-        code_assignments = sub_activity_district_code_assignments_if_complete(klass.name)
+      def district_codings_from_implementer_splits(klass)
+        code_assignments = implementer_split_district_code_assignments_if_complete(klass.name)
         location_amounts = {}
         code_assignments.each do |ca|
           location_amounts[ca.code] = 0 unless location_amounts[ca.code]

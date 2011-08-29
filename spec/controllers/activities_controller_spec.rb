@@ -129,6 +129,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response)
       @activity = Factory(:activity, :project => @project,
                           :data_response => @data_response, :am_approved => false)
+      @project.reload
       login @user
     end
 

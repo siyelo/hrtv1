@@ -1,0 +1,68 @@
+- budget_fiscal_year = @response.organization.gor_fiscal_year_start(:budget).map{ |y| y.to_s.last(2) }.join("-")
+- spend_fiscal_year = budget_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 1).to_s.last(2) }.join("-")
+- spend_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 2).to_s.last(2) }.join("-")
+- @project = project
+- project_activities = @activities ? @activities.find_all{|a| a.project == project} : @project.activities
+.header
+  - if project.valid? && project_activities.select{ |a| !a.valid? }.empty?
+    = image_tag "tick_12.png", :class => 'saved_tick js_saved'
+    = nice_name(project, 50)
+  - else
+    .left
+      = image_tag "warning_12.png", :title => "This project has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip js_unsaved'
+      = nice_name(project, 50)
+
+      %span.project= project.try(:name)
+
+.main.dashboard_section{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
+  = error_messages_for :project, :object => project, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+  - semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
+    - f.inputs :class => 'inputs_condensed' do
+
+      .project_heading
+        Project
+      = f.input :data_response_id, :as => :hidden
+      %li.section_form
+        = render "projects/basic_fields", :f => f
+        %table.input_table
+          %thead
+            %tr
+              %th Funding Organization
+              %th
+                .right_justified= "Disbursements Received (#{current_fy(@response)})"
+              %th
+                .right_justified= "Planned Disbursements (#{next_fy(@response)})"
+              %th
+          %tbody
+            - f.fields_for :in_flows, project.in_flows do |flows|
+              %tr.overflow_fix.fields
+                %td.title
+                  .f_from_container
+                    .implementer_container
+                      .ui_widget
+                        = flows.select :organization_id_from, options_for_select(funding_organizations_select, flows.object.organization_id_from), {}, :class => 'js_implementer_select js_combobox f_from'
+
+                %td= flows.text_field :spend, :class => 'js_spend no_style', :class => flows.object.errors.on(:spend) ? "error" : ""
+                %td= flows.text_field :budget , :class => 'js_budget no_style', :class => flows.object.errors.on(:budget) ? "error" : ""
+                %td.delete= link_to_remove_fields "x", f, :class => 'delete_row'
+            %tr
+
+      %li.section_form
+        %h3 Activities
+        %ul.condensed_fields.section_form.activities_form
+          - f.fields_for :activities, project_activities, :class => 'section_form' do |ff|
+            .activity_wrapper{:class => ff.object.errors.empty? ? "" : "error"}
+              = ff.input :name, :required => false, :input_html => {:size => '80'}, :class => ff.object.errors.on(:name) ? "error" : ""
+              = ff.input :description, :input_html => { :rows => 2 }, :required => false, :class => ff.object.errors.on(:description) ? "error" : ""
+              -unless ff.object.new_record?
+                = ff.input :id, :as => :hidden
+              = ff.input :data_response_id, :as => :hidden
+
+              %li
+                = render 'shared/outlays/implementers', :f => ff, :outlay => ff.object, :blank_rows => 0, :show_buttons => false
+
+      %li.borderless.marginless
+        %br
+        - f.buttons :class => 'buttons' do
+          = f.commit_button "Save", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
+          = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

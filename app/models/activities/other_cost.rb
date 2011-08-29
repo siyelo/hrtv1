@@ -74,6 +74,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -120,5 +121,9 @@ end
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
+#  planned_for_gor_q1           :boolean
+#  planned_for_gor_q2           :boolean
+#  planned_for_gor_q3           :boolean
+#  planned_for_gor_q4           :boolean
 #
 

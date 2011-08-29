@@ -34,13 +34,13 @@ Feature: Reporter can manage activities
     When I follow "Projects"
     And I follow "existing description"
     And I follow "Implementers" within ".section_nav"
-    And I select "organization2" from "activity_sub_activities_attributes_0_provider_mask"
-    And I fill in "activity[sub_activities_attributes][0][spend_mask]" with "99"
-    And I fill in "activity[sub_activities_attributes][0][budget_mask]" with "19"
+    And I select "organization2" from "activity_implementer_splits_attributes_0_provider_mask"
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
     And I press "Save"
     Then I should see "Activity was successfully updated."
-    And the "activity[sub_activities_attributes][0][spend_mask]" field should contain "99"
-    And the "activity[sub_activities_attributes][0][budget_mask]" field should contain "19"
+    And the "activity[implementer_splits_attributes][0][spend]" field should contain "99"
+    And the "activity[implementer_splits_attributes][0][budget]" field should contain "19"
 
   Scenario: Reporter can CRUD activities
     When I follow "Add Activities now"

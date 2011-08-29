@@ -7,7 +7,7 @@
     %th You Said
     %th Search + Select
   %tbody
-    - form_for(:sub_activities, :url => bulk_create_activity_sub_activities_path(@activity)) do |f|
+    - form_for(:implementer_splits, :url => bulk_create_activity_sub_activities_path(@activity)) do |f|
       - @sa.each_key do |k|
         - fields_for "#{k}" do |e|
           = e.hidden_field :data_response_id, :as => :hidden, :value => @sa[k][:data_response_id], :required => false

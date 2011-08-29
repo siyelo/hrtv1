@@ -14,7 +14,8 @@ class DataResponse < ActiveRecord::Base
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :other_costs, :dependent => :destroy
-  has_many :sub_activities, :dependent => :destroy
+  has_many :implementer_splits, :class_name => "SubActivity", :dependent => :destroy
+  has_many :sub_activities, :dependent => :destroy #deprecated
   has_many :projects, :dependent => :destroy
   has_many :users_currently_completing,
            :class_name => "User",
@@ -333,7 +334,8 @@ class DataResponse < ActiveRecord::Base
     end
 
     def reject_uncoded_locations(other_costs)
-      other_costs.select{ |a| !a.coding_budget_district_classified? || !a.coding_spend_district_classified? }
+      other_costs.select{ |a| !a.coding_budget_district_classified? ||
+          !a.coding_spend_district_classified? }
     end
 
     # Find all complete Activities

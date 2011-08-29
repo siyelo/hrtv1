@@ -22,8 +22,8 @@ class ImplementerMover
     if no_splits_exist
       create_new_split! provider_or_self
       # create new sa (provider_or_self)
-    elsif ((@activity.spend || 0)  > @activity.sub_activities_total(:spend)) or
-          ((@activity.budget || 0) > @activity.sub_activities_total(:budget))
+    elsif ((@activity.spend || 0)  > @activity.implementer_splits_total(:spend)) or
+          ((@activity.budget || 0) > @activity.implementer_splits_total(:budget))
       #find existing split to clone
       split = @activity.implementer_splits.find_or_create_by_provider_id(provider_or_self.id)
       split.data_response_id = @activity.response.id
@@ -53,7 +53,7 @@ class ImplementerMover
       if activity_amount <= (split.send(amount_field) || 0)
         return (split.send(amount_field) || 0)
       else
-        return activity_amount - activity.sub_activities_total(amount_field)
+        return activity_amount - activity.implementer_splits_total(amount_field)
       end
     end
 

@@ -2,7 +2,7 @@
 
 = render 'shared/outlays/sub_activities_import_export', :outlay => outlay
 
-%ul.section_form.wrapped.last
+%ul.wrapped.last
   %table.input_table
     %thead
       %tr
@@ -17,30 +17,31 @@
           .right_justified Current Budget
         %th.delete
     %tbody
-      - f.semantic_fields_for :sub_activities do |sa|
+      - f.semantic_fields_for :implementer_splits do |sa|
         = render "shared/outlays/sub_activity_row", :f => sa
-      - 3.times do
-        - f.object.sub_activities.build unless f.object.sub_activities.length > 0
-        - new_object = f.object.class.reflect_on_association(:sub_activities).klass.new
-        - f.fields_for(:sub_activities, new_object) do |builder|
+      - blank_rows.times do
+        - f.object.implementer_splits.build unless f.object.implementer_splits.length > 0
+        - new_object = f.object.class.reflect_on_association(:implementer_splits).klass.new
+        - f.fields_for(:implementer_splits, new_object) do |builder|
           = render "shared/outlays/sub_activity_fields", :f => builder
 
       %tr
         %td
-          %span= link_to_add_fields "Add Implementer", f, :sub_activities, "shared/outlays/", :class => "create_alt marginless"
-          %span
-            - unless outlay.new_record?
-              - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
-                = image_tag "icon_import_export.png"
-                Import / Export
+          -if show_buttons
+            %span= link_to_add_fields "Add Implementer", f, :implementer_splits, "shared/outlays/", :class => "create_alt marginless"
+            %span
+              - unless outlay.new_record?
+                - link_to "#", :id => "import_implementers", :class => "create_alt js_upload_btn overlay sub_impl_imp_exp", :rel => "#sub_activities_upload_box" do
+                  = image_tag "icon_import_export.png"
+                  Import / Export
 
         %td
           %p.total.js_total_spend
             %span.label.left Total
-            %span.amount.right= number_with_precision(outlay.sub_activities_total(:spend), :precision => 2)
+            %span.amount.right= number_with_precision(outlay.implementer_splits_total(:spend), :precision => 2)
             %span.currency.right= outlay.currency
         %td
           %p.total.js_total_budget
             %span.label.left Total
-            %span.amount.right= number_with_precision(outlay.sub_activities_total(:budget), :precision => 2)
+            %span.amount.right= number_with_precision(outlay.implementer_splits_total(:budget), :precision => 2)
             %span.currency.right= outlay.currency

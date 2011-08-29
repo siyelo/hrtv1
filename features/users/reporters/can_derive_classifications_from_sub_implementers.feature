@@ -20,7 +20,7 @@ Feature: Reporter can derive classifications from sub implementers
       And a sub_activity exists with activity: the activity, provider: the provider, data_response: the data_response, budget: "55", spend: "55"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the ngo, current_response: the data_response
       And I am signed in as "reporter@hrtapp.com"
-      And I follow "data_request1"
+      And I go to the set request page for "data_request1"
       And I follow "Projects"
       And I follow "activity1"
 

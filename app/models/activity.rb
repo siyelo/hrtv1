@@ -208,8 +208,6 @@ class Activity < ActiveRecord::Base
                 row << "" if index > 0
                 row << "" if index > 0
                 row << "" if index > 0
-                row << "" if index > 0
-                row << "" if index > 0
                 row << sub_activity.id
                 row << sub_activity.provider.try(:name)
                 row << sub_activity.spend
@@ -232,6 +230,8 @@ class Activity < ActiveRecord::Base
     project_description = activity_description = ''
     activity_in_memory = false
     existing_sa = nil
+
+    SubActivity.after_save.reject! {|callback| callback.method.to_s == 'update_activity_cache'}
 
     doc.each do |row|
       activity_name = row['Activity Name'].blank? ? activity_name : row['Activity Name']
@@ -303,13 +303,13 @@ class Activity < ActiveRecord::Base
       project.name                = project_name.try(:strip)
       project.description         = project_description.try(:strip)
       if project.new_record?
-        project.start_date        = DateHelper::flexible_date_parse(activity_start_date.try(:strip))
-        project.end_date          = DateHelper::flexible_date_parse(activity_end_date.try(:strip))
+        project.start_date        = Time.now #DateHelper::flexible_date_parse(activity_start_date.try(:strip))
+        project.end_date          = Time.now + 1.year #DateHelper::flexible_date_parse(activity_end_date.try(:strip))
         ff                        = project.funding_flows.new
         ff.organization_id_from   = project.organization.id
         ff.spend                  = 0
         ff.budget                 = 0
-        project.funding_flows << ff
+        project.funding_flows << ff #killing performance
       end
 
       unless response.projects.include?(project)
@@ -337,8 +337,9 @@ class Activity < ActiveRecord::Base
         sub_activity.budget = row["Current Budget"]
       end
 
+
       unless sub_activities.include?(sub_activity)
-        activity.sub_activities << sub_activity
+        activity.sub_activities << sub_activity #this does a save & murders performance
       end
 
       if activity.new_record? && !activity_in_memory
@@ -354,6 +355,9 @@ class Activity < ActiveRecord::Base
       end
       activity_in_memory = false
     end
+
+    SubActivity.send :after_save, :update_activity_cache #re-enable callback
+
     activities
   end
 
@@ -646,8 +650,8 @@ class Activity < ActiveRecord::Base
       unless project
         self_funder = FundingFlow.new(:from => self.organization,
                         :spend => self.spend, :budget => self.budget)
-        project = Project.create(:name => name, :start_date => start_date,
-                                :end_date => end_date, :data_response => data_response,
+        project = Project.create(:name => name, :start_date => Time.now,
+                                :end_date => Time.now + 1.year, :data_response => data_response,
                                 :in_flows => [self_funder])
       end
       self.project = project

@@ -52,16 +52,16 @@ Feature: Can view district reports
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
 
-
+  @run
   Scenario: reporter views district reports
     Given I am signed in as "reporter@hrtapp.com"
-    And I follow "Req1"
+    And I go to the set request page for "Req1"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
     Then I should see a District-Location-Activity report for "Activity 1 A"
 
   Scenario: admin views district reports for all organizations
     Given I am signed in as a sysadmin
-    And I follow "Req1"
+    And I go to the set request page for "Req1"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
     Then I should see a District-Location-Activity report for "Activity 1 A"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 B"
@@ -70,7 +70,7 @@ Feature: Can view district reports
   # District reports are the same for all users and organizations
   Scenario: admin views district reports for single organization
     Given I am signed in as a sysadmin
-    And I follow "Req1"
+    And I go to the set request page for "Req1"
     When I follow "Organizations"
     And I follow "Org A"
     When I drill down to Reports->Districts->"Location X"->"Activity 1 A"
@@ -80,7 +80,7 @@ Feature: Can view district reports
 
   Scenario: user only sees district reports for current request
     Given I am signed in as "reporter@hrtapp.com"
-    And I follow "Req1"
+    And I go to the set request page for "Req1"
     And I follow "Reports"
     And I follow "Review District Expenditures and Current Budgets"
     And I follow "Location X"

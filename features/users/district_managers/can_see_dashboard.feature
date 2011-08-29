@@ -23,5 +23,5 @@ Feature: District Manager can see dashboard
       And an district_manager exists with email: "district_manager@hrtapp.com", organization: the nonreporting_organization, location: the location
     When I am signed in as "district_manager@hrtapp.com"
     Then I should see "ORG: [dr2]"
-    When I follow "dr1"
+    When I go to the set request page for "dr1"
     Then I should see "ORG: [dr1]"

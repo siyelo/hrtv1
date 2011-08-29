@@ -30,7 +30,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And a reporter exists with email: "reporter@hrtapp.com", organization: the organization, current_response: the data_response
     And a project exists with name: "Project", data_response: the data_response
     And I am signed in as "reporter@hrtapp.com"
-    And I follow "data_request1"
+    And I go to the set request page for "data_request1"
 
 
   ############
@@ -180,7 +180,7 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Classification for approved activity cannot be changed."
 
 
-  @javascript @run
+  @javascript
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity

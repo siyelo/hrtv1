@@ -12,7 +12,7 @@ Feature: Reporter can manage projects
     And data_response "data_response1" should exist with data_request: data_request "data_request2", organization: organization "organization3"
     And a reporter exists with email: "reporter@hrtapp.com", organization: organization "organization2"
     And I am signed in as "reporter@hrtapp.com"
-    And I follow "data_request1"
+    And I go to the set request page for "data_request1"
     And a project "Project5" exists with name: "Project5", data_response: data_response "data_response"
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"

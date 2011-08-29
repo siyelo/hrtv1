@@ -143,6 +143,7 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == false
     end
   end
+end
 
 #assumes project total is 10
 def setup_equal_to_project(field)

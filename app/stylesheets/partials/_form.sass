@@ -1,4 +1,4 @@
-input[type="text"], textarea, select
+input[type="text"], input[type="password"], textarea, select
   border: 1px solid $primary_border2
   color: #444
   font-family: Arial, sans-serif
@@ -96,6 +96,8 @@ input[type="text"], textarea, select
       float: left
       margin-top: 7px
       width: 18%
+      &.indented
+        padding-left: 10px
 
     select, input[type=text], input[type=password], textarea
       float: left
@@ -199,14 +201,10 @@ input[type="text"], textarea, select
   float: left
 
 .form_aside
-  background: $filler
-  border: 1px solid $lightest-blue
   float: right !important
-  margin-top: 5px
   padding: 1% 2% 1%
   width: 16%
-  +border-radius(3px)
-
+  
   .warn
     color: $warm-red
 
@@ -825,6 +823,10 @@ a.tooltip
     padding-top: 15px
   &.last
     border-bottom: 1px solid $primary_border
+  &.single
+    padding-top: 15px
+    border-top: 1px solid $primary_border
+    border-bottom: 1px solid $primary_border
   &.connect
     padding-bottom: 0
   &.main
@@ -837,8 +839,6 @@ a.tooltip
     -webkit-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
-
-.section_comments
 
 #activity_name_input
   width: 50% !important

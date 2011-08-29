@@ -513,10 +513,10 @@ var updateTotalValues = function (el) {
   var total_value = 0;
 
   if ($(el).hasClass('js_spend')) {
-    var input_fields = $(el).parents('table').find('.js_spend:visible');
+    var input_fields = $(el).parents('table, .activity_tree').find('.js_spend:visible');
     var total_field = $('.js_total_spend .amount');
   } else if ($(el).hasClass('js_budget')) {
-    var input_fields = $(el).parents('table').find('.js_budget:visible');
+    var input_fields = $(el).parents('table, .activity_tree').find('.js_budget:visible');
     var total_field = $('.js_total_budget .amount');
   }
 
@@ -952,6 +952,7 @@ var activity_classification = function () {
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
+    updateTotalValues(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
@@ -970,6 +971,7 @@ var activity_classification = function () {
 
   });
 
+  numericInputField(".percentage_boxi, .js_spend, .js_budget");
 
   var updateParentNodes = function(siblingLi, type, parentTotal){
     var siblingValue = 0;

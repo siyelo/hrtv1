@@ -970,7 +970,6 @@ var activity_classification = function () {
 
   });
 
-  numericInputField(".percentage_boxi, .js_spend, .js_budget");
 
   var updateParentNodes = function(siblingLi, type, parentTotal){
     var siblingValue = 0;

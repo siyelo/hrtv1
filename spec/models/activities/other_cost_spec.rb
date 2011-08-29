@@ -48,24 +48,16 @@ describe OtherCost do
                               :data_response => @response, :project => @project)
       @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
                               :budget => 50, :spend => 40)
-      @activity.stub(:coding_budget_valid?) { true }
-      @activity.stub(:coding_budget_cc_valid?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
+
       @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_spend_valid?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { true }
       @activity.stub(:coding_spend_district_classified?) { true }
       @activity.save
       @activity.reload
     end
 
-    it "is classified? when both budget and spend are classified with factories" do
-      @activity.coding_budget_classified?.should == true
-      @activity.coding_budget_cc_classified?.should == true
+    it "is classified? when only locations are classified" do
       @activity.coding_budget_district_classified?.should == true
       @activity.budget_classified?.should == true
-      @activity.coding_spend_classified?.should == true
-      @activity.coding_spend_cc_classified?.should == true
       @activity.coding_spend_district_classified?.should == true
       @activity.spend_classified?.should == true
       @activity.classified?.should be_true

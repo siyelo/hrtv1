@@ -1,6 +1,7 @@
 - budget_fiscal_year = @response.organization.gor_fiscal_year_start(:budget).map{ |y| y.to_s.last(2) }.join("-")
 - spend_fiscal_year = budget_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 1).to_s.last(2) }.join("-")
 - spend_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 2).to_s.last(2) }.join("-")
+
 .header
   - if outlay.valid?
     = image_tag "tick_12.png"
@@ -25,7 +26,7 @@
         %span Current Budget:
         = "#{outlay.budget} #{outlay.currency}"
 
-.main.dashboard_section{:style => (outlay.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
+.main{:style => (outlay.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
   - semantic_form_for outlay, :namespace => form_namespace(outlay), :url => (bulk_edit_activity_path(outlay, response) ), :html => {:class => "condensed_form"} do |f|
     - f.inputs :class => 'inputs_condensed' do
       %li
@@ -39,11 +40,11 @@
             %li== We didn't find the project "#{outlay.csv_project_name}" in the list, please select the correct one
             %br
 
-        %ul.clearfix
+        %ul.section_form.single
           = f.input :project_id, :label => "Project", :input_html => {:class => 'activity_project_id'}, :wrapper_html => {:class => 'activity_project'}, :as => :select, :collection => @response.projects
 
       %li
-        %ul
+        %ul.section_form.last
           = f.input :name, :required => false, :wrapper_html => {:class => 'grid-30'}
           = f.input :description, :input_html => { :rows => 2 }, :required => false, :wrapper_html => {:class => 'grid-40'}
           = f.input :start_date, :as => :string, :input_html => {:class => 'date_picker'}, :wrapper_html => {:class => 'short_input'}, :required => false, :wrapper_html => {:class => 'grid-15'}
@@ -63,7 +64,7 @@
         %ul
           = render 'shared/outlays/implementers', :f => f, :outlay => outlay
 
-      %li.borderless.marginless
+      %li.marginless.section_form.last
         %br
         - f.buttons :class => 'buttons' do
           = f.commit_button "Save", :wrapper_html => {:class => "save_btn left"}, :button_html => {:class => "next"}

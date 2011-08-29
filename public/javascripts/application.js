@@ -1715,6 +1715,7 @@ var activities_new = activities_create = activities_edit = activities_update = o
   run: function () {
     activity_classification();
     activity_form();
+    $(document).find('.js_add_nested').trigger('click');
   }
 };
 

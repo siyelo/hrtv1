@@ -88,8 +88,7 @@ Spork.each_run do
   end
 
   def proj_funded_by(proj, funder, budget = 50, spend = 50)
-    to = proj.data_response.organization
-    Factory(:funding_flow, :from => funder, :to => to, :project => proj,
+    Factory(:funding_flow, :from => funder, :project => proj,
              :budget => budget, :spend => spend)
     proj.reload
     proj
@@ -164,16 +163,32 @@ Spork.each_run do
   end
 
   def basic_setup_response
+    basic_setup_response_for_controller
+    @request = @data_request
+    @response = @data_response
+  end
+
+  #controller specs don't like you setting @request, @response
+  def basic_setup_response_for_controller
     @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
-    @response     = @organization.latest_response
+    request      = Factory(:data_request, :organization => @organization)
+    @data_request = request
+    @data_response     = @organization.latest_response
   end
 
   def basic_setup_project
     @organization = Factory(:organization)
+    @other_org    = Factory(:organization)
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
-    @project      = Factory(:project, :data_response => @response)
+    @project      = Project.new(:data_response => @response,
+                      :name => "non_factory_project_name_#{rand(100_000_000)}",
+                      :description => "proj descr",
+                      :start_date => "2010-01-01",
+                      :end_date => "2011-01-01",
+                      :in_flows_attributes => [:organization_id_from => @other_org.id,
+                          :budget => 10, :spend => 20])
+    @project.save!
   end
 
   def basic_setup_activity
@@ -203,13 +218,13 @@ Spork.each_run do
   end
 
   def basic_setup_funding_flow
+    @donor = Factory(:organization)
     @organization = Factory(:organization)
-    @ngo          = Factory(:organization)
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @funding_flow = Factory(:funding_flow, :project => @project,
-                            :from => @organization, :to => @ngo)
+                            :from => @donor)
   end
 
   def debug_model_objects

@@ -28,8 +28,6 @@ describe Activity do
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
-    it { should allow_mass_assignment_of(:start_date) }
-    it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:project_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
@@ -39,6 +37,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:approved) }
     it { should allow_mass_assignment_of(:sub_activities_attributes) }
+    it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:csv_project_name) }
     it { should allow_mass_assignment_of(:csv_provider) }
@@ -46,6 +45,10 @@ describe Activity do
     it { should allow_mass_assignment_of(:targets_attributes) }
     it { should allow_mass_assignment_of(:outputs_attributes) }
     it { should allow_mass_assignment_of(:am_approved_date) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q1) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q2) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q3) }
+    it { should allow_mass_assignment_of(:planned_for_gor_q4) }
   end
 
   describe "Validations" do
@@ -53,49 +56,21 @@ describe Activity do
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
-    it "will return false if the activity start date is before the project start date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2010-01-01", :end_date => "2011-03-01")
-      @activity.should_not be_valid
-    end
-
-    it "will return false if the activity end date is after the project end date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2001-03-01", :end_date => "2011-08-01")
-
-      @activity.should_not be_valid
-    end
-
-    it "will return true if the activity start and end date are within the project start and end date" do
-      basic_setup_response
-      @project  = Factory(:project, :data_response => @response,
-                         :start_date => '2011-01-01', :end_date => '2011-04-01')
-      @activity = Factory.build(:activity, :data_response => @response, :project => @project,
-                         :start_date => "2011-02-01", :end_date => "2011-03-01")
-
-      @activity.should be_valid
-    end
   end
-  
+
   describe "update attributes" do
     context "when one sub_activity" do
       before :each do
         basic_setup_activity
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+        attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", 
+            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+            }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
-    
+
       it "should maintain the activites budget/spend cache when creating a new sub_activity" do
         @activity.sub_activities.size.should == 1
         @activity.sub_activities[0].implementer.should == @organization
@@ -114,30 +89,30 @@ describe Activity do
         SubActivity.after_save.should include(:update_activity_cache)
       end
     end
-    
+
     context "when two sub_activities" do
       before :each do
         basic_setup_sub_activity
         @implementer2 = Factory :organization
         @sub_activity2 = Factory(:sub_activity, :data_response => @response,
                                  :activity => @activity, :provider => @implementer2)
-        
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+
+        attributes = {"name"=>"dsf",  "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>
               {"spend_mask"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
             "1"=>
               {"spend_mask"=>"20", "id"=>"#{@sub_activity2.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget_mask"=>"40.0"}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+            }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
-    
+
       it "should maintain the activites budget/spend cache when creating a new sub_activity" do
         @activity.sub_activities.size.should == 2
         @activity.sub_activities[0].implementer.should == @organization
         @activity.sub_activities[0].spend.to_f.should == 10
-        @activity.sub_activities[0].budget.to_f.should == 20        
+        @activity.sub_activities[0].budget.to_f.should == 20
         @activity.sub_activities[1].implementer.should == @implementer2
         @activity.sub_activities[1].spend.to_f.should == 20
         @activity.sub_activities[1].budget.to_f.should == 40
@@ -145,30 +120,30 @@ describe Activity do
         @activity.spend.to_f.should == 30
         @activity.budget.to_f.should == 60
       end
-    
+
       it "should not call activity cache update more than once" do
         pending #tricky to count the number of method calls on the callback
       end
-      
+
       it "should leave the sa callbacks intact" do
         SubActivity.after_save.should include(:update_activity_cache)
       end
     end
   end
 
-  
+
   describe "new" do
     context "when creating one sub activity" do
       before :each do
         basic_setup_project
-        @attributes = { "name"=>"new activity", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", 
+            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04", "data_response_id"=>"#{@response.id}"}
+            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
-    
+
       it "should instantiate new activity with cache values already calculated" do
         @activity.sub_activities.size.should == 1
         @activity.sub_activities[0].implementer.should == @organization
@@ -177,33 +152,33 @@ describe Activity do
         @activity.spend.to_f.should == 10
         @activity.budget.to_f.should == 20
       end
-    
+
       it "should call activity_cache_update once" do
         pending #tricky to count the number of method calls on the callback
       end
-    
+
       it "should leave the sa callbacks intact" do
         SubActivity.after_save.should include(:update_activity_cache)
       end
-    end    
-    
+    end
+
     context "when (bulk) creating more than one sub activity" do
       before :each do
         basic_setup_project
         @implementer2 = Factory :organization
         @implementer3 = Factory :organization
-        @attributes = { "name"=>"new activity", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", 
+            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
             "budget_mask"=>"20.0", "_destroy"=>""},
-            "1"=>{"spend_mask"=>"20", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", 
+            "1"=>{"spend_mask"=>"20", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}",
             "budget_mask"=>"40.0", "_destroy"=>""},
-            "2"=>{"spend_mask"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}", 
+            "2"=>{"spend_mask"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}",
             "budget_mask"=>"60.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "end_date"=>"2010-08-04", "data_response_id"=>"#{@response.id}"}
+            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
-    
+
       it "should instantiate new activity with cache values already calculated" do
         @activity.sub_activities.size.should == 3
         @activity.sub_activities[0].implementer.should == @organization
@@ -211,86 +186,74 @@ describe Activity do
         @activity.sub_activities[0].budget.to_f.should == 20
         @activity.sub_activities[1].implementer.should == @implementer2
         @activity.sub_activities[1].spend.to_f.should == 20
-        @activity.sub_activities[1].budget.to_f.should == 40        
+        @activity.sub_activities[1].budget.to_f.should == 40
         @activity.sub_activities[2].implementer.should == @implementer3
         @activity.sub_activities[2].spend.to_f.should == 40
         @activity.sub_activities[2].budget.to_f.should == 60
         @activity.spend.to_f.should == 70
         @activity.budget.to_f.should == 120
       end
-      
+
       it "should call activity_cache_update once" do
         pending #tricky to count the number of method calls on the callback
       end
-      
+
       it "should call activity_cache_update once on saving" do
         pending
         # FIXME: this is still doing callback for each nested sub activity - will be slow!
       end
-    
+
       it "should leave the sa callbacks intact" do
         SubActivity.after_save.should include(:update_activity_cache)
       end
     end
-  
-  
+
+
   end
 
   describe "download activity template" do
-    it "returns the correct fields in the activity template" do
-      organization  = Factory(:organization,
-                              :fiscal_year_start_date => "2009-10-01",
-                              :fiscal_year_end_date => "2010-09-30")
-      data_request  = Factory(:data_request, :organization => organization)
-      data_response = organization.latest_response
-      Timecop.freeze(Date.parse("2009-10-15"))
-      header_row = Activity.download_template(data_response)
-      header_row.should == "Project Name,Activity Name,Activity Description,Provider,Jul '08 - Sep '08 Spend,Oct '08 - Dec '08 Spend,Jan '09 - Mar '09 Spend,Apr '09 - Jun '09 Spend,Jul '09 - Sep '09 Spend,Jul '09 - Sep '09 Budget,Oct '09 - Dec '09 Budget,Jan '10 - Mar '10 Budget,Apr '10 - Jun '10 Budget,Jul '10 - Sep '10 Budget,Beneficiaries,Targets,Start Date,End Date,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
-    end
-
     it "should return csv header" do
       organization  = Factory(:organization)
       request        = Factory(:data_request, :organization => organization)
       response      = organization.latest_response
-      Activity.file_upload_columns(response).should == [
+      Activity.file_upload_columns.should == [
         'Project Name',
+        'Project Description',
         'Activity Name',
         'Activity Description',
-        'Provider',
-        "Apr '10 - Jun '10 Spend",
-        "Jul '10 - Sep '10 Spend",
-        "Oct '10 - Dec '10 Spend",
-        "Jan '11 - Mar '11 Spend",
-        "Apr '11 - Jun '11 Spend",
-        "Apr '11 - Jun '11 Budget",
-        "Jul '11 - Sep '11 Budget",
-        "Oct '11 - Dec '11 Budget",
-        "Jan '12 - Mar '12 Budget",
-        "Apr '12 - Jun '12 Budget",
-        'Beneficiaries',
-        'Targets',
-        'Start Date',
-        'End Date']
+        'Id',
+        'Implementer',
+        'Past Expenditure',
+        'Current Budget']
     end
   end
 
   describe "#download_template" do
-    it "should return template" do
+    it "should return template with blank cells for repeated project & activity" do
       basic_setup_activity
+      sub_activity = Factory(:sub_activity, :activity => @activity, :data_response => @response)
+      sub_activity2 = Factory(:sub_activity, :activity => @activity, :data_response => @response)
       #@activity.targets << Factory(:target)
-      csv = Activity.download_template(@response, [@activity])
+      csv = Activity.download_template(@response)
       rows = FasterCSV.parse(csv)
-      rows[0].should == Activity.file_upload_columns_with_id_col(@response)
-      rows[1][0].should == @activity.project.try(:name)
-      rows[1][1].should == @activity.name
-      rows[1][2].should == @activity.description
-      rows[1][3].should == @activity.provider.try(:name)
-      rows[1][4].to_s.should == @activity.spend.to_s
-      rows[1][5].to_s.should == @activity.budget.to_s
-      rows[1][6].should == @activity.beneficiaries.map{|l| l.short_display}.join(',')
-      rows[1][7].should == @activity.targets.map{|o| o.description}.join("")
-      rows[1][8].should == @activity.start_date.to_s
-      rows[1][9].should == @activity.end_date.to_s
+      rows[0].should == Activity.file_upload_columns
+      rows[1][0].should == sub_activity.activity.project.try(:name)
+      rows[1][1].should == sub_activity.activity.project.try(:description)
+      rows[1][2].should == sub_activity.activity.name
+      rows[1][3].should == sub_activity.activity.description
+      rows[1][4].should == sub_activity.id.to_s
+      rows[1][5].should == sub_activity.provider.try(:name)
+      rows[1][6].to_s.should == sub_activity.spend.to_s
+      rows[1][7].to_s.should == sub_activity.budget.to_s
+
+      rows[2][0].should == ""
+      rows[2][1].should == ""
+      rows[2][2].should == ""
+      rows[2][3].should == ""
+      rows[2][4].should == sub_activity2.id.to_s
+      rows[2][5].should == sub_activity2.provider.try(:name)
+      rows[2][6].to_s.should == sub_activity2.spend.to_s
+      rows[2][7].to_s.should == sub_activity2.budget.to_s
     end
   end
 
@@ -315,9 +278,10 @@ describe Activity do
   end
 
   describe "gets budget and spend from sub activities" do
-    before :each do 
+    before :each do
       basic_setup_activity
-      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response, :budget => 25, :spend => 10)
+      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+              :budget => 25, :spend => 10)
       @activity.reload
     end
 
@@ -337,7 +301,8 @@ describe Activity do
 
     describe "works with more than one sub activity" do
       before :each do
-        @sa1 = Factory(:sub_activity, :activity => @activity, :data_response => @response, :budget => 125, :spend => 100)
+        @sa1 = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+                :budget => 125, :spend => 100)
         @activity.reload
       end
       it "activity.budget should be the total of sub activities(2)" do
@@ -370,15 +335,14 @@ describe Activity do
         basic_setup_project
         our_org   = Factory(:organization)
         other_org = Factory(:organization)
-        flow      = Factory(:funding_flow,
-                            :from => our_org, :to => other_org, :project => @project)
-        activity  = Factory(:activity, :data_response => @response,
-                            :project => @project, :provider => other_org )
+        flow      = Factory(:funding_flow, :from => our_org, :project => @project)
+        activity  = Factory(:activity, :data_response => @response, :project => @project,
+                      :provider => other_org )
         activity.provider.should == other_org # duh
       end
     end
   end
-  
+
 
   it "cannot be edited once approved" do
     basic_setup_activity
@@ -486,8 +450,7 @@ describe Activity do
         @organization   = Factory(:organization)
         @request        = Factory(:data_request, :organization => @organization)
         @response       = @organization.latest_response
-        @project        = Factory(:project, :data_response => @response, :name => "project1",
-                          :start_date => '2012-01-01', :end_date => '2012-12-12')
+        @project        = Factory(:project, :data_response => @response, :name => "project1")
         @activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
         @doc            = FasterCSV.open(@activities_csv, {:headers => true})
         @implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
@@ -500,20 +463,18 @@ describe Activity do
       end
 
       it "should create a budget and spend automatically for the activities" do
+        pending
         @activities[0].sub_activities.count.should == 1
         @activities[0].sub_activities[0].data_response.should == @response
         @activities[0].sub_activities[0].organization.should == @organization
       end
 
       it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
+        pending
         @activities.count.should == 1
         @activities[0].implementer_splits.first.implementer.should == @implementer
       end
 
-      it "recognizes non-standard dates" do
-        @activities[0].start_date.to_s.should  == '2012-01-01'
-        @activities[0].end_date.to_s.should    == '2012-12-12'
-      end
     end
 
     context "when CSV has an existing project" do

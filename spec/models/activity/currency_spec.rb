@@ -51,6 +51,7 @@ describe Activity, "Currency" do
     it "should update spend in USD after organization currency change" do
       @organization.currency = "RWF"
       @organization.save
+      @organization.currency.should == "RWF"
       @a.reload
       @a.spend_in_usd.should == 0.2469
     end

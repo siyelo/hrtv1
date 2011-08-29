@@ -68,6 +68,10 @@ module NavigationHelpers
       response = get_data_response($2, $1)
       admin_response_path(response)
 
+    when /the set request page for "(.+)"/
+      request = DataRequest.find_by_title($1)
+      set_request_path(request.id)
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #

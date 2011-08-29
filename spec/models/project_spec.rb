@@ -39,18 +39,21 @@ describe Project do
     it { should_not allow_value('2010-13-01').for(:end_date) }
     it { should_not allow_value('2010-12-41').for(:end_date) }
 
-
-    it "should validates length of name" do
-      @project = Factory.build(:project, 
-                  :name => nil)
-
+    it "should validate length of name" do
+      @project = Factory.build(:project, :name => nil)
       @project.save.should be_false
-
-      @project = Factory.build(:project,
-      :name => "alskfjalsdkfjalksdfhalksjhfakljhflkashflkajshdflkajshflkasjhdflkasjhdflkasjhflkasjhflkasjhflkasjhflkasjhdflaksjhdflkasjhdflkasjhdflkasjhdflaksjhdflkasjhdflkasj,hdflaksjhdflaksdjhflaksjhdflaksjdhflkasjhflksajhflksjfh")
+      # TODO - filter to just one error
+      @project.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]
+      @project.name = "1111111111222222222233333333334444444444555555555566666666667777777777"
       @project.save.should be_false
+      @project.errors.on(:name).should == "is too long (maximum is 64 characters)"
     end
 
+    it "should have at least one funder" do
+      @project = Factory.build(:project, :in_flows => [])
+      @project.save.should be_false
+      @project.errors.on(:base).should == "Project must have at least one Funding Source."
+    end
 
     context "subject" do
       subject { basic_setup_project; @project }
@@ -64,8 +67,15 @@ describe Project do
         lambda {subject.organization}.should_not raise_error
       end
 
-      it " should NOT create workflow records after save" do
-        subject.funding_flows.should have(0).items
+      it " should only create in_flow record on save" do
+        subject.in_flows.should have(1).items
+        subject.in_flows.first.to.should == @project.organization
+      end
+
+      it " should only create in_flow record on save" do
+        subject.reload
+        subject.funding_flows.should have(1).items
+        subject.funding_flows.first.to.should == @project.organization
       end
     end
   end
@@ -88,7 +98,6 @@ describe Project do
       Factory(:coding_budget_district, :activity => activity1, :code => location1)
       Factory(:coding_budget_district, :activity => activity1, :code => location2)
       Factory(:coding_budget_district, :activity => activity2, :code => location1)
-
       @project.locations.length.should == 2
       @project.locations.should include(location1)
       @project.locations.should include(location2)
@@ -102,17 +111,11 @@ describe Project do
       @donor2 = Factory :organization
       @response1     = @donor1.latest_response
       @response2     = @donor2.latest_response
-      @project1      = Factory(:project, :data_response => @response1)
-      @project2      = Factory(:project, :data_response => @response2)
-      Factory(:funding_flow, :from => @donor1, :to => @organization,
-             :project => @project, :project_from => @project1,
-             :spend => 10, :budget => 20)
-      Factory(:funding_flow, :from => @donor2, :to => @organization,
-             :project => @project, :project_from => @project2,
-             :spend => 10, :budget => 20)
-
-      @project.in_flows_total(:budget).should == 40
-      @project.in_flows_total(:spend).should == 20
+      @project1      = Factory(:project, :data_response => @response1, :in_flows =>
+        [ Factory.build(:funding_flow, :from => @donor1, :spend => 10, :budget => 20),
+          Factory.build(:funding_flow, :from => @donor2, :spend => 10, :budget => 20)])
+      @project1.in_flows_total(:budget).to_f.should == 40
+      @project1.in_flows_total(:spend).to_f.should == 20
     end
   end
 end

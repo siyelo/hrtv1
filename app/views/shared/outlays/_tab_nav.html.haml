@@ -13,18 +13,19 @@
         .dummy
           %span 2
           Locations
-      %li
-        .dummy
-          %span 3
-          Purposes
-      %li
-        .dummy
-          %span 4
-          Inputs
-      %li
-        .dummy
-          %span 5
-          Outputs, Targets, Beneficiaries
+      - if is_activity
+        %li
+          .dummy
+            %span 3
+            Purposes
+        %li
+          .dummy
+            %span 4
+            Inputs
+        %li
+          .dummy
+            %span 5
+            Outputs, Targets, Beneficiaries
     - else
       -# TODO: add ".finished" class to spans to indicate this tab is "done"
       %li{:class => first_tab_class}
@@ -37,16 +38,17 @@
           %span 2
           Locations
 
-      %li{:class => params[:mode] == 'purposes' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(outlay, :mode => 'purposes') do
-          %span 3
-          Purposes
+      - if is_activity
+        %li{:class => params[:mode] == 'purposes' ? 'selected' : nil}
+          - link_to edit_activity_or_ocost_path(outlay, :mode => 'purposes') do
+            %span 3
+            Purposes
 
-      %li{:class => params[:mode] == 'inputs' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(outlay, :mode => 'inputs') do
-          %span 4
-          Inputs
-      %li{:class => params[:mode] == 'outputs' ? 'selected' : nil}
-        - link_to edit_activity_or_ocost_path(outlay, :mode => 'outputs') do
-          %span 5
-          Targets, Outputs & Beneficiaries
+        %li{:class => params[:mode] == 'inputs' ? 'selected' : nil}
+          - link_to edit_activity_or_ocost_path(outlay, :mode => 'inputs') do
+            %span 4
+            Inputs
+        %li{:class => params[:mode] == 'outputs' ? 'selected' : nil}
+          - link_to edit_activity_or_ocost_path(outlay, :mode => 'outputs') do
+            %span 5
+            Targets, Outputs & Beneficiaries

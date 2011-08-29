@@ -1,0 +1,8 @@
+%h1.main_heading
+  New Other Cost
+  %span= render 'other_costs/help'
+
+= error_messages_for :other_cost, :header_message  => nil, :message => "Oops, we couldn't save your changes."
+
+- semantic_form_for @other_cost, :url => response_other_costs_path(@response), :html => {:class => "basic_form js_form"} do |f|
+  = render 'shared/outlays/form', :f => f, :outlay => @other_cost

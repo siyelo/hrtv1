@@ -94,7 +94,7 @@ class OtherCostsController < Reporter::BaseController
 
     def success_flash(action)
       flash[:notice] = "Other Cost was successfully #{action}."
-      if params[:other_cost][:project_id] == "-1"
+      if params[:other_cost][:project_id] == Activity::AUTOCREATE
         flash[:notice] += "  <a href=#{edit_response_project_path(@response, @other_cost.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end

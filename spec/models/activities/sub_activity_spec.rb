@@ -15,31 +15,30 @@ describe SubActivity do
   describe "Validations:" do
     it { should validate_numericality_of(:spend_mask) }
     it { should validate_numericality_of(:budget_mask) }
-    
+
     describe "implementer uniqueness" do
-      
       #TODO - fix. Yes this is gonna break the build, but lets not leave this a pending and forget about it
       it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
         basic_setup_activity
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>
               {"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
-            "1"=>                                                                                                                        
+            "1"=>
               {"spend_mask"=>"30", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"40.0"}
             }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
         @activity.reload
         @activity.update_attributes(attributes).should be_false
         @activity.sub_activities[1].errors.on(:provider_id).should == "must be unique"
       end
-      
+
       it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
         basic_setup_sub_activity
-        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}", 
+        attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
           "sub_activities_attributes"=>
             {"0"=>
               {"spend_mask"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
-            "1"=>                                                                                                                        
+            "1"=>
               {"spend_mask"=>"30", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"40.0"}
             }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
         @activity.reload
@@ -56,7 +55,7 @@ describe SubActivity do
         @sub_activity1.errors.on(:provider_id).should == "must be unique"
       end
     end
-    
+
 
     context "spend_mask:" do
       before :each do
@@ -120,20 +119,20 @@ describe SubActivity do
       end
     end
   end
-  
 
-  
+
+
   describe "saving sub activity updates the activity" do
-    before :each do 
+    before :each do
       basic_setup_activity
     end
-    
+
     it "should update the spend field on the parent activity" do
       @sa = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :spend => 74)
       @sa.save; @activity.reload
       @activity.spend.should == 74
     end
-    
+
     it "should update the budget field on the parent activity" do
       @sa = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :budget => 74)
       @sa.save; @activity.reload
@@ -155,13 +154,9 @@ describe SubActivity do
       @data_request  = Factory(:data_request, :organization => donor)
       @response      = ngo.latest_response
       project        = Factory(:project, :data_response => @response)
-      in_flow        = Factory(:funding_flow, :project => project, :from => donor, :to => ngo,
-                        :budget => 10, :spend => 10)
-      out_flow       = Factory(:funding_flow, :project => project, :from => ngo, 
-                        :to => @implementer, :budget => 7, :spend => 7)
       @activity      = Factory.build(:activity, :name => 'Activity 1',
                          :data_response => @response, :provider => ngo, :project => project)
-      @sa            = Factory(:sub_activity, :activity => @activity, 
+      @sa            = Factory(:sub_activity, :activity => @activity,
                         :data_response => @response, :budget => 100, :spend => 100,
                         :provider => @implementer)
       @activity.save
@@ -170,12 +165,12 @@ describe SubActivity do
 
     it "should return code assignments for all types of codings" do
       @location = Factory(:location, :short_display => 'Location 1')
-      @implementer.location = @location        
+      @implementer.location = @location
       CodingBudget.update_classifications(@activity, { Factory(:mtef_code).id => 10 })
-      CodingBudgetCostCategorization.update_classifications(@activity, { 
+      CodingBudgetCostCategorization.update_classifications(@activity, {
         Factory(:cost_category_code).id => 10 })
       CodingSpend.update_classifications(@activity, { Factory(:mtef_code).id => 20 }) # 20%
-      CodingSpendCostCategorization.update_classifications(@activity, { 
+      CodingSpendCostCategorization.update_classifications(@activity, {
         Factory(:cost_category_code).id => 20 })
       @sa.code_assignments[0].cached_amount.to_f.should == 10
       @sa.code_assignments[0].type.should == 'CodingBudget'
@@ -190,7 +185,7 @@ describe SubActivity do
       @sa.code_assignments[5].cached_amount.to_f.should == 100
       @sa.code_assignments[5].type.should == 'CodingSpendDistrict'
     end
-    
+
     it "caches sub activities count" do
       @implementer2 = Factory(:organization, :location => Factory(:location))
       @implementer_split2 = Factory(:sub_activity, :activity => @activity,
@@ -203,7 +198,7 @@ describe SubActivity do
       @response.reload.sub_activities_count.should == 3
       @activity.reload.sub_activities_count.should == 3
     end
-    
+
     [:budget_district_coding_adjusted, :spend_district_coding_adjusted].each do |method|
       describe "#{method.to_s}" do
         before :each do
@@ -212,13 +207,13 @@ describe SubActivity do
           @district_coding = :coding_budget_district
           @input_coding = :coding_budget_cost_categorization
           if method == :spend_district_coding_adjusted
-            @field = :spend 
+            @field = :spend
             @coding = :coding_spend
             @district_coding = :coding_spend_district
             @input_coding = :coding_spend_cost_categorization
           end
         end
-      
+
         describe "#{@coding}" do
           it "should return adjusted activity code_assignments" do
             klass = @coding.to_s.camelcase.constantize
@@ -246,9 +241,9 @@ describe SubActivity do
         end
       end
    end
-   
+
    ### Shared examples for the next part
-   
+
    shared_examples_for "an autosplit that equals the sub-activity total" do
      it "returns adjusted total equal to the SubAct's actual #{@amount_sym.to_s}" do
        @implementer_split.send(@district_adjust_method_sym).inject(0) do |sum, ca|

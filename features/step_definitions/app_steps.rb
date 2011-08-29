@@ -2,59 +2,6 @@ Given /^a project$/ do
   @project = Factory(:project)
 end
 
-Given /^a project with name "([^"]*)" for request "([^"]*)" and organization "([^"]*)"$/ do |project_name, data_request_name, organization_name|
-  @project = Factory(:project,
-                    :name          => project_name,
-                    :data_response => get_data_response(data_request_name, organization_name))
-end
-
-Given /^an implementer "([^"]*)" for project "([^"]*)"$/ do |implementer_name, project_name|
-  steps %Q{
-    Given an implementer "#{implementer_name}" who we gave "20000000" for project "#{project_name}"
-  }
-end
-
-Given /^an implementer "([^"]*)" who we gave "([^"]*)" for project "([^"]*)"$/ do |implementer_name, budget, project_name|
-  @project = Project.find_by_name(project_name)
-  @implementer = Factory(:implementer,
-                          :project       => @project,
-                          :from          => @project.organization,
-                          :budget        => budget,
-                          :to            => Organization.find_by_name(implementer_name),
-                          :data_response => @project.data_response)
-end
-
-Given /^a budget coding for "([^"]*)" with amount "([^"]*)"$/ do |code_name, amount|
-  # assumes @activity is set !
-  @code_assignment = Factory(:coding_budget,
-                             :activity => @activity,
-                             :code => Code.find_by_short_display(code_name),
-                             :amount => amount,
-                             :cached_amount => amount)
-  @activity.reload
-end
-
-# Uses "the activity" definition from Pickle
-Given /^a budget coding code_name: "([^"]*)", activity: "([^"]*)", amount: "([^"]*)"$/ do |code_name, activity, amount|
-  @code_assignment = Factory(:coding_budget,
-                             :activity => model(activity),
-                             :code => Code.find_by_short_display(code_name),
-                             :amount => amount,
-                             :cached_amount => amount)
-end
-
-Given /^#{capture_model} for code "([^"]*)" exists?(?: with #{capture_fields})?$/ do |name, code_name, fields|
-  code_assignments = create_model(name, fields)
-  code_assignments.merge(:code => Code.find_by_short_display(code_name))
-end
-
-Given /^the following comments$/ do |table|
-  table.hashes.each do |hash|
-    commentable = Project.find_by_name(hash.delete("project"))
-    Factory(:comment, hash.merge(:commentable => commentable))
-  end
-end
-
 Given /^a reporter "([^"]*)" with email "([^"]*)" and password "([^"]*)"$/ do | name, email, password|
 @user = Factory(:reporter,
                 :full_name             => name,
@@ -69,12 +16,6 @@ Given /^an activity manager "([^"]*)" with email "([^"]*)" and password "([^"]*)
                 :email                 => email,
                 :password              => password,
                 :password_confirmation => password)
-end
-
-Given /^the root codes$/ do |table|
-  table.hashes.each do |hash|
-    f = Factory(:root_code, hash.merge(:type => 'Nha'))
-  end
 end
 
 Given /^I am signed in as "([^"]*)"$/ do |email|
@@ -113,21 +54,6 @@ Given /^I am signed in as a sysadmin$/ do
   }
 end
 
-Given /^an organization with name "([^"]*)"$/ do |name|
-  @organization = Factory(:organization, :name => name)
-end
-
-Given /^a data request with title "([^\"]*)" from "([^\"]*)"$/ do |title, requestor|
-  org  = Organization.find_by_name(requestor)
-  @data_request = Factory(:data_request, :title => title, :organization => org)
-end
-
-Given /^the following organizations$/ do |table|
-  table.hashes.each do |hash|
-    Factory(:organization, hash)
-  end
-end
-
 Given /^a reporter "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
   @organization = Factory(:organization, :name => org_name)
   @user = Factory(:reporter,
@@ -157,23 +83,18 @@ Given /^a sysadmin "([^"]*)" in organization "([^"]*)"$/ do |email, org_name|
 
 end
 
-Given /^the following funding flows$/ do |table|
-  table.hashes.each do |hash|
-    to_org   = Organization.find_by_name(hash.delete("to"))
-    project  = Project.find_by_name(hash.delete("project"))
-    from_org = Organization.find_by_name(hash.delete("from"))
-    Factory(:funding_flow, {
-                            :project       => project,
-                            :to            => to_org.id,
-                            :from          => from_org,
-                            :data_response => project.data_response
-                          }.merge(hash) )
-  end
-end
-
 Then /^debug$/ do
   $page = page
   debugger
+end
+
+Then /^I should see the main nav tabs$/ do
+  steps %Q{
+    Then I should see "Home"
+    Then I should see "Projects"
+    Then I should see "Reports"
+    Then I should see "Help"
+  }
 end
 
 Then /^I should see the "([^"]*)" tab is "([^"]*)"/ do |text, class_name|
@@ -201,27 +122,6 @@ Then /^I should see the common footer$/ do
     Then I should see "Help" within "div#footer"
     Then I should see "Contact" within "div#footer"
     Then I should see "About" within "div#footer"
-  }
-end
-
-Then /^I should see the main nav tabs$/ do
-  steps %Q{
-    Then I should see "Home"
-    Then I should see "Projects"
-    Then I should see "Reports"
-    Then I should see "Help"
-  }
-end
-
-Then /^I should see the data response tabs$/ do
-  steps %Q{
-    Then I should see "Projects" within "li"
-  }
-end
-
-Then /^I should not see the data response tabs$/ do
-  steps %Q{
-    Then I should not see "Projects" within "li"
   }
 end
 

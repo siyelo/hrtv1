@@ -26,23 +26,11 @@ class Reports::MapFacilitiesByPartner
         @districts_hash[organization][:total] = 0
         @districts_hash[organization][:partners] = {} # partner => amount
         dr = organization.data_responses.find_by_data_request_id(@request.id)
-
-        # if have my own DR, pull lots of info from there
-        # otherwise get who gives me money by activities
-        if dr && !dr.empty?
-          in_flows = organization.in_flows.find(:all,
-                                  :conditions => ["projects.data_response_id = ?", dr.id],
-                                  :include => :project)
-          in_flows.each do |flow|
-            set_amounts(organization, flow.from, in_flow_amount(flow))
-          end
-        else
-          activities = organization.provider_for.canonical
-          #preload_district_associations(activities, @is_budget) # eager-load
-          activities.each do |activity|
-            if activity.data_request == @request
-              set_amounts(organization, activity.organization, activity_amount(activity))
-            end
+        activities = organization.provider_for.canonical
+        #preload_district_associations(activities, @is_budget) # eager-load
+        activities.each do |activity|
+          if activity.data_request == @request
+            set_amounts(organization, activity.organization, activity_amount(activity))
           end
         end
       end

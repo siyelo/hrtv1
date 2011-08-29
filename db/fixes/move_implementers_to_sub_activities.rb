@@ -8,7 +8,6 @@
 ENV['RAILS_ENV'] = ENV['RAILS_ENV'] || 'development'
 require File.expand_path(File.dirname(__FILE__) + "/../../config/environment")
 
-
 Activity.after_save.reject! {|callback| callback.method.to_s == 'update_counter_cache'}
 Activity.after_destroy.reject! {|callback| callback.method.to_s == 'update_counter_cache'}
 

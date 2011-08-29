@@ -36,6 +36,39 @@ describe ProjectsController do
       login @user
     end
 
+    describe "nested funder management" do
+      before :each do
+        request      = Factory(:data_request, :organization => @organization)
+        @data_request = request
+        @data_response     = @organization.latest_response
+      end
+
+      it "should create a new in-flow (eg. self implementer)" do
+        post :create, :response_id => @data_response.id,
+          :project => {:name => "new project", :description => "new description",
+          :start_date => "2010-01-01", :end_date => "2010-12-31",
+          :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
+            :budget => 10, :spend => 20}}}
+        project = Project.find_by_name('new project')
+        project.should_not be_nil
+        project.in_flows.should have(1).funder
+        project.in_flows.first.organization.should == @organization
+      end
+
+      it "should create a new from-org when new name given in in-flows" do
+        post :create, :response_id => @data_response.id,
+          :project => {:name => "new project", :description => "new description",
+          :start_date => "2010-01-01", :end_date => "2010-12-31",
+          :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
+            :budget => 10, :spend => 20}}}
+        project = Project.find_by_name('new project')
+        project.should_not be_nil
+        project.in_flows.should have(1).funder
+        new_org = Organization.find_by_name "a new org plox k thx"
+        new_org.should_not be_nil
+      end
+    end
+
     describe "import / export" do
       before :each do
         @data_response = mock_model(DataResponse)

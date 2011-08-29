@@ -4,6 +4,7 @@ class DashboardController < ApplicationController
   ### Filters
   before_filter :require_user
   before_filter :load_comments
+  before_filter :load_charts, :only => :index
 
   ### Public Methods
 
@@ -11,7 +12,6 @@ class DashboardController < ApplicationController
   def index
     load_activity_manager if current_user.activity_manager?
     load_requests
-
     warn_if_not_current_request unless current_user.district_manager?
   end
 

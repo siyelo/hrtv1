@@ -231,20 +231,38 @@ module ApplicationHelper
     @response || current_response || last_response
   end
 
-  def month_year(date, i = 0)
-    "#{date.strftime('%b')}'#{date.strftime('%y').to_i + i}"
+  # simply returns the year of the given date
+  # intended for 'fuzzy' FY's (e.g. "2010/2011")
+  def rough_fiscal_year(date, i = 0)
+    "#{date.strftime('%Y').to_i + i}"
   end
 
   def prev_fy(response)
-    "#{month_year(response.request.start_date, -1)} - #{month_year(response.request.end_date, -1)}"
+    "FY #{rough_fiscal_year(response.request.start_date, -1)} / #{rough_fiscal_year(response.request.end_date, -1)}"
   end
 
   def current_fy(response)
-    "#{month_year(response.request.start_date)} - #{month_year(response.request.end_date)}"
+    "FY #{rough_fiscal_year(response.request.start_date)} / #{rough_fiscal_year(response.request.end_date)}"
   end
 
   def next_fy(response)
-    "#{month_year(response.request.start_date, 1)} - #{month_year(response.request.end_date, 1)}"
+    "FY #{rough_fiscal_year(response.request.start_date, 1)} / #{rough_fiscal_year(response.request.end_date, 1)}"
+  end
+
+  def next_fy_q1(response)
+    "Jul #{rough_fiscal_year(response.request.start_date, 1)} - Sep #{rough_fiscal_year(response.request.start_date, 1)}"
+  end
+
+  def next_fy_q2(response)
+    "Oct #{rough_fiscal_year(response.request.start_date, 1)} - Dec #{rough_fiscal_year(response.request.start_date, 1)}"
+  end
+
+  def next_fy_q3(response)
+    "Jan #{rough_fiscal_year(response.request.start_date, 2)} - Mar #{rough_fiscal_year(response.request.start_date, 2)}"
+  end
+
+  def next_fy_q4(response)
+    "Apr #{rough_fiscal_year(response.request.start_date, 2)} - Jun #{rough_fiscal_year(response.request.start_date, 2)}"
   end
 
   # find namespace of given class
@@ -272,13 +290,15 @@ module ApplicationHelper
       edit_response_other_cost_path(response, outlay, opts)
   end
 
-  def save_and_add_button_text(current_step)
+  # other costs do not show Purposes/Inputs/Outputs tabs
+  def save_and_add_button_text(current_step, activity_or_other_cost)
+    is_activity = activity_or_other_cost.class == Activity ? true : false
     case current_step
     when nil;         "Save & Add Locations >"
-    when 'locations'; "Save & Add Purposes >"
+    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Go to Overview >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Review >"
+    when 'outputs';   "Save & Go to Overview >"
     end
   end
 end

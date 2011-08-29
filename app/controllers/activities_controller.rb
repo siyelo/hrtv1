@@ -3,12 +3,12 @@ class ActivitiesController < Reporter::BaseController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   inherit_resources
+  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
   before_filter :warn_if_not_classified, :only => [:edit]
-  belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
@@ -91,14 +91,12 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def template
-    template = Activity.download_template(@response)
+    template = Activity.download_header
     send_csv(template, 'activities_template.csv')
   end
 
   def export
-    activities = params[:project_id].present? ?
-      @response.projects.find(params[:project_id]).activities : @response.activities
-    template = Activity.download_template(@response, activities)
+    template = Activity.download_template(@response)
     send_csv(template, 'activities.csv')
   end
 
@@ -127,7 +125,7 @@ class ActivitiesController < Reporter::BaseController
 
     def success_flash(action)
       flash[:notice] = "Activity was successfully #{action}."
-      if params[:activity][:project_id] == "-1"
+      if params[:activity][:project_id] == Activity::AUTOCREATE.to_s
         flash[:notice] += "  <a href=#{edit_response_project_path(@response, @activity.project)}>Click here</a>
                            to enter the funding sources for the automatically created project."
       end

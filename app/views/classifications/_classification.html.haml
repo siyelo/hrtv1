@@ -1,15 +1,19 @@
+- heading_hint = "The percentage of the total activity amount."
+- unless params[:mode] == 'locations'
+  - heading_hint += " Enter the most detailed level first, and we'll roll it up for you automatically."
 - if @budget_coding_tree.root_codes.present?
   %p#expl
     %span.spend
-      - link_to '#', :id => 'js_spend_to_budget' do
-        Expenditure %
-        = image_tag "icon_s2b.png", :alt => "Copy Past Expenditure to Current Budget", :title => "Copy Past Expenditure to Current Budget"
+      %span Expenditure %
+      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
+      - alt_txt = "Copy Past Expenditure to Current Budget"
+      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_spend_to_budget'
     %span.budget
-      - link_to '#', :id => 'js_budget_to_spend' do
-        = image_tag "icon_b2s.png", :alt => "Copy Current Budget to Past Expenditure", :title => "Copy Current Budget to Past Expenditure"
-        Current Budget %
-
+      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_budget_to_spend'
+      %span Current Budget %
+      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
+      - alt_txt = "Copy Current Budget to Past Expenditure"
 
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
-      = render 'classifications/code_row', :code => code, :margin => 0
+      = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay

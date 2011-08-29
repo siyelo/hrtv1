@@ -26,5 +26,5 @@ Feature: Reporter can see dashboard
 
     Scenario: Can Switch between requests
       Then I should see "ORG: [dr2]"
-      When I follow "dr1"
+      When I go to the set request page for "dr1"
       Then I should see "ORG: [dr1]"

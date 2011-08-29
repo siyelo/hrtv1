@@ -8,7 +8,7 @@
           %span.required *
           - link_to "#", :title => "A short name for this project", :class => 'tooltip' do
             = image_tag "tooltip.png"
-        = f.text_field :name
+        = f.text_field :name, :size => "80"
 
       %li#project_start_date_input.string.required
         .name
@@ -29,7 +29,7 @@
           = f.label :currency, "Currency override"
           - link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
             = image_tag "tooltip.png"
-        = f.select :currency, currency_options_for_select, {:selected => @project.currency || @response.currency, :include_blank => true }
+        = f.select :currency, currency_options_for_select, {:selected => @project.currency, :include_blank => true }
       %br
       %li#project_description_input.text
         .name

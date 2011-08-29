@@ -33,6 +33,54 @@ function add_fields(link, association, content) {
   after_add_fields_callback(association);
 };
 
+//prevents non-numeric characters to be entered in the input field
+var numericInputField = function (input) {
+
+  $(input).keydown(function(event) {
+    // Allow backspace and delete, enter and tab
+    var bksp = 46;
+    var del = 8;
+    var enter = 13;
+    var tab = 9;
+
+    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
+      // let it happen, don't do anything
+    } else {
+      // Ensure that it is a number or a '.' and stop the keypress
+      var period = 190;
+      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
+        // let it happen
+      } else {
+       event.preventDefault();
+      };
+    };
+  });
+}
+
+var observeFormChanges = function (form) {
+  var catcher = function () {
+    var changed = false;
+
+    if ($(form).data('initialForm') != $(form).serialize()) {
+      changed = true;
+    }
+
+    if (changed) {
+      return 'You have unsaved changes!';
+    }
+  };
+
+  if($(form).length){ //# dont bind unless you find the form element on the page
+    $('input[type=submit]').click(function (e) {
+      $(form).data('initialForm', $(form).serialize());
+    });
+
+    $(form).data('initialForm', $(form).serialize());
+    $(window).bind('beforeunload', catcher);
+  };
+}
+
+
 var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
   var total = edit_block.find('.js_' + type).val();
 
@@ -461,20 +509,6 @@ var updateTotalsValuesCallback = function (el) {
   updateTotalValues($(el).parents('tr').find('.js_budget'));
 };
 
-var dynamicUpdateTotalsInit = function () {
-  $('.js_spend, .js_budget').live('keyup', function () {
-    var total_value = 0;
-
-    if ($(this).hasClass('js_spend')) {
-      var input_fields = $(this).parents('table').find('.js_spend');
-      var total_field = $('.js_total_spend .amount');
-    } else if ($(this).hasClass('js_budget')) {
-      var input_fields = $(this).parents('table').find('.js_budget');
-      var total_field = $('.js_total_budget .amount');
-    }
-  });
-};
-
 var updateTotalValues = function (el) {
   var total_value = 0;
 
@@ -643,7 +677,7 @@ var createPieChart = function (element_type, options) {
   var domId = get_chart_element_id(element_type, options)
   var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
 
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "300", "2", "#FFF");
+  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "220", "2", "#FFF");
   so.addVariable("path", "/ampie/");
   so.addVariable("settings_file", escape("/ampie/ampie_settings.xml,/ampie/additional_settings.xml"));
   so.addVariable("data_file", encodeURIComponent(urlEndpoint));
@@ -744,30 +778,7 @@ var build_data_response_review_screen = function () {
     //root.find(".activity_classification > div::nth-child(" + (element.index() + 1) + ")").show();
   });
 
-  // bind click events for tabs
-  // Assumes this convention
-  //  .tabs_nav
-  //    ul > li, li, li
-  // tab content
-  //  .tabs > .tab1, .tab2, .tab3
-  // BUT if you supply an id (e.g. tab1), it will use that
-  // (useful if tab nav has non-clickable items in the list)
-  $(".tabs_nav ul li").live('click', function (e) {
-    e.preventDefault();
-    var element = $(this);
-    var target_tab = 'tab1'
 
-    if (element.attr("id")) {
-      target_tab = element.attr("id");
-    } else {
-      target_tab = "tab" + (element.index() + 1); //there is no tab0
-    }
-    element.parents('.tabs_nav').find("li").removeClass('selected');
-    element.addClass('selected');
-    var tabs = element.parents(".tabs_nav").next(".tabs")
-    tabs.find("> div").hide();
-    tabs.find('> div.' + target_tab).show();
-  });
 
   // bind click events for project chart sub-tabs (Pie | Tree)
   $(".tabs ul.inline_tab li").live('click', function (e) {
@@ -803,6 +814,35 @@ var build_data_response_review_screen = function () {
       }
     }
    });
+
+   build_flash_charts();
+};
+
+var build_flash_charts = function () {
+  // bind click events for tabs
+  // Assumes this convention
+  //  .tabs_nav
+  //    ul > li, li, li
+  // tab content
+  //  .tabs > .tab1, .tab2, .tab3
+  // BUT if you supply an id (e.g. tab1), it will use that
+  // (useful if tab nav has non-clickable items in the list)
+  $(".tabs_nav ul li").live('click', function (e) {
+    e.preventDefault();
+    var element = $(this);
+    var target_tab = 'tab1'
+
+    if (element.attr("id")) {
+      target_tab = element.attr("id");
+    } else {
+      target_tab = "tab" + (element.index() + 1); //there is no tab0
+    }
+    element.parents('.tabs_nav').find("li").removeClass('selected');
+    element.addClass('selected');
+    var tabs = element.parents(".tabs_nav").next(".tabs")
+    tabs.find("> div").hide();
+    tabs.find('> div.' + target_tab).show();
+  });
 
   // Data Response charts
   createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
@@ -862,7 +902,7 @@ var activity_classification = function () {
   addCollabsibleButtons('tab1');
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
-  
+
   showSubtotalIcons();
 
   $('.js_upload_btn').click(function (e) {
@@ -930,26 +970,7 @@ var activity_classification = function () {
 
   });
 
-  // restrict input to only numbers
-  $(".percentage_box").keydown(function(event) {
-    // Allow backspace and delete, enter and tab
-    var bksp = 46;
-    var del = 8;
-    var enter = 13;
-    var tab = 9;
-
-    if ( event.keyCode == bksp || event.keyCode == del || event.keyCode == enter || event.keyCode == tab ) {
-        // let it happen, don't do anything
-    } else {
-      // Ensure that it is a number or a '.' and stop the keypress
-      var period = 190;
-      if ((event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode >= 37 && event.keyCode <= 40)  {
-        // let it happen
-      }else{
-        event.preventDefault();
-      };
-    };
-  });
+  numericInputField(".percentage_boxi, .js_spend, .js_budget");
 
   var updateParentNodes = function(siblingLi, type, parentTotal){
     var siblingValue = 0;
@@ -970,7 +991,7 @@ var activity_classification = function () {
     var del = 8;
     if ((event.keyCode == bksp || event.keyCode == del)){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
-      
+
       var childTotal = 0;
       childNodes.each(function (){
         childValue = parseFloat($(this).val())
@@ -978,7 +999,7 @@ var activity_classification = function () {
           childTotal = childTotal + childValue
         };
       });
-      
+
       if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
         childNodes.each(function(){
           if ($(this).val !== ''){
@@ -1068,7 +1089,7 @@ var showSubtotalIcons = function(){
   $('.tab1').find('.percentage_box').each(function(){
     if($(this).val().length > 0){
       $(this).siblings('.subtotal_icon').removeClass('hidden')
-    }   
+    }
   });
 }
 
@@ -1524,6 +1545,7 @@ var projects_index = {
     });
 
     dynamicUpdateTotalsInit();
+    numericInputField(".js_spend, .js_budget");
   }
 };
 
@@ -1814,9 +1836,13 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
   }
 }
 
+
 var dashboard_index = {
   run: function () {
     $('.dropdown_trigger').click(function (e) {e.preventDefault()});
+
+    build_flash_charts();
+    $('#tab1').find('a').click();
 
     $('.dropdown_menu').hover(function (e){
       e.preventDefault();
@@ -1833,7 +1859,7 @@ var dashboard_index = {
 
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
-    $( ".js_combobox" ).combobox();
+    $(".js_combobox" ).combobox();
   }
 };
 
@@ -1843,6 +1869,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
     quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
     dynamicUpdateTotalsInit();
+    numericInputField(".js_spend, .js_budget");
   }
 }
 
@@ -1864,6 +1891,9 @@ $(function () {
 
   //jquery tools overlays
   $(".overlay").overlay();
+
+  //observe form changes and alert user if form has unsaved data
+  observeFormChanges($('.js_form'));
 
   var id = $('body').attr("id");
   if (id) {

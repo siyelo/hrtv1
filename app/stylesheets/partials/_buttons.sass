@@ -330,10 +330,14 @@ a, input[type=submit], button
       pointer-events: none
       cursor: default
     &.cancel_button
+      color: $primary_light
+      font-family: Avenir, sans-serif
       font-size: 14px !important
-      padding: 12px 15px 8px 15px
-      margin-top: 1px
+      padding: 9px 15px 7px 15px
+      margin: 3px 0 0 6px
       +border-radius
+      &:hover, &:focus
+        color: $secondary !important
 
   &.delete_button
     &:hover, &:focus

@@ -18,12 +18,12 @@ class SubActivity < Activity
   attr_accessible :activity_id, :data_response_id, :spend_mask, :budget_mask, :provider_id
 
   ### Callbacks
+  before_validation :strip_mask_fields
   after_create    :update_counter_cache
-  after_destroy   :update_counter_cache
   before_save     :set_budget_amount
   before_save     :set_spend_amount
-  before_validation :strip_mask_fields
   after_save      :update_activity_cache
+  after_destroy   :update_counter_cache
 
   ### Validations
   validates_presence_of :provider_mask
@@ -34,7 +34,7 @@ class SubActivity < Activity
   validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
 
   ### Delegates
-  [:projects, :name, :description, :start_date, :end_date, :approved,
+  [:projects, :name, :description, :approved,
    :text_for_beneficiaries, :beneficiaries, :currency].each do |method|
     delegate method, :to => :activity, :allow_nil => true
   end

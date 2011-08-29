@@ -38,6 +38,12 @@ class ApplicationController < ActionController::Base
                 :disposition => "attachment; filename=#{filename}"
     end
 
+    # load vars for pretty charts
+    def load_charts
+      @response = @data_response    = current_response
+      @projects                     = @data_response.projects.find(:all, :order => "name ASC") if @data_response
+    end
+
   private
 
     def invalid_method
@@ -229,12 +235,12 @@ class ApplicationController < ActionController::Base
     def load_klasses_from_mode
       load_klasses(:mode)
     end
-    
+
     # http://stackoverflow.com/questions/4244507/headers-in-rails-cache-firefox-impropriety
     def prevent_browser_cache
       headers["Pragma"] = "no-cache"
-      headers["Cache-Control"] = "must-revalidate"   
-      headers["Cache-Control"] = "no-cache"   
-      headers["Cache-Control"] = "no-store"       
+      headers["Cache-Control"] = "must-revalidate"
+      headers["Cache-Control"] = "no-cache"
+      headers["Cache-Control"] = "no-store"
     end
 end

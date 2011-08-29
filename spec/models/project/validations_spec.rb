@@ -14,20 +14,18 @@ describe Project, "Validations" do
   describe "#linked?" do
     context "when not all in flows has parent project" do
       it "returns false" do
-        Factory(:funding_flow, :from => @donor1, :to => @organization,
-                :project => @project, :project_from => @project1)
-        Factory(:funding_flow, :from => @donor2, :to => @organization,
-                :project => @project, :project_from => nil)
+        @project.in_flows = [
+            Factory.build(:funding_flow, :from => @donor1, :project_from => @project1),
+            Factory.build(:funding_flow, :from => @donor2, :project_from => nil)]
         @project.linked?.should be_false
       end
     end
 
     context "when all in flows has parent project" do
       it "returns true" do
-        Factory(:funding_flow, :from => @donor1, :to => @organization,
-                :project => @project, :project_from => @project1)
-        Factory(:funding_flow, :from => @donor2, :to => @organization,
-                :project => @project, :project_from => @project2)
+        @project.in_flows = [
+            Factory.build(:funding_flow, :from => @donor1, :project_from => @project1),
+            Factory.build(:funding_flow, :from => @donor2, :project_from => @project2)]
         @project.linked?.should be_true
       end
     end
@@ -39,7 +37,7 @@ describe Project, "Validations" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
         @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
                           :budget => 10, :spend => 10)
-        Factory(:funding_flow, :from => @organization, :to => @organization,
+        Factory(:funding_flow, :from => @organization,
                 :project => @project, :project_from => @project, :budget => 10, :spend => 10)
         @project.validation_errors.should == []
       end
@@ -55,11 +53,9 @@ describe Project, "Validations" do
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
         @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity2,
                             :budget => 9, :spend => 1)
-        Factory(:funding_flow, :from => @donor1, :to => @organization,
-                :project => @project, :budget => 3, :spend => 7)
-        Factory(:funding_flow, :from => @donor2, :to => @organization,
-                :project => @project, :budget => 7, :spend => 3)
-
+        @project.in_flows = [Factory.build(:funding_flow, :from => @donor1, :budget => 3, :spend => 7),
+                             Factory.build(:funding_flow, :from => @donor2, :budget => 7, :spend => 3)]
+        @project.save!
         @project.matches_in_flow_amount?(:budget).should be_true
         @project.matches_in_flow_amount?(:spend).should be_true
       end
@@ -70,7 +66,7 @@ describe Project, "Validations" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
         @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
                           :budget => 1, :spend => 9)
-        Factory(:funding_flow, :from => @organization, :to => @organization,
+        Factory(:funding_flow, :from => @organization,
                 :project => @project, :budget => 4, :spend => 4)
         @project.matches_in_flow_amount?(:budget).should be_false
         @project.matches_in_flow_amount?(:spend).should be_false

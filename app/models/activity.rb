@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
   include BudgetSpendHelper
   include Activity::Classification
   include Activity::Validations
+  include AutocreateHelper
 
   ### Constants
   MAX_NAME_LENGTH = 64
@@ -12,16 +13,23 @@ class Activity < ActiveRecord::Base
     :sub_activities => "Implementers",
     :budget => "Current Budget",
     :spend => "Past Expenditure" }
+  AUTOCREATE = -1
 
+  ### Class-Level Method Invocations
+  strip_commas_from_all_numbers
+
+  ### Attribute Accessor
+  attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
-    :name, :description, :start_date, :end_date,
+    :name, :description,
     :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
-    :beneficiary_ids, :provider_id,
+    :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :sub_activities_attributes, :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
-    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id
+    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id,
+    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
 
   ### Associations
   #TODO: provider now only used for sub-activities, so should be removed from activity altogether
@@ -36,7 +44,6 @@ class Activity < ActiveRecord::Base
   has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
     :dependent => :destroy #TODO - use non-sti model
   has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
-
   # deprecated
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
@@ -57,10 +64,33 @@ class Activity < ActiveRecord::Base
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
 
+  ### Callbacks
+  # also see callbacks in BudgetSpendHelper
+  before_validation :strip_input_fields, :unless => :is_sub_activity?
+  before_save   :auto_create_project, :unless => :is_sub_activity?
+  after_save    :update_counter_cache, :unless => :is_sub_activity?
+  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
-  ### Class-Level Method Invocations
-  strip_commas_from_all_numbers
+  ### Nested attributes
+  accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
+    :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  accepts_nested_attributes_for :targets, :allow_destroy => true
+  accepts_nested_attributes_for :outputs, :allow_destroy => true
 
+  ### Delegates
+  delegate :currency, :to => :project, :allow_nil => true
+  delegate :data_request, :to => :data_response
+  delegate :organization, :to => :data_response
+
+  ### Validations
+  # also see validations in BudgetSpendHelper
+  validate :approved_activity_cannot_be_changed, :unless => :is_sub_activity?
+  validates_presence_of :name, :unless => :is_sub_activity?
+  validates_presence_of :description, :if => :is_activity?
+  validates_presence_of :project_id, :if => :is_activity?
+  validates_presence_of :data_response_id
+  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
 
   ### Scopes
   named_scope :roots,                { :conditions => "activities.type IS NULL" }
@@ -106,7 +136,6 @@ class Activity < ActiveRecord::Base
   named_scope :sorted,               { :order => "activities.name" }
   named_scope :sorted_by_id,               { :order => "activities.id" }
 
-
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
   before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
@@ -114,36 +143,20 @@ class Activity < ActiveRecord::Base
   after_save    :update_counter_cache, :unless => :is_sub_activity?
   after_destroy :update_counter_cache, :unless => :is_sub_activity?
 
-
   ### Attribute Accessor
   attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
 
-
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  accepts_nested_attributes_for :implementer_splits, :allow_destroy => true
   accepts_nested_attributes_for :targets, :allow_destroy => true
   accepts_nested_attributes_for :outputs, :allow_destroy => true
-
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
   delegate :data_request, :to => :data_response
   delegate :organization, :to => :data_response
 
-
-  ### Validations
-  # also see validations in BudgetSpendHelper
-  before_validation :strip_input_fields, :unless => :is_sub_activity?
-  validate :approved_activity_cannot_be_changed
-  validates_presence_of :name, :unless => :is_sub_activity?
-  validates_presence_of :description, :if => :is_activity?
-  validates_presence_of :project_id, :if => :is_activity?
-  validates_presence_of :data_response_id
-  validates_date :start_date, :unless => :is_sub_activity?
-  validates_date :end_date, :unless => :is_sub_activity?
-  validates_dates_order :start_date, :end_date, :message => "Start date must come before End date."
-  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity?, :allow_blank => true
-  validate :dates_within_project_date_range, :if => Proc.new { |model| model.start_date.present? && model.end_date.present? }
 
   ### Class Methods
   def self.human_attribute_name(attr)
@@ -172,83 +185,186 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified?}
   end
 
-  def self.download_template(response, activities = [])
+  def self.download_template(response)
     FasterCSV.generate do |csv|
-      csv << file_upload_columns_with_id_col(response)
-
-      activities.each do |activity|
+      csv << file_upload_columns
+      response.projects.sorted.each do |project|
         row = []
-        row << activity.project.try(:name)
-        row << activity.name
-        row << activity.description
-        row << activity.provider.try(:name)
-        row << activity.spend
-        row << activity.budget
-        row << activity.beneficiaries.map{|l| l.short_display}.join(',')
-        row << activity.targets.map{|o| o.description}.join(",")
-        row << activity.start_date
-        row << activity.end_date
-        (100 - row.length).times{ row << nil}
-        row << activity.id
-        csv << row
+        row << project.name
+        row << project.description
+        if project.activities.empty?
+          csv << row
+        else
+          project.activities.roots.sorted.each_with_index do |activity, index|
+            row << "" if index > 0 # dont re-print project details on each line
+            row << "" if index > 0
+            row << activity.name
+            row << activity.description
+            if activity.sub_activities.empty?
+              csv << row
+            else
+              activity.sub_activities.sorted.each_with_index do |sub_activity, index|
+                row << "" if index > 0 # dont re-print activity details on each line
+                row << "" if index > 0
+                row << "" if index > 0
+                row << "" if index > 0
+                row << sub_activity.id
+                row << sub_activity.provider.try(:name)
+                row << sub_activity.spend
+                row << sub_activity.budget
+                csv << row
+                row = []
+              end
+            end
+          end
+        end
       end
     end
   end
 
   def self.find_or_initialize_from_file(response, doc, project_id)
     activities = []
-    col_names = file_upload_columns(response)
+    sub_activities = []
+    col_names = file_upload_columns
+    activity_name = project_name = sub_activity_name = ''
+    project_description = activity_description = ''
+    activity_in_memory = false
+    existing_sa = nil
+
+    SubActivity.after_save.reject! {|callback| callback.method.to_s == 'update_activity_cache'}
 
     doc.each do |row|
-      activity_id = row['Id']
-      if activity_id.present?
-        # reset the activity id if it is already found in previous rows
-        # this can happen when user edits existing activities but copies
+      activity_name = row['Activity Name'].blank? ? activity_name : row['Activity Name']
+      if row['Activity Description'].blank? && row['Activity Name'].blank?
+        activity_description =  activity_description
+      else
+        activity_description = row['Activity Description']
+      end
+
+      project_name        = row['Project Name'] || project_name
+      project_description = row['Project Description'] || project_description unless row['Project Name'].blank?
+      sub_activity_name   = row['Implementer']
+      sub_activity_id     = row['Id']
+      csv_provider        = row["Implementer"].try(:strip)
+
+      if csv_provider.nil?
+        implementer = response.organization
+      else
+        implementer = Organization.find(:first,:conditions => ["LOWER(name) LIKE ?", "%#{csv_provider.downcase}%"])
+      end
+
+      if sub_activity_id.present?
+        # reset the sub_activity id if it is already found in previous rows
+        # this can happen when user edits existing sub_activities but copies
         # the whole row (then the activity id is also copied)
-        if activities.map(&:id).include?(activity_id.to_i)
-          activity = response.activities.new
-        else
-          activity = response.activities.find(activity_id)
+        unless response.sub_activities.map(&:id).include?(sub_activity_id.to_i)
+          begin
+            sub_activity = response.sub_activities.find(sub_activity_id)
+          rescue
+            sub_activity = nil
+          end
+        end
+      end
+
+      unless sub_activity
+        sub_activities.each do |sa|
+          if sa.provider.name.downcase == csv_provider.downcase && sa.activity.name == activity_name && sa.activity.project.name == project_name
+            sub_activity = sa
+            existing_sa = sa
+          end
+        end
+      end
+
+      if sub_activity
+        #sub_activity ID is present - any changes to the
+        #project/activity name/description will change the existing project/activity
+
+        activity = sub_activity.activity
+        project  = activity.project
+      else
+        #sub_activity ID not present or invalid - considered to be a new row.
+        #If the project/activity doesn't exist, a new one is created
+        activities.each do |a|
+          if a.name == activity_name && a.project.name == project_name
+            activity = a
+            project = a.project
+            activity_in_memory = true
+          end
+        end
+
+        project = (response.projects.find_by_name(project_name) || response.projects.new) unless project
+        activity = (project.activities.find_by_name(activity_name) || project.activities.new) unless activity
+
+        existing_sa = SubActivity.find(:first, :conditions => {:provider_id => implementer.id, :activity_id => activity.id, :data_response_id => response.id})
+        sub_activity = existing_sa || activity.sub_activities.new
+      end
+
+      project.data_response       = response
+      project.name                = project_name.try(:strip)
+      project.description         = project_description.try(:strip)
+      if project.new_record?
+        project.start_date        = Time.now #DateHelper::flexible_date_parse(activity_start_date.try(:strip))
+        project.end_date          = Time.now + 1.year #DateHelper::flexible_date_parse(activity_end_date.try(:strip))
+        ff                        = project.funding_flows.new
+        ff.organization_id_from   = project.organization.id
+        ff.spend                  = 0
+        ff.budget                 = 0
+        project.funding_flows << ff #killing performance
+      end
+
+      unless response.projects.include?(project)
+        response.projects << project
+      end
+
+      activity.data_response     = response
+      activity.project           = project
+      activity.name              = activity_name.try(:strip)
+      activity.description       = activity_description.try(:strip)
+
+      sub_activity.provider      = implementer
+      sub_activity.activity      = activity
+      sub_activity.data_response = response
+
+      if existing_sa
+        if sub_activity.spend && row["Past Expenditure"]
+          sub_activity.spend += row["Past Expenditure"].to_i
+        end
+        if sub_activity.budget && row["Current Budget"]
+          sub_activity.budget += row["Current Budget"].to_i
         end
       else
-        activity = response.activities.new
-      end
-      activity.csv_project_name        = row["Project Name"].try(:strip)
-      activity.name                    = row["Activity Name"].try(:strip)
-      activity.description             = row["Activity Description"].try(:strip)
-      activity.csv_provider            = row["Provider"].try(:strip)
-      activity.csv_beneficiaries       = row["Beneficiaries"].try(:strip)
-      activity.csv_targets             = row["Targets"].try(:strip)
-      activity.start_date              = DateHelper::flexible_date_parse(row["Start Date"].try(:strip))
-      activity.end_date                = DateHelper::flexible_date_parse(row["End Date"].try(:strip))
-
-      # associations
-      if activity.csv_project_name.present?
-        # find project by name
-        project = response.projects.find_by_name(activity.csv_project_name)
-      else
-        # find project by project id if present (when uploading activities for project)
-        project = project_id.present? ? Project.find_by_id(project_id) : nil
+        sub_activity.spend  = row["Past Expenditure"]
+        sub_activity.budget = row["Current Budget"]
       end
 
-      activity.project       = project if project
-      activity.name          = activity.description[0..MAX_NAME_LENGTH-1] if activity.name.blank? && !activity.description.blank?
-      implementer            = Organization.find(:first,
-                                 :conditions => ["name LIKE ?", "%#{activity.csv_provider}%"])
 
-      if implementer
-        sub = SubActivity.new(:provider_id => implementer.id, :data_response_id => activity.data_response_id,
-                        :budget => row["Budget"], :spend => row["Spend"])
-        activity.sub_activities = [sub] #done like this because the initialize method creates a sub activity by default
+      unless sub_activities.include?(sub_activity)
+        activity.sub_activities << sub_activity #this does a save & murders performance
       end
-      activity.beneficiaries = activity.csv_beneficiaries.to_s.split(',').
-                                 map{|b| Beneficiary.find_by_short_display(b.strip)}.compact
-      activity.targets       = activity.csv_targets.to_s.split(';').
-                                 map{|o| Target.find_or_create_by_description(o.strip)}.compact
-      activity.save
-      activities << activity
+
+      if activity.new_record? && !activity_in_memory
+        activity.sub_activities = [sub_activity] #done like this because the initialize method creates a sub activity by default
+      end
+
+      unless activities.include?(activity)
+        activities << activity
+      end
+
+      unless sub_activities.include?(sub_activity) && !existing_sa
+        sub_activities << sub_activity
+      end
+      activity_in_memory = false
     end
+
+    SubActivity.send :after_save, :update_activity_cache #re-enable callback
+
     activities
+  end
+
+  def self.download_header
+    FasterCSV.generate do |csv|
+      csv << file_upload_columns
+    end
   end
 
   ### Instance Methods
@@ -335,13 +451,7 @@ class Activity < ActiveRecord::Base
 
   def provider_mask=(the_provider_mask)
     self.provider_id_will_change! # trigger saving of this model
-    if is_number?(the_provider_mask)
-      self.provider_id = the_provider_mask
-    else
-      organization = Organization.find_or_create_by_name(the_provider_mask)
-      organization.save(false) # ignore any errors e.g. on currency or contact details
-      self.provider_id = organization.id
-    end
+    self.provider_id = self.assign_or_create_organization(the_provider_mask)
     @provider_mask   = self.provider_id
   end
 
@@ -373,7 +483,6 @@ class Activity < ActiveRecord::Base
       end
     end
   end
-
 
   def deep_clone
     clone = self.clone
@@ -454,33 +563,15 @@ class Activity < ActiveRecord::Base
   private
 
   ### Class methods
-    def self.file_upload_columns(response)
+    def self.file_upload_columns
       ["Project Name",
+       "Project Description",
        "Activity Name",
        "Activity Description",
-       "Provider",
-       "#{response.quarter_label(:spend, 'q4_prev')} Spend",
-       "#{response.quarter_label(:spend, 'q1')} Spend",
-       "#{response.quarter_label(:spend, 'q2')} Spend",
-       "#{response.quarter_label(:spend, 'q3')} Spend",
-       "#{response.quarter_label(:spend, 'q4')} Spend",
-       "#{response.quarter_label(:budget, 'q4_prev')} Budget",
-       "#{response.quarter_label(:budget, 'q1')} Budget",
-       "#{response.quarter_label(:budget, 'q2')} Budget",
-       "#{response.quarter_label(:budget, 'q3')} Budget",
-       "#{response.quarter_label(:budget, 'q4')} Budget",
-       "Beneficiaries",
-       "Targets",
-       "Start Date",
-       "End Date"]
-    end
-
-    # adds a 'hidden' id column at the end of the row
-    def self.file_upload_columns_with_id_col(response)
-      header_row = file_upload_columns(response)
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      header_row
+       "Id",
+       "Implementer",
+       "Past Expenditure",
+       "Current Budget"]
     end
 
     ### Instance methods
@@ -494,7 +585,9 @@ class Activity < ActiveRecord::Base
       if (dr = self.data_response)
         dr.activities_count = dr.activities.only_simple.count
         dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
-        dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count if dr.respond_to?(:unclassified_activities_count)
+        if dr.respond_to?(:unclassified_activities_count)
+          dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count
+        end
         dr.save(false)
       end
     end
@@ -517,14 +610,8 @@ class Activity < ActiveRecord::Base
     end
 
     def approved_activity_cannot_be_changed
-      errors.add(:base, "Activity was approved by SysAdmin and cannot be changed") if changed? and approved and changed != ["approved"]
-    end
-
-    def dates_within_project_date_range
-      if project.present? && project.start_date && project.end_date
-        errors.add(:start_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if start_date < project.start_date
-        errors.add(:end_date, "must be within the projects start date (#{project.start_date}) and the projects end date (#{project.end_date})") if end_date > project.end_date
-      end
+      message = "Activity was approved by SysAdmin and cannot be changed"
+      errors.add(:base, message) if changed? and approved and changed != ["approved"]
     end
 
     def is_simple?
@@ -558,18 +645,20 @@ class Activity < ActiveRecord::Base
     end
 
    def auto_create_project
-     if project_id == -1
+     if project_id == AUTOCREATE
       project = data_response.projects.find_by_name(name)
       unless project
-        project= Project.create(:name => name,
-                                :start_date => start_date,
-                                :end_date   => end_date,
-                                :data_response => data_response)
+        self_funder = FundingFlow.new(:from => self.organization,
+                        :spend => self.spend, :budget => self.budget)
+        project = Project.create(:name => name, :start_date => Time.now,
+                                :end_date => Time.now + 1.year, :data_response => data_response,
+                                :in_flows => [self_funder])
       end
       self.project = project
     end
   end
 end
+
 
 
 
@@ -585,14 +674,24 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
+#  spend_q1                     :decimal(, )
+#  spend_q2                     :decimal(, )
+#  spend_q3                     :decimal(, )
+#  spend_q4                     :decimal(, )
 #  start_date                   :date
 #  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
+#  spend_q4_prev                :decimal(, )
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
+#  budget_q1                    :decimal(, )
+#  budget_q2                    :decimal(, )
+#  budget_q3                    :decimal(, )
+#  budget_q4                    :decimal(, )
+#  budget_q4_prev               :decimal(, )
 #  comments_count               :integer         default(0)
 #  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
@@ -600,10 +699,6 @@ end
 #  project_id                   :integer
 #  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

@@ -17,5 +17,5 @@ Feature: District Manager can see dashboard
       And an sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
     When I am signed in as "sysadmin@hrtapp.com"
     Then I should see "ORG: [dr2]"
-    When I follow "dr1"
+    When I go to the set request page for "dr1"
     Then I should see "ORG: [dr1]"

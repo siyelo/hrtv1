@@ -66,8 +66,8 @@ class Reports::ActivitiesByDistrict
       row << "#{h activity.organization.name}"
       row << "#{activity.organization.raw_type}"
       row << "#{activity.id}"
-      row << "#{h activity.name}"
-      row << "#{h activity.description}"
+      row << "#{h activity.name || ''}"
+      row << "#{h activity.description || ''}"
       row << "#{activity.budget_in_usd}"
       row << "#{activity.spend_in_usd}"
       row << "#{activity.currency}"
@@ -75,7 +75,7 @@ class Reports::ActivitiesByDistrict
       row << "#{activity.end_date}"
       row << provider_name(activity)
       row << provider_fosaid(activity)
-      row << "#{h activity.text_for_beneficiaries}"
+      row << "#{h activity.text_for_beneficiaries || ''}"
       row << "#{h activity.targets.map{|o| o.description}.join('; ')}"
       row << is_activity(activity)
       row << parent_activity_budget(activity)

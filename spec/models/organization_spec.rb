@@ -26,9 +26,7 @@ describe Organization do
     it { should have_many(:projects) }
     it { should have_many(:dr_activities) }
     it { should have_many(:out_flows).dependent(:nullify) }
-    it { should have_many(:in_flows).dependent(:nullify) }
     it { should have_many(:donor_for) }
-    it { should have_many(:implementor_for) }
     it { should have_many(:provider_for).dependent(:nullify) }
     it { should have_and_belong_to_many :managers }
   end
@@ -52,7 +50,6 @@ describe Organization do
 
       # try updating with invalid attributes
       organization.update_attributes(attributes).should be_false
-      organization.errors.on(:currency).should_not be_blank
       organization.errors.on(:contact_name).should_not be_blank
       organization.errors.on(:contact_position).should_not be_blank
       organization.errors.on(:contact_phone_number).should_not be_blank
@@ -203,14 +200,6 @@ describe Organization do
       basic_setup_project
     end
 
-    it "can have many in_flows" do
-      @organization.in_flows.should have(0).items
-      Factory(:funding_flow,
-              :project => @project, :to => @organization)
-      @organization.reload
-      @organization.in_flows.should have(1).item
-    end
-
     it "can have many out_flows" do
       @organization.out_flows.should have(0).items
       Factory(:funding_flow,
@@ -225,15 +214,6 @@ describe Organization do
               :project => @project, :from => @organization)
       @organization.reload
       @organization.donor_for.should have(1).item
-    end
-
-    it "can implement a project" do
-      @organization.implementor_for.should have(0).items
-      Factory(:funding_flow,
-              :project => @project, :to => @organization)
-      @organization.reload
-      @organization.implementor_for.should have(1).item
-      @organization.implementor_for.first.should == @project
     end
   end
 
@@ -256,14 +236,6 @@ describe Organization do
 
     it "is not empty when it has users" do
       Factory(:reporter, :organization => @organization)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has in flows" do
-      project = Factory(:project, :data_response => @response)
-      Factory(:funding_flow,
-              :to => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -379,20 +351,6 @@ describe Organization do
       @target.out_flows.count.should == 2
     end
 
-    it "copies in flows from duplicate to @target" do
-      project_from = Factory(:project, :data_response => @target_dr)
-      project_to   = Factory(:project, :data_response => @duplicate_dr)
-      Factory(:funding_flow,
-              :to => @target, :project => project_from)
-      Factory(:funding_flow,
-              :to => @duplicate, :project => project_to)
-
-      @duplicate.reload
-      @target.in_flows.count.should == 1
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.in_flows.count.should == 2
-    end
-
     it "copies location from duplicate to @target" do
       @target.location = Factory(:location)
       new_location = Factory(:location)
@@ -465,31 +423,6 @@ describe Organization do
       it "returns reporting organizations" do
         Organization.nonreporting.should == [@org2]
       end
-    end
-  end
-
-  describe "#has_provider?" do
-    before :each do
-      @request = Factory.create(:data_request)
-
-      @org1 = Factory.create(:organization)
-      @org2 = Factory.create(:organization)
-
-      @response1 = @org1.latest_response
-      @response2 = @org2.latest_response
-    end
-
-    it "has X as provider when any of its activities has it as provider" do
-      project1  = Factory.create(:project, :data_response => @response1)
-      activity1 = Factory.create(:activity, :project => project1, :provider => @org2,
-                                :data_response => @response1)
-
-      @org1.has_provider?(@org2).should be_true
-    end
-
-    it "does not have X as provider when all of its activities does not have it as provider" do
-      project1  = Factory.create(:project, :data_response => @response1)
-      @org1.has_provider?(@org2).should be_false
     end
   end
 

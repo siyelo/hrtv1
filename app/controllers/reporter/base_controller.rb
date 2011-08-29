@@ -11,7 +11,7 @@ class Reporter::BaseController < ApplicationController
       @activity.project = @response.projects.find_by_id(params[:project_id]) if params[:project_id]
       # if you cant find an existing project with given params
       # then set it to -1 (i.e. Create a project for me)
-      @activity.project_id = -1 unless @activity.project
+      @activity.project_id = Activity::AUTOCREATE unless @activity.project
       @activity.provider = current_user.organization
     end
 
@@ -34,8 +34,8 @@ class Reporter::BaseController < ApplicationController
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'inputs')
       elsif params[:commit] == "Save & Add Targets >"
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'outputs')
-      elsif params[:commit] == "Save & Review >"
-        return redirect_to review_response_path(outlay.response)
+      elsif params[:commit] == "Save & Go to Overview >"
+        return redirect_to response_projects_path(outlay.response)
       else
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end
@@ -43,9 +43,9 @@ class Reporter::BaseController < ApplicationController
 
   private
     def js_redirect
-      render :json => {:html => render_to_string(:partial => 'activities/bulk_edit',
+      render :json => {:html => render_to_string(:partial => 'shared/outlays/bulk_edit',
                                        :layout => false,
-                                       :locals => {:activity => @activity,
+                                       :locals => {:outlay => @activity,
                                                    :response => @response})}
     end
 end

@@ -1,7 +1,5 @@
-
+%br
 - f.inputs :class => 'inputs clearfix' do
-  %li.marginless
-    %h3.underlined Enter organization information
   = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
   = f.input :raw_type, :as => :select, :collection => Organization::ORGANIZATION_TYPES, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
   = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false

@@ -220,9 +220,9 @@ describe Project do
       #not sure we want this functionality any longer...
       # lets have it log an error / inconsistency in data and continue as if data is okay
       # NOT adding the intermediary in but just using it's UFS
-     # Factory(:funding_flow, :from => @org1, :to => @org2, :project => @proj2,
+     # Factory(:funding_flow, :from => @org1,  :project => @proj2,
      #   :budget => 1, :spend => 2)
-     # Factory(:funding_flow, :from => @org2, :to => @org3, :project => @proj3,
+     # Factory(:funding_flow, :from => @org2,  :project => @proj3,
      #   :budget => 50)
      # @proj2.reload
      # @proj3.reload
@@ -238,22 +238,22 @@ describe Project do
 
       # organization 1
       Factory(:funding_flow,
-              :from => @org1, :to => @org1, :project => @proj1,
+              :from => @org1,  :project => @proj1,
               :budget => 100, :spend => 100)
       Factory(:activity, :project => @proj1, :provider => @org2,
                      :data_response => @response1)
       # organization 2
       Factory(:funding_flow,
-              :from => @org1, :to => @org2, :project => @proj21,
+              :from => @org1,  :project => @proj21,
               :budget => 30, :spend => 30)
       Factory(:funding_flow,
-              :from => @org2, :to => @org2, :project => @proj22,
+              :from => @org2,  :project => @proj22,
               :budget => 70, :spend => 70)
       Factory(:activity, :project => @proj21, :provider => @org3,
                      :data_response => @response2)
       # organization 3
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 30, :spend => 30)
       @proj1.reload
       @proj21.reload
@@ -268,13 +268,13 @@ describe Project do
     it "returns real UFS if it's implementer of an activity of self-funded organization" do
       # organization 2
       Factory(:funding_flow,
-              :from => @org2, :to => @org2, :project => @proj2,
+              :from => @org2,  :project => @proj2,
               :budget => 50, :spend => 50)
       activity = Factory(:activity, :project => @proj2, :provider => @org3,
                                 :data_response => @response2)
       # organization 3
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 1, :spend => 2)
       @proj2.reload
       @proj3.reload
@@ -287,14 +287,14 @@ describe Project do
       # organization 2 is donor
       @org2.raw_type = "Donor"; @org2.save
       Factory(:funding_flow,
-              :from => @org0, :to => @org2, :project => @proj2,
+              :from => @org0,  :project => @proj2,
               :budget => 50, :spend => 50)
       activity = Factory(:activity, :project => @proj2, :provider => @org3,
                          :budget => 50, :data_response => @response2)
 
       # organization 3
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 50, :spend => 50)
       @proj2.reload
       @proj3.reload
@@ -308,17 +308,17 @@ describe Project do
       # organization 2 is donor
       @org2.raw_type = "Donor"; @org2.save
       Factory(:funding_flow,
-              :from => @org0, :to => @org2, :project => @proj2,
+              :from => @org0,  :project => @proj2,
               :budget => 100, :spend => 100)
       activity = Factory(:activity, :project => @proj2, :provider => @org3,
                          :budget => 50, :data_response => @response2)
 
       # organization 3
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 50, :spend => 50)
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 50, :spend => 50)
       @proj2.reload
       @proj3.reload
@@ -331,12 +331,12 @@ describe Project do
       # organization 2 is donor
       @org2.raw_type = "Donor"; @org2.save
       Factory(:funding_flow,
-              :from => @org0, :to => @org2, :project => @proj2,
+              :from => @org0,  :project => @proj2,
               :budget => 50, :spend => 50)
 
       # organization 3
       Factory(:funding_flow,
-              :from => @org2, :to => @org3, :project => @proj3,
+              :from => @org2,  :project => @proj3,
               :budget => 1, :spend => 2)
       @proj2.reload
       @proj3.reload

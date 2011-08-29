@@ -11,6 +11,7 @@
       .implementer_container
         .ui_widget
           = f.hidden_field :updated_at
+          = f.hidden_field :provider_mask, :value => f.object.provider.id
           -# perf hack - non editable provider name
           %span.ui-autocomplete= f.object.provider.try(:name) || "< n/a >"
 

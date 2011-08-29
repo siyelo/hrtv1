@@ -19,5 +19,5 @@ Feature: Activity Manager can see dashboard
       And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization
       And I am signed in as "activity_manager@hrtapp.com"
     Then I should see "ORG: [dr2]"
-    When I follow "dr1"
+    When I go to the set request page for "dr1"
     Then I should see "ORG: [dr1]"

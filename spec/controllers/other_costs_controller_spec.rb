@@ -65,17 +65,17 @@ describe OtherCostsController do
      end
 
      it "should allow a project to be created automatically on update" do
-       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
-       put :update, :id => @other_cost.id, :response_id => @data_response.id, 
-           :other_cost => {:project_id => '-1', :name => @other_cost.name, :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
+       #if the project_id is -1 then the controller should create a new project
+       put :update, :id => @other_cost.id, :response_id => @data_response.id,
+           :other_cost => {:project_id => '-1', :name => @other_cost.name}
        @other_cost.reload
        @other_cost.project.name.should == @other_cost.name
      end
 
      it "should allow a project to be created automatically on create" do
-       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
+       #if the project_id is -1 then the controller should create a new project with name
        post :create, :response_id => @data_response.id,
-           :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description", :start_date => @other_cost.start_date, :end_date => @other_cost.end_date}
+           :other_cost => {:project_id => '-1', :name => "new other_cost", :description => "description"}
        @new_other_cost = Activity.find_by_name('new other_cost')
        @new_other_cost.project.name.should == @new_other_cost.name
      end

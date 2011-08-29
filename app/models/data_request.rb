@@ -55,6 +55,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_requests
@@ -68,10 +69,6 @@ end
 #  start_date        :date
 #  end_date          :date
 #  final_review      :boolean         default(FALSE)
-#  year_2            :boolean         default(TRUE)
-#  year_3            :boolean         default(TRUE)
-#  year_4            :boolean         default(TRUE)
-#  year_5            :boolean         default(TRUE)
 #  purposes          :boolean         default(TRUE)
 #  locations         :boolean         default(TRUE)
 #  inputs            :boolean         default(TRUE)

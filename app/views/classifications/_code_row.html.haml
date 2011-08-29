@@ -2,10 +2,9 @@
 
 - if all_view? || classified
   %li
-    = render 'classifications/li', :code => code, :classified => classified, :margin => margin
+    = render 'classifications/li', :code => code, :classified => classified, :margin => margin, :outlay => outlay
 
     - unless code.leaf?
       %ul
         - @budget_coding_tree.cached_children(code).each do |child|
-          = render 'classifications/code_row', :code => child, :margin => margin + 15
-
+          = render 'classifications/code_row', :code => child, :margin => margin + 11, :outlay => outlay

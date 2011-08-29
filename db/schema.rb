@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110818155523) do
+ActiveRecord::Schema.define(:version => 20110829015157) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -53,6 +53,10 @@ ActiveRecord::Schema.define(:version => 20110818155523) do
     t.boolean  "coding_spend_valid",           :default => false
     t.boolean  "coding_spend_cc_valid",        :default => false
     t.boolean  "coding_spend_district_valid",  :default => false
+    t.boolean  "planned_for_gor_q1"
+    t.boolean  "planned_for_gor_q2"
+    t.boolean  "planned_for_gor_q3"
+    t.boolean  "planned_for_gor_q4"
   end
 
   add_index "activities", ["activity_id"], :name => "index_activities_on_activity_id"
@@ -182,7 +186,6 @@ ActiveRecord::Schema.define(:version => 20110818155523) do
 
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
-    t.integer  "organization_id_to"
     t.integer  "project_id"
     t.datetime "created_at"
     t.datetime "updated_at"

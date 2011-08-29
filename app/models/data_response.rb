@@ -132,14 +132,11 @@ class DataResponse < ActiveRecord::Base
       return self.save
     else
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      errors.add_to_base("Projects are not yet linked.") unless projects_linked?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
       errors.add_to_base("Activites are not yet coded.") unless activities_coded?
-      errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
-      errors.add_to_base("Other Costs are not yet coded.") unless other_costs_coded?
-      errors.add_to_base("Project budget and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_matching_budgets?
-      errors.add_to_base("Project expenditures and sum of Funding Source budgets are not equal.") unless projects_and_funding_sources_have_correct_spends?
+      #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
+      errors.add_to_base("Other Costs are not yet coded.") if projects_have_other_costs? && !other_costs_coded?
       return false
     end
   end
@@ -153,32 +150,21 @@ class DataResponse < ActiveRecord::Base
   def basics_done?
     projects_entered? &&
     projects_have_activities? &&
-    projects_have_other_costs? &&
-    projects_and_funding_sources_have_matching_budgets? &&
-    projects_and_funding_sources_have_correct_spends? &&
     activity_amounts_entered? &&
     activities_coded? &&
-    other_costs_coded?
+    (projects_have_other_costs? ? other_costs_coded? : true)
   end
 
   def basics_done_to_h
     {:projects_entered =>                                  projects_entered?,
     :projects_have_activities =>                           projects_have_activities?,
-    :projects_have_other_costs =>                          projects_have_other_costs?,
-    :projects_and_funding_sources_have_matching_budgets => projects_and_funding_sources_have_matching_budgets?,
-    :projects_and_funding_sources_have_correct_spends =>   projects_and_funding_sources_have_correct_spends?,
     :activity_amounts_entered =>                           activity_amounts_entered?,
     :activities_coded =>                                   activities_coded?,
-    :other_costs_coded =>                                  other_costs_coded?}
+    :other_costs_coded =>   (projects_have_other_costs? ? other_costs_coded? : true)}
   end
 
-
   def ready_to_submit?
-    if request.final_review?
-      basics_done? && projects_linked?
-    else
-      basics_done?
-    end
+    basics_done?
   end
 
   def projects_entered?
@@ -268,22 +254,6 @@ class DataResponse < ActiveRecord::Base
   end
   memoize :projects_have_other_costs?
 
-  def projects_and_funding_sources_have_matching_budgets?
-    projects.all?{ |project| project.matches_in_flow_amount?(:budget) }
-  end
-  memoize :projects_and_funding_sources_have_matching_budgets?
-
-  def projects_and_funding_sources_have_correct_spends?
-    projects.all?{ |project| project.matches_in_flow_amount?(:spend) }
-  end
-  memoize :projects_and_funding_sources_have_correct_spends?
-
-  def projects_funding_sources_ok?
-    projects_and_funding_sources_have_matching_budgets? &&
-    projects_and_funding_sources_have_correct_spends?
-  end
-  memoize :projects_funding_sources_ok?
-
   def project_and_activities_matching_amounts?(project, amount_method)
     m = amount_method
     p_total = (project.send(m) || 0)
@@ -302,7 +272,7 @@ class DataResponse < ActiveRecord::Base
   end
 
   def uncoded_other_costs
-    reject_uncoded(other_costs)
+    reject_uncoded_locations(other_costs)
   end
 
   def coded_other_costs
@@ -362,9 +332,18 @@ class DataResponse < ActiveRecord::Base
       activities.select{ |a| !a.budget_classified? || !a.spend_classified? }
     end
 
+    def reject_uncoded_locations(other_costs)
+      other_costs.select{ |a| !a.coding_budget_district_classified? || !a.coding_spend_district_classified? }
+    end
+
     # Find all complete Activities
     def select_coded(activities)
       activities.select{ |a| a.classified? }
+    end
+
+    # Find all complete Ocosts
+    def select_coded_ocosts(other_costs)
+      other_costs.select{ |a| a.classified? }
     end
 
     def select_failing(collection, validation_method, amount_method)

@@ -1,20 +1,43 @@
 %li.section_form.wrapped.marginless
   .column2.borderless.targets.js_targets
-    %h3.simple Targets
-    - f.semantic_fields_for :targets do |ca|
-      = render "shared/outlays/target_fields", :f => ca
-    .add
-      = link_to_add_fields "Add Target", f, :targets, "shared/outlays/", :class => "create_alt marginless js_add_nested"
-
-  .column2.last.borderless.targets.js_targets
-    %h3.simple Outputs
+    %h3.simple= "Outputs (#{current_fy(@response)})"
     - f.semantic_fields_for :outputs do |ca|
       = render "shared/outlays/output_fields", :f => ca
     .add
       = link_to_add_fields "Add Output", f, :outputs, "shared/outlays/", :class => "create_alt marginless js_add_nested"
 
+  .column2.last.borderless.targets.js_targets
+    %h3.simple= "Targets (#{next_fy(@response)})"
+    - f.semantic_fields_for :targets do |ca|
+      = render "shared/outlays/target_fields", :f => ca
+    .add
+      = link_to_add_fields "Add Target", f, :targets, "shared/outlays/", :class => "create_alt marginless js_add_nested"
+
 %li.last.clear
-  %h3== Beneficiaries
-  %ul.section_form.last
-    = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'column2 borderless beneficiaries_boxes' }
-    = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'column2 last other_beneficiaries' }
+  .column2
+    %h3== Beneficiaries
+    %ul.section_form.last
+      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'borderless beneficiaries_boxes' }
+      = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'other_beneficiaries' }
+
+  .column2.last
+    - hint = 'Indicate whether the activity is planned to be implemented in any of these Government Of Rwanda Fiscal Quarters'
+    %h3
+      Planned Dates
+      = link_to image_tag("tooltip.png"), "#", :title => hint, :class => 'tooltip'
+    %fieldset
+      %ol.section_form.last.planned_dates_boxes
+        %li
+          = f.check_box :planned_for_gor_q1
+          = f.label :planned_for_gor_q1, next_fy_q1(@response)
+        %li
+          = f.check_box :planned_for_gor_q2
+          = f.label :planned_for_gor_q2, next_fy_q2(@response)
+        %li
+          = f.check_box :planned_for_gor_q3
+          = f.label :planned_for_gor_q3, next_fy_q3(@response)
+        %li
+          = f.check_box :planned_for_gor_q4
+          = f.label :planned_for_gor_q4, next_fy_q4(@response)
+
+

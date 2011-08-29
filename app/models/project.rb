@@ -22,9 +22,10 @@ class Project < ActiveRecord::Base
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
   has_many :funding_streams, :dependent => :destroy
+
+  #FIXME - cant initialize nested in_flows because of the :conditions statement
   has_many :in_flows, :class_name => "FundingFlow",
-           :conditions => [ 'self_provider_flag = 0 and
-                            organization_id_to = #{organization.id}' ] 
+           :conditions => [ 'self_provider_flag = 0' ]
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
   has_many :providers, :through => :funding_flows, :class_name => "Organization",
@@ -32,7 +33,8 @@ class Project < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
-  accepts_nested_attributes_for :in_flows, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
+  accepts_nested_attributes_for :in_flows, :allow_destroy => true,
+    :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
   before_validation_on_create :assign_project_to_funding_flows
   before_validation :strip_leading_spaces
 
@@ -49,22 +51,44 @@ class Project < ActiveRecord::Base
     :message => "Start date must come before End date."
   validates_length_of :name, :within => 1..MAX_NAME_LENGTH
 
+  validate :has_in_flows?, :if => Proc.new {|model| model.in_flows.reject{ |attrs|
+    attrs['organization_id_from'].blank? || attrs.marked_for_destruction? }.empty?}
+
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,
                   :start_date, :end_date, :currency, :data_response, :activities,
-                  :in_flows_attributes, :am_approved, :am_approved_date
+                  :in_flows_attributes, :am_approved, :am_approved_date, :in_flows
 
   ### Delegates
-  delegate :organization, :to => :data_response
+  delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
 
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
-  after_save :update_cached_currency_amounts
+  after_save :update_cached_currency_amounts, :if => Proc.new {|p| p.currency_changed?}
 
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }
 
-  ### Public methods
+  ### Class methods
+
+  def self.download_template
+    FasterCSV.generate do |csv|
+      csv << Project::FILE_UPLOAD_COLUMNS
+    end
+  end
+
+  def self.create_from_file(doc, data_response)
+    saved, errors = 0, 0
+    doc.each do |row|
+      attributes = row.to_hash
+      project = data_response.projects.new(attributes)
+      project.save ? (saved += 1) : (errors += 1)
+    end
+    return saved, errors
+  end
+
+
+  ### Instance methods
   #
   def implementers
     providers
@@ -92,8 +116,8 @@ class Project < ActiveRecord::Base
   # Returns DR.currency if no project currency specified
   def currency
     c = read_attribute(:currency)
-    return c if new_record?
     return c unless c.blank?
+    return "USD" if data_response.nil?
     return data_response.currency
   end
 
@@ -116,26 +140,10 @@ class Project < ActiveRecord::Base
     end
 
     # shallow has_many's
-    %w[funding_flows funding_streams].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.clone })
+    %w[in_flows funding_streams].each do |assoc|
+      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.project_id = nil; obj.clone })
     end
     clone
-  end
-
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = data_response.projects.new(attributes)
-      project.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
   end
 
   def amount_for_provider(provider, field)
@@ -237,7 +245,22 @@ class Project < ActiveRecord::Base
     activities.only_simple.inject([]){ |acc, a| acc.concat(a.locations) }.uniq
   end
 
+  def update_cached_currency_amounts
+    self.activities.each do |a|
+      a.code_assignments.each {|c| c.save}
+      a.save!
+    end
+
+    self.in_flows.each do |in_flow|
+      in_flow.save!
+    end
+  end
+
   private
+
+    def has_in_flows?
+      errors.add_to_base "Project must have at least one Funding Source."
+    end
 
     def trace_ultimate_funding_source(organization, funders, traced = [])
       traced = traced.dup
@@ -312,8 +335,13 @@ class Project < ActiveRecord::Base
 
     def get_budget_and_spend(from_id, to_id, project_id = nil)
       scope = FundingFlow.scoped({})
+      # TODO - refactor SQL. we need to add Org Id on project...
       scope = scope.scoped(:conditions => ["organization_id_from = ?
-                                            AND organization_id_to = ?",
+                                            AND project_id IN (
+                                              SELECT id FROM projects
+                                              where data_response_id in (
+                                                SELECT id FROM data_responses
+                                                 WHERE organization_id = ?))",
                                             from_id, to_id])
       scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
       ffs = scope.all
@@ -351,18 +379,6 @@ class Project < ActiveRecord::Base
       funding_flows.each {|ff| ff.project = self}
     end
 
-    def update_cached_currency_amounts
-      if self.currency_changed?
-        self.activities.each do |a|
-          a.code_assignments.each {|c| c.save}
-          a.save
-        end
-
-        self.in_flows.each do |in_flow|
-          in_flow.save
-        end
-      end
-    end
 end
 
 

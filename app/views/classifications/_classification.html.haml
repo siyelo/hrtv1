@@ -7,11 +7,11 @@
       %span Expenditure %
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
       - alt_txt = "Copy Past Expenditure to Current Budget"
-      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_spend_to_budget'
+      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_spend_to_budget'
     %span.budget
-      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_budget_to_spend'
+      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_budget_to_spend'
       %span Current Budget %
-      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
+      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip right'
       - alt_txt = "Copy Current Budget to Past Expenditure"
 
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}

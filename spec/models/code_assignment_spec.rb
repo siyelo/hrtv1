@@ -16,9 +16,9 @@ describe CodeAssignment do
       basic_setup_activity
       code        = Factory.create(:mtef_code, :short_display => 'code1')
       CodingBudget.update_classifications(@activity, { code.id => 5, code.id => 6  })
-      
+
       code.code_assignments.first.percentage.should == 6
-    end    
+    end
   end
 
   describe "Associations" do
@@ -137,8 +137,8 @@ describe CodeAssignment do
       # i.e. you can't create individuals (below) since there are not yet any callbacks to keep each coding's cached_amount up to date
       #  ca1      = Factory.create(:coding_budget, :activity => activity, :code => code, :percentage => '100', :cached_amount => nil)
       #  ca2      = Factory.create(:coding_spend,  :activity => activity, :code => code, :percentage => '100', :cached_amount => nil)
-      CodingBudget.update_classifications(activity, { code.id => 100 })   # 100 means 100%    
-      CodingSpend.update_classifications(activity, { code.id => 100 }) 
+      CodingBudget.update_classifications(activity, { code.id => 100 })   # 100 means 100%
+      CodingSpend.update_classifications(activity, { code.id => 100 })
       activity.reload
       cb1 = activity.coding_budget.first
       cb1.cached_amount.to_f.should == 100
@@ -160,8 +160,8 @@ describe CodeAssignment do
                          :budget => 100, :spend => 200)
       code1        = Factory.create(:mtef_code, :short_display => 'code1')
       code2        = Factory.create(:mtef_code, :short_display => 'code2')
-      activity1.reload 
-      CodingBudget.update_classifications(activity1, { code1.id => 1})   # 1 means 1%    
+      activity1.reload
+      CodingBudget.update_classifications(activity1, { code1.id => 1})   # 1 means 1%
       CodingSpend.update_classifications(activity1, { code2.id => 5.5 }) # 5.5% of 200 == 11
       code_assignments = CodeAssignment.select_for_pies.all
       code_assignments[0].value.to_s.should == "11"
@@ -308,6 +308,16 @@ describe CodeAssignment do
             assignments = CodeAssignment.all
             assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 11
             assignments.detect{|ca| ca.code_id == @code2.id}.percentage.should == 22
+          end
+
+          it "rounds percentages off to two decimal places" do
+            @cb = Factory(:coding_budget, :activity => @activity, :code => @code1, :percentage => 57.344656)
+            @cb.percentage.to_f.should == 57.34
+          end
+
+          it "rounds percentages off to two decimal places" do
+            @cb = Factory(:coding_spend, :activity => @activity, :code => @code1, :percentage => 52.7388)
+            @cb.percentage.to_f.should == 52.74
           end
         end
       end

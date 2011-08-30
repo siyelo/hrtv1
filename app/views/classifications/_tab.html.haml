@@ -4,10 +4,11 @@
     %li= link_to 'Show mine', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
 
     %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
-    %li
-      - link_to "#", :class => "create_alt js_upload_btn" do
-        = image_tag "new.png"
-        Upload
+    - if params["mode"] != "inputs" && params["mode"] != "purposes"
+      %li
+        - link_to "#", :class => "create_alt js_upload_btn" do
+          = image_tag "new.png"
+          Upload
 
   .upload_box
     %h3.title_bar.wrapped Upload a CSV file for Classifications

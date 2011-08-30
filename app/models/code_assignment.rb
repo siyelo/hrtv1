@@ -8,7 +8,7 @@ class CodeAssignment < ActiveRecord::Base
                   :sum_of_children, :cached_amount, :cached_amount_in_usd
                   #FIXME!!: deprecate :sum_of_children, :cached_amount, :cached_amount_in_usd
                   # we only use percentage API now...
-                  
+
   ### Associations
   belongs_to :activity
   belongs_to :code
@@ -182,6 +182,10 @@ class CodeAssignment < ActiveRecord::Base
 
   def has_amount_not_in_children?
     cached_amount - sum_of_children > 0 ? true : false
+  end
+
+  def percentage=(amount)
+    amount.present? ? write_attribute(:percentage, amount.to_f.round_with_precision(2)) : write_attribute(:percentage, nil)
   end
 
   # NOTE: in this method we use amounts in USD

@@ -116,6 +116,111 @@ describe CodingTree do
   end
 
   describe "coding tree" do
+    context "0.5% variance" do
+      describe "budget" do
+        it "is valid when there are only roots (slightly above)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40025)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60050)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == true
+        end
+
+        it "is valid when there are only roots (slightly below)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 39975)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 59950)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == true
+        end
+
+        it "is valid when there are only roots (slightly too much above)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40525)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60020)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == false
+        end
+
+        it "is valid when there are only roots (slightly to much below)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 39475)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 59950)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == false
+        end
+      end
+
+      describe "spend" do
+        it "is valid when there are only roots (slightly above)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40025)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60050)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == true
+        end
+
+        it "is valid when there are only roots (slightly below)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 39975)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 59950)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == true
+        end
+
+        it "is valid when there are only roots (slightly too much above)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 40525)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 60020)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == false
+        end
+
+        it "is valid when there are only roots (slightly to much below)" do
+          @activity.write_attribute(:budget, 100000)
+          ca1 = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 39475)
+          ca2 = Factory(:coding_budget, :activity => @activity, :code => @code2, :cached_amount => 59950)
+          ct  = CodingTree.new(@activity, CodingBudget)
+          ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+          ct.valid?.should == false
+        end
+      end
+
+      it "is valid when sum_of_children is same as parent cached_sum (2 level)" do
+        ca1  = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100.5, :sum_of_children => 100)
+        ca11 = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100)
+        ct   = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+        ct.valid?.should == true
+      end
+
+      it "is valid when sum_of_children is same as parent cached_sum (3 level)" do
+        ca1   = Factory(:coding_budget, :activity => @activity, :code => @code1, :cached_amount => 100, :sum_of_children => 100)
+        ca11  = Factory(:coding_budget, :activity => @activity, :code => @code11, :cached_amount => 100, :sum_of_children => 100)
+        ca111 = Factory(:coding_budget, :activity => @activity, :code => @code111, :cached_amount => 100)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+        ct.valid?.should == true
+      end
+
+      # looks like the amount from a child is only bubbling up 3 levels
+      # something happens as moves up from 3 to 4 that it loses amounts
+      it "is valid when there is one 4 levels down coding of 100% (4 level)" do
+        ca1221 = Factory(:coding_budget, :activity => @activity, :code => @code1221, :amount => 100)
+        ct    = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+        ct.set_cached_amounts!
+        ct.valid?.should == true
+      end
+    end
+
     it "is valid when activity amount is nil and classifications amount is 0" do
       @activity.write_attribute(:budget, nil)
       ct  = CodingTree.new(@activity, CodingBudget)

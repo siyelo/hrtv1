@@ -75,8 +75,11 @@ class CodingTree
     children_sum    = inner_root.children.inject(0){|sum, tree| sum += tree.ca.cached_amount}
     activity_amount = @activity.classification_amount(@coding_klass.to_s) || 0
 
+    variance = activity_amount * (0.5/100)
     (activity_amount.blank? && children_sum == 0) ||
-    (inner_root.valid_children? && children_sum == activity_amount)
+    (inner_root.valid_children? &&
+     (children_sum <= (activity_amount + variance)) &&
+      children_sum >= (activity_amount - variance))
   end
 
   def valid_ca?(code_assignment)
@@ -138,7 +141,7 @@ class CodingTree
             cached_amount = bucket[:amount]
             sum_of_children = bucket[:amount]
           end
-          
+
           ca.update_attributes(:cached_amount => cached_amount,
                                :sum_of_children => sum_of_children)
           descendants = true # tell parents that it has descendants

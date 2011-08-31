@@ -37,6 +37,7 @@ input[type="text"], input[type="password"], textarea, select
     li
       margin-bottom: 7px
       padding-bottom: 7px
+      position: relative
       +pie-clearfix
       &:last-child
         border: none
@@ -117,13 +118,18 @@ input[type="text"], input[type="password"], textarea, select
         color: $orange
 
     .inline-errors
-      color: red
-      float: left
+      background: $red
+      border: 1px solid $red - #111
+      color: #fff
       font-size: 11px
-      margin-top: 3px
-      margin-left: 17%
-      padding-left: 10px
-      width: 70%
+      opacity: 0.8
+      padding: 3px 5px 2px
+      position: absolute
+      text-align: center
+      top: 45px
+      z-index: 10
+      +border-bottom-radius(3px)
+      +box-shadow(#ccc, 0, 0, 3px)
 
   .other_beneficiaries
     label

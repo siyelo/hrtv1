@@ -248,11 +248,11 @@ class Project < ActiveRecord::Base
   def update_cached_currency_amounts
     self.activities.each do |a|
       a.code_assignments.each {|c| c.save}
-      a.save!
+      a.save
     end
 
     self.in_flows.each do |in_flow|
-      in_flow.save!
+      in_flow.save
     end
   end
 

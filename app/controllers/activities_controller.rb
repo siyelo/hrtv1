@@ -156,7 +156,7 @@ class ActivitiesController < Reporter::BaseController
         @spend_assignments  = @spend_klass.with_activity(activity).all.
                                 map_to_hash{ |b| {b.code_id => b} }
         # set default to 'all'
-        params[:view] = 'all' if params[:view].blank? 
+        params[:view] = 'all' if params[:view].blank?
       end
     end
 

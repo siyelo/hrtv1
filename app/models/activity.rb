@@ -75,8 +75,11 @@ class Activity < ActiveRecord::Base
   ### Nested attributes
   accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
-  accepts_nested_attributes_for :targets, :allow_destroy => true
-  accepts_nested_attributes_for :outputs, :allow_destroy => true
+  accepts_nested_attributes_for :targets, :allow_destroy => true,
+    :reject_if => Proc.new { |attrs| attrs['description'].blank? }
+  accepts_nested_attributes_for :outputs, :allow_destroy => true,
+    :reject_if => Proc.new { |attrs| attrs['description'].blank? }
+  accepts_nested_attributes_for :implementer_splits, :allow_destroy => true
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -145,12 +148,6 @@ class Activity < ActiveRecord::Base
 
   ### Attribute Accessor
   attr_accessor :csv_project_name, :csv_provider, :csv_beneficiaries, :csv_targets
-
-  ### Nested attributes
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true, :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
-  accepts_nested_attributes_for :implementer_splits, :allow_destroy => true
-  accepts_nested_attributes_for :targets, :allow_destroy => true
-  accepts_nested_attributes_for :outputs, :allow_destroy => true
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true

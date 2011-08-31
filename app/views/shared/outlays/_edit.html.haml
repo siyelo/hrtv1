@@ -13,9 +13,8 @@
   %ul.horizontal.right
     %li
       -if !outlay.new_record? && params[:controller] != 'code_assignments'
-        - link_to "#comments" do
-          %span
-            View Comments
+        - link_to "#comments", :class => "regular_link" do
+          View Comments
     - if current_user.sysadmin?
       = render 'shared/outlays/approve_as_admin', :outlay => outlay
 

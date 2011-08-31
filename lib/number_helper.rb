@@ -95,4 +95,5 @@ module NumberHelper
   def one_hundred_dollar_leeway(currency)
     universal_currency_converter(100, "USD", currency)
   end
+
 end

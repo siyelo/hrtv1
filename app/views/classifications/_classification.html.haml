@@ -7,13 +7,27 @@
       %span Expenditure %
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
       - alt_txt = "Copy Past Expenditure to Current Budget"
-      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_spend_to_budget'
+      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_spend_to_budget'
     %span.budget
-      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt), '#', :id => 'js_budget_to_spend'
+      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_budget_to_spend'
       %span Current Budget %
-      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
+      = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip right'
       - alt_txt = "Copy Current Budget to Past Expenditure"
 
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay
+ 
+  .coding_total.right 
+    %p.value.left.js_total_spend
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= 0
+
+    %p.value.right.js_total_budget
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= 0 
+
+  = submit_tag 'Save', :class => 'submit_btn js_submit_btn big next'
+  = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

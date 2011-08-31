@@ -513,10 +513,10 @@ var updateTotalValues = function (el) {
   var total_value = 0;
 
   if ($(el).hasClass('js_spend')) {
-    var input_fields = $(el).parents('table').find('.js_spend:visible');
+    var input_fields = $(el).parents('table, .activity_tree').find('.js_spend:visible');
     var total_field = $('.js_total_spend .amount');
   } else if ($(el).hasClass('js_budget')) {
-    var input_fields = $(el).parents('table').find('.js_budget:visible');
+    var input_fields = $(el).parents('table, .activity_tree').find('.js_budget:visible');
     var total_field = $('.js_total_budget .amount');
   }
 
@@ -527,7 +527,7 @@ var updateTotalValues = function (el) {
     }
   }
 
-  total_field.html(total_value.toFixed(1));
+  total_field.html(total_value.toFixed(2));
 };
 
 var dynamicUpdateTotalsInit = function () {
@@ -952,6 +952,7 @@ var activity_classification = function () {
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
+    updateTotalValues(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
@@ -1064,6 +1065,8 @@ var checkRootNodes = function(type){
     if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
   });
 
+  $('.totals').find(type).find('.amount').html(total);
+  
   if (total != 100 && total >0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
@@ -1715,6 +1718,7 @@ var activities_new = activities_create = activities_edit = activities_update = o
   run: function () {
     activity_classification();
     activity_form();
+    $(document).find('.js_add_nested').trigger('click');
   }
 };
 

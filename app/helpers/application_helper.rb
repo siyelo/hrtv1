@@ -275,7 +275,7 @@ module ApplicationHelper
     unless flash[:error]
       if outlay.approved? || outlay.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif (!outlay.budget_classified? || !outlay.spend_classified?)
+      elsif !outlay.classified?
         flash.now[:error] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
                              #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
                              to see what still needs to be classified"}"
@@ -295,10 +295,10 @@ module ApplicationHelper
     is_activity = activity_or_other_cost.class == Activity ? true : false
     case current_step
     when nil;         "Save & Add Locations >"
-    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Go to Overview >"
+    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Review>"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Go to Overview >"
+    when 'outputs';   "Save & Review >"
     end
   end
 end

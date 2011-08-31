@@ -385,6 +385,7 @@ ul.ordered_nav
 
 .comments_list
   .comment_item
+    margin-top: 15px
     > ul
       margin-bottom: 10px
       padding-left: 30px
@@ -430,7 +431,6 @@ ul.ordered_nav
   .comment
     font-size: 12px
     line-height: 1.4
-    margin-bottom: 20px
     padding-left: 7px
 
 // MAIN COMMENTS end //
@@ -488,20 +488,20 @@ ul.activity_tree
       height: 13px
       line-height: 1
       margin: 0 3px 0 5px !important
-      padding: 2px
+      padding: 1px
       text-align: center
-      width: 12px !important
+      width: 13px !important
       &.expanded
         background: #fff
         color: red
         position: relative
-        top: 8px
+        top: 9px
         +border-radius(10px)
       &.collapsed
         background: #fff
         color: green
         position: relative
-        top: 8px
+        top: 9px
         +border-radius(10px)
 
     ul
@@ -551,16 +551,15 @@ ul.activity_tree
     .classification_input_left
       float: left
       width: 150px
+      
   .tooltip
     float: left
-    margin: 7px 4px 0 3px
+    margin: 5px 5px 0 3px
   input[type=checkbox]
     float: left
     margin-top: 5px
   .values input
     margin-bottom: 0 !important
-  .values
-
 
   .hide
     display: none
@@ -570,6 +569,23 @@ ul.activity_tree
     cursor: default
     &.expanded, &.collapsed
       cursor: pointer
+
+.coding_total
+  color: $primary
+  float: right
+  font-size: 10px
+  margin-right: 10px
+  width: 310px
+  .value
+    border-bottom: 2px solid $primary_light
+    margin-top: 15px
+    padding-bottom: 5px
+    width: 150px
+  .amount
+    color: $primary_dark
+    font-weight: bold
+    font-size: 14px
+    padding-right: 2px
 
 .code_label
   float: left

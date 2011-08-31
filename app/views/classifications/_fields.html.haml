@@ -1,13 +1,10 @@
-- # amount     = assignment.nil? ? '' : assignment.amount
-- # amount2     = assignment2.nil? ? '' : assignment2.amount
 - cached_amount = assignment.nil? ? '' : assignment.cached_amount
 - cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
 - association = klass.to_s.underscore.to_sym
+- sub_activities_total =  assignment.nil? ? "" : "#{assignment.activity.sub_activities_total(type)}"
 - percentage = derive_percentage_from_amount(outlay, type, assignment)
 - options = percentage_field_options(code, assignment, valid)
-
 - association_name = type.to_s.underscore # CodingBudget becomes :coding_budget
-= text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box"}.merge(options)
+= text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_#{c_type}"}.merge(options)
 .inline_ratio %
 = link_to image_tag("amount.png"), "#", :title => "#{cached_amount} #{assignment.activity.currency if assignment}", :class => "tooltip subtotal_icon hidden"
-

@@ -155,10 +155,8 @@ class ActivitiesController < Reporter::BaseController
                                 map_to_hash{ |b| {b.code_id => b} }
         @spend_assignments  = @spend_klass.with_activity(activity).all.
                                 map_to_hash{ |b| {b.code_id => b} }
-        # set default to 'my' view if there are code assignments present
-        if params[:view].blank?
-          params[:view] = @budget_coding_tree.roots.present? ? 'my' : 'all'
-        end
+        # set default to 'all'
+        params[:view] = 'all' if params[:view].blank? 
       end
     end
 

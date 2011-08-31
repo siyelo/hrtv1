@@ -44,6 +44,17 @@ class OtherCost < Activity
   def classified?
     (coding_budget_district_classified? && !budget.blank?) || (coding_spend_district_classified? && !spend.blank?)
   end
+  
+  def budget_classified?
+    budget.blank? ||
+    coding_budget_district_classified?
+  end
+
+  def spend_classified?
+    spend.blank? ||
+    coding_spend_district_classified?
+  end
+
 
 end
 

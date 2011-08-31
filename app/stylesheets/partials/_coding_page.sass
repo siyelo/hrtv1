@@ -16,8 +16,8 @@
         text-transform: uppercase
   #buttons
     position: absolute
-    right: 15px
-    top: 0px
+    left: 280px
+    top: 18px
 
 #activity_classification
   form
@@ -36,7 +36,7 @@ body #content #main .activity_tree a
   float: right
   position: absolute
   right: 15px
-  top: 33px
+  top: 27px
   width: 323px
 
   span
@@ -48,8 +48,6 @@ body #content #main .activity_tree a
       width: 163px
       span
         padding-left: 3px
-      span, a.tooltip
-        float: left
       img
         float: left
     &.spend
@@ -59,9 +57,20 @@ body #content #main .activity_tree a
         float: left
       img
         float: right
+        
+  .click
+    background: $primary_lighter
+    border: 1px solid $primary_light
+    float: left
+    opacity: 0.7
+    padding: 3px 6px
+    +border-radius
+    &:hover
+      opacity: 1
 
   a
     text-decoration: none
+    
   img
     margin: 0 3px
 

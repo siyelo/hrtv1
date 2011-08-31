@@ -28,16 +28,16 @@
     %fieldset
       %ol.section_form.last.planned_dates_boxes
         %li
-          = f.check_box :planned_for_gor_q1
+          = f.check_box :planned_for_gor_q1, :class => 'left'
           = f.label :planned_for_gor_q1, next_fy_q1(@response)
         %li
-          = f.check_box :planned_for_gor_q2
+          = f.check_box :planned_for_gor_q2, :class => 'left'
           = f.label :planned_for_gor_q2, next_fy_q2(@response)
         %li
-          = f.check_box :planned_for_gor_q3
+          = f.check_box :planned_for_gor_q3, :class => 'left'
           = f.label :planned_for_gor_q3, next_fy_q3(@response)
         %li
-          = f.check_box :planned_for_gor_q4
+          = f.check_box :planned_for_gor_q4, :class => 'left'
           = f.label :planned_for_gor_q4, next_fy_q4(@response)
 
 

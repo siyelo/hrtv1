@@ -19,6 +19,7 @@ describe Admin::CurrenciesController do
       Money.default_bank.get_rate("BWP", "ZAR").should == 1.6
     end
     it "does not create the currency if the same conversion exists" do
+      Factory(:currency, :conversion => 'USD_TO_EUR', :rate => 1)
       post :create, :currency => {:from => "USD", :rate => 9.6, :to =>"EUR"}
       Currency.find_by_conversion('USD_TO_EUR').rate.should_not == 9.6
       flash[:error].should == "Conversion has already been taken"
@@ -27,14 +28,8 @@ describe Admin::CurrenciesController do
   end
 
   describe "Updating the currency" do
-    after :all do
-      @currency = Currency.find_by_conversion('USD_TO_USD')
-      @currency.rate = 1; @currency.save ## because the currency rates are persisted in the database
-      @currency = Currency.find_by_conversion('RWF_TO_USD')
-    end
-
     it "updates the default bank when the currency is updated" do
-      @currency = Currency.find_by_conversion('USD_TO_USD')
+      @currency = Factory(:currency, :conversion => 'USD_TO_USD', :rate => 1)
       put :update, :id => @currency.id, :rate => 98
       @currency.reload
       Money.default_bank.get_rate("USD", "USD").should == 98.0

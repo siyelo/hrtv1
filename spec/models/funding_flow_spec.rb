@@ -182,10 +182,14 @@ describe FundingFlow do
 
   describe "#name" do
     it "returns from and to organizations in the name" do
-      basic_setup_project
+      @organization = Factory(:organization, :name => 'Organization 2')
+      @other_org    = Factory(:organization, :name => 'ORG2')
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @project.save!
+
       from = Factory(:organization, :name => 'Organization 1')
-      @organization.name = 'Organization 2'
-      @organization.save
       funding_flow = Factory(:funding_flow, :project => @project, :from => from)
       funding_flow.name.should == "From: #{from} - To: #{@organization}"
     end

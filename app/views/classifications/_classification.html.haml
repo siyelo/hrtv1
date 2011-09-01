@@ -19,3 +19,14 @@
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
       = render 'classifications/code_row', :code => code, :margin => 0, :outlay => outlay
+
+  .coding_total.right
+    %p.value.left.js_total_spend
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= codings_total(outlay, @budget_coding_tree.coding_klass)
+      
+    %p.value.right.js_total_budget
+      %span.label.left Total
+      %span.percentage.right= '%'
+      %span.amount.right= codings_total(outlay, @budget_coding_tree.coding_klass)

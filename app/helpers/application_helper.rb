@@ -154,7 +154,7 @@ module ApplicationHelper
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
     callback = options[:callback] || 'null'
-    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this, #{callback})", :class => class_name)
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)
   end
 
   # Helper for adding new nested form models
@@ -268,6 +268,10 @@ module ApplicationHelper
   # find namespace of given class
   def namespace(klass)
     klass.to_s.split("::").first
+  end
+
+  def codings_total(activity, type)
+    type.with_activity(activity).all.reject{|ca| !ca.code.parent.nil?}.sum{|rca| rca.percentage.to_f}
   end
 
   def warn_if_not_classified

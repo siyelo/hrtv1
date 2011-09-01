@@ -10,9 +10,9 @@
       .spend.js_spend{:style => "width: #{150-margin}px;"}
         - spend_assignment = @spend_assignments[code.id]
         - valid = spend_assignment && !@spend_coding_tree.valid_ca?(spend_assignment)
-        = render '/classifications/fields', :code => code, :assignment => spend_assignment, :klass => @spend_klass, :type => :spend, :valid => valid, :outlay => outlay
+        = render '/classifications/fields', :code => code, :assignment => spend_assignment, :klass => @spend_klass, :type => :spend, :valid => valid, :outlay => outlay, :c_type => 'spend'
     .classification_input_right
       .budget.js_budget{:style => "width: #{150-margin}px;"}
         - budget_assignment = @budget_assignments[code.id]
         - valid = budget_assignment && !@budget_coding_tree.valid_ca?(budget_assignment)
-        = render '/classifications/fields', :code => code, :assignment => budget_assignment, :klass => @budget_klass, :type => :budget, :valid => valid, :outlay => outlay
+        = render '/classifications/fields', :code => code, :assignment => budget_assignment, :klass => @budget_klass, :type => :budget, :valid => valid, :outlay => outlay, :c_type => 'budget'

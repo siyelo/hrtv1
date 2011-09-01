@@ -17,5 +17,5 @@
 
   %td= f.text_field :spend_mask, :class => 'js_spend'
   %td= f.text_field :budget_mask, :class => 'js_budget'
-  %td= link_to_remove_fields "x", f, {:class => 'delete_row', :callback => 'updateTotalsValuesCallback'}
+  %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback'}
 

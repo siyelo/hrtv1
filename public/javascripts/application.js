@@ -7,13 +7,13 @@ function inspect (obj) {
         alert(str);
 }
 
-function remove_fields(link, callback) {
+function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
   $(link).closest(".fields").hide();
   //$(link).parent().next().hide();
 
-  if (callback !== null) {
-    callback(link);
+  if ($(link).hasClass('totals_callback')) {
+    updateTotalValuesCallback(link);
   }
 };
 
@@ -79,47 +79,6 @@ var observeFormChanges = function (form) {
     $(window).bind('beforeunload', catcher);
   };
 }
-
-
-var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
-  var total = edit_block.find('.js_' + type).val();
-
-  var values = jQuery.map(edit_block.find(".js_" + type + "_quarters input"), function (e) {
-    return $(e).val();
-  });
-  var labels = jQuery.map(edit_block.find(".js_" + type + "_quarters label"), function (e) {
-    return $(e).text();
-  });
-
-  if (display_funder) {
-    var organization = edit_block.find('.ff_from option:selected').text();
-    var funder = $('<li/>').append(
-      $('<span/>').text('Funder'),
-      organization || 'N/A'
-    );
-  } else {
-    var funder = $('<li/>');
-  }
-
-  var ul = $('<ul/>');
-  for (var i = 0; i < values.length; i++) {
-    ul.append(
-      $('<li/>').append(
-        $('<span/>').text(labels[i]),
-        values[i] || 'N/A'
-      )
-    )
-  }
-
-  return $('<ul/>').append(
-    funder,
-    $('<li/>').append(
-      $('<span/>').text(type_name),
-      total || 'N/A'
-    ),
-    $('<li/>').append(ul)
-  )
-};
 
 var build_activity_funding_source_row = function (edit_block) {
   var organization = edit_block.find('.ff_organization option:selected').text();
@@ -461,78 +420,57 @@ var removeRow = function (resources, rowId) {
   updateCount(resources);
 };
 
-var calculate_total_from_quarters = function (quarterInputs, total_box) {
-  var total_ammount = 0;
+var updateTotalValuesCallback = function (el) {
+  updateTotalValue($(el).parents('tr').find('.js_spend'));
+  updateTotalValue($(el).parents('tr').find('.js_budget'));
+};
 
-  for (var i = 0; i < quarterInputs.length; i++) {
-    var quarter_value = Number($(quarterInputs[i]).val());
+var getFieldsTotal = function (fields) {
+  var total = 0;
 
-    if (!isNaN(quarter_value)) {
-      total_ammount += quarter_value;
+  for (var i = 0; i < fields.length; i++) {
+    if (!isNaN(fields[i].value)) {
+      total += Number(fields[i].value);
     }
   }
 
-  total_box.val(total_ammount);
-};
+  return total;
+}
 
-var split_total_across_quarters = function (quarterInputs, value) {
-  value = value.replace(",","");
-
-  if (!isNaN(value)) {
-    var quarter_value = value / quarterInputs.length;
-
-    for (var i = 0; i < quarterInputs.length; i++) {
-      $(quarterInputs[i]).val(quarter_value);
-    }
-  }
-};
-
-var quartersSplit = function (elements) {
-  elements.live('keyup', function () {
-    split_total_across_quarters($(this).parents("li:first").next().find('.js_fy_quarter'), $(this).val());
-  });
-};
-
-var quartersSum = function (quarters) {
-  quarters.live('keyup', function () {
-    calculate_total_from_quarters($(this).parents('ul:first').find('.js_fy_quarter'), $(this).parents('li.js_row').prev().find('input'));
-  });
-};
-
-var quartersInit = function () {
-  quartersSplit($(".js_budget, .js_spend"));
-  quartersSum($('.js_fy_quarter'));
-};
-
-var updateTotalsValuesCallback = function (el) {
-  updateTotalValues($(el).parents('tr').find('.js_spend'));
-  updateTotalValues($(el).parents('tr').find('.js_budget'));
-};
-
-var updateTotalValues = function (el) {
-  var total_value = 0;
-
+var updateTotalValue = function (el) {
   if ($(el).hasClass('js_spend')) {
-    var input_fields = $(el).parents('table').find('.js_spend:visible');
-    var total_field = $('.js_total_spend .amount');
-  } else if ($(el).hasClass('js_budget')) {
-    var input_fields = $(el).parents('table').find('.js_budget:visible');
-    var total_field = $('.js_total_budget .amount');
-  }
-
-  for (var i = 0; i < input_fields.length; i++) {
-    var input_field_value = Number(input_fields[i].value);
-    if (!isNaN(input_field_value)) {
-      total_value += input_field_value;
+    if ($(el).parents('table').length) {
+      // table totals
+      var table        = $(el).parents('table');
+      var input_fields = table.find('input.js_spend:visible');
+      var total_field  = table.find('.js_total_spend .amount');
+    } else {
+      // classifications tree totals
+      var input_fields = $(el).parents('.activity_tree').find('> li > div input.js_spend');
+      var total_field  = $('.js_total_spend .amount');
     }
+  } else if ($(el).hasClass('js_budget')) {
+    if ($(el).parents('table').length) {
+      // table totals
+      var table = $(el).parents('table');
+      var input_fields = table.find('input.js_budget:visible');
+      var total_field = table.find('.js_total_budget .amount');
+    } else {
+      // classifications tree totals
+      var input_fields = $(el).parents('.activity_tree').find('> li > div input.js_budget');
+      var total_field = $('.js_total_budget .amount');
+    }
+  } else {
+    throw "Element class not valid";
   }
 
-  total_field.html(total_value.toFixed(1));
+  var fieldsTotal = getFieldsTotal(input_fields);
+  total_field.html(fieldsTotal.toFixed(2));
 };
 
 var dynamicUpdateTotalsInit = function () {
   $('.js_spend, .js_budget').live('keyup', function () {
-    updateTotalValues(this);
+    updateTotalValue(this);
   });
 };
 
@@ -952,6 +890,7 @@ var activity_classification = function () {
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
+    updateTotalValue(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
@@ -1063,6 +1002,8 @@ var checkRootNodes = function(type){
     value = $(this).find(type).find('input').val();
     if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
   });
+
+  $('.totals').find(type).find('.amount').html(total);
 
   if (total != 100 && total >0){
     topNodes.each(function(){
@@ -1554,6 +1495,7 @@ var hideAll = function() {
   $('#new_project_form').hide();
   $('#new_activity_form').hide();
   $('#new_other_cost_form').hide();
+  $('.js_total_budget .amount, .js_total_spend .amount').html(0);
 };
 
 var projects_bulk_edit = {
@@ -1798,7 +1740,6 @@ var activity_form = function () {
   approveBudget();
   approveAsAdmin();
   commentsInit();
-  quartersInit();
   dynamicUpdateTotalsInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
@@ -1869,7 +1810,6 @@ var admin_organizations_create = admin_organizations_edit = {
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
     commentsInit();
-    quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");

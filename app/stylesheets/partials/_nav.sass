@@ -1,0 +1,193 @@
+/* APP MAIN-NAV STYLES */
+#main-nav
+  background: $primary_dark
+
+  a
+    color: $nav_font
+    font-family: 'Avenir', sans-serif
+    font-size: 12px
+
+  ul
+    display: block
+    overflow: hidden
+    min-width: 650px
+
+    li
+      +box-shadow(#111, 0, 0px, 13px)
+      display: block
+
+      &:first-child a
+        +border-top-left-radius
+      &:last-child a
+        +border-top-right-radius
+
+      &.active
+        a
+          background: $subnav
+          border-bottom: 1px solid #FFF
+          border-left: none
+          background: white
+          color: $secondary
+          font-family: 'Avenir Black', sans-serif
+          letter-spacing: 0.05em
+          margin: 0
+          padding-top: 15px
+          position: relative
+          top: 1px
+          +border-top-radius(3px)
+          +linear-gradient(color-stops(#fff, $subnav))
+          +text-shadow(#fff, 0, 1px, 1px)
+
+          // dont want hover background on active tab
+          &:hover
+            background: $subnav
+            border-left: none
+            color: $secondary
+            +linear-gradient(color-stops(#fff, $subnav))
+            +text-shadow(#fff, 0, 1px, 1px)
+
+      a
+        border: 1px solid $nav
+        margin: 3px 0 0
+        background: $nav
+        color: $nav_font
+        display: inline
+        float: left
+        font-size: 14px
+        height: 15px
+        padding: 12px 20px 11px
+        text-decoration: none
+        +transition(hover, 1s, ease, 0)
+        +linear-gradient(color-stops($nav_alt, $nav))
+        +text-shadow($nav - #222, 0, 1px, 1px)
+
+        &:hover
+          background: $nav
+          border: 1px solid $nav - #111
+          color: $filler
+          +linear-gradient(color-stops($nav_alt - #111, $nav - #111))
+          +text-shadow($nav - #333, 0, 1px, 1px)
+
+      &.home_tab
+        a
+          span
+            background: image_url("home_nav.png") repeat scroll 0 -17px transparent
+            display: block
+            height: 17px
+            line-height: 17px
+            margin-top: -2px
+            text-indent: -5000px
+            width: 18px
+        &.active
+          a
+            span
+              background-position: 0 0
+
+  img
+    float: right
+    margin-top: -35px
+/* APP MAIN-NAV STYLES end */
+
+/* sub-nav styles */
+#sub-nav
+  background: $subnav
+  border-bottom: 1px solid #ddd
+  padding-top: 4px
+  +box-shadow(#f3f3f3, 0, 2px, 3px)
+  +pie-clearfix
+
+  ul
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+    
+  a
+    color: $subnav_font
+    display: inline-block
+    font-family: 'Avenir', sans-serif
+    font-size: 13px
+    padding: 11px 10px 11px
+    text-decoration: none
+    +text-shadow(#fff, 0, 1px, 0)
+    &:hover, &:focus
+      color: $subnav_font
+      
+  &.alt
+    margin: 10px -15px
+
+  .active
+    a
+      background: image_url("subnav_active.png") no-repeat center 26px
+      font-weight: bold
+      padding: 9px 10px 13px
+      position: relative
+      bottom: -2px
+  .inactive
+    a
+      color: grey
+/* sub-nav styles end */
+
+
+/* form section tabbed navigation */
+.section_nav
+  background: #EEE
+  border: 1px solid $primary_light
+  border-bottom: none
+  min-height: 36px
+  padding: 0 17px
+  +linear-gradient(color-stops($primary_lightest, $primary_lighter))
+  +pie-clearfix
+  -webkit-box-shadow: $primary_light 0 1px 7px inset
+  -moz-box-shadow: $primary_light 0 1px 7px inset
+  box-shadow: $primary_light 0 1px 7px inset
+
+  li
+    display: inline-block
+    float: left
+    margin-bottom: 0 !important
+    padding-bottom: 0 !important
+    +pie-clearfix
+
+    &.selected
+      a, .dummy
+        background: image_url("subnav_active2.png") no-repeat center 29px
+        color: $secondary
+        font-weight: bold
+        padding: 10px 10px 12px
+        position: relative
+        top: 2px
+        +text-shadow(#FFF, 0, 1px, 0)
+        span
+          background: $secondary
+          color: $primary_light
+
+  a, .dummy
+    color: $primary
+    display: inline-block
+    font-family: 'Avenir', sans-serif
+    font-size: 13px
+    padding: 12px 10px 10px
+    text-decoration: none
+    +text-shadow(#FFF, 0, 1px, 0)
+
+    span
+      background: $primary_light
+      color: $primary
+      display: inline-block
+      font-size: 9px
+      font-weight: normal
+      line-height: 1
+      margin-right: 2px
+      padding: 4px
+      position: relative
+      text-align: center
+      top: -1px
+      width: 9px
+      +box-shadow(#FFF, 0, 1px, 0)
+      +border-radius(10px)
+      &.finished
+        background: $green
+        color: #FFF
+        +text-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
+/* form section tabbed navigation end */

@@ -23,7 +23,7 @@ describe Reports::Districts::OrganizationsController do
         it "is not able to access activities index page for other district" do
           @location2 = Factory(:location)
           get :index, :district_id => @location2.id
-          response.should redirect_to(login_path)
+          response.should redirect_to(root_path)
         end
       end
 
@@ -36,7 +36,7 @@ describe Reports::Districts::OrganizationsController do
         it "is not able to access activities index page for other district" do
           @location2 = Factory(:location)
           get :show, :id => @organization.id, :district_id => @location2.id
-          response.should redirect_to(login_path)
+          response.should redirect_to(root_path)
         end
       end
     end

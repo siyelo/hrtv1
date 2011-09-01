@@ -1,4 +1,7 @@
 /* STYLES SHARED BETWEEN ALL PAGES */
+html
+  height: 100%
+  
 body
   background: image_url("bg-white.jpg")
   font-family: sans-serif
@@ -6,99 +9,57 @@ body
   &.app
     background: #fff
 
-  /* shared heading styles */
-  h1, h2, h3, h4, h5, h6
-    font-weight: bold
+/* shared heading styles */
+h1, h2, h3, h4, h5, h6
+  font-weight: bold
 
-  h2, h3, h4, h5, h6
-    font-weight: bold
-    text-transform: uppercase
+h2, h3, h4, h5, h6
+  font-weight: bold
+  text-transform: uppercase
 
-  /* universal float right class */
-  .left
-    float: left
+/* universal float right class */
+.left
+  float: left
 
-  /* universal float right class */
-  .right
-    float: right
+/* universal float right class */
+.right
+  float: right
 
-  /* shared content>wrapper styles */
-  #content .wrapper
-    +border-bottom-radius
-    +clearfix
-    //background: white
-    margin: 0 auto
-    padding: 0 10px
+/* shared content>wrapper styles */
+#content .wrapper
+  +border-bottom-radius
+  +clearfix
+  //background: white
+  margin: 0 auto
+  padding: 0 10px
 
-  /* warning text */
-  p.warning
-    border: 1px solid red
-    color: red
-  /* end */
+/* warning text */
+p.warning
+  border: 1px solid red
+  color: red
+/* end */
 
-  /* bordered paragraph style */
-  p.borderful
-    border: 1px solid $lightest-blue
-    color: $mid-blue
-    margin-bottom: 20px
-  /* end */
+/* bordered paragraph style */
+p.borderful
+  border: 1px solid $lightest-blue
+  color: $mid-blue
+  margin-bottom: 20px
+/* end */
 
-  .borderless
-    border: none !important
+.borderless
+  border: none !important
 
-  /* shared footer styles */
-  #footer
-    color: $mid-blue
-    font-size: 11px
-    margin-bottom: 15px
-    text-align: center
-    text-transform: uppercase
-    +pie-clearfix
+.wrapper > .full-width
+  padding: 5px 0 0
 
-    ul
-      line-height: 16px
-      li.powered
-        font-size: 11px
-        text-transform: none
+.like_a_h2
+  font-size: 12px
 
-    h2.logo
-      color: $dark-blue
-      font-size: 13px
-    h2.left
-      left: 2px
-      position: relative
-      top: 3px
-
-    .version
-      background: $mid-blue
-      color: #FFF
-      padding: 3px 6px 2px !important
-      text-transform: none
-      +border-radius
-
-    .left
-      float: left
-      h2
-        display: inline-block
-      img
-        margin-bottom: -5px
-
-    a
-      color: $mid-blue
-      padding-right: 10px
-      text-decoration: none
-      &:hover, &:focus
-        color: orange
-
-    ul
-      +horizontal-list
-      margin-bottom: 10px
-
-  .wrapper > .full-width
-    padding: 5px 0 0
-
-  .like_a_h2
-    font-size: 12px
+.wrapper
+  margin: 0 auto
+  padding: 0 15px
+  position: relative
+  width: 960px
 
 .wrap-80
   float: left

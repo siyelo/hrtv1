@@ -2,20 +2,19 @@
 /* SHARED HEADER STYLES */
 
 #header, #header_app
-  background: $primary_dark
-  color: $lightest-blue
+  color: $primary_lighter
   +pie-clearfix
 
   #logo
-    color: orange
+    color: $primary_dark
     font-size: 30px
     float: left
-    font-family: Avenir, sans-serif
+    font-family: Avenir Black, sans-serif
     font-weight: normal
     margin: 0
-    padding: 50px 0 35px
+    padding: 50px 0 15px
     text-decoration: none
-    +text-shadow(#777, 0, 0, 15px)
+    +text-shadow(rgba(0, 0, 0, 0.4), 0, 0, 10px)
     &:hover
       color: $mid-blue
       +text-shadow($light-blue, 0, 0, 15px)
@@ -38,6 +37,10 @@
     float: right
     font-family: 'Avenir'
     width: 250px
+
+    &.login_form_opacity
+      +opacity(0.3)
+
 
     span
       color: $nav_font
@@ -92,38 +95,45 @@
             img
               margin-bottom: -5px
 
-  #tagline
-    float: right
-    padding-top: 50px
-    padding-bottom: 10px
-    text-align: right
-    width: 400px
-    +text-shadow(#444, 0, 0, 15px)
-
     h2
       color: $light-blue
       font-size: 1em
       padding-bottom: 2px
 
-    h6
-      color: orange
-      font-family: Arial, Helvetica Neu, sans-serif
-      font-size: 0.6em
-      font-weight: normal
-      letter-spacing: 0.1em
-
 /* SHARED HEADER STYLES end */
 
 
 /* LANDING PAGE HEADER STYLES */
-body.promo.landing #admin p
-  color: $mid-blue + #111
-  float: right
-  font-size: 13px
-  font-weight: normal
-  padding: 14px 7px 0 0
-  text-align: right
-  +text-shadow($light-blue, 0, 1px, 0)
+body.promo.landing
+  #header
+    #logo
+      color: rgba(255, 255, 255, 0.6)
+      font-family: Avenir Black, sans-serif
+      letter-spacing: 1px
+      text-transform: none
+      img
+        margin-right: 10px
+        position: relative
+        top: -12px
+      &:hover, &:focus
+        color: rgba(255, 255, 255, 0.9)
+        +text-shadow(rgba(0, 0, 0, 0.5), 0, 0, 10px)
+    #admin
+      margin-top: 37px
+      position: relative
+      z-index: 5
+      width: auto !important
+      p
+        color: $mid-blue + #111
+        float: right
+        font-size: 13px
+        font-weight: normal
+        padding: 14px 7px 0 0
+        text-align: right
+        +text-shadow($light-blue, 0, 1px, 0)
+      span
+        color: $dark-blue
+        +text-shadow(#ddd, 0, 1px, 1px)
 
 /* LANDING PAGE HEADER STYLES end */
 
@@ -131,6 +141,7 @@ body.promo.landing #admin p
 /* APP HEADER STYLES */
 
 #header_app
+  background: $primary_dark
   height: 34px
 
   .wrapper
@@ -167,173 +178,3 @@ body.promo.landing #admin p
       +text-shadow($dark-blue, 0, 1px, 0)
 
 /* APP HEADER STYLES end */
-
-
-/* APP MAIN-NAV STYLES */
-#main-nav
-  background: $primary_dark
-
-  a
-    color: $nav_font
-    font-family: 'Avenir', sans-serif
-    font-size: 12px
-
-  ul
-    display: block
-    overflow: hidden
-    min-width: 650px
-
-    li
-      +box-shadow(#111, 0, 0px, 13px)
-      display: block
-
-      &:first-child a
-        +border-top-left-radius
-      &:last-child a
-        +border-top-right-radius
-
-      &.active
-        a
-          background: $subnav
-          border-bottom: 1px solid #FFF
-          border-left: none
-          background: white
-          color: $secondary
-          font-family: 'Avenir Black', sans-serif
-          letter-spacing: 0.05em
-          margin: 0
-          padding-top: 15px
-          position: relative
-          top: 1px
-          +border-top-radius(3px)
-          +linear-gradient(color-stops(#fff, $subnav))
-          +text-shadow(#fff, 0, 1px, 1px)
-
-          // dont want hover background on active tab
-          &:hover
-            background: $subnav
-            border-left: none
-            color: $secondary
-            +linear-gradient(color-stops(#fff, $subnav))
-            +text-shadow(#fff, 0, 1px, 1px)
-
-      a
-        border: 1px solid $nav
-        margin: 3px 0 0
-        background: $nav
-        color: $nav_font
-        display: inline
-        float: left
-        font-size: 14px
-        height: 15px
-        padding: 12px 20px 11px
-        text-decoration: none
-        +transition(hover, 1s, ease, 0)
-        +linear-gradient(color-stops($nav_alt, $nav))
-        +text-shadow($nav - #222, 0, 1px, 1px)
-
-        &:hover
-          background: $nav
-          border: 1px solid $nav - #111
-          color: $filler
-          +linear-gradient(color-stops($nav_alt - #111, $nav - #111))
-          +text-shadow($nav - #333, 0, 1px, 1px)
-
-      &.home_tab
-        a
-          span
-            background: image_url("home_nav.png") repeat scroll 0 -17px transparent
-            display: block
-            height: 17px
-            line-height: 17px
-            margin-top: -2px
-            text-indent: -5000px
-            width: 18px
-        &.active
-          a
-            span
-              background-position: 0 0
-
-  img
-    float: right
-    margin-top: -35px
-/* APP MAIN-NAV STYLES end */
-
-/* sub-nav styles */
-#sub-nav
-  background: $subnav
-  border-bottom: 1px solid #ddd
-  padding-top: 4px
-  +box-shadow(#f3f3f3, 0, 2px, 3px)
-  +pie-clearfix
-
-  ul
-    +pie-clearfix
-    li
-      display: inline
-      float: left
-    
-  a
-    color: $subnav_font
-    display: inline-block
-    font-family: 'Avenir', sans-serif
-    font-size: 13px
-    padding: 11px 10px 11px
-    text-decoration: none
-    +text-shadow(#fff, 0, 1px, 0)
-    &:hover, &:focus
-      color: $subnav_font
-      
-  &.alt
-    margin: 10px -15px
-
-  .active
-    a
-      background: image_url("subnav_active.png") no-repeat center 26px
-      font-weight: bold
-      padding: 9px 10px 13px
-      position: relative
-      bottom: -2px
-  .inactive
-    a
-      color: grey
-/* sub-nav styles end */
-
-/* LANDING & LOGIN PAGES SPECIFIC STYLES */
-
-body.login
-  #header, #header_app
-    #logo
-      padding: 16px 0 1px
-      text-decoration: none
-      color: $dark-orange
-      font-family: 'Avenir', sans-serif
-      font-size: 24px
-      font-weight: normal
-      text-decoration: none
-      text-transform: none
-      +text-shadow(#000, 0, 1px, 0)
-
-      img
-        margin: -9px 7px 0 0
-
-    /* overriding the shared tagline style*/
-    #tagline
-      float: left
-      text-align: left
-      padding-top: 12px
-      a
-        color: $light-blue
-        font-weight: bold
-        text-decoration: none
-        &:hover, &:focus
-          color: $lightest-blue
-
-    /* end */
-
-    #admin
-      margin-top: 5px
-      span
-        margin-right: 10px
-
-/* LANDING PAGE STYLES end */

@@ -1010,7 +1010,7 @@ var checkRootNodes = function(type){
 
   $('.totals').find(type).find('.amount').html(total);
 
-  if ((total > 100.05 || total < 99.95) && total > 0){
+  if ((total > 100.05 || total < 99.95) && total > 0) {
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){
@@ -1840,6 +1840,25 @@ var projects_new = projects_create = projects_edit = projects_update = {
     validateDates($('#project_start_date'), $('#project_end_date'));
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
+  }
+}
+
+var promo_landing = {
+  run: function () {
+    $('#password_reset').click(function (e) {
+      e.preventDefault();
+       $('#new_user_session').fadeOut(function () {
+        $('#admin').removeClass('login_form_opacity')
+         $('#new_password_reset').fadeIn();
+       });
+    });
+
+    $('#sign_in').click(function (e) {
+      e.preventDefault();
+       $('#new_password_reset').fadeOut(function () {
+         $('#new_user_session').fadeIn();
+       });
+    });
   }
 }
 

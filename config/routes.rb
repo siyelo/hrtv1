@@ -5,9 +5,8 @@ ActionController::Routing::Routes.draw do |map|
   # LOGIN/LOGOUT
   map.resource  :user_session
   map.resource  :registration, :only => [:edit, :update]
-  map.login     'login', :controller => 'user_sessions', :action => 'new'
   map.logout    'logout', :controller => 'user_sessions', :action => 'destroy'
-  map.resources :password_resets
+  map.resources :password_resets, :only => [:create, :edit, :update]
 
   # PROFILE
   map.resource :profile, :only => [:edit, :update, :disable_tips],

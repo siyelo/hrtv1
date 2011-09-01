@@ -1,31 +1,42 @@
-#admin
+#admin{:class => login_form_opacity_class}
 
   - if current_user
     %ul
       %li
         - link_to edit_profile_path do
-          //= image_tag("icon_profile.png")
           My Profile
       %li
         - link_to "http://hrtapp.tenderapp.com/", :target => "_blank" do
-          //= image_tag("icon_dashboard.png")
           Help
       %li
         - link_to logout_path do
-          //= image_tag("icon_logout.png")
           Sign Out
     %p
       = "#{current_user.email}"
-      // Alternative option to display the user
-      //= "#{current_user.name} (#{current_user.email})"
 
 
   - else
-    %ul
-      %li.borderless
-        %a{ :href => login_path, :class => "signin borderless"}
-          =image_tag"icon_signin.png"
-          Sign in
-    %span Have an account?
+    - @user_session = UserSession.new unless @user_session
+    - form_for @user_session, :url => user_session_path, :html => {:class => "login_form"} do |f|
+      %ol.inputs
+        %li
+          = f.label :email
+          = f.text_field :email, :tabindex => 1
+        %li
+          = f.label :password, "Password #{link_to("(Reset password)", "#", :id => 'password_reset')}"
+          = f.password_field :password, :tabindex => 2
+        %li
+          = f.check_box :remember_me
+          = f.label :remember_me, "", :class => "inline", :tabindex => 3
+
+      .buttons
+        = f.submit "Sign in"
 
 
+    - form_tag password_resets_path, :id => 'new_password_reset', :style => 'display: none;', :class => 'login_form' do
+      %ol.inputs
+        %li.single
+          = label_tag :email, "Email #{link_to("(Back to Sign in)", "#", :id => 'sign_in')}"
+          = text_field_tag :email
+      .buttons
+        = submit_tag "Send"

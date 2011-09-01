@@ -1,0 +1,86 @@
+/* FOOTER STYLES */
+
+/* main footer styles */
+#footer
+  color: $primary_dark
+  font-size: 11px
+  margin-bottom: 15px
+  text-align: center
+  +pie-clearfix
+
+  .version
+    background: $primary_dark
+    color: #FFF
+    padding: 3px 6px 2px !important
+    +border-radius(3px)
+
+  a
+    color: $primary
+    text-decoration: none
+    &:hover, &:focus
+      color: #fff
+      
+  .left a
+    padding-right: 15px
+
+  ul
+    margin-bottom: 10px
+    +pie-clearfix
+    li
+      display: inline
+      float: left
+
+/* override landing footer styles */
+
+body.landing
+  
+  .container
+    min-height: 100%
+    height: auto !important
+    height: 100%
+    margin: 0 auto -100px
+    position: relative
+    width: 960px
+    
+  #footer 
+    margin: 0
+    padding-top: 20px
+    .wrapper
+      border-top: 3px solid $primary_dark - #060606
+      color: $primary_light
+      padding: 20px 0 0
+      width: 940px
+
+
+    a
+      color: $primary_light
+      opacity: 0.5
+      &:hover, &:focus
+        opacity: 1
+    p
+      opacity: 0.5
+    img
+      width: 20px
+  #footer, .push
+    height: 100px
+    
+  #browsers
+    li
+      margin-left: 10px
+    img
+      margin-top: -5px
+
+/* override app footer styles */
+body.app
+  #footer
+    background: #f9f9f9
+    border-top: $primary_border4 1px solid
+    padding-top: 30px
+    a
+      &:hover, &:focus
+        color: $primary_dark
+    .country
+      font-family: Avenir Black
+      margin-left: 3px
+      position: relative
+      top: 4px

@@ -20,7 +20,7 @@ end
 
 Given /^I am signed in as "([^"]*)"$/ do |email|
   steps %Q{
-    When I go to the login page
+    When I go to the home page
     When I fill in "Email" with "#{email}"
     And  I fill in "Password" with "password"
     And  I press "Sign in"
@@ -105,7 +105,6 @@ end
 
 Then /^I should see the visitors header$/ do
   steps %Q{
-    Then I should see "Have an account?" within "div#admin"
     And I should see "Sign in" within "div#admin"
   }
 end

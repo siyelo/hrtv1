@@ -66,7 +66,7 @@ Spork.each_run do
   end
 
   shared_examples_for "a protected endpoint" do
-    it { should redirect_to(login_path) }
+    it { should redirect_to(root_url) }
     it { should set_the_flash.to("You must be logged in to access this page") }
   end
 

@@ -2,6 +2,7 @@
   font-size: 12px
   position: relative
   text-align: center
+  +box-shadow($very-light-grey, 0, 2px, 5px)
 
   &.wide
     +border-radius(0)
@@ -29,47 +30,37 @@
         opacity: 1
 
   #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-    background-position: 15px 7px
-    background-repeat: no-repeat
     border-bottom: 1px solid rgba(0, 0, 0, 0.05)
     display: inline-block
     padding: 10px 5% 9px
     position: relative
     text-align: center
     width: 90%
-    +box-shadow($very-light-grey, 0, 2px, 5px)
-    +text-shadow(rgba(255, 255, 255, 0.4), 0, 1px, 0)
+    +text-shadow(rgba(0, 0, 0, 0.4), 0, 1px, 0)
     a
       color: #444
       font-style: italic
       padding-right: 1px
 
   #success, #info, .success, .info
-    //border-color: #99cc99
-    color: #4f8a10
-    //background-image: url(/images/alertsuccess_icon.png)
-    background-color: #dff2bf
+    color: #fff
+    background-color: $green
+    +linear-gradient(color-stops($green, $green - #111))
   #notice, .notice
-    //border-color: #99cc99
-    color: #00529b
-    background-color: #bde5f8
-    //background-image: url(/images/alertinfo_icon.png)
+    color: #fff
+    background-color: $primary
+    +linear-gradient(color-stops($primary, $primary - #111))
   #warning, .warning
-    //border-color: #99cc99
     color: #9f6000
     background-color: #feefb3
-    //background-image: url(/images/alertwarning_icon.png)
   #validation_error, .validation_error
-    //border-color: #cc9999
     color: #d63301
     background-color: #ffccba
-    //background-image: url(/images/alertvalidation_error_icon.png)
   #error, .error
-    //border-color: #cc9999
-    color: #d8000c
-    background-color: #ffc0c0
+    color: #fff
+    background-color: $red
     font-size: 12px
-    //background-image: url(/images/alerterror_icon.png)
+    +linear-gradient(color-stops($red, $red - #111))
   a:hover
     color: $dark-blue !important
 
@@ -87,19 +78,14 @@
     margin-bottom: 5px
     &.error
       background-color: #ffbaba
-      //background-image: url(/images/alerterror_icon.png)
-      //border-color: #cc9999
       color: #d8000c
     &.notice
       background-color: #bde5f8
-      //background-image: url(/images/alertinfo_icon.png)
-      //border-color: #99cc99
       color: #00529b
 
 // DR Settings Page
 .errorExplanation
-  background-color: #ffccba
-  //border-color: #cc9999
+  background-color: #ffccba 
   color: #d63301
   margin-bottom: 20px
   padding: 10px
@@ -141,16 +127,10 @@ ul.response-notice
 
 .final_review td
   background: $lightest-blue 
+  
 // Landing Page flashes override
-body.landing
-  #flashes
-    clear: both
-    position: absolute
-    top: 90px
-    width: 100%
-    z-index: 0
-    #success, #notice, #warning, #validation_error, #error, #info, .success, .notice, .warning, .validation_error, .error, .info
-      +box-shadow($light-blue - #333, 0, 1px, 5px)
+body.landing #flashes
+  +box-shadow($primary_dark - #111, 0, 1px, 5px)
 
 // Login Pages flashes styles
 body.login

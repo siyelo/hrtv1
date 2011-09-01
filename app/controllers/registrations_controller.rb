@@ -1,5 +1,5 @@
 class RegistrationsController < ApplicationController
-  layout 'promo_inner'
+  layout 'promo_landing'
 
   def edit
     current_user_session.destroy if current_user_session # logout current user if logged in

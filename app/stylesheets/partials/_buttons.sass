@@ -26,7 +26,7 @@ a.remove_nested
   width: 80px
   +pie-clearfix
 
-.app a, button
+.app a, button, input
   &.create_new
     background: $orange
     border: 1px solid $orange - #222
@@ -58,6 +58,7 @@ a.remove_nested
     background: #eee
     border: 1px solid $light-blue
     color: $primary
+    cursor: pointer
     display: inline-block
     font-size: 12px
     font-weight: bold
@@ -221,7 +222,6 @@ a.remove_nested
         color: #fff !important
 
     &:last-child
-      border-right: 1px dotted $light-blue
       margin-right: 5px
 
 .simple_table a
@@ -379,6 +379,7 @@ a, input[type=submit], button
       outline: none
       position: relative
       top: 1px
+      
 .delete_inline
   display: inline-block
   opacity: 0.2

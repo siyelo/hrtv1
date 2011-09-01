@@ -40,7 +40,7 @@ Feature: Reporter can manage other costs
     And I fill in "Description" with "other_cost2 description"
     And I select "<Automatically create a project for me>" from "Project"
     And I press "Save"
-    Then I should see "Other Cost was successfully created. Click here to enter the funding sources for the automatically created project."
+    Then I should see "Other Cost was successfully created"
 
   Scenario: Reporter can create an other costs at an Org level (i.e. without a project)
     When I follow "Add Other Costs now"

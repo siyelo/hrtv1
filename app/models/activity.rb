@@ -247,7 +247,9 @@ class Activity < ActiveRecord::Base
       if csv_provider.nil?
         implementer = response.organization
       else
-        implementer = Organization.find(:first,:conditions => ["LOWER(name) LIKE ?", "%#{csv_provider.downcase}%"])
+        implementer = Organization.find(:first,
+                                        :conditions => ["LOWER(name) LIKE ?",
+                                                "%#{csv_provider.downcase}%"])
       end
 
       if sub_activity_id.present?
@@ -265,7 +267,7 @@ class Activity < ActiveRecord::Base
 
       unless sub_activity
         sub_activities.each do |sa|
-          if sa.provider.name.downcase == csv_provider.downcase && sa.activity.name == activity_name && sa.activity.project.name == project_name
+          if sa.provider.name.to_s.downcase == csv_provider.to_s.downcase && sa.activity.name == activity_name && sa.activity.project.name == project_name
             sub_activity = sa
             existing_sa = sa
           end

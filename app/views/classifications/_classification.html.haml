@@ -4,7 +4,7 @@
 - if @budget_coding_tree.root_codes.present?
   %p#expl
     %span.spend
-      %span Expenditure %
+      %span Past Expenditure %
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
       - alt_txt = "Copy Past Expenditure to Current Budget"
       = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_spend_to_budget'

@@ -271,6 +271,10 @@ module ApplicationHelper
   end
 
   def codings_total(activity, type)
+    puts "==========================================================="
+    p activity
+    p type
+    puts "==========================================================="
     type.with_activity(activity).all.reject{|ca| !ca.code.parent.nil?}.sum{|rca| rca.percentage.to_f}
   end
 

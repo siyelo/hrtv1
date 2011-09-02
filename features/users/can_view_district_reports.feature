@@ -52,7 +52,6 @@ Feature: Can view district reports
       And a coding_budget_district exists with activity: the activity, code: the first location
       And a coding_spend_district exists with activity: the activity, code: the first location
 
-  @run
   Scenario: reporter views district reports
     Given I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "Req1"

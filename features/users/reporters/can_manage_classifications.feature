@@ -281,15 +281,22 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
     And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"
 
-    @run
-  Scenario: Reporter can follow workflow with the Save and Add Blah buttons
+  Scenario: Reporter can follow classification workflow for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
-    And I follow "activity1"
+      And I follow "activity1"
     When I press "Save & Add Locations >"
-    And I press "Save & Add Purposes >"
-    And I press "Save & Add Inputs >"
-    And I press "Save & Add Targets >"
-    And I press "Save & Review >"
+      And I press "Save & Add Purposes >"
+      And I press "Save & Add Inputs >"
+      And I press "Save & Add Targets >"
+      And I press "Save & Review >"
+    Then I should see "Submit Response"
+
+  Scenario: Reporter can follow other costs workflow for other cost
+    Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
+    When I follow "Projects"
+      And I follow "OC1"
+    When I press "Save & Add Locations >"
+      And I press "Save & Review >"
     Then I should see "Submit Response"

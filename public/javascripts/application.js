@@ -1460,6 +1460,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
+      $('#new_project_form #project_name').focus();
     });
 
 
@@ -1467,6 +1468,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_activity_form').fadeIn();
+      $('#new_activity_form #activity_name').focus();
       activity_form();
     });
 
@@ -1474,6 +1476,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_other_cost_form').fadeIn();
+      $('#new_other_cost_form #other_cost_name').focus();
     });
 
     $('.js_toggle_projects_listing').click(function (e) {

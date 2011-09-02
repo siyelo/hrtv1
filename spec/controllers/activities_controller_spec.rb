@@ -176,26 +176,26 @@ describe ActivitiesController do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Locations >', :response_id => @data_response.id
-      response.should redirect_to edit_response_activity_path(@project.activities.first, :mode => 'locations')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'locations')
     end
 
     it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Purposes >', :response_id => @data_response.id
-      response.should redirect_to edit_response_activity_path(@project.activities.first, :mode => 'purposes')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'purposes')
     end
     it "redirects to the input classifications page when Save & Add Inputs is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Inputs >', :response_id => @data_response.id
-      response.should redirect_to edit_response_activity_path(@project.activities.first, :mode => 'inputs')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'inputs')
     end
     it "redirects to the output classifications page when Save & Add Targets is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Targets >', :response_id => @data_response.id
-      response.should redirect_to edit_response_activity_path(@project.activities.first, :mode => 'outputs')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'outputs')
     end
 
     it "should NOT approve the project as a reporter" do

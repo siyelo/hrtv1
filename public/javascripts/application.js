@@ -70,7 +70,7 @@ var observeFormChanges = function (form) {
     }
   };
 
-  if($(form).length){ //# dont bind unless you find the form element on the page
+  if ($(form).length) { //# dont bind unless you find the form element on the page
     $('input[type=submit]').click(function (e) {
       $(form).data('initialForm', $(form).serialize());
     });
@@ -863,7 +863,7 @@ var activity_classification = function () {
 
   $('#js_budget_to_spend').click(function (e) {
     e.preventDefault();
-    if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
+    if (confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')) {
       $('.js_budget input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
@@ -873,7 +873,7 @@ var activity_classification = function () {
 
   $('#js_spend_to_budget').click(function (e) {
     e.preventDefault();
-    if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
+    if (confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')) {
       $('.js_spend input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());
@@ -970,7 +970,7 @@ var activity_classification = function () {
       var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
       message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
       parentTotal.attr('original-title', message) ;
-    }else{
+    } else {
       parentTotal.removeClass('invalid_node tooltip')
     };
   };
@@ -985,10 +985,10 @@ var activity_classification = function () {
 
     if (elementValue > 0){
       subtotal.removeClass('hidden')
-      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency)
-    }else{
-      subtotal.attr('title','') && element.val('')
-      subtotal.addClass('hidden')
+      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency);
+    } else {
+      subtotal.attr('title','');
+      subtotal.addClass('hidden');
     }
   };
 }
@@ -1014,7 +1014,7 @@ var checkRootNodes = function(type){
       var message = "The root nodes do not add up to 100%";
       rootNode.attr('original-title', message) ;
     });
-  }else{
+  } else {
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.attr('original-title') != undefined && rootNode.attr('original-title') == "The root nodes do not add up to 100%"){
@@ -1028,7 +1028,7 @@ var checkRootNodes = function(type){
 
 var showSubtotalIcons = function(){
   $('.tab1').find('.percentage_box').each(function(){
-    if($(this).val().length > 0){
+    if ($(this).val().length > 0) {
       $(this).siblings('.subtotal_icon').removeClass('hidden')
     }
   });
@@ -1063,9 +1063,9 @@ var responses_submit = {
       var image = row_id + "_image";
       var source = $('.'+image).attr('src');
       var split = source.split("?", 1);
-      if(split == "/images/icon_expand.png") {
+      if (split == "/images/icon_expand.png") {
         $('.' + image).attr('src', "/images/icon_collapse.png");
-      }else{
+      } else {
         $('.' + image).attr('src', "/images/icon_expand.png");
       }
     });
@@ -1401,7 +1401,7 @@ var projects_index = {
     $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
       menu = dropdown.menu($(this));
-      if(!menu.is('.persist')){
+      if (!menu.is('.persist')) {
         dropdown.toggle_on(menu);
       } else {
         dropdown.toggle_off(menu);
@@ -1440,7 +1440,7 @@ var projects_index = {
         if (!($('#projects_listing').is(":visible"))){
           $('.js_toggle_projects_listing').click();
         }
-      }else{
+      } else {
         if (hash == '/new_project'){
           hideAll();
           $('/new_project_form').fadeIn();
@@ -1657,7 +1657,7 @@ var activities_new = activities_create = activities_edit = activities_update = o
   run: function () {
     activity_classification();
     activity_form();
-    if($('.js_target_field').size() == 0){
+    if ($('.js_target_field').size() == 0) {
       $(document).find('.js_add_nested').trigger('click');
     }
   }
@@ -1678,7 +1678,7 @@ var activity_form = function () {
   $('.js_implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
-    if(element.val() == "-1"){
+    if (element.val() == "-1") {
       $('.implementer_container').hide();
       $('.add_organization').show();
     }
@@ -1699,9 +1699,9 @@ var activity_form = function () {
       var data = $.parseJSON(data);
       $('.implementer_container').show();
       $('.add_organization').hide();
-      if(isNaN(data.organization.id)){
+      if (isNaN(data.organization.id)) {
         $('.js_implementer_select').val(null);
-      }else{
+      } else {
         $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
         $('.js_implementer_select').val(data.organization.id);
       }

@@ -1005,7 +1005,7 @@ var checkRootNodes = function(type){
 
   $('.totals').find(type).find('.amount').html(total);
 
-  if (total != 100 && total >0){
+  if ((total > 100.05 || total < 99.95) && total > 0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){

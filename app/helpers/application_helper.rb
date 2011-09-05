@@ -159,7 +159,7 @@ module ApplicationHelper
 
   # Helper for adding new nested form models
   # looks for partial with _<model>_fields
-  # e.g. _sub_activity_fields.html.haml
+  # e.g. _implementer_split_fields.html.haml
   def link_to_add_fields(name, f, association, subfolder, options = {})
     class_name = options[:class] || 'add_nested'
     new_object = f.object.class.reflect_on_association(association).klass.new

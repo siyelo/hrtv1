@@ -23,7 +23,7 @@
         - f.object.implementer_splits.build unless f.object.implementer_splits.length > 0
         - new_object = f.object.class.reflect_on_association(:implementer_splits).klass.new
         - f.fields_for(:implementer_splits, new_object) do |builder|
-          = render "shared/outlays/sub_activity_fields", :f => builder
+          = render "shared/outlays/implementer_split_fields", :f => builder
 
       %tr
         %td

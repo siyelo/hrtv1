@@ -29,7 +29,7 @@ class Activity < ActiveRecord::Base
     :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
     :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id,
-    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4
+    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4, :updated_at
 
   ### Associations
   #TODO: provider now only used for sub-activities, so should be removed from activity altogether

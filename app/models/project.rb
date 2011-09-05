@@ -66,7 +66,7 @@ class Project < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,:data_response_id,
                   :start_date, :end_date, :currency, :data_response, :activities, :activities_attributes,
-                  :in_flows_attributes, :am_approved, :am_approved_date, :in_flows
+                  :in_flows_attributes, :am_approved, :am_approved_date, :in_flows, :updated_at
 
   ### Delegates
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation

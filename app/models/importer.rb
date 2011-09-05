@@ -100,6 +100,7 @@ class Importer
       project.data_response       = @response
       project.name                = project_name.try(:strip).slice(0..Project::MAX_NAME_LENGTH-1)
       project.description         = project_description.try(:strip)
+      project.updated_at          = Time.now
       # if its a new record, create a default in_flow so it can be saved
       if project.in_flows.empty?
         project.start_date        = Date.today

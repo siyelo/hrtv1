@@ -4,8 +4,9 @@
 - @project = project
 - project_activities = @activities ? @activities.find_all{|a| a.project == project} : @project.activities
 .header
-  - if project.valid? && project_activities.select{ |a| !a.valid? }.empty?
-    = image_tag "tick_12.png", :class => 'saved_tick js_saved'
+  - if project.valid?
+    - if !project.changed?
+      = image_tag "tick_12.png", :class => 'saved_tick js_saved'
     = nice_name(project, 50)
   - else
     .left
@@ -22,6 +23,7 @@
       .project_heading
         Project
       = f.input :data_response_id, :as => :hidden
+      = f.input :updated_at, :as => :hidden
       %li.section_form
         = render "projects/basic_fields", :f => f
         %table.input_table
@@ -57,6 +59,7 @@
               -unless ff.object.new_record?
                 = ff.input :id, :as => :hidden
               = ff.input :data_response_id, :as => :hidden
+              = ff.input :updated_at, :as => :hidden
 
               %li
                 = render 'shared/outlays/implementers', :f => ff, :outlay => ff.object, :blank_rows => 0, :show_buttons => false

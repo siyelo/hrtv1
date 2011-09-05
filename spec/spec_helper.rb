@@ -215,6 +215,7 @@ Spork.each_run do
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
     @sub_activity = Factory(:sub_activity, :data_response => @response,
                             :activity => @activity, :provider => @organization)
+    @split = @sub_activity # sub_activity is deprecated
   end
 
   def basic_setup_funding_flow
@@ -258,14 +259,14 @@ Spork.each_run do
     filename
   end
 
-  def write_and_open_csv_with_header(csv_string)
+  def write_csv_with_header(csv_string)
     header = <<-EOS
 Project Name,Project Description,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
 EOS
-    write_and_open_csv(header + csv_string)
+    write_csv(header + csv_string)
   end
 
-  def write_and_open_csv(csv_string)
-    FasterCSV.open(write_temp_csv(csv_string), {:headers => true})
+  def write_csv(csv_string)
+    write_temp_csv(csv_string)
   end
 end

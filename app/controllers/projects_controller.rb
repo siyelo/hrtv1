@@ -65,8 +65,7 @@ class ProjectsController < Reporter::BaseController
   def bulk_create
     begin
       if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        @i = Importer.new(@response, doc)
+        @i = Importer.new(@response, params[:file].path)
         @i.import
         @projects = @i.projects
         @activities = @i.activities

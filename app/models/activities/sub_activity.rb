@@ -14,7 +14,7 @@ class SubActivity < Activity
   belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :provider_id, :budget, :spend
+  attr_accessible :activity_id, :data_response_id, :provider_id, :budget, :spend, :updated_at
 
   ### Validations
   validates_presence_of :provider_mask

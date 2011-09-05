@@ -11,6 +11,7 @@ describe SubActivity do
     it { should allow_mass_assignment_of(:data_response_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
+    it { should allow_mass_assignment_of(:updated_at) }
   end
 
   describe "Validations:" do

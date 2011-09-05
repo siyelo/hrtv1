@@ -1,10 +1,11 @@
 class Importer
 
-  attr_accessor :response, :file, :projects, :activities, :new_splits
+  attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
 
-  def initialize(response, file)
+  def initialize(response, filename)
     @response = response
-    @file = file
+    @filename = filename
+    @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
     @projects = @activities = @new_splits = []
   end
 
@@ -109,19 +110,17 @@ class Importer
         ff.budget                 = 0
         project.in_flows << ff
       end
-      #project.save
 
-      activity.data_response     = @response
-      activity.project           = project
-      activity.name              = activity_name.try(:strip).slice(0..Project::MAX_NAME_LENGTH-1)
-      activity.description       = activity_description.try(:strip)
+      activity.data_response = @response
+      activity.project       = project
+      activity.name          = activity_name.try(:strip).slice(0..Project::MAX_NAME_LENGTH-1)
+      activity.description   = activity_description.try(:strip)
+      activity.updated_at    = Time.now
       split.provider      = implementer
       split.data_response = @response
       split.spend         = row["Past Expenditure"]
       split.budget        = row["Current Budget"]
-
-      # we save the implementer split via the activity
-      #activity.save
+      split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below
 
       @activities << activity unless @activities.include?(activity)
       @projects << project unless @projects.include?(project)

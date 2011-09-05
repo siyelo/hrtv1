@@ -36,6 +36,23 @@ Feature: Reporter can manage projects
     When I follow "Delete this Project"
     Then I should see "Project was successfully destroyed"
 
+  # cant run in js mode.
+  # right now, this search yields the problems with jQuery Autocomplete combobox and capybara
+  #http://www.google.co.za/search?sourceid=chrome&ie=UTF-8&q=jquery+autocomplete+combobox+capybara
+  @run
+  Scenario: A reporter can select a funder for a project
+    When I follow "Project"
+    And I fill in "Name" with "Project1"
+    And I fill in "Description" with "Project1 description"
+    And I fill in "Start date" with "2011-01-01"
+    And I fill in "End date" with "2011-12-01"
+    And I select "organization2" from "project_in_flows_attributes_0_organization_id_from"
+    And I fill in "project_in_flows_attributes_0_spend" with "11"
+    And I fill in "project_in_flows_attributes_0_budget" with "12"
+    And I press "Create Project"
+    Then I should see "Project successfully created"
+    And I should see "organization2" within ".implementer_container"
+
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Project"
     And I fill in "Name" with "Some Project"
@@ -60,7 +77,6 @@ Feature: Reporter can manage projects
     And I press "Create Comment"
     Then I should see "Comment body"
 
-
   Scenario: A reporter can create comments for a project
     Given a project exists with name: "project1", data_response: data_response "data_response"
     When I follow "Projects"
@@ -70,22 +86,3 @@ Feature: Reporter can manage projects
     When I fill in "Comment" with "Comment body"
     And I press "Create Comment"
     Then I should see "Comment body"
-
-
-  @javascript @wip
-  Scenario: A reporter can create in flows for a project
-    When I follow "Project"
-    And I fill in "Name" with "Project1"
-    And I fill in "Description" with "Project1 description"
-    And I fill in "Start date" with "2011-01-01"
-    And I fill in "End date" with "2011-12-01"
-    And I follow "Add funding source"
-    And I press "Create Project"
-    Then I should see "Project was successfully created"
-    When I follow "Project1"
-    Then the "Spent" field within ".fields" should contain "11"
-    When I follow "Edit" within ".funding_flows"
-    And I fill in "Budget" with "7778" within ".fields"
-    And I press "Update Project"
-    And I follow "Project1"
-    Then the "Budget" field within ".fields" should contain "7778"

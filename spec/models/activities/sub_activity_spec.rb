@@ -86,10 +86,6 @@ describe SubActivity do
     end
   end
 
-  it "returns the correct fields in the activity template" do
-    header_row = SubActivity.download_template
-    header_row.should == "Implementer,Past Expenditure,Current Budget,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Id\n"
-  end
 
   describe "methods:" do
     before :each do

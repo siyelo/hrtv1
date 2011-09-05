@@ -2,7 +2,6 @@ class SubActivity < Activity
   extend ActiveSupport::Memoizable
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = ["Implementer", "Past Expenditure", "Current Budget"]
   IMPLEMENTER_HUMANIZED_ATTRIBUTES = {
     :budget => "Implementer Current Budget",
     :spend => "Implementer Past Expenditure",
@@ -39,59 +38,6 @@ class SubActivity < Activity
 
   def self.human_attribute_name(attr)
     IMPLEMENTER_HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-
-  def self.download_template(activity = nil)
-    FasterCSV.generate do |csv|
-      header_row = SubActivity::FILE_UPLOAD_COLUMNS
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      csv << header_row
-
-      if activity
-        activity.implementer_splits.each do |sa|
-          row = [sa.provider.try(:name), sa.spend, sa.budget]
-
-          (100 - row.length).times{ row << nil}
-          row << sa.id
-          csv << row
-        end
-      end
-    end
-  end
-
-  def self.create_sa(activity, doc)
-    all_ok = true
-    implementer_splits = {}
-    counter = 1
-    doc.each do |row|
-      provider_id = Organization.find_by_name(row['Implementer']).try(:id)
-      if provider_id
-        row['id'] ? sa = activity.implementer_splits.find_by_id(row['Id']) : sa = activity.implementer_splits.find_by_provider_id(provider_id)
-        attributes = {:budget => row['Current Budget'],
-                      :spend => row['Past Expenditure'],
-                      :provider_id => provider_id,
-                      :data_response_id => activity.data_response.id}
-
-        if sa
-          sa.update_attributes(attributes)
-          attributes = {}
-        else
-          activity.implementer_splits.create(attributes)
-          attributes = {}
-        end
-      else
-        attributes = {counter.to_s => {:budget => row['Current Budget'],
-                      :spend => row['Past Expenditure'],
-                      :provider_name => row['Implementer'],
-                      :row_id => counter,
-                      :data_response_id => activity.data_response.id}}
-        all_ok = false
-      end
-      implementer_splits.merge! attributes
-      counter += 1
-    end
-    return all_ok, implementer_splits
   end
 
   ### Instance Methods

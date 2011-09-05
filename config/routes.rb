@@ -78,9 +78,6 @@ ActionController::Routing::Routes.draw do |map|
       :except => [:index, :new, :create, :edit, :update, :destroy], #TODO - stop being lazy..
       :member => {:derive_classifications_from_sub_implementers => :put,
                   :download_template => :get, :bulk_create => :put}
-    activity.resources :sub_activities,
-      :only => [:index, :create],
-      :collection => {:template => :get, :bulk_create => :post}
   end
 
   map.resources :organizations, :only => [:edit, :update],

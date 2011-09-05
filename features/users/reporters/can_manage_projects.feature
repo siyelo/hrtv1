@@ -34,7 +34,7 @@ Feature: Reporter can manage projects
     And I press "Update Project"
     Then I should see "Project successfully updated"
     When I follow "Delete this Project"
-    Then I should see "Project successfully destroyed"
+    Then I should see "Project was successfully destroyed"
 
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Project"

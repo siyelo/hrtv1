@@ -7,7 +7,6 @@ Feature: Reporter can manage activities
     Given an organization exists with name: "organization1"
       And a data_request exists with title: "data_request1", organization: the organization
       And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
-
       And an organization exists with name: "organization2"
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And data_response should exist with data_request: the data_request, organization: the organization

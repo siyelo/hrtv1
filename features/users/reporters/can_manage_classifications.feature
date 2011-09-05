@@ -241,6 +241,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Inputs" within ".section_nav"
     And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "99"
     And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "99"
@@ -248,7 +250,6 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Activity was successfully updated."
     And the "spend_inputs" checkbox should not be checked
     And the "budget_inputs" checkbox should not be checked
-
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"

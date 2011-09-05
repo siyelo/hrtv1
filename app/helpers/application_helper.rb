@@ -299,10 +299,10 @@ module ApplicationHelper
     is_activity = activity_or_other_cost.class == Activity ? true : false
     case current_step
     when nil;         "Save & Add Locations >"
-    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Review >"
+    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Go to Overview >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Review >"
+    when 'outputs';   "Save & Go to Overview >"
     end
   end
 end

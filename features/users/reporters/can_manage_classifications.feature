@@ -290,13 +290,13 @@ Feature: Reporter can enter a code breakdown for each activity
       And I press "Save & Add Purposes >"
       And I press "Save & Add Inputs >"
       And I press "Save & Add Targets >"
-      And I press "Save & Review >"
-    Then I should see "Submit Response"
+      And I press "Save & Go to Overview >"
+    Then I should see "Projects & Activities" within "h1"
 
   Scenario: Reporter can follow other costs workflow for other cost
     Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
     When I follow "Projects"
       And I follow "OC1"
     When I press "Save & Add Locations >"
-      And I press "Save & Review >"
-    Then I should see "Submit Response"
+      And I press "Save & Go to Overview >"
+    Then I should see "Projects & Activities" within "h1"

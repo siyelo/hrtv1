@@ -837,7 +837,10 @@ var activity_classification = function () {
   };
 
   //collapsible checkboxes for tab1
-  addCollabsibleButtons('tab1');
+  var mode = document.location.search.split("=")[1]
+  if (mode != 'locations') {
+    addCollabsibleButtons('tab1');
+  }
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
 
@@ -868,6 +871,7 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
       });
+      checkRootNodes('.spend');
     };
   });
 
@@ -878,6 +882,7 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());
       });
+      checkRootNodes('.budget');
     };
   });
 
@@ -1677,9 +1682,7 @@ var approveActivity = function (element, approval_type, success_text) {
 var activities_new = activities_create = activities_edit = activities_update = other_costs_edit = other_costs_new = other_costs_create = other_costs_update = {
   run: function () {
     var mode = document.location.search.split("=")[1]
-    if (mode == "purposes" || mode == "inputs") {
-      activity_classification();
-    }
+    activity_classification();
     activity_form();
     if ($('.js_target_field').size() == 0) {
       $(document).find('.js_add_nested').trigger('click');

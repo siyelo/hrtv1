@@ -66,7 +66,10 @@ class ProjectsController < Reporter::BaseController
     begin
       if params[:file].present?
         doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        @projects, @activities = Project.find_or_initialize_from_file(@response, doc)
+        @i = Importer.new(@response, doc)
+        @i.import
+        @projects = @i.projects
+        @activities = @i.activities
       else
         flash[:error] = 'Please select a file to upload activities'
         redirect_to response_projects_url(@response)

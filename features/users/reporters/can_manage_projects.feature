@@ -17,7 +17,6 @@ Feature: Reporter can manage projects
     And a project "Project6" exists with name: "Project6", data_response: data_response "data_response1"
     And I follow "Projects"
 
-
   Scenario: Reporter can CRUD projects
     When I follow "Project"
     And I fill in "Name" with "Project1"
@@ -29,14 +28,13 @@ Feature: Reporter can manage projects
     And I fill in "project_in_flows_attributes_0_spend" with "10"
     And I fill in "project_in_flows_attributes_0_budget" with "20"
     And I press "Create Project"
-    Then I should see "Project was successfully created"
+    Then I should see "Project successfully created"
     When I fill in "Name" with "Project2"
     And I fill in "Description" with "Project2 description"
     And I press "Update Project"
-    Then I should see "Project was successfully updated"
+    Then I should see "Project successfully updated"
     When I follow "Delete this Project"
-    Then I should see "Project was successfully destroyed"
-
+    Then I should see "Project successfully destroyed"
 
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Project"

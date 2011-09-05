@@ -21,8 +21,6 @@ Feature: Reporter can enter a code breakdown for each activity
   # level 1
   Given a mtef_code "mtef1" exists with id: 1, short_display: "mtef1"
     And a mtef_code "mtef2" exists with id: 2, short_display: "mtef2"
-
-    # level 1
     And a cost_category_code exists with id: 3, short_display: "cost_category1"
     And an organization exists with name: "organization1"
     And a data_request exists with title: "data_request1"
@@ -41,6 +39,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
     And I fill in "activity[classifications][coding_spend][1]" with "100"
@@ -52,7 +52,6 @@ Feature: Reporter can enter a code breakdown for each activity
 
   Scenario: Reporter can classify Purposes for activity (second level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     When I follow "Projects"
@@ -72,7 +71,6 @@ Feature: Reporter can enter a code breakdown for each activity
 
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -95,7 +93,6 @@ Feature: Reporter can enter a code breakdown for each activity
   @javascript
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -129,14 +126,17 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Purposes" within ".section_nav"
-    And I fill in "activity[classifications][coding_budget][1]" with "99"
+    Then the "spend_purposes" checkbox should not be checked
+    And the "budget_purposes" checkbox should not be checked
+    When I fill in "activity[classifications][coding_budget][1]" with "99"
     And I fill in "activity[classifications][coding_spend][1]" with "99"
     And I press "Save"
     Then I should see "Activity was successfully updated."
     And the "spend_purposes" checkbox should not be checked
     And the "budget_purposes" checkbox should not be checked
-
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"

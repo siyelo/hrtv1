@@ -18,7 +18,7 @@ Feature: Reporter can manage activities
   Scenario: Reporter can add targets & outputs
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
-    And I follow "existing description"
+    And I follow "existing activity"
     And I follow "Targets, Outputs & Beneficiaries"
     And I follow "Add Target"
     And I fill in "target_field" with "Target description"
@@ -32,7 +32,7 @@ Feature: Reporter can manage activities
   Scenario: Reporter can add implementers with percentages
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
-    And I follow "existing description"
+    And I follow "existing activity"
     And I follow "Implementers" within ".section_nav"
     And I select "organization2" from "activity_implementer_splits_attributes_0_provider_mask"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
@@ -71,36 +71,6 @@ Feature: Reporter can manage activities
     And I press "Save"
     Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
-  Scenario: Reporter can upload activities
-    When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
-    And I press "Import" within ".activities_upload_box"
-    Then I should see "Activities Bulk Create"
-
-  @javascript @wip
-  Scenario: Reporter can upload Implementers
-    Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project
-    And I follow "Projects"
-    And I follow "activity1"
-    And I follow "import_implementers"
-    When I attach the file "spec/fixtures/implementers_update.csv" to "File"
-    And I press "Import"  within ".activities_upload_box"
-    Then I should see "Sub-Implementers Upload"
-
-  Scenario: Reporter can see error if no csv file is not attached for upload
-    When I press "Import" within ".activities_upload_box"
-    Then I should see "Please select a file to upload activities"
-
-  Scenario: Adding malformed CSV file doesnt throw exception
-    When I attach the file "spec/fixtures/malformed.csv" to "File" within ".activities_upload_box"
-    And I press "Import" within ".activities_upload_box"
-    Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
-
-  Scenario: Reporter can download Activities
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-    When I follow "Projects"
-    And I follow "Export" within ".activities_upload_box"
-    Then I should see "Activity1"
-    And I should see "Activity1 description"
 
 
   Scenario: A reporter can create comments for a Activity

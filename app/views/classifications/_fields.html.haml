@@ -9,5 +9,5 @@
 - association_name = type.to_s.underscore # CodingBudget becomes :coding_budget
 = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_#{c_type}"}.merge(options)
 .inline_ratio %
-= link_to image_tag("amount.png"), "#", :title => "#{cached_amount} #{assignment.activity.currency if assignment}", :class => "tooltip subtotal_icon hidden"
+= link_to "¤", "#", :title => "#{n2cs(cached_amount, assignment.activity.currency) if assignment}", :class => "tooltip subtotal_icon hidden"
 

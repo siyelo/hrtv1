@@ -7,10 +7,10 @@
       %span Past Expenditure%
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip'
       - alt_txt = "Copy across Expenditure classifications to Budget classifications"
-      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_spend_to_budget'
+      = link_to image_tag("icon_s2b.png", :alt => alt_txt, :title => alt_txt, :class => "click #{'approved' if outlay.approved?}"), '#', :id => 'js_spend_to_budget'
     %span.budget
       - alt_txt = "Copy across Budget classifications to Expenditure classifications"
-      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt, :class => "click"), '#', :id => 'js_budget_to_spend'
+      = link_to image_tag("icon_b2s.png", :alt => alt_txt, :title => alt_txt, :class => "click #{'approved' if outlay.approved?}"), '#', :id => 'js_budget_to_spend'
       %span Current Budget%
       = link_to image_tag("tooltip.png"), "#", :title => heading_hint, :class => 'tooltip right'
 

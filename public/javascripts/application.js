@@ -866,7 +866,9 @@ var activity_classification = function () {
 
   $('#js_budget_to_spend').click(function (e) {
     e.preventDefault();
-    if (confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')) {
+    if ($(this).find('img').hasClass('approved')) {
+      alert('Classifications for an approved activity cannot be changed');
+    } else if (confirm('This will overwrite all Past Expenditure percentages with the Current Budget percentages. Are you sure?')) {
       $('.js_budget input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
@@ -877,7 +879,9 @@ var activity_classification = function () {
 
   $('#js_spend_to_budget').click(function (e) {
     e.preventDefault();
-    if (confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')) {
+    if ($(this).find('img').hasClass('approved')) {
+      alert('Classifications for an approved activity cannot be changed');
+    } else if (confirm('This will overwrite all Current Budget percentages with the Past Expenditure percentages. Are you sure?')) {
       $('.js_spend input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());

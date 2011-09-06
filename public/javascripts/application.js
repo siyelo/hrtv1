@@ -1448,15 +1448,15 @@ var projects_index = {
       } else {
         if (hash == '/new_project'){
           hideAll();
-          $('/new_project_form').fadeIn();
+          $('#new_project_form').fadeIn();
         }else if (hash == '/new_activity'){
           hideAll();
-          $('/new_activity_form').fadeIn();
+          $('#new_activity_form').fadeIn();
           activity_form();
         }
         else if (hash == '/new_other cost'){
           hideAll();
-          $('/new_other_cost_form').fadeIn();
+          $('#new_other_cost_form').fadeIn();
         }
       };
     });

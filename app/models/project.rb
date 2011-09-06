@@ -170,8 +170,8 @@ class Project < ActiveRecord::Base
     end
 
     # has_many's with deep associations
-    %w[normal_activities other_costs].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.deep_clone })
+    [:normal_activities, :other_costs].each do |assoc|
+      clone.send(assoc) << self.send(assoc).map { |obj| obj.deep_clone }
     end
 
     # shallow has_many's

@@ -285,6 +285,7 @@ class Activity < ActiveRecord::Base
 
   def deep_clone
     clone = self.clone
+    clone.implementer_splits = [] #this is because implementer splits are created upon initialization
     # HABTM's
     %w[organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))

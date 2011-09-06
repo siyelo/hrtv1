@@ -11,9 +11,10 @@ describe ProjectMover do
     @project = Factory(:project, :data_response => @dr1)
     @a1 = Factory(:activity, :project => @project, :data_response => @dr1)
     @a2 = Factory(:activity, :project => @project, :data_response => @dr1)
+    @o1 = Factory(:other_cost, :project => @project, :data_response => @dr1)
 
     @dr2.reload #refreshes org.user relation
-    @mover = ProjectMover.new(@dr1, @dr2, @project)
+    @mover = ProjectMover.new(@dr2, @project)
   end
 
   it "should move a project to a new response" do
@@ -23,7 +24,9 @@ describe ProjectMover do
 
   it "should deep clone the project" do
     @clone_project = @mover.move!
-    @clone_project.activities.count.should == 2
+    @clone_project.normal_activities.count.should == 2
+    @clone_project.other_costs.count.should == 1
+    @clone_project.activities.count.should == 3
   end
 
   it "should destroy the original project" do
@@ -41,7 +44,7 @@ describe ProjectMover do
     before :each do
       @project.name  = nil
       @project.save(false)
-      @mover = ProjectMover.new(@dr1, @dr2, @project)
+      @mover = ProjectMover.new(@dr2, @project)
     end
 
     it "should barf if one of the AR objects are somehow invalid" do

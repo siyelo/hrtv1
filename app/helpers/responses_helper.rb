@@ -21,4 +21,23 @@ module ResponsesHelper
     ready(
       @response.check_projects_funding_sources_have_organizations?)
   end
+
+  def link_to_unclassified(activity)
+    case
+    when !activity.coding_spend_district_classified? && activity.data_request.locations?
+      edit_activity_or_ocost_path(activity, :mode => 'locations')
+    when !activity.coding_spend_classified? && activity.data_request.purposes?
+      edit_activity_or_ocost_path(activity, :mode => 'purposes')
+    when !activity.coding_spend_cc_classified? && activity.data_request.inputs?
+      edit_activity_or_ocost_path(activity, :mode => 'inputs')
+    when !activity.coding_budget_district_classified? && activity.data_request.locations?
+      edit_activity_or_ocost_path(activity, :mode => 'locations')
+    when !activity.coding_budget_classified? && activity.data_request.purposes?
+      edit_activity_or_ocost_path(activity, :mode => 'purposes')
+    when !activity.coding_budget_cc_classified? && activity.data_request.inputs?
+      edit_activity_or_ocost_path(activity, :mode => 'inputs')
+    else
+      edit_activity_or_ocost_path(activity)
+    end
+  end
 end

@@ -268,17 +268,9 @@ class Activity < ActiveRecord::Base
 
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    if budget_changed?
-      [CodingBudget, CodingBudgetDistrict,
-         CodingBudgetCostCategorization].each do |type|
-        set_classified_amount_cache(type)
-      end
-    end
-    if spend_changed?
-      [CodingSpend, CodingSpendDistrict,
-         CodingSpendCostCategorization].each do |type|
-        set_classified_amount_cache(type)
-      end
+    [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization,
+     CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+      update_classified_amount_cache(type)
     end
   end
   handle_asynchronously :update_all_classified_amount_caches
@@ -392,7 +384,7 @@ class Activity < ActiveRecord::Base
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
-      self.send(:"#{get_valid_attribute_name(type)}=", coding_tree.valid?)
+      self.send("#{get_valid_attribute_name(type)}=".to_sym, coding_tree.valid?)
     end
 
     def implementer_split_district_code_assignments_if_complete(coding_type)

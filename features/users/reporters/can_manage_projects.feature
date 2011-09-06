@@ -39,7 +39,6 @@ Feature: Reporter can manage projects
   # cant run in js mode.
   # right now, this search yields the problems with jQuery Autocomplete combobox and capybara
   #http://www.google.co.za/search?sourceid=chrome&ie=UTF-8&q=jquery+autocomplete+combobox+capybara
-  @run
   Scenario: A reporter can select a funder for a project
     When I follow "Project"
     And I fill in "Name" with "Project1"

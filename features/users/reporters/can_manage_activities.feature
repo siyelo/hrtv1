@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage activities
   In order to track information
   As a reporter
@@ -13,6 +14,41 @@ Feature: Reporter can manage activities
     And I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "data_request1"
     And I follow "Projects"
+
+  Scenario: Reporter can CRUD activities
+    When I follow "Add Activities now"
+    And I fill in "activity_name" with "activity1"
+    And I fill in "activity_description" with "activity1 description"
+    And I select "project1" from "Project"
+    # self org should already be present/selected
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
+    And I press "Save"
+    Then I should see "Activity was successfully created"
+    And I fill in "Name" with "activity2"
+    And I fill in "Description" with "activity2 description"
+    And I press "Save"
+    Then I should see "Activity was successfully updated"
+    And I follow "Projects"
+    When I follow "activity2"
+    And I follow "Delete this Activity"
+    Then I should see "Activity was successfully destroyed"
+
+  Scenario: Reported can create activity with automatically created project
+    When I follow "Add Activities now"
+    And I fill in "activity_name" with "activity1"
+    And I fill in "activity_description" with "activity1 description"
+    And I select "<Automatically create a project for me>" from "Project"
+    # self org should already be selected
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
+    And I press "Save"
+    Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
+    When I fill in "Name" with "activity2"
+    And I fill in "Description" with "activity2 description"
+    And I select "<Automatically create a project for me>" from "Project"
+    And I press "Save"
+    Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
   @javascript
   Scenario: Reporter can add targets & outputs
@@ -41,35 +77,6 @@ Feature: Reporter can manage activities
     Then I should see "Activity was successfully updated."
     And the "activity[implementer_splits_attributes][0][spend]" field should contain "99"
     And the "activity[implementer_splits_attributes][0][budget]" field should contain "19"
-
-  Scenario: Reporter can CRUD activities
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I select "project1" from "Project"
-    And I press "Save"
-    Then I should see "Activity was successfully created"
-    And I fill in "Name" with "activity2"
-    And I fill in "Description" with "activity2 description"
-    And I press "Save"
-    Then I should see "Activity was successfully updated"
-    And I follow "Projects"
-    When I follow "activity2"
-    And I follow "Delete this Activity"
-    Then I should see "Activity was successfully destroyed"
-
-  Scenario: Reported can create activity with automatically created project
-    When I follow "Add Activities now"
-    And I fill in "activity_name" with "activity1"
-    And I fill in "activity_description" with "activity1 description"
-    And I select "<Automatically create a project for me>" from "Project"
-    And I press "Save"
-    Then I should see "Activity was successfully created. Click here to enter the funding sources for the automatically created project."
-    When I fill in "Name" with "activity2"
-    And I fill in "Description" with "activity2 description"
-    And I select "<Automatically create a project for me>" from "Project"
-    And I press "Save"
-    Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
   Scenario: A reporter can create comments for a Activity
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response

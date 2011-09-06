@@ -4,7 +4,6 @@ class OtherCost < Activity
   FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure]
 
   ### Delegates
-
   delegate :currency, :to => :data_response, :allow_nil => true
 
   ### Class Methods
@@ -29,7 +28,7 @@ class OtherCost < Activity
 
   ### Instance Methods
 
-  # Overrides activity currency deletage method
+  # Overrides activity currency delegate method
   # some other costs does not have a project and
   # then we use the currency of the data response
   def currency
@@ -42,20 +41,16 @@ class OtherCost < Activity
 
   # An OCost can be considered classified if the locations are classified
   def classified?
-    (coding_budget_district_classified? && !budget.blank?) || (coding_spend_district_classified? && !spend.blank?)
+    coding_budget_district_classified? || coding_spend_district_classified?
   end
-  
+
   def budget_classified?
-    budget.blank? ||
     coding_budget_district_classified?
   end
 
   def spend_classified?
-    spend.blank? ||
     coding_spend_district_classified?
   end
-
-
 end
 
 

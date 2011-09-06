@@ -28,7 +28,7 @@ class Activity < ActiveRecord::Base
     :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
-    :outputs_attributes, :am_approved_date, :user_id, :provider_mask, :data_response_id,
+    :outputs_attributes, :am_approved_date, :user_id, :data_response_id,
     :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4, :updated_at
 
   ### Associations
@@ -74,14 +74,15 @@ class Activity < ActiveRecord::Base
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
   accepts_nested_attributes_for :outputs, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
+
   ### Callbacks
   # also see callbacks in BudgetSpendHelper
-  before_validation :strip_input_fields, :unless => :is_sub_activity?
-  before_save   :auto_create_project, :unless => :is_sub_activity?
-  before_save   :update_implementer_cache, :unless => :is_sub_activity?
-  after_save    :update_counter_cache, :unless => :is_sub_activity?
-  after_destroy :update_counter_cache, :unless => :is_sub_activity?
-  before_update :update_all_classified_amount_caches, :unless => :is_sub_activity?
+  before_validation :strip_input_fields, :unless => :is_implementer_split?
+  before_save   :auto_create_project, :unless => :is_implementer_split?
+  before_save   :update_implementer_cache, :unless => :is_implementer_split?
+  after_save    :update_counter_cache, :unless => :is_implementer_split?
+  after_destroy :update_counter_cache, :unless => :is_implementer_split?
+  before_update :update_all_classified_amount_caches, :unless => :is_implementer_split?
 
   ### Other callbacks
   include BudgetSpendHelper # we want the currency callback to run after update_implementer_cache
@@ -93,7 +94,7 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  validate :approved_activity_cannot_be_changed, :unless => :is_sub_activity?
+  validate :approved_activity_cannot_be_changed, :unless => :is_implementer_split?
   validates_presence_of :name, :if => :is_activity_or_other_cost?
   validates_presence_of :description, :if => :is_activity_or_other_cost?
   validates_presence_of :project_id, :if => :is_activity?, :unless => Proc.new{|a| a.project}
@@ -178,7 +179,7 @@ class Activity < ActiveRecord::Base
 
   def initialize(*params)
     super(*params)
-    unless is_sub_activity?
+    unless is_implementer_split?
       #needed to fully initialize an activity with default (self-)implementer split
       self.implementer_splits.build(:provider_id => self.organization.id,
         :data_response_id => self.data_response_id) if self.data_response_id && self.implementer_splits.empty?
@@ -187,30 +188,15 @@ class Activity < ActiveRecord::Base
   end
 
   def update_attributes(params)
-    # intercept the classifications and process using the bulk classification update API
-    #
-    # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
-    #
-    if params[:classifications]
-      params[:classifications].each_pair do |association, values|
-        begin
-          klass = association.camelcase.constantize
-        rescue NameError
-          return false
-        end
-        klass.update_classifications(self, values)
-      end
-      params.delete(:classifications)
-      params.delete(:code_assignment_tree) #not sure why this is a param?
+    unless is_implementer_split?
+      update_classifications_from_params(params)
     end
 
     result = super(params)
 
-    if result
-    # if sub activities were passed, update Activity amount cache
-      unless is_sub_activity?
-        result = self.save # must let caller know if this failed too...
-      end
+    unless is_implementer_split?
+      # if sub activities were passed, update Activity amount cache
+      result = self.save if result # must let caller know if this failed too...
     end
     result
   end
@@ -237,16 +223,6 @@ class Activity < ActiveRecord::Base
 
   def human_name
     "Activity"
-  end
-
-  def provider_mask
-    @provider_mask || provider_id
-  end
-
-  def provider_mask=(the_provider_mask)
-    self.provider_id_will_change! # trigger saving of this model
-    self.provider_id = self.assign_or_create_organization(the_provider_mask)
-    @provider_mask   = self.provider_id
   end
 
   def possible_duplicate?
@@ -354,12 +330,42 @@ class Activity < ActiveRecord::Base
 
   #saves the subactivities totals into the buget/spend fields
   def update_implementer_cache
-    unless is_sub_activity? # to be doubly sure!
+    unless is_implementer_split? # to be doubly sure!
       [:budget, :spend].each do |method|
         write_attribute(method, implementer_splits_totals(method))
       end
     end
   end
+
+  def implementer_splits_valid?
+    valid = true
+    self.implementer_splits.each do |is|
+      if !is.valid?
+        valid = false
+        break
+      end
+    end
+    valid
+  end
+
+  protected
+
+    # intercept the classifications and process using the bulk classification update API
+    # FIXME: the CodingBlah class method saves the activity in the middle of this update... Not good.
+    def update_classifications_from_params(params)
+      if params[:classifications]
+        params[:classifications].each_pair do |association, values|
+          begin
+            klass = association.camelcase.constantize
+          rescue NameError
+            return false
+          end
+          klass.update_classifications(self, values)
+        end
+        params.delete(:classifications)
+        params.delete(:code_assignment_tree) #not sure why this is a param?
+      end
+    end
 
   private
 
@@ -415,7 +421,7 @@ class Activity < ActiveRecord::Base
       self.class.eql?(Activity)
     end
 
-    def is_sub_activity?
+    def is_implementer_split?
       self.class.eql?(SubActivity)
     end
 
@@ -437,19 +443,19 @@ class Activity < ActiveRecord::Base
       end
     end
 
-   def auto_create_project
-     if project_id == AUTOCREATE
-      project = data_response.projects.find_by_name(name)
-      unless project
-        self_funder = FundingFlow.new(:from => self.organization,
+    def auto_create_project
+      if project_id == AUTOCREATE
+        project = data_response.projects.find_by_name(name)
+        unless project
+          self_funder = FundingFlow.new(:from => self.organization,
                         :spend => self.spend, :budget => self.budget)
-        project = Project.create(:name => name, :start_date => Time.now,
+          project = Project.create(:name => name, :start_date => Time.now,
                                 :end_date => Time.now + 1.year, :data_response => data_response,
                                 :in_flows => [self_funder])
+        end
+        self.project = project
       end
-      self.project = project
     end
-  end
 end
 
 

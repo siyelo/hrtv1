@@ -4,9 +4,8 @@
 - @project = project
 - project_activities = @activities ? @activities.find_all{|a| a.project == project} : @project.activities
 .header
-  - if project.valid?
-    - if !project.changed?
-      = image_tag "tick_12.png", :class => 'saved_tick js_saved'
+  - if project.valid? && project_activities.select{|a| !a.errors.empty?}.empty?
+    = image_tag "tick_12.png", :class => 'hidden saved_tick js_unsaved'
     = nice_name(project, 50)
   - else
     .left

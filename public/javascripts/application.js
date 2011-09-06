@@ -1881,9 +1881,6 @@ $(function () {
   //jquery tools overlays
   $(".overlay").overlay();
 
-  //observe form changes and alert user if form has unsaved data
-  observeFormChanges($('.js_form'));
-
   var id = $('body').attr("id");
   if (id) {
     controller_action = id;
@@ -1891,6 +1888,9 @@ $(function () {
       window[controller_action]['run']();
     }
   }
+
+  //observe form changes and alert user if form has unsaved data
+  observeFormChanges($('.js_form'));
 
   $(".closeFlash").click(function (e) {
     e.preventDefault();

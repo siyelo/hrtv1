@@ -24,7 +24,7 @@ class Activity < ActiveRecord::Base
   ### Attribute Protection
   attr_accessible :text_for_provider, :text_for_beneficiaries, :project_id,
     :name, :description,
-    :approved, :am_approved, :budget, :budget2, :budget3, :budget4, :budget5, :spend,
+    :approved, :am_approved, :budget, :spend,
     :beneficiary_ids, :provider_id, :implementer_splits_attributes,
     :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,

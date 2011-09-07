@@ -188,10 +188,6 @@ end
 #  project_id                   :integer
 #  ServiceLevelBudget_amount    :decimal(, )     default(0.0)
 #  ServiceLevelSpend_amount     :decimal(, )     default(0.0)
-#  budget2                      :decimal(, )
-#  budget3                      :decimal(, )
-#  budget4                      :decimal(, )
-#  budget5                      :decimal(, )
 #  am_approved                  :boolean
 #  user_id                      :integer
 #  am_approved_date             :date

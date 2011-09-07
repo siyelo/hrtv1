@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Importer
 
   attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
@@ -25,7 +27,7 @@ class Importer
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
 
-      sub_activity_name   = row['Implementer'].try(:strip)
+      sub_activity_name   = Importer::sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
       # find implementer based on name or set self-implementer if not found
@@ -153,17 +155,21 @@ class Importer
   end
 
   def name_for(current_row_name, previous_name)
-    current_row_name.blank? ? previous_name : current_row_name
+    Importer::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
   end
 
   # return the previous description only if both description and name
   # from current row are blank
   def description_for(description, previous_description, name)
+    result = description
     if description.blank? && name.blank?
-      previous_description
-    else
-      description
+      result = previous_description
     end
+    Importer::sanitize_encoding(result)
+  end
+
+  def self.sanitize_encoding(string)
+    Iconv.conv("UTF-8//IGNORE", "US-ASCII", string)
   end
 
   def find_implementer(implementer_name)

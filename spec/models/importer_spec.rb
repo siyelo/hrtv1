@@ -69,6 +69,26 @@ EOS
     i.projects.should_not be_empty
   end
 
+  it "should handle utf8 encoding" do
+    csv_string = <<-EOS
+project1,project description with utf chars äóäó,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.projects.should be_empty
+    i.import
+    i.projects.first.description.should == "project description with utf chars"
+  end
+
+  it "should handle utf16 encoding" do
+    csv_string = <<-EOS
+project1,project description with Norwegian: æøå. French: êèé,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.projects.should be_empty
+    i.import
+    i.projects.first.description.should == "project description with Norwegian: . French:"
+  end
+
   context "when updating existing records" do
     it "should just update existing implementer when records exist" do
       csv_string = <<-EOS

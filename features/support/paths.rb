@@ -38,6 +38,9 @@ module NavigationHelpers
     when /the organizations page/
       organizations_path
 
+    when /the login page/
+      login_path
+
     when /the implementers page/
       implementers_path
 

@@ -1590,6 +1590,10 @@ var toggle_collapsed = function (elem, indicator) {
   };
 };
 
+var unsaved_warning = function () {
+  return 'You have projects that have not been saved.  Saved projects show a green checkmark next to them.  Are you sure you want to leave this page?'
+};
+
 var projects_bulk_create = {
   run: function () {
 
@@ -1615,12 +1619,18 @@ var projects_bulk_create = {
     blurDemoText($('*[data-hint]'));
 
     $('.js_finish').live('click', function (e){
-      if($('.js_unsaved').length > 0){
-        if (!(confirm('You have projects that have not been saved.  Saved projects show a green checkmark next to them.  Are you sure you want to leave this page?'))){
+      if ($('.js_unsaved').length > 0) {
+        if (!(confirm(unsaved_warning()))) {
           e.preventDefault();
         }
       }
     })
+
+    $(window).bind('beforeunload',function (e) {
+      if ($('.js_unsaved').length > 0) {
+        return unsaved_warning();
+      }
+    });
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();

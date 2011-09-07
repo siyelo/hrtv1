@@ -18,6 +18,7 @@ class ActivitiesController < Reporter::BaseController
   def edit
     prepare_classifications(resource)
     load_comment_resources(resource)
+    load_validation_errors(resource)
     edit!
   end
 
@@ -155,5 +156,12 @@ class ActivitiesController < Reporter::BaseController
         # set default to 'all'
         params[:view] = 'all' if params[:view].blank?
       end
+    end
+
+    # run validations on the models independently of any save action
+    # useful if you want to show (existing) errors without having to save the form first.
+    def load_validation_errors(resource)
+      resource.implementer_splits.each {|is| is.valid?}
+      resource.valid?
     end
 end

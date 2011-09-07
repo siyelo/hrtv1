@@ -14,13 +14,18 @@ class SubActivity < Activity
   belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
   ### Attributes
-  attr_accessible :activity_id, :data_response_id, :provider_id, :budget, :spend, :updated_at
+  attr_accessible :activity_id, :data_response_id, :provider_id, :budget, :spend, :updated_at,
+    :provider, :data_response, :provider_mask
 
   ### Validations
   validates_presence_of :provider_mask
+  # this seems to be bypassed on activity update if you pass two of the same providers
   validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
   validates_numericality_of :spend, :if => Proc.new {|is|is.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|is| is.budget.present?}
+  validates_presence_of :spend, :if => lambda {|is| (!((is.budget || 0) > 0)) &&
+                                                    (!((is.spend || 0) > 0))},
+    :message => " and/or Budget must be present"
 
   ### Callbacks
   before_validation :strip_mask_fields
@@ -41,6 +46,16 @@ class SubActivity < Activity
   end
 
   ### Instance Methods
+
+  def provider_mask
+    @provider_mask || provider_id
+  end
+
+  def provider_mask=(the_provider_mask)
+    self.provider_id_will_change! # trigger saving of this model
+    self.provider_id = self.assign_or_create_organization(the_provider_mask)
+    @provider_mask   = self.provider_id
+  end
 
   def budget
     read_attribute(:budget)

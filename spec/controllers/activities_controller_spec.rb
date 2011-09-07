@@ -62,8 +62,9 @@ describe ActivitiesController do
 
       context "Requesting /activities using POST" do
         before do
-          params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory(:activity, params.merge(:data_response => @data_response, :project => @project) )
+          params = { :name => 'title', :description =>  'descr'}
+          @activity = Factory(:activity, params.merge(:data_response => @data_response,
+            :project => @project) )
           @activity.stub!(:save).and_return(true)
           post :create, :activity =>  params, :response_id => @data_response.id
         end
@@ -72,8 +73,9 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using PUT" do
         before do
-          params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory(:activity, params.merge(:data_response => @data_response, :project => @project) )
+          params = { :name => 'title', :description =>  'descr'}
+          @activity = Factory(:activity, params.merge(:data_response => @data_response,
+            :project => @project) )
           @activity.stub!(:save).and_return(true)
           put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
         end
@@ -144,7 +146,10 @@ describe ActivitiesController do
     it "should allow a project to be created automatically on create" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       post :create, :response_id => @data_response.id,
-        :activity => {:project_id => '-1', :name => "new activity", :description => "description"}
+        :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+          "implementer_splits_attributes"=>
+            {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+              "provider_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name

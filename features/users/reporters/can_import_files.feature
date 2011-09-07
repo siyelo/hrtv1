@@ -17,7 +17,7 @@ Feature: Reporter can import/export workplans
   Scenario: Reporter can upload activities
     When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
-    Then I should see "Projects Bulk Create"
+    Then I should see "Import: Review & Save"
 
   Scenario: Reporter can see error if no csv file is not attached for upload
     When I press "Import" within ".activities_upload_box"

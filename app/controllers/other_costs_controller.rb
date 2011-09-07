@@ -59,33 +59,6 @@ class OtherCostsController < Reporter::BaseController
     end
   end
 
-  def download_template
-    template = OtherCost.download_template
-    send_csv(template, 'other_costs_template.csv')
-  end
-
-  def create_from_file
-    begin
-      if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        if doc.headers.to_set == OtherCost::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = OtherCost.create_from_file(doc, @response)
-          flash[:notice] = "Created #{saved} of #{saved + errors} other costs successfully"
-        else
-          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-        end
-      else
-        flash[:error] = 'Please select a file to upload'
-      end
-
-      redirect_to response_other_costs_url(@response)
-    rescue
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_other_costs_url(@response)
-    end
-  end
-
-
   private
 
     def success_flash(action)

@@ -51,17 +51,13 @@ ActionController::Routing::Routes.draw do |map|
     :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.
     :member => {:review => :get, :submit => :get, :send_data_response => :put} do |response|
     response.resources :projects,
-      :collection => {:create_from_file => :post,
-                      :download_template => :get,
+      :collection => {:download_template => :get,
                       :download_workplan => :get,
-                      :bulk_edit => :get,
                       :export => :get,
-                      :bulk_update => :put,
                       :bulk_create => :post}
     response.resources :activities, :except => [:index, :show],
       :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
-      :collection => {:bulk_create => :post,
-                      :template => :get,
+      :collection => {:template => :get,
                       :export => :get}
     response.resources :other_costs, :except => [:index, :show],
       :collection => {:create_from_file => :post, :download_template => :get}
@@ -73,13 +69,7 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-  map.resources :activities do |activity|
-    activity.resources :classifications,
-      :except => [:index, :new, :create, :edit, :update, :destroy], #TODO - stop being lazy..
-      :member => {:derive_classifications_from_sub_implementers => :put,
-                  :download_template => :get, :bulk_create => :put}
-  end
-
+  map.resources :activities
   map.resources :organizations, :only => [:edit, :update],
     :collection => { :export => :get }
 

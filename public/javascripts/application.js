@@ -1510,22 +1510,6 @@ var hideAll = function() {
   $('.js_total_budget .amount, .js_total_spend .amount').html(0);
 };
 
-var projects_bulk_edit = {
-  run: function () {
-
-    $('.parent_project').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var tableRow = element.parents('tr');
-      url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
-      $.get(url, function(data) {
-        var data = $.parseJSON(data);
-        id = tableRow.find('.funder_project_description').html(data.project.description);
-      });
-    });
-  }
-};
-
 var initDemoText = function (elements) {
   elements.each(function(){
     var element = $(this);

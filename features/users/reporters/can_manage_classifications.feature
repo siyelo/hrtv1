@@ -147,39 +147,6 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "spend_purposes" checkbox should be checked
     And the "budget_purposes" checkbox should be checked
 
-  Scenario: Reporter can download Purposes classification template
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Purposes" within ".section_nav"
-    And I follow "Download template"
-    Then I should see "mtef1"
-    And I should not see "cost_category1"
-
-  Scenario: Reporter can upload Purposes classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Purposes" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Activity classification was successfully uploaded."
-    And the "activity[classifications][coding_budget][1]" field should contain "40"
-    And the "activity[classifications][coding_spend][1]" field should contain "30"
-
-  Scenario: Reporter cannot upload Purposes classification for already approved activity
-    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
-    And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity2"
-    And I follow "Purposes" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Classification for approved activity cannot be changed."
-
-
   @javascript
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
@@ -259,28 +226,6 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Activity was successfully updated."
     And the "spend_inputs" checkbox should be checked
     And the "budget_inputs" checkbox should be checked
-
-  Scenario: Reporter can download Inputs classification template
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Inputs" within ".section_nav"
-    And I follow "Download template"
-    Then I should see "cost_category1"
-    And I should not see "mtef1"
-
-  Scenario: Reporter can upload Inputs classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Inputs" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_inputs.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Activity classification was successfully uploaded."
-    And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
-    And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"
 
   Scenario: Reporter can follow classification workflow for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project

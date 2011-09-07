@@ -68,52 +68,6 @@ class CodeAssignment < ActiveRecord::Base
 
   ### Class Methods
 
-  def self.download_template(klass)
-    max_level = klass.deepest_nesting
-    FasterCSV.generate do |csv|
-      header_row = (['Code'] * max_level).concat(['Past Expenditure', 'Current Budget', 'Code', 'Description'])
-      (100 - header_row.length).times{ header_row << nil}
-      header_row << 'Id'
-      csv << header_row
-      klass.roots.each{|code| add_rows(csv, code, max_level, 0)}
-    end
-  end
-
-  def self.create_from_file(doc, activity, budget_klass, spend_klass)
-    budget_updates = {}
-    spend_updates  = {}
-    doc.each do |row|
-      spend   = row['Past Expenditure']
-      budget  = row['Current Budget']
-      code_id = row['Id']
-
-      budget_updates[code_id] = budget if code_id && budget.present?
-      spend_updates[code_id]  = spend if code_id && spend.present?
-    end
-
-    budget_klass.update_classifications(activity, budget_updates)
-    spend_klass.update_classifications(activity, spend_updates)
-  end
-
-  def self.add_rows(csv, code, max_level, current_level)
-    row = []
-
-    current_level.times{|i| row << '' }
-    row << code.short_display
-    (max_level - (current_level + 1)).times{ |i| row << '' }
-    row << ''
-    row << ''
-    row << code.short_display
-    row << code.description
-
-    (100 - row.length).times{ row << nil}
-    row << code.id
-
-    csv << row
-
-    code.children.each{|code| add_rows(csv, code, max_level, current_level + 1)}
-  end
-
   # TODO: spec
   def self.sums_by_code_id(code_ids, coding_type, activities)
     CodeAssignment.with_code_ids(code_ids).with_type(coding_type).with_activities(activities).find(:all,

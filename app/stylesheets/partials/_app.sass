@@ -16,6 +16,14 @@
   font-weight: bold
 
 body.app
+  .wrapper
+    //min-width: 960px
+    //max-width: 1280px
+    margin: 0 auto
+    padding: 0 15px
+    position: relative
+    width: 960px
+
   /* adding properties to the shared admin style */
   #admin
     margin-top: 10px
@@ -367,6 +375,29 @@ body#static_page_submit #content .wrapper #main
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
 
+.breadcrumb
+  background: $filler
+  border: 1px solid $lightest-blue
+  border-right: none
+  float: left
+  font-size: 11px
+  margin-top: 7px
+  margin-bottom: 10px !important
+  +border-radius
+  +pie-clearfix
+
+  li
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 18px 5px 10px
+
+    &:last-child
+      background: image_url("breadcrumb-last.png") no-repeat right center
+
+    a
+      text-decoration: none
+
 .bordered
   border: 1px solid $lightest-blue
   border-top: none
@@ -417,10 +448,38 @@ body#static_page_submit #content .wrapper #main
   label
     margin: 5px 0px
 
+#guide
+  h2
+    +border-radius
+    margin: 10px 0
+  h3, h5
+    font-weight: bold
+  h3, h5, h6
+    padding: 20px 0 10px 10px
+  h6
+    font-style: italic
+    text-decoration: underline
+  p
+    padding: 0 0 10px 10px
+  a
+    margin-bottom: 10px
+  em
+    font-style: italic
+  ul, ol
+    padding-left: 20px
+    margin-bottom: 10px
+    font-size: 0.8em
+    li
+      padding-bottom: 5px
+  ul li
+    list-style-type: disc
+    margin-left: 10px
+
+
 #gs_container
   width: 100%
   +box-shadow(#ddd, 1px, 1px, 3px)
-
+  
   #getting_started_title
     overflow: hidden
     +border-top-radius
@@ -467,7 +526,7 @@ body#static_page_submit #content .wrapper #main
     padding: 10px
     +border-bottom-radius
     +pie-clearfix
-
+    
     .message
       color: #555555
       padding: 0
@@ -518,6 +577,7 @@ body#static_page_submit #content .wrapper #main
   h1.main_heading
     padding: 0
     margin: 0
+
 
 .welcome_continue
   color: $mid-blue

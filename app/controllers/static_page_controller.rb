@@ -1,8 +1,12 @@
 class StaticPageController < ApplicationController
-  layout 'promo_landing'
+  layout 'promo_inner'
 
   def index
-    redirect_to dashboard_path if current_user
+    if current_user
+      redirect_to dashboard_path
+    else
+      render :layout => 'promo_landing'
+    end
   end
 
   def about

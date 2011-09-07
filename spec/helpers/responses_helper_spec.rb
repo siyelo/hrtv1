@@ -27,10 +27,4 @@ describe "link to unclassified activity" do
     @activity.stub(:coding_budget_district_classified?) { false }
     link_to_unclassified(@activity).should == edit_activity_or_ocost_path(@activity, :mode => 'locations')
   end
-
-  it "should link to the purposes spend is unclassified and the locations budget is unclassified" do
-    @activity.stub(:coding_spend_classified?) { false }
-    @activity.stub(:coding_budget_district_classified?) { false }
-    link_to_unclassified(@activity).should == edit_activity_or_ocost_path(@activity, :mode => 'purposes')
-  end
 end

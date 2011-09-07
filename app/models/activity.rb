@@ -188,16 +188,11 @@ class Activity < ActiveRecord::Base
   end
 
   def update_attributes(params)
-    unless is_implementer_split?
-      update_classifications_from_params(params)
-    end
-
+    update_classifications_from_params(params) unless is_implementer_split?
     result = super(params)
-
-    unless is_implementer_split?
-      # if sub activities were passed, update Activity amount cache
-      result = self.save if result # must let caller know if this failed too...
-    end
+    # if sub activities were passed, update Activity amount cache
+    # must let caller know if this failed too...
+    result = self.save if result && !is_implementer_split?
     result
   end
 

@@ -3,24 +3,22 @@
 - spend_fiscal_year_prev = @response.organization.gor_fiscal_year_start(:budget).map{ |y| (y - 2).to_s.last(2) }.join("-")
 - @project = project
 - project_activities = @activities ? @activities.find_all{|a| a.project == project} : @project.activities
-.header
+
+.header.section_nav
+  %span.indicator.collapsed
   - if project.valid? && project_activities.select{|a| !a.errors.empty?}.empty?
     = image_tag "tick_12.png", :class => 'hidden saved_tick js_unsaved'
-    = nice_name(project, 50)
   - else
-    .left
-      = image_tag "warning_12.png", :title => "This project has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip js_unsaved'
-      = nice_name(project, 50)
+    = image_tag "warning_12.png", :title => "This project has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip js_unsaved'
 
-      %span.project= project.try(:name)
+  = link_to nice_name(project, 50), "#"
 
 .main.dashboard_section{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
   = error_messages_for :project, :object => project, :header_message  => nil, :message => "Oops, we couldn't save your changes."
   - semantic_form_for project, :namespace => form_namespace(project), :url => create_or_edit_project_path(project, @response), :html => {:class => "condensed_form basic_form bulk_edit_form"} do |f|
     - f.inputs :class => 'inputs_condensed' do
 
-      .project_heading
-        Project
+      .project_heading Project
       = f.input :data_response_id, :as => :hidden
       = f.input :updated_at, :as => :hidden
       %li.section_form
@@ -66,5 +64,5 @@
       %li.borderless.marginless
         %br
         - f.buttons :class => 'buttons' do
-          = f.commit_button "Save", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
+          = f.commit_button "Save Project", :wrapper_html => {:class => "left save_btn"}, :button_html => {:class => "next"}
           = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => 'display: none;'

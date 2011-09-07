@@ -3,10 +3,6 @@ module Activity::Classification
   def self.included(base)
     base.send(:extend, ClassMethods)
     base.send(:include, InstanceMethods)
-
-    #base.class_eval do
-      #validates_presence_of :name
-    #end
   end
 
   ### Constants
@@ -34,27 +30,27 @@ module Activity::Classification
 
   module InstanceMethods
     def coding_budget_classified? #purposes
-      !data_response.request.purposes? || budget.blank? || coding_budget_valid?
+      !data_response.request.purposes? || coding_budget_valid?
     end
 
     def coding_budget_cc_classified? #inputs
-      !data_response.request.inputs? || budget.blank? || coding_budget_cc_valid?
+      !data_response.request.inputs? || coding_budget_cc_valid?
     end
 
     def coding_budget_district_classified? #locations
-      !data_response.request.locations? || budget.blank? || coding_budget_district_valid?
+      !data_response.request.locations? || coding_budget_district_valid?
     end
 
     def coding_spend_classified?
-      !data_response.request.purposes? || spend.blank? || coding_spend_valid?
+      !data_response.request.purposes? || coding_spend_valid?
     end
 
     def coding_spend_cc_classified?
-      !data_response.request.inputs? || spend.blank? || coding_spend_cc_valid?
+      !data_response.request.inputs? || coding_spend_cc_valid?
     end
 
     def coding_spend_district_classified?
-      !data_response.request.locations?  || spend.blank? || coding_spend_district_valid?
+      !data_response.request.locations?  || coding_spend_district_valid?
     end
 
     def budget_classified?
@@ -73,7 +69,7 @@ module Activity::Classification
 
     # An activity can be considered classified if at least one of these are populated.
     def classified?
-      (budget_classified? && !budget.blank?) || (spend_classified? && !spend.blank?)
+      budget_classified? || spend_classified?
     end
 
     # TODO: spec

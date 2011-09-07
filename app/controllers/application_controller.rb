@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   class AccessDenied < StandardError; end
   rescue_from AccessDenied do |exception|
     flash[:error] = "You are not authorized to do that"
-    redirect_to root_url
+    redirect_to login_url
   end
 
   rescue_from ActionController::MethodNotAllowed, :with => :invalid_method
@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
       unless current_user
         store_location
         flash[:error] = "You must be logged in to access this page"
-        redirect_to root_url
+        redirect_to login_url
         return false
       end
     end
@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
       unless current_user && current_user.sysadmin?
         store_location
         flash[:error] = "You must be an administrator to access that page"
-        redirect_to root_url
+        redirect_to login_url
         return false
       end
     end

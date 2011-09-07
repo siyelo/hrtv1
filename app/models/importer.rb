@@ -1,3 +1,5 @@
+require 'iconv'
+
 class Importer
 
   attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
@@ -25,13 +27,12 @@ class Importer
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
 
-      sub_activity_name   = row['Implementer'].try(:strip)
+      sub_activity_name   = Importer::sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
       # find implementer based on name or set self-implementer if not found
       # or row is left blank
-      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
-        "%#{sub_activity_name.try(:downcase)}%"]) || @response.organization
+      implementer = find_implementer(sub_activity_name)
 
       split = nil
       activity = nil
@@ -98,7 +99,7 @@ class Importer
       end
 
       project.data_response       = @response
-      project.name                = project_name.try(:strip).slice(0..Project::MAX_NAME_LENGTH-1)
+      project.name                = project_name
       project.description         = project_description.try(:strip)
       project.updated_at          = Time.now
       # if its a new record, create a default in_flow so it can be saved
@@ -114,7 +115,7 @@ class Importer
 
       activity.data_response = @response
       activity.project       = project
-      activity.name          = activity_name.try(:strip).slice(0..Project::MAX_NAME_LENGTH-1)
+      activity.name          = activity_name
       activity.description   = activity_description.try(:strip)
       activity.updated_at    = Time.now
       split.provider      = implementer
@@ -122,6 +123,8 @@ class Importer
       split.spend         = row["Past Expenditure"]
       split.budget        = row["Current Budget"]
       split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below
+
+      trigger_errors(project, activity, split)
 
       @activities << activity unless @activities.include?(activity)
       @projects << project unless @projects.include?(project)
@@ -154,17 +157,32 @@ class Importer
   end
 
   def name_for(current_row_name, previous_name)
-    current_row_name.blank? ? previous_name : current_row_name
+    name = Importer::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
+    name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
+                                                                 # any trailing spaces
   end
 
   # return the previous description only if both description and name
   # from current row are blank
   def description_for(description, previous_description, name)
+    result = description
     if description.blank? && name.blank?
-      previous_description
-    else
-      description
+      result = previous_description
     end
+    Importer::sanitize_encoding(result)
+  end
+
+  def self.sanitize_encoding(string)
+    Iconv.conv("UTF-8//IGNORE", "US-ASCII", string)
+  end
+
+  def find_implementer(implementer_name)
+    implementer = @response.organization
+    unless implementer_name.blank?
+      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+          "%#{implementer_name.try(:downcase)}%"]) || implementer
+    end
+    implementer
   end
 
   def find_cached_split_using_split_id(implementer_split_id)
@@ -191,6 +209,12 @@ class Importer
       end
     end
     [split, activity]
+  end
+
+  def trigger_errors(project, activity, split)
+    project.valid?
+    activity.valid?
+    split.valid?
   end
 end
 

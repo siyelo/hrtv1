@@ -16,6 +16,14 @@
   font-weight: bold
 
 body.app
+  .wrapper
+    //min-width: 960px
+    //max-width: 1280px
+    margin: 0 auto
+    padding: 0 15px
+    position: relative
+    width: 960px
+
   /* adding properties to the shared admin style */
   #admin
     margin-top: 10px
@@ -164,19 +172,25 @@ body.app
     font-size: 0.9em
     border: 1px solid $lightest-blue
     link-type: none
-    padding: 20px 10px 0
+    padding: 0 10px 0
     li
-      border-bottom: 1px dashed $lightest-blue
-      margin-bottom: 20px
+      border-bottom: 1px solid $primary_lightest
+      margin-top: -1px
+      padding-bottom: 10px
     h5
-      color: $mid-blue
-      font-size: 0.75em
-      padding-bottom: 7px
+      font: normal 14px Avenir, sans-serif
+      padding: 15px 0 5px 10px
+      text-transform: none
+      a
+        text-decoration: none
       span
         font-size: 1em
     p
       color: $light-blue - #777
       &.main
+        color: #666
+        font-size: 12px
+        line-height: 1.4
         padding: 0 20px 3px 10px
       &.time
         color: $light-blue - #333
@@ -184,11 +198,19 @@ body.app
         font-style: italic
         padding: 0 20px 5px 6px
     .author
-      padding: 0 20px 3px 10px
+      background: $primary_lightest
+      padding: 5px 5px 3px 10px
       color: $light-blue - #333
       font-size: 0.8em
       font-style: italic
-      margin: 5px 0 10px
+      line-height: 1.3
+      margin: 15px 0 0
+      text-align: right
+      a
+        text-decoration: none
+    img
+      border: 4px solid $primary_lighter
+      margin: 1px 1px 1px 10px
 .read_more
   padding-bottom: 10px
   float: right
@@ -353,6 +375,29 @@ body#static_page_submit #content .wrapper #main
 #heading-users
   background: image_url("icon_users.png") no-repeat center left
 
+.breadcrumb
+  background: $filler
+  border: 1px solid $lightest-blue
+  border-right: none
+  float: left
+  font-size: 11px
+  margin-top: 7px
+  margin-bottom: 10px !important
+  +border-radius
+  +pie-clearfix
+
+  li
+    background: image_url("breadcrumb.png") no-repeat right center
+    display: inline-block
+    float: left
+    padding: 5px 18px 5px 10px
+
+    &:last-child
+      background: image_url("breadcrumb-last.png") no-repeat right center
+
+    a
+      text-decoration: none
+
 .bordered
   border: 1px solid $lightest-blue
   border-top: none
@@ -403,10 +448,38 @@ body#static_page_submit #content .wrapper #main
   label
     margin: 5px 0px
 
+#guide
+  h2
+    +border-radius
+    margin: 10px 0
+  h3, h5
+    font-weight: bold
+  h3, h5, h6
+    padding: 20px 0 10px 10px
+  h6
+    font-style: italic
+    text-decoration: underline
+  p
+    padding: 0 0 10px 10px
+  a
+    margin-bottom: 10px
+  em
+    font-style: italic
+  ul, ol
+    padding-left: 20px
+    margin-bottom: 10px
+    font-size: 0.8em
+    li
+      padding-bottom: 5px
+  ul li
+    list-style-type: disc
+    margin-left: 10px
+
+
 #gs_container
   width: 100%
   +box-shadow(#ddd, 1px, 1px, 3px)
-
+  
   #getting_started_title
     overflow: hidden
     +border-top-radius
@@ -453,7 +526,7 @@ body#static_page_submit #content .wrapper #main
     padding: 10px
     +border-bottom-radius
     +pie-clearfix
-
+    
     .message
       color: #555555
       padding: 0
@@ -504,6 +577,7 @@ body#static_page_submit #content .wrapper #main
   h1.main_heading
     padding: 0
     margin: 0
+
 
 .welcome_continue
   color: $mid-blue

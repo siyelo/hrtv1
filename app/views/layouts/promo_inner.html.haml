@@ -1,9 +1,10 @@
+-# default layout for inner static pages except homepage
 !!! Strict
 %html{:lang => "en", "xml:lang" => "en", :xmlns => "http://www.w3.org/1999/xhtml"}
   = render 'layouts/head'
 
-  %body.promo.landing
-    = render 'layouts/header', :landing_page => true
+  %body.promo.login
+    = render 'layouts/header'
 
     #content
       .wrapper

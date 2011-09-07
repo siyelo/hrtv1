@@ -291,11 +291,16 @@ table.workplan
       &.hidden
         display: none
   .name
-    vertical-align: top
+    
+    font: normal 13px/1.4 Avenir, Arial, sans-serif
     padding-top: 14px
-    font-weight: bold
-    line-height: 1
-    font-size: 11px
+    vertical-align: top
+    a
+      color: $secondary
+      text-decoration: none
+      &:hover, &:focus
+        color: $primary
+        text-decoration: underline
 
   .nested_name
     line-height: 1

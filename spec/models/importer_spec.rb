@@ -69,6 +69,53 @@ EOS
     i.projects.should_not be_empty
   end
 
+  it "should show project errors on import" do
+    csv_string = <<-EOS
+,project description,,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.projects.first.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]
+  end
+
+  it "should show activity errors on import" do
+    csv_string = <<-EOS
+project,project description,,activity1 description,#{@split.id},selfimplementer1,99.9,100
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.activities.first.errors.on(:name).should == "can't be blank"
+  end
+
+  it "should show implementer split errors on import" do
+    csv_string = <<-EOS
+project,project description,activity,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.activities.first.implementer_splits.first.errors.on(:budget).should == "is not a number"
+  end
+
+  it "should handle utf8 encoding" do
+    csv_string = <<-EOS
+project1,project description with utf chars äóäó,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.projects.should be_empty
+    i.import
+    i.projects.first.description.should == "project description with utf chars"
+  end
+
+  it "should handle utf16 encoding" do
+    csv_string = <<-EOS
+project1,project description with Norwegian: æøå. French: êèé,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.projects.should be_empty
+    i.import
+    i.projects.first.description.should == "project description with Norwegian: . French:"
+  end
+
   context "when updating existing records" do
     it "should just update existing implementer when records exist" do
       csv_string = <<-EOS
@@ -95,6 +142,17 @@ EOS
       i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 99.9
       i.activities[0].implementer_splits.first.budget.to_f.should == 100.1
+    end
+
+    it "should truncate and strip long names" do
+      csv_string = <<-EOS
+"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+
+EOS
+      i = Importer.new(@response, write_csv_with_header(csv_string))
+      i.import
+      i.projects.size.should == 1
+      i.projects[0].name.should == 'Coordination, planning, M&E and partnership of the national HIV'
     end
 
     it "should keep existing, unchanged records" do
@@ -157,6 +215,17 @@ EOS
         @implementer2  = Factory(:organization, :name => "implementer2")
         @split2 = Factory(:sub_activity, :data_response => @response,
                                 :activity => @activity, :provider => @implementer2)
+      end
+
+      it "should find a previously imported project with a stripped & truncated name" do
+        csv_string = <<-EOS
+"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+,,,,,implementer2,99.9,100.1
+EOS
+        i = Importer.new(@response, write_csv_with_header(csv_string))
+        i.import
+        i.projects.size.should == 1
+        i.projects[0].name == 'Coordination, planning, M&E and partnership of the national HIV'
       end
 
       it "should update multiple implementers" do
@@ -403,13 +472,15 @@ EOS
   end
 
   it "should assign to a self-implementer if implementer cant be found (left blank)" do
+    @response.organization = Factory(:organization) # create a new org to check that it doesn't
+                                                    # just return the first org in the db
     csv_string = <<-EOS
 project1,project description,activity1,activity1 description,,,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+    i.activities[0].implementer_splits.first.implementer_name.should == @response.organization.name
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
   end

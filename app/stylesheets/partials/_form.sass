@@ -28,7 +28,7 @@ input[type="text"], input[type="password"], textarea, select
     width: 80px !important
     &:hover, &:focus
       background: #fff image_url("icon_calendar.png") no-repeat 95% 50%
-  
+
 .basic_form
   .dashboard_section
     background: $filler
@@ -287,69 +287,6 @@ input[type="text"], input[type="password"], textarea, select
     input[type=text], textarea
       width: 75px
 
-.login_form
-  width: 380px
-  +pie-clearfix
-  li
-    float: left
-    margin-bottom: 0
-    width: 50%
-    &.single
-      float: right
-      
-  .inputs
-    float: left
-    width: 300px
-  .buttons
-    float: left
-    width: 75px
-    li
-      margin: 0 !important
-  label
-    color: $primary_light !important
-    display: block
-    padding: 1px
-    +text-shadow(rgba(0, 0, 0, 0.3), 0, 1px, 0)
-    a
-      color: $primary + #111
-      font-size: 11px
-      &:hover, &:focus
-        color: $primary_light
-    &.inline
-      display: inline
-  input[type=text], input[type=password]
-    display: inline-block
-    width: 86%
-  input[type=text], input[type=password], input[type=checkbox]
-    border: 1px solid $primary_dark
-    font-size: 12px
-    opacity: 0.3
-    padding: 7px
-    &:hover, &:focus
-      border: 1px solid $primary_dark - #111 !important
-      opacity: 0.8
-  input[type=submit]
-    border: 1px solid $primary_dark - #191919
-    background: $primary_dark
-    color: white !important
-    cursor: pointer
-    font-family: Avenir, sans-serif
-    font-size: 14px
-    margin-top: 7px
-    padding: 6px 15px 4px 15px
-    text-decoration: none
-    +border-radius
-    +box-shadow(rgba(255, 255, 255, 0.2), 0, 1px, 0)
-    +linear-gradient(color-stops($primary_dark, $primary_dark - #111))
-    +text-shadow($green - #444, 0, 1px, 0)
-    &:hover, &:focus
-      background: $mid-blue
-      border: 1px solid $green - #444
-      color: white
-      text-decoration: none
-      +box-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
-      +linear-gradient(color-stops($green, $green - #111))
-    
 // SEARCH
 #search
   float: right
@@ -459,6 +396,8 @@ h3.form_heading
         color: $mid-blue
         font-size: 12px
         font-weight: bold
+
+
         span
           display: block
           margin-bottom: 3px
@@ -572,21 +511,11 @@ h3.form_heading
     float: left
 
   .header
-    background: $primary_dark
-    color: $lightest-blue
     cursor: pointer
     font-size: 12px
     font-weight: bold
-    padding: 10px
     text-transform: none
-    +linear-gradient(color-stops($primary_dark + #111, $primary_dark))
     +pie-clearfix
-
-    span
-      color: $light-blue - #111
-      font-size: 10px
-      padding: 3px 5px
-      +border-radius
 
     img
       margin-right: 5px
@@ -823,6 +752,67 @@ a.tooltip
   padding-bottom: 5px
   margin: 0 -6px
 
+.section_nav
+  background: #EEE
+  border: 1px solid $primary_light
+  border-bottom: none
+  min-height: 36px
+  padding: 0 17px
+  +linear-gradient(color-stops($primary_lightest, $primary_lighter))
+  +pie-clearfix
+  -webkit-box-shadow: $primary_light 0 1px 7px inset
+  -moz-box-shadow: $primary_light 0 1px 7px inset
+  box-shadow: $primary_light 0 1px 7px inset
+
+  li
+    display: inline-block
+    float: left
+    margin-bottom: 0 !important
+    padding-bottom: 0 !important
+    +pie-clearfix
+
+    &.selected
+      a, .dummy
+        background: image_url("subnav_active2.png") no-repeat center 29px
+        color: $secondary
+        font-weight: bold
+        padding: 10px 10px 12px
+        position: relative
+        top: 2px
+        +text-shadow(#FFF, 0, 1px, 0)
+        span
+          background: $secondary
+          color: $primary_light
+
+  a, .dummy
+    color: $primary
+    display: inline-block
+    font-family: 'Avenir', sans-serif
+    font-size: 13px
+    padding: 12px 10px 10px
+    text-decoration: none
+    +text-shadow(#FFF, 0, 1px, 0)
+
+    span
+      background: $primary_light
+      color: $primary
+      display: inline-block
+      font-size: 9px
+      font-weight: normal
+      line-height: 1
+      margin-right: 2px
+      padding: 4px
+      position: relative
+      text-align: center
+      top: -1px
+      width: 9px
+      +box-shadow(#FFF, 0, 1px, 0)
+      +border-radius(10px)
+      &.finished
+        background: $green
+        color: #FFF
+        +text-shadow(rgba(0, 0, 0, 0.1), 0, 1px, 0)
+
 // form section wrapper
 .section_form
   background: #FBFBFB
@@ -894,50 +884,3 @@ a.tooltip
 
 #project_name_input
   width: 50% !important
-
-.sign_in_form
-  background: rgba(255, 255, 255, 0.1)
-  border-top: 3px solid $primary_dark - #060606
-  margin: 0 290px
-  padding: 40px 40px 20px
-  width: 300px
-  +pie-clearfix
-  .inputs li
-    float: left
-    margin-right: 1%
-    margin-bottom: 10px
-    width: 49%
-  h2
-    color: $primary_light
-    font-family: Avenir, Arial, sans-serif
-    margin-bottom: 15px
-    text-transform: none
-    
-    &.welcome
-      color: $primary_dark - #222
-      font-size: 24px
-      left: 0
-      letter-spacing: -1px
-      line-height: 1.2
-      position: absolute
-      text-align: center
-      top: -70px
-      width: 380px
-      +text-shadow(rgba(255, 255, 255, 0.2))
-      
-  h3
-    color: $primary_light
-    display: block
-    font-family: Avenir, Arial, sans-serif
-    margin-bottom: 15px
-    text-transform: none
-      
-  label
-    color: $primary_light !important
-    display: block
-    margin-bottom: 3px
-    +text-shadow(rgba(0, 0, 0, 0.2), 0, 1px, 0)
-  input
-    padding: 7px
-  input[type=password]
-    width: 126px

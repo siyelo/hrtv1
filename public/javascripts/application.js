@@ -1014,7 +1014,7 @@ var checkRootNodes = function(type){
 
   $('.totals').find(type).find('.amount').html(total);
 
-  if ((total > 100.05 || total < 99.95) && total > 0) {
+  if ((total > 100.05 || total < 99.95) && total > 0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){
@@ -1581,22 +1581,35 @@ var blurDemoText = function (elements) {
   });
 };
 
+var toggle_collapsed = function (elem, indicator) {
+  var is_visible = elem.is(':visible');
+  if (is_visible) {
+    indicator.removeClass('collapsed');
+  } else {
+    indicator.addClass('collapsed');
+  };
+};
+
 var projects_bulk_create = {
   run: function () {
 
     initDemoText($('*[data-hint]'));
 
-    $('.header:first').parents('.activity_box').find('.main').toggle();
-
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       var activity_box = $(this).parents('.activity_box');
 
+      //collapse the others, in an accordion style
       $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
         $(this).find('.main').hide();
+        toggle_collapsed($(this).find('.main'), $(this).find('.header span'));
       });
+
       activity_box.find('.main').toggle();
+      toggle_collapsed(activity_box.find('.main'), activity_box.find('.header span'));
     });
+
+    $('.header:first').trigger('click'); // expand the first one on page load
 
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
@@ -1614,7 +1627,7 @@ var projects_bulk_create = {
       var element = $(this);
       var form = element.parents('form');
       var ajaxLoader = element.next('.ajax-loader');
-      var activityBox = element.parents('.activity_box');
+      var activity_box = element.parents('.activity_box');
 
       // reset input values before submit !!
       form.find('*[data-hint]').each(function() {
@@ -1629,17 +1642,20 @@ var projects_bulk_create = {
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
-        activityBox.html(data.html);
-        initDemoText(activityBox.find('*[data-hint]'));
-        activityBox.find(".js_combobox").combobox();
+        activity_box.html(data.html);
+        initDemoText(activity_box.find('*[data-hint]'));
+        activity_box.find(".js_combobox").combobox();
         ajaxLoader.hide();
         if (data.status == 'success') {
-           activityBox.find('.saved_tick').show();
-           activityBox.find('.saved_tick').removeClass('js_unsaved');
-           activityBox.find('.saved_tick').addClass('js_saved');
+           activity_box.find('.saved_tick').show();
+           activity_box.find('.saved_tick').removeClass('js_unsaved');
+           activity_box.find('.saved_tick').addClass('js_saved');
 
-           activityBox.find('.main').toggle();
+           activity_box.find('.main').toggle();
+           toggle_collapsed(activity_box.find('.main'), activity_box.find('.header span'));
+
            $('.js_unsaved:first').parents('.activity_box').find('.main').toggle();
+           toggle_collapsed($('.js_unsaved:first').parents('.activity_box').find('.main'), $('.js_unsaved:first').parents('.activity_box').find('.header span'));
          }
       });
     });
@@ -1847,25 +1863,6 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 }
 
-var promo_landing = {
-  run: function () {
-    $('#password_reset').click(function (e) {
-      e.preventDefault();
-       $('#new_user_session').fadeOut(function () {
-        $('#admin').removeClass('login_form_opacity')
-         $('#new_password_reset').fadeIn();
-       });
-    });
-
-    $('#sign_in').click(function (e) {
-      e.preventDefault();
-       $('#new_password_reset').fadeOut(function () {
-         $('#new_user_session').fadeIn();
-       });
-    });
-  }
-}
-
 
 $(function () {
 
@@ -1952,8 +1949,9 @@ $(function () {
   });
 
   // Show/hide getting started tips
-  $('#tips_hide').click(function () {
-    $('#gs_container').remove();
+  $('.js_tips_hide').click(function (e) {
+    e.preventDefault();
+    $('.js_tips_container').fadeOut();
     $.post('/profile/disable_tips', { "_method": "put" });
   });
 });

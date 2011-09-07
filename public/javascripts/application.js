@@ -1949,8 +1949,9 @@ $(function () {
   });
 
   // Show/hide getting started tips
-  $('#tips_hide').click(function () {
-    $('#gs_container').remove();
+  $('.js_tips_hide').click(function (e) {
+    e.preventDefault();
+    $('.js_tips_container').fadeOut();
     $.post('/profile/disable_tips', { "_method": "put" });
   });
 });

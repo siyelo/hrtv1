@@ -327,7 +327,7 @@ body.app
     line-height: 1.5em
     margin-bottom: 15px !important
     font-size: 12px
-    li 
+    li
       margin-right: 8px
     a
       text-decoration: none
@@ -378,14 +378,14 @@ body.app
     margin-bottom: 20px
     width: 49%
     +pie-clearfix
-    
+
   .second-half
     float: right
     margin-right: 0
     margin-bottom: 20px
     width: 49%
     +pie-clearfix
-    
+
   .third
     float: left
     margin-right: 1%
@@ -393,7 +393,7 @@ body.app
     width: 31%
     .third
       margin: 0
-      
+
   .fourth
     float: left
     margin-right: 1%
@@ -464,11 +464,9 @@ body.app #content .tabs
   height: 16px
   width: 16px
 
-.collapsed
-  float: left
-  width: auto
-  .indicator
-    background: image_url("icon_expand.png") no-repeat 0px 3px
+  &.collapsed
+    background: image_url("icon_expand.png") no-repeat 0px 3px !important
+    width: 16px !important
 
 #projects
   width: 100%
@@ -505,7 +503,7 @@ body.app #content .tabs
     font-weight: bold
     margin-bottom: 5px
     padding-bottom: 5px
-    
+
   #duplicate
     background: $lightest-blue
     border-top: 3px solid $mid-blue
@@ -516,7 +514,7 @@ body.app #content .tabs
     margin-bottom: 20px
     padding: 10px
     width: 47%
-    
+
   #target
     background: $lightest-blue
     border-top: 3px solid $mid-blue

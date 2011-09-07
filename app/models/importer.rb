@@ -30,8 +30,7 @@ class Importer
 
       # find implementer based on name or set self-implementer if not found
       # or row is left blank
-      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
-        "%#{sub_activity_name.try(:downcase)}%"]) || @response.organization
+      implementer = find_implementer(sub_activity_name)
 
       split = nil
       activity = nil
@@ -165,6 +164,15 @@ class Importer
     else
       description
     end
+  end
+
+  def find_implementer(implementer_name)
+    implementer = @response.organization
+    unless implementer_name.blank?
+      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+          "%#{implementer_name.try(:downcase)}%"]) || implementer
+    end
+    implementer
   end
 
   def find_cached_split_using_split_id(implementer_split_id)

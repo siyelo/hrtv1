@@ -403,13 +403,15 @@ EOS
   end
 
   it "should assign to a self-implementer if implementer cant be found (left blank)" do
+    @response.organization = Factory(:organization) # create a new org to check that it doesn't
+                                                    # just return the first org in the db
     csv_string = <<-EOS
 project1,project description,activity1,activity1 description,,,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+    i.activities[0].implementer_splits.first.implementer_name.should == @response.organization.name
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
   end

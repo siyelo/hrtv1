@@ -135,9 +135,9 @@ class DataResponse < ActiveRecord::Base
       errors.add_to_base("Projects are not yet entered.") unless projects_entered?
       errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
       errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
-      errors.add_to_base("Activites are not yet coded.") unless activities_coded?
+      errors.add_to_base("Activites are not yet classified.") unless activities_coded?
       #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
-      errors.add_to_base("Other Costs are not yet coded.") if projects_have_other_costs? && !other_costs_coded?
+      errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
       return false
     end
   end

@@ -97,21 +97,6 @@ class ActivitiesController < Reporter::BaseController
     send_csv(template, 'activities.csv')
   end
 
-  def bulk_create
-    begin
-      if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
-      else
-        flash[:error] = 'Please select a file to upload activities'
-        redirect_to response_projects_url(@response)
-      end
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_url(@response)
-    end
-  end
-
   def destroy
     destroy! do |success, failure|
       success.html { redirect_to response_projects_url(@response) }

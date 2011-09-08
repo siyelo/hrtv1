@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can import/export workplans
   In order to speed up data entry
   As a reporter

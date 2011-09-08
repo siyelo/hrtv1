@@ -1,5 +1,5 @@
 - if current_user.tips_shown
-  #gs_container
+  #gs_container.js_tips_container
     #getting_started_title
       %h2= "Getting started with #{yield(:title)}"
       = render :partial => 'shared/tips_hide'
@@ -7,7 +7,7 @@
       .message
         %p Your file has been read and each Activity in the file is listed below.
         %ul.bulleted
-          %li To open an activity, click anywhere on the blue bar with a X or checkmark. 
+          %li To open an activity, click anywhere on the blue bar with a X or checkmark.
           %li If you make any changes after opening an activity, click the save button to save your changes.
           %li Activities that need attention have a red X next to them.
           %li It's a good idea to open each activity and review it to check if its correct.

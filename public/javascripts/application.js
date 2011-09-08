@@ -1510,22 +1510,6 @@ var hideAll = function() {
   $('.js_total_budget .amount, .js_total_spend .amount').html(0);
 };
 
-var projects_bulk_edit = {
-  run: function () {
-
-    $('.parent_project').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var tableRow = element.parents('tr');
-      url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
-      $.get(url, function(data) {
-        var data = $.parseJSON(data);
-        id = tableRow.find('.funder_project_description').html(data.project.description);
-      });
-    });
-  }
-};
-
 var initDemoText = function (elements) {
   elements.each(function(){
     var element = $(this);
@@ -1602,7 +1586,6 @@ var projects_bulk_create = {
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       var activity_box = $(this).parents('.activity_box');
-
       //collapse the others, in an accordion style
       $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
         $(this).find('.main').hide();
@@ -1617,14 +1600,6 @@ var projects_bulk_create = {
 
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
-
-    $('.js_finish').live('click', function (e){
-      if ($('.js_unsaved').length > 0) {
-        if (!(confirm(unsaved_warning()))) {
-          e.preventDefault();
-        }
-      }
-    })
 
     $(window).bind('beforeunload',function (e) {
       if ($('.js_unsaved').length > 0) {

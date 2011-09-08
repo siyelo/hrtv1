@@ -6,26 +6,6 @@ class OtherCost < Activity
   ### Delegates
   delegate :currency, :to => :data_response, :allow_nil => true
 
-  ### Class Methods
-
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << OtherCost::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = Project.find_by_name(attributes.delete('project_name'))
-      attributes.merge!(:project_id => project.id) if project
-      other_cost = data_response.other_costs.new(attributes)
-      other_cost.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
-  end
-
   ### Instance Methods
 
   # Overrides activity currency delegate method

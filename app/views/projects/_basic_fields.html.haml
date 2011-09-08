@@ -14,7 +14,7 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :start_date, :tabindex => "2", :class => f.object.errors.on(:start_date) ? "error date_picker" : "date_picker"
+    = f.text_field :start_date, :tabindex => "2", :class => f.object.errors.on(:start_date) ? "error date_picker" : "date_picker", :id => "project_start_date_#{f.object.id}"
 
   %li#project_end_date_input.string.required
     .name
@@ -22,7 +22,7 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :end_date, :tabindex => "3", :class => f.object.errors.on(:end_date) ? "error date_picker" : "date_picker"
+    = f.text_field :end_date, :tabindex => "3", :class => f.object.errors.on(:end_date) ? "error date_picker" : "date_picker", :id => "project_end_date_#{f.object.id}"
   %li#project_currency_input.select.required
     .name
       = f.label :currency, "Currency override"

@@ -20,7 +20,7 @@
             - association = @spend_klass.to_s.underscore.to_sym
             - percentage = derive_percentage_from_amount(outlay, :spend, assignment)
 
-            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_spend"}
+            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_spend", :tabindex => autotab}
             .inline_ratio %
             = link_to "¤", "#", :title => "#{n2cs(cached_amount, assignment.activity.currency) if assignment}", :class => "tooltip subtotal_icon hidden"
 
@@ -32,7 +32,7 @@
             - association = @budget_klass.to_s.underscore.to_sym
             - percentage = derive_percentage_from_amount(outlay, :budget, assignment)
 
-            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_budget"}
+            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_budget", :tabindex => autotab}
             .inline_ratio %
             = link_to "¤", "#", :title => "#{n2cs(cached_amount, assignment.activity.currency) if assignment}", :class => "tooltip subtotal_icon hidden"
 

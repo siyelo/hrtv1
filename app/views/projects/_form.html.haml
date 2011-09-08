@@ -8,7 +8,7 @@
     = render 'projects/in_flows', :f => f
 
 - f.buttons :class => 'buttons', :style => 'float: none' do
-  = f.commit_button :button_html => {:class => "last big_button"}, :tabindex => "6"
+  = f.commit_button :button_html => {:class => "last big_button"}, :tabindex => autotab
   %li
     = link_to "Cancel", response_projects_path(@response), :class => "js_toggle_projects_listing add_row cancel_button last"
 

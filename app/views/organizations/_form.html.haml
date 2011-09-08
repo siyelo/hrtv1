@@ -32,20 +32,18 @@
     %li.last
       %h2 Basics
       %ul.section_form
-        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => "Default Currency", :required => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
-
-        = f.text_field :fiscal_year_start_date, :class => 'date_picker', :label => "Start of Fiscal Year", :required => true, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
-
-        = f.text_field :fiscal_year_end_date, :class => 'date_picker', :label => "End of Fiscal Year", :required => true, :hint => "The End of the Fiscal Year", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
+        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => "Default Currency", :required => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
+        = f.text_field :fiscal_year_start_date, :class => 'date_picker', :label => "Start of Fiscal Year", :required => true, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
+        = f.text_field :fiscal_year_end_date, :class => 'date_picker', :label => "End of Fiscal Year", :required => true, :hint => "The End of the Fiscal Year", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
 
     %li.last
       %h2 Contact Details
       %ul.section_form
-        = f.text_field :contact_name, :label => "Contact Name", :required => true, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_position, :label => "Contact Position", :required => true, :hint => "The position of the contact at your organization.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_phone_number, :label => "Phone number", :required => true, :hint => "A telephone number that can be used to contact the contact person.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_main_office_phone_number, :label => "Office number", :required => true, :hint => "The telephone number of the organizations main office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_office_location, :label => "Office location", :required => true, :hint => "The geographic location of the office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_name, :label => "Contact Name", :required => true, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_position, :label => "Contact Position", :required => true, :hint => "The position of the contact at your organization.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_phone_number, :label => "Phone number", :required => true, :hint => "A telephone number that can be used to contact the contact person.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_main_office_phone_number, :label => "Office number", :required => true, :hint => "The telephone number of the organizations main office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_office_location, :label => "Office location", :required => true, :hint => "The geographic location of the office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
 
     %li.last
       %h2 Users
@@ -57,7 +55,6 @@
               %th= sortable "email"
               %th= sortable "last_login_at"
               %th= "Role"
-              %th= "Invitation"
               - if current_user.sysadmin?
                 %th
 
@@ -69,7 +66,6 @@
                   %td= mail_to user.email
                   %td= user.last_login_at.strftime('%d %b %Y %T %z') if user.last_login_at
                   %td= user.roles.map{|role| role.humanize}.join(', ')
-                  %td= user.invite_token.nil? ? "No pending invitation" : "1 pending"
                   - if current_user.sysadmin?
                     %td
                       %ul.manage_bar

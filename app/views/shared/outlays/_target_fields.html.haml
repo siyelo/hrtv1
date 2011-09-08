@@ -2,5 +2,5 @@
 
   %ul.edit_block.clearfix
     %li
-      = f.text_field :description, :class => 'js_target_field', :id => 'target_field'
+      = f.text_field :description, :class => 'js_target_field', :id => 'target_field', :tabindex => autotab
       %span= link_to_remove_fields "x", f, :class => 'delete_inline'

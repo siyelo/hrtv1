@@ -15,6 +15,6 @@
           -# perf hack - non editable provider name
           %span.ui-autocomplete= f.object.provider.try(:name) || "< n/a >"
 
-  %td= f.text_field :spend, :class => 'js_spend'
-  %td= f.text_field :budget, :class => 'js_budget'
+  %td= f.text_field :spend, :class => 'js_spend', :tabindex => autotab
+  %td= f.text_field :budget, :class => 'js_budget', :tabindex => autotab
   %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}

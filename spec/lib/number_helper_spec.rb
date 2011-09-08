@@ -15,6 +15,7 @@ describe NumberHelper do
   end
 
   it "should correctly convert currencies to USD then from USD to the currency when a direct conversion is not possible" do
+    debugger
     universal_currency_converter(1000, "GBP", "EUR").should == 1440.92219
   end
 

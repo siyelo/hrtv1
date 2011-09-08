@@ -1618,14 +1618,6 @@ var projects_bulk_create = {
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
 
-    $('.js_finish').live('click', function (e){
-      if ($('.js_unsaved').length > 0) {
-        if (!(confirm(unsaved_warning()))) {
-          e.preventDefault();
-        }
-      }
-    })
-
     $(window).bind('beforeunload',function (e) {
       if ($('.js_unsaved').length > 0) {
         return unsaved_warning();

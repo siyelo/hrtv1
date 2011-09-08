@@ -21,4 +21,8 @@ module ResponsesHelper
     ready(
       @response.check_projects_funding_sources_have_organizations?)
   end
+
+  def flag
+    @response.submitted? ? "go" : "stop"
+  end
 end

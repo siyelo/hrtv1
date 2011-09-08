@@ -18,8 +18,21 @@ module ResponsesHelper
   end
 
   def data_verification_class
-    ready(
-      @response.check_projects_funding_sources_have_organizations?)
+    ready(@response.check_projects_funding_sources_have_organizations?)
+  end
+
+  def link_to_unclassified(activity)
+    case
+    when !activity.coding_spend_district_classified? || !activity.coding_budget_district_classified?
+      mode = 'locations'
+    when !activity.coding_spend_classified? || !activity.coding_budget_classified?
+      mode = 'purposes'
+    when !activity.coding_spend_cc_classified? || !activity.coding_budget_cc_classified?
+      mode = 'inputs'
+    else
+      mode = nil
+    end
+    edit_response_activity_path(activity.response, activity, :mode => mode)
   end
 
   def flag

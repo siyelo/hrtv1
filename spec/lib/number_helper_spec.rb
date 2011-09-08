@@ -4,6 +4,7 @@ include NumberHelper
 describe NumberHelper do
   before :each do
     Money.default_bank.set_rate(:EUR, :USD, 1.5)
+    Money.default_bank.set_rate(:USD, :EUR, 0.720461095)
     Money.default_bank.set_rate(:GBP, :USD, 2)
     Money.default_bank.set_rate(:RWF, :KES, 5)
     Money.default_bank.set_rate(:AOA, :USD, nil)
@@ -15,7 +16,6 @@ describe NumberHelper do
   end
 
   it "should correctly convert currencies to USD then from USD to the currency when a direct conversion is not possible" do
-    debugger
     universal_currency_converter(1000, "GBP", "EUR").should == 1440.92219
   end
 

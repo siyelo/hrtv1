@@ -138,7 +138,7 @@ module ApplicationHelper
   end
 
   def usd_to_local_currency
-    Money.default_bank.get_rate(:USD, Money.default_currency)
+    Money.default_bank.get_rate(:USD, Money.default_currency) || 0
   end
 
   # sortable columns

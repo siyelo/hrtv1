@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -21,8 +22,8 @@ Feature: Reporter can manage projects
     When I follow "Project"
     And I fill in "Name" with "Project1"
     And I fill in "Description" with "Project1 description"
-    And I fill in "Start date" with "2011-01-01"
-    And I fill in "End date" with "2011-12-01"
+    And I fill in "project[start_date]" with "2011-01-01"
+    And I fill in "project[end_date]" with "2011-12-01"
     And I select "Euro (EUR)" from "Currency override"
     And I select "organization3" from "project_in_flows_attributes_0_organization_id_from"
     And I fill in "project_in_flows_attributes_0_spend" with "10"
@@ -43,8 +44,8 @@ Feature: Reporter can manage projects
     When I follow "Project"
     And I fill in "Name" with "Project1"
     And I fill in "Description" with "Project1 description"
-    And I fill in "Start date" with "2011-01-01"
-    And I fill in "End date" with "2011-12-01"
+    And I fill in "project[start_date]" with "2011-01-01"
+    And I fill in "project[end_date]" with "2011-12-01"
     And I select "organization2" from "project_in_flows_attributes_0_organization_id_from"
     And I fill in "project_in_flows_attributes_0_spend" with "11"
     And I fill in "project_in_flows_attributes_0_budget" with "12"
@@ -55,8 +56,8 @@ Feature: Reporter can manage projects
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Project"
     And I fill in "Name" with "Some Project"
-    And I fill in "Start date" with "<start_date>"
-    And I fill in "End date" with "<end_date>"
+    And I fill in "project[start_date]" with "<start_date>"
+    And I fill in "project[end_date]" with "<end_date>"
     And I press "Create Project"
     Then I should see "<message>"
     And I should see "<specific_message>"

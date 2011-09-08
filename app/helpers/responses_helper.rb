@@ -25,18 +25,14 @@ module ResponsesHelper
   def link_to_unclassified(activity)
     case
     when !activity.coding_spend_district_classified? || !activity.coding_budget_district_classified?
-      # edit_activity_or_ocost_path(activity, :mode => 'locations')
       mode = 'locations'
-    when !activity.coding_spend_classified? && !activity.coding_budget_classified?
-      # edit_activity_or_ocost_path(activity, :mode => 'purposes')
+    when !activity.coding_spend_classified? || !activity.coding_budget_classified?
       mode = 'purposes'
-    when !activity.coding_spend_cc_classified? && !activity.coding_budget_cc_classified?
-      # edit_activity_or_ocost_path(activity, :mode => 'inputs')
+    when !activity.coding_spend_cc_classified? || !activity.coding_budget_cc_classified?
       mode = 'inputs'
     else
-      # edit_activity_or_ocost_path(activity)
       mode = nil
     end
-      edit_activity_or_ocost_path(activity, :mode => mode)
+      edit_response_activity_path(activity.response, activity, :mode => mode)
   end
 end

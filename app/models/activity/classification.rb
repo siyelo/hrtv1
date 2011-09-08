@@ -127,24 +127,6 @@ module Activity::Classification
       virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
     end
 
-    def derive_classifications_from_sub_implementers!(coding_type)
-      klass = coding_type.constantize
-      location_amounts = {}
-
-      delete_existing_code_assignments_by_type(coding_type)
-
-      sub_activity_district_code_assignments(coding_type).each do |ca|
-        location_amounts[ca.code] ||= 0
-        location_amounts[ca.code] += ca.amount
-      end
-
-      location_amounts.each do |location, amount|
-        fake_ca(klass, location, amount).save!
-      end
-
-      self.update_classified_amount_cache(klass)
-    end
-
     def coding_budget_sum_in_usd
       coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
     end
@@ -162,19 +144,6 @@ module Activity::Classification
     end
 
     private
-      def delete_existing_code_assignments_by_type(coding_type)
-        CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
-      end
-
-      def sub_activity_district_code_assignments(coding_type)
-        case coding_type
-        when 'CodingBudgetDistrict'
-          implementer_splits.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
-        when 'CodingSpendDistrict'
-          implementer_splits.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
-        end.flatten
-      end
-
       def district_coding_adjusted(klass, assignments, amount)
         if assignments.present?
           assignments

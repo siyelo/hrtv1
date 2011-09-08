@@ -1586,7 +1586,6 @@ var projects_bulk_create = {
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       var activity_box = $(this).parents('.activity_box');
-
       //collapse the others, in an accordion style
       $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
         $(this).find('.main').hide();
@@ -1601,14 +1600,6 @@ var projects_bulk_create = {
 
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
-
-    $('.js_finish').live('click', function (e){
-      if ($('.js_unsaved').length > 0) {
-        if (!(confirm(unsaved_warning()))) {
-          e.preventDefault();
-        }
-      }
-    })
 
     $(window).bind('beforeunload',function (e) {
       if ($('.js_unsaved').length > 0) {

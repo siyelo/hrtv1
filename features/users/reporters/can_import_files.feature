@@ -1,3 +1,4 @@
+@run
 Feature: Reporter can import/export workplans
   In order to speed up data entry
   As a reporter
@@ -13,6 +14,11 @@ Feature: Reporter can import/export workplans
     And I am signed in as "reporter@hrtapp.com"
     And I go to the set request page for "data_request1"
     And I follow "Projects"
+
+  Scenario: Reporter can upload activities
+    When I attach the file "spec/fixtures/activities.csv" to "File" within ".activities_upload_box"
+    And I press "Import" within ".activities_upload_box"
+    Then I should see "Import: Review & Save"
 
   Scenario: Reporter can see error if no csv file is not attached for upload
     When I press "Import" within ".activities_upload_box"

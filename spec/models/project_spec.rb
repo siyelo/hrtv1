@@ -130,21 +130,25 @@ describe Project do
       rows[0].should == Project::FILE_UPLOAD_COLUMNS
       rows[1][0].should == sub_activity.activity.project.try(:name)
       rows[1][1].should == sub_activity.activity.project.try(:description)
-      rows[1][2].should == sub_activity.activity.name
-      rows[1][3].should == sub_activity.activity.description
-      rows[1][4].should == sub_activity.id.to_s
-      rows[1][5].should == sub_activity.provider.try(:name)
-      rows[1][6].to_s.should == sub_activity.spend.to_s
-      rows[1][7].to_s.should == sub_activity.budget.to_s
+      rows[1][2].should == sub_activity.activity.project.try(:start_date).to_s
+      rows[1][3].should == sub_activity.activity.project.try(:end_date).to_s
+      rows[1][4].should == sub_activity.activity.name
+      rows[1][5].should == sub_activity.activity.description
+      rows[1][6].should == sub_activity.id.to_s
+      rows[1][7].should == sub_activity.provider.try(:name)
+      rows[1][8].to_s.should == sub_activity.spend.to_s
+      rows[1][9].to_s.should == sub_activity.budget.to_s
 
       rows[2][0].should == ""
       rows[2][1].should == ""
       rows[2][2].should == ""
       rows[2][3].should == ""
-      rows[2][4].should == sub_activity2.id.to_s
-      rows[2][5].should == sub_activity2.provider.try(:name)
-      rows[2][6].to_s.should == sub_activity2.spend.to_s
-      rows[2][7].to_s.should == sub_activity2.budget.to_s
+      rows[2][4].should == ""
+      rows[2][5].should == ""
+      rows[2][6].should == sub_activity2.id.to_s
+      rows[2][7].should == sub_activity2.provider.try(:name)
+      rows[2][8].to_s.should == sub_activity2.spend.to_s
+      rows[2][9].to_s.should == sub_activity2.budget.to_s
     end
   end
 

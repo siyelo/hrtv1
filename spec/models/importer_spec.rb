@@ -14,9 +14,9 @@ describe Importer do
       @split2 = Factory(:sub_activity, :data_response => @response,
                               :activity => @activity, :provider => @implementer2)
       @csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
-,,,,#{@split2.id},selfimplementer2,3,6
-new project,blah,new activity,blah activity,,implementer2,4,8
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
+,,,,,,#{@split2.id},selfimplementer2,3,6
+new project,blah,01/01/2010,31/12/2010,new activity,blah activity,,implementer2,4,8
 EOS
       @filename = write_csv_with_header(@csv_string)
       @i = Importer.new(@response, @filename)
@@ -61,7 +61,7 @@ EOS
 
   it "should import a file" do
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should be_empty
@@ -71,7 +71,7 @@ EOS
 
   it "should show project errors on import" do
     csv_string = <<-EOS
-,project description,,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
+,project description,01/01/2010,31/12/2010,,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -80,7 +80,7 @@ EOS
 
   it "should show activity errors on import" do
     csv_string = <<-EOS
-project,project description,,activity1 description,#{@split.id},selfimplementer1,99.9,100
+project,project description,01/01/2010,31/12/2010,,activity1 description,#{@split.id},selfimplementer1,99.9,100
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -89,16 +89,60 @@ EOS
 
   it "should show implementer split errors on import" do
     csv_string = <<-EOS
-project,project description,activity,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
+project,project description,01/01/2010,31/12/2010,activity,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities.first.implementer_splits.first.errors.on(:budget).should == "is not a number"
   end
 
+  it "should try parse different date formats" do
+    csv_string = <<-EOS
+project,project description,2010-01-15,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
+project2,project description,15-01-2010,31/12/2010,activity,activity1 description,,selfimplementer1,99.9,100
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.projects.first.start_date.to_s.should == "2010-01-15"
+    i.projects.first.end_date.to_s.should   == "2010-12-31"
+    i.projects[1].start_date.to_s.should == "2010-01-15"
+    i.projects[1].end_date.to_s.should   == "2010-12-31"
+  end
+
+  it "should return a blank string if a date cannot be parsed" do
+    csv_string = <<-EOS
+project,project description,99/99/99,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.projects.first.start_date.to_s.should == ""
+    i.projects.first.errors.on(:start_date).should == "is not a valid date"
+  end
+
+  it "should return today's date and today's date + 1 for start date and end date respectively if date columns are not found" do
+    csv_string = <<-EOS
+Project Name,Project Description,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
+new project,project description,activity,activity1 description,,selfimplementer1,99.9,100
+EOS
+    i = Importer.new(@response, write_csv(csv_string))
+    i.import
+    i.projects.first.start_date.should == Date.today
+    i.projects.first.end_date.should == Date.today + 1
+  end
+
+  it "should NOT overwrite an existing project start/end date if the start/end date in the CSV is blank" do
+    csv_string = <<-EOS
+project,project description,2010/01/01,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
+,,,,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.projects.first.start_date.to_s.should == "2010-01-01"
+  end
+
   it "should handle utf8 encoding" do
     csv_string = <<-EOS
-project1,project description with utf chars äóäó,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project1,project description with utf chars äóäó,activity1,01/01/2010,31/12/2010,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should be_empty
@@ -108,7 +152,7 @@ EOS
 
   it "should handle utf16 encoding" do
     csv_string = <<-EOS
-project1,project description with Norwegian: æøå. French: êèé,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project1,project description with Norwegian: æøå. French: êèé,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should be_empty
@@ -119,7 +163,7 @@ EOS
   context "when updating existing records" do
     it "should just update existing implementer when records exist" do
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -132,7 +176,7 @@ EOS
 
     it "should ignore trailing blank lines" do
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
@@ -146,7 +190,7 @@ EOS
 
     it "should truncate and strip long names" do
       csv_string = <<-EOS
-"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
 
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
@@ -160,7 +204,7 @@ EOS
       @split.budget = 2
       @split.save!
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},#{@split.implementer_name},#{@split.spend},#{@split.budget}
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},#{@split.implementer_name},#{@split.spend},#{@split.budget}
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -173,8 +217,8 @@ EOS
 
     it "should discard duplicate implementer rows" do
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
-,,,,#{@split.id},selfimplementer1,3,6
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
+,,,,,,#{@split.id},selfimplementer1,3,6
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -187,9 +231,9 @@ EOS
 
     it "should discard several duplicate implementer rows" do
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
-,,,,#{@split.id},selfimplementer1,3,6
-,,,,#{@split.id},selfimplementer1,4,8
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
+,,,,,,#{@split.id},selfimplementer1,3,6
+,,,,,,#{@split.id},selfimplementer1,4,8
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -202,7 +246,7 @@ EOS
 
     it "should maintain activity cache" do
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -219,8 +263,8 @@ EOS
 
       it "should find a previously imported project with a stripped & truncated name" do
         csv_string = <<-EOS
-"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
-,,,,,implementer2,99.9,100.1
+"Coordination, planning, M&E and partnership of the national HIV 1234567",project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+,,,,,,,implementer2,99.9,100.1
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
@@ -230,8 +274,8 @@ EOS
 
       it "should update multiple implementers" do
         csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
-,,,,#{@split2.id},implementer2,3.0,6.0
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
@@ -247,8 +291,8 @@ EOS
 
       it "should update 1 activity plus its multiple implementers" do
         csv_string = <<-EOS
-project1,project description,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
-,,,,#{@split2.id},implementer2,3.0,6.0
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
@@ -266,7 +310,7 @@ EOS
       it "should update existing activity overwriting its multiple implementers" do
         @implementer3  = Factory(:organization, :name => "implementer3")
         csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,implementer3,2.0,4.0
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,implementer3,2.0,4.0
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
@@ -280,8 +324,8 @@ EOS
 
       it "should update the project, plus the activity plus its multiple implementers" do
         csv_string = <<-EOS
-project1,project NEW description,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
-,,,,#{@split2.id},implementer2,3.0,6.0
+project1,project NEW description,01/01/2010,31/12/2010,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,,,#{@split2.id},implementer2,3.0,6.0
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
@@ -306,8 +350,8 @@ EOS
       @split2 = Factory(:sub_activity, :data_response => @response,
                              :activity => @activity2, :provider => @implementer2)
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
-project1,project description,activity2,activity2 description,#{@split2.id},implementer2,3.0,6.0
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+project1,project description,01/01/2010,31/12/2010,activity2,activity2 description,#{@split2.id},implementer2,3.0,6.0
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -330,10 +374,10 @@ EOS
                              :activity => @activity, :provider => Factory(:organization,
                                :name => "implementer4"))
       csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
-,,,,#{@split2.id},implementer2,3.0,6.0
-,,,,#{@split3.id},implementer3,4.0,6.0
-,,,,#{@split4.id},implementer4,5.0,6.0
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,,,#{@split2.id},implementer2,3.0,6.0
+,,,,,,#{@split3.id},implementer3,4.0,6.0
+,,,,,,#{@split4.id},implementer4,5.0,6.0
 EOS
       i = Importer.new(@response, write_csv_with_header(csv_string))
       i.import
@@ -369,9 +413,9 @@ EOS
 
       it "should update 2 existing activities" do
         csv_string = <<-EOS
-  project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
-  ,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
-  EOS
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
+EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
         i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
@@ -384,11 +428,11 @@ EOS
 
       it "should update > 2 implementers across multiple activities" do
         csv_string = <<-EOS
-  project1,project description,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
-  ,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
-  ,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
-  ,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
-  EOS
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
+,,,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
+,,,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
+,,,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
+EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
         i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
@@ -415,8 +459,8 @@ EOS
 
         it "should update existing activities across multiple projects" do
           csv_string = <<-EOS
-project2,project2 description,activity21,activity21 description,#{@split21.id},selfimplementer1,2.0,4.0
-project1,project1 description,activity1,d1,#{@split.id},selfimplementer1,3.0,6.0
+project2,project2 description,01/01/2010,31/12/2010,activity21,activity21 description,#{@split21.id},selfimplementer1,2.0,4.0
+project1,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id},selfimplementer1,3.0,6.0
 EOS
           i = Importer.new(@response, write_csv_with_header(csv_string))
           i.import
@@ -430,11 +474,11 @@ EOS
 
         it "should update > 2 activities across multiple projects" do
           csv_string = <<-EOS
-project2,project2 description,activity21,activity21 description,#{@split21.id},selfimplementer1,1.0,2.0
-project1,project1 description,activity1,d1,#{@split.id},selfimplementer1,2.0,3.0
-,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
-,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
-,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
+project2,project2 description,01/01/2010,31/12/2010,activity21,activity21 description,#{@split21.id},selfimplementer1,1.0,2.0
+project1,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id},selfimplementer1,2.0,3.0
+,,,,activity2,d2,#{@split2.id},implementer2,3.0,6.0
+,,,,activity3,d3,#{@split3.id},implementer3,4.0,6.0
+,,,,activity4,d4,#{@split4.id},implementer4,5.0,6.0
 EOS
           i = Importer.new(@response, write_csv_with_header(csv_string))
           i.import
@@ -461,7 +505,7 @@ EOS
   it "should assign to a self-implementer if implementer cant be found (new org name)" do
     # we dont want users bulk creating things in the db!
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,new implementer,2,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,new implementer,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -475,7 +519,7 @@ EOS
     @response.organization = Factory(:organization) # create a new org to check that it doesn't
                                                     # just return the first org in the db
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,,2,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -487,7 +531,7 @@ EOS
 
   it "should ignore new implementer name when ID is still given" do
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,#{@split.id},new implementer,2,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},new implementer,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -501,9 +545,9 @@ EOS
 
   it "should discard several duplicate brand new implementer rows" do
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,new implementer,2,4
-,,,,,new implementer,3,6
-,,,,,new implementer,4,8
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,new implementer,2,4
+,,,,,,,new implementer,3,6
+,,,,,,,new implementer,4,8
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -515,7 +559,7 @@ EOS
 
   it "should allow an invalid implementer split on a valid activity to be corrected and saved" do
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,selfimplementer1,aaaa,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -529,8 +573,8 @@ EOS
 
   it "should allow an invalid implementer split on a valid activity with other valid implementers to be corrected and saved" do
     csv_string = <<-EOS
-project1,project description,activity1,activity1 description,,selfimplementer1,aaaa,4
-,,,,,organization2,3,6
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,4
+,,,,,,,organization2,3,6
 EOS
     @organization2 = Factory(:organization, :name => 'organization2')
     i = Importer.new(@response, write_csv_with_header(csv_string))
@@ -545,8 +589,8 @@ EOS
 
   it "should allow an invalid activity with valid implementers and a valid project can be corrected and saved" do
     csv_string = <<-EOS
-project1,project description,ac,activity1 description,,selfimplementer1,2,4
-,,,,,selfimplementer1,3,6
+project1,project description,01/01/2010,31/12/2010,ac,activity1 description,,selfimplementer1,2,4
+,,,,,,,selfimplementer1,3,6
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -559,9 +603,9 @@ EOS
 
   it "should create an activity even when supplied with incorrect column heading" do
     csv_string = <<-EOS
-Project Name,Project Description,HERP DERP,Activity Description,Id,Implementer,Past Expenditure,Current Budget
-project1,project description,my activity name,activity1 description,,selfimplementer1,2,4
-,,,,,selfimplementer1,3,6
+Project Name,project description,01/01/2010,31/12/2010,HERP DERP,Activity Description,Id,Implementer,Past Expenditure,Current Budget
+project1,project description,01/01/2010,31/12/2010,my activity name,activity1 description,,selfimplementer1,2,4
+,,,,,,,selfimplementer1,3,6
 EOS
     i = Importer.new(@response, write_csv(csv_string))
     i.import
@@ -574,7 +618,7 @@ EOS
 
   it "should auto trim a long name from project" do
     csv_string = <<-EOS
-11111111112222222222333333333344444444445555555555666666666677777777778,project description,act,activity1 description,,selfimplementer1,2,4
+11111111112222222222333333333344444444445555555555666666666677777777778,project description,01/01/2010,31/12/2010,act,activity1 description,,selfimplementer1,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -588,7 +632,7 @@ EOS
 
   it "should allow correcting of invalid project name" do
     csv_string = <<-EOS
-,project description,act,activity1 description,,selfimplementer1,2,4
+,project description,01/01/2010,31/12/2010,act,activity1 description,,selfimplementer1,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
@@ -604,7 +648,7 @@ EOS
   context "when adding new activity and existing implementer" do
     before :each do
       csv_string = <<-EOS
-project1,project description,activity2,activity2 description,,Shyira HD District Hospital,3,6
+project1,project description,01/01/2010,31/12/2010,activity2,activity2 description,,Shyira HD District Hospital,3,6
 EOS
       @implementer2   = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
       @i = Importer.new(@response, write_csv_with_header(csv_string))

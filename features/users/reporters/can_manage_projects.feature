@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter

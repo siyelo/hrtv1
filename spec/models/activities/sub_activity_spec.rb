@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe SubActivity do
   describe "Associations:" do
     it { should belong_to :activity }
@@ -178,6 +180,7 @@ describe SubActivity do
       CodingSpend.update_classifications(@activity, { Factory(:mtef_code).id => 20 }) # 20%
       CodingSpendCostCategorization.update_classifications(@activity, {
         Factory(:cost_category_code).id => 20 })
+      run_delayed_jobs
       @sa.code_assignments[0].cached_amount.to_f.should == 10
       @sa.code_assignments[0].type.should == 'CodingBudget'
       @sa.code_assignments[1].cached_amount.to_f.should == 10
@@ -224,6 +227,7 @@ describe SubActivity do
           it "should return adjusted activity code_assignments" do
             klass = @coding.to_s.camelcase.constantize
             klass.update_classifications(@activity, { Factory(:mtef_code).id => 10 })
+            run_delayed_jobs
             @sa.send(@coding).length.should == 1
             @sa.send(@coding)[0].cached_amount.to_f.should == 10
             @sa.send(@coding)[0].type.should == @coding.to_s.camelcase

@@ -271,7 +271,9 @@ module ApplicationHelper
   end
 
   def codings_total(activity, type)
-    type.with_activity(activity).all.reject{|ca| !ca.code.parent.nil?}.sum{|rca| rca.percentage.to_f}
+    type.with_activity(activity).find(:all, :include => :code).
+      reject{|ca| ca.code.parent_id.present?}.
+      sum{|rca| rca.percentage.to_f}
   end
 
   def warn_if_not_classified

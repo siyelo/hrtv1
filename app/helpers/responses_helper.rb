@@ -32,7 +32,7 @@ module ResponsesHelper
     else
       mode = nil
     end
-    edit_response_activity_path(activity.response, activity, :mode => mode)
+    edit_activity_or_ocost_path(activity, :mode => mode)
   end
 
   def flag

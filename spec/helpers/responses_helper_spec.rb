@@ -1,5 +1,5 @@
 require 'spec_helper'
-include ResponsesHelper
+include ResponsesHelper, ApplicationHelper
 
 describe "link to unclassified activity" do
   before :each do

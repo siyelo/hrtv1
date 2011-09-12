@@ -87,14 +87,13 @@ describe ProjectsController do
         DataResponse.stub(:find).and_return(@data_response)
       end
 
-      it "downloads csv template" do
+      it "downloads xls template" do
         data_response = mock_model(DataResponse)
         DataResponse.stub(:find).and_return(data_response)
-        Project.should_receive(:download_template).and_return('csv')
         get :download_template, :response_id => 1
         response.should be_success
-        response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
-        response.header["Content-Disposition"].should == "attachment; filename=projects_template.csv"
+        response.header["Content-Type"].should == "application/excel"
+        response.header["Content-Disposition"].should == "attachment; filename=import_template.xls"
       end
 
       it "downloads csv workplan" do

@@ -20,6 +20,7 @@ gem 'rails', '2.3.12'
 gem 'rdoc'
 gem 'sass', '=3.1.4'
 gem 'settingslogic'
+gem "spreadsheet", "~> 0.6.5.9"
 gem 'validates_timeliness', '~> 2.3'
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"

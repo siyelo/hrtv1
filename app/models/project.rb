@@ -1,4 +1,5 @@
 require 'validators'
+require 'spreadsheet'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
@@ -83,48 +84,61 @@ class Project < ActiveRecord::Base
   ### Class methods
 
   def self.export_all(response)
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
-      response.projects.sorted.each do |project|
-        row = []
-        row << project.name.slice(0..MAX_NAME_LENGTH-1)
-        row << project.description
-        row << project.start_date
-        row << project.end_date
-        if project.activities.empty?
-          csv << row
-        else
-          project.activities.roots.sorted.each_with_index do |activity, index|
-            4.times do
-              row << "" if index > 0 # dont re-print project details on each line
-            end
-            row << activity.name.slice(0..MAX_NAME_LENGTH-1)
-            row << activity.description
-            if activity.implementer_splits.empty?
-              csv << row
-            else
-              activity.implementer_splits.sorted.each_with_index do |split, index|
-                6.times do
-                  row << "" if index > 0 # dont re-print activity details on each line
-                end
-                row << split.id
-                row << split.provider.try(:name)
-                row << split.spend
-                row << split.budget
-                csv << row
-                row = []
+    rows = []
+    response.projects.sorted.each do |project|
+      row = []
+      row << EncodingHelper::sanitize_encoding(project.name.slice(0..MAX_NAME_LENGTH-1))
+      row << EncodingHelper::sanitize_encoding(project.description)
+      row << project.start_date.to_s
+      row << project.end_date.to_s
+      if project.activities.empty?
+        rows << row
+      else
+        project.activities.roots.sorted.each_with_index do |activity, index|
+          4.times do
+            row << "" if index > 0 # dont re-print project details on each line
+          end
+          row << EncodingHelper::sanitize_encoding(activity.name.slice(0..MAX_NAME_LENGTH-1))
+          row << EncodingHelper::sanitize_encoding(activity.description)
+          if activity.implementer_splits.empty?
+            rows << row
+          else
+            activity.implementer_splits.sorted.each_with_index do |split, index|
+              6.times do
+                row << "" if index > 0 # dont re-print activity details on each line
               end
+              row << split.id
+              row << split.provider.try(:name)
+              row << split.spend.to_f
+              row << split.budget.to_f
+              rows << row
+              row = []
             end
           end
         end
       end
     end
+
+    self.download_template(rows)
+
   end
 
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
+  def self.download_template(rows = [])
+    Spreadsheet.client_encoding = "UTF-8//IGNORE"
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+
+    rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
+
+    rows.each_with_index do |row, row_index|
+      row.each_with_index do |cell, column_index|
+        sheet1[row_index, column_index] = cell
+      end
     end
+
+    data = StringIO.new ''
+    book.write data
+    return data
   end
 
 

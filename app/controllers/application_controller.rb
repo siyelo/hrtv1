@@ -38,6 +38,12 @@ class ApplicationController < ActionController::Base
                 :disposition => "attachment; filename=#{filename}"
     end
 
+    def send_xls(data, filename)
+      send_data data.string,
+                :type=>"application/excel",
+                :disposition=>"attachment; filename=#{filename}"
+    end
+
     # load vars for pretty charts
     def load_charts
       @response = @data_response    = current_response

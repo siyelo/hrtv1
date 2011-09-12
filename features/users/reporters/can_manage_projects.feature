@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can manage projects
   In order to track information
   As a reporter
@@ -30,7 +29,8 @@ Feature: Reporter can manage projects
     And I fill in "project_in_flows_attributes_0_budget" with "20"
     And I press "Create Project"
     Then I should see "Project successfully created"
-    When I fill in "Name" with "Project2"
+    When I follow "Project1"
+    And I fill in "Name" with "Project2"
     And I fill in "Description" with "Project2 description"
     And I press "Update Project"
     Then I should see "Project successfully updated"

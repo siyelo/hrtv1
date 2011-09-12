@@ -13,7 +13,7 @@
     = @response.request.title
   %li
     %span Status:
-    = @response.request.status
+    = @response.status
   %li
     %span Last Submitted:
     = !@response.last_submitted_at.nil? ? l(@response.last_submitted_at, :format => :short) : 'never'

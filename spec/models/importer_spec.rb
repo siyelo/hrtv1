@@ -119,15 +119,15 @@ EOS
     i.projects.first.errors.on(:start_date).should == "is not a valid date"
   end
 
-  it "should return today's date and today's date + 1 for start date and end date respectively if date columns are not found" do
+  it "should allow blanks for start date and end date respectively if date columns are not found" do
     csv_string = <<-EOS
 Project Name,Project Description,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
 new project,project description,activity,activity1 description,,selfimplementer1,99.9,100
 EOS
     i = Importer.new(@response, write_csv(csv_string))
     i.import
-    i.projects.first.start_date.should == Date.today
-    i.projects.first.end_date.should == Date.today + 1
+    i.projects.first.start_date.should == nil
+    i.projects.first.end_date.should == nil
   end
 
   it "should NOT overwrite an existing project start/end date if the start/end date in the CSV is blank" do

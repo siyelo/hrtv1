@@ -102,8 +102,8 @@ class Importer
       project.name                = project_name
       project.description         = project_description.try(:strip)
       project.updated_at          = Time.now
-      project.start_date          = date_for(row['Project Start Date'], project.start_date) || Date.today
-      project.end_date            = date_for(row['Project End Date'], project.end_date) || Date.today + 1
+      project.start_date          = date_for(row['Project Start Date'], project.start_date)
+      project.end_date            = date_for(row['Project End Date'], project.end_date)
       # if its a new record, create a default in_flow so it can be saved
       if project.in_flows.empty?
         ff                        = project.in_flows.new

@@ -1,5 +1,6 @@
 class ChartsController < ApplicationController
   include StringCleanerHelper # gives h method
+  TOP_ASSIGNMENTS_COUNT = 4
 
   before_filter :require_user
 
@@ -47,16 +48,16 @@ class ChartsController < ApplicationController
   # csv format for AM pie chart:
   # title, value, ?, ?, ?, description
   def get_csv_string(records)
-    other = 0
+    other_costs = 0
     csv_string = FasterCSV.generate do |csv|
       records.each_with_index do |record, index|
-        if index < 4
+        if index < TOP_ASSIGNMENTS_COUNT
           csv << [first_n_words(h(record.name), 3), record.value.to_f, nil, nil, nil, h(record.name) ]
         else
-          other += record.value.to_f
+          other_costs += record.value.to_f
         end
       end
-      csv << ['Other', other, nil, nil, nil, 'Other'] if other > 0
+      csv << ['Other', other_costs, nil, nil, nil, 'Other'] if other_costs > 0
     end
     csv_string
   end

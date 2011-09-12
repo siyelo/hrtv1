@@ -36,6 +36,18 @@ describe ProjectsController do
       login @user
     end
 
+    it "redirects to the projects index after create" do
+      request        = Factory(:data_request, :organization => @organization)
+      @data_request  = request
+      @data_response = @organization.latest_response
+      post :create, :response_id => @data_response.id,
+        :project => {:name => "new project", :description => "new description",
+        :start_date => "2010-01-01", :end_date => "2010-12-31",
+        :in_flows_attributes => { "0" => {:organization_id_from => @organization.id,
+          :budget => 10, :spend => 20}}}
+      response.should redirect_to response_projects_path(@data_response)
+    end
+
     describe "nested funder management" do
       before :each do
         request      = Factory(:data_request, :organization => @organization)

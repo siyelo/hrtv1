@@ -36,7 +36,7 @@ class ProjectsController < Reporter::BaseController
     if @project.save
       respond_to do |format|
         format.html {flash[:notice] = "Project successfully created";
-              redirect_to edit_response_project_url(@response, @project) }
+              redirect_to response_projects_path(@response) }
         format.js   { js_redirect('success') }
       end
     else

@@ -1,0 +1,5 @@
+- if @organization.errors[:base].present?
+  #errorExplanation.errorExplanation
+    %ul
+      - @organization.errors[:base].each do |error|
+        %li= error

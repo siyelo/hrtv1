@@ -1,6 +1,9 @@
 class AddNewCodesToCodingTree < ActiveRecord::Migration
   def self.up
-    load 'db/fixes/20110825_add_new_codes.rb'
+    Code.reset_column_information
+    if Rails.env != "test"
+      load 'db/fixes/20110825_add_new_codes.rb'
+    end
   end
 
   def self.down

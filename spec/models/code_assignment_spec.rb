@@ -130,6 +130,7 @@ describe CodeAssignment do
                          :budget => 100, :spend => 200)
       code     = Factory.create(:mtef_code, :short_display => 'code1')
       activity.reload
+      activity.save # get new cached implementer split total
       activity.budget.should == 100
       activity.spend.should == 200
       # at time of writing you must call one of the 'bulk' update APIs for classifications to have their cached amounts
@@ -161,6 +162,7 @@ describe CodeAssignment do
       code1        = Factory.create(:mtef_code, :short_display => 'code1')
       code2        = Factory.create(:mtef_code, :short_display => 'code2')
       activity1.reload
+      activity1.save #update cache
       CodingBudget.update_classifications(activity1, { code1.id => 1})   # 1 means 1%
       CodingSpend.update_classifications(activity1, { code2.id => 5.5 }) # 5.5% of 200 == 11
       code_assignments = CodeAssignment.select_for_pies.all

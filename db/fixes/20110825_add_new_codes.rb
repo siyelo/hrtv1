@@ -30,21 +30,15 @@ FasterCSV.foreach("db/seed_files/newCodes.csv", :headers=>true) do |row|
     hssp2_stratprog_val = row["HSSP2 Strategic Program"].nil? ? '' : row["HSSP2 Strategic Program"].gsub(/@/, ',')
     official_name = row["Official (long) name"].nil? ? '' : row["Official (long) name"].gsub(/@/, ',')
 
+
     new_code = Code.find(:first, :conditions => {:parent_id => parent_id, :short_display => simple_display})
 
     unless new_code
       puts "Adding #{r[0][1]}"
-      new_code = Code.create!(
-        :short_display => simple_display,
-        :description => description,
-        :type => row["Type"],
-        :hssp2_stratobj_val => hssp2_stratobj_val,
-        :hssp2_stratprog_val => hssp2_stratprog_val,
-        :official_name => official_name,
-        :parent_id => parent_id)
+      new_code = Code.create!(:short_display => simple_display, :description => description, :type => row["Type"], :hssp2_stratobj_val => hssp2_stratobj_val, :hssp2_stratprog_val => hssp2_stratprog_val, :official_name => official_name, :parent_id => parent_id)
     end
     previous_level = level.to_i
-    previous_id = row["ID"].present? ? row["ID"] : new_code.id
+    previous_id = new_code.id
     eval("previous_level_#{level} = #{previous_id}")
   end
 end

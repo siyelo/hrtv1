@@ -4,32 +4,11 @@ class OtherCost < Activity
   FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure]
 
   ### Delegates
-
   delegate :currency, :to => :data_response, :allow_nil => true
-
-  ### Class Methods
-
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << OtherCost::FILE_UPLOAD_COLUMNS
-    end
-  end
-
-  def self.create_from_file(doc, data_response)
-    saved, errors = 0, 0
-    doc.each do |row|
-      attributes = row.to_hash
-      project = Project.find_by_name(attributes.delete('project_name'))
-      attributes.merge!(:project_id => project.id) if project
-      other_cost = data_response.other_costs.new(attributes)
-      other_cost.save ? (saved += 1) : (errors += 1)
-    end
-    return saved, errors
-  end
 
   ### Instance Methods
 
-  # Overrides activity currency deletage method
+  # Overrides activity currency delegate method
   # some other costs does not have a project and
   # then we use the currency of the data response
   def currency
@@ -42,21 +21,18 @@ class OtherCost < Activity
 
   # An OCost can be considered classified if the locations are classified
   def classified?
-    (coding_budget_district_classified? && !budget.blank?) || (coding_spend_district_classified? && !spend.blank?)
+    coding_budget_district_classified? || coding_spend_district_classified?
   end
-  
+
   def budget_classified?
-    budget.blank? ||
     coding_budget_district_classified?
   end
 
   def spend_classified?
-    spend.blank? ||
     coding_spend_district_classified?
   end
-
-
 end
+
 
 
 
@@ -120,5 +96,9 @@ end
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
+#  planned_for_gor_q1           :boolean
+#  planned_for_gor_q2           :boolean
+#  planned_for_gor_q3           :boolean
+#  planned_for_gor_q4           :boolean
 #
 

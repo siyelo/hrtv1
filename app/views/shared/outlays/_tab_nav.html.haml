@@ -1,6 +1,5 @@
 - first_tab_class = ((params[:controller] == 'activities' || params[:controller] == 'other_costs' || params[:controller] == 'projects') && params[:mode].nil?) ? 'selected' : nil
-- unless outlay.new_record?
-  - is_activity = outlay.class == Activity ? true : false
+- is_activity = outlay.class == Activity ? true : false
 
 .section_overlap
   %ul.section_nav

@@ -126,25 +126,6 @@ describe FundingFlow do
           funding_flow.spend_in_usd.should == 45.6
         end
       end
-
-      context "USG FY" do
-        it "sets budget_in_usd and spend_in_usd amounts" do
-          pending #expected to be removed in next merge
-          @organization = Factory(:organization, :currency => 'RWF',
-                                 :fiscal_year_start_date => "2010-10-01",
-                                 :fiscal_year_end_date => "2011-09-30")
-          @request      = Factory(:data_request, :organization => @organization)
-          @response     = @organization.latest_response
-          @project      = Factory(:project, :data_response => @response)
-          funding_flow = Factory(:funding_flow, :project => @project,
-                                 :from => @organization, :budget_q4_prev => 10, :budget_q1 => 10,
-                                 :budget_q2 => 10, :budget_q3 => 10, :budget_q4 => 999,
-                                 :spend_q4_prev => 11, :spend_q1 => 11,
-                                 :spend_q2 => 11, :spend_q3 => 11, :spend_q4 => 999)
-          funding_flow.budget_in_usd.should == 4
-          funding_flow.spend_in_usd.should == 4.4
-        end
-      end
     end
   end
 
@@ -182,10 +163,14 @@ describe FundingFlow do
 
   describe "#name" do
     it "returns from and to organizations in the name" do
-      basic_setup_project
+      @organization = Factory(:organization, :name => 'Organization 2')
+      @other_org    = Factory(:organization, :name => 'ORG2')
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @project.save!
+
       from = Factory(:organization, :name => 'Organization 1')
-      @organization.name = 'Organization 2'
-      @organization.save
       funding_flow = Factory(:funding_flow, :project => @project, :from => from)
       funding_flow.name.should == "From: #{from} - To: #{@organization}"
     end

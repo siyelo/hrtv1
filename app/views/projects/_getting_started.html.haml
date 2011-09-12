@@ -1,5 +1,5 @@
 - if current_user.tips_shown
-  #gs_container
+  #gs_container.js_tips_container
     #getting_started_title
       %h2= "Getting started with #{yield(:title)}"
       = render :partial => 'shared/tips_hide'
@@ -10,13 +10,12 @@
           %li Add a new project for each programme/project you have, or use the bulk csv upload.
           %li Select the location(s) that the project takes place in.
           %li Show where the funding came from (you can have multiple funding sources)
-          %li Indicate the Expenditure and/or Current Budget for the entire project
+          %li Indicate the Past Expenditure and/or Current Budget for the entire project
           %li
             Add
-            = link_to "Activities", response_activities_path(@response)
+            = link_to "Activities", new_response_activity_path(@response)
             for each Project
           %li If the project is implemented by multiple entities/partners, add these to the relevant Activities.
-          %li The project dashboard gives an overview of all current projects
         %p
           There is great
           = link_to "online help", help_link, :target => "_blank"

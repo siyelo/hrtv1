@@ -10,6 +10,7 @@ class OrganizationsController < Reporter::BaseController
       flash[:notice] = "Settings were successfully updated."
       redirect_to dashboard_url
     else
+      flash.now[:error] = "Oops, we couldn't save your changes."
       render :action => :edit
     end
   end

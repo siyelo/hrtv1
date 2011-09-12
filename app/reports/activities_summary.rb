@@ -18,7 +18,7 @@ class Reports::ActivitiesSummary
       #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |activity| # DEBUG ONLY
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
       Activity.find(:all, :include => :provider).each do |activity|
-        if ((activity.class == Activity && activity.sub_activities.empty?) ||
+        if ((activity.class == Activity && activity.implementer_splits.empty?) ||
             activity.class == SubActivity) && activity.data_request == @request
           csv << build_row(activity)
         end

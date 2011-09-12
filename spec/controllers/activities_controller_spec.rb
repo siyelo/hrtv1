@@ -1,5 +1,4 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-include ApplicationHelper
 
 describe ActivitiesController do
 
@@ -63,8 +62,9 @@ describe ActivitiesController do
 
       context "Requesting /activities using POST" do
         before do
-          params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory(:activity, params.merge(:data_response => @data_response, :project => @project) )
+          params = { :name => 'title', :description =>  'descr'}
+          @activity = Factory(:activity, params.merge(:data_response => @data_response,
+            :project => @project) )
           @activity.stub!(:save).and_return(true)
           post :create, :activity =>  params, :response_id => @data_response.id
         end
@@ -73,8 +73,9 @@ describe ActivitiesController do
 
       context "Requesting /activities/1 using PUT" do
         before do
-          params = { :name => 'title', :description =>  'descr' }
-          @activity = Factory(:activity, params.merge(:data_response => @data_response, :project => @project) )
+          params = { :name => 'title', :description =>  'descr'}
+          @activity = Factory(:activity, params.merge(:data_response => @data_response,
+            :project => @project) )
           @activity.stub!(:save).and_return(true)
           put :update, { :id => @activity.id, :response_id => @data_response.id }.merge(params)
         end
@@ -130,6 +131,7 @@ describe ActivitiesController do
       @project = Factory(:project, :data_response => @data_response)
       @activity = Factory(:activity, :project => @project,
                           :data_response => @data_response, :am_approved => false)
+      @project.reload
       login @user
     end
 
@@ -144,7 +146,10 @@ describe ActivitiesController do
     it "should allow a project to be created automatically on create" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       post :create, :response_id => @data_response.id,
-        :activity => {:project_id => '-1', :name => "new activity", :description => "description"}
+        :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+          "implementer_splits_attributes"=>
+            {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+              "provider_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name
@@ -177,26 +182,26 @@ describe ActivitiesController do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Locations >', :response_id => @data_response.id
-      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'locations')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'locations')
     end
 
     it "redirects to the purpose classifications page when Save & Add Purposes is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Purposes >', :response_id => @data_response.id
-      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'purposes')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'purposes')
     end
     it "redirects to the input classifications page when Save & Add Inputs is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Inputs >', :response_id => @data_response.id
-      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'inputs')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'inputs')
     end
     it "redirects to the output classifications page when Save & Add Targets is clicked" do
       @data_request.save
       put :update, :activity => { :name => "new name" }, :id => @activity.id,
         :commit => 'Save & Add Targets >', :response_id => @data_response.id
-      response.should redirect_to edit_activity_or_ocost_path(@project.activities.first, :mode => 'outputs')
+      response.should redirect_to edit_response_activity_path(@data_response.id, @project.activities.first, :mode => 'outputs')
     end
 
     it "should NOT approve the project as a reporter" do

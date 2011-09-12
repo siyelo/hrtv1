@@ -46,57 +46,6 @@ body.app
     font-size: 11px
     padding: 0 10px 20px 10px
     +pie-clearfix
-  .resources
-    .placer
-      position: relative
-      .form_box
-        background: $lightest-blue + #111111
-        border-top: 1px solid white
-        border-left: 1px solid $lighter-blue
-        border-right: 1px solid $lighter-blue
-        border-bottom: 4px solid $mid-blue
-        padding: 10px 20px
-    .edit_form
-      padding: 0 10px
-    .dashboard_comments, .placer
-      tbody td
-        font-size: 12px
-      ol
-        +horizontal-list
-        #basic
-          float: left
-          width: 70%
-          li
-            width: 48%
-        .buttons
-          float: left
-          font-size: 12px
-          margin-top: 10px
-          width: 25%
-      input[type=text], label
-        width: 90%
-      textarea
-        height: 30px
-        width: 90%
-    .inline-errors
-      color: red
-      margin: -10px
-    .close
-      background: $mid-blue
-      border: 1px solid white
-      color: white
-      float: right
-      font-size: 12px
-      margin-top: 20px
-      padding: 7px 14px 5px
-      text-decoration: none
-      +border-radius
-      &:hover
-        background: white
-        border: 1px solid $lighter-blue
-        color: $mid-blue
-    .cancel_btn
-      margin: 15px 0 0 10px
 
   label
     color: $mid-blue
@@ -320,6 +269,7 @@ body.app
         a
           display: inline-block
           padding: 4px
+
   ul.inline_tab
     +horizontal-list
     border-bottom: 1px solid $light-blue
@@ -327,7 +277,7 @@ body.app
     line-height: 1.5em
     margin-bottom: 15px !important
     font-size: 12px
-    li 
+    li
       margin-right: 8px
     a
       text-decoration: none
@@ -338,6 +288,7 @@ body.app
       font-weight: bold
     .incomplete a
       color: #973030
+      
   ul.inline_alt_tab
     +horizontal-list
     border-bottom: 3px solid $mid-blue
@@ -378,14 +329,14 @@ body.app
     margin-bottom: 20px
     width: 49%
     +pie-clearfix
-    
+
   .second-half
     float: right
     margin-right: 0
     margin-bottom: 20px
     width: 49%
     +pie-clearfix
-    
+
   .third
     float: left
     margin-right: 1%
@@ -393,7 +344,7 @@ body.app
     width: 31%
     .third
       margin: 0
-      
+
   .fourth
     float: left
     margin-right: 1%
@@ -464,11 +415,9 @@ body.app #content .tabs
   height: 16px
   width: 16px
 
-.collapsed
-  float: left
-  width: auto
-  .indicator
-    background: image_url("icon_expand.png") no-repeat 0px 3px
+  &.collapsed
+    background: image_url("icon_expand.png") no-repeat 0px 3px !important
+    width: 16px !important
 
 #projects
   width: 100%
@@ -505,7 +454,7 @@ body.app #content .tabs
     font-weight: bold
     margin-bottom: 5px
     padding-bottom: 5px
-    
+
   #duplicate
     background: $lightest-blue
     border-top: 3px solid $mid-blue
@@ -516,7 +465,7 @@ body.app #content .tabs
     margin-bottom: 20px
     padding: 10px
     width: 47%
-    
+
   #target
     background: $lightest-blue
     border-top: 3px solid $mid-blue

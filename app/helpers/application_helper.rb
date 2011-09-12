@@ -138,7 +138,7 @@ module ApplicationHelper
   end
 
   def usd_to_local_currency
-    Money.default_bank.get_rate(:USD, Money.default_currency)
+    Money.default_bank.get_rate(:USD, Money.default_currency) || 0
   end
 
   # sortable columns
@@ -154,12 +154,12 @@ module ApplicationHelper
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
     callback = options[:callback] || 'null'
-    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this, #{callback})", :class => class_name)
+    f.hidden_field(:_destroy) + link_to_function(name, "remove_fields(this)", :class => class_name)
   end
 
   # Helper for adding new nested form models
   # looks for partial with _<model>_fields
-  # e.g. _sub_activity_fields.html.haml
+  # e.g. _implementer_split_fields.html.haml
   def link_to_add_fields(name, f, association, subfolder, options = {})
     class_name = options[:class] || 'add_nested'
     new_object = f.object.class.reflect_on_association(association).klass.new
@@ -270,6 +270,10 @@ module ApplicationHelper
     klass.to_s.split("::").first
   end
 
+  def codings_total(activity, type)
+    type.with_activity(activity).all.reject{|ca| !ca.code.parent.nil?}.sum{|rca| rca.percentage.to_f}
+  end
+
   def warn_if_not_classified
     outlay = @activity || @other_cost
     unless flash[:error]
@@ -295,10 +299,24 @@ module ApplicationHelper
     is_activity = activity_or_other_cost.class == Activity ? true : false
     case current_step
     when nil;         "Save & Add Locations >"
-    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Review>"
+    when 'locations'; is_activity ? "Save & Add Purposes >" : "Save & Go to Overview >"
     when 'purposes';  "Save & Add Inputs >"
     when 'inputs';    "Save & Add Targets >"
-    when 'outputs';   "Save & Review >"
+    when 'outputs';   "Save & Go to Overview >"
     end
+  end
+
+  def link_to_unclassified(activity)
+    case
+    when !activity.coding_spend_district_classified? || !activity.coding_budget_district_classified?
+      mode = 'locations'
+    when !activity.coding_spend_classified? || !activity.coding_budget_classified?
+      mode = 'purposes'
+    when !activity.coding_spend_cc_classified? || !activity.coding_budget_cc_classified?
+      mode = 'inputs'
+    else
+      mode = nil
+    end
+    edit_activity_or_ocost_path(activity, :mode => mode)
   end
 end

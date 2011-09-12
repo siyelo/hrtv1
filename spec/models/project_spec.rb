@@ -25,6 +25,7 @@ describe Project do
     it { should allow_mass_assignment_of(:data_response) }
     it { should allow_mass_assignment_of(:activities) }
     it { should allow_mass_assignment_of(:in_flows_attributes) }
+    it { should allow_mass_assignment_of(:updated_at) }
   end
 
   describe "Validations" do
@@ -81,10 +82,73 @@ describe Project do
   end
 
   describe "create" do
+    it "should create a new project object with (unsaved) nested associations" do
+      basic_setup_response
+      p = Project.new(:name => "new project", :description => "new description",
+      :data_response => @response, :start_date => "2010-01-01", :end_date => "2010-12-31",
+      :in_flows_attributes => { "0" => {:organization_id_from => "a new org plox k thx",
+        :budget => 10, :spend => 20}})
+      p.in_flows.should have(1).item
+      p.save.should == true
+    end
+
+    it "should create a new project object with (unsaved) nested associations" do
+      basic_setup_response
+      p = Project.new(
+        {"name"=>"Kuraneza", "start_date"=>"2011-08-29",
+         "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"0", "budget"=>"0"}},
+         "data_response_id"=>"#{@response.id}", "_destroy"=>"", "currency"=>"RWF", "description"=>"Describe the proje",
+         "end_date"=>"2012-08-29",
+         "activities_attributes"=>
+            {"0"=>{"name"=>"Activity name not more than 64 characters otherwise you will not",
+             "data_response_id" => @response.id , "implementer_splits_attributes"=>
+              {"0"=>{"updated_at"=>"", "spend"=>"6000.0", "data_response_id"=>"#{@response.id}",
+                     "provider_mask"=>"#{@organization.id}", "budget"=>"10000.0", "_destroy"=>""}},
+           "description"=>"Description of activity"}}}
+      )
+      p.in_flows.should have(1).item
+      p.activities.should have(1).item
+      p.save.should == true
+    end
+
     it "should save without the optional currency override" do
       basic_setup_response
       p = Factory :project, :currency => "", :data_response => @response
       p.save.should == true
+    end
+  end
+
+  describe "#download_template" do
+    it "should return template with blank cells for repeated project & activity" do
+      basic_setup_activity
+      sub_activity = Factory(:sub_activity, :activity => @activity, :data_response => @response)
+      sub_activity2 = Factory(:sub_activity, :activity => @activity, :data_response => @response)
+      @activity.reload; @activity.save!
+
+      csv = Project.export_all(@response)
+      rows = FasterCSV.parse(csv)
+      rows[0].should == Project::FILE_UPLOAD_COLUMNS
+      rows[1][0].should == sub_activity.activity.project.try(:name)
+      rows[1][1].should == sub_activity.activity.project.try(:description)
+      rows[1][2].should == sub_activity.activity.project.try(:start_date).to_s
+      rows[1][3].should == sub_activity.activity.project.try(:end_date).to_s
+      rows[1][4].should == sub_activity.activity.name
+      rows[1][5].should == sub_activity.activity.description
+      rows[1][6].should == sub_activity.id.to_s
+      rows[1][7].should == sub_activity.provider.try(:name)
+      rows[1][8].to_s.should == sub_activity.spend.to_s
+      rows[1][9].to_s.should == sub_activity.budget.to_s
+
+      rows[2][0].should == ""
+      rows[2][1].should == ""
+      rows[2][2].should == ""
+      rows[2][3].should == ""
+      rows[2][4].should == ""
+      rows[2][5].should == ""
+      rows[2][6].should == sub_activity2.id.to_s
+      rows[2][7].should == sub_activity2.provider.try(:name)
+      rows[2][8].to_s.should == sub_activity2.spend.to_s
+      rows[2][9].to_s.should == sub_activity2.budget.to_s
     end
   end
 

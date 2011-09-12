@@ -72,7 +72,7 @@ class Admin::UsersController < Admin::BaseController
       redirect_to admin_users_url
     end
   end
-  
+
   private
     def sort_column
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "email"

@@ -7,7 +7,8 @@ describe DataResponse do
     it { should belong_to(:data_request) }
     it { should have_many(:activities).dependent(:destroy) }
     it { should have_many(:other_costs).dependent(:destroy) }
-    it { should have_many(:sub_activities).dependent(:destroy) }
+    it { should have_many(:implementer_splits).dependent(:destroy) }
+    it { should have_many(:sub_activities).dependent(:destroy) } #TODO: deprecate
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
     it { should have_many(:comments).dependent(:destroy) }
@@ -79,6 +80,7 @@ describe DataResponse do
       @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
                               :budget => 1000, :spend => 2000)
       @activity.reload
+      @activity.save
     end
 
     it "should update cached USD amounts on Activity and Code Assignment" do
@@ -123,8 +125,11 @@ describe DataResponse do
         @oc2         = Factory(:other_cost, :data_response => @response)
         @sa          = Factory(:sub_activity, :activity => @oc2, :data_response => @response,
                                :budget => 200, :spend => 100)
-        @response.budget.should == 600
-        @response.spend.should == 300
+        @activity.reload; @activity.save;
+        @oc1.reload; @oc1.save;
+        @oc2.reload; @oc2.save;
+        @response.budget.to_f.should == 600
+        @response.spend.to_f.should == 300
       end
     end
 
@@ -142,9 +147,11 @@ describe DataResponse do
         @other_cost2 = Factory(:other_cost, :data_response => @response)
         @sa3         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost2,
                                :spend => 100, :budget => 200)
-
-        @response.budget.should == 400 # 100 + 100 + 200
-        @response.spend.should == 200 # 50 + 50 + 100
+        @activity1.reload; @activity1.save;
+        @other_cost1.reload; @other_cost1.save;
+        @other_cost2.reload; @other_cost2.save;
+        @response.budget.to_f.should == 400 # 100 + 100 + 200
+        @response.spend.to_f.should == 200 # 50 + 50 + 100
       end
     end
   end
@@ -156,8 +163,8 @@ end
                 #:spend => 100, :budget => 200)
         #Factory(:other_cost, :data_response => @response,
                 #:spend => 100, :budget => 200)
-        #@response.budget.should == 400 # 100 + 100 + 200
-        #@response.spend.should == 200 # 50 + 50 + 100
+        #@response.budget.to_f.should == 400 # 100 + 100 + 200
+        #@response.spend.to_f.should == 200 # 50 + 50 + 100
 
 # == Schema Information
 #

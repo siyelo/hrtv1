@@ -36,7 +36,7 @@ describe Activity do
     it { should allow_mass_assignment_of(:text_for_provider) }
     it { should allow_mass_assignment_of(:text_for_beneficiaries) }
     it { should allow_mass_assignment_of(:approved) }
-    it { should allow_mass_assignment_of(:sub_activities_attributes) }
+    it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:implementer_splits_attributes) }
     it { should allow_mass_assignment_of(:organization_ids) }
     it { should allow_mass_assignment_of(:csv_project_name) }
@@ -52,10 +52,28 @@ describe Activity do
   end
 
   describe "Validations" do
-    it { should validate_presence_of(:description) }
+    subject { basic_setup_activity; @activity }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
+    it { should validate_presence_of(:description) }
+
+    it "cannot be edited once approved" do
+      subject.stub(:approved).and_return(true)
+      subject.stub(:approved?).and_return(true)
+
+      subject.name = "new activity name"
+      subject.save.should == false
+      subject.errors.on(:base).should include("Activity was approved by SysAdmin and cannot be changed")
+    end
+
+    it "cannot be approved if unclassified" do
+      subject.stub(:classified?).and_return(false)
+
+      subject.approved = true
+      subject.save.should == false
+      subject.errors.on(:base).should include("Cannot approve unclassified Activity")
+    end
   end
 
   describe "update attributes" do
@@ -63,19 +81,19 @@ describe Activity do
       before :each do
         basic_setup_activity
         attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
-          "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
-            "budget_mask"=>"20.0", "_destroy"=>""}
+          "implementer_splits_attributes"=>
+            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
+            "budget"=>"20.0", "_destroy"=>""}
             }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
 
       it "should maintain the activites budget/spend cache when creating a new sub_activity" do
-        @activity.sub_activities.size.should == 1
-        @activity.sub_activities[0].implementer.should == @organization
-        @activity.sub_activities[0].spend.to_f.should == 10
-        @activity.sub_activities[0].budget.to_f.should == 20
+        @activity.implementer_splits.size.should == 1
+        @activity.implementer_splits[0].implementer.should == @organization
+        @activity.implementer_splits[0].spend.to_f.should == 10
+        @activity.implementer_splits[0].budget.to_f.should == 20
         @activity.reload
         @activity.spend.to_f.should == 10
         @activity.budget.to_f.should == 20
@@ -84,13 +102,9 @@ describe Activity do
       it "should not call activity cache update more than once" do
         pending #tricky to count the number of method calls on the callback
       end
-
-      it "should leave the sa callbacks intact" do
-        SubActivity.after_save.should include(:update_activity_cache)
-      end
     end
 
-    context "when two sub_activities" do
+    context "when two implementer_splits" do
       before :each do
         basic_setup_sub_activity
         @implementer2 = Factory :organization
@@ -98,24 +112,24 @@ describe Activity do
                                  :activity => @activity, :provider => @implementer2)
 
         attributes = {"name"=>"dsf",  "project_id"=>"#{@project.id}",
-          "sub_activities_attributes"=>
+          "implementer_splits_attributes"=>
             {"0"=>
-              {"spend_mask"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget_mask"=>"20.0"},
+              {"spend"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget"=>"20.0"},
             "1"=>
-              {"spend_mask"=>"20", "id"=>"#{@sub_activity2.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget_mask"=>"40.0"}
+              {"spend"=>"20", "id"=>"#{@sub_activity2.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget"=>"40.0"}
             }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
       end
 
       it "should maintain the activites budget/spend cache when creating a new sub_activity" do
-        @activity.sub_activities.size.should == 2
-        @activity.sub_activities[0].implementer.should == @organization
-        @activity.sub_activities[0].spend.to_f.should == 10
-        @activity.sub_activities[0].budget.to_f.should == 20
-        @activity.sub_activities[1].implementer.should == @implementer2
-        @activity.sub_activities[1].spend.to_f.should == 20
-        @activity.sub_activities[1].budget.to_f.should == 40
+        @activity.implementer_splits.size.should == 2
+        @activity.implementer_splits[0].implementer.should == @organization
+        @activity.implementer_splits[0].spend.to_f.should == 10
+        @activity.implementer_splits[0].budget.to_f.should == 20
+        @activity.implementer_splits[1].implementer.should == @implementer2
+        @activity.implementer_splits[1].spend.to_f.should == 20
+        @activity.implementer_splits[1].budget.to_f.should == 40
         @activity.reload
         @activity.spend.to_f.should == 30
         @activity.budget.to_f.should == 60
@@ -123,10 +137,6 @@ describe Activity do
 
       it "should not call activity cache update more than once" do
         pending #tricky to count the number of method calls on the callback
-      end
-
-      it "should leave the sa callbacks intact" do
-        SubActivity.after_save.should include(:update_activity_cache)
       end
     end
   end
@@ -137,18 +147,18 @@ describe Activity do
       before :each do
         basic_setup_project
         @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
-          "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
-            "budget_mask"=>"20.0", "_destroy"=>""}
+          "implementer_splits_attributes"=>
+            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
+            "budget"=>"20.0", "_destroy"=>""}
             }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
 
       it "should instantiate new activity with cache values already calculated" do
-        @activity.sub_activities.size.should == 1
-        @activity.sub_activities[0].implementer.should == @organization
-        @activity.sub_activities[0].spend.to_f.should == 10
-        @activity.sub_activities[0].budget.to_f.should == 20
+        @activity.implementer_splits.size.should == 1
+        @activity.implementer_splits[0].implementer.should == @organization
+        @activity.implementer_splits[0].spend.to_f.should == 10
+        @activity.implementer_splits[0].budget.to_f.should == 20
         @activity.spend.to_f.should == 10
         @activity.budget.to_f.should == 20
       end
@@ -157,9 +167,6 @@ describe Activity do
         pending #tricky to count the number of method calls on the callback
       end
 
-      it "should leave the sa callbacks intact" do
-        SubActivity.after_save.should include(:update_activity_cache)
-      end
     end
 
     context "when (bulk) creating more than one sub activity" do
@@ -168,28 +175,28 @@ describe Activity do
         @implementer2 = Factory :organization
         @implementer3 = Factory :organization
         @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
-          "sub_activities_attributes"=>
-            {"0"=>{"spend_mask"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
-            "budget_mask"=>"20.0", "_destroy"=>""},
-            "1"=>{"spend_mask"=>"20", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}",
-            "budget_mask"=>"40.0", "_destroy"=>""},
-            "2"=>{"spend_mask"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}",
-            "budget_mask"=>"60.0", "_destroy"=>""}
+          "implementer_splits_attributes"=>
+            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
+            "budget"=>"20.0", "_destroy"=>""},
+            "1"=>{"spend"=>"20", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}",
+            "budget"=>"40.0", "_destroy"=>""},
+            "2"=>{"spend"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}",
+            "budget"=>"60.0", "_destroy"=>""}
             }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
         @activity = Activity.new(@attributes)
       end
 
       it "should instantiate new activity with cache values already calculated" do
-        @activity.sub_activities.size.should == 3
-        @activity.sub_activities[0].implementer.should == @organization
-        @activity.sub_activities[0].spend.to_f.should == 10
-        @activity.sub_activities[0].budget.to_f.should == 20
-        @activity.sub_activities[1].implementer.should == @implementer2
-        @activity.sub_activities[1].spend.to_f.should == 20
-        @activity.sub_activities[1].budget.to_f.should == 40
-        @activity.sub_activities[2].implementer.should == @implementer3
-        @activity.sub_activities[2].spend.to_f.should == 40
-        @activity.sub_activities[2].budget.to_f.should == 60
+        @activity.implementer_splits.size.should == 3
+        @activity.implementer_splits[0].implementer.should == @organization
+        @activity.implementer_splits[0].spend.to_f.should == 10
+        @activity.implementer_splits[0].budget.to_f.should == 20
+        @activity.implementer_splits[1].implementer.should == @implementer2
+        @activity.implementer_splits[1].spend.to_f.should == 20
+        @activity.implementer_splits[1].budget.to_f.should == 40
+        @activity.implementer_splits[2].implementer.should == @implementer3
+        @activity.implementer_splits[2].spend.to_f.should == 40
+        @activity.implementer_splits[2].budget.to_f.should == 60
         @activity.spend.to_f.should == 70
         @activity.budget.to_f.should == 120
       end
@@ -203,57 +210,6 @@ describe Activity do
         # FIXME: this is still doing callback for each nested sub activity - will be slow!
       end
 
-      it "should leave the sa callbacks intact" do
-        SubActivity.after_save.should include(:update_activity_cache)
-      end
-    end
-
-
-  end
-
-  describe "download activity template" do
-    it "should return csv header" do
-      organization  = Factory(:organization)
-      request        = Factory(:data_request, :organization => organization)
-      response      = organization.latest_response
-      Activity.file_upload_columns.should == [
-        'Project Name',
-        'Project Description',
-        'Activity Name',
-        'Activity Description',
-        'Id',
-        'Implementer',
-        'Past Expenditure',
-        'Current Budget']
-    end
-  end
-
-  describe "#download_template" do
-    it "should return template with blank cells for repeated project & activity" do
-      basic_setup_activity
-      sub_activity = Factory(:sub_activity, :activity => @activity, :data_response => @response)
-      sub_activity2 = Factory(:sub_activity, :activity => @activity, :data_response => @response)
-      #@activity.targets << Factory(:target)
-      csv = Activity.download_template(@response)
-      rows = FasterCSV.parse(csv)
-      rows[0].should == Activity.file_upload_columns
-      rows[1][0].should == sub_activity.activity.project.try(:name)
-      rows[1][1].should == sub_activity.activity.project.try(:description)
-      rows[1][2].should == sub_activity.activity.name
-      rows[1][3].should == sub_activity.activity.description
-      rows[1][4].should == sub_activity.id.to_s
-      rows[1][5].should == sub_activity.provider.try(:name)
-      rows[1][6].to_s.should == sub_activity.spend.to_s
-      rows[1][7].to_s.should == sub_activity.budget.to_s
-
-      rows[2][0].should == ""
-      rows[2][1].should == ""
-      rows[2][2].should == ""
-      rows[2][3].should == ""
-      rows[2][4].should == sub_activity2.id.to_s
-      rows[2][5].should == sub_activity2.provider.try(:name)
-      rows[2][6].to_s.should == sub_activity2.spend.to_s
-      rows[2][7].to_s.should == sub_activity2.budget.to_s
     end
   end
 
@@ -272,8 +228,8 @@ describe Activity do
     it "creates a sub activitiy in the initialization of the activity" do
       basic_setup_project
       @activity = Activity.new(:data_response_id => @response.id, :project_id => @project_id)
-      @activity.sub_activities.size.should == 1
-      @activity.sub_activities.first.provider.should == @organization
+      @activity.implementer_splits.size.should == 1
+      @activity.implementer_splits.first.provider.should == @organization
     end
   end
 
@@ -282,7 +238,7 @@ describe Activity do
       basic_setup_activity
       @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
               :budget => 25, :spend => 10)
-      @activity.reload
+      @activity.reload; @activity.save;
     end
 
     it "activity.budget should be the total of sub activities(1)" do
@@ -294,7 +250,7 @@ describe Activity do
     end
 
     it "refreshes the amount if the amount of the sub-activity changes" do
-      @sa.spend = 13; @sa.budget = 29; @sa.save!; @activity.reload
+      @sa.spend = 13; @sa.budget = 29; @sa.save!; @activity.reload; @activity.save;
       @activity.spend.to_f.should == 13
       @activity.budget.to_f.should == 29
     end
@@ -303,8 +259,9 @@ describe Activity do
       before :each do
         @sa1 = Factory(:sub_activity, :activity => @activity, :data_response => @response,
                 :budget => 125, :spend => 100)
-        @activity.reload
+        @activity.reload; @activity.save;
       end
+
       it "activity.budget should be the total of sub activities(2)" do
         @activity.budget.to_f.should == 150
       end
@@ -314,7 +271,7 @@ describe Activity do
       end
 
       it "refreshes the amount if the amount of the sub-activity changes" do
-        @sa.spend = 20; @sa.budget = 35; @sa.save!; @activity.reload
+        @sa.spend = 20; @sa.budget = 35; @sa.save!; @activity.reload; @activity.save;
         @activity.spend.to_f.should == 120
         @activity.budget.to_f.should == 160
       end
@@ -341,16 +298,6 @@ describe Activity do
         activity.provider.should == other_org # duh
       end
     end
-  end
-
-
-  it "cannot be edited once approved" do
-    basic_setup_activity
-    @activity.approved.should == nil
-    @activity.approved = true
-    @activity.save!
-    @activity.name = "blarpants"
-    @activity.save.should == false
   end
 
   describe "counter cache" do
@@ -422,7 +369,7 @@ describe Activity do
       it "looks for amount in sub-activity" do
         @subact = Factory(:sub_activity, :data_response => @response,
                           :activity => @activity, :budget => 10)
-        @activity.sub_activities.reload
+        @activity.implementer_splits.reload
         @activity.amount_for_provider(@subact.provider, :budget).should == 10
       end
     end
@@ -441,63 +388,6 @@ describe Activity do
       Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input,
         :amount => 5, :cached_amount => 5)
       @activity.purposes.should == [@purpose1, @purpose2]
-    end
-  end
-
-  describe "#self.find_or_initialize_from_file" do
-    context "when CSV has implementer value of: 'Shyira HD District Hospital'" do
-      before :each do
-        @organization   = Factory(:organization)
-        @request        = Factory(:data_request, :organization => @organization)
-        @response       = @organization.latest_response
-        @project        = Factory(:project, :data_response => @response, :name => "project1")
-        @activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
-        @doc            = FasterCSV.open(@activities_csv, {:headers => true})
-        @implementer    = Factory(:organization, :name => "Shyira HD District Hospital | Nyabihu")
-        @activities     = Activity.find_or_initialize_from_file(@response, @doc, @project.id)
-      end
-
-      it "recognizes the correct project" do
-        @activities[0].should be_valid
-        @activities[0].project.should == @project
-      end
-
-      it "should create a budget and spend automatically for the activities" do
-        pending
-        @activities[0].sub_activities.count.should == 1
-        @activities[0].sub_activities[0].data_response.should == @response
-        @activities[0].sub_activities[0].organization.should == @organization
-      end
-
-      it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
-        pending
-        @activities.count.should == 1
-        @activities[0].implementer_splits.first.implementer.should == @implementer
-      end
-
-    end
-
-    context "when CSV has an existing project" do
-      it "assigns existing project to the activity from the organization's response" do
-        organization1  = Factory(:organization)
-        request        = Factory(:data_request, :organization => organization1)
-        response1      = organization1.latest_response
-        project        = Factory(:project, :data_response => response1)
-        activities_csv = File.join(Rails.root, 'spec', 'fixtures', 'activities_bulk.csv')
-        doc            = FasterCSV.open(activities_csv, {:headers => true})
-
-        # project named: 'project1' in the organization uploading the file
-        project1       = Factory(:project, :name => 'project1', :data_response => response1)
-
-        organization2  = Factory(:organization)
-        response2      = organization2.latest_response
-        # project named: 'project1' in the other organization
-        project2       = Factory(:project, :name => 'project1', :data_response => response2)
-
-        activities = Activity.find_or_initialize_from_file(response1, doc, project.id)
-        activities.count.should == 1
-        activities[0].project.should == project1
-      end
     end
   end
 

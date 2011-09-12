@@ -14,9 +14,6 @@ Feature: Reporter can see dashboard
 
     Scenario: "See data requests"
       Then I should see "Dashboard"
-      And I should see "Data Requests"
-      Then I should see "dr1" within "#content"
-       And I should see "dr2" within "#content"
 
     Scenario: See menu tabs when a Data Req is selected
       Then I should see "Home" within the main nav

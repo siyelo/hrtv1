@@ -28,7 +28,7 @@ Spork.prefork do
     config.fixture_path = RAILS_ROOT + '/spec/fixtures/'
 
     config.before :each do
-      DatabaseCleaner.strategy = :truncation, {:except => %w[currencies]}
+      DatabaseCleaner.strategy = :truncation#, {:except => %w[currencies]}
       DatabaseCleaner.clean
     end
 
@@ -215,6 +215,7 @@ Spork.each_run do
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
     @sub_activity = Factory(:sub_activity, :data_response => @response,
                             :activity => @activity, :provider => @organization)
+    @split = @sub_activity # sub_activity is deprecated
   end
 
   def basic_setup_funding_flow
@@ -246,5 +247,26 @@ Spork.each_run do
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, {:data_response => @response,
                                         :project => @project}.merge(attributes))
+  end
+
+  def write_temp_csv(csv_string)
+    filename =  File.join(Rails.root, 'tmp', 'temporary_spec.csv')
+    FasterCSV.open(filename, "w", :force_quotes => true) do |file|
+      FasterCSV.parse(csv_string).each do |line|
+        file << line
+      end
+    end
+    filename
+  end
+
+  def write_csv_with_header(csv_string)
+    header = <<-EOS
+Project Name,Project Description,Project Start Date,Project End Date,Activity Name,Activity Description,Id,Implementer,Past Expenditure,Current Budget
+EOS
+    write_csv(header + csv_string)
+  end
+
+  def write_csv(csv_string)
+    write_temp_csv(csv_string)
   end
 end

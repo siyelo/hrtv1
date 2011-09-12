@@ -21,8 +21,6 @@ Feature: Reporter can enter a code breakdown for each activity
   # level 1
   Given a mtef_code "mtef1" exists with id: 1, short_display: "mtef1"
     And a mtef_code "mtef2" exists with id: 2, short_display: "mtef2"
-
-    # level 1
     And a cost_category_code exists with id: 3, short_display: "cost_category1"
     And an organization exists with name: "organization1"
     And a data_request exists with title: "data_request1"
@@ -41,6 +39,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
     And I fill in "activity[classifications][coding_spend][1]" with "100"
@@ -52,7 +52,6 @@ Feature: Reporter can enter a code breakdown for each activity
 
   Scenario: Reporter can classify Purposes for activity (second level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     When I follow "Projects"
@@ -72,7 +71,6 @@ Feature: Reporter can enter a code breakdown for each activity
 
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -95,7 +93,6 @@ Feature: Reporter can enter a code breakdown for each activity
   @javascript
   Scenario: Reporter can classify Purposes for activity (third level)
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"
     And a mtef_code "mtef12" exists with id: 12, short_display: "mtef12", parent: mtef_code "mtef1"
     And a mtef_code "mtef111" exists with id: 111, short_display: "mtef111", parent: mtef_code "mtef11"
@@ -129,14 +126,17 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Purposes" within ".section_nav"
-    And I fill in "activity[classifications][coding_budget][1]" with "99"
+    Then the "spend_purposes" checkbox should not be checked
+    And the "budget_purposes" checkbox should not be checked
+    When I fill in "activity[classifications][coding_budget][1]" with "99"
     And I fill in "activity[classifications][coding_spend][1]" with "99"
     And I press "Save"
     Then I should see "Activity was successfully updated."
     And the "spend_purposes" checkbox should not be checked
     And the "budget_purposes" checkbox should not be checked
-
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
@@ -147,39 +147,6 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "spend_purposes" checkbox should be checked
     And the "budget_purposes" checkbox should be checked
 
-  Scenario: Reporter can download Purposes classification template
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Purposes" within ".section_nav"
-    And I follow "Download template"
-    Then I should see "mtef1"
-    And I should not see "cost_category1"
-
-  Scenario: Reporter can upload Purposes classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Purposes" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Activity classification was successfully uploaded."
-    And the "activity[classifications][coding_budget][1]" field should contain "40"
-    And the "activity[classifications][coding_spend][1]" field should contain "30"
-
-  Scenario: Reporter cannot upload Purposes classification for already approved activity
-    Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
-    And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity2"
-    And I follow "Purposes" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_purposes.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Classification for approved activity cannot be changed."
-
-
   @javascript
   Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
@@ -188,7 +155,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_budget][1]" with "100"
-    And I follow "#js_budget_to_spend"  #And I follow "Copy Current Budget to Past Expenditure"
+    And I follow "Copy across Budget classifications to Expenditure classifications"
     And I press "Save"
     Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
@@ -202,8 +169,7 @@ Feature: Reporter can enter a code breakdown for each activity
     And I follow "activity1"
     And I follow "Purposes" within ".section_nav"
     And I fill in "activity[classifications][coding_spend][1]" with "100"
-    #And I click element "#js_spend_to_budget"
-    And I follow "Copy Past Expenditure to Current Budget"
+    And I follow "Copy across Expenditure classifications to Budget classifications"
     And I press "Save"
     Then I should see "This Activity has not been fully classified"
     And the "activity[classifications][coding_budget][1]" field should contain "100"
@@ -242,6 +208,8 @@ Feature: Reporter can enter a code breakdown for each activity
     And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
     And I follow "activity1"
+    #since we used a factory above, need save to refresh cache by saving activity
+    And I press "Save"
     And I follow "Inputs" within ".section_nav"
     And I fill in "activity[classifications][coding_budget_cost_categorization][3]" with "99"
     And I fill in "activity[classifications][coding_spend_cost_categorization][3]" with "99"
@@ -249,7 +217,6 @@ Feature: Reporter can enter a code breakdown for each activity
     Then I should see "Activity was successfully updated."
     And the "spend_inputs" checkbox should not be checked
     And the "budget_inputs" checkbox should not be checked
-
     When I follow "Projects"
     And I follow "activity1"
     And I follow "Inputs" within ".section_nav"
@@ -260,37 +227,22 @@ Feature: Reporter can enter a code breakdown for each activity
     And the "spend_inputs" checkbox should be checked
     And the "budget_inputs" checkbox should be checked
 
-  Scenario: Reporter can download Inputs classification template
+  Scenario: Reporter can follow classification workflow for activity
     Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
     When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Inputs" within ".section_nav"
-    And I follow "Download template"
-    Then I should see "cost_category1"
-    And I should not see "mtef1"
-
-  Scenario: Reporter can upload Inputs classification for activity
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
-    And I follow "Inputs" within ".section_nav"
-    And I attach the file "spec/fixtures/classifications_inputs.csv" to "File" within ".upload_box"
-    And I press "Upload"
-    Then I should see "Activity classification was successfully uploaded."
-    And the "activity[classifications][coding_budget_cost_categorization][3]" field should contain "44"
-    And the "activity[classifications][coding_spend_cost_categorization][3]" field should contain "55"
-
-    @run
-  Scenario: Reporter can follow workflow with the Save and Add Blah buttons
-    Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-    And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
-    When I follow "Projects"
-    And I follow "activity1"
+      And I follow "activity1"
     When I press "Save & Add Locations >"
-    And I press "Save & Add Purposes >"
-    And I press "Save & Add Inputs >"
-    And I press "Save & Add Targets >"
-    And I press "Save & Review >"
+      And I press "Save & Add Purposes >"
+      And I press "Save & Add Inputs >"
+      And I press "Save & Add Targets >"
+      And I press "Save & Go to Overview >"
+    Then I should see "Projects & Activities" within "h1"
+
+  Scenario: Reporter can follow other costs workflow for other cost
+    Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
+    When I follow "Projects"
+      And I follow "OC1"
+    When I press "Save & Add Locations >"
+      And I press "Save & Go to Overview >"
     Then I should see "Projects & Activities" within "h1"

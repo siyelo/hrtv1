@@ -1,46 +1,4 @@
 module ClassificationsHelper
-  def friendly_name_for_coding_copy(coding_type)
-    case coding_type
-    when 'CodingBudget', 'CodingSpend'
-      'Purposes'
-    when 'CodingBudgetDistrict', 'CodingSpendDistrict'
-      'Locations'
-    when 'CodingBudgetCostCategorization', 'CodingSpendCostCategorization'
-      'Inputs'
-    end
-  end
-
-  def spend_or_budget(coding_type)
-    case coding_type
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization', 'HsspBudget'
-      "current budget"
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization', 'HsspSpend'
-      "expenditure"
-    end
-  end
-
-  def tab_class(activity, current_coding_type, coding_type)
-    classes = []
-    classes << 'incomplete' unless activity.classified_by_type?(coding_type)
-    classes << 'selected' if current_coding_type == coding_type
-    classes.join(' ')
-  end
-
-  def get_coding_type(klass)
-    case klass.to_s
-    when 'CodingBudget', 'CodingBudgetDistrict', 'CodingBudgetCostCategorization'
-      :budget
-    when 'CodingSpend', 'CodingSpendDistrict', 'CodingSpendCostCategorization'
-      :spend
-    else
-      raise "Invalid coding_klass #{klass.to_s}".to_yaml
-    end
-  end
-
-  def node_error(code, assignment)
-    "Amount of this node is not same as the sum of children amounts underneath (#{assignment.cached_amount} - #{assignment.sum_of_children} = #{assignment.cached_amount - assignment.sum_of_children})."
-  end
-
   def all_view?
     params[:view] != 'my'
   end
@@ -56,9 +14,9 @@ module ClassificationsHelper
   def derive_percentage_from_amount(activity_or_ocost, amount_field, assignment)
     if assignment
       if assignment.percentage.nil?
-        percentage = activity_or_ocost.send(amount_field) > 0 ? (100 / (activity_or_ocost.send(amount_field).to_f / assignment.cached_amount.to_f)).to_s : 0
+        percentage = activity_or_ocost.send(amount_field) > 0 ? (100 / (activity_or_ocost.send(amount_field).to_f / assignment.cached_amount.to_f)).to_f.round_with_precision(2).to_s : 0
       else
-        percentage = assignment.percentage
+        percentage = assignment.percentage.to_f.round_with_precision(2)
       end
     else
       percentage = ''

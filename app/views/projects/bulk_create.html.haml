@@ -1,0 +1,18 @@
+- title("Import: Review & Save")
+
+- content_for :sub_nav do
+  = render :partial => 'shared/sub_nav_projects'
+
+%h1.main_heading Import: Review & Save
+
+%p Please review each of your uploaded projects & activities, and press Save for each project you want to import.
+
+/ = render 'getting_started_bulk'
+
+- @projects.each_with_index do |project, index|
+  .activity_box
+    = render 'projects/bulk_review', :project => project, :response => @response
+
+%br
+
+= link_to "Return to Projects & Activities", response_projects_path(@response), :class => 'js_finish add_row cancel_button last'

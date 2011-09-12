@@ -7,13 +7,13 @@ function inspect (obj) {
         alert(str);
 }
 
-function remove_fields(link, callback) {
+function remove_fields(link) {
   $(link).prev("input[type=hidden]").val("1");
   $(link).closest(".fields").hide();
   //$(link).parent().next().hide();
 
-  if (callback !== null) {
-    callback(link);
+  if ($(link).hasClass('totals_callback')) {
+    updateTotalValuesCallback(link);
   }
 };
 
@@ -24,7 +24,7 @@ function add_fields(link, association, content) {
   var new_id = new Date().getTime();
   var regexp = new RegExp("new_" + association, "g")
 
-  if (association === 'in_flows' || association === 'sub_activities' ) {
+  if (association === 'in_flows' || association === 'implementer_splits' ) {
     $(link).parents('tr:first').before(content.replace(regexp, new_id));
   } else {
     $(link).parent().before(content.replace(regexp, new_id));
@@ -70,7 +70,7 @@ var observeFormChanges = function (form) {
     }
   };
 
-  if($(form).length){ //# dont bind unless you find the form element on the page
+  if ($(form).length) { //# dont bind unless you find the form element on the page
     $('input[type=submit]').click(function (e) {
       $(form).data('initialForm', $(form).serialize());
     });
@@ -79,47 +79,6 @@ var observeFormChanges = function (form) {
     $(window).bind('beforeunload', catcher);
   };
 }
-
-
-var build_project_in_flow_row = function (edit_block, type, type_name, display_funder) {
-  var total = edit_block.find('.js_' + type).val();
-
-  var values = jQuery.map(edit_block.find(".js_" + type + "_quarters input"), function (e) {
-    return $(e).val();
-  });
-  var labels = jQuery.map(edit_block.find(".js_" + type + "_quarters label"), function (e) {
-    return $(e).text();
-  });
-
-  if (display_funder) {
-    var organization = edit_block.find('.ff_from option:selected').text();
-    var funder = $('<li/>').append(
-      $('<span/>').text('Funder'),
-      organization || 'N/A'
-    );
-  } else {
-    var funder = $('<li/>');
-  }
-
-  var ul = $('<ul/>');
-  for (var i = 0; i < values.length; i++) {
-    ul.append(
-      $('<li/>').append(
-        $('<span/>').text(labels[i]),
-        values[i] || 'N/A'
-      )
-    )
-  }
-
-  return $('<ul/>').append(
-    funder,
-    $('<li/>').append(
-      $('<span/>').text(type_name),
-      total || 'N/A'
-    ),
-    $('<li/>').append(ul)
-  )
-};
 
 var build_activity_funding_source_row = function (edit_block) {
   var organization = edit_block.find('.ff_organization option:selected').text();
@@ -461,78 +420,57 @@ var removeRow = function (resources, rowId) {
   updateCount(resources);
 };
 
-var calculate_total_from_quarters = function (quarterInputs, total_box) {
-  var total_ammount = 0;
+var updateTotalValuesCallback = function (el) {
+  updateTotalValue($(el).parents('tr').find('.js_spend'));
+  updateTotalValue($(el).parents('tr').find('.js_budget'));
+};
 
-  for (var i = 0; i < quarterInputs.length; i++) {
-    var quarter_value = Number($(quarterInputs[i]).val());
+var getFieldsTotal = function (fields) {
+  var total = 0;
 
-    if (!isNaN(quarter_value)) {
-      total_ammount += quarter_value;
+  for (var i = 0; i < fields.length; i++) {
+    if (!isNaN(fields[i].value)) {
+      total += Number(fields[i].value);
     }
   }
 
-  total_box.val(total_ammount);
-};
+  return total;
+}
 
-var split_total_across_quarters = function (quarterInputs, value) {
-  value = value.replace(",","");
-
-  if (!isNaN(value)) {
-    var quarter_value = value / quarterInputs.length;
-
-    for (var i = 0; i < quarterInputs.length; i++) {
-      $(quarterInputs[i]).val(quarter_value);
-    }
-  }
-};
-
-var quartersSplit = function (elements) {
-  elements.live('keyup', function () {
-    split_total_across_quarters($(this).parents("li:first").next().find('.js_fy_quarter'), $(this).val());
-  });
-};
-
-var quartersSum = function (quarters) {
-  quarters.live('keyup', function () {
-    calculate_total_from_quarters($(this).parents('ul:first').find('.js_fy_quarter'), $(this).parents('li.js_row').prev().find('input'));
-  });
-};
-
-var quartersInit = function () {
-  quartersSplit($(".js_budget, .js_spend"));
-  quartersSum($('.js_fy_quarter'));
-};
-
-var updateTotalsValuesCallback = function (el) {
-  updateTotalValues($(el).parents('tr').find('.js_spend'));
-  updateTotalValues($(el).parents('tr').find('.js_budget'));
-};
-
-var updateTotalValues = function (el) {
-  var total_value = 0;
-
+var updateTotalValue = function (el) {
   if ($(el).hasClass('js_spend')) {
-    var input_fields = $(el).parents('table, .activity_tree').find('.js_spend:visible');
-    var total_field = $('.js_total_spend .amount');
-  } else if ($(el).hasClass('js_budget')) {
-    var input_fields = $(el).parents('table, .activity_tree').find('.js_budget:visible');
-    var total_field = $('.js_total_budget .amount');
-  }
-
-  for (var i = 0; i < input_fields.length; i++) {
-    var input_field_value = Number(input_fields[i].value);
-    if (!isNaN(input_field_value)) {
-      total_value += input_field_value;
+    if ($(el).parents('table').length) {
+      // table totals
+      var table        = $(el).parents('table');
+      var input_fields = table.find('input.js_spend:visible');
+      var total_field  = table.find('.js_total_spend .amount');
+    } else {
+      // classifications tree totals
+      var input_fields = $(el).parents('.activity_tree').find('> li > div input.js_spend');
+      var total_field  = $('.js_total_spend .amount');
     }
+  } else if ($(el).hasClass('js_budget')) {
+    if ($(el).parents('table').length) {
+      // table totals
+      var table = $(el).parents('table');
+      var input_fields = table.find('input.js_budget:visible');
+      var total_field = table.find('.js_total_budget .amount');
+    } else {
+      // classifications tree totals
+      var input_fields = $(el).parents('.activity_tree').find('> li > div input.js_budget');
+      var total_field = $('.js_total_budget .amount');
+    }
+  } else {
+    throw "Element class not valid";
   }
 
-  total_field.html(total_value.toFixed(2));
+  var fieldsTotal = getFieldsTotal(input_fields);
+  total_field.html(fieldsTotal.toFixed(2));
 };
 
 var dynamicUpdateTotalsInit = function () {
   $('.js_spend, .js_budget').live('keyup', function () {
-    updateTotalValues(this);
+    updateTotalValue(this);
   });
 };
 
@@ -899,7 +837,10 @@ var activity_classification = function () {
   };
 
   //collapsible checkboxes for tab1
-  addCollabsibleButtons('tab1');
+  var mode = document.location.search.split("=")[1]
+  if (mode != 'locations') {
+    addCollabsibleButtons('tab1');
+  }
   checkRootNodes('.budget:first');
   checkRootNodes('.spend:first');
 
@@ -925,21 +866,27 @@ var activity_classification = function () {
 
   $('#js_budget_to_spend').click(function (e) {
     e.preventDefault();
-    if(confirm('This will overwrite all Expenditure amounts with the Budget amounts. Are you sure?')){
+    if ($(this).find('img').hasClass('approved')) {
+      alert('Classifications for an approved activity cannot be changed');
+    } else if (confirm('This will overwrite all Past Expenditure percentages with the Current Budget percentages. Are you sure?')) {
       $('.js_budget input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
       });
+      checkRootNodes('.spend');
     };
   });
 
   $('#js_spend_to_budget').click(function (e) {
     e.preventDefault();
-    if(confirm('This will overwrite all Budget amounts with the Expenditure amounts. Are you sure?')){
+    if ($(this).find('img').hasClass('approved')) {
+      alert('Classifications for an approved activity cannot be changed');
+    } else if (confirm('This will overwrite all Current Budget percentages with the Past Expenditure percentages. Are you sure?')) {
       $('.js_spend input').each(function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());
       });
+      checkRootNodes('.budget');
     };
   });
 
@@ -952,7 +899,7 @@ var activity_classification = function () {
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
-    updateTotalValues(element);
+    updateTotalValue(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
       clearChildNodes(element, event,type);
@@ -1032,7 +979,7 @@ var activity_classification = function () {
       var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
       message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
       parentTotal.attr('original-title', message) ;
-    }else{
+    } else {
       parentTotal.removeClass('invalid_node tooltip')
     };
   };
@@ -1047,10 +994,10 @@ var activity_classification = function () {
 
     if (elementValue > 0){
       subtotal.removeClass('hidden')
-      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency)
-    }else{
-      subtotal.attr('title','') && element.val('')
-      subtotal.addClass('hidden')
+      subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency);
+    } else {
+      subtotal.attr('title','');
+      subtotal.addClass('hidden');
     }
   };
 }
@@ -1066,8 +1013,8 @@ var checkRootNodes = function(type){
   });
 
   $('.totals').find(type).find('.amount').html(total);
-  
-  if (total != 100 && total >0){
+
+  if ((total > 100.05 || total < 99.95) && total > 0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){
@@ -1076,7 +1023,7 @@ var checkRootNodes = function(type){
       var message = "The root nodes do not add up to 100%";
       rootNode.attr('original-title', message) ;
     });
-  }else{
+  } else {
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.attr('original-title') != undefined && rootNode.attr('original-title') == "The root nodes do not add up to 100%"){
@@ -1090,7 +1037,7 @@ var checkRootNodes = function(type){
 
 var showSubtotalIcons = function(){
   $('.tab1').find('.percentage_box').each(function(){
-    if($(this).val().length > 0){
+    if ($(this).val().length > 0) {
       $(this).siblings('.subtotal_icon').removeClass('hidden')
     }
   });
@@ -1125,9 +1072,9 @@ var responses_submit = {
       var image = row_id + "_image";
       var source = $('.'+image).attr('src');
       var split = source.split("?", 1);
-      if(split == "/images/icon_expand.png") {
+      if (split == "/images/icon_expand.png") {
         $('.' + image).attr('src', "/images/icon_collapse.png");
-      }else{
+      } else {
         $('.' + image).attr('src', "/images/icon_expand.png");
       }
     });
@@ -1463,7 +1410,7 @@ var projects_index = {
     $('.js_dropdown_trigger').click(function (e){
       e.preventDefault();
       menu = dropdown.menu($(this));
-      if(!menu.is('.persist')){
+      if (!menu.is('.persist')) {
         dropdown.toggle_on(menu);
       } else {
         dropdown.toggle_off(menu);
@@ -1502,18 +1449,18 @@ var projects_index = {
         if (!($('#projects_listing').is(":visible"))){
           $('.js_toggle_projects_listing').click();
         }
-      }else{
+      } else {
         if (hash == '/new_project'){
           hideAll();
-          $('/new_project_form').fadeIn();
+          $('#new_project_form').fadeIn();
         }else if (hash == '/new_activity'){
           hideAll();
-          $('/new_activity_form').fadeIn();
+          $('#new_activity_form').fadeIn();
           activity_form();
         }
         else if (hash == '/new_other cost'){
           hideAll();
-          $('/new_other_cost_form').fadeIn();
+          $('#new_other_cost_form').fadeIn();
         }
       };
     });
@@ -1522,6 +1469,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_project_form').fadeIn();
+      $('#new_project_form #project_name').focus();
     });
 
 
@@ -1529,6 +1477,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_activity_form').fadeIn();
+      $('#new_activity_form #activity_name').focus();
       activity_form();
     });
 
@@ -1536,6 +1485,7 @@ var projects_index = {
       e.preventDefault();
       hideAll();
       $('#new_other_cost_form').fadeIn();
+      $('#new_other_cost_form #other_cost_name').focus();
     });
 
     $('.js_toggle_projects_listing').click(function (e) {
@@ -1557,22 +1507,7 @@ var hideAll = function() {
   $('#new_project_form').hide();
   $('#new_activity_form').hide();
   $('#new_other_cost_form').hide();
-};
-
-var projects_bulk_edit = {
-  run: function () {
-
-    $('.parent_project').live('change', function(e) {
-      e.preventDefault();
-      var element = $(this);
-      var tableRow = element.parents('tr');
-      url = "/responses/" + _response_id + "/projects/" + element.val() + ".js"
-      $.get(url, function(data) {
-        var data = $.parseJSON(data);
-        id = tableRow.find('.funder_project_description').html(data.project.description);
-      });
-    });
-  }
+  $('.js_total_budget .amount, .js_total_spend .amount').html(0);
 };
 
 var initDemoText = function (elements) {
@@ -1630,8 +1565,20 @@ var blurDemoText = function (elements) {
   });
 };
 
+var toggle_collapsed = function (elem, indicator) {
+  var is_visible = elem.is(':visible');
+  if (is_visible) {
+    indicator.removeClass('collapsed');
+  } else {
+    indicator.addClass('collapsed');
+  };
+};
 
-var activities_bulk_create = {
+var unsaved_warning = function () {
+  return 'You have projects that have not been saved.  Saved projects show a green checkmark next to them.  Are you sure you want to leave this page?'
+};
+
+var projects_bulk_create = {
   run: function () {
 
     initDemoText($('*[data-hint]'));
@@ -1639,22 +1586,33 @@ var activities_bulk_create = {
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       var activity_box = $(this).parents('.activity_box');
-
+      //collapse the others, in an accordion style
       $.each($.merge(activity_box.prevAll('.activity_box'), activity_box.nextAll('.activity_box')), function () {
         $(this).find('.main').hide();
+        toggle_collapsed($(this).find('.main'), $(this).find('.header span'));
       });
+
       activity_box.find('.main').toggle();
+      toggle_collapsed(activity_box.find('.main'), activity_box.find('.header span'));
     });
+
+    $('.header:first').trigger('click'); // expand the first one on page load
 
     focusDemoText($('*[data-hint]'));
     blurDemoText($('*[data-hint]'));
+
+    $(window).bind('beforeunload',function (e) {
+      if ($('.js_unsaved').length > 0) {
+        return unsaved_warning();
+      }
+    });
 
     $('.save_btn').live('click', function (e) {
       e.preventDefault();
       var element = $(this);
       var form = element.parents('form');
       var ajaxLoader = element.next('.ajax-loader');
-      var activityBox = element.parents('.activity_box');
+      var activity_box = element.parents('.activity_box');
 
       // reset input values before submit !!
       form.find('*[data-hint]').each(function() {
@@ -1669,9 +1627,21 @@ var activities_bulk_create = {
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
-        activityBox.html(data.html);
-        initDemoText(activityBox.find('*[data-hint]'));
-        activityBox.find(".js_combobox").combobox();
+        activity_box.html(data.html);
+        initDemoText(activity_box.find('*[data-hint]'));
+        activity_box.find(".js_combobox").combobox();
+        ajaxLoader.hide();
+        if (data.status == 'success') {
+           activity_box.find('.saved_tick').show();
+           activity_box.find('.saved_tick').removeClass('js_unsaved');
+           activity_box.find('.saved_tick').addClass('js_saved');
+
+           activity_box.find('.main').toggle();
+           toggle_collapsed(activity_box.find('.main'), activity_box.find('.header span'));
+
+           $('.js_unsaved:first').parents('.activity_box').find('.main').toggle();
+           toggle_collapsed($('.js_unsaved:first').parents('.activity_box').find('.main'), $('.js_unsaved:first').parents('.activity_box').find('.header span'));
+         }
       });
     });
   }
@@ -1716,9 +1686,12 @@ var approveActivity = function (element, approval_type, success_text) {
 
 var activities_new = activities_create = activities_edit = activities_update = other_costs_edit = other_costs_new = other_costs_create = other_costs_update = {
   run: function () {
+    var mode = document.location.search.split("=")[1]
     activity_classification();
     activity_form();
-    $(document).find('.js_add_nested').trigger('click');
+    if ($('.js_target_field').size() == 0) {
+      $(document).find('.js_add_nested').trigger('click');
+    }
   }
 };
 
@@ -1737,7 +1710,7 @@ var activity_form = function () {
   $('.js_implementer_select').live('change', function(e) {
     e.preventDefault();
     var element = $(this);
-    if(element.val() == "-1"){
+    if (element.val() == "-1") {
       $('.implementer_container').hide();
       $('.add_organization').show();
     }
@@ -1758,9 +1731,9 @@ var activity_form = function () {
       var data = $.parseJSON(data);
       $('.implementer_container').show();
       $('.add_organization').hide();
-      if(isNaN(data.organization.id)){
+      if (isNaN(data.organization.id)) {
         $('.js_implementer_select').val(null);
-      }else{
+      } else {
         $('.js_implementer_select').prepend("<option value=\'"+ data.organization.id + "\'>" + data.organization.name + "</option>");
         $('.js_implementer_select').val(data.organization.id);
       }
@@ -1799,7 +1772,6 @@ var activity_form = function () {
   approveBudget();
   approveAsAdmin();
   commentsInit();
-  quartersInit();
   dynamicUpdateTotalsInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
 };
@@ -1870,7 +1842,6 @@ var admin_organizations_create = admin_organizations_edit = {
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
     commentsInit();
-    quartersInit();
     validateDates($('#project_start_date'), $('#project_end_date'));
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
@@ -1896,9 +1867,6 @@ $(function () {
   //jquery tools overlays
   $(".overlay").overlay();
 
-  //observe form changes and alert user if form has unsaved data
-  observeFormChanges($('.js_form'));
-
   var id = $('body').attr("id");
   if (id) {
     controller_action = id;
@@ -1906,6 +1874,9 @@ $(function () {
       window[controller_action]['run']();
     }
   }
+
+  //observe form changes and alert user if form has unsaved data
+  observeFormChanges($('.js_form'));
 
   $(".closeFlash").click(function (e) {
     e.preventDefault();
@@ -1963,8 +1934,9 @@ $(function () {
   });
 
   // Show/hide getting started tips
-  $('#tips_hide').click(function () {
-    $('#gs_container').remove();
+  $('.js_tips_hide').click(function (e) {
+    e.preventDefault();
+    $('.js_tips_container').fadeOut();
     $.post('/profile/disable_tips', { "_method": "put" });
   });
 });

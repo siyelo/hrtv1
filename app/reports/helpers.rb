@@ -155,7 +155,7 @@ module Reports::Helpers
   end
 
   def number_of_health_centers(activity)
-    health_centers = activity.sub_activities.implemented_by_health_centers.count
+    health_centers = activity.implementer_splits.implemented_by_health_centers.count
     health_centers > 0 ? health_centers : nil
   end
 

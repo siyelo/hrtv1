@@ -63,6 +63,8 @@ GEM
     culerity (0.2.15)
     daemons (1.1.4)
     database_cleaner (0.6.7)
+    delayed_job (2.0.6)
+      daemons
     diff-lcs (1.1.2)
     factory_girl (1.2.4)
     fastercsv (1.5.4)
@@ -209,6 +211,7 @@ DEPENDENCIES
   cucumber
   cucumber-rails (= 0.3.2)
   database_cleaner
+  delayed_job (~> 2.0.4)
   email_spec!
   factory_girl (= 1.2.4)
   fastercsv

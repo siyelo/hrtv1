@@ -14,10 +14,10 @@ def zero_out_everything(project)
     project.budget_q3        =
     project.budget_q4        =
     project.budget_q4_prev   =
-    project.budget2          =
-    project.budget3          =
-    project.budget4          =
-    project.budget5          =
+    #project.budget2          =
+    #project.budget3          =
+    #project.budget4          =
+    #project.budget5          =
     nil
 
   project.comments_count = 0 # has default of 0 - must preserve
@@ -56,10 +56,10 @@ def zero_out_activity(activity)
     activity.budget_q4                             =
     activity.budget_q4_prev                        =
     activity.comments_count                        =
-    activity.budget2                               =
-    activity.budget3                               =
-    activity.budget4                               =
-    activity.budget5                               =
+    #activity.budget2                               =
+    #activity.budget3                               =
+    #activity.budget4                               =
+    #activity.budget5                               =
     activity.am_approved                           =
     activity.am_approved_date                      =
     nil
@@ -83,7 +83,7 @@ def zero_out_activity(activity)
     zero_out_assignment(ca)
   end
 
-  activity.sub_activities.each do |sa|
+  activity.implementer_splits.each do |sa|
     zero_out_activity(sa)
   end
 

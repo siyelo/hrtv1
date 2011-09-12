@@ -1,4 +1,4 @@
-- unless activity.sub_activities.empty?
+- unless activity.implementer_splits.empty?
   %table.sub_activities
     %thead
       %tr
@@ -7,7 +7,7 @@
         %th Expenditure
     %tbody
       /TODO sort by budget & calculate %'s if missing
-      - activity.sub_activities.find(:all, :include => :provider).each do |sub_activity|
+      - activity.implementer_splits.find(:all, :include => :provider).each do |sub_activity|
         %tr.sub_activity.entry_header
           %td=  sub_activity.implementer.try(:name)
           %td= n2cnds(universal_currency_converter(sub_activity.budget, sub_activity.currency, sub_activity.data_response.currency), sub_activity.data_response.currency)

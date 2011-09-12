@@ -18,7 +18,10 @@ module ResponsesHelper
   end
 
   def data_verification_class
-    ready(
-      @response.check_projects_funding_sources_have_organizations?)
+    ready(@response.check_projects_funding_sources_have_organizations?)
+  end
+
+  def flag
+    @response.submitted? ? "go" : "stop"
   end
 end

@@ -12,7 +12,6 @@
       %tr
         %th Name
         %th{:colspan => colspan} Past Expenditure
-        %th{:colspan => colspan} Current Budget
         %th.manage Manage
       %tr
         %th
@@ -24,31 +23,17 @@
           - if @data_request.inputs?
             %th Inputs
 
-        - if @data_request.locations?
-          %th Locations
-        - unless other_costs
-          - if @data_request.purposes?
-            %th Purposes
-          - if @data_request.inputs?
-            %th Inputs
         %th
     %tbody
       - activities.each do |activity|
         %tr
           %td= nice_name(activity, 64)
           - if @data_request.locations?
-            %td= check_box_tag "", "", activity.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+            %td= check_box_tag "", "", activity.coding_spend_district_classified? && activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
           - unless other_costs
             - if @data_request.purposes?
-              %td= check_box_tag "", "", activity.coding_spend_classified?, {:disabled => "disabled"} if @data_request.purposes?
+              %td= check_box_tag "", "", activity.coding_spend_classified? && activity.coding_budget_classified?, {:disabled => "disabled"} if @data_request.purposes?
             - if @data_request.inputs?
-              %td= check_box_tag "", "", activity.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+              %td= check_box_tag "", "", activity.coding_spend_cc_classified? && activity.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+          %td= link_to 'Classify', link_to_unclassified(activity)
 
-          - if @data_request.locations?
-            %td= check_box_tag "", "", activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
-          - unless other_costs
-            - if @data_request.purposes?
-              %td= check_box_tag "", "", activity.coding_budget_classified?, {:disabled => "disabled"}
-            - if @data_request.inputs?
-              %td= check_box_tag "", "", activity.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
-          %td= link_to 'Classify', edit_activity_or_ocost_path(activity, :mode => 'purposes')

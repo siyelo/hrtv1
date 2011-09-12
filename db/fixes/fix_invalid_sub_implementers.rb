@@ -34,7 +34,7 @@ SubActivity.all.each do |implementer_split|
         # add the amount to a self-implementer row
         puts " => moving to a self-implementer split"
         org_id = implementer_split.activity.organization.id
-        self_split = implementer_split.activity.sub_activities.find_or_create_by_provider_id(org_id)
+        self_split = implementer_split.activity.implementer_splits.find_or_create_by_provider_id(org_id)
         self_split.data_response = implementer_split.data_response
         self_split.spend = BigDecimal.new(self_split.spend.to_s) # cast nils
         self_split.budget = BigDecimal.new(self_split.budget.to_s)

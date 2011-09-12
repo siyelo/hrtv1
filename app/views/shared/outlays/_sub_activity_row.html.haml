@@ -1,4 +1,4 @@
-- # a performance-friendly version of sub_activity_fields
+- # a performance-friendly version of implementer_split_fields
 - # doesnt load all the big organization selects
 
 - error_class = ""
@@ -10,12 +10,11 @@
     .f_from_container
       .implementer_container
         .ui_widget
-          = f.hidden_field :updated_at
+          = f.hidden_field :updated_at, :value => Time.now
           = f.hidden_field :provider_mask, :value => f.object.provider.id
           -# perf hack - non editable provider name
           %span.ui-autocomplete= f.object.provider.try(:name) || "< n/a >"
 
-  %td= f.text_field :spend_mask, :class => 'js_spend'
-  %td= f.text_field :budget_mask, :class => 'js_budget'
-  %td= link_to_remove_fields "x", f, {:class => 'delete_row', :callback => 'updateTotalsValuesCallback'}
-
+  %td= f.text_field :spend, :class => 'js_spend'
+  %td= f.text_field :budget, :class => 'js_budget'
+  %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}

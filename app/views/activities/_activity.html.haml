@@ -1,6 +1,6 @@
 %tr.js_project_row
   %td{:colspan => 2}
-    = link_to activity.name.presence || 'Unnamed Activity', edit_response_activity_path(@response, activity), :title => activity.description
+    = link_to activity.name.presence || 'Unnamed Activity', edit_response_activity_path(@response, activity), :title => activity.name
     = link_to image_tag("tooltip.png"), "#", :title => activity.description, :class => 'tooltip'
   %td
     .right_justified= n2c activity.spend

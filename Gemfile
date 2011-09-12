@@ -6,6 +6,7 @@ gem 'ar_strip_commas'
 gem 'authlogic'
 gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
+gem 'delayed_job', '~>2.0.4'
 gem 'fastercsv'
 gem 'formtastic', "= 1.2.3"
 gem 'haml', '=3.1.2'

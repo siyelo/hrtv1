@@ -5,13 +5,17 @@
 %ul.dashboard_comments
   - comments.each do |comment|
     %li
+      .author.right
+        
+        = image_tag comment.user.gravatar(20), :class => "right"
+        = "from #{comment.user.name} (#{time_ago_in_words(comment.created_at)} ago)"
+        %br
+        = "#{auto_link(comment.user.email)}"
+        
+      
       %h5.title
         - comment_title = truncate(model_name(comment.commentable), :length => 40)
         - comment_title += " (#{comment.commentable.organization.name})" unless comment.commentable.organization == current_user.organization
         %span= link_to comment_title, commentable_path(comment, current_user)
-      .author
-        from
-        = image_tag comment.user.gravatar(20)
-        %b= "#{comment.user.name} (#{auto_link(comment.user.email)})"
-        = "#{time_ago_in_words(comment.created_at)} ago"
       %p.main= truncate(comment.comment, :length => 300)
+      

@@ -10,8 +10,6 @@
     - link_to "#comments", :class => "regular_link" do
       View Comments
 
-= render 'getting_started'
-
 %ul.response-notice
   - @project.validation_errors.each do |error|
     %li= error

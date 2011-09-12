@@ -28,7 +28,9 @@ Feature: Admin can manage data requests
       Then I should see "Request was successfully updated"
        And I should see "My new data response title"
 
+      # delete both request
       When I follow "Delete"
+        And I follow "Delete"
       Then I should see "Request was successfully deleted."
        And I should not see "My data response title"
 

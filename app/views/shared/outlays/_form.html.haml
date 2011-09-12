@@ -13,7 +13,8 @@
 
   - elsif params[:mode].nil?
     %li.last.sub_activities
-      = render 'shared/outlays/implementers', :f => f, :outlay => outlay
+      %ul.section_form
+        = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :show_buttons => true
 
   - elsif params[:mode] == 'outputs'
     = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay

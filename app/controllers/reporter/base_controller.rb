@@ -34,18 +34,18 @@ class Reporter::BaseController < ApplicationController
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'inputs')
       elsif params[:commit] == "Save & Add Targets >"
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => 'outputs')
-      elsif params[:commit] == "Save & Review >"
-        return redirect_to submit_response_path(outlay.response)
+      elsif params[:commit] == "Save & Go to Overview >"
+        return redirect_to response_projects_path(outlay.response)
       else
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end
     end
 
   private
-    def js_redirect
-      render :json => {:html => render_to_string(:partial => 'shared/outlays/bulk_edit',
-                                       :layout => false,
-                                       :locals => {:outlay => @activity,
+    def js_redirect(status)
+      render :json => {:status => status,:html => render_to_string(:partial => 'projects/bulk_review',
+                                         :layout => false,
+                                         :locals => {:project => @project,
                                                    :response => @response})}
     end
 end

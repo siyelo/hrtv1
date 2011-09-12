@@ -53,6 +53,9 @@ describe Project, "Validations" do
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
         @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity2,
                             :budget => 9, :spend => 1)
+        @activity.reload; @activity.save # refresh cached amounts
+        @activity2.reload; @activity2.save # refresh cached amounts
+        @project.reload
         @project.in_flows = [Factory.build(:funding_flow, :from => @donor1, :budget => 3, :spend => 7),
                              Factory.build(:funding_flow, :from => @donor2, :budget => 7, :spend => 3)]
         @project.save!
@@ -66,8 +69,10 @@ describe Project, "Validations" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
         @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
                           :budget => 1, :spend => 9)
+        @activity.save # refresh cached amounts
         Factory(:funding_flow, :from => @organization,
                 :project => @project, :budget => 4, :spend => 4)
+        @project.reload
         @project.matches_in_flow_amount?(:budget).should be_false
         @project.matches_in_flow_amount?(:spend).should be_false
       end

@@ -61,6 +61,7 @@ describe CodingTree do
     @sa       = Factory(:sub_activity, :activity => @activity, :data_response => @response,
                         :budget => 100, :spend => 200)
     @activity.reload
+    @activity.save
 
   end
 

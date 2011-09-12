@@ -10,58 +10,63 @@
           .val( value )
           .autocomplete({
             delay: 300, //otherwise when you type a long string, it crawls
-            minLength: 3, // for performance
+            minLength: 2, // for performance
             source: function( request, response ) {
-              var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-              var match = false;
+                var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+                var select_el = select.get(0); // get dom element
+                var rep = new Array(); // response array
+                var maxRepSize = 30; // maximum response size
+                // simple loop for the options
+                for (var i = 0; i < select_el.length; i++) {
+                    var text = select_el.options[i].text;
+                    if ( select_el.options[i].value && ( !request.term || matcher.test(text) ) ) {
+                        // add element to result array
+                        rep.push({
+                            label: text, // no more bold
+                            value: text,
+                            option: select_el.options[i]
+                        });
+                    }
+                    if ( rep.length > maxRepSize ) {
+                        rep.push({
+                            label: "... more available",
+                            value: "maxRepSizeReached",
+                            option: ""
+                        });
+                        break;
+                    }
+                 }
 
-              response( select.children( "option" ).map(function(i, value) {
-                var text = $( this ).text();
-                if ( this.value && ( !request.term || matcher.test(text) ) ) {
-                  match = true;
-                  return {
-                    label: text.replace(
-                      new RegExp(
-                        "(?![^&;]+;)(?!<[^<>]*)(" +
-                        $.ui.autocomplete.escapeRegex(request.term) +
-                        ")(?![^<>]*>)(?![^&;]+;)", "gi"
-                      ), "<strong>$1</strong>" ),
-                    value: text,
-                    option: this
-                  };
-                }
-
-                // great "add new" solution from Nazar:
-                // http://stackoverflow.com/questions/4690292/jquery-autocomplete-for-rails-application
-                if (!match && i == select.children("option").size() -1) { //&& self.options.allow_new ) {
-                  // remove any previous selected
-                  select.children( ":selected" ).removeAttr("selected");
-                  return {
-                    label:'&lt;Create new <strong>'+ input.val() +'</strong>&gt;',
-                    value: input.val(),
-                    option: null
-                  };
-                }
-              }));
+                  if (rep.length === 0) {
+                      rep.push({
+                          label:'&lt;Create new <strong>'+ input.val() +'</strong>&gt;',
+                          value: input.val(),
+                          option: null
+                      });
+                  }
+                 // send response
+                 response( rep );
             },
             select: function( event, ui ) {
-              if(ui.item.option){
-                ui.item.option.selected = true;
-              }else{ // we clicked Create New
-                var input_val = $(this).val();
-                // set the id of this option to be the string the user entered
-                select.children("option:first").val(input_val);
-                // (then on the server side we detect this string to create the
-                // object with that name.)
-                // TODO: we should probably set this option to be selected
-                // but it seems to pass the correct "selected" attribute without
-                // doing this
-                // select.children("option:first").attr("selected", true);
-
-              };
-              self._trigger( "selected", event, {
-                item: ui.item.option
-              });
+                if ( ui.item.value == "maxRepSizeReached") {
+                    return false;
+                } else {
+                    if (ui.item.option) {
+                      ui.item.option.selected = true;
+                      self._trigger( "selected", event, {
+                          item: ui.item.option
+                      });
+                    } else {
+                      var option = $('<option/>').val(ui.item.value)
+                      select.append(option)
+                      option[0].selected = true;
+                    }
+                }
+            },
+            focus: function( event, ui ) {
+                if ( ui.item.value == "maxRepSizeReached") {
+                    return false;
+                }
             },
             change: function( event, ui ) {
               if ( !ui.item ) {

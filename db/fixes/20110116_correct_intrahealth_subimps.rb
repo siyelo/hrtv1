@@ -47,7 +47,7 @@ def create_sub_activity(activity, organization, item)
   b = BigDecimal.new(item[:budget].to_s.gsub(',', ''))
   s = BigDecimal.new(item[:spend].to_s.gsub(',', ''))
   puts b.to_s + " - " + s.to_s
-  activity.sub_activities.create!(
+  activity.implementer_splits.create!(
     :data_response => activity.data_response,
     :provider_id => organization.id,
     :budget => b,
@@ -59,7 +59,7 @@ Activity.transaction do
   activity_items.each do |activity_item|
     activity = activity_item[:activity]
     puts "Removing sub implementers for activity #{activity.description}"
-    activity.sub_activities.destroy_all
+    activity.implementer_splits.destroy_all
 
     activity_item[:items].each do |item|
       organization = item[:organization]

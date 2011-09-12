@@ -10,6 +10,7 @@ describe Activity, "Classification" do
                          :activity => activity, :budget => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
+      activity.save
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudget.update_classifications(activity, params)
@@ -23,6 +24,7 @@ describe Activity, "Classification" do
                          :activity => activity, :budget => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
+      activity.save
 
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -40,6 +42,7 @@ describe Activity, "Classification" do
                          :activity => activity, :budget => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
+      activity.save
 
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 100}
@@ -55,6 +58,7 @@ describe Activity, "Classification" do
                          :activity => activity, :budget => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
+      activity.save
 
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -73,6 +77,7 @@ describe Activity, "Classification" do
                          :activity => activity, :budget => 100)
 
       activity.reload
+      activity.save
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudgetDistrict.update_classifications(activity, params)
@@ -86,8 +91,8 @@ describe Activity, "Classification" do
                          :project => @project)
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :budget => 100)
-
       activity.reload
+      activity.save
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingBudgetDistrict.update_classifications(activity, params)
@@ -103,8 +108,8 @@ describe Activity, "Classification" do
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :spend => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
-
       activity.reload
+      activity.save
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpend.update_classifications(activity, params)
@@ -119,6 +124,7 @@ describe Activity, "Classification" do
                          :activity => activity, :spend => 100)
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
+      activity.save
 
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 99}
@@ -136,7 +142,7 @@ describe Activity, "Classification" do
                          :activity => activity, :spend => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
-
+      activity.save
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendCostCategorization.update_classifications(activity, params)
@@ -150,8 +156,8 @@ describe Activity, "Classification" do
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :spend => 100)
       code     = Factory(:cost_category_code, :short_display => 'code')
-
       activity.reload
+      activity.save
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendCostCategorization.update_classifications(activity, params)
@@ -167,8 +173,8 @@ describe Activity, "Classification" do
                          :project => @project)
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :spend => 100)
-
       activity.reload
+      activity.save
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendDistrict.update_classifications(activity, params)
@@ -182,8 +188,8 @@ describe Activity, "Classification" do
                          :project => @project)
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :spend => 100)
-
       activity.reload
+      activity.save
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendDistrict.update_classifications(activity, params)
@@ -197,6 +203,7 @@ describe Activity, "Classification" do
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => @activity, :spend => 100, :budget => 100)
       @activity.reload
+      @activity.save
     end
 
     it "is budget_classified? when all budgets are classified" do
@@ -234,6 +241,7 @@ describe Activity, "Classification" do
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => @activity, :spend => 100, :budget => 100)
       @activity.reload
+      @activity.save
     end
 
     it "is spend_classified? when all spends are classified" do
@@ -271,6 +279,7 @@ describe Activity, "Classification" do
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => @activity, :spend => 100, :budget => 100)
       @activity.reload
+      @activity.save
     end
 
     it "is classified? when both budget and spend are classified" do
@@ -347,6 +356,7 @@ describe Activity, "Classification" do
                            :activity => @activity, @field => 100,
                            :provider => Factory(:provider, :location => nil))
         @activity.reload
+        @activity.save
         @activity.send(method).should == []
       end
 
@@ -363,12 +373,12 @@ describe Activity, "Classification" do
           implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
           implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
 
-          @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
+          @activity.implementer_splits << Factory.build(:sub_activity, :data_response => @response,
                                                     :activity => @activity,
                                                     :provider => implementer1,
                                                     :data_response => @response,
                                                     @field => 4)
-          @activity.sub_activities << Factory.build(:sub_activity, :data_response => @response,
+          @activity.implementer_splits << Factory.build(:sub_activity, :data_response => @response,
                                                     :activity => @activity,
                                                     :provider => implementer2,
                                                     :data_response => @response,
@@ -391,23 +401,24 @@ describe Activity, "Classification" do
           @location1    = Factory(:location, :short_display => 'Location1')
           implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
           implementer2  = Factory(:ngo, :name => 'Implementer2')# , :location => @location2)
-          @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+          @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
                                                     :provider => implementer1,
                                                     :data_response => @response,
                                                     @field => 4)
-          @activity.sub_activities << Factory.build(:sub_activity, :activity => @activity,
+          @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
                                                     :provider => implementer2,
                                                     :data_response => @response,
                                                     @field => 3)
           @activity.send(method).should be_empty
         end
 
-        context "when sub_activities does not have #{@field} district code assignments" do
+        context "when implementer_splits does not have #{@field} district code assignments" do
           it "returns even split on activity locations when activity has locations" do
             sa       = Factory(:sub_activity, :data_response => @response,
                                :activity => @activity, @field => 100,
                                :provider => Factory(:provider, :location => nil))
-            @activity.reload # get updated budget/spend cache
+            @activity.reload
+            @activity.save # get updated budget/spend cache
             @location1    = Factory(:location, :short_display => 'Location1')
             @location2    = Factory(:location, :short_display => 'Location2')
             klass = @coding.to_s.camelcase.constantize #e.g. CodingBudgetDistrict
@@ -524,69 +535,6 @@ describe Activity, "Classification" do
           @activity.spend_stratobj_coding[0].cached_amount.should == 40
           @activity.spend_stratobj_coding[1].type.should == 'HsspSpend'
           @activity.spend_stratobj_coding[1].cached_amount.should == 35
-        end
-      end
-    end
-  end
-
-  describe "derive_classifications_from_sub_implementers" do
-    before :each do
-      donor          = Factory(:donor, :name => 'Donor')
-      ngo            = Factory(:ngo,   :name => 'Ngo')
-      @location1     = Factory(:location, :short_display => 'Location1')
-      @location2     = Factory(:location, :short_display => 'Location2')
-      @implementer1  = Factory(:ngo, :name => 'Implementer1')
-      @implementer2  = Factory(:ngo, :name => 'Implementer2')
-      @data_request  = Factory(:data_request, :organization => donor)
-      @response      = ngo.latest_response
-      project        = Factory(:project, :data_response => @response)
-      @activity      = Factory(:activity, :data_response => @response, :project => project,
-                               :name => 'Activity 1', :provider => ngo, :project => project)
-      @sa            = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                               :spend => 100, :budget => 100)
-      @sub_activity1 = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                               :provider => @implementer1, :data_response => @response,
-                               :budget => 2, :spend => 2)
-      @sub_activity2 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity, :provider => @implementer2,
-                               :data_response => @response, :budget => 3, :spend => 3)
-    end
-
-    [:coding_budget_district, :coding_spend_district].each do |district_coding_type|
-      describe "#{district_coding_type.to_s.humanize}" do
-        it "removes existing code assignments" do
-          Factory(district_coding_type, :activity => @activity, :amount => nil, :cached_amount => 100)
-          @activity.code_assignments.length.should == 1
-          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
-          @activity.code_assignments.reload.length.should == 0
-        end
-
-        it "derives nothing when no implementers has no locations" do
-          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
-          @activity.code_assignments.length.should == 0
-        end
-
-        it "derives only classifications for the locations of the implementers" do
-          @implementer1.location = @location1; @implementer1.save
-          @implementer2.location = @location2; @implementer2.save
-          @activity.reload
-          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
-          @activity.code_assignments.length.should == 2
-          @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase
-          @activity.code_assignments[1].type.should == district_coding_type.to_s.camelcase
-          cached_amounts = @activity.code_assignments.map(&:cached_amount)
-          cached_amounts.should include(2)
-          cached_amounts.should include(3)
-        end
-
-        it "sums derived classifications when 2 sub implementers in same location" do
-          @implementer1.location = @location1; @implementer1.save
-          @implementer2.location = @location1; @implementer2.save
-          @activity.reload
-          @activity.derive_classifications_from_sub_implementers!(district_coding_type.to_s.camelcase)
-          @activity.code_assignments.length.should == 1
-          @activity.code_assignments[0].type.should == district_coding_type.to_s.camelcase
-          @activity.code_assignments[0].cached_amount.should == 5
         end
       end
     end

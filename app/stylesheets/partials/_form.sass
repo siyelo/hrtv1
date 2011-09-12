@@ -37,6 +37,7 @@ input[type="text"], input[type="password"], textarea, select
     li
       margin-bottom: 7px
       padding-bottom: 7px
+      position: relative
       +pie-clearfix
       &:last-child
         border: none
@@ -103,7 +104,6 @@ input[type="text"], input[type="password"], textarea, select
     select, input[type=text], input[type=password], textarea
       float: left
       margin: 0
-      width: 35%
 
     select
       padding: 4px 4px 3px
@@ -117,13 +117,18 @@ input[type="text"], input[type="password"], textarea, select
         color: $orange
 
     .inline-errors
-      color: red
-      float: left
+      background: $red
+      border: 1px solid $red - #111
+      color: #fff
       font-size: 11px
-      margin-top: 3px
-      margin-left: 17%
-      padding-left: 10px
-      width: 70%
+      opacity: 0.8
+      padding: 3px 5px 2px
+      position: absolute
+      text-align: center
+      top: 45px
+      z-index: 10
+      +border-bottom-radius(3px)
+      +box-shadow(#ccc, 0, 0, 3px)
 
   .other_beneficiaries
     label
@@ -145,10 +150,13 @@ input[type="text"], input[type="password"], textarea, select
 
   .beneficiaries_boxes
     li
-      width: 33% !important
+      width: 50% !important
+      margin-bottom: 7px !important
   .planned_dates_boxes
     li
       width: 50% !important
+      label
+        margin-top: 3px
 
 
   .check_boxes
@@ -205,7 +213,7 @@ input[type="text"], input[type="password"], textarea, select
   float: right !important
   padding: 1% 2% 1%
   width: 16%
-  
+
   .warn
     color: $warm-red
 
@@ -489,6 +497,9 @@ h3.form_heading
     margin-bottom: 0 !important
     padding-bottom: 0 !important
 
+.ajax-loader
+  margin: 10px 5px 0
+
 .activity_box
   margin: 0 !important
 
@@ -498,34 +509,21 @@ h3.form_heading
   .left
     float: left
 
-  .ajax-loader
-    margin: 5px
-
   .header
-    background: $primary_dark
-    color: $lightest-blue
     cursor: pointer
     font-size: 12px
     font-weight: bold
-    padding: 10px
     text-transform: none
-    +linear-gradient(color-stops($primary_dark + #111, $primary_dark))
     +pie-clearfix
-
-    span
-      color: $light-blue - #111
-      font-size: 10px
-      padding: 3px 5px
-      +border-radius
 
     img
       margin-right: 5px
-      
+
     ul
       font-size: 11px
       font-weight: normal
       margin-bottom: 0 !important
-      
+
       li
         background: $primary_dark - #111
         display: inline
@@ -684,15 +682,12 @@ strong
     border: 1px solid $light-blue
     padding: 5px
 
-#activities_bulk_create
-  .ui-autocomplete-input
-    height: 22px
-    margin-top: 2px
-    width: 100%
-
 td.error, tr.error td
-  background-color: #ffbaba !important
+  background-color: #ffebeb !important
 
+#projects_bulk_create
+  .error
+    border: 1px solid #ffbaba !important
 
 // New form styles
 .condensed_fields
@@ -843,8 +838,89 @@ a.tooltip
     -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
 
+  // temporary hack to override basic_form input widths
+  // remove after formtastic refactor is finished
+  select, input[type=text], input[type=password], textarea
+    width: auto
+    &.date_picker
+      background: #fff image_url("icon_calendar2.png") no-repeat 95% 50%
+      width: 80px !important
+      &:hover, &:focus
+        background: #fff image_url("icon_calendar.png") no-repeat 95% 50%
+
+
+.bulk_edit_form
+  .section_form
+    width: 900px
+    border-left: 0px
+    border-right: 0px
+    h3
+      border-top:  1px solid $primary_border4 !important
+  .activities_form
+    width: 862px !important
+    border-left: 1px solid $primary_border4
+    border-right: 1px solid $primary_border4
+    border-bottom: 1px solid $primary_border
+    .input_table
+      width: 880px
+  .project_heading
+    color: $secondary !important
+    font-family: Avenir, sans-serif
+    font-weight: normal
+    padding: 10px 20px 0 !important
+  .basic_form
+    ol
+      textarea
+        margin: 0 5px !important
+  .condensed_fields
+    li
+      min-width: 0px
+      margin-right: 0px
+      textarea
+        width: 700px !important
+  .activity_wrapper
+    display: inline-block
+    border-top: 1px solid $primary_border
+    margin-left: -19px
+    padding: 10px 0px 10px 20px
+
 #activity_name_input
   width: 50% !important
 
 #project_name_input
   width: 50% !important
+
+p.value
+  overflow: visible !important
+
+li.input-wrapper
+  input, input.date_picker[type="text"], .section_form input.date_picker[type="text"]
+    width: 179px !important
+
+.input-box
+  float: left
+  position: relative
+  width: 191px
+  +box-shadow(#ccc, 1px, 1px, 2px)
+  +border-bottom-radius(4px)
+  input
+    width: 179px !important
+  &.picker
+    width: 92px
+
+
+.input-errors
+  background: $red
+  clear: both
+  color: #fff
+  font-size: 11px
+  opacity: 0.75
+  padding: 4px 5px 3px
+  +border-bottom-radius(4px)
+  +linear-gradient(color-stops($red, $red - #111))
+  +text-shadow(rgba(0, 0, 0, 0.3), 0, 1px, 0)
+
+.input-hints
+  color: $primary_light - #333
+  font-size: 11px
+  padding-left: 10px

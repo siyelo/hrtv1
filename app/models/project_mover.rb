@@ -1,10 +1,10 @@
 class ProjectMover
 
-  attr_accessor :source_response, :project, :target_response
+  attr_accessor :project, :target_response
   attr_reader :cloned_project
 
-  def initialize(source_response, target_response, project)
-    @source_response = source_response
+  def initialize(target_response, project)
+    @source_response = project.data_response
     @project = project
     @target_response = target_response
   end

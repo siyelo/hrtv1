@@ -21,8 +21,6 @@
     - if current_user.activity_manager?
       = render 'shared/outlays/approve_budget', :outlay => outlay
 
-= render '/activities/getting_started'
-
 = error_messages_for controller_name.singularize.to_sym, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
 - semantic_form_for outlay, :url => form_path, :html => {:class => "basic_form js_form"} do |f|

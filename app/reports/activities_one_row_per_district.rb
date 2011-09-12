@@ -19,7 +19,7 @@ class Reports::ActivitiesOneRowPerDistrict
       #Activity.find(:all, :conditions => ['id IN (?)', [4760]]).each do |activity| # DEBUG ONLY
       #Activity.find(:all, :conditions => ['id IN (?)', [1416]]).each do |activity| # DEBUG ONLY
       Activity.with_request(@request).each do |activity|
-        if ((activity.class == Activity && activity.sub_activities.empty?) ||
+        if ((activity.class == Activity && activity.implementer_splits.empty?) ||
             activity.class == SubActivity)
           build_rows(csv, activity)
         end

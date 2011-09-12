@@ -5,6 +5,10 @@ class Foo
 end
 
 describe CurrencyHelper do
+  before :all do
+    load 'currencies_load_script.rb'
+  end
+
   before :each do
     Money.default_bank.set_rate(:RWF, :USD, 1)
     Money.default_bank.set_rate(:USD, :USD, 1)

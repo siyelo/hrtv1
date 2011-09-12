@@ -3,10 +3,6 @@ module Activity::Classification
   def self.included(base)
     base.send(:extend, ClassMethods)
     base.send(:include, InstanceMethods)
-
-    #base.class_eval do
-      #validates_presence_of :name
-    #end
   end
 
   ### Constants
@@ -34,27 +30,27 @@ module Activity::Classification
 
   module InstanceMethods
     def coding_budget_classified? #purposes
-      !data_response.request.purposes? || budget.blank? || coding_budget_valid?
+      !data_response.request.purposes? || coding_budget_valid?
     end
 
     def coding_budget_cc_classified? #inputs
-      !data_response.request.inputs? || budget.blank? || coding_budget_cc_valid?
+      !data_response.request.inputs? || coding_budget_cc_valid?
     end
 
     def coding_budget_district_classified? #locations
-      !data_response.request.locations? || budget.blank? || coding_budget_district_valid?
+      !data_response.request.locations? || coding_budget_district_valid?
     end
 
     def coding_spend_classified?
-      !data_response.request.purposes? || spend.blank? || coding_spend_valid?
+      !data_response.request.purposes? || coding_spend_valid?
     end
 
     def coding_spend_cc_classified?
-      !data_response.request.inputs? || spend.blank? || coding_spend_cc_valid?
+      !data_response.request.inputs? || coding_spend_cc_valid?
     end
 
     def coding_spend_district_classified?
-      !data_response.request.locations?  || spend.blank? || coding_spend_district_valid?
+      !data_response.request.locations?  || coding_spend_district_valid?
     end
 
     def budget_classified?
@@ -73,7 +69,7 @@ module Activity::Classification
 
     # An activity can be considered classified if at least one of these are populated.
     def classified?
-      (budget_classified? && !budget.blank?) || (spend_classified? && !spend.blank?)
+      budget_classified? || spend_classified?
     end
 
     # TODO: spec
@@ -131,24 +127,6 @@ module Activity::Classification
       virtual_codes(HsspSpend, coding_spend, STRAT_OBJ_TO_CODES_FOR_TOTALING)
     end
 
-    def derive_classifications_from_sub_implementers!(coding_type)
-      klass = coding_type.constantize
-      location_amounts = {}
-
-      delete_existing_code_assignments_by_type(coding_type)
-
-      sub_activity_district_code_assignments(coding_type).each do |ca|
-        location_amounts[ca.code] ||= 0
-        location_amounts[ca.code] += ca.amount
-      end
-
-      location_amounts.each do |location, amount|
-        fake_ca(klass, location, amount).save!
-      end
-
-      self.update_classified_amount_cache(klass)
-    end
-
     def coding_budget_sum_in_usd
       coding_budget.with_code_ids(Mtef.roots).sum(:cached_amount_in_usd)
     end
@@ -166,24 +144,11 @@ module Activity::Classification
     end
 
     private
-      def delete_existing_code_assignments_by_type(coding_type)
-        CodeAssignment.delete_all(["activity_id = ? AND type = ?", self.id, coding_type])
-      end
-
-      def sub_activity_district_code_assignments(coding_type)
-        case coding_type
-        when 'CodingBudgetDistrict'
-          sub_activities.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
-        when 'CodingSpendDistrict'
-          sub_activities.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
-        end.flatten
-      end
-
       def district_coding_adjusted(klass, assignments, amount)
         if assignments.present?
           assignments
-        elsif sub_activities.present?
-          district_codings_from_sub_activities(klass)
+        elsif implementer_splits.present?
+          district_codings_from_implementer_splits(klass)
         elsif amount
           locations.map{|location| fake_ca(klass, location, amount / locations.size)}
         else
@@ -191,8 +156,8 @@ module Activity::Classification
         end
       end
 
-      def district_codings_from_sub_activities(klass)
-        code_assignments = sub_activity_district_code_assignments_if_complete(klass.name)
+      def district_codings_from_implementer_splits(klass)
+        code_assignments = implementer_split_district_code_assignments_if_complete(klass.name)
         location_amounts = {}
         code_assignments.each do |ca|
           location_amounts[ca.code] = 0 unless location_amounts[ca.code]

@@ -8,7 +8,7 @@ Hello,
 To view/respond to it, please visit the url below.
 
 <% if @comment.commentable.is_a?(DataResponse) %>
-  <%= review_response_url(@comment.commentable) %>
+  <%= response_projects_url(@comment.commentable) %>
 <% else %>
   <%= response_activity_url(@comment.commentable.data_response, @comment.commentable) %>
 <% end %>

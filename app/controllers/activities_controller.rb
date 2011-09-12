@@ -18,6 +18,7 @@ class ActivitiesController < Reporter::BaseController
   def edit
     prepare_classifications(resource)
     load_comment_resources(resource)
+    load_validation_errors(resource)
     edit!
   end
 
@@ -26,12 +27,10 @@ class ActivitiesController < Reporter::BaseController
     if @activity.save
       respond_to do |format|
         format.html { success_flash("created"); html_redirect }
-        format.js   { js_redirect }
       end
     else
       respond_to do |format|
         format.html { render :action => 'new' }
-        format.js   { js_redirect }
       end
     end
   end
@@ -41,7 +40,6 @@ class ActivitiesController < Reporter::BaseController
     if !@activity.am_approved? && @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html { success_flash("updated"); html_redirect }
-        format.js   { js_redirect }
       end
     else
       respond_to do |format|
@@ -52,7 +50,6 @@ class ActivitiesController < Reporter::BaseController
                       load_comment_resources(resource)
                       render :action => 'edit'
                     }
-        format.js   { js_redirect }
       end
     end
   end
@@ -63,13 +60,15 @@ class ActivitiesController < Reporter::BaseController
       @activity = @response.activities.find(params[:id])
       unless @activity.approved?
         @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
-        @activity.save(false)
-      end
-      render :json => {:status => 'success'}
-      return true
+        if @activity.save
+          status_msg = 'success'
+        else
+          status_msg = @activity.errors.full_messages.join(', ')
+        end
+      end 
+      render :json => {:status => status_msg}
     else
       render :json => {:status => 'access denied'}
-      return false
     end
   end
 
@@ -98,21 +97,6 @@ class ActivitiesController < Reporter::BaseController
   def export
     template = Activity.download_template(@response)
     send_csv(template, 'activities.csv')
-  end
-
-  def bulk_create
-    begin
-      if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        @activities = Activity.find_or_initialize_from_file(@response, doc, params[:project_id])
-      else
-        flash[:error] = 'Please select a file to upload activities'
-        redirect_to response_projects_url(@response)
-      end
-    rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_url(@response)
-    end
   end
 
   def destroy
@@ -155,9 +139,16 @@ class ActivitiesController < Reporter::BaseController
                                 map_to_hash{ |b| {b.code_id => b} }
         @spend_assignments  = @spend_klass.with_activity(activity).all.
                                 map_to_hash{ |b| {b.code_id => b} }
+
         # set default to 'all'
-        params[:view] = 'all' if params[:view].blank? 
+        params[:view] = 'all' if params[:view].blank?
       end
     end
 
+    # run validations on the models independently of any save action
+    # useful if you want to show (existing) errors without having to save the form first.
+    def load_validation_errors(resource)
+      resource.implementer_splits.each {|is| is.valid?}
+      resource.valid?
+    end
 end

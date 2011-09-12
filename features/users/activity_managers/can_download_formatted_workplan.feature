@@ -13,18 +13,21 @@ Feature: Activity Manager can download formatted workplan
       And organization "reporter_org" is one of the activity_manager's organizations
       And I am signed in as "activity_manager@hrtapp.com"
 
-  @javascript
+  #'
+  @javascript @wip
   Scenario: See workplan option in menu
     Given I follow "reporter_org"
     And I follow "Import / Export"
     Then I should see "Export Workplan"
 
   # this cannot be run with @javascript - gives a capy NotSupportedByDriverError
+  @wip
   Scenario: Download workplan
     Given I follow "reporter_org"
     And I follow "Export Workplan"
     Then I should receive a csv file
 
+  @wip
   Scenario: quick-download workplan from AM Dashboard page
     When I follow "Export Workplan"
     Then I should receive a csv file

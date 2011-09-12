@@ -9,7 +9,7 @@ class Reports::JawpReport
     @include_subs = false
     @is_budget  = is_budget?(type)
     @activities = activities
-    @hc_sub_activities = Activity.with_type('SubActivity').
+    @hc_implementer_splits = Activity.with_type('SubActivity').
       implemented_by_health_centers.find(:all,
                                          :select => 'activity_id, COUNT(*) AS total',
                                          :group => 'activity_id')
@@ -69,17 +69,17 @@ class Reports::JawpReport
       parent_activity = activity
       parent_amount_total = amount_total
       parent_amount_total_in_usd = amount_total_in_usd
-      if activity.sub_activities.empty? or !@include_subs
-        sub_activities = [activity]
+      if activity.implementer_splits.empty? or !@include_subs
+        implementer_splits = [activity]
         use_sub_activity_district_coding = false
       else
-        sub_activities = activity.sub_activities
+        implementer_splits = activity.implementer_splits
          if @is_budget
            use_sub_activity_district_coding =
-              parent_activity.sub_activities_each_have_defined_districts?("CodingBudgetDistrict")
+              parent_activity.implementer_splits_each_have_defined_districts?("CodingBudgetDistrict")
          else
            use_sub_activity_district_coding =
-              parent_activity.sub_activities_each_have_defined_districts?("CodingSpendDistrict")
+              parent_activity.implementer_splits_each_have_defined_districts?("CodingSpendDistrict")
          end
       end
 
@@ -105,7 +105,7 @@ class Reports::JawpReport
       coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(codings)
       cost_category_coding_with_parent_codes = get_coding_only_nodes_with_local_amounts(cost_category_codings)
 
-      sub_activities.each do |activity|
+      implementer_splits.each do |activity|
         break_out = false
         if activity != parent_activity
             if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
@@ -192,7 +192,7 @@ class Reports::JawpReport
           end
         end
       end
-      end #sub_activities
+      end #implementer_splits
     end
 
     def build_header
@@ -272,6 +272,6 @@ class Reports::JawpReport
     end
 
     def get_hc_sub_activity_count(activity)
-      @hc_sub_activities.detect{|sa| sa.activity_id == activity.id}.try(:total) || 0
+      @hc_implementer_splits.detect{|sa| sa.activity_id == activity.id}.try(:total) || 0
     end
 end

@@ -136,9 +136,13 @@ describe DataResponse do #validations
     end
 
     it "fails if there are uncoded other costs" do
-      cs = @other_cost.coding_spend.first
-      sa = Factory(:sub_activity, :data_response => @response, :activity => @other_cost, :budget => 54)
-      @other_cost.coding_budget_valid = false; @other_cost.save; @other_cost.reload
+      sa = Factory(:sub_activity, :data_response => @response, :activity => @other_cost,
+                   :budget => 54)
+      @other_cost.reload;
+      @other_cost.code_assignments = [];
+      @other_cost.coding_budget_district_valid = false; #usually happens in a callback
+      @other_cost.save!
+      @response.reload
       @response.other_costs_coded?.should == false
       @response.ready_to_submit?.should == false
     end

@@ -19,6 +19,4 @@
       %ul.manage_bar
         %li= link_to "Edit", edit_admin_organization_path(organization)
         %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure you want to DELETE this organization? There is no undo."
-  - elsif current_user.activity_manager? && response
-    %td= link_to 'Export Workplan', download_workplan_response_projects_path(response)
 

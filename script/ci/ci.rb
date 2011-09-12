@@ -13,7 +13,7 @@
 require File.join(File.dirname(__FILE__), '../../lib/', 'script_helper')
 include ScriptHelper
 
-WORKSPACE=ENV['WORKSPACE']
+WORKSPACE=ENV['WORKSPACE'] || "../"
 
 def bundle_install
   #result = run "bundle check"
@@ -29,8 +29,7 @@ end
 def setup_specs
   ENV['RAILS_ENV'] = 'test'
   run "rake db:migrate RAILS_ENV=test"
-  run_or_die "rake setup_quick --trace"
-  run "rake db:load_currencies"
+  run_or_die "rake setup_quick --trace RAILS_ENV=test"
 end
 
 def specs
@@ -62,5 +61,4 @@ end
 bundle_install
 setup_sqlite
 specs
-#cukes - ffox busting its nut on CI server. Not worth the trouble.
-
+cukes

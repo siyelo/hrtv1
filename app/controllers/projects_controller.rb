@@ -33,30 +33,50 @@ class ProjectsController < Reporter::BaseController
 
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
-    create! do |success, failure|
-      success.html { redirect_to edit_response_project_url(@response, @project) }
-    end
-  end
-
-  def update
-    update! do |success, failure|
-      success.html {
-        redirect_to edit_response_project_url(@response, @project)
-      }
-      failure.html do
-        load_comment_resources(resource)
-        render :action => 'edit'
+    if @project.save
+      respond_to do |format|
+        format.html {flash[:notice] = "Project successfully created";
+              redirect_to edit_response_project_url(@response, @project) }
+        format.js   { js_redirect('success') }
+      end
+    else
+      respond_to do |format|
+        format.html { render :action => 'new' }
+        format.js   { js_redirect('failed') }
       end
     end
   end
 
-  def bulk_edit
-    @projects = @response.projects
+  def update
+    @project = Project.find(params[:id])
+    if @project.update_attributes(params[:project])
+      respond_to do |format|
+        format.html {flash[:notice] = "Project successfully updated"; redirect_to edit_response_project_url(@response, @project)}
+        format.js {js_redirect('success')}
+      end
+    else
+      respond_to do |format|
+        format.html {load_comment_resources(resource); render :action => 'edit'}
+        format.js {js_redirect('failed')}
+      end
+    end
   end
 
-  def bulk_update
-    flash[:notice] = "Your projects have been successfully updated"
-    redirect_to response_projects_url
+  def bulk_create
+    begin
+      if params[:file].present?
+        @i = Importer.new(@response, params[:file].path)
+        @i.import
+        @projects = @i.projects
+        @activities = @i.activities
+      else
+        flash[:error] = 'Please select a file to upload activities'
+        redirect_to response_projects_url(@response)
+      end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      redirect_to response_projects_url(@response)
+    end
   end
 
   def download_template
@@ -65,32 +85,13 @@ class ProjectsController < Reporter::BaseController
   end
 
   def export
-    template = Activity.download_template(@response, @response.activities)
+    template = Project.export_all(@response)
     send_csv(template, "all_activities.csv")
   end
 
   def download_workplan
     filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
     send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
-  end
-
-  def create_from_file
-    begin
-      if params[:file].present?
-        doc = FasterCSV.parse(params[:file].open.read, {:headers => true})
-        if doc.headers.to_set == Project::FILE_UPLOAD_COLUMNS.to_set
-          saved, errors = Project.create_from_file(doc, @response)
-          flash[:notice] = "Created #{saved} of #{saved + errors} projects successfully"
-        else
-          flash[:error] = 'Wrong fields mapping. Please download the CSV template'
-        end
-      else
-        flash[:error] = 'Please select a file to upload'
-      end
-    rescue
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
-      redirect_to response_projects_path(@response)
-    end
   end
 
   protected

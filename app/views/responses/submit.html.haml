@@ -7,7 +7,7 @@
 
 = error_messages_for :response, :header_message  => nil, :message => "Oops, we couldn't process your submission."
 
-%ul.status.stop
+%ul{:class => "status #{flag}"}
   %li
     %span Request:
     = @response.request.title

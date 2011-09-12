@@ -27,17 +27,18 @@ describe Activity, "Currency" do
                               :budget => 123.45, :spend => 123.45)
       @organization.reload # needs reload for dr_activities association to work
       @a.reload
+      @a.save
     end
 
     it "should update spend in USD on creation" do
-      @a.spend_in_usd.should == 123.45
+      @a.spend_in_usd.to_f.should == 123.45
     end
 
     it "should update spend in USD on update" do
       @sa.spend = 456.78
       @sa.save
-      @a.reload
-      @a.spend_in_usd.should == 456.78
+      @a.reload; @a.save # re-cache
+      @a.spend_in_usd.to_f.should == 456.78
     end
 
     it "should update spend in USD after project currency change" do
@@ -45,7 +46,8 @@ describe Activity, "Currency" do
       @p.currency = 'RWF'
       @p.save
       @a.reload
-      @a.spend_in_usd.should == 0.2469
+      @a.save # re-cache
+      @a.spend_in_usd.to_f.should == 0.2469
     end
 
     it "should update spend in USD after organization currency change" do
@@ -53,37 +55,35 @@ describe Activity, "Currency" do
       @organization.save
       @organization.currency.should == "RWF"
       @a.reload
-      @a.spend_in_usd.should == 0.2469
+      @a.spend_in_usd.to_f.should == 0.2469
     end
 
     it "should update spend in USD after currency change with a big number" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
-      @a.reload
-      @a.write_attribute(:spend, 7893.10)
-      @a.save
-      @a.spend_in_usd.should == 15.7862
+      @sa.spend = 7893.10; @sa.save
+      @a.reload; @a.save
+      @a.spend_in_usd.to_f.should == 15.7862
     end
 
     it "should update new_budget on creation" do
-      @a.budget_in_usd.should == 123.45
+      @a.budget_in_usd.to_f.should == 123.45
     end
 
     it "should update budget in USD on update" do
-      @a.write_attribute(:budget, 456.79)
-      @a.save
-      @a.budget_in_usd.should == 456.79
+      @sa.budget = 456.79; @sa.save
+      @a.reload; @a.save
+      @a.budget_in_usd.to_f.should == 456.79
     end
 
     it "should update budget in USD after currency change" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
-      @a.reload
-      @a.write_attribute(:budget, 789.10)
-      @a.save
-      @a.budget_in_usd.should ==  789.10 * 0.002
+      @sa.budget = 789.10; @sa.save
+      @a.reload; @a.save
+      @a.budget_in_usd.to_f.should ==  789.10 * 0.002
     end
   end
 

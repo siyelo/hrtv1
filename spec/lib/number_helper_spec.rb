@@ -4,6 +4,7 @@ include NumberHelper
 describe NumberHelper do
   before :each do
     Money.default_bank.set_rate(:EUR, :USD, 1.5)
+    Money.default_bank.set_rate(:USD, :EUR, 0.720461095)
     Money.default_bank.set_rate(:GBP, :USD, 2)
     Money.default_bank.set_rate(:RWF, :KES, 5)
     Money.default_bank.set_rate(:AOA, :USD, nil)

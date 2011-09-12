@@ -5,7 +5,6 @@ Factory.define :activity, :class => Activity do |f|
   f.end_date        { "2010-12-31" }
 end
 
-
 Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :activity do |f|
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
@@ -13,6 +12,7 @@ Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :act
   f.coding_spend_valid            { true }
   f.coding_spend_cc_valid         { true }
   f.coding_spend_district_valid   { true }
+  f.approved                      { false}
 end
 
 Factory.define :other_cost_budget_spend_coded, :class => OtherCost, :parent => :activity do |f|
@@ -24,12 +24,16 @@ Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
   f.sequence(:name) { |i| "other_cost_name_#{i}" }
 end
 
-Factory.define :sub_activity, :class => SubActivity, :parent => :activity do |f|
-  f.sequence(:name) { |i| "sub_activity_name_#{i}" }
-  f.description     { 'sub_activity_description' }
+Factory.define :implementer_split, :class => SubActivity, :parent => :activity do |f|
+  f.sequence(:name) { |i| "implementer_split_name_#{i}" }
+  f.description     { 'implementer_split_descr' }
   f.provider        { Factory.create(:provider) }
+  f.spend           { 1.23 }
 end
 
+#deprecated
+Factory.define :sub_activity, :class => SubActivity, :parent => :implementer_split do |f|
+end
 
 ### Partial factories: just to keep it DRY
 Factory.define :_budget_coded, :class => Activity, :parent => :activity  do |f|

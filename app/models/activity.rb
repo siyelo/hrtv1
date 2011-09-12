@@ -95,9 +95,10 @@ class Activity < ActiveRecord::Base
   ### Validations
   # also see validations in BudgetSpendHelper
   validate :approved_activity_cannot_be_changed, :unless => :is_implementer_split?
+  validate :cannot_approve_unclassified_activity, :unless => :is_implementer_split?
   validates_presence_of :name, :if => :is_activity_or_other_cost?
   validates_presence_of :description, :if => :is_activity_or_other_cost?
-  validates_presence_of :project_id, :if => :is_activity?, :unless => Proc.new{|a| a.project}
+  validates_presence_of :project_id, :if => :is_activity?, :unless => Proc.new{|a| a.project && a.project.new_record?}
   validates_presence_of :data_response_id
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity_or_other_cost?,
     :allow_blank => true
@@ -401,7 +402,12 @@ class Activity < ActiveRecord::Base
 
     def approved_activity_cannot_be_changed
       message = "Activity was approved by SysAdmin and cannot be changed"
-      errors.add(:base, message) if changed? and approved and changed != ["approved"]
+      errors.add(:base, message) if changed? && approved? && !changed.include?("approved")
+    end
+
+    def cannot_approve_unclassified_activity
+      message = "Cannot approve unclassified #{self.class.to_s.titleize}"
+      errors.add(:base, message) if changed? && !classified? && changed.include?("approved")
     end
 
     def is_activity_or_other_cost?

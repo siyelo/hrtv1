@@ -60,13 +60,15 @@ class ActivitiesController < Reporter::BaseController
       @activity = @response.activities.find(params[:id])
       unless @activity.approved?
         @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
-        @activity.save(false)
-      end
-      render :json => {:status => 'success'}
-      return true
+        if @activity.save
+          status_msg = 'success'
+        else
+          status_msg = @activity.errors.full_messages.join(', ')
+        end
+      end 
+      render :json => {:status => status_msg}
     else
       render :json => {:status => 'access denied'}
-      return false
     end
   end
 

@@ -52,10 +52,28 @@ describe Activity do
   end
 
   describe "Validations" do
-    it { should validate_presence_of(:description) }
+    subject { basic_setup_activity; @activity }
     it { should validate_presence_of(:data_response_id) }
     it { should validate_presence_of(:project_id) }
     it { should ensure_length_of(:name) }
+    it { should validate_presence_of(:description) }
+
+    it "cannot be edited once approved" do
+      subject.stub(:approved).and_return(true)
+      subject.stub(:approved?).and_return(true)
+
+      subject.name = "new activity name"
+      subject.save.should == false
+      subject.errors.on(:base).should include("Activity was approved by SysAdmin and cannot be changed")
+    end
+
+    it "cannot be approved if unclassified" do
+      subject.stub(:classified?).and_return(false)
+
+      subject.approved = true
+      subject.save.should == false
+      subject.errors.on(:base).should include("Cannot approve unclassified Activity")
+    end
   end
 
   describe "update attributes" do
@@ -280,16 +298,6 @@ describe Activity do
         activity.provider.should == other_org # duh
       end
     end
-  end
-
-
-  it "cannot be edited once approved" do
-    basic_setup_activity
-    @activity.approved.should == nil
-    @activity.approved = true
-    @activity.save!
-    @activity.name = "blarpants"
-    @activity.save.should == false
   end
 
   describe "counter cache" do

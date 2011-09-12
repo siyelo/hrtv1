@@ -18,7 +18,7 @@ class ActivitiesController < Reporter::BaseController
   def edit
     prepare_classifications(resource)
     load_comment_resources(resource)
-    load_validation_errors(resource) if params[:mode].blank?
+    load_validation_errors(resource) if on_implementers_page?
     edit!
   end
 
@@ -65,7 +65,7 @@ class ActivitiesController < Reporter::BaseController
         else
           status_msg = @activity.errors.full_messages.join(', ')
         end
-      end 
+      end
       render :json => {:status => status_msg}
     else
       render :json => {:status => 'access denied'}
@@ -150,5 +150,9 @@ class ActivitiesController < Reporter::BaseController
     def load_validation_errors(resource)
       resource.implementer_splits.find(:all, :include => :provider).each {|is| is.valid?}
       resource.valid?
+    end
+
+    def on_implementers_page?
+      params[:mode].blank?
     end
 end

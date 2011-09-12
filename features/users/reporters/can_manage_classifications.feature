@@ -236,20 +236,20 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can follow classification workflow for activity
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-	And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+        And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
       When I follow "Projects"
-	And I follow "activity1"
+        And I follow "activity1"
       When I press "Save & Add Locations >"
-	And I press "Save & Add Purposes >"
-	And I press "Save & Add Inputs >"
-	And I press "Save & Add Targets >"
-	And I press "Save & Go to Overview >"
+        And I press "Save & Add Purposes >"
+        And I press "Save & Add Inputs >"
+        And I press "Save & Add Targets >"
+        And I press "Save & Go to Overview >"
       Then I should see "Projects & Activities" within "h1"
 
     Scenario: Reporter can follow other costs workflow for other cost
       Given an other cost exists with name: "OC1", data_response: the data_response, project: the project
       When I follow "Projects"
-	And I follow "OC1"
+        And I follow "OC1"
       When I press "Save & Add Locations >"
-	And I press "Save & Go to Overview >"
+        And I press "Save & Go to Overview >"
       Then I should see "Projects & Activities" within "h1"

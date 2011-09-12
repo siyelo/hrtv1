@@ -1,5 +1,4 @@
 %ul.horizontal
-  -# FIXME to work for other costs
   %li= link_to 'Show mine', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'my'), :class => (params[:view] == 'my' ? 'active create_alt' : 'create_alt')
 
   %li= link_to 'Show all', edit_activity_or_ocost_path(outlay, :mode => params[:mode], :view => 'all'), :class => (params[:view] == 'all' ? 'active create_alt' : 'create_alt')
@@ -27,7 +26,7 @@
 
   %ul.activity_tree{:activity_budget => outlay.budget, :activity_spend => outlay.spend, :activity_currency => outlay.currency}
     - @budget_coding_tree.root_codes.each do |code|
-      = render 'activities/code_row', :code => code, :margin => 0, :outlay => outlay
+      = render 'shared/outlays/code_row', :code => code, :margin => 0, :outlay => outlay
 
   .coding_total.right
     %p.value.left.js_total_spend

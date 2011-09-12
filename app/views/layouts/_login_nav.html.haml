@@ -4,21 +4,15 @@
     %ul
       %li
         - link_to edit_profile_path do
-          //= image_tag("icon_profile.png")
           My Profile
       %li
         - link_to "http://hrtapp.tenderapp.com/", :target => "_blank" do
-          //= image_tag("icon_dashboard.png")
           Help
       %li
         - link_to logout_path do
-          //= image_tag("icon_logout.png")
           Sign Out
     %p
       = "#{current_user.email}"
-      // Alternative option to display the user
-      //= "#{current_user.name} (#{current_user.email})"
-
 
   - else
     %ul
@@ -27,5 +21,3 @@
           =image_tag"icon_signin.png"
           Sign in
     %span Have an account?
-
-

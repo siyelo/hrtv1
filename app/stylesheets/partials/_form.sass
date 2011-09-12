@@ -104,7 +104,6 @@ input[type="text"], input[type="password"], textarea, select
     select, input[type=text], input[type=password], textarea
       float: left
       margin: 0
-      width: 35%
 
     select
       padding: 4px 4px 3px
@@ -838,6 +837,17 @@ a.tooltip
     -moz-box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
     box-shadow: rgba(0,0,0,0.03) 0 -4px 6px inset
 
+  // temporary hack to override basic_form input widths
+  // remove after formtastic refactor is finished
+  select, input[type=text], input[type=password], textarea
+    width: auto
+    &.date_picker
+      background: #fff image_url("icon_calendar2.png") no-repeat 95% 50%
+      width: 80px !important
+      &:hover, &:focus
+        background: #fff image_url("icon_calendar.png") no-repeat 95% 50%
+
+
 .bulk_edit_form
   .section_form
     width: 900px
@@ -881,3 +891,35 @@ a.tooltip
 
 p.value
   overflow: visible !important
+
+li.input-wrapper
+  input, input.date_picker[type="text"], .section_form input.date_picker[type="text"]
+    width: 179px !important
+
+.input-box
+  float: left
+  position: relative
+  width: 191px
+  +box-shadow(#ccc, 1px, 1px, 2px)
+  +border-bottom-radius(4px)
+  input
+    width: 179px !important
+  &.picker
+    width: 92px
+
+
+.input-errors
+  background: $red
+  clear: both
+  color: #fff
+  font-size: 11px
+  opacity: 0.75
+  padding: 4px 5px 3px
+  +border-bottom-radius(4px)
+  +linear-gradient(color-stops($red, $red - #111))
+  +text-shadow(rgba(0, 0, 0, 0.3), 0, 1px, 0)
+
+.input-hints
+  color: $primary_light - #333
+  font-size: 11px
+  padding-left: 10px

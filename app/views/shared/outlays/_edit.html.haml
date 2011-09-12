@@ -4,7 +4,7 @@
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
 
-= render '/classifications/uncoded_overlay', :outlay => outlay
+= render '/shared/outlays/uncoded_overlay', :outlay => outlay
 
 %h1.main_heading
   = klass == Activity ? "Edit Activity" : "Edit Other Cost"

@@ -5,6 +5,6 @@
     #classification.section_form.wrapped.last
       #activity_classification
         %div.tab1{:style => 'display: block'}
-          = render '/classifications/tab', :outlay => @activity
+          = render 'shared/outlays/classification', :outlay => @activity
 
 = render 'shared/outlays/edit', :outlay => @activity

@@ -1,3 +1,5 @@
+var ALLOWED_VARIANCE = 0.05;
+
 /* Nested model forms BEGIN */
 function inspect (obj) {
         var str;
@@ -974,7 +976,7 @@ var activity_classification = function () {
     var parentValue = parseFloat(parentTotal.val()).toFixed(2)
     childTotal = childTotal.toFixed(2)
 
-    if (childTotal != parentValue && childTotal > 0){
+    if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
       parentTotal.addClass('invalid_node tooltip')
       var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
       message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
@@ -1009,12 +1011,14 @@ var checkRootNodes = function(type){
 
   topNodes.each(function(){
     value = $(this).find(type).find('input').val();
-    if (!isNaN(parseFloat(value))){total += parseFloat($(this).find(type).find('input').val());};
+    if (!isNaN(parseFloat(value))){
+      total += parseFloat($(this).find(type).find('input').val());
+    };
   });
 
   $('.totals').find(type).find('.amount').html(total);
 
-  if ((total > 100.05 || total < 99.95) && total > 0){
+  if ( (Math.abs(total - 100.00) > ALLOWED_VARIANCE) && total > 0){
     topNodes.each(function(){
       rootNode = $(this).find(type).find('input');
       if (rootNode.val().length > 0 && (!(rootNode.hasClass('invalid_node tooltip')))){

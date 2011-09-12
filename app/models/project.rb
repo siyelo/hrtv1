@@ -9,6 +9,8 @@ class Project < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = ["Project Name",
                          "Project Description",
+                         "Project Start Date",
+                         "Project End Date",
                          "Activity Name",
                          "Activity Description",
                          "Id",
@@ -87,19 +89,22 @@ class Project < ActiveRecord::Base
         row = []
         row << project.name.slice(0..MAX_NAME_LENGTH-1)
         row << project.description
+        row << project.start_date
+        row << project.end_date
         if project.activities.empty?
           csv << row
         else
           project.activities.roots.sorted.each_with_index do |activity, index|
-            row << "" if index > 0 # dont re-print project details on each line
-            row << "" if index > 0
+            4.times do
+              row << "" if index > 0 # dont re-print project details on each line
+            end
             row << activity.name.slice(0..MAX_NAME_LENGTH-1)
             row << activity.description
             if activity.implementer_splits.empty?
               csv << row
             else
               activity.implementer_splits.sorted.each_with_index do |split, index|
-                4.times do
+                6.times do
                   row << "" if index > 0 # dont re-print activity details on each line
                 end
                 row << split.id

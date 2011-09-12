@@ -102,10 +102,10 @@ class Importer
       project.name                = project_name
       project.description         = project_description.try(:strip)
       project.updated_at          = Time.now
+      project.start_date          = date_for(row['Project Start Date'], project.start_date) || Date.today
+      project.end_date            = date_for(row['Project End Date'], project.end_date) || Date.today + 1
       # if its a new record, create a default in_flow so it can be saved
       if project.in_flows.empty?
-        project.start_date        = Date.today
-        project.end_date          = Date.today + 1.year
         ff                        = project.in_flows.new
         ff.organization_id_from   = project.organization.id
         ff.spend                  = 0
@@ -170,6 +170,15 @@ class Importer
       result = previous_description
     end
     Importer::sanitize_encoding(result)
+  end
+
+  def date_for(date_row, existing_date)
+    if date_row.blank? && existing_date
+      date = existing_date
+    else
+      date = DateHelper::flexible_date_parse(date_row)
+    end
+    date
   end
 
   def self.sanitize_encoding(string)

@@ -9,6 +9,7 @@ class ProfilesController < ApplicationController
       flash[:notice] = 'Profile was successfully updated'
       redirect_to root_url
     else
+      flash.now[:error] = "Oops, we couldn't save your changes."
       render :action => 'edit'
     end
   end

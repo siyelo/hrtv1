@@ -978,7 +978,7 @@ var activity_classification = function () {
 
     if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
       parentTotal.addClass('invalid_node tooltip')
-      var message = "Amount of this node is not same as the sum of children amounts underneath (" ;
+      var message = "This amount is not the same as the sum of the amounts underneath (" ;
       message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
       parentTotal.attr('original-title', message) ;
     } else {

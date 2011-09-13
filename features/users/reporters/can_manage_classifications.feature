@@ -113,7 +113,7 @@ Feature: Reporter can enter a code breakdown for each activity
       When I fill in "activity[classifications][coding_spend][1]" with "100"
       And I fill in "activity[classifications][coding_budget][1]" with "100"
       And I hover over ".tooltip" within ".values"
-      Then I should see "Amount of this node is not same as the sum of children amounts underneath (100.00% - 40.00% = 60%)"
+      Then I should see "This amount is not the same as the sum of the amounts underneath (100.00% - 40.00% = 60%)"
 
       When I fill in "activity[classifications][coding_spend][1]" with "10"
       And I hover over ".tooltip" within ".values"

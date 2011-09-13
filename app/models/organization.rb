@@ -33,9 +33,9 @@ class Organization < ActiveRecord::Base
   has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from",
     :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
-  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id,
-    :dependent => :nullify
   has_many :projects, :through => :data_responses
+  has_many :implemented_activities, :class_name => "Activity", :foreign_key => :provider_id,
+    :dependent => :nullify
 
   ### Validations
   validates_presence_of :name
@@ -109,13 +109,30 @@ class Organization < ActiveRecord::Base
 
   def self.merge_organizations!(target, duplicate)
     ActiveRecord::Base.disable_validation!
-    target.activities << duplicate.activities
-    target.data_requests << duplicate.data_requests
-    target.data_responses << duplicate.data_responses
-    target.out_flows << duplicate.out_flows
-    target.provider_for << duplicate.provider_for
-    target.location = duplicate.location
+
+    duplicate.responses.each do |response|
+      target_response = target.responses.find(:first,
+                   :conditions => ["data_request_id = ?", response.data_request_id])
+      target_response.projects << response.projects
+      target_response.projects.each do |project|
+        project.in_flows.each do |in_flow|
+          if in_flow.from == duplicate
+            in_flow.from = target
+            in_flow.save(false)
+          end
+        end
+      end
+      target_response.activities << response.activities
+    end
+
+
     target.users << duplicate.users
+
+    #target.projects << duplicate.projects
+    #target.activities << duplicate.activities
+    #target.out_flows << duplicate.out_flows
+    # target.location = duplicate.location
+    #target.provider_for << duplicate.provider_for
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
     ActiveRecord::Base.enable_validation!
   end
@@ -144,8 +161,9 @@ class Organization < ActiveRecord::Base
 
   ### Instance Methods
 
+  # TODO CHECK ME
   def is_empty?
-    if users.empty? && out_flows.empty? && provider_for.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && out_flows.empty? && implemented_activities.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false

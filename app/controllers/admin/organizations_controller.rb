@@ -10,20 +10,20 @@ class Admin::OrganizationsController < Admin::BaseController
   def index
     filter = params[:filter]
     scope = Organization.scoped({})
-                         
+
     if AVAILABLE_FILTERS.include?(filter)
       scope = Organization.with_submitted_responses_for(current_request) if filter == "Submitted"
-      scope = Organization.with_submitted_for_final_responses_for(current_request) if filter == "Submitted for Final Review" 
+      scope = Organization.with_submitted_for_final_responses_for(current_request) if filter == "Submitted for Final Review"
       scope = Organization.with_complete_responses_for(current_request)  if filter == "Complete"
-      scope = Organization.with_empty_responses_for(current_request) if filter == "Not Started" 
+      scope = Organization.with_empty_responses_for(current_request) if filter == "Not Started"
       scope = Organization.with_in_progress_responses_for(current_request) if filter == "In Progress"
     end
-    
+
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                            UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                            UPPER(organizations.fosaid) LIKE UPPER(:q)",
                                            {:q => "%#{params[:query]}%"}]) if params[:query]
-    
+
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
                     :order => "UPPER(organizations.#{sort_column}) #{sort_direction}")
   end
@@ -86,7 +86,7 @@ class Admin::OrganizationsController < Admin::BaseController
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if duplicate.users.size > 0
+      if duplicate.users_count > 0
         render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
         Organization.merge_organizations!(target, duplicate)
@@ -120,7 +120,7 @@ class Admin::OrganizationsController < Admin::BaseController
       redirect_to admin_organizations_url
     end
   end
-  
+
   private
 
     def render_error(message, path)

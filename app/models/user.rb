@@ -42,6 +42,11 @@ class User < ActiveRecord::Base
   delegate :responses, :to => :organization # instead of deprecated data_response
   delegate :latest_response, :to => :organization # find the last response in the org
 
+  # assign organization association so that counter cache is updated
+  def organization_id=(organization_id)
+    self.organization = Organization.find_by_id(organization_id) if organization_id.present?
+  end
+
   ### Class Methods
 
   #authlogic authentication

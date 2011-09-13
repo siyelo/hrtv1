@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110905141149) do
+ActiveRecord::Schema.define(:version => 20110913085847) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -123,6 +123,16 @@ ActiveRecord::Schema.define(:version => 20110905141149) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "currencies", :force => true do |t|
     t.string   "conversion"
     t.float    "rate"
@@ -216,6 +226,15 @@ ActiveRecord::Schema.define(:version => 20110905141149) do
   add_index "funding_flows", ["project_id"], :name => "index_funding_flows_on_project_id"
   add_index "funding_flows", ["self_provider_flag"], :name => "index_funding_flows_on_self_provider_flag"
 
+  create_table "funding_sources", :force => true do |t|
+    t.integer  "activity_id"
+    t.integer  "funding_flow_id"
+    t.decimal  "spend"
+    t.decimal  "budget"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "funding_streams", :force => true do |t|
     t.integer  "project_id"
     t.integer  "organization_ufs_id"
@@ -233,6 +252,11 @@ ActiveRecord::Schema.define(:version => 20110905141149) do
     t.text     "message"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "locations_organizations", :id => false, :force => true do |t|
+    t.integer "location_id"
+    t.integer "organization_id"
   end
 
   create_table "organizations", :force => true do |t|
@@ -329,8 +353,5 @@ ActiveRecord::Schema.define(:version => 20110905141149) do
     t.boolean  "active",                   :default => false
     t.integer  "location_id"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

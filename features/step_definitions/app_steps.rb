@@ -350,7 +350,7 @@ When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
 end
 
 Given /^now is "([^"]*)"$/ do |time|
-  Timecop.freeze(Date.parse(time))
+  Timecop.freeze DateTime.parse(time)
 end
 
 When /^I confirm the js popup$/ do

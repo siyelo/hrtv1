@@ -200,6 +200,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  # authlogic only updates last_login after youve signed in the 2nd time
+  # if the user has only signed in once, return the current login date
+  def last_signin_at
+    last_login_at || current_login_at
+  end
+
   private
 
     def assign_current_response_to_latest
@@ -242,6 +248,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -263,5 +270,7 @@ end
 #  invite_token             :string(255)
 #  active                   :boolean         default(FALSE)
 #  location_id              :integer
+#  current_login_at         :datetime
+#  last_login_at            :datetime
 #
 

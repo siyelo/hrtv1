@@ -195,6 +195,39 @@ describe Organization do
     end
   end
 
+  describe "#last logged in user" do
+    it "returns the last user in that organization that logged in if there is one user" do
+      org = Factory(:organization)
+      user1 = Factory(:user, :organization => org,
+                      :last_login_at => DateTime.parse('2009-06-04 02:00:00'))
+      org.last_user_logged_in.should == user1
+    end
+
+    it "returns the last user in that organization that logged in if there is one user and the last_login_at is nil" do
+      org = Factory(:organization)
+      user1 = Factory(:user, :organization => org,
+                      :last_login_at => DateTime.parse('2009-06-04 02:00:00'))
+      org.last_user_logged_in.should == user1
+    end
+
+    it " returns nil when nobody has ever logged in" do
+      org = Factory(:organization)
+      user1 = Factory(:user, :organization => org,
+                      :last_login_at => nil)
+      user2 = Factory(:user, :organization => org)
+      org.last_user_logged_in.should be_nil
+    end
+
+    it "returns the last user for that organization if there are users from different orgs" do
+      org1 = Factory(:organization)
+      org2 = Factory(:organization)
+      user1 = Factory(:user, :organization => org1,
+                      :last_login_at => DateTime.parse('2011-06-04 02:00:00'))
+      user2 = Factory(:user, :organization => org2)
+      org1.last_user_logged_in.should == user1
+    end
+  end
+
   describe "creating a organization record" do
     before :each do
       basic_setup_project
@@ -266,7 +299,6 @@ describe Organization do
       @organization.is_empty?.should_not be_true
     end
   end
-
 
   describe "CSV" do
     before :each do

@@ -15,6 +15,12 @@ table.standard
       color: white
       padding-left: 5px
       height: 25px
+      &.login
+        min-width: 15%
+      &.org
+        min-width: 20%
+      &.invitation
+        min-width: 12%
       &.dummy
         padding: 5px
       a
@@ -23,16 +29,16 @@ table.standard
         display: block
         font-size: 11px
         font-weight: bold
-        padding: 10px 20px 7px 12px
+        padding: 10px 7px 7px 0px
         text-decoration: none
         text-transform: uppercase
         &:hover, &:focus, &:active
           color: #FFF
           //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
         &.asc
-          background: image_url("icon_arrow_up.gif") no-repeat right center $primary_dark - #111
+          background: image_url("icon_arrow_up.gif") no-repeat 85% center
         &.desc
-          background: image_url("icon_arrow_down.gif") no-repeat right center $primary_dark - #111
+          background: image_url("icon_arrow_down.gif") no-repeat 85% center
       &:first-child a
         +border-top-left-radius
       &:last-child a
@@ -85,7 +91,7 @@ table.standard
   th, td
     min-width: 60px
     &:first-child
-      padding-left: 0
+      padding-left: 10px
     &:last-child
       padding-left: 0
       padding-right: 0
@@ -290,7 +296,7 @@ table.workplan
         +text-shadow(#000, 0, 1px, 0)
       &.hidden
         display: none
-        
+
   .name
 
     font: normal 13px/1.4 Avenir, Arial, sans-serif

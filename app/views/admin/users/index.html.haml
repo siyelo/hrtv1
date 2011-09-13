@@ -8,12 +8,12 @@
 
 %ul.horizontal
   %li
-    - link_to new_admin_user_path, :class => "create_new" do
-      = image_tag "new_white.png"
+    - link_to new_admin_user_path, :class => "create_alt" do
+      = image_tag "new.png"
       Create User
 
   %li
-    = link_to "File Import", '#', :id => "csv_file", :class => 'create_new'
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_alt'
 
 #import
   %h3.title_bar Import a CSV file
@@ -38,9 +38,10 @@
     %tr
       %th= sortable "full_name"
       %th= sortable "email"
-      %th= sortable "organizations.name", "Organization"
-      %th= "Role"
-      %th= "Invitation"
+      %th.org= sortable "organizations.name", "Organization"
+      %th.login= sortable "last_login_at", "Last login"
+      %th= sortable "roles_mask", "Role"
+      %th.invitation= sortable "invite_token", "Invitation"
       %th
 
   %tbody
@@ -49,8 +50,9 @@
         %td= link_to "#{user.full_name}", edit_admin_user_path(user)
         %td= mail_to user.email
         %td= user.organization.try(:name)
+        %td= last_signin_for(user)
         %td= user.roles.map{|role| role.humanize}.join(', ')
-        %td= user.invite_token.nil? ? "No pending invitation" : "1 pending"
+        %td= user.invite_token.nil? ? "No pending" : "1 pending"
         %td
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_user_path(user)

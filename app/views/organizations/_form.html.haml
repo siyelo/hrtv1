@@ -40,12 +40,41 @@
 
     %li.last
       %h2 Contact Details
-      %ul.section_form.last
+      %ul.section_form
         = f.text_field :contact_name, :label => "Contact Name", :required => true, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
         = f.text_field :contact_position, :label => "Contact Position", :required => true, :hint => "The position of the contact at your organization.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
         = f.text_field :contact_phone_number, :label => "Phone number", :required => true, :hint => "A telephone number that can be used to contact the contact person.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
         = f.text_field :contact_main_office_phone_number, :label => "Office number", :required => true, :hint => "The telephone number of the organizations main office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
         = f.text_field :contact_office_location, :label => "Office location", :required => true, :hint => "The geographic location of the office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+
+    %li.last
+      %h2 Users
+      %ul.section_form.last
+        %table.standard.rounded
+          %thead
+            %tr
+              %th= sortable "full_name"
+              %th= sortable "email"
+              %th= sortable "last_login_at"
+              %th= "Role"
+              %th= "Invitation"
+              - if current_user.sysadmin?
+                %th
+
+          %tbody
+            - if @users
+              - @users.each do |user|
+                %tr{:class => cycle("even", "odd")}
+                  %td= link_to "#{user.full_name}", edit_admin_user_path(user)
+                  %td= mail_to user.email
+                  %td= user.last_login_at.strftime('%d %b %Y %T %z') if user.last_login_at
+                  %td= user.roles.map{|role| role.humanize}.join(', ')
+                  %td= user.invite_token.nil? ? "No pending invitation" : "1 pending"
+                  - if current_user.sysadmin?
+                    %td
+                      %ul.manage_bar
+                        %li= link_to "Edit", edit_admin_user_path(user)
+                        %li= link_to "x", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right"
 
       %fieldset.wrap-80.buttons.push-12
         %ol

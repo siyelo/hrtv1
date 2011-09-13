@@ -1,20 +1,16 @@
 - response = organization.response_for(current_request)
 - response_link = link_to organization.name, response_projects_path(response) if response
-
+- user = organization.last_user_logged_in
 %tr
   %td.title= response_link || organization.name
-  %td= organization.contact_phone_number ? "#{organization.contact_name} (#{organization.contact_phone_number})" : "#{organization.contact_name}"
-  %td
-    %ul
-      - organization.user_emails(2).each do |e|
-        %li= mail_to(e)
+  - if current_user.sysadmin?
+    %td= user.last_login_at.strftime('%d %b %Y %T %z') if user
+    %td= user.name if user
   %td= response.nil? ? "n/a" : "#{response.activities.manager_approved.count}/#{response.activities_count}"
   %td= response.nil? ? "n/a" : response.status
 
-  - if current_user.admin?
+  - if current_user.sysadmin?
     %td= organization.raw_type
-    %td= organization.fosaid
-    %td= organization.location_name
     %td
       %ul.manage_bar
         %li= link_to "Edit", edit_admin_organization_path(organization)

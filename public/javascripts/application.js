@@ -843,8 +843,9 @@ var activity_classification = function () {
   if (mode != 'locations') {
     addCollabsibleButtons('tab1');
   }
-  checkRootNodes('.budget:first');
-  checkRootNodes('.spend:first');
+  checkRootNodes('budget');
+  checkRootNodes('spend');
+  checkAllChildren();
 
   showSubtotalIcons();
 
@@ -856,8 +857,8 @@ var activity_classification = function () {
   $('.js_submit_btn').click(function (e) {
     var ajaxLoader = $(this).closest('ol').find('.ajax-loader');
     ajaxLoader.show();
-    checkRootNodes('.spend:first');
-    checkRootNodes('.budget:first');
+    checkRootNodes('spend');
+    checkRootNodes('budget');
     if ($('.invalid_node').size() > 0){
       e.preventDefault();
       alert('The classification tree could not be saved.  Please correct all errors and try again')
@@ -875,7 +876,8 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
       });
-      checkRootNodes('.spend');
+      checkRootNodes('spend');
+      checkAllChildren();
     };
   });
 
@@ -888,31 +890,34 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());
       });
-      checkRootNodes('.budget');
+      checkRootNodes('budget');
+      checkAllChildren();
     };
   });
 
   $(".percentage_box").keyup(function(event) {
     var element = $(this);
     var isSpend = element.parents('div:first').hasClass('spend')
-    var type = (isSpend) ? '.spend:first' : '.budget:first';
-    var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
-    var siblingLi = element.parents('ul:first').children('li');
+    var type = (isSpend) ? 'spend' : 'budget';
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
     updateTotalValue(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
-      clearChildNodes(element, event,type);
-    }
-    if (event.keyCode != 9){
-      updateParentNodes(siblingLi, type, parentTotal)
+      clearChildNodes(element, event, type);
     }
 
+    var period = 190;
+    var bksp = 46;
+    var del = 8;
+    //update parent nodes if: numeric keys, backspace/delete, period or undefined (i.e. called from another function)
+    if (typeof event.keyCode == 'undefined' || (event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode == del || event.keyCode == bksp || event.keyCode >= 37 && event.keyCode <= 40){
+      updateParentNodes(element, type)
+    }
     //check whether children (1 level deep) are equal to my total
     if (childLi.size() > 0){
-      compareChildrenToParent(element, childLi, type);
+      compareChildrenToParent(element, type);
     };
 
     //check whether root nodes are = 100%
@@ -922,7 +927,11 @@ var activity_classification = function () {
 
   numericInputField(".percentage_boxi, .js_spend, .js_budget");
 
-  var updateParentNodes = function(siblingLi, type, parentTotal){
+  var updateParentNodes = function(element, type){
+    type = '.' + type + ':first'
+    var parentElement = element.parents('ul:first').prev('div:first').find(type).find('input');
+    var siblingLi = element.parents('ul:first').children('li');
+
     var siblingValue = 0;
     var siblingTotal = 0;
     siblingLi.each(function (){
@@ -932,13 +941,15 @@ var activity_classification = function () {
       }; 
     });
     siblingTotal = siblingTotal == 0 ? '' : siblingTotal
-    parentTotal.val(siblingTotal);
-    parentTotal.trigger('keyup');
+    parentElement.val(siblingTotal);
+    parentElement.trigger('keyup');
   }
 
   var clearChildNodes = function(element, event, type){
     var bksp = 46;
     var del = 8;
+    type = '.' + type + ':first'
+
     if ((event.keyCode == bksp || event.keyCode == del)){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
 
@@ -961,31 +972,6 @@ var activity_classification = function () {
     }
   }
 
-  var compareChildrenToParent = function(parentTotal, childLi, type){
-
-    var childValue = 0;
-    var childTotal = 0;
-
-    childLi.each(function (){
-      childValue = parseFloat($(this).find(type).find('input:first').val())
-      if (!isNaN(childValue)) {
-        childTotal = childTotal + childValue
-      };
-    });
-
-    var parentValue = parseFloat(parentTotal.val()).toFixed(2)
-    childTotal = childTotal.toFixed(2)
-
-    if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
-      parentTotal.addClass('invalid_node tooltip')
-      var message = "This amount is not the same as the sum of the amounts underneath (" ;
-      message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
-      parentTotal.attr('original-title', message) ;
-    } else {
-      parentTotal.removeClass('invalid_node tooltip')
-    };
-  };
-
   var updateSubTotal = function(element){
     var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
     var activity_spend = parseFloat(element.parents('ul:last').attr('activity_spend'));
@@ -1004,10 +990,47 @@ var activity_classification = function () {
   };
 }
 
+var checkAllChildren = function(){
+  var inputs = $('.percentage_box')
+  inputs.each(function(){
+    if ($(this).val !== ''){
+      var type = $(this).hasClass('js_spend') ? 'spend' : 'budget'
+      compareChildrenToParent($(this), type);
+    }
+  });
+}
+
+var compareChildrenToParent = function(parentElement, type){
+  var childValue = 0;
+  var childTotal = 0;
+  var childLi = parentElement.parents('li:first').children('ul:first').children('li');
+  type = '.' + type + ':first'
+
+  childLi.each(function (){
+    childValue = parseFloat($(this).find(type).find('input:first').val())
+    if (!isNaN(childValue)) {
+      childTotal = childTotal + childValue
+    };
+  });
+
+  var parentValue = parseFloat(parentElement.val()).toFixed(2)
+  childTotal = childTotal.toFixed(2)
+
+  if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
+    parentElement.addClass('invalid_node tooltip')
+    var message = "This amount is not the same as the sum of the amounts underneath (" ;
+    message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
+    parentElement.attr('original-title', message) ;
+  } else {
+    parentElement.removeClass('invalid_node tooltip')
+  };
+};
+
 var checkRootNodes = function(type){
   var topNodes =  $('.activity_tree').find('li:first').siblings().andSelf();
   var total = 0;
   var value = 0;
+  type = '.' + type + ':first'
 
   topNodes.each(function(){
     value = $(this).find(type).find('input').val();

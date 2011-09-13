@@ -174,8 +174,8 @@ class ApplicationController < ActionController::Base
       super
     end
 
-    def latest_request_message(request)
-      "You are now viewing your data for the latest Request: \"<span class='bold'>#{request.name}</span>\""
+    def request_message(request)
+      "You are now viewing your data for the Request: \"<span class='bold'>#{request.name}</span>\""
     end
 
     def not_latest_request_message(request)

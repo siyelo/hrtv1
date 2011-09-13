@@ -7,10 +7,6 @@ module ClassificationsHelper
     budget_assignments.has_key?(code.id) || spend_assignments.has_key?(code.id)
   end
 
-  def percentage_field_options(code, assignment, valid)
-    valid ? {:title => node_error(code, assignment), :class => "percentage_box tooltip invalid_node"} : {}
-  end
-
   def derive_percentage_from_amount(activity_or_ocost, amount_field, assignment)
     if assignment
       if assignment.percentage.nil?

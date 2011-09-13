@@ -1,50 +1,8 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe Charts::DataResponsePies do
-  it "should return even split for two root MTEFs" do
-    basic_setup_activity
-    @code1 = Factory :mtef_code
-    @code2 = Factory :mtef_code
-    @purpose_split1 = Factory :coding_budget, :code => @code1, :activity => @activity,
-                        :percentage => 60, :cached_amount => nil
-    @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
-                        :percentage => 40, :cached_amount => nil
-    @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-            :budget => 100)
-    @activity.reload;
-    @activity.save!
-    # we dont run delayed_job in test, so call the synchronous method manually
-    @activity.update_classified_amount_cache(CodingBudget)
-    @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
-    @assignments.should have(2).items
-    @assignments[0].name.should == @code1.name
-    @assignments[1].name.should == @code2.name
-    @assignments[0].value.should == 60
-    @assignments[1].value.should == 40
-  end
-
-  it "should return leaf MTEFs only" do
-    basic_setup_activity
-    @code1 = Factory :mtef_code
-    @code11 = Factory :mtef_code, :parent => @code1
-    @code2 = Factory :mtef_code
-    @purpose_split1 = Factory :coding_budget, :code => @code11, :activity => @activity,
-                        :percentage => 60, :cached_amount => nil
-    @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
-                        :percentage => 40, :cached_amount => nil
-    @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-            :budget => 100)
-    @activity.reload; @activity.save!
-    # we dont run delayed_job in test, so call the synchronous method manually
-    @activity.update_classified_amount_cache(CodingBudget)
-    @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
-    @assignments.should have(2).items
-    @assignments[0].name.should == @code11.name
-    @assignments[1].name.should == @code2.name
-    @assignments[0].value.should == 60
-    @assignments[1].value.should == 40
-  end
-
   describe "MTEF chart" do
     before :each do
       basic_setup_activity
@@ -53,16 +11,12 @@ describe Charts::DataResponsePies do
     end
 
     it "should return even split for two root MTEFs" do
-
-      @purpose_split1 = Factory :coding_budget, :code => @code1, :activity => @activity, :percentage => 60,
-                         :cached_amount => nil
-      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity, :percentage => 40,
-                         :cached_amount => nil
-      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-              :budget => 100)
-      @activity.reload; @activity.save!
-      # we dont run delayed_job in test, so call the synchronous method manually
-      @activity.update_classified_amount_cache(CodingBudget)
+      @purpose_split1 = Factory :coding_budget, :code => @code1, :activity => @activity,
+                          :percentage => 60, :cached_amount => 60
+      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
+                          :percentage => 40, :cached_amount => 40
+      @sa             = Factory :sub_activity, :activity => @activity,
+                          :data_response => @response, :budget => 100
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code1.name
@@ -73,15 +27,44 @@ describe Charts::DataResponsePies do
 
     it "should return leaf MTEFs only" do
       @code11 = Factory :mtef_code, :parent => @code1
-      @purpose_split1 = Factory :coding_budget, :code => @code11, :activity => @activity, :percentage => 60,
-                         :cached_amount => nil
-      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity, :percentage => 40,
-                         :cached_amount => nil
-      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-             :budget => 100)
-      @activity.reload; @activity.save!
-      # we dont run delayed_job in test, so call the synchronous method manually
-      @activity.update_classified_amount_cache(CodingBudget)
+      @purpose_split1 = Factory :coding_budget, :code => @code11, :activity => @activity,
+                          :percentage => 60, :cached_amount => 60
+      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
+                          :percentage => 40, :cached_amount => 40
+      @sa             = Factory :sub_activity, :activity => @activity,
+                          :data_response => @response, :budget => 100
+      @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
+      @assignments.should have(2).items
+      @assignments[0].name.should == @code11.name
+      @assignments[1].name.should == @code2.name
+      @assignments[0].value.should == 60
+      @assignments[1].value.should == 40
+    end
+
+
+    it "should return even split for two root MTEFs" do
+      @purpose_split1 = Factory :coding_budget, :code => @code1, :activity => @activity,
+                                :percentage => 60, :cached_amount => 60
+      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
+                                :percentage => 40, :cached_amount => 40
+      @sa             = Factory :sub_activity, :activity => @activity,
+                                :data_response => @response, :budget => 100
+      @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
+      @assignments.should have(2).items
+      @assignments[0].name.should == @code1.name
+      @assignments[1].name.should == @code2.name
+      @assignments[0].value.should == 60
+      @assignments[1].value.should == 40
+    end
+
+    it "should return leaf MTEFs only" do
+      @code11 = Factory :mtef_code, :parent => @code1
+      @purpose_split1 = Factory :coding_budget, :code => @code11, :activity => @activity,
+                                :percentage => 60, :cached_amount => 60
+      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
+                                :percentage => 40, :cached_amount => 40
+      @sa             = Factory :sub_activity, :activity => @activity,
+                                :data_response => @response, :budget => 100
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code11.name
@@ -93,17 +76,15 @@ describe Charts::DataResponsePies do
     it "should return leaf MTEFs only even if parent split has amount(s)" do
       @code11 = Factory :mtef_code, :parent => @code1
       # this is how the app currently works. Parent split nodes look like this
-      @purpose_split1 = Factory :coding_budget, :code => @code1, :activity => @activity, :percentage => 60,
-                         :cached_amount => nil
-      @purpose_split1 = Factory :coding_budget, :code => @code11, :activity => @activity, :percentage => 60,
-                         :cached_amount => nil
-      @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity, :percentage => 40,
-                         :cached_amount => nil
-      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-             :budget => 100)
-      @activity.reload; @activity.save!
-      # we dont run delayed_job in test, so call the synchronous method manually
-      @activity.update_classified_amount_cache(CodingBudget)
+      @purpose_split1 = Factory :coding_budget, :code => @code1,
+                          :activity => @activity, :percentage => 60, :cached_amount => 60
+      @purpose_split1 = Factory :coding_budget, :code => @code11,
+                          :activity => @activity, :percentage => 60, :cached_amount => 60
+      @purpose_split2 = Factory :coding_budget, :code => @code2,
+                          :activity => @activity, :percentage => 40, :cached_amount => 40
+      @sa             = Factory :sub_activity, :activity => @activity,
+                          :data_response => @response, :budget => 100
+
       @chart_items = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @chart_items.size.should == 2
       @chart_items[0].name.should == @code11.name

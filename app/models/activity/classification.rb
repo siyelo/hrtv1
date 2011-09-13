@@ -50,7 +50,7 @@ module Activity::Classification
     end
 
     def coding_spend_district_classified?
-      !data_response.request.locations?  || coding_spend_district_valid?
+      !data_response.request.locations? || coding_spend_district_valid?
     end
 
     def budget_classified?

@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe Activity, "Classification" do
   describe "coding_budget_classified?" do
     it "is classified when activity budget is equal to coded budget" do
@@ -14,7 +16,8 @@ describe Activity, "Classification" do
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudget.update_classifications(activity, params)
-      activity.coding_budget_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_budget_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded budget" do
@@ -29,7 +32,8 @@ describe Activity, "Classification" do
       activity.coding_budget_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingBudget.update_classifications(activity, params)
-      activity.coding_budget_classified?.should be_false
+      run_delayed_jobs
+      activity.reload.coding_budget_classified?.should be_false
     end
   end
 
@@ -47,7 +51,8 @@ describe Activity, "Classification" do
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudgetCostCategorization.update_classifications(activity, params)
-      activity.coding_budget_cc_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_budget_cc_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded cost category budget" do
@@ -63,7 +68,8 @@ describe Activity, "Classification" do
       activity.coding_budget_cc_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingBudgetCostCategorization.update_classifications(activity, params)
-      activity.coding_budget_cc_classified?.should be_false
+      run_delayed_jobs
+      activity.reload.coding_budget_cc_classified?.should be_false
     end
   end
 
@@ -81,7 +87,8 @@ describe Activity, "Classification" do
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingBudgetDistrict.update_classifications(activity, params)
-      activity.coding_budget_district_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_budget_district_classified?.should be_true
     end
 
     it "is not classified when activity budget is not equal to coded location budget" do
@@ -96,7 +103,8 @@ describe Activity, "Classification" do
       activity.coding_budget_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingBudgetDistrict.update_classifications(activity, params)
-      activity.coding_budget_district_classified?.should be_false
+      run_delayed_jobs
+      activity.reload.coding_budget_district_classified?.should be_false
     end
   end
 
@@ -113,7 +121,8 @@ describe Activity, "Classification" do
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpend.update_classifications(activity, params)
-      activity.coding_spend_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_spend_classified?.should be_true
     end
 
     it "is not classified when activity spend is not equal to coded spend" do
@@ -129,7 +138,8 @@ describe Activity, "Classification" do
       activity.coding_spend_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpend.update_classifications(activity, params)
-      activity.coding_spend_classified?.should be_false
+      run_delayed_jobs
+      activity.reload.coding_spend_classified?.should be_false
     end
   end
 
@@ -146,7 +156,8 @@ describe Activity, "Classification" do
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendCostCategorization.update_classifications(activity, params)
-      activity.coding_spend_cc_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_spend_cc_classified?.should be_true
     end
 
     it "is not classified when activity spend is not equal to coded cost category spend" do
@@ -161,7 +172,8 @@ describe Activity, "Classification" do
       activity.coding_spend_cc_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendCostCategorization.update_classifications(activity, params)
-      activity.coding_spend_cc_classified?.should be_false
+      run_delayed_jobs
+      activity.reload.coding_spend_cc_classified?.should be_false
     end
   end
 
@@ -173,12 +185,11 @@ describe Activity, "Classification" do
                          :project => @project)
       sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => activity, :spend => 100)
-      activity.reload
-      activity.save
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendDistrict.update_classifications(activity, params)
-      activity.coding_spend_district_classified?.should be_true
+      run_delayed_jobs
+      activity.reload.coding_spend_district_classified?.should be_true
     end
 
     it "is not classified when activity spend is not equal to coded activity spend" do
@@ -193,6 +204,7 @@ describe Activity, "Classification" do
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 99}
       CodingSpendDistrict.update_classifications(activity, params)
+      run_delayed_jobs
       activity.coding_spend_district_classified?.should be_false
     end
   end
@@ -424,6 +436,7 @@ describe Activity, "Classification" do
             klass = @coding.to_s.camelcase.constantize #e.g. CodingBudgetDistrict
             klass.update_classifications(@activity, { @location1.id => 50,
               @location2.id => 50})
+            run_delayed_jobs
             adjusted_split = @activity.send(method)
             adjusted_split.length.should == 2
             adjusted_split[0].type.should == @coding.to_s.camelcase

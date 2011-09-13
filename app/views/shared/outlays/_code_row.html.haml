@@ -1,0 +1,42 @@
+- classified = code_classified?(@budget_assignments, @spend_assignments, code)
+- margin_max = 150
+- margin_delta = 11
+
+- if all_view? || classified
+  %li
+    %div.clearfix
+      .code_label
+        - id = "row[#{code.id}]"
+        = check_box_tag id, code.id, classified, { :tabindex => -1 }
+        = link_to image_tag("tooltip.png"), "#", :title => code.description, :class => "tooltip info" if code.description
+        = label_tag id, code.short_display
+
+      .values.js_values.right
+        .classification_input_left
+          .spend.js_spend{:style => "width: #{margin_max-margin}px;"}
+            - assignment = @spend_assignments[code.id]
+            - cached_amount = assignment.nil? ? '' : assignment.cached_amount
+            - cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
+            - association = @spend_klass.to_s.underscore.to_sym
+            - percentage = derive_percentage_from_amount(outlay, :spend, assignment)
+
+            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_spend"}
+            .inline_ratio %
+            = link_to "¤", "#", :title => "#{n2cs(cached_amount, assignment.activity.currency) if assignment}", :class => "tooltip subtotal_icon hidden"
+
+        .classification_input_right
+          .budget.js_budget{:style => "width: #{150-margin}px;"}
+            - assignment = @budget_assignments[code.id]
+            - cached_amount = assignment.nil? ? '' : assignment.cached_amount
+            - cached_label = cached_amount.blank? ? "" : "#{n2c(cached_amount)}"
+            - association = @budget_klass.to_s.underscore.to_sym
+            - percentage = derive_percentage_from_amount(outlay, :budget, assignment)
+
+            = text_field_tag "#{outlay.class.to_s.underscore}[classifications][#{association}][#{code.id}]", h(percentage), {:size => 5, :class => "percentage_box js_budget"}
+            .inline_ratio %
+            = link_to "¤", "#", :title => "#{n2cs(cached_amount, assignment.activity.currency) if assignment}", :class => "tooltip subtotal_icon hidden"
+
+    - unless code.leaf?
+      %ul
+        - @budget_coding_tree.cached_children(code).each do |child|
+          = render 'shared/outlays/code_row', :code => child, :margin => margin + margin_delta, :outlay => outlay

@@ -271,7 +271,9 @@ module ApplicationHelper
   end
 
   def codings_total(activity, type)
-    type.with_activity(activity).all.reject{|ca| !ca.code.parent.nil?}.sum{|rca| rca.percentage.to_f}
+    type.with_activity(activity).find(:all, :include => :code).
+      reject{|ca| ca.code.parent_id.present?}.
+      sum{|rca| rca.percentage.to_f}
   end
 
   def warn_if_not_classified
@@ -280,7 +282,7 @@ module ApplicationHelper
       if outlay.approved? || outlay.am_approved?
         flash.now[:error] = "Classification for approved activity cannot be changed."
       elsif !outlay.classified?
-        flash.now[:error] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
+        flash.now[:warning] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
                              #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
                              to see what still needs to be classified"}"
       end

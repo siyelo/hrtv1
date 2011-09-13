@@ -360,3 +360,14 @@ end
 When /^I dismiss the js popup$/ do
   page.driver.browser.switch_to.alert.dismiss
 end
+
+When /^I run delayed jobs$/ do
+  Delayed::Job.all.each do |job|
+    job.payload_object.perform
+    job.destroy
+  end
+end
+
+When /^I refresh the page$/ do
+  visit [ current_path, page.driver.last_request.env['QUERY_STRING'] ].reject(&:blank?).join('?')
+end

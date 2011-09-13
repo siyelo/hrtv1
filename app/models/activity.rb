@@ -190,17 +190,15 @@ class Activity < ActiveRecord::Base
 
   def update_attributes(params)
     update_classifications_from_params(params) unless is_implementer_split?
-    result = super(params)
-    # if sub activities were passed, update Activity amount cache
-    # must let caller know if this failed too...
-    result = self.save if result && !is_implementer_split?
-    result
+    super(params)
   end
 
   # This method calculates the totals of the sub-activities budget/spend
-  # This is done because an activities budget/spend is the total of their implementer_splits budget/spend
+  # This is done because an activities budget/spend is the total of
+  # their implementer_splits budget/spend
   def implementer_splits_totals(method)
-    implementer_splits.map { |sa| sa.send(method) }.compact.sum || 0
+    implementer_splits.reject { |sa| sa.marked_for_destruction? }.
+      map { |sa| sa.send(method) }.compact.sum || 0
   end
 
   #preventing user from writing
@@ -231,21 +229,29 @@ class Activity < ActiveRecord::Base
 
   # synchronously update classification tree cached amounts
   def update_classified_amount_cache(type)
-    Activity.before_update.reject! {|callback| callback.method.to_s == 'update_all_classified_amount_caches'}
+    # disable update_all_classified_amount_caches
+    # callback to be run again on save !!
+    Activity.before_update.reject! {|callback|
+      callback.method.to_s == 'update_all_classified_amount_caches' }
+
     set_classified_amount_cache(type)
-    result = self.save(false) # save the activity even if it's approved
-    Activity.send :before_update, :update_all_classified_amount_caches #re-enable callback
-    result
+    self.save(false) # save the activity even if it's approved
   end
+  handle_asynchronously :update_classified_amount_cache
 
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches
-    [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization,
-     CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
-      update_classified_amount_cache(type)
+    if budget_changed?
+      [CodingBudget, CodingBudgetDistrict, CodingBudgetCostCategorization].each do |type|
+        update_classified_amount_cache(type)
+      end
+    end
+    if spend_changed?
+      [CodingSpend, CodingSpendDistrict, CodingSpendCostCategorization].each do |type|
+        update_classified_amount_cache(type)
+      end
     end
   end
-  handle_asynchronously :update_all_classified_amount_caches
 
   def deep_clone
     clone = self.clone
@@ -359,7 +365,6 @@ class Activity < ActiveRecord::Base
           klass.update_classifications(self, values)
         end
         params.delete(:classifications)
-        params.delete(:code_assignment_tree) #not sure why this is a param?
       end
     end
 

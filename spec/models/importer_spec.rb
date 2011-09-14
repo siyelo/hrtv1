@@ -59,7 +59,7 @@ EOS
     end
   end
 
-  describe 'API (xls)' do
+  describe 'importing excel files' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
       @split2 = Factory(:sub_activity, :data_response => @response,

@@ -13,7 +13,7 @@ class Reporter::ReportsController < Reporter::BaseController
   end
 
   def show
-    send_csv(report.csv, report_name)
+    send_csv_or_xls(report.csv, report_name)
   end
 
   private

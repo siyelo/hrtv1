@@ -255,7 +255,7 @@ DEPENDENCIES
   sketches
   slurper
   spork (~> 0.8)
-  spreadsheet (~> 0.6.5.9)
+  spreadsheet
   sqlite3-ruby
   taps
   timecop

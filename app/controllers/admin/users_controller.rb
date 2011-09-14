@@ -49,7 +49,7 @@ class Admin::UsersController < Admin::BaseController
 
   def download_template
     template = User.download_template
-    send_csv(template, 'users_template.csv')
+    send_csv_or_xls(template, 'users_template.csv')
   end
 
   def create_from_file

@@ -32,15 +32,16 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def send_csv(text, filename)
-      send_data text,
-                :type => 'text/csv; charset=iso-8859-1; header=present',
-                :disposition => "attachment; filename=#{filename}"
-    end
+    def send_csv_or_xls(data, filename)
+      length = filename.length
+      if filename[length-3..length].downcase == 'xls'
+        type_string = 'application/excel'
+      else
+        # if you are not sending an xls file assume it is csv
+        type_string = 'text/csv; charset=iso-8859-1; header=present'
+      end
 
-    def send_xls(data, filename)
-      send_data data.string,
-                :type=>"application/excel",
+      send_data data, :type=> type_string,
                 :disposition=>"attachment; filename=#{filename}"
     end
 

@@ -82,17 +82,17 @@ class ProjectsController < Reporter::BaseController
 
   def download_template
     template = Project.download_template
-    send_xls(template, 'import_template.xls')
+    send_csv_or_xls(template.string, 'import_template.xls')
   end
 
   def export
     template = Project.export_all(@response)
-    send_xls(template, "all_activities.xls")
+    send_csv_or_xls(template.string, "all_activities.xls")
   end
 
   def download_workplan
     filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
-    send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
+    send_csv_or_xls(Reports::OrganizationWorkplan.new(@response).csv, filename)
   end
 
   protected

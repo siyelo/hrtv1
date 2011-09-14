@@ -91,12 +91,12 @@ class ActivitiesController < Reporter::BaseController
 
   def template
     template = Activity.download_header
-    send_csv(template, 'activities_template.csv')
+    send_csv_or_xls(template, 'activities_template.csv')
   end
 
   def export
     template = Activity.download_template(@response)
-    send_csv(template, 'activities.csv')
+    send_csv_or_xls(template, 'activities.csv')
   end
 
   def destroy

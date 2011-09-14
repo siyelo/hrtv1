@@ -7,13 +7,7 @@ class Importer
   def initialize(response, filename)
     @response = response
     @filename = filename
-    begin
-      worksheet = Spreadsheet.open(@filename).worksheet(0)
-      @file = create_hash_from_header(worksheet)
-    rescue Ole::Storage::FormatError
-      # try import the file as a csv if it is not an spreadsheet
-      @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
-    end
+    @file = open_from_filename(@filename)
     @projects = @activities = @new_splits = []
   end
 
@@ -223,6 +217,18 @@ class Importer
     project.valid?
     activity.valid?
     split.valid?
+  end
+
+  def open_from_filename(filename)
+    begin
+      worksheet = Spreadsheet.open(@filename).worksheet(0)
+      @file = create_hash_from_header(worksheet)
+    rescue Ole::Storage::FormatError
+      # try import the file as a csv if it is not an spreadsheet
+      @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+    end
+
+    @file
   end
 
   def create_hash_from_header(xls_worksheet)

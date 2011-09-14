@@ -97,7 +97,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def download_template
     template = Organization.download_template
-    send_csv_or_xls(template, 'organization_template.csv')
+    send_csv(template, 'organization_template.csv')
   end
 
   def create_from_file

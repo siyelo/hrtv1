@@ -7,7 +7,7 @@ class Importer
   def initialize(response, filename)
     @response = response
     @filename = filename
-    @file = open_from_filename(@filename)
+    @file = open_xls_or_csv(@filename)
     @projects = @activities = @new_splits = []
   end
 
@@ -219,7 +219,7 @@ class Importer
     split.valid?
   end
 
-  def open_from_filename(filename)
+  def open_xls_or_csv(filename)
     begin
       worksheet = Spreadsheet.open(@filename).worksheet(0)
       @file = create_hash_from_header(worksheet)

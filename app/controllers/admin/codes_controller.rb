@@ -44,7 +44,7 @@ class Admin::CodesController < Admin::BaseController
 
   def download_template
     template = Code.download_template
-    send_csv_or_xls(template, 'codes_template.csv')
+    send_csv(template, 'codes_template.csv')
   end
 
   def create_from_file

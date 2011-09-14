@@ -24,7 +24,7 @@ class OrganizationsController < Reporter::BaseController
       organizations = Organization.reporting.ordered
     end
     template = Organization.reporting.download_template(organizations)
-    send_csv_or_xls(template, 'organizations.csv')
+    send_csv(template, 'organizations.csv')
   end
 
   private

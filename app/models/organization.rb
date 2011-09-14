@@ -30,12 +30,12 @@ class Organization < ActiveRecord::Base
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from",
-    :dependent => :nullify
+  has_many :out_flows, :class_name => "FundingFlow",
+             :foreign_key => "organization_id_from", :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :projects, :through => :data_responses
-  has_many :implemented_activities, :class_name => "Activity", :foreign_key => :provider_id,
-    :dependent => :nullify
+  has_many :implemented_activities, :class_name => "Activity",
+             :foreign_key => :provider_id, :dependent => :nullify
 
   ### Validations
   validates_presence_of :name
@@ -61,44 +61,12 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :with_submitted_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.submitted = ? AND
-                                 (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND
-                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
-                                  request.id, true, false, false]} }
-  named_scope :with_submitted_for_final_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.submitted_for_final = ? AND
-                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
-                                  request.id, true, false]} }
-  named_scope :with_complete_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.complete = ?",
-                                  request.id, true]} }
-  named_scope :with_empty_responses_for, lambda { |request|
-                {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
-                             LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                             LEFT JOIN projects ON data_responses.id = projects.data_response_id"],
-                 :conditions => ["activities.data_response_id IS NULL AND
-                                  projects.data_response_id IS NULL AND
-                                  data_responses.data_request_id = ?", request.id],
-                 :from => ["organizations"]}}
-  named_scope :with_in_progress_responses_for, lambda { |request|
-                 {:conditions => ["organizations.id in (
-                     SELECT organizations.id
-                       FROM organizations
-                  LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
-                  INNER JOIN projects ON data_responses.id = projects.data_response_id
-                  INNER JOIN activities ON data_responses.id = activities.data_response_id
-                      WHERE data_responses.data_request_id = ? AND
-                            (data_responses.submitted IS NULL OR
-                            data_responses.submitted = ?))", request.id, false]}}
   named_scope :reporting, :conditions => "raw_type != 'Non-Reporting'"
   named_scope :nonreporting, :conditions => "raw_type = 'Non-Reporting'"
+  named_scope :responses_by_states, lambda { |request, states|
+    { :joins => {:data_responses => :data_request },
+      :conditions => ["data_requests.id = ? AND
+                       data_responses.state IN (?)", request.id, states]} }
 
 
   ### Class Methods
@@ -157,6 +125,26 @@ class Organization < ActiveRecord::Base
       organization.save ? (saved += 1) : (errors += 1)
     end
     return saved, errors
+  end
+
+  def self.unstarted_responses(request)
+    responses_by_states(request, ['unstarted'])
+  end
+
+  def self.started_responses(request)
+    responses_by_states(request, ['started'])
+  end
+
+  def self.submitted_responses(request)
+    responses_by_states(request, ['submitted'])
+  end
+
+  def self.rejected_responses(request)
+    responses_by_states(request, ['rejected'])
+  end
+
+  def self.accepted_responses(request)
+    responses_by_states(request, ['accepted'])
   end
 
   ### Instance Methods
@@ -306,7 +294,6 @@ class Organization < ActiveRecord::Base
       end
     end
 end
-
 
 # == Schema Information
 #

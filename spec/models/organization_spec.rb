@@ -112,41 +112,84 @@ describe Organization do
 
   describe "Named Scopes" do
     before :each do
-      @request1 = Factory(:data_request)
-      @request2 = Factory(:data_request)
-      @org = Factory(:organization, :name => "Responder Organization")
-      @response = @org.responses.find_by_data_request_id(@request1.id)
+      request_org   = Factory(:organization)
+      @response_org = Factory(:organization)
+      @request1     = Factory(:data_request, :organization => request_org)
+      @response1    = @response_org.latest_response
+      @request2     = Factory(:data_request, :organization => request_org)
+      @response2    = @response_org.latest_response
     end
 
-    it "should find submitted responses" do
-      @response.submitted = true
-      @response.save(false)
-      Organization.with_submitted_responses_for(@request1).should == [@org]
-      Organization.with_submitted_for_final_responses_for(@request1).should_not == [@org]
-      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    it "returns responses by states" do
+      Organization.responses_by_states(@request1, ['started']).should be_empty
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should be_empty
+
+      @response1.state = 'started'
+      @response1.save
+
+      Organization.responses_by_states(@request1, ['started']).should == [@response_org]
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should be_empty
+
+      @response2.state = 'rejected'
+      @response2.save
+
+      Organization.responses_by_states(@request1, ['started']).should == [@response_org]
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should == [@response_org]
+      Organization.responses_by_states(@request1, ['started', 'rejected']).should == [@response_org]
+    end
+  end
+
+  describe "Responses" do
+    before :each do
+      @organization1 = Factory(:organization)
+      @organization2 = Factory(:organization)
+      @request       = Factory(:data_request, :organization => @organization1)
+      @response1    = @organization1.latest_response
+      @response2    = @organization2.latest_response
     end
 
-    it "should find submitted for final review responses" do
-      @response.submitted_for_final = true
-      @response.save(false)
-      Organization.with_submitted_for_final_responses_for(@request1).should == [@org]
-      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    it "returns unstarted responses" do
+      responses = Organization.unstarted_responses(@request)
+      responses.should include(@organization1)
+      responses.should include(@organization2)
     end
 
-    it "should find completed responses" do
-      @response.complete = true
-      @response.save(false)
-      Organization.with_complete_responses_for(@request1).should == [@org]
+    it "returns started responses" do
+      @response1.state = 'started'
+      @response1.save!
+      responses = Organization.started_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
 
-    it "should find empty responses" do
-      Organization.with_empty_responses_for(@request1).should have(3).items
+    it "returns submitted responses" do
+      @response1.state = 'submitted'
+      @response1.save!
+      responses = Organization.submitted_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
 
-    it "should find in progress responses (i.e. at least one activity) " do
-      @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:activity, :project => @project, :data_response => @response)
-      Organization.with_in_progress_responses_for(@request1).should == [@org]
+    it "returns rejected responses" do
+      @response1.state = 'rejected'
+      @response1.save!
+      responses = Organization.rejected_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
+    end
+
+    it "returns accepted responses" do
+      @response1.state = 'accepted'
+      @response1.save!
+      responses = Organization.accepted_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
   end
 
@@ -274,9 +317,8 @@ describe Organization do
     end
 
     it "is not empty when it has out flows" do
+      # project factory creates out flow from organization to this project
       project = Factory(:project, :data_response => @response)
-      Factory(:funding_flow,
-              :from => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
@@ -410,8 +452,7 @@ describe Organization do
 
     it "changes organization_from when self provider" do
       project = Factory(:project, :data_response => @duplicate_response)
-      ff      = Factory(:funding_flow, :project => project, :project_from => project,
-                        :from => @duplicate_org)
+      ff      = project.in_flows.first
 
       Organization.merge_organizations!(@target_org, @duplicate_org)
       ff.reload.from.should == @target_org

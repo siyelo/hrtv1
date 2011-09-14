@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'spork'
-require 'lib/delayed_job_spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), 'lib', 'delayed_job_spec_helper'))
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,

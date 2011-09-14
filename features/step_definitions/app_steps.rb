@@ -331,8 +331,8 @@ end
 Given /^the latest response for "([^"]*)" is submitted$/ do |org_name|
   @organization = Organization.find_by_name(org_name)
   @response = @organization.latest_response
-  @response.submitted = true
-  @response.save(false)
+  @response.state = 'submitted'
+  @response.save!
 end
 
 Then /^I should receive a csv file(?: "([^"]*)")?/ do |file|
@@ -371,3 +371,10 @@ end
 When /^I refresh the page$/ do
   visit [ current_path, page.driver.last_request.env['QUERY_STRING'] ].reject(&:blank?).join('?')
 end
+
+Given /^#{capture_model} state is: "([^"]*)"$/ do |name, state|
+  response = find_model!(name)
+  response.state = state
+  response.save!
+end
+

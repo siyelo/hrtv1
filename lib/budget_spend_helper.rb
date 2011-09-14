@@ -2,20 +2,6 @@
 module BudgetSpendHelper
   include NumberHelper
 
-  def self.included(base)
-    base.class_eval do
-
-      ### Callbacks
-      if base.eql?(FundingFlow)
-        before_save :update_cached_usd_amounts
-      end
-
-      if base.eql?(Activity)
-        before_save :update_cached_usd_amounts
-      end
-    end
-  end
-
   def spend?
     !spend.nil? and spend > 0
   end

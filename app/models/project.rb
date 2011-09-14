@@ -75,8 +75,8 @@ class Project < ActiveRecord::Base
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
 
   ### Callbacks
-  # also see callbacks in BudgetSpendHelper
-  after_save :update_cached_currency_amounts, :if => Proc.new {|p| p.currency_changed?}
+  after_save   :update_cached_currency_amounts, :if => Proc.new { |p| p.currency_changed? }
+  after_create :start_response_if_unstarted
 
   ### Named Scopes
   named_scope :sorted,           {:order => "projects.name" }
@@ -437,12 +437,11 @@ class Project < ActiveRecord::Base
     def assign_project_to_activities
       activities.each {|a| a.project = self}
     end
+
+    def start_response_if_unstarted
+      response.start! if response.unstarted?
+    end
 end
-
-
-
-
-
 
 # == Schema Information
 #

@@ -10,7 +10,7 @@ class DashboardController < ApplicationController
 
   # Load the dashboard with any special conditions detected by user type
   def index
-    load_activity_manager if current_user.activity_manager?
+    load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
     warn_if_not_current_request unless current_user.district_manager?
   end
@@ -29,9 +29,9 @@ class DashboardController < ApplicationController
         :conditions =>  ["organization_id in (?) AND
                           data_responses.data_request_id = ?", organization_ids, current_request])
       @recent_responses = DataResponse.find_all_by_data_request_id(current_request,
-        :conditions => ["organization_id in (?) AND
-                         submitted_at IS NOT NULL", organization_ids],
-        :order => 'submitted_at DESC', :limit => 3)
+        :conditions => ["organization_id in (?)", organization_ids],
+        :order => 'updated_at DESC', :limit => 3)
+      @responses = current_request.data_responses
     end
 
 

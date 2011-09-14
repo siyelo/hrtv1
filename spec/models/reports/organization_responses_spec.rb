@@ -11,9 +11,9 @@ describe Reports::OrganizationResponses do
     @request        = Factory(:data_request, :organization => @organization1)
     @response1      = @organization1.latest_response
     @response2      = @organization2.latest_response
+
     # submit the 2nd one (yeah even if invalid)
-    @response2.submitted = true
-    @response2.submitted_at = Time.now
+    @response2.state = 'submitted'
     @response2.save(false)
   end
 
@@ -23,7 +23,7 @@ describe Reports::OrganizationResponses do
 
   it "should show all organizations, regardless of status" do
     Reports::OrganizationResponses.new(@request).csv.should == @header + "\n" +
-      "org1,Empty / Not Started,0.00,0.00,0.00,0.00,0.00,0.00\norg2,Submitted,0.00,0.00,0.00,0.00,0.00,0.00\n"
+      "org1,Not Yet Started,0.00,0.00,0.00,0.00,0.00,0.00\norg2,Submitted,0.00,0.00,0.00,0.00,0.00,0.00\n"
   end
 
   context 'with projects/activities in USD' do
@@ -37,7 +37,7 @@ describe Reports::OrganizationResponses do
 
     it "should show project totals" do
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-        'org1,In Progress,5.00,5.00,0.00,10.00,10.00,0.00'
+        'org1,Started,5.00,5.00,0.00,10.00,10.00,0.00'
     end
 
     it "should show project totals with cents if present" do
@@ -47,7 +47,7 @@ describe Reports::OrganizationResponses do
       @act1.reload; @act1.save!;
       @project1.save(false)
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-        'org1,In Progress,5.20,5.20,0.00,10.00,10.00,0.00'
+        'org1,Started,5.20,5.20,0.00,10.00,10.00,0.00'
     end
 
     context "with activities" do
@@ -60,19 +60,19 @@ describe Reports::OrganizationResponses do
 
       it "should show activity totals" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,17.00,17.00,0.00,16.00,16.00,0.00'
+          'org1,Started,17.00,17.00,0.00,16.00,16.00,0.00'
       end
 
       it "should show differences as negative if activity exceeds project" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,17.00,17.00,0.00,16.00,16.00,0.00'
+          'org1,Started,17.00,17.00,0.00,16.00,16.00,0.00'
       end
 
       it "should show differences as positive if project exceeds activity" do
         #@activity1.write_attribute(:spend, 2)
         @sactivit1.spend = 2; @sactivit1.save; @activity1.reload; @activity1.save!;
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,7.00,7.00,0.00,16.00,16.00,0.00'
+          'org1,Started,7.00,7.00,0.00,16.00,16.00,0.00'
       end
     end
 
@@ -86,12 +86,12 @@ describe Reports::OrganizationResponses do
 
       it "should show other costs totals" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-          'org1,In Progress,5.00,17.00,-12.00,10.00,16.00,-6.00'
+          'org1,Started,5.00,17.00,-12.00,10.00,16.00,-6.00'
       end
 
       it "should show other costs without a project" do
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
-         'org1,In Progress,5.00,17.00,-12.00,10.00,16.00,-6.00'
+         'org1,Started,5.00,17.00,-12.00,10.00,16.00,-6.00'
       end
     end
   end
@@ -112,7 +112,7 @@ describe Reports::OrganizationResponses do
 
     it "should print totals in USD for simple comparison" do
       report = Reports::OrganizationResponses.new(@request).csv
-      report.split("\n")[1].should == 'org1,In Progress,12.00,12.00,0.00,6.00,6.00,0.00'
+      report.split("\n")[1].should == 'org1,Started,12.00,12.00,0.00,6.00,6.00,0.00'
       report.split("\n")[2].should == 'org2,Submitted,9.00,9.00,0.00,4.50,4.50,0.00'
     end
   end

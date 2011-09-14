@@ -31,7 +31,7 @@
 
 .section_overlap
   %ul.section_nav
-    - ["All", "Not Started",  "Submitted", "Submitted for Final Review", "Complete", "In Progress"].each do |filter|
+    - ["All", "Not Yet Started", "Started", "Submitted", "Rejected", "Accepted"].each do |filter|
       - css_class = "active" if params[:filter] == filter || (filter == 'All' && params[:filter].blank?)
       %li= link_to filter, {:sort => params[:sort], :direction => params[:direction], :query => params[:query], :filter => filter}, {:class => css_class}
 

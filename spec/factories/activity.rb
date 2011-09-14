@@ -5,7 +5,7 @@ Factory.define :activity, :class => Activity do |f|
   f.end_date        { "2010-12-31" }
 end
 
-Factory.define :activity_budget_spend_coded, :class => Activity, :parent => :activity do |f|
+Factory.define :classified_activity, :class => Activity, :parent => :activity do |f|
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }

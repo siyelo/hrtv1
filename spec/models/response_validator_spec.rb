@@ -57,7 +57,7 @@ describe DataResponse do #validations
 
   describe "ready to submit" do
     before :each do
-      @activity        = Factory(:activity_budget_spend_coded, :data_response => @response,
+      @activity        = Factory(:classified_activity, :data_response => @response,
                                  :project => @project)
       @sa              = Factory(:sub_activity, :activity => @activity,
                                  :data_response => @response, :budget => 100, :spend => 80)
@@ -87,11 +87,6 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == true
     end
 
-    it "allows submit if everything is coded" do
-      @response.stub(:uncoded_activities) { [] }
-      @response.submit!.should == true
-    end
-
     context "projects not linked" do
       before :each do
         @funder.project_from_id = nil; @funder.save
@@ -107,11 +102,6 @@ describe DataResponse do #validations
         @request.final_review = true; @request.save; @funder_response.reload
         @funder_response.ready_to_submit?.should == false
       end
-    end
-
-    it "disallows submit! if not complete" do
-      @activity.destroy
-      @response.submit!.should == false
     end
 
     it "fails if there are no activities" do

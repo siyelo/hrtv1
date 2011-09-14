@@ -41,7 +41,8 @@ describe Project do
     it { should_not allow_value('2010-12-41').for(:end_date) }
 
     it "should validate length of name" do
-      @project = Factory.build(:project, :name => nil)
+      basic_setup_response
+      @project = Factory.build(:project, :name => nil, :data_response => @response)
       @project.save.should be_false
       # TODO - filter to just one error
       @project.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]

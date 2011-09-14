@@ -14,42 +14,14 @@ describe Admin::OrganizationsController do
       @all_organizations = [@admin.organization, @request1.organization, @organization]
     end
 
-    it " should return all organizations" do
+    it "should return all organizations when not using any filter" do
       get :index
       assigns(:organizations).should == @all_organizations
     end
 
-    it "should filter by submitted response" do
-      @data_response.submitted = true
-      @data_response.save(false)
-      get :index, :filter => 'Submitted'
-      assigns(:organizations).should == [@organization]
-    end
-
-    it "should filter by submitted for final response" do
-      @data_response.submitted_for_final = true
-      @data_response.save(false)
-      get :index, :filter => 'Submitted for Final Review'
-      assigns(:organizations).should == [@organization]
-    end
-
-    it "should filter by complete response" do
-      @data_response.complete = true
-      @data_response.save(false)
-      get :index, :filter => 'Complete'
-      assigns(:organizations).should == [@organization]
-    end
-
-    it "should filter by empty response" do
-      get :index, :filter => 'Not Started'
+    it "should return all organizations when using All filter" do
+      get :index, :filter => 'All'
       assigns(:organizations).should == @all_organizations
-    end
-
-    it "should filter by in progress response" do
-      @project = Factory(:project, :data_response => @data_response)
-      @activity = Factory(:activity, :project => @project, :data_response => @data_response)
-      get :index, :filter => 'In Progress'
-      assigns(:organizations).should == [@organization]
     end
 
     it "should ignore unrecognized filters" do
@@ -57,6 +29,45 @@ describe Admin::OrganizationsController do
       assigns(:organizations).should == @all_organizations
     end
 
+    it "should filter by empty response" do
+      get :index, :filter => 'Not Started'
+      assigns(:organizations).should == @all_organizations
+    end
+
+    it "should filter by started response" do
+      @data_response.state = 'started'
+      @data_response.save!
+      get :index, :filter => 'Started'
+      assigns(:organizations).should == [@organization]
+    end
+
+    it "should filter by rejected response" do
+      @data_response.state = 'rejected'
+      @data_response.save!
+      get :index, :filter => 'Rejected'
+      assigns(:organizations).should == [@organization]
+    end
+
+    it "should filter by submitted response" do
+      @data_response.state = 'submitted'
+      @data_response.save!
+      get :index, :filter => 'Submitted'
+      assigns(:organizations).should == [@organization]
+    end
+
+    it "should filter by complete response" do
+      @data_response.state = 'accepted'
+      @data_response.save!
+      get :index, :filter => 'Accepted'
+      assigns(:organizations).should == [@organization]
+    end
+
+    it "should filter by started response" do
+      @data_response.state = 'started'
+      @data_response.save!
+      get :index, :filter => 'Started'
+      assigns(:organizations).should == [@organization]
+    end
   end
 
   describe "show organization" do

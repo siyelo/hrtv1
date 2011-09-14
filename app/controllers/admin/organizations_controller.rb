@@ -1,24 +1,18 @@
 require 'set'
 class Admin::OrganizationsController < Admin::BaseController
-  SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
-  AVAILABLE_FILTERS = ["Not Started", "Submitted", "Submitted for Final Review", "Complete", "In Progress"]
+  include ResponseStatesHelper
+
+  SORTABLE_COLUMNS  = ['name', 'raw_type', 'fosaid']
+  AVAILABLE_FILTERS = ["All", "Not Yet Started", "Started", "Submitted", "Rejected", "Accepted"]
+
   ### Inherited Resources
   inherit_resources
 
   helper_method :sort_column, :sort_direction
 
   def index
-    filter = params[:filter]
     scope = Organization.scoped({})
-
-    if AVAILABLE_FILTERS.include?(filter)
-      scope = Organization.with_submitted_responses_for(current_request) if filter == "Submitted"
-      scope = Organization.with_submitted_for_final_responses_for(current_request) if filter == "Submitted for Final Review"
-      scope = Organization.with_complete_responses_for(current_request)  if filter == "Complete"
-      scope = Organization.with_empty_responses_for(current_request) if filter == "Not Started"
-      scope = Organization.with_in_progress_responses_for(current_request) if filter == "In Progress"
-    end
-
+    scope = filter_organizations(scope, params[:filter]) if allowed_filter?(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                            UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                            UPPER(organizations.fosaid) LIKE UPPER(:q)",
@@ -26,6 +20,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
                     :order => "UPPER(organizations.#{sort_column}) #{sort_direction}")
+    @responses = current_request.data_responses
   end
 
   def show
@@ -153,5 +148,17 @@ class Admin::OrganizationsController < Admin::BaseController
 
     def sort_direction
       %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    end
+
+    def filter_organizations(scope, filter)
+      if filter == 'All'
+        scope
+      else
+        scope.responses_by_states(current_request, [name_to_state(filter)])
+      end
+    end
+
+    def allowed_filter?(filter)
+      AVAILABLE_FILTERS.include?(filter)
     end
 end

@@ -1,4 +1,133 @@
+- title("Submit Response")
+
 - content_for :sub_nav do
   = render :partial => 'shared/sub_nav_projects'
 
-= render '/shared/data_responses/show'
+%h1.main_heading Submit Response
+
+= error_messages_for :response, :header_message  => nil, :message => "Oops, we couldn't process your submission."
+
+%ul{:class => "status #{flag}"}
+  %li
+    %span Request:
+    = @response.request.title
+  %li
+    %span Status:
+    = @response.status
+  %li
+    %span Last Updated On:
+    = @response.updated_at.to_s(:long)
+
+= render 'getting_started_submit'
+
+%ul.review
+  %li.alt
+    %h2 Settings
+  %li.dashboard_section
+    %h3{:class => ready(@response.valid?)}
+      Organization Settings Complete
+      - unless @response.valid?
+        %span.info
+          = "Your Settings are not complete. Please visit the #{link_to "settings", edit_organization_path(current_user.organization)} to make the necessary changes."
+  %li.alt
+    %h2 Projects
+  %li.dashboard_section
+    %h3{:class => your_projects_class}
+      Your Projects
+
+    %ul.review
+      %li
+        %h3{:class => ready(@response.projects_entered?)}
+          Projects Entered
+          - unless @response.projects_entered?
+            %span.info
+              = render 'projects/no_projects_yet'
+
+      %li
+        %h3{:class => ready(@response.check_projects_funding_sources_have_organizations?)}
+          All Projects have Funding Sources
+          - unless @response.check_projects_funding_sources_have_organizations?
+            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
+            %ul
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+              - @projects.each do |project|
+                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+
+      %li
+        %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
+          Activities Entered
+          - unless @response.projects_have_activities?
+            - if !@response.projects_entered?
+              %span.info
+                = render 'projects/no_projects_yet'
+                Then you may start adding Activities.
+            - else
+              %span.info
+                You have project(s), but not all have activities yet.
+                = link_to "Start by adding your activities here.", response_projects_path(@response)
+          - unless @response.activities_without_amounts.empty?
+            %span.info
+              The activities below are missing amounts, click to edit and add amounts
+            // GN TODO: handle sub activities better here
+            // currently just takes to edit page for activity, very confusing
+            %ul.push
+              - @response.activities_without_amounts.each do |activity|
+                %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
+
+      %li
+        %h3{:class => ready(@response.projects_have_other_costs?)}
+          (Other Costs Entered)
+          - unless @response.projects_have_other_costs?
+            - unless @response.projects_entered?
+              %span.info
+                = render 'projects/no_projects_yet'
+                Then you may start adding Other Costs.
+            - else
+              %span.info
+                Other Costs help you include any financial information at the national level and/or administrative expenses.
+                = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+
+  %li.alt
+    %h2 Classifications
+  %li.dashboard_section
+    %h3{:class => ready(@response.activities_coded? && @response.other_costs_coded?)}
+      Detailed Classifications
+
+    %ul.review
+      %li
+        %h3{:class => ready(@response.activities_coded?)}
+          Activities Classified
+          - unless @response.activities_coded?
+            - unless @response.uncoded_activities.empty?
+              %span.info
+                Click the classify link at the end of each row to classify each activity. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info
+                Start by adding a few Activities first (see above), then you can start classifying them.
+                = link_to "Start adding your Activities here.", response_projects_path(@response)
+        - unless @response.activities_coded?
+          - unless @response.uncoded_activities.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_activities
+
+      %li
+        %h3{:class => ready(@response.other_costs_coded?)}
+          (Other Costs Classified)
+          - unless @response.other_costs_coded?
+            - unless @response.uncoded_other_costs.empty?
+              %span.info Click the classify link at the end of each row to classify each Other Cost. Unchecked boxes mean that coding has not been started or does not add up to the correct amount.
+            - else
+              %span.info
+                Start by adding a few Other Costs first (see above), then you can start classifying them.
+                = link_to "Start adding your Other Costs here.", response_projects_path(@response)
+
+        - unless @response.other_costs_coded?
+          - unless @response.uncoded_other_costs.empty?
+            = render 'uncoded_table', :activities => @response.uncoded_other_costs
+
+//%hr.divider
+%p.submit
+  - if @response.submittable?
+    = link_to "Submit", submit_response_path(@response), :method => :put, :confirm => "Are you sure?", :class => "next big"
+  - else
+    This response has already been submitted.

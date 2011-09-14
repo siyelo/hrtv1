@@ -5,7 +5,7 @@
 - else
   %h1.main_heading Dashboard
 
-- if current_user.admin?
+- if current_user.sysadmin?
   = render 'sysadmin'
   = render 'dashboard/requests'
 - elsif current_user.activity_manager?

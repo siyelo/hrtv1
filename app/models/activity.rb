@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
   include Activity::Classification
   include Activity::Validations
   include AutocreateHelper
+  include BudgetSpendHelper
 
   ### Constants
   MAX_NAME_LENGTH = 64
@@ -76,16 +77,13 @@ class Activity < ActiveRecord::Base
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
 
   ### Callbacks
-  # also see callbacks in BudgetSpendHelper
   before_validation :strip_input_fields, :unless => :is_implementer_split?
-  before_save   :auto_create_project, :unless => :is_implementer_split?
-  before_save   :update_implementer_cache, :unless => :is_implementer_split?
-  after_save    :update_counter_cache, :unless => :is_implementer_split?
-  after_destroy :update_counter_cache, :unless => :is_implementer_split?
-  before_update :update_all_classified_amount_caches, :unless => :is_implementer_split?
-
-  ### Other callbacks
-  include BudgetSpendHelper # we want the currency callback to run after update_implementer_cache
+  before_save       :auto_create_project, :unless => :is_implementer_split?
+  before_save       :update_implementer_cache, :unless => :is_implementer_split?
+  before_save       :update_cached_usd_amounts
+  after_save        :update_counter_cache, :unless => :is_implementer_split?
+  after_destroy     :update_counter_cache, :unless => :is_implementer_split?
+  before_update     :update_all_classified_amount_caches, :unless => :is_implementer_split?
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true

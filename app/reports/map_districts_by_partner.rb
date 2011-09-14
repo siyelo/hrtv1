@@ -5,11 +5,7 @@ class Reports::MapDistrictsByPartner
 
   def initialize(type, request)
     @is_budget = is_budget?(type)
-    # partners   = DataResponse.in_progress.map(&:organization) +
-    #            DataResponse.submitted.map(&:organization)
-    partners   = Organization.with_in_progress_responses_for(request) +
-                 Organization.with_submitted_responses_for(request)
-    partners   = partners.uniq
+    partners   = Organization.responses_by_states(request, ['started', 'submitted'])
 
     @districts_hash = {}
     Location.all.each do |location|

@@ -21,7 +21,7 @@ class OtherCost < Activity
 
   # An OCost can be considered classified if the locations are classified
   def classified?
-    coding_budget_district_classified? || coding_spend_district_classified?
+    coding_budget_district_classified? && coding_spend_district_classified?
   end
 
   def budget_classified?

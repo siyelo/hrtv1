@@ -11,10 +11,6 @@
     %thead
       %tr
         %th Name
-        %th{:colspan => colspan} Past Expenditure
-        %th.manage Manage
-      %tr
-        %th
         - if @data_request.locations?
           %th Locations
         - unless other_costs
@@ -22,8 +18,7 @@
             %th Purposes
           - if @data_request.inputs?
             %th Inputs
-
-        %th
+        %th.manage Manage
     %tbody
       - activities.each do |activity|
         %tr

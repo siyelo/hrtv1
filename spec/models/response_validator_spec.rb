@@ -123,13 +123,20 @@ describe DataResponse do #validations
     it "fails if there are uncoded activities" do
       activity2 = Factory(:activity, :data_response => @response, :project => @project)
       sa = Factory(:sub_activity, :data_response => @response, :activity => activity2, :budget => 54)
+      sa.save
+      activity2.reload
+      activity2.save
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
     end
 
     it "fails if an activity is missing a coding split" do
+      sa = Factory(:sub_activity, :data_response => @response, :activity => @activity, :spend => 100)
+      sa.save
+      @activity.reload
       cs = @activity.coding_spend.first
-      @activity.coding_budget_valid = false; @activity.save; @activity.reload
+      @activity.coding_budget_valid = false
+      @activity.save
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false

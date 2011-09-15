@@ -11,6 +11,7 @@ describe ApplicationHelper do
       @activity.stub(:coding_budget_district_classified?) { true }
       @activity.stub(:coding_budget_cc_classified?) { true }
     end
+
     it "should link to the activity if there is nothing uncoded" do
       helper.link_to_unclassified(@activity).should == edit_response_activity_path(@response, @activity)
     end

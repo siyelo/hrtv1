@@ -198,7 +198,6 @@ class DataResponse < ActiveRecord::Base
   def projects_linked?
     return false unless projects_entered?
     self.projects.each do |project|
-      #return false if project.in_flows.present? && !project.linked?
       return false unless project.linked?
     end
     true
@@ -220,14 +219,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_have_activities?
-    # NOTE: old code
-    #return false unless activities_entered?
-    #self.projects.each do |project|
-      #return false unless project.has_activities?
-    #end
-    #true
-
-    # NOTE: optimization
     activities.find(:first,
                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                     :conditions => {:type => nil, :project_id => projects}
@@ -241,13 +232,6 @@ class DataResponse < ActiveRecord::Base
   memoize :other_costs_entered?
 
   def projects_have_other_costs?
-    # NOTE: old code
-    #return false unless other_costs_entered?
-    #self.projects.each do |project|
-      #return false unless project.has_other_costs?
-    #end
-    #true
-    # NOTE: optimization
     activities.find(:first,
                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                     :conditions => {:type => 'OtherCost', :project_id => projects}

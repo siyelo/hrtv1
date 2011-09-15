@@ -3,7 +3,11 @@ module ResponsesHelper
     expr ? "ready" : "not-ready"
   end
 
-  def your_projects_class
+  def other_costs_class(data_response)
+    !data_response.other_costs_entered? ? "info" : "ready"
+  end
+
+  def projects_class
     ready(@response.projects_entered? &&
     @response.projects_have_activities? &&
     @response.projects_have_other_costs?)

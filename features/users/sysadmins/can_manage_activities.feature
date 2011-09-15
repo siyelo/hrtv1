@@ -53,13 +53,14 @@ Feature: Reporter can manage activities
         And I follow "Approve (Admin)"
         And wait a few moments
       Then I should see "Admin Approved"
-    
+
     @javascript
     Scenario: An admin cannot approve unclassified activity
-      Given an activity exists with name: "activity1", description: "a1 description", data_response: the data_response, project: the project
       When I follow "Organizations"
         And I follow "organization2"
-        And I follow "activity1"
+        And I follow "activity2"
+        And I press "Save"
+        And I run delayed jobs
         And I follow "Approve (Admin)"
         And wait a few moments
       Then I should not see "Admin Approved"

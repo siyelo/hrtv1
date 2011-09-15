@@ -54,14 +54,14 @@ module Activity::Classification
     end
 
     def budget_classified?
-      budget.blank? ||
+      budget.blank? || budget.to_i == 0 ||
       coding_budget_classified? &&
       coding_budget_district_classified? &&
       coding_budget_cc_classified?
     end
 
     def spend_classified?
-      spend.blank? ||
+      spend.blank? || spend.to_i == 0 ||
       coding_spend_classified? &&
       coding_spend_district_classified? &&
       coding_spend_cc_classified?
@@ -69,7 +69,7 @@ module Activity::Classification
 
     # An activity can be considered classified if at least one of these are populated.
     def classified?
-      budget_classified? || spend_classified?
+      budget_classified? && spend_classified?
     end
 
     # TODO: spec

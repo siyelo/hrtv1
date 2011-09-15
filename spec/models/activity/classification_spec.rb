@@ -212,7 +212,7 @@ describe Activity, "Classification" do
   describe "budget_classified?" do
     before :each do
       basic_setup_activity
-      sa       = Factory(:sub_activity, :data_response => @response,
+      @sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => @activity, :spend => 100, :budget => 100)
       @activity.reload
       @activity.save
@@ -245,12 +245,23 @@ describe Activity, "Classification" do
       @activity.stub(:coding_budget_cc_classified?) { false }
       @activity.budget_classified?.should be_false
     end
+
+    it "is budget_classified? when no budgets are classified & budget is blank or zero" do
+      @sa.budget = nil
+      @sa.save
+      @activity.reload
+      @activity.save
+      @activity.stub(:coding_budget_classified?) { false }
+      @activity.stub(:coding_budget_district_classified?) { false }
+      @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.budget_classified?.should be_true
+    end
   end
 
   describe "spend_classified?" do
     before :each do
       basic_setup_activity
-      sa       = Factory(:sub_activity, :data_response => @response,
+      @sa       = Factory(:sub_activity, :data_response => @response,
                          :activity => @activity, :spend => 100, :budget => 100)
       @activity.reload
       @activity.save
@@ -283,6 +294,17 @@ describe Activity, "Classification" do
       @activity.stub(:coding_spend_cc_classified?) { false }
       @activity.spend_classified?.should be_false
     end
+
+    it "is spend_classified? when no spends are classified & spend is blank or zero" do
+      @sa.spend = nil
+      @sa.save
+      @activity.reload
+      @activity.save
+      @activity.stub(:coding_spend_classified?) { false }
+      @activity.stub(:coding_spend_district_classified?) { false }
+      @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.spend_classified?.should be_true
+    end
   end
 
   describe "classified?" do
@@ -303,13 +325,13 @@ describe Activity, "Classification" do
     it "is not classified? when budget is not classified" do
       @activity.stub(:budget_classified?) { false }
       @activity.stub(:spend_classified?) { true }
-      @activity.classified?.should be_true
+      @activity.classified?.should be_false
     end
 
     it "is not classified? when spend is not classified" do
       @activity.stub(:budget_classified?) { true }
       @activity.stub(:spend_classified?) { false }
-      @activity.classified?.should be_true
+      @activity.classified?.should be_false
     end
 
     it "is not classified? when both are not classified" do

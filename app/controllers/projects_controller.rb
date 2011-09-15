@@ -51,7 +51,10 @@ class ProjectsController < Reporter::BaseController
     @project = Project.find(params[:id])
     if @project.update_attributes(params[:project])
       respond_to do |format|
-        format.html {flash[:notice] = "Project successfully updated"; redirect_to edit_response_project_url(@response, @project)}
+        format.html {
+          flash[:notice] = "Project successfully updated";
+          redirect_to edit_response_project_url(@response, @project)
+        }
         format.js {js_redirect('success')}
       end
     else
@@ -62,7 +65,7 @@ class ProjectsController < Reporter::BaseController
     end
   end
 
-  def bulk_create
+  def import
     begin
       if params[:file].present?
         @i = Importer.new(@response, params[:file].path)
@@ -70,7 +73,7 @@ class ProjectsController < Reporter::BaseController
         @projects = @i.projects
         @activities = @i.activities
       else
-        flash[:error] = 'Please select a file to upload activities'
+        flash[:error] = 'Please select a file to upload'
         redirect_to response_projects_url(@response)
       end
     rescue FasterCSV::MalformedCSVError
@@ -140,4 +143,13 @@ class ProjectsController < Reporter::BaseController
       self.load_activity_new
       self.load_other_cost_new
     end
+
+    def js_redirect(status)
+      render :json => {:status => status,
+                       :html => render_to_string(:partial => 'projects/bulk_review',
+                       :layout => false,
+                       :locals => {:project => @project,
+                                   :response => @response})}
+    end
+
 end

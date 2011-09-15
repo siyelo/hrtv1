@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe DataResponse do
 
   describe "associations" do
@@ -31,17 +33,11 @@ describe DataResponse do
       it_should_behave_like "comments_cacher"
     end
 
-    it "caches projects count" do
-      basic_setup_response
-      @response.projects_count.should == 0
-      Factory.create(:project, :data_response => @response)
-      @response.reload.projects_count.should == 1
-    end
-
     it "caches activities count" do
       basic_setup_project
       @response.activities_count.should == 0
       Factory.create(:activity, :data_response => @response, :project => @project)
+      run_delayed_jobs
       @response.reload.activities_count.should == 1
     end
 
@@ -57,11 +53,14 @@ describe DataResponse do
   describe "searching for in-progress data responses" do
     it "should not be in progress on creation" do
       basic_setup_response
+      run_delayed_jobs
       DataResponse.in_progress.should_not include(@response)
     end
 
-    it "should be in progress if it has a project" do
-      basic_setup_project
+    # NOTE: will be removed with the new state machine for responses
+    it "should be in progress if it has an activity" do
+      basic_setup_activity
+      run_delayed_jobs
       DataResponse.in_progress.should include(@response)
     end
   end
@@ -186,7 +185,6 @@ end
 #  contact_office_location           :string(255)
 #  submitted                         :boolean
 #  submitted_at                      :timestamp
-#  projects_count                    :integer         default(0)
 #  comments_count                    :integer         default(0)
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)

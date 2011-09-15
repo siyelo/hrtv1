@@ -290,7 +290,7 @@ table.workplan
         +text-shadow(#000, 0, 1px, 0)
       &.hidden
         display: none
-        
+
   .name
 
     font: normal 13px/1.4 Avenir, Arial, sans-serif
@@ -466,12 +466,11 @@ tr.activity_subheading
   tr
     position: relative
 
-    &:last-child td
-      background: none
-      border: none
-      padding: 8px 0 0
-    &.error td:last-child
-      background: none !important
+    &.total
+      td
+        background: none
+        border: none
+        padding: 8px 0 0
 
   th
     background: $primary_lightest
@@ -528,9 +527,8 @@ tr.activity_subheading
     border-bottom: 1px solid $primary_border
     &:last-child
       border-bottom: none
-  tr:last-child td
-    border-left: none
-    border-right: none
+  tr.total td
+    border: none
   //
 
   input

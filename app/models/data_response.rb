@@ -55,13 +55,11 @@ class DataResponse < ActiveRecord::Base
   def self.in_progress
     self.find :all,
               :select => 'data_responses.*,
-                          (SELECT COUNT(*) AS projects_count FROM projects
-                            WHERE projects.data_response_id = data_responses.id)
                           (SELECT COUNT(*) AS activities_count FROM activities
                             WHERE activities.data_response_id = data_responses.id)',
               :include => [:organization, :projects],
               :conditions => ["(submitted = ? OR submitted is NULL) AND
-                               (projects_count > 0 OR activities_count > 0)", false]
+                               (activities_count > 0)", false]
   end
 
   # TODO: add this back in (GLN). This handles additional associations nicely...
@@ -370,7 +368,6 @@ end
 #  organization_id                   :integer         indexed
 #  submitted                         :boolean
 #  submitted_at                      :datetime
-#  projects_count                    :integer         default(0)
 #  comments_count                    :integer         default(0)
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)

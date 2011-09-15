@@ -21,7 +21,7 @@ Feature: Reporter can import/export workplans
 
   Scenario: Reporter can see error if no csv file is not attached for upload
     When I press "Import" within ".activities_upload_box"
-    Then I should see "Please select a file to upload activities"
+    Then I should see "Please select a file to upload"
 
   Scenario: Adding malformed CSV file doesnt throw exception
     When I attach the file "spec/fixtures/malformed.csv" to "File" within ".activities_upload_box"

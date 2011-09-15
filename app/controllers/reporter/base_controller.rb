@@ -40,12 +40,4 @@ class Reporter::BaseController < ApplicationController
         return redirect_to edit_activity_or_ocost_path(outlay, :mode => params[:mode])
       end
     end
-
-  private
-    def js_redirect(status)
-      render :json => {:status => status,:html => render_to_string(:partial => 'projects/bulk_review',
-                                         :layout => false,
-                                         :locals => {:project => @project,
-                                                   :response => @response})}
-    end
 end

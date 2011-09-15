@@ -141,78 +141,6 @@ describe Activity do
     end
   end
 
-
-  describe "new" do
-    context "when creating one sub activity" do
-      before :each do
-        basic_setup_project
-        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
-          "implementer_splits_attributes"=>
-            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
-            "budget"=>"20.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
-        @activity = Activity.new(@attributes)
-      end
-
-      it "should instantiate new activity with cache values already calculated" do
-        @activity.implementer_splits.size.should == 1
-        @activity.implementer_splits[0].implementer.should == @organization
-        @activity.implementer_splits[0].spend.to_f.should == 10
-        @activity.implementer_splits[0].budget.to_f.should == 20
-        @activity.spend.to_f.should == 10
-        @activity.budget.to_f.should == 20
-      end
-
-      it "should call activity_cache_update once" do
-        pending #tricky to count the number of method calls on the callback
-      end
-
-    end
-
-    context "when (bulk) creating more than one sub activity" do
-      before :each do
-        basic_setup_project
-        @implementer2 = Factory :organization
-        @implementer3 = Factory :organization
-        @attributes = { "name"=>"new activity", "project_id"=>"#{@project.id}",
-          "implementer_splits_attributes"=>
-            {"0"=>{"spend"=>"10", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}",
-            "budget"=>"20.0", "_destroy"=>""},
-            "1"=>{"spend"=>"20", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}",
-            "budget"=>"40.0", "_destroy"=>""},
-            "2"=>{"spend"=>"40", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer3.id}",
-            "budget"=>"60.0", "_destroy"=>""}
-            }, "description"=>"adfasdf", "data_response_id"=>"#{@response.id}"}
-        @activity = Activity.new(@attributes)
-      end
-
-      it "should instantiate new activity with cache values already calculated" do
-        @activity.implementer_splits.size.should == 3
-        @activity.implementer_splits[0].implementer.should == @organization
-        @activity.implementer_splits[0].spend.to_f.should == 10
-        @activity.implementer_splits[0].budget.to_f.should == 20
-        @activity.implementer_splits[1].implementer.should == @implementer2
-        @activity.implementer_splits[1].spend.to_f.should == 20
-        @activity.implementer_splits[1].budget.to_f.should == 40
-        @activity.implementer_splits[2].implementer.should == @implementer3
-        @activity.implementer_splits[2].spend.to_f.should == 40
-        @activity.implementer_splits[2].budget.to_f.should == 60
-        @activity.spend.to_f.should == 70
-        @activity.budget.to_f.should == 120
-      end
-
-      it "should call activity_cache_update once" do
-        pending #tricky to count the number of method calls on the callback
-      end
-
-      it "should call activity_cache_update once on saving" do
-        pending
-        # FIXME: this is still doing callback for each nested sub activity - will be slow!
-      end
-
-    end
-  end
-
   describe "organization_name" do
     it "returns organization nane" do
       @organization = Factory(:organization, :name => "Organization1")
@@ -221,15 +149,6 @@ describe Activity do
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:activity, :data_response => @response, :project => @project)
       @activity.organization_name.should == "Organization1"
-    end
-  end
-
-  describe "sub-activities" do
-    it "creates a sub activitiy in the initialization of the activity" do
-      basic_setup_project
-      @activity = Activity.new(:data_response_id => @response.id, :project_id => @project_id)
-      @activity.implementer_splits.size.should == 1
-      @activity.implementer_splits.first.provider.should == @organization
     end
   end
 

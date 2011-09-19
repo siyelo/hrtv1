@@ -139,30 +139,27 @@ describe SubActivity do
       @sa = Factory.build(:sub_activity, :data_response => @response,
                           :activity => @activity)
     end
-    it "doesn't allow the sub-activity to have a spend with more than two decimal place" do
-      @sa.spend = 10.12345; @sa.save; @sa.reload
-      @sa.spend.to_f.should == 10.12
-    end
 
-    it "doesn't allow the sub-activity to have a budget with more than two decimal place" do
-      @sa.budget = 10.12345; @sa.save; @sa.reload
+    it "doesn't allow the sub-activity to have a spend or budget with more than two decimal places" do
+      @sa.budget = 10.12345
+      @sa.spend = 10.12345
+      @sa.save; @sa.reload
       @sa.budget.to_f.should == 10.12
+      @sa.spend.to_f.should == 10.12
     end
 
     context "rounds up or down" do
       it "if the 3rd decimal place is 5 or larger it rounds up" do
-        @sa.budget = 10.12745; @sa.save; @sa.reload
+        @sa.budget = 10.12745; @sa.spend = 10.12345
+        @sa.save; @sa.reload
         @sa.budget.to_f.should == 10.13
-      end
-
-      it "if the 3rd decimal place is 4 or lower it rounds down" do
-        @sa.budget = 10.12345; @sa.save; @sa.reload
-        @sa.budget.to_f.should == 10.12
+        @sa.spend.to_f.should == 10.12
       end
     end
-    it "works if budget / spend is nil" do
-      @sa.budget = 10.23243336; @sa.spend = nil; @sa.save
-      @sa.budget.should == 10.23
+
+    it "it allows budget / spend to be nil" do
+      @sa.budget = nil; @sa.spend = nil; @sa.save
+      @sa.budget.should == nil
       @sa.spend.should == nil
     end
   end

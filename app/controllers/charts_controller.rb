@@ -63,6 +63,8 @@ class ChartsController < ApplicationController
   end
 
   def first_n_words(string, n)
-    string.split(' ').slice(0,n).join(' ') + '...'
+    words = string.split(' ')
+    name = words.slice(0, n).join(' ')
+    words.length <= n ? name : name + '...'
   end
 end

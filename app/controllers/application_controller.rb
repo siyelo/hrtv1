@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include SslRequirement
+  include Exporter
 
   class AccessDenied < StandardError; end
   rescue_from AccessDenied do |exception|
@@ -20,7 +21,6 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::MethodNotAllowed, :with => :invalid_method
 
   protected
-
     # Require SSL for all actions in all controllers
     # redefined method from SSL requirement plugin
     # This method is redefined in static pages controller for actions: :index, :about, :contact, :news
@@ -30,19 +30,6 @@ class ApplicationController < ActionController::Base
       else
         false
       end
-    end
-
-    def send_csv(data, filename)
-      send_file(data, filename, :type => "text/csv; charset=iso-8859-1; header=present")
-    end
-
-    def send_xls(data, filename)
-      send_file(data, filename, :type => "application/excel")
-    end
-
-    def send_file(data, filename, options = {})
-      send_data data, :type => options[:type],
-                :disposition=>"attachment; filename=#{filename}"
     end
 
     # load vars for pretty charts

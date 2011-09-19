@@ -2,7 +2,8 @@ require 'set'
 class Admin::UsersController < Admin::BaseController
 
   ### Constants
-  SORTABLE_COLUMNS = ['email', 'full_name', 'organizations.name']
+  SORTABLE_COLUMNS = ['email', 'full_name', 'organizations.name',
+    'last_login_at', 'roles_mask', 'invite_token']
 
   ### Inherited Resources
   inherit_resources

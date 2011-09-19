@@ -42,6 +42,11 @@ class User < ActiveRecord::Base
   delegate :responses, :to => :organization # instead of deprecated data_response
   delegate :latest_response, :to => :organization # find the last response in the org
 
+  # assign organization association so that counter cache is updated
+  def organization_id=(organization_id)
+    self.organization = Organization.find_by_id(organization_id) if organization_id.present?
+  end
+
   ### Class Methods
 
   #authlogic authentication
@@ -195,6 +200,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  # authlogic only updates last_login after youve signed in the 2nd time
+  # if the user has only signed in once, return the current login date
+  def last_signin_at
+    last_login_at || current_login_at
+  end
+
   private
 
     def assign_current_response_to_latest
@@ -237,6 +248,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: users
@@ -258,5 +270,7 @@ end
 #  invite_token             :string(255)
 #  active                   :boolean         default(FALSE)
 #  location_id              :integer
+#  current_login_at         :datetime
+#  last_login_at            :datetime
 #
 

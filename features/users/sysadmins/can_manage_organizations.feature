@@ -104,7 +104,6 @@ Feature: Admin can manage organizations
       | column_name  | column | text1 | text2 |
       | Organization | 1      | org2  | org1  |
       | Type         | 6      | Donor | Ngo   |
-      | Fosaid       | 7      | 111   | 222   |
 
 
   Scenario: An admin can search organizations

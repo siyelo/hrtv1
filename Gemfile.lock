@@ -17,6 +17,7 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    SystemTimer (1.2.3)
     actionmailer (2.3.12)
       actionpack (= 2.3.12)
     actionpack (2.3.12)
@@ -134,6 +135,7 @@ GEM
     rack (1.1.2)
     rack-test (0.6.1)
       rack (>= 1.0)
+    rack-timeout (0.0.3)
     rails (2.3.12)
       actionmailer (= 2.3.12)
       actionpack (= 2.3.12)
@@ -202,6 +204,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  SystemTimer
   acts_as_tree
   akephalos!
   annotate
@@ -239,6 +242,7 @@ DEPENDENCIES
   open_gem
   paperclip (= 2.3.11)
   pickle (~> 0.4.4)
+  rack-timeout
   rails (= 2.3.12)
   rails-footnotes
   rb-fsevent

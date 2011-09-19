@@ -86,7 +86,7 @@ class Admin::OrganizationsController < Admin::BaseController
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if duplicate.users.size > 0
+      if duplicate.users_count > 0
         render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
         Organization.merge_organizations!(target, duplicate)

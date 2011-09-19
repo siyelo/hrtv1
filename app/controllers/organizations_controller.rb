@@ -1,8 +1,13 @@
 class OrganizationsController < Reporter::BaseController
   before_filter :load_organization
 
+  helper_method :sort_column, :sort_direction
+
+  SORTABLE_COLUMNS = ['email', 'full_name', 'last_login_at']
+
   def edit
     @organization.valid? # trigger validation errors
+    @users = @organization.users.find(:all, :order => "#{sort_column} #{sort_direction}")
   end
 
   def update
@@ -30,6 +35,14 @@ class OrganizationsController < Reporter::BaseController
   private
     def load_organization
       @organization = current_user.sysadmin? ? Organization.reporting.find(params[:id]) : current_user.organization
+    end
+
+    def sort_column
+      SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "full_name"
+    end
+
+    def sort_direction
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
     end
 end
 

@@ -16,10 +16,12 @@ gem 'inherited_resources', '= 1.0.6'
 gem 'json_pure'
 gem 'money', "~> 3.5"
 gem 'paperclip', "= 2.3.11"
+gem "rack-timeout"
 gem 'rails', '2.3.12'
 gem 'rdoc'
 gem 'sass', '=3.1.4'
 gem 'settingslogic'
+gem "SystemTimer", :require => "system_timer", :platforms => :ruby_18
 gem 'validates_timeliness', '~> 2.3'
 gem 'version'
 gem 'will_paginate', "~> 2.3.11"

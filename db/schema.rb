@@ -1,4 +1,4 @@
-# This file is auto-generated from the current state of the database. Instead of editing this file,
+# This file is auto-generated from the current state of the database. Instead of editing this file, 
 # please use the migrations feature of Active Record to incrementally modify your database, and
 # then regenerate this schema definition.
 #
@@ -10,6 +10,7 @@
 # It's strongly recommended to check this file into your version control system.
 
 ActiveRecord::Schema.define(:version => 20110916153117) do
+
   create_table "activities", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -86,7 +87,6 @@ ActiveRecord::Schema.define(:version => 20110916153117) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
-  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -327,6 +327,11 @@ ActiveRecord::Schema.define(:version => 20110916153117) do
     t.string   "invite_token"
     t.boolean  "active",                   :default => false
     t.integer  "location_id"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
   end
+
+  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

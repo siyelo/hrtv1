@@ -260,6 +260,10 @@ class Organization < ActiveRecord::Base
     read_attribute(:currency).blank? ? "USD" : read_attribute(:currency)
   end
 
+  def last_user_logged_in
+    users.select { |a,b| a.last_login_at.present? }.max { |a,b| a.last_login_at <=> b.last_login_at }
+  end
+
   protected
 
     def tidy_name(n)

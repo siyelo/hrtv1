@@ -32,7 +32,7 @@
   %li.alt
     %h2 Projects
   %li.dashboard_section
-    %h3{:class => your_projects_class}
+    %h3{:class => projects_class}
       Your Projects
 
     %ul.review
@@ -75,10 +75,11 @@
               - @response.activities_without_amounts.each do |activity|
                 %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
+
       %li
-        %h3{:class => ready(@response.projects_have_other_costs?)}
+        %h3{:class => other_costs_class(@response)}
           (Other Costs Entered)
-          - unless @response.projects_have_other_costs?
+          - unless @response.other_costs_entered?
             - unless @response.projects_entered?
               %span.info
                 = render 'projects/no_projects_yet'

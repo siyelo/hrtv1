@@ -7,7 +7,7 @@ class Importer
   def initialize(response, filename)
     @response = response
     @filename = filename
-    @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+    @file = open_xls_or_csv(@filename)
     @projects = @activities = @new_splits = []
   end
 
@@ -27,7 +27,7 @@ class Importer
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
 
-      sub_activity_name   = Importer::sanitize_encoding(row['Implementer'].try(:strip))
+      sub_activity_name   = EncodingHelper::sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
       # find implementer based on name or set self-implementer if not found
@@ -150,14 +150,11 @@ class Importer
       split.activity.save
     end
 
-    ### grab any cache updates from db for these objects
-    #@projects.each{|p| p.reload if p.valid?}
-    #@activities.each{|a| a.reload if a.valid?}
     return @projects, @activities
   end
 
   def name_for(current_row_name, previous_name)
-    name = Importer::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
+    name = EncodingHelper::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
     name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
                                                                  # any trailing spaces
   end
@@ -169,7 +166,7 @@ class Importer
     if description.blank? && name.blank?
       result = previous_description
     end
-    Importer::sanitize_encoding(result)
+    EncodingHelper::sanitize_encoding(result)
   end
 
   def date_for(date_row, existing_date)
@@ -179,10 +176,6 @@ class Importer
       date = DateHelper::flexible_date_parse(date_row)
     end
     date
-  end
-
-  def self.sanitize_encoding(string)
-    Iconv.conv("UTF-8//IGNORE", "US-ASCII", string)
   end
 
   def find_implementer(implementer_name)
@@ -225,5 +218,35 @@ class Importer
     activity.valid?
     split.valid?
   end
+
+  def open_xls_or_csv(filename)
+    begin
+      worksheet = Spreadsheet.open(@filename).worksheet(0)
+      @file = create_hash_from_header(worksheet)
+    rescue Ole::Storage::FormatError
+      # try import the file as a csv if it is not an spreadsheet
+      @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+    end
+
+    @file
+  end
+
+  def create_hash_from_header(xls_worksheet)
+    file = []
+    header = []
+    xls_worksheet.each_with_index do |row, row_index|
+      if row_index == 0
+        header = row
+      else
+        h = Hash.new
+        row.each_with_index do |cell, col_index|
+          h[header[col_index]] = cell
+        end
+        file << h
+      end
+    end
+    file
+  end
+
 end
 

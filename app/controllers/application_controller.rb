@@ -32,10 +32,17 @@ class ApplicationController < ActionController::Base
       end
     end
 
-    def send_csv(text, filename)
-      send_data text,
-                :type => 'text/csv; charset=iso-8859-1; header=present',
-                :disposition => "attachment; filename=#{filename}"
+    def send_csv(data, filename)
+      send_file(data, filename, :type => "text/csv; charset=iso-8859-1; header=present")
+    end
+
+    def send_xls(data, filename)
+      send_file(data, filename, :type => "application/excel")
+    end
+
+    def send_file(data, filename, options = {})
+      send_data data, :type => options[:type],
+                :disposition=>"attachment; filename=#{filename}"
     end
 
     # load vars for pretty charts

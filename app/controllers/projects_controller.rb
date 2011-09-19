@@ -74,19 +74,20 @@ class ProjectsController < Reporter::BaseController
         redirect_to response_projects_url(@response)
       end
     rescue FasterCSV::MalformedCSVError
-      flash[:error] = "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
+                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
       redirect_to response_projects_url(@response)
     end
   end
 
   def download_template
     template = Project.download_template
-    send_csv(template, 'projects_template.csv')
+    send_xls(template.string, 'import_template.xls')
   end
 
   def export
     template = Project.export_all(@response)
-    send_csv(template, "all_activities.csv")
+    send_xls(template.string, "all_activities.xls")
   end
 
   def download_workplan

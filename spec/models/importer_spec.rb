@@ -59,6 +59,56 @@ EOS
     end
   end
 
+  describe 'importing excel files' do
+    before :each do
+      @implementer2  = Factory(:organization, :name => "implementer2")
+      @split2 = Factory(:sub_activity, :data_response => @response,
+                              :activity => @activity, :provider => @implementer2)
+      rows = []
+      rows << ['project1','project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
+      rows << ['','','','','','',"#{@split2.id}",'selfimplementer2','3','6']
+      rows << ['new project','blah','01/01/2010','31/12/2010','new activity','blah activity','','implementer2','4','8']
+      @filename = write_xls_with_header(rows)
+      @i = Importer.new(@response, @filename)
+    end
+
+    it "should return its attributes" do
+      @i.response.should == @response
+      @i.filename.should == @filename
+      @i.import
+      @i.projects.size.should == 2
+      @i.activities.size.should == 2
+    end
+
+    it "should track new splits it creates" do
+      @i.new_splits.should == []
+    end
+
+    describe 'row parsing' do
+      before :each do
+        @i.import # seems to have a side effect of hosing @file... ?
+      end
+
+      it "should carry over a description on subsequent lines" do
+        previous_row_name = "some name"
+        previous_row_descr = "some descr"
+        @i.name_for("", previous_row_name).should == 'some name'
+        @i.description_for("", previous_row_descr, "").should == 'some descr'
+      end
+
+      it "should find existing splits based on their given id" do
+        @i.find_cached_split_using_split_id(@split.id).should == @split
+        @i.find_cached_activity_using_split_id(@split.id).should == @activity
+      end
+
+      it "should always return the same activity object from the cache" do
+        activity = @i.activities.first
+        @i.find_cached_activity_using_split_id(@split.id).should === activity
+      end
+
+    end
+  end
+
   it "should import a file" do
     csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
@@ -147,7 +197,7 @@ EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should be_empty
     i.import
-    i.projects.first.description.should == "project description with utf chars"
+    i.projects.first.description.should == "project description with utf chars äóäó"
   end
 
   it "should handle utf16 encoding" do
@@ -157,7 +207,7 @@ EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.projects.should be_empty
     i.import
-    i.projects.first.description.should == "project description with Norwegian: . French:"
+    i.projects.first.description.should == "project description with Norwegian: æøå. French: êèé"
   end
 
   context "when updating existing records" do

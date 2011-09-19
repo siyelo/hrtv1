@@ -129,5 +129,3 @@
 %p.submit
   - if @response.submittable?
     = link_to "Submit", submit_response_path(@response), :method => :put, :confirm => "Are you sure?", :class => "next big"
-  - else
-    This response has already been submitted.

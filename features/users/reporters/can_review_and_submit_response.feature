@@ -16,7 +16,6 @@ Feature: Reporter can Review & Submit response
       And I follow "Review & Submit"
       And I follow "Submit"
     Then I should see "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      And I should see "This response has already been submitted."
       And I should not see "Submit" within ".submit"
 
 

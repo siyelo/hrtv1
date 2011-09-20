@@ -83,6 +83,15 @@ class ApplicationController < ActionController::Base
       end
     end
 
+    def require_activity_manager
+      unless current_user && current_user.activity_manager?
+        store_location
+        flash[:error] = "You must be an activity manager to access that page"
+        redirect_to login_url
+        return false
+      end
+    end
+
     def require_no_user
       if current_user
         flash[:error] = "You must be logged out to access requested page"

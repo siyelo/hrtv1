@@ -5,29 +5,21 @@ Feature: Activity Manager can download formatted workplan
 
   Background:
     Given an organization "admin_org" exists with name: "admin_org"
-      And a data_request exists with title: "dr1", organization: the organization
+      And a data_request exists with organization: the organization
       And an organization "reporter_org" exists with name: "reporter_org"
-      And a reporter exists with organization: the organization
+      And a reporter exists with organization: the organization "reporter_org"
       And an organization "ac_org" exists with name: "ac_org"
-      And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization
+      And an activity_manager exists with email: "activity_manager@hrtapp.com", organization: the organization "ac_org"
       And organization "reporter_org" is one of the activity_manager's organizations
       And I am signed in as "activity_manager@hrtapp.com"
 
-  #'
-  @javascript @wip
-  Scenario: See workplan option in menu
-    Given I follow "reporter_org"
-    And I follow "Import / Export"
-    Then I should see "Export Workplan"
 
-  # this cannot be run with @javascript - gives a capy NotSupportedByDriverError
-  @wip
-  Scenario: Download workplan
-    Given I follow "reporter_org"
-    And I follow "Export Workplan"
+  Scenario: Activity manager can download workplan
+    When I follow "reporter_org"
+      And I follow "Export Workplan"
     Then I should receive a csv file
 
-  @wip
-  Scenario: quick-download workplan from AM Dashboard page
+
+  Scenario: Activity manager can quick-download workplan from AM Dashboard page
     When I follow "Export Workplan"
     Then I should receive a csv file

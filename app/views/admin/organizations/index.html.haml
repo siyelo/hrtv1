@@ -52,6 +52,6 @@
           %th= sortable "raw_type", "Type"
           %th
       %tbody
-        = render :partial => '/organizations/organization', :collection => @organizations
+        = render :partial => 'organization', :collection => @organizations
 
     = will_paginate @organizations

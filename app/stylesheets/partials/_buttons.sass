@@ -81,7 +81,7 @@ a.remove_nested
       outline: none
       position: relative
       top: 1px
-      
+
   &.dropdown
     background: #eee
     border: 1px solid $light-blue
@@ -108,6 +108,8 @@ a.remove_nested
       +linear-gradient(color-stops($green, $green - #222))
       +text-shadow($green - #222, 0, 0, 1px)
 
+    &.dropless
+      padding: 7px 12px 5px 12px
 
   &.create_inline
     background: #eee
@@ -341,7 +343,7 @@ a, input[type=submit], button
   &.delete_button
     &:hover, &:focus
       color: $red !important
-      
+
   &.delete_row
     +replace-text("delete_row.png")
     display: inline-block

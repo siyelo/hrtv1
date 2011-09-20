@@ -53,7 +53,7 @@ ActionController::Routing::Routes.draw do |map|
                 :reject => :put, :accept => :put} do |response|
     response.resources :projects, :except => [:show],
       :collection => {:download_template => :get,
-                      :download_workplan => :get,
+                      :export_workplan => :get,
                       :export => :get,
                       :bulk_create => :post}
     response.resources :activities, :except => [:index, :show],

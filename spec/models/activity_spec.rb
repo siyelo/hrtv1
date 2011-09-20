@@ -214,7 +214,7 @@ describe Activity do
   end
 
   describe "organization_name" do
-    it "returns organization nane" do
+    it "returns organization name" do
       @organization = Factory(:organization, :name => "Organization1")
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response

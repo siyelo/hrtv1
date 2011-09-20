@@ -1481,6 +1481,7 @@ var projects_index = {
         if (hash == '/new_project'){
           hideAll();
           $('#new_project_form').fadeIn();
+          validateDates($('.start_date'), $('.end_date'));
         }else if (hash == '/new_activity'){
           hideAll();
           $('#new_activity_form').fadeIn();
@@ -1770,13 +1771,6 @@ var activity_form = function () {
     $('.add_organization').slideToggle();
   });
 
-  if (typeof(namespace) === 'undefined') {
-    validateDates($('#activity_start_date'), $('#activity_end_date'));
-  } else {
-    // it injects the namespace in the activity form !?
-    validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
-  }
-
   $('.js_target_field').live('keydown', function (e) {
     var block = $(this).parents('.js_targets');
 
@@ -1870,7 +1864,7 @@ var admin_organizations_create = admin_organizations_edit = {
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
     commentsInit();
-    validateDates($('#project_start_date'), $('#project_end_date'));
+    validateDates($('.start_date'), $('.end_date'));
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
   }

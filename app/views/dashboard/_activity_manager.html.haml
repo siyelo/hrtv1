@@ -29,6 +29,43 @@
 .dashboard_section
   %table.modern_table
     %thead
-      = render :partial => '/organizations/index_header'
+      %tr
+        %th Organization
+        %th Contacts
+        %th Approved Activities
+        %th Status
+        %th Export
     %tbody
-      = render :partial => '/organizations/organization', :collection => @organizations
+      - @organizations.each do |organization|
+        - response = @responses.detect { |dr| dr.organization_id == organization.id }
+        %tr
+          %td.title= link_to organization.name, response_projects_path(response)
+          %td.contacts
+            %h3 Primary
+            %ul
+              %li
+                %span Name
+                = organization.contact_name
+              %li
+                %span Position
+                = organization.contact_position
+              %li
+
+                %span Phone Number
+                = organization.contact_phone_number
+              %li
+                %span Office Phone Number
+                = organization.contact_main_office_phone_number
+              %li
+
+                %span.info_type Office Location
+                = organization.contact_office_location
+
+            %h3 Secondary
+            %ul
+              - organization.user_emails.each do |email|
+                %li= mail_to email
+
+          %td= response.nil? ? "n/a" : "#{response.activities.manager_approved.count}/#{response.activities_count}"
+          %td= response.nil? ? "n/a" : response.status
+          %td= link_to "Export Workplan", export_workplan_response_projects_path(response)

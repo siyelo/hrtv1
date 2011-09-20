@@ -2,6 +2,8 @@ require 'set'
 class ProjectsController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'spend', 'budget']
 
+  before_filter :require_activity_manager, :only => :export_workplan
+
   inherit_resources
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
@@ -90,7 +92,7 @@ class ProjectsController < Reporter::BaseController
     send_xls(template.string, "all_activities.xls")
   end
 
-  def download_workplan
+  def export_workplan
     filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
     send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
   end

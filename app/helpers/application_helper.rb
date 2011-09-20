@@ -322,4 +322,9 @@ module ApplicationHelper
     end
     edit_activity_or_ocost_path(activity, :mode => mode)
   end
+
+  def autotab
+    @current_tab ||= 0
+    @current_tab += 1
+  end
 end

@@ -9,7 +9,10 @@
   %li.last= render 'shared/outlays/tab_nav', :outlay => outlay
 
   - if ['locations', 'purposes', 'inputs'].include? params[:mode]
-    = yield :classification
+    #classification.section_form.wrapped.last
+      #activity_classification
+        %div.tab1{:style => 'display: block'}
+          = render 'shared/outlays/classification', :outlay => outlay
 
   - elsif params[:mode].nil?
     %li.last.sub_activities

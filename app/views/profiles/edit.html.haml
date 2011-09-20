@@ -2,15 +2,15 @@
 
 %h2 Your profile settings
 - form_for @user, :builder => CustomFormBuilder, :url => profile_path, :html => {:class => "basic_form js_form"} do |f|
-
   %fieldset.inputs
     %ol
       %li.last
         %ul.section_form.last
-          = f.text_field :full_name, :label => "Full Name", :required => true, :hint => "Your first and last name", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-          = f.text_field :email, :label => "Email", :required => true, :hint => "Your email address", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-          = f.password_field :password, :label => "New password", :required => false, :hint => "New Password", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-          = f.password_field :password_confirmation, :label => "Confirm new password", :required => false, :hint => "Type your new password again", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+          = f.text_field :full_name, :label => "Full Name", :required => true, :hint => "Your first and last name", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+          = f.text_field :email, :label => "Email", :required => true, :hint => "Your email address", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+          = f.password_field :password, :label => "New password", :required => false, :hint => "New Password", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+          = f.password_field :password_confirmation, :label => "Confirm new password", :required => false, :hint => "Type your new password again", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+
           %li.input_wrapper
             %label.indented Picture
             = image_tag current_user.gravatar(60), :class => "gravatar"
@@ -19,7 +19,7 @@
               = link_to "gravatar.com", "http://www.gravatar.com", :target => "_blank"
               =" by registering "
               = current_user.email
-          = f.check_box :tips_shown, :label => "Show tips?", :required => false, :hint => "Show the Getting Started tips at the top of each page", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+          = f.check_box :tips_shown, :label => "Show tips?", :required => false, :hint => "Show the Getting Started tips at the top of each page", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
           %fieldset.buttons.push-12
             %ol
               = f.submit "Save", :class => "next update"

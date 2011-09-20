@@ -925,7 +925,7 @@ var activity_classification = function () {
 
   });
 
-  numericInputField(".percentage_boxi, .js_spend, .js_budget");
+  numericInputField(".percentage_box, .js_spend, .js_budget");
 
   var updateParentNodes = function(element, type){
     type = '.' + type + ':first'
@@ -936,13 +936,14 @@ var activity_classification = function () {
     var siblingTotal = 0;
     siblingLi.each(function (){
       siblingValue = parseFloat($(this).find(type).find('input:first').val());
-      if (!isNaN(siblingValue)) {
+      if ( !isNaN(siblingValue) ) {
         siblingTotal = siblingTotal + siblingValue;
       }; 
     });
-    siblingTotal = siblingTotal == 0 ? '' : siblingTotal
-    parentElement.val(siblingTotal);
-    parentElement.trigger('keyup');
+    if ( siblingTotal !== 0 ) {
+      parentElement.val(siblingTotal);
+      parentElement.trigger('keyup');
+    }
   }
 
   var clearChildNodes = function(element, event, type){
@@ -950,7 +951,7 @@ var activity_classification = function () {
     var del = 8;
     type = '.' + type + ':first'
 
-    if ((event.keyCode == bksp || event.keyCode == del)){
+    if ( (event.keyCode == bksp || event.keyCode == del) ){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
 
       var childTotal = 0;
@@ -961,9 +962,9 @@ var activity_classification = function () {
         };
       });
 
-      if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
+      if ( childTotal > 0 && confirm('Would you like to clear the value of all child nodes?') ){
         childNodes.each(function(){
-          if ($(this).val !== ''){
+          if ( $(this).val !== '' ){
             $(this).val(' ');
             updateSubTotal($(this));
           }
@@ -980,7 +981,7 @@ var activity_classification = function () {
     var subtotal = element.siblings('.subtotal_icon');
     var isSpend = element.parents('div:first').hasClass('spend')
 
-    if (elementValue > 0){
+    if ( elementValue > 0 ){
       subtotal.removeClass('hidden')
       subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency);
     } else {
@@ -993,7 +994,7 @@ var activity_classification = function () {
 var checkAllChildren = function(){
   var inputs = $('.percentage_box')
   inputs.each(function(){
-    if ($(this).val !== ''){
+    if ( $(this).val !== '' ){
       var type = $(this).hasClass('js_spend') ? 'spend' : 'budget'
       compareChildrenToParent($(this), type);
     }

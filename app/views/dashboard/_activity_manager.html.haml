@@ -8,11 +8,11 @@
   %h3.tracked
     %br
     %span.light Approved Activities
-    %span.large= @approved_orgs
+    %span.large= @approved_activities
   %h3.tracked
     %br
-    %span.light Pending
-    %span.large= @total_activities - @approved_orgs
+    %span.light Pending Activities
+    %span.large= @pending_activities
   %h3.tracked.last
     %br
     %span.light Recently Submitted for Approval
@@ -37,7 +37,7 @@
         %th Export
     %tbody
       - @organizations.each do |organization|
-        - response = @responses.detect { |dr| dr.organization_id == organization.id }
+        - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
         %tr
           %td.title= link_to organization.name, response_projects_path(response)
           %td.contacts

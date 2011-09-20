@@ -21,17 +21,17 @@ class DashboardController < ApplicationController
     def load_activity_manager
       @organizations = current_user.organizations
       organization_ids = @organizations.map{|o| o.id}
-      @approved_orgs = Activity.with_organization.count(:all,
+      @approved_activities = Activity.only_simple.with_organization.count(:all,
         :conditions =>  ["organization_id in (?) AND
                           data_responses.data_request_id = ? AND
                           am_approved = ?", organization_ids, current_request, true])
-      @total_activities = Activity.with_organization.count(:all,
+      @total_activities = Activity.only_simple.with_organization.count(:all,
         :conditions =>  ["organization_id in (?) AND
                           data_responses.data_request_id = ?", organization_ids, current_request])
       @recent_responses = DataResponse.find_all_by_data_request_id(current_request,
         :conditions => ["organization_id in (?)", organization_ids],
         :order => 'updated_at DESC', :limit => 3)
-      @responses = current_request.data_responses
+      @pending_activities = @total_activities - @approved_activities
     end
 
 

@@ -279,13 +279,28 @@ module ApplicationHelper
 
   def warn_if_not_classified
     outlay = @activity || @other_cost
-    unless flash[:error]
-      if outlay.approved? || outlay.am_approved?
-        flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif !outlay.classified?
-        flash.now[:warning] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
-                             #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
-                             to see what still needs to be classified"}"
+
+    check_delayed_jobs_for(outlay)
+
+    if outlay.approved? || outlay.am_approved?
+      flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
+    elsif !outlay.classified?
+      flash.now[:warning] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
+                           #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
+                           to see what still needs to be classified"}" unless flash[:warning]
+    end
+  end
+
+  def check_delayed_jobs_for(outlay)
+    Delayed::Job.all.each do |dj|
+      handler = YAML.load(dj.handler).object
+      type_id = handler.split(';')
+      if type_id[1] == "Activity" && type_id[2] == outlay.id.to_s
+        flash.now[:warning] = "We are still busy processing changes to the classification tree.
+                               Please reload the page to see whether this
+                               #{outlay.class == OtherCost ? "Other Cost" : "Activity"}
+                               has been fully classified."
+        break
       end
     end
   end

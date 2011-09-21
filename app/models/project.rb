@@ -46,9 +46,11 @@ class Project < ActiveRecord::Base
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
   accepts_nested_attributes_for :activities
 
+  ### Callbacks
   before_validation :assign_project_to_in_flows
   before_validation :assign_project_to_activities
   before_validation :strip_leading_spaces
+  after_save :update_activity_amount_cache
 
   ### Validations
   # also see validations in BudgetSpendHelper
@@ -424,6 +426,10 @@ class Project < ActiveRecord::Base
     def strip_leading_spaces
       self.name = self.name.strip if self.name
       self.description = self.description.strip if self.description
+    end
+
+    def update_activity_amount_cache
+      activities.each { |a| a.send(:update_cached_usd_amounts) } if currency_changed?
     end
 
     # work arround for validates_presence_of :project issue

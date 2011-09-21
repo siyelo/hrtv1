@@ -15,15 +15,38 @@
           .right_justified Current Budget
         %th.delete
     %tbody
-      - f.semantic_fields_for :implementer_splits do |sa|
-        = render "shared/outlays/sub_activity_row", :f => sa
+      - splits = outlay.implementer_splits
+      - if outlay.new_record? && splits.empty?
+        - self_org_id = outlay.organization.id
+        - splits.build(:provider_id => self_org_id, :data_response_id => outlay.data_response_id)
+      - else
+        - # sort existing records alphabetically
+        - splits = splits.sorted unless splits.detect{ |s| s.new_record? }
+
+      - splits.each do |is|
+        - f.semantic_fields_for :implementer_splits, is do |ff|
+          - # a performance-friendly version of implementer_split_fields
+          - # doesnt load all the big organization selects
+          - error_class = ""
+          - error_class = "error" unless ff.object.errors.empty?
+          %tr.overflow_fix.fields{:class => error_class}
+            %td
+              = ff.hidden_field :data_response_id, :value => @response.id
+              = ff.hidden_field :updated_at, :value => Time.now
+              = ff.hidden_field :provider_mask, :value => ff.object.provider.id
+              -# perf hack - non editable provider name
+              %span.ui-autocomplete= ff.object.provider.try(:name) || "< n/a >"
+            %td= ff.text_field :spend, :class => 'js_spend'
+            %td= ff.text_field :budget, :class => 'js_budget'
+            %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}
+
       - blank_rows.times do
         - f.object.implementer_splits.build unless f.object.implementer_splits.length > 0
         - new_object = f.object.class.reflect_on_association(:implementer_splits).klass.new
         - f.fields_for(:implementer_splits, new_object) do |builder|
           = render "shared/outlays/implementer_split_fields", :f => builder
 
-      %tr
+      %tr.total
         %td
           -if show_buttons
             %span= link_to_add_fields "Add Implementer", f, :implementer_splits, "shared/outlays/", :class => "create_alt marginless"

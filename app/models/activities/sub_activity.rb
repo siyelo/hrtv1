@@ -39,6 +39,9 @@ class SubActivity < Activity
   end
   delegate :name, :to => :implementer, :prefix => true, :allow_nil => true # gives you implementer_name
 
+  ### Named Scopes
+  named_scope :sorted, { :joins => [:provider], :order => ["organizations.name"]}
+
   ### Class Methods
 
   def self.human_attribute_name(attr)

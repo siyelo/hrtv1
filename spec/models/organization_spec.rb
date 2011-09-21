@@ -18,7 +18,7 @@ describe Organization do
   end
 
   describe "Associations" do
-    it { should have_and_belong_to_many(:activities) }
+    it { should have_many(:activities) }
     it { should belong_to(:location) }
     it { should have_many(:users) }
     it { should have_many(:data_requests) }
@@ -263,6 +263,7 @@ describe Organization do
     it "is not empty when it has activities" do
       project  = Factory(:project, :data_response => @response)
       activity = Factory(:activity, :data_response => @response, :project => project)
+      @organization.reload
       @organization.is_empty?.should_not be_true
     end
   end
@@ -303,52 +304,13 @@ describe Organization do
       all_organizations.should_not include(@duplicate)
     end
 
-    it "copies activities from @duplicate to @target" do
-      target_project     = Factory(:project, :data_response => @target_dr)
-      duplicate_project  = Factory(:project, :data_response => @duplicate_dr)
-
-      target_activity    = Factory(:activity, :data_response => @target_dr,
-                                   :project => target_project)
-      duplicate_activity = Factory(:activity, :data_response => @duplicate_dr,
-                                   :project => duplicate_project)
-
-      @target.activities << target_activity
-      @duplicate.activities << duplicate_activity
-      @target.activities.count.should == 1
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.activities.count.should == 2
-    end
-
-    it "copies data_requests from duplicate to @target" do
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.data_requests.count.should == 2
-    end
-
-    it "copies data responses from @duplicate to @target" do
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 4
-    end
-
     it "copies also invalid data responses from duplicate to @target" do
       @duplicate.fiscal_year_start_date = "2010-02-01"
       @duplicate.fiscal_year_end_date = "2010-01-01"
       @duplicate.save(false)
       duplicate_data_response = @duplicate.latest_response
       Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 4 # not 2, since our before block created a valid DR
-    end
-
-    it "copies out flows from duplicate to @target" do
-      project_from = Factory(:project, :data_response => @target_dr)
-      project_to   = Factory(:project, :data_response => @duplicate_dr)
-      Factory(:funding_flow,
-              :from => @target, :project => project_from)
-      Factory(:funding_flow,
-              :from => @duplicate, :project => project_to)
-
-      @target.out_flows.count.should == 1
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.out_flows.count.should == 2
+      @target.data_responses.count.should == 2 # not 2, since our before block created a valid DR
     end
 
     it "copies location from duplicate to @target" do
@@ -364,17 +326,6 @@ describe Organization do
       Factory(:reporter, :organization => @duplicate)
       Organization.merge_organizations!(@target, @duplicate)
       @target.users.count.should == 2
-    end
-
-    it "copies provider_for from @duplicate to @target" do
-      target_project = Factory(:project, :data_response => @target_dr)
-      duplicate_project = Factory(:project, :data_response => @duplicate_dr)
-      Factory(:activity, :provider => @target, :data_response => @target_dr,
-              :project => target_project)
-      Factory(:activity, :provider => @target, :data_response => @target_dr,
-              :project => duplicate_project)
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.provider_for.count.should == 2
     end
   end
 

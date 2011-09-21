@@ -34,15 +34,10 @@ class Importer
       # or row is left blank
       implementer = find_implementer(sub_activity_name)
 
-      split = nil
-      activity = nil
-      project = nil
+      split = activity = project = nil
 
       # try find the split based on the id
       # use the association, not AR find, so we reference the same object
-
-      # activity = find_existing_split_from_cache(@activites,sub_activity_)
-
       split = find_cached_split_using_split_id(sub_activity_id)
       activity = find_cached_activity_using_split_id(sub_activity_id)
 
@@ -78,81 +73,31 @@ class Importer
         activity.project = project
         split = activity.implementer_splits.find(:first,
                         :conditions => { :provider_id => implementer.id}) if implementer
-        unless split
-          split = SubActivity.new # dont use activity.implementer_splits.new as it loads a new
-                                  # association object
-          split.activity = activity
-          @new_splits << split
-        end
+        split = create_new_implementer_split(activity) unless split
       end
 
       # at this point, we should have an activity, and since we save everything via activity,
       # we need to use the activity objects
 
-      # try find the split based on the id
-      # use the association, not AR find, so we reference the same object
-      activity.implementer_splits.each do |a|
-        if a.id == split.id
-          split = a
-          break
-        end
-      end
+      # try find the split based on the id. use the association, not AR find,
+      # so we reference the same object
+      split = activity.implementer_splits.detect{ |is| is.id == split.id } || split
 
-      project.data_response       = @response
-      project.name                = project_name
-      project.description         = project_description.try(:strip)
-      project.updated_at          = Time.now
-      project.start_date          = date_for(row['Project Start Date'], project.start_date)
-      project.end_date            = date_for(row['Project End Date'], project.end_date)
-      # if its a new record, create a default in_flow so it can be saved
-      if project.in_flows.empty?
-        ff                        = project.in_flows.new
-        ff.organization_id_from   = project.organization.id
-        ff.spend                  = 0
-        ff.budget                 = 0
-        project.in_flows << ff
-      end
-
-      activity.data_response = @response
-      activity.project       = project
-      activity.name          = activity_name
-      activity.description   = activity_description.try(:strip)
-      activity.updated_at    = Time.now
-      split.provider      = implementer
-      split.data_response = @response
-      split.spend         = row["Past Expenditure"]
-      split.budget        = row["Current Budget"]
-      split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below
-
-      trigger_errors(project, activity, split)
+      assign_project_fields(project, project_name, project_description,
+        row['Project Start Date'], row['Project End Date'])
+      assign_activity_fields(activity, project, activity_name, activity_description)
+      assign_split_fields(split, implementer, row["Past Expenditure"], row["Current Budget"])
 
       @activities << activity unless @activities.include?(activity)
       @projects << project unless @projects.include?(project)
     end
 
-    @activities.each_with_index do |la, i|
-      # blow away any splits that werent modified by upload
-      la.implementer_splits.each_with_index do |split, j|
-        la.implementer_splits[j] = nil unless split.changed?
-      end
-      la.implementer_splits.compact! # remove any nils
-      # we're not saving the activity yet, but we want to make sure the cached totals
-      # from implementer_splits are up to date
-      la.update_implementer_cache
-    end
-
-    # the new split objects wont be associated with their parent activites until you assign them
-    # via the association. But, doing so any earlier saves all the changed records, so we
-    # cant tell which unmodified splits to delete
-    # So after clearing out the unwanted existing splits (above), we save in the brand new splits
+    check_projects_activities_valid(@projects, @activities)
+    tidy_up_splits
     @new_splits.each do |split|
-      split.activity.implementer_splits << split # does a save
-      split.activity.save
+      split.activity.implementer_splits << split
     end
 
-    ### grab any cache updates from db for these objects
-    #@projects.each{|p| p.reload if p.valid?}
-    #@activities.each{|a| a.reload if a.valid?}
     return @projects, @activities
   end
 
@@ -220,10 +165,70 @@ class Importer
     [split, activity]
   end
 
-  def trigger_errors(project, activity, split)
-    project.valid?
-    activity.valid?
-    split.valid?
-  end
+  protected
+
+    def tidy_up_splits
+      @activities.each_with_index do |la, i|
+        # blow away any splits that werent modified by upload
+        la.implementer_splits.each_with_index do |split, j|
+          la.implementer_splits[j].mark_for_destruction unless split.changed?
+        end
+        la.implementer_splits.compact! # remove any nils
+        # we're not saving the activity yet, but we want to make sure the cached totals
+        # from implementer_splits are up to date
+        la.update_implementer_cache
+      end
+    end
+
+    def check_projects_activities_valid(projects, activities)
+      projects.each{ |p| p.valid?}
+      activities.each{ |a| a.valid?}
+    end
+
+    def create_self_funder_for(project)
+      # if its a new record, create a default in_flow so it can be saved
+      if project.in_flows.empty?
+        ff                        = project.in_flows.new
+        ff.organization_id_from   = project.organization.id
+        ff.spend                  = 1
+        ff.budget                 = 1
+        project.in_flows << ff
+      end
+    end
+
+    def create_new_implementer_split(activity)
+      split = SubActivity.new # dont use activity.implementer_splits.new as it loads a new
+                              # association object
+      split.activity = activity
+      @new_splits << split
+
+      split
+    end
+
+    def assign_project_fields(project, name, description, start_date, end_date)
+      project.data_response       = @response
+      project.name                = name
+      project.description         = description.try(:strip)
+      project.updated_at          = Time.now
+      project.start_date          = date_for(start_date, project.start_date)
+      project.end_date            = date_for(end_date, project.end_date)
+      create_self_funder_for(project)
+    end
+
+    def assign_activity_fields(activity, project, name, description)
+      activity.data_response = @response
+      activity.project       = project
+      activity.name          = name
+      activity.description   = description.try(:strip)
+      activity.updated_at    = Time.now
+    end
+
+    def assign_split_fields(split, implementer, spend, budget)
+      split.provider      = implementer
+      split.data_response = @response
+      split.spend         = spend
+      split.budget        = budget
+      split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below
+    end
 end
 

@@ -6,7 +6,7 @@ require 'thread' #fixes uninitialized constant ActiveSupport::Dependencies::Mute
 require File.join(File.dirname(__FILE__), 'boot')
 
 puts "WARN: $HRT_COUNTRY not set, defaulting to Rwanda" unless ENV['HRT_COUNTRY']
-puts "Loading #{ENV['HRT_COUNTRY'] || "Rwanda"} environment."
+puts "Loading #{ENV['HRT_COUNTRY'] || "Rwanda"} environment. (#{RAILS_ENV})"
 
 Rails::Initializer.run do |config|
   config.time_zone = 'UTC'

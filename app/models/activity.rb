@@ -83,7 +83,10 @@ class Activity < ActiveRecord::Base
   before_save       :update_cached_usd_amounts
   after_save        :update_counter_cache, :unless => :is_implementer_split?
   after_destroy     :update_counter_cache, :unless => :is_implementer_split?
-  before_update     :update_all_classified_amount_caches, :unless => :is_implementer_split?
+  after_destroy     :restart_response_if_all_activities_removed,
+                      :unless => :is_implementer_split?
+  before_update     :update_all_classified_amount_caches,
+                      :unless => :is_implementer_split?
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -459,6 +462,10 @@ class Activity < ActiveRecord::Base
         end
         self.project = project
       end
+    end
+
+    def restart_response_if_all_activities_removed
+      response.restart! if response.activities.empty?
     end
 end
 

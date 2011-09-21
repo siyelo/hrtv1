@@ -10,6 +10,14 @@ class DataResponse < ActiveRecord::Base
       transition [:unstarted] => :started
     end
 
+    event :unstart do
+      transition [:started, :submitted, :rejected, :accepted] => :unstarted
+    end
+
+    event :restart do
+      transition [:started, :submitted, :rejected, :accepted] => :started
+    end
+
     event :submit do
       transition [:started, :rejected] => :submitted
     end

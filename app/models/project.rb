@@ -68,8 +68,9 @@ class Project < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,:data_response_id,
-                  :start_date, :end_date, :currency, :data_response, :activities, :activities_attributes,
-                  :in_flows_attributes, :am_approved, :am_approved_date, :in_flows, :updated_at
+                  :start_date, :end_date, :currency, :data_response, :activities,
+                  :activities_attributes, :in_flows_attributes, :am_approved,
+                  :am_approved_date, :in_flows, :updated_at
 
   ### Delegates
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
@@ -77,9 +78,10 @@ class Project < ActiveRecord::Base
   ### Callbacks
   after_save   :update_cached_currency_amounts, :if => Proc.new { |p| p.currency_changed? }
   after_create :start_response_if_unstarted
+  after_destroy :unstart_response_if_all_projects_removed
 
   ### Named Scopes
-  named_scope :sorted,           {:order => "projects.name" }
+  named_scope :sorted, { :order => "projects.name" }
 
   ### Class methods
 
@@ -440,6 +442,10 @@ class Project < ActiveRecord::Base
 
     def start_response_if_unstarted
       response.start! if response.unstarted?
+    end
+
+    def unstart_response_if_all_projects_removed
+      response.unstart! if response.projects.empty?
     end
 end
 

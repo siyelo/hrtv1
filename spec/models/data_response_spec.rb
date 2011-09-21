@@ -73,42 +73,11 @@ describe DataResponse do
       @response    = organization.latest_response
     end
 
-    describe "Transitions" do
-      it "can transition from unstarted to started" do
-        @response.start!
-        @response.state.should == 'started'
-      end
-
-      it "can transition from started to submitted" do
-        @response.state = 'started'
-        @response.submit!
-        @response.state.should == 'submitted'
-      end
-
-      it "can transition from submitted to rejected" do
-        @response.state = 'submitted'
-        @response.reject!
-        @response.state.should == 'rejected'
-      end
-
-      it "can transition from rejected to submitted" do
-        @response.state = 'rejected'
-        @response.submit!
-        @response.state.should == 'submitted'
-      end
-
-      it "can transition from submitted to accepted" do
-        @response.state = 'submitted'
-        @response.accept!
-        @response.state.should == 'accepted'
-      end
+    it "sets unstarted as default state" do
+      @response.state.should == 'unstarted'
     end
 
-    describe "Context Events" do
-      it "sets unstarted as default state" do
-        @response.state.should == 'unstarted'
-      end
-
+    context "first project is created" do
       it "transitions from unstarted to started when first project is created" do
         @response.state.should == 'unstarted'
         Factory(:project, :data_response => @response)
@@ -119,6 +88,34 @@ describe DataResponse do
         @response.state = 'rejected'
         Factory(:project, :data_response => @response)
         @response.state.should == 'rejected'
+      end
+    end
+
+    context "all projects are destroyed" do
+      it "moves the response into unstarted state" do
+        @response.state.should == 'unstarted'
+        project = Factory(:project, :data_response => @response)
+        @response.state.should == 'started'
+        project.destroy
+        @response.reload.state.should == 'unstarted'
+      end
+    end
+
+    context "response is submitted and activity is deleted" do
+      it "moves the response into started state" do
+        @response.state.should == 'unstarted'
+        project = Factory(:project, :data_response => @response)
+        @response.state.should == 'started'
+        activity1 = Factory(:activity, :data_response => @response,
+                            :project => project)
+        activity2 = Factory(:activity, :data_response => @response,
+                            :project => project)
+        @response.submit!
+        @response.state.should == 'submitted'
+        activity1.destroy
+        @response.reload.state.should == 'submitted'
+        activity2.destroy
+        @response.reload.state.should == 'started'
       end
     end
 

@@ -142,10 +142,11 @@ module ApplicationHelper
   end
 
   # sortable columns
-  def sortable(column, title = nil)
+  def sortable(column, title = nil, reverse_sort = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
+    direction = "desc" if column != sort_column && reverse_sort
     link_to title, {:sort => column, :direction => direction, :query => params[:query],
         :filter => params[:filter]}, {:class => css_class}
   end

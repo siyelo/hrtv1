@@ -154,6 +154,10 @@ Then /^wait a few moments$/ do
   sleep 4
 end
 
+Then /^wait a moment$/ do
+  sleep 1
+end
+
 When /^I wait until "([^"]*)" is visible$/ do |selector|
   page.has_css?("#{selector}", :visible => true)
 end

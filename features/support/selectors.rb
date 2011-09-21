@@ -45,6 +45,24 @@ module HtmlSelectorsHelper
     when /the group tab/
       "ul#group"
 
+    when /the table heading/
+      "thead"
+
+    when /the 2nd row of the table/
+      "tbody tr:nth-child(2)"
+
+    when /a link in the 2nd row of the table/
+      "tbody tr:nth-child(2) td a"
+
+    when /the 1st row of the table/
+      "tbody tr:nth-child(1)"
+
+    when /a link in the 1st row of the table/
+      "tbody tr:nth-child(1) td a"
+
+    when /a link in the filters list/
+      "ul.section_nav li a"
+
     else
       raise "Can't find mapping from \"#{scope}\" to a selector.\n" +
         "Now, go and add a mapping in #{__FILE__}"

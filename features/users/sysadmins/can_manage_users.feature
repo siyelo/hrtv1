@@ -45,7 +45,7 @@ Feature: Admin can manage users
     And I follow "Sign Out"
     And I am signed in as "sysadmin@hrtapp.com"
     And I follow "Users"
-    Then I should see "01 Jan '11 21:30 UTC"
+    Then I should see "01 Jan '11 21:30"
 
 
   Scenario: Adding malformed CSV file doesnt throw exception
@@ -108,7 +108,6 @@ Feature: Admin can manage users
        | organization2    | organization3    |
        | organization3    | organization2    |
 
-
   Scenario Outline: An admin can sort users
     Given an organization exists with name: "organization2"
     And a reporter exists with email: "user1@hrtapp.com", full_name: "Full name 1", organization: the organization, last_login_at: "2010-09-19 10:48:23"
@@ -126,11 +125,11 @@ Feature: Admin can manage users
     And column "<column>" row "2" should have text "<text1>"
 
       Examples:
-        | column_name  | column | text1                | text2                |
-        | Full Name    | 1      | Full name 1          | Full name 2          |
-        | Email        | 2      | user2@hrtapp.com     | user1@hrtapp.com     |
-        | Organization | 3      | organization2        | organization3        |
-        | Last login   | 4      | 19 Sep '10 10:48 UTC | 19 Sep '11 10:48 UTC |
+        | column_name  | column | text1            | text2            |
+        | Full Name    | 1      | Full name 1      | Full name 2      |
+        | Email        | 2      | user2@hrtapp.com | user1@hrtapp.com |
+        | Organization | 3      | organization2    | organization3    |
+        | Last login   | 4      | 19 Sep '10 10:48 | 19 Sep '11 10:48 |
 
 
   Scenario: An admin can create Activity Manager and assign organizations for managing

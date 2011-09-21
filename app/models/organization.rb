@@ -8,13 +8,17 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue",
-    "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
-    "District Hospital", "Government", "Govt Insurance", "Health Center",
-    "Health Post", "International NGO", "Local NGO", "MOH central",
-    "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
-    "Non-Reporting", "Other ministries", "Parastatal", "Prison Clinic",
-    "RBC institutions"]
+  ORGANIZATION_TYPES = ['Bilateral', 'Central Govt Revenue',
+    'Clinic/Cabinet Medical', 'Communal FOSA', 'Dispensary', 'District',
+    'District Hospital', 'Government', 'Govt Insurance', 'Health Center',
+    'Health Post', 'International NGO', 'Local NGO', 'MOH central',
+    'Military Hospital', 'MoH unit', 'Multilateral', 'National Hospital',
+    'Non-Reporting', 'Other ministries', 'Parastatal', 'Prison Clinic',
+    'RBC institutions']
+
+  NON_REPORTING_TYPES = ['Clinic/Cabinet Medical', 'Communal FOSA',
+    'Dispensary', 'District', 'District Hospital', 'Health Center',
+    'Health Post', 'Non-Reporting', 'Other ministries', 'Prison Clinic']
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
@@ -61,8 +65,8 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :reporting, :conditions => "raw_type != 'Non-Reporting'"
-  named_scope :nonreporting, :conditions => "raw_type = 'Non-Reporting'"
+  named_scope :reporting, :conditions => ['raw_type not in (?)', NON_REPORTING_TYPES]
+  named_scope :nonreporting, :conditions => ['raw_type in (?)', NON_REPORTING_TYPES]
   named_scope :responses_by_states, lambda { |request, states|
     { :joins => {:data_responses => :data_request },
       :conditions => ["data_requests.id = ? AND
@@ -237,11 +241,11 @@ class Organization < ActiveRecord::Base
   end
 
   def reporting?
-    raw_type != 'Non-Reporting'
+    !nonreporting?
   end
 
   def nonreporting?
-    raw_type == 'Non-Reporting'
+    NON_REPORTING_TYPES.include?(raw_type)
   end
 
   def currency
@@ -249,7 +253,21 @@ class Organization < ActiveRecord::Base
   end
 
   def last_user_logged_in
-    users.select { |a,b| a.last_login_at.present? }.max { |a,b| a.last_login_at <=> b.last_login_at }
+    users.select{ |a,b| a.last_login_at.present? }.max do |a,b|
+      a.last_login_at <=> b.last_login_at
+    end
+  end
+
+  # last login at will return nil on first login, but current will be set
+  def current_user_logged_in
+    users.select{ |a,b| a.current_login_at.present? }.max do |a,b|
+      a.current_login_at <=> b.current_login_at
+    end
+  end
+
+  #workaround for authlogic not setting last to current on first login
+  def last_or_current_user_logged_in
+    last_user_logged_in || current_user_logged_in
   end
 
   protected

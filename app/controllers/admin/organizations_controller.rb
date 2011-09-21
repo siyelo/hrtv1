@@ -2,8 +2,9 @@ require 'set'
 class Admin::OrganizationsController < Admin::BaseController
   include ResponseStatesHelper
 
-  SORTABLE_COLUMNS  = ['name', 'raw_type', 'fosaid']
-  AVAILABLE_FILTERS = ["All", "Not Yet Started", "Started", "Submitted", "Rejected", "Accepted"]
+  SORTABLE_COLUMNS  = ['name', 'raw_type', 'fosaid', 'created_at']
+  AVAILABLE_FILTERS = ["Reporting", "Not Yet Started", "Started", "Submitted",
+    "Rejected", "Accepted", "Non-Reporting"]
 
   ### Inherited Resources
   inherit_resources
@@ -11,20 +12,20 @@ class Admin::OrganizationsController < Admin::BaseController
   helper_method :sort_column, :sort_direction
 
   def index
-    scope = Organization.scoped({})
-    scope = filter_organizations(scope, params[:filter]) if allowed_filter?(params[:filter])
+    scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                            UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                            UPPER(organizations.fosaid) LIKE UPPER(:q)",
                                            {:q => "%#{params[:query]}%"}]) if params[:query]
 
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
-                    :order => "UPPER(organizations.#{sort_column}) #{sort_direction}")
+                    :order => "#{sort_column_query} #{sort_direction}")
     @responses = current_request.data_responses
   end
 
   def show
-    @organization = Organization.find(params[:id])
+    @organization = Organization.find(params[:id], :include => [:projects,
+      :activities, :users, :location])
 
     respond_to do |format|
       format.js {render :partial => 'organization_info'}
@@ -146,15 +147,25 @@ class Admin::OrganizationsController < Admin::BaseController
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
     end
 
-    def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+    def sort_column_query
+      col = "organizations.#{sort_column}"
+      col = "UPPER(#{col})" unless col == "organizations.created_at"
+      col
     end
 
-    def filter_organizations(scope, filter)
-      if filter == 'All'
-        scope
+    def sort_direction
+      direction = sort_column == "created_at" ? "desc" : "asc"
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : direction
+    end
+
+    # show reporting orgs by default.
+    def scope_organizations(filter)
+      if filter == 'Non-Reporting'
+        Organization.nonreporting
+      elsif allowed_filter?(params[:filter])
+        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
       else
-        scope.responses_by_states(current_request, [name_to_state(filter)])
+        Organization.reporting
       end
     end
 

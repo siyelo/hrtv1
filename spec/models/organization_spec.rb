@@ -239,35 +239,36 @@ describe Organization do
   end
 
   describe "#last logged in user" do
+    before :each do
+      @org = Factory.build(:organization)
+      @user = Factory.build(:user,
+        :last_login_at => DateTime.parse('2009-05-04 02:00:00'),
+        :current_login_at => DateTime.parse('2009-06-04 02:00:00'))
+      @org.users << @user
+    end
+
     it "returns the last user in that organization that logged in if there is one user" do
-      org = Factory(:organization)
-      user1 = Factory(:user, :organization => org,
-                      :last_login_at => DateTime.parse('2009-06-04 02:00:00'))
-      org.last_user_logged_in.should == user1
+      @org.last_user_logged_in.should == @user
+      @org.current_user_logged_in.should == @user
+      @org.last_or_current_user_logged_in.should == @user
     end
 
-    it "returns the last user in that organization that logged in if there is one user and the last_login_at is nil" do
-      org = Factory(:organization)
-      user1 = Factory(:user, :organization => org,
-                      :last_login_at => DateTime.parse('2009-06-04 02:00:00'))
-      org.last_user_logged_in.should == user1
+    it "returns nil when nobody has ever logged in" do
+      @user.last_login_at = nil
+      @user.current_login_at = nil
+      user2 = Factory.build(:user, :organization => @org)
+      @org.users << @user; @org.users << user2
+      @org.last_user_logged_in.should be_nil
+      @org.current_user_logged_in.should be_nil
+      @org.last_or_current_user_logged_in.should be_nil
     end
 
-    it " returns nil when nobody has ever logged in" do
-      org = Factory(:organization)
-      user1 = Factory(:user, :organization => org,
-                      :last_login_at => nil)
-      user2 = Factory(:user, :organization => org)
-      org.last_user_logged_in.should be_nil
-    end
-
-    it "returns the last user for that organization if there are users from different orgs" do
-      org1 = Factory(:organization)
-      org2 = Factory(:organization)
-      user1 = Factory(:user, :organization => org1,
-                      :last_login_at => DateTime.parse('2011-06-04 02:00:00'))
-      user2 = Factory(:user, :organization => org2)
-      org1.last_user_logged_in.should == user1
+    # authlogic idiosyncracy
+    it " returns last logged in as nil on first sign in" do
+      @user.last_login_at = nil
+      @org.last_user_logged_in.should be_nil
+      @org.current_user_logged_in.should == @user
+      @org.last_or_current_user_logged_in.should == @user
     end
   end
 
@@ -567,19 +568,19 @@ describe Organization do
       Organization.ordered.should == [org2, org1]
     end
 
-    context "reporting & nonreporting" do
-      before :each do
-        @org1 = Factory(:organization, :raw_type => 'Bilateral')
-        @org2 = Factory(:organization, :raw_type => 'Non-Reporting')
+    it "returns (non/)reporting organizations" do
+      @org1 = Factory(:organization, :raw_type => 'Bilateral')
+
+      non_reporting_types = ['Clinic/Cabinet Medical', 'Communal FOSA',
+        'Dispensary', 'District', 'District Hospital', 'Health Center',
+        'Health Post', 'Non-Reporting', 'Other ministries',
+        'Prison Clinic']
+      non_reporting_types.each do |type|
+        Factory(:organization, :raw_type => type)
       end
 
-      it "returns reporting organizations" do
-        Organization.reporting.should == [@org1]
-      end
-
-      it "returns reporting organizations" do
-        Organization.nonreporting.should == [@org2]
-      end
+      Organization.reporting.should == [@org1]
+      Organization.nonreporting.count.should == non_reporting_types.count
     end
   end
 

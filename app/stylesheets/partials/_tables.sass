@@ -25,16 +25,14 @@ table.standard
         padding: 5px
       a
         background: $primary_dark
-        color: $primary_lighter
+        color: white
         display: block
         font-size: 11px
-        font-weight: bold
-        padding: 10px 7px 7px 0px
         text-decoration: none
-        text-transform: uppercase
         &:hover, &:focus, &:active
-          color: #FFF
-          //background: image_url("icon_arrow_up.gif") no-repeat right center $mid-blue - #111
+          //override default anchor hover color
+          color: white
+          text-decoration: underline
         &.asc
           background: image_url("icon_arrow_up.gif") no-repeat 85% center
         &.desc
@@ -99,6 +97,11 @@ table.standard
   .wrap_30
     min-width: 30%
 
+// fixes background arrow overlapping in "Created" column
+#admin_organizations_index
+  table.standard
+    td, th
+      min-width: 75px
 
 // Pretty Table with clickable rows
 table.clickable

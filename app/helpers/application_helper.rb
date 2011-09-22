@@ -285,9 +285,11 @@ module ApplicationHelper
     if outlay.approved? || outlay.am_approved?
       flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
     elsif !outlay.classified?
-      flash.now[:warning] = "This #{type} has not been fully classified.
-                           #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
-                           to see what still needs to be classified"}" unless flash[:warning]
+      unless flash[:warning]
+        flash.now[:warning] = "This #{type} has not been fully classified.
+          #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
+          to see what still needs to be classified"}"
+      end
     else
       flash.now[:notice] = "This #{type} has been fully classified." unless flash[:notice]
     end
@@ -297,10 +299,12 @@ module ApplicationHelper
     dj = Delayed::Job.find(:first, :select => 'id',
            :conditions => "handler LIKE '%object: LOAD;Activity;#{outlay.id}%'")
 
-    flash.now[:warning] = "We are still busy processing changes to the classification tree.
-                          Please reload the page to see whether this
-                          #{outlay.class == OtherCost ? "Other Cost" : "Activity"}
-                          has been fully classified." if dj
+    if dj
+      flash.now[:warning] = "We are still busy processing changes to the
+        classification tree. Please reload the page to see whether this
+        #{outlay.class.to_s.humanize} has been
+        fully classified."
+    end
   end
 
   def edit_activity_or_ocost_path(outlay, opts = nil)

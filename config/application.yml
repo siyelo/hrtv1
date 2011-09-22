@@ -1,5 +1,5 @@
 defaults: &defaults
-  google_account_id: 
+  google_account_id:
 
 development:
   <<: *defaults
@@ -21,6 +21,11 @@ test:
     storage: :filesystem
 
 cucumber:
+  <<: *defaults
+  paperclip:
+    storage: :filesystem
+
+profiling:
   <<: *defaults
   paperclip:
     storage: :filesystem

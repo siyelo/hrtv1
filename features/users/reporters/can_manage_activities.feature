@@ -99,12 +99,11 @@ Feature: Reporter can manage activities
   @wip
   Scenario: A reporter can filter activities
     Given an activity exists with name: "activity2", description: "activity1 description", project: the project, data_response: the data_response
-      And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response
+    And an activity exists with name: "activity2", description: "activity2 description", project: the project, data_response: the data_response
     When I follow "Activities"
     Then I should see "activity1 description"
-      And I should see "activity2 description"
-
+    And I should see "activity2 description"
     When I fill in "query" with "activity1"
-      And I press "Search"
+    And I press "Search"
     Then I should see "activity1 description"
     And I should not see "activity2 description"

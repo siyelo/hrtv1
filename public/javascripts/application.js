@@ -1607,11 +1607,8 @@ var unsaved_warning = function () {
   return 'You have projects that have not been saved.  Saved projects show a green checkmark next to them.  Are you sure you want to leave this page?'
 };
 
-var projects_bulk_create = {
+var projects_import = {
   run: function () {
-
-    initDemoText($('*[data-hint]'));
-
     $('.activity_box .header').live('click', function (e) {
       e.preventDefault();
       var activity_box = $(this).parents('.activity_box');
@@ -1627,9 +1624,6 @@ var projects_bulk_create = {
 
     $('.header:first').trigger('click'); // expand the first one on page load
 
-    focusDemoText($('*[data-hint]'));
-    blurDemoText($('*[data-hint]'));
-
     $(window).bind('beforeunload',function (e) {
       if ($('.js_unsaved').length > 0) {
         return unsaved_warning();
@@ -1643,21 +1637,10 @@ var projects_bulk_create = {
       var ajaxLoader = element.next('.ajax-loader');
       var activity_box = element.parents('.activity_box');
 
-      // reset input values before submit !!
-      form.find('*[data-hint]').each(function() {
-        var input = $(this);
-        var demo_text = input.attr('data-hint');
-
-        if (input.val() == demo_text) {
-          input.val('');
-        }
-      });
-
       ajaxLoader.show();
 
       $.post(buildUrl(form.attr('action')), form.serialize(), function (data) {
         activity_box.html(data.html);
-        initDemoText(activity_box.find('*[data-hint]'));
         activity_box.find(".js_combobox").combobox();
         ajaxLoader.hide();
         if (data.status == 'success') {
@@ -1740,7 +1723,7 @@ var activity_form = function () {
     e.preventDefault();
     var element = $(this);
     if (element.val() == "-1") {
-      $('.implementer_container').hide();
+      $('.js_implementer_container').hide();
       $('.add_organization').show();
     }
   });
@@ -1749,7 +1732,7 @@ var activity_form = function () {
     e.preventDefault();
     $('.organization_name').attr('value', '');
     $('.add_organization').hide();
-    $('.implementer_container').show();
+    $('.js_implementer_container').show();
     $('.js_implementer_select').val(null);
   });
 
@@ -1758,7 +1741,7 @@ var activity_form = function () {
     var name = $('.organization_name').val();
     $.post("/organizations.js", { "name" : name }, function(data){
       var data = $.parseJSON(data);
-      $('.implementer_container').show();
+      $('.js_implementer_container').show();
       $('.add_organization').hide();
       if (isNaN(data.organization.id)) {
         $('.js_implementer_select').val(null);
@@ -1854,7 +1837,6 @@ var dashboard_index = {
   }
 };
 
-
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
     $(".js_combobox" ).combobox();
@@ -1870,7 +1852,7 @@ var projects_new = projects_create = projects_edit = projects_update = {
   }
 }
 
-
+// DOM LOAD
 $(function () {
 
   // prevent going to top when tooltip clicked

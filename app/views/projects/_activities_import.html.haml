@@ -5,7 +5,7 @@
   .dashboard_section
     %p Create one or more projects and activities from an XLS or CSV file. Export your existing projects and activities, edit them in your preferred spreadsheet application (e.g. Microsoft Excel), save the file and  upload it here.
     %br
-    - form_tag(bulk_create_response_projects_path(@response, url_params), :multipart => true) do
+    - form_tag(import_response_projects_path(@response, url_params), :multipart => true) do
 
       .upbox
         = label_tag :file, "File"

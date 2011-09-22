@@ -42,7 +42,7 @@ Feature: Reporter can manage other costs
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost2 description"
     And I select "<Automatically create a project for me>" from "Project"
-    # self org should already be selected
+    # self org should already be present/selected
     And I fill in "other_cost[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "other_cost[implementer_splits_attributes][0][budget]" with "19"
     And I press "Save"
@@ -58,28 +58,12 @@ Feature: Reporter can manage other costs
     And I press "Save"
     Then I should see "Other Cost was successfully created"
 
-  @wip
   Scenario: A reporter can create comments for an other cost and see comment errors
     Given an other cost exists with project: the project, description: "OtherCost1 description", data_response: the data_response
     When I follow "Projects"
     And I follow "OtherCost1 description"
     And I press "Create Comment"
-    Then I should see "can't be blank" within "#comment_comment_input"
+    Then I should see "You cannot create blank comment."
     When I fill in "Comment" with "Comment body"
     And I press "Create Comment"
-    Then I should see "Comment was successfully created"
-    And I should see "Comment body"
-
-  @wip
-  Scenario: If the data_request budget is not checked the budget should not show up in the other costs screen
-    Given I follow "Sign Out"
-    And an organization exists with name: "organization5"
-    And a data_request exists with title: "data_request2", budget: false
-    Then a data_response should exist with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter2@hrtapp.com", organization: the organization
-    When I am signed in as "reporter2@hrtapp.com"
-    And I follow "data_request2"
-    And a project exists with name: "project1", data_response: the data_response
-    And I follow "Projects"
-    And I follow "Add Other Costs now"
-    Then I should not see "Budget (planned expenditure)"
+    Then I should see "Comment body"

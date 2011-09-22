@@ -78,8 +78,8 @@ class Activity < ActiveRecord::Base
 
   ### Callbacks
   before_validation :strip_input_fields, :unless => :is_implementer_split?
-  before_save       :auto_create_project, :unless => :is_implementer_split?
   before_save       :update_implementer_cache, :unless => :is_implementer_split?
+  before_save       :auto_create_project, :unless => :is_implementer_split?
   before_save       :update_cached_usd_amounts
   after_save        :update_counter_cache, :unless => :is_implementer_split?
   after_destroy     :update_counter_cache, :unless => :is_implementer_split?
@@ -176,18 +176,6 @@ class Activity < ActiveRecord::Base
   end
 
   ### Instance Methods
-
-  # to create subactivities for activities
-
-  def initialize(*params)
-    super(*params)
-    unless is_implementer_split?
-      #needed to fully initialize an activity with default (self-)implementer split
-      self.implementer_splits.build(:provider_id => self.organization.id,
-        :data_response_id => self.data_response_id) if self.data_response_id && self.implementer_splits.empty?
-      update_implementer_cache
-    end
-  end
 
   def update_attributes(params)
     update_classifications_from_params(params) unless is_implementer_split?
@@ -388,6 +376,7 @@ class Activity < ActiveRecord::Base
         dr.save(false)
       end
     end
+    handle_asynchronously :update_counter_cache
 
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)

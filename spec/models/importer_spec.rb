@@ -128,6 +128,18 @@ EOS
     i.projects.first.errors.on(:name).should == ["can't be blank", "is too short (minimum is 1 characters)"]
   end
 
+  it "should have default self-funder on import of new project" do
+    csv_string = <<-EOS
+newproj,project description,01/01/2010,31/12/2010,act name,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.projects.size.should == 1
+    i.projects.first.should be_valid
+    i.projects.first.name.should == 'newproj'
+    i.projects.first.in_flows.size.should == 1
+  end
+
   it "should show activity errors on import" do
     csv_string = <<-EOS
 project,project description,01/01/2010,31/12/2010,,activity1 description,#{@split.id},selfimplementer1,99.9,100
@@ -308,7 +320,7 @@ EOS
       before :each do
         @implementer2  = Factory(:organization, :name => "implementer2")
         @split2 = Factory(:sub_activity, :data_response => @response,
-                                :activity => @activity, :provider => @implementer2)
+                    :activity => @activity, :provider => @implementer2)
       end
 
       it "should find a previously imported project with a stripped & truncated name" do
@@ -339,6 +351,28 @@ EOS
         i.activities[0].budget.to_f.should == 10
       end
 
+      it "should not create dummy self implementer on existing activities" do
+        csv_string = <<-EOS
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split2.id},implementer2,2.0,4.0
+EOS
+        i = Importer.new(@response, write_csv_with_header(csv_string))
+        i.import
+        i.activities[0].implementer_splits.size.should == 2
+        i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
+        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+      end
+
+      it "should not create dummy self implementer on brand new activities" do
+        csv_string = <<-EOS
+project1,project description,01/01/2010,31/12/2010,activity BLAR,activity blar description,#{@split2.id},implementer2,2.0,4.0
+EOS
+        i = Importer.new(@response, write_csv_with_header(csv_string))
+        i.import
+        i.activities[0].implementer_splits.size.should == 2
+        i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
+        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+      end
+
       it "should update 1 activity plus its multiple implementers" do
         csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 NEW description,#{@split.id},selfimplementer1,2.0,4.0
@@ -364,12 +398,12 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
         i = Importer.new(@response, write_csv_with_header(csv_string))
         i.import
-        i.activities[0].implementer_splits.size.should == 1
-        i.activities[0].implementer_splits.first.implementer_name.should == 'implementer3'
-        i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
-        i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
-        i.activities[0].spend.to_f.should == 2
-        i.activities[0].budget.to_f.should == 4
+        i.activities[0].implementer_splits.size.should == 3
+        i.activities[0].implementer_splits[0].marked_for_destruction?.should == true
+        i.activities[0].implementer_splits[1].marked_for_destruction?.should == true
+        i.activities[0].implementer_splits[2].implementer_name.should == 'implementer3'
+        i.activities[0].implementer_splits[2].spend.to_f.should == 2.0
+        i.activities[0].implementer_splits[2].budget.to_f.should == 4.0
       end
 
       it "should update the project, plus the activity plus its multiple implementers" do
@@ -573,10 +607,10 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
-    i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == @response.organization.name
-    i.activities[0].implementer_splits.first.spend.to_f.should == 2
-    i.activities[0].implementer_splits.first.budget.to_f.should == 4
+    i.activities[0].implementer_splits.size.should == 2
+    i.activities[0].implementer_splits[1].implementer_name.should == @response.organization.name
+    i.activities[0].implementer_splits[1].spend.to_f.should == 2
+    i.activities[0].implementer_splits[1].budget.to_f.should == 4
   end
 
   it "should ignore new implementer name when ID is still given" do

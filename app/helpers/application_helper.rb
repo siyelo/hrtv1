@@ -278,19 +278,6 @@ module ApplicationHelper
       sum{|rca| rca.percentage.to_f}
   end
 
-  def warn_if_not_classified
-    outlay = @activity || @other_cost
-    unless flash[:error]
-      if outlay.approved? || outlay.am_approved?
-        flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif !outlay.classified?
-        flash.now[:warning] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
-                             #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
-                             to see what still needs to be classified"}"
-      end
-    end
-  end
-
   def edit_activity_or_ocost_path(outlay, opts = nil)
     response = outlay.data_response
     outlay.class == Activity ?

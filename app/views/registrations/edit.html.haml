@@ -8,8 +8,8 @@
 
   - semantic_form_for @user, :url => registration_path(:invite_token => params[:invite_token]) do |f|
     - f.inputs do
-      = f.input :password, :value => nil
-      = f.input :password_confirmation
+      = f.input :password, :value => nil, :input_html => { :autocomplete => "off" }
+      = f.input :password_confirmation, :input_html => { :autocomplete => "off" }
 
     - f.buttons do
       = f.commit_button "Save", :class => "last"

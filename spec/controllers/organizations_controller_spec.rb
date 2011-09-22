@@ -16,7 +16,7 @@ end
 describe OrganizationsController do
   context "as a reporter" do
     before :each do
-      login(Factory.create(:reporter))
+      login(Factory(:reporter))
     end
 
     it "redirects to dashboard_path" do
@@ -37,7 +37,7 @@ describe OrganizationsController do
 
   context "as a sysadmin" do
     before :each do
-      login(Factory.create(:admin))
+      login(Factory(:admin))
     end
 
     it_should_behave_like 'an organization controller'

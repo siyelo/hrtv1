@@ -16,10 +16,10 @@ Feature: Activity Manager can download formatted workplan
 
   Scenario: Activity manager can download workplan
     When I follow "reporter_org"
-      And I follow "Export Workplan"
+      And I follow "Download Workplan"
     Then I should receive a csv file
 
 
   Scenario: Activity manager can quick-download workplan from AM Dashboard page
-    When I follow "Export Workplan"
+    When I follow "Download Workplan"
     Then I should receive a csv file

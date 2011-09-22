@@ -3,13 +3,12 @@
 
 :javascript
   var _pie = #{@pie.to_json};
-  google.load("visualization", "1", {packages: ["corechart", "treemap"]});
+  google.load("visualization", "1", {packages: ["corechart"]});
   var _code_spent_values      = #{js_safe(@code_spent_values)};
   var _code_budget_values     = #{js_safe(@code_budget_values)};
 
 %h1.main_heading
   = h @location.name
-
 
 = render 'nav'
 

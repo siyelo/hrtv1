@@ -43,7 +43,7 @@
     - if current_user.activity_manager?
       %li
         - link_to export_workplan_response_projects_path(@response), :class => 'dropdown dropless' do
-          Export Workplan
+          Download Workplan
 
         %ul.menu_items{:style => 'display: none'}
           %li= link_to 'Import', '#', :id => "import_export"

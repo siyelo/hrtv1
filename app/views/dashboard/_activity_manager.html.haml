@@ -68,4 +68,4 @@
 
           %td= response.nil? ? "n/a" : "#{response.activities.manager_approved.count}/#{response.activities_count}"
           %td= response.nil? ? "n/a" : response.status
-          %td= link_to "Export Workplan", export_workplan_response_projects_path(response)
+          %td= link_to "Download Workplan", export_workplan_response_projects_path(response)

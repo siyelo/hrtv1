@@ -29,23 +29,16 @@ class Reports::DistrictsController < Reports::BaseController
     code_type   = get_code_type_and_initialize(params[:code_type])
     @chart_name = get_chart_name(params[:code_type])
 
-    if @pie
-      if @hssp2_strat_prog || @hssp2_strat_obj
-        @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location,
-                                      code_type, true, current_request.id)
-        @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location,
-                                     code_type, false, current_request.id)
-      else
-        @code_spent_values   = Charts::DistrictPies::pie(current_request.id,
-                                     @location, code_type, true, MTEF_CODE_LEVEL)
-        @code_budget_values  = Charts::DistrictPies::pie(current_request.id,
-                                     @location, code_type, false, MTEF_CODE_LEVEL)
-      end
+    if @hssp2_strat_prog || @hssp2_strat_obj
+      @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location,
+                                    code_type, true, current_request.id)
+      @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location,
+                                   code_type, false, current_request.id)
     else
-      @code_spent_values   = Charts::DistrictTreemaps::treemap(current_request.id,
-                                     @location, code_type, @location.activities, true)
-      @code_budget_values  = Charts::DistrictTreemaps::treemap(current_request.id,
-                                     @location, code_type, @location.activities, false)
+      @code_spent_values   = Charts::DistrictPies::pie(current_request.id,
+                                   @location, code_type, true, MTEF_CODE_LEVEL)
+      @code_budget_values  = Charts::DistrictPies::pie(current_request.id,
+                                   @location, code_type, false, MTEF_CODE_LEVEL)
     end
   end
 

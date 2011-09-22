@@ -8,7 +8,6 @@ class ActivitiesController < Reporter::BaseController
   before_filter :load_response
   before_filter :confirm_activity_type, :only => [:edit]
   before_filter :require_admin, :only => [:sysadmin_approve]
-  before_filter :warn_if_not_classified, :only => [:edit]
   before_filter :prevent_browser_cache, :only => [:edit, :update] # firefox misbehaving
 
   def new
@@ -16,6 +15,7 @@ class ActivitiesController < Reporter::BaseController
   end
 
   def edit
+    warn_if_not_classified(resource)
     prepare_classifications(resource)
     load_comment_resources(resource)
     load_validation_errors(resource) if on_implementers_page?

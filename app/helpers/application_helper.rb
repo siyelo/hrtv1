@@ -277,36 +277,6 @@ module ApplicationHelper
       sum{|rca| rca.percentage.to_f}
   end
 
-  def warn_if_not_classified
-    outlay = @activity || @other_cost
-    type   = outlay.class == OtherCost ? "Other Cost" : "Activity"
-    check_delayed_jobs_for(outlay)
-
-    if outlay.approved? || outlay.am_approved?
-      flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
-    elsif !outlay.classified?
-      unless flash[:warning]
-        flash.now[:warning] = "This #{type} has not been fully classified.
-          #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
-          to see what still needs to be classified"}"
-      end
-    else
-      flash.now[:notice] = "This #{type} has been fully classified." unless flash[:notice]
-    end
-  end
-
-  def check_delayed_jobs_for(outlay)
-    dj = Delayed::Job.find(:first, :select => 'id',
-           :conditions => "handler LIKE '%object: LOAD;Activity;#{outlay.id}%'")
-
-    if dj
-      flash.now[:warning] = "We are still busy processing changes to the
-        classification tree. Please reload the page to see whether this
-        #{outlay.class.to_s.humanize} has been
-        fully classified."
-    end
-  end
-
   def edit_activity_or_ocost_path(outlay, opts = nil)
     response = outlay.data_response
     outlay.class == Activity ?

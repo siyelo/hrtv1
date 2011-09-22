@@ -50,6 +50,7 @@ Feature: Reporter can enter a code breakdown for each activity
       And the "activity[classifications][coding_budget][1]" field should contain "100"
       And the "activity[classifications][coding_spend][1]" field should contain "100"
 
+
     Scenario: Reporter can classify Purposes for activity (second level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
       And a mtef_code "mtef11" exists with id: 11, short_display: "mtef11", parent: mtef_code "mtef1"

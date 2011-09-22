@@ -51,7 +51,7 @@ Feature: Reporter can manage projects
     And I fill in "project_in_flows_attributes_0_budget" with "12"
     And I press "Create Project"
     Then I should see "Project successfully created"
-    And I should see "organization2" within ".implementer_container"
+    And I should see "organization2" within ".js_implementer_container"
 
   Scenario Outline: Edit project dates, see feedback messages for start and end dates
     When I follow "Project"

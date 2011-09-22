@@ -18,7 +18,7 @@ describe Organization do
   end
 
   describe "Associations" do
-    it { should have_and_belong_to_many(:activities) }
+    it { should have_many(:activities) }
     it { should belong_to(:location) }
     it { should have_many(:users) }
     it { should have_many(:data_requests) }
@@ -339,6 +339,7 @@ describe Organization do
     it "is not empty when it has activities" do
       project  = Factory(:project, :data_response => @response)
       activity = Factory(:activity, :data_response => @response, :project => project)
+      @organization.reload
       @organization.is_empty?.should_not be_true
     end
   end
@@ -387,9 +388,20 @@ describe Organization do
       project2 = Factory(:project, :data_response => @duplicate_response2)
 
       Organization.merge_organizations!(@target_org, @duplicate_org)
-
+      all_organizations = Organization.all
       @target_response.projects.should include(project1)
       @target_response2.projects.should include(project2)
+      all_organizations.should include(@target_org)
+      all_organizations.should_not include(@duplicate_org)
+    end
+
+    it "copies also invalid data responses from duplicate to @target" do
+      @duplicate_org.fiscal_year_start_date = "2010-02-01"
+      @duplicate_org.fiscal_year_end_date = "2010-01-01"
+      @duplicate_org.save(false)
+      duplicate_data_response = @duplicate_org.latest_response
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.data_responses.count.should == 2 # not 2, since our before block created a valid DR
     end
 
     it "moves activities from duplicate to target organization" do
@@ -407,116 +419,6 @@ describe Organization do
       activity1.project.should == project1
       activity2.project.should == project2
     end
-
-    it "moves other_costs from duplicate to target organization" do
-      project1 = Factory(:project, :data_response => @duplicate_response)
-      project2 = Factory(:project, :data_response => @duplicate_response2)
-      other_cost1 = Factory(:other_cost, :data_response => @duplicate_response,
-                          :project => project1)
-      other_cost2 = Factory(:other_cost, :data_response => @duplicate_response2,
-                          :project => project2)
-      other_cost3 = Factory(:other_cost, :data_response => @duplicate_response)
-      other_cost4 = Factory(:other_cost, :data_response => @duplicate_response2)
-
-      Organization.merge_organizations!(@target_org, @duplicate_org)
-
-      @target_response.other_costs.should include(other_cost1)
-      @target_response.other_costs.should include(other_cost3)
-      @target_response2.other_costs.should include(other_cost2)
-      @target_response2.other_costs.should include(other_cost4)
-      other_cost1.project.should == project1
-      other_cost2.project.should == project2
-      other_cost3.project.should == nil
-      other_cost4.project.should == nil
-    end
-
-    it "moves out_flows from the duplicate organization to target organization" do
-      project = Factory(:project, :data_response => @organization.latest_response)
-      project1 = Factory(:project, :data_response => @duplicate_response)
-      project2 = Factory(:project, :data_response => @duplicate_response2)
-
-      ff1 = Factory(:funding_flow, :project => project1, :project_from => project,
-                    :from => @organization)
-      ff2 = Factory(:funding_flow, :project => project2, :project_from => project,
-                    :from => @organization)
-
-      Organization.merge_organizations!(@target_org, @duplicate_org)
-
-      # because the projects are moved so the target response should change
-      ff1.project.reload.response.should == @target_response
-      ff2.project.reload.response.should == @target_response2
-
-      # funding flows are moved with the project
-      ff1.project.response.organization.should == @target_org
-      ff2.project.response.organization.should == @target_org
-    end
-
-    it "changes organization_from when self provider" do
-      project = Factory(:project, :data_response => @duplicate_response)
-      ff      = project.in_flows.first
-
-      Organization.merge_organizations!(@target_org, @duplicate_org)
-      ff.reload.from.should == @target_org
-    end
-
-    it "moves users from duplicate to target" do
-      Factory(:reporter, :organization => @target_org)
-      Factory(:reporter, :organization => @duplicate_org)
-      Organization.merge_organizations!(@target_org, @duplicate_org)
-      @target_org.users.count.should == 2
-      @duplicate_org.users.count.should == 0
-    end
-
-    #it "copies activities from @duplicate to @target" do
-      #target_project     = Factory(:project, :data_response => @target_dr)
-      #duplicate_project  = Factory(:project, :data_response => @duplicate_dr)
-
-      #target_activity    = Factory(:activity, :data_response => @target_dr,
-                                   #:project => target_project)
-      #duplicate_activity = Factory(:activity, :data_response => @duplicate_dr,
-                                   #:project => duplicate_project)
-
-      #@target.activities << target_activity
-      #@duplicate.activities << duplicate_activity
-      #@target.activities.count.should == 1
-      #Organization.merge_organizations!(@target, @duplicate)
-      #@target.activities.count.should == 2
-    #end
-
-    #it "copies also invalid data responses from duplicate to @target" do
-      #@duplicate.fiscal_year_start_date = "2010-02-01"
-      #@duplicate.fiscal_year_end_date = "2010-01-01"
-      #@duplicate.save(false)
-      #duplicate_data_response = @duplicate.latest_response
-      #Organization.merge_organizations!(@target, @duplicate)
-      #@target.data_responses.count.should == 4 # not 2, since our before block created a valid DR
-    #end
-
-    #it "copies out flows from duplicate to @target" do
-      #project_from = Factory(:project, :data_response => @target_dr)
-      #project_to   = Factory(:project, :data_response => @duplicate_dr)
-      #Factory(:funding_flow,
-              #:from => @target, :project => project_from)
-      #Factory(:funding_flow,
-              #:from => @duplicate, :project => project_to)
-
-      #@target.out_flows.count.should == 1
-      #Organization.merge_organizations!(@target, @duplicate)
-      #@target.out_flows.count.should == 2
-    #end
-
-
-
-    #it "copies provider_for from @duplicate to @target" do
-      #target_project = Factory(:project, :data_response => @target_dr)
-      #duplicate_project = Factory(:project, :data_response => @duplicate_dr)
-      #Factory(:activity, :provider => @target, :data_response => @target_dr,
-              #:project => target_project)
-      #Factory(:activity, :provider => @target, :data_response => @target_dr,
-              #:project => duplicate_project)
-      #Organization.merge_organizations!(@target, @duplicate)
-      #@target.provider_for.count.should == 2
-    #end
   end
 
   describe "counter cache" do

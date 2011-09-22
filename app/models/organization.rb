@@ -1,4 +1,3 @@
-require 'validation_disabler'
 require 'validators'
 
 class Organization < ActiveRecord::Base
@@ -26,7 +25,6 @@ class Organization < ActiveRecord::Base
     :contact_main_office_phone_number, :contact_office_location, :location_id
 
   ### Associations
-  has_and_belongs_to_many :activities # activities that target / aid this org
   belongs_to :location
   has_many :users # people in this organization
   has_and_belongs_to_many :managers, :join_table => "organizations_managers",
@@ -40,6 +38,7 @@ class Organization < ActiveRecord::Base
   has_many :projects, :through => :data_responses
   has_many :implemented_activities, :class_name => "Activity",
              :foreign_key => :provider_id, :dependent => :nullify
+  has_many :activities, :through => :data_responses
 
   ### Validations
   validates_presence_of :name
@@ -80,8 +79,6 @@ class Organization < ActiveRecord::Base
   end
 
   def self.merge_organizations!(target, duplicate)
-    ActiveRecord::Base.disable_validation!
-
     duplicate.responses.each do |response|
       target_response = target.responses.find(:first,
                    :conditions => ["data_request_id = ?", response.data_request_id])
@@ -97,16 +94,8 @@ class Organization < ActiveRecord::Base
       target_response.activities << response.activities
     end
 
-
     target.users << duplicate.users
-
-    #target.projects << duplicate.projects
-    #target.activities << duplicate.activities
-    #target.out_flows << duplicate.out_flows
-    # target.location = duplicate.location
-    #target.provider_for << duplicate.provider_for
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
-    ActiveRecord::Base.enable_validation!
   end
 
   def self.download_template(organizations = [])
@@ -155,7 +144,9 @@ class Organization < ActiveRecord::Base
 
   # TODO CHECK ME
   def is_empty?
-    if users.empty? && out_flows.empty? && implemented_activities.empty? && location.nil? && activities.empty? && data_responses.select{|dr| dr.empty?}.length == data_responses.size
+    if users.empty? && out_flows.empty? && implemented_activities.empty? &&
+      location.nil? && activities.empty? &&
+      data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
     else
       false

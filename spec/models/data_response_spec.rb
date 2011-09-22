@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe DataResponse do
   describe "Associations" do
     it { should belong_to(:organization) }
@@ -43,17 +45,11 @@ describe DataResponse do
       it_should_behave_like "comments_cacher"
     end
 
-    it "caches projects count" do
-      basic_setup_response
-      @response.projects_count.should == 0
-      Factory.create(:project, :data_response => @response)
-      @response.reload.projects_count.should == 1
-    end
-
     it "caches activities count" do
       basic_setup_project
       @response.activities_count.should == 0
       Factory.create(:activity, :data_response => @response, :project => @project)
+      run_delayed_jobs
       @response.reload.activities_count.should == 1
     end
 

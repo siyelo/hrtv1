@@ -9,8 +9,7 @@ module ResponsesHelper
 
   def projects_class
     ready(@response.projects_entered? &&
-    @response.projects_have_activities? &&
-    @response.projects_have_other_costs?)
+    @response.projects_have_activities?)
   end
 
   def projects_linked_class

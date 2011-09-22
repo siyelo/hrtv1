@@ -303,26 +303,35 @@ describe Activity do
   describe "currencies" do
     before :each do
       Money.default_bank.set_rate(:EUR, :USD, 2)
-      basic_setup_activity
+      basic_setup_response
     end
 
     it "updates spend_in_usd and budget_in_usd fields on currency change" do
-      @sa = Factory(:sub_activity, :data_response => @response,
-                          :activity => @activity, :spend => 20, :budget => 30)
-      @activity.reload; @activity.save; @project.reload
+      @sa = Factory.build(:sub_activity, :data_response => @response,
+                          :spend => 20, :budget => 30)
+      @activity = Factory.build(:activity, :data_response => @response,
+                          :implementer_splits => [@sa])
+      @project = Factory(:project, :data_response => @response,
+                         :activities => [@activity])
 
       @activity.spend_in_usd.should == 20
       @activity.budget_in_usd.should == 30
+
       @project.currency = "EUR"
       @project.save
-      @activity.reload
+
       @activity.spend_in_usd.to_f.should == 40
       @activity.budget_in_usd.to_f.should == 60
     end
 
     it "doesn't update the spend_in_usd and budget_in_usd amount if the budget/spend of the activity is 0 or nil" do
+      @activity = Factory.build(:activity, :data_response => @response)
+      @project = Factory(:project, :data_response => @response,
+                         :activities => [@activity])
+
       @project.currency = "EUR"
-      @project.save; @activity.reload
+      @project.save
+
       @activity.spend_in_usd.should == 0
       @activity.budget_in_usd.should == 0
     end

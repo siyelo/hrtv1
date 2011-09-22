@@ -1,0 +1,19 @@
+- date_format = '%d %b \'%y %H:%M'
+- short_date_format = '%d %b \'%y'
+- response = @responses.detect { |dr| dr.organization_id == organization.id}
+- response_link = link_to organization.name, response_projects_path(response) if response
+- user = organization.last_or_current_user_logged_in
+%tr
+  %td.title= response_link || organization.name
+  %td= mail_to user.email, user.name if user
+  %td= user.last_signin_at.strftime(date_format) if user
+  %td= organization.raw_type
+  %td= organization.fosaid
+  %td= organization.location
+  %td= organization.created_at.strftime(short_date_format)
+  %td= response.nil? ? "n/a" : response.status
+  %td
+    %ul.manage_bar
+      %li= link_to "Edit", edit_admin_organization_path(organization)
+      %li= link_to "x", admin_organization_path(organization), :method => :delete, :confirm => "Are you sure you want to DELETE this organization? There is no undo."
+

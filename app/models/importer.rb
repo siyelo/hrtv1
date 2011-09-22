@@ -7,7 +7,7 @@ class Importer
   def initialize(response, filename)
     @response = response
     @filename = filename
-    @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+    @file = open_xls_or_csv(@filename)
     @projects = @activities = @new_splits = []
   end
 
@@ -26,8 +26,7 @@ class Importer
       project_name         = name_for(row['Project Name'], project_name)
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
-
-      sub_activity_name   = Importer::sanitize_encoding(row['Implementer'].try(:strip))
+      sub_activity_name   = EncodingHelper::sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
       # find implementer based on name or set self-implementer if not found
@@ -80,7 +79,7 @@ class Importer
       # we need to use the activity objects
 
       # try find the split based on the id. use the association, not AR find,
-      # so we reference the same object
+      # so we reference the same object. (AR find might pull out a new object)
       split = activity.implementer_splits.detect{ |is| is.id == split.id } || split
 
       assign_project_fields(project, project_name, project_description,
@@ -102,7 +101,7 @@ class Importer
   end
 
   def name_for(current_row_name, previous_name)
-    name = Importer::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
+    name = EncodingHelper::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
     name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
                                                                  # any trailing spaces
   end
@@ -114,7 +113,7 @@ class Importer
     if description.blank? && name.blank?
       result = previous_description
     end
-    Importer::sanitize_encoding(result)
+    EncodingHelper::sanitize_encoding(result)
   end
 
   def date_for(date_row, existing_date)
@@ -126,17 +125,24 @@ class Importer
     date
   end
 
-  def self.sanitize_encoding(string)
-    Iconv.conv("UTF-8//IGNORE", "US-ASCII", string)
-  end
-
   def find_implementer(implementer_name)
-    implementer = @response.organization
+    implementer = nil
     unless implementer_name.blank?
-      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
-          "%#{implementer_name.try(:downcase)}%"]) || implementer
+      implementer = find_implementer_by_full_name(implementer_name) ||
+        find_implementer_by_first_word(implementer_name) ||
+        implementer
     end
     implementer
+  end
+
+  def find_implementer_by_full_name(implementer_name = '')
+    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+        "%#{implementer_name.downcase}%"])
+  end
+
+  def find_implementer_by_first_word(implementer_name = '')
+    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+        "#{implementer_name.split(' ')[0].downcase}%"])
   end
 
   def find_cached_split_using_split_id(implementer_split_id)
@@ -167,16 +173,45 @@ class Importer
 
   protected
 
-    def tidy_up_splits
-      @activities.each_with_index do |la, i|
-        # blow away any splits that werent modified by upload
-        la.implementer_splits.each_with_index do |split, j|
-          la.implementer_splits[j].mark_for_destruction unless split.changed?
+    def open_xls_or_csv(filename)
+      begin
+        worksheet = Spreadsheet.open(@filename).worksheet(0)
+        @file = create_hash_from_header(worksheet)
+      rescue Ole::Storage::FormatError
+        # try import the file as a csv if it is not an spreadsheet
+        @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+      end
+
+      @file
+    end
+
+    def create_hash_from_header(xls_worksheet)
+      file = []
+      header = []
+      xls_worksheet.each_with_index do |row, row_index|
+        if row_index == 0
+          header = row
+        else
+          h = Hash.new
+          row.each_with_index do |cell, col_index|
+            h[header[col_index]] = cell
+          end
+          file << h
         end
-        la.implementer_splits.compact! # remove any nils
+      end
+      file
+    end
+
+    def tidy_up_splits
+      @activities.each do |a|
+        # blow away any splits that werent modified by upload
+        a.implementer_splits.select{ |is| !is.changed? }.each do |is|
+          is.mark_for_destruction
+        end
+        a.implementer_splits.compact! # remove any nils
         # we're not saving the activity yet, but we want to make sure the cached totals
         # from implementer_splits are up to date
-        la.update_implementer_cache
+        a.update_implementer_cache
       end
     end
 

@@ -1,4 +1,4 @@
-- klass = f.object.class.to_s
+- klass = outlay.class.to_s
 
 %ul.wrapped.last
   %table.input_table
@@ -16,26 +16,28 @@
         %th.delete
     %tbody
       - splits = outlay.implementer_splits
+
       - if outlay.new_record? && splits.empty?
         - self_org_id = outlay.organization.id
         - splits.build(:provider_id => self_org_id, :data_response_id => outlay.data_response_id)
-      - else
-        - # sort existing records alphabetically
-        - splits = splits.sorted unless splits.detect{ |s| s.new_record? }
 
-      - splits.each do |is|
+      - sort_splits(splits).each do |is|
         - f.semantic_fields_for :implementer_splits, is do |ff|
           - # a performance-friendly version of implementer_split_fields
           - # doesnt load all the big organization selects
-          - error_class = ""
-          - error_class = "error" unless ff.object.errors.empty?
-          %tr.overflow_fix.fields{:class => error_class}
+          - styling = ""
+          - styling = "error" unless ff.object.errors.empty?
+          - styling += " deleting" if ff.object.marked_for_destruction?
+
+          %tr.overflow_fix.fields{:class => styling}
             %td
               = ff.hidden_field :data_response_id, :value => @response.id
               = ff.hidden_field :updated_at, :value => Time.now
-              = ff.hidden_field :provider_mask, :value => ff.object.provider.id
+              -# the importer intentionally returns nil implementers
+              -# which should fail on save
+              = ff.hidden_field :provider_mask, :value => ff.object.try(:implementer).try(:id)
               -# perf hack - non editable provider name
-              %span.ui-autocomplete= ff.object.provider.try(:name) || "< n/a >"
+              %span.ui-autocomplete= ff.object.try(:implementer).try(:name) || "< n/a >"
             %td= ff.text_field :spend, :class => 'js_spend'
             %td= ff.text_field :budget, :class => 'js_budget'
             %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}

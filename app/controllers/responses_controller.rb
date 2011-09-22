@@ -1,18 +1,8 @@
 class ResponsesController < Reporter::BaseController
   before_filter :require_user
-  before_filter :load_response_from_id, :except => :new
+  before_filter :load_response_from_id
 
   def review
-    @projects                     = @response.projects.find(:all, :order => "name ASC")
-    @activities_without_projects  = @response.activities.roots.without_a_project
-    @other_costs_without_projects = @response.other_costs.without_a_project
-    @code_roots                   = Code.purposes.roots
-    @cost_cat_roots               = CostCategory.roots
-    @other_cost_roots             = OtherCostCode.roots
-    @policy_maker                 = true #view helper
-  end
-
-  def submit
     # NOTE: old code
     #@projects = @response.projects.find(:all, :include => :normal_activities)
 
@@ -22,13 +12,27 @@ class ResponsesController < Reporter::BaseController
     @projects = @response.projects
   end
 
-  def send_data_response
+  def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
-    if @response.submit!
+    if @response.ready_to_submit?
+      @response.submit!
       flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
-      redirect_to submit_response_url(@response)
+      redirect_to review_response_url(@response)
     else
-      render :submit
+      @response.load_validation_errors
+      render :review
     end
+  end
+
+  def reject
+    @response.reject!
+    flash[:notice] = "Response was successfully rejected"
+    redirect_to response_projects_path(@response)
+  end
+
+  def accept
+    @response.accept!
+    flash[:notice] = "Response was successfully accepted"
+    redirect_to response_projects_path(@response)
   end
 end

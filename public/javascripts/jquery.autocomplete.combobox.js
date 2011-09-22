@@ -69,7 +69,7 @@
                 }
             },
             change: function( event, ui ) {
-              if ( !ui.item ) {
+              if ( !ui.item && $(this).val() != "" ) {
                 var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( $(this).val() ) + "$", "i" ),
                   valid = false;
                 select.children( "option" ).each(function() {

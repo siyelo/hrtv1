@@ -1,0 +1,10 @@
+%ul.horizontal
+  %li
+    - link_to new_admin_organization_path, :class => "create_alt" do
+      = image_tag "new.png"
+      Create Organization
+  %li
+    = link_to "File Import", '#', :id => "csv_file", :class => 'create_alt'
+  %li
+    - link_to duplicate_admin_organizations_path, :class => 'create_alt' do
+      Fix duplicate organizations

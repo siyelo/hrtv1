@@ -19,8 +19,8 @@
       - 3.times do
         - f.object.in_flows.build unless f.object.in_flows.length > 0
         - new_object = f.object.class.reflect_on_association(:in_flows).klass.new
-        - f.fields_for(:in_flows, new_object) do |builder|
-          = render("projects/in_flow_fields", :f => builder)
+        - f.fields_for :in_flows, new_object do |builder|
+          = render "projects/in_flow_fields", :f => builder
 
       %tr.total
         %td= link_to_add_fields "Add funding source", f, :in_flows, "projects/", :class => 'create_alt marginless'

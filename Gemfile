@@ -8,21 +8,25 @@ gem 'aws-s3', :require => 'aws/s3'
 gem 'compass', '=0.10.2'
 gem 'delayed_job', '~>2.0.4'
 gem 'fastercsv'
-gem 'formtastic', "= 1.2.3"
+gem 'formtastic', '= 1.2.3'
 gem 'haml', '=3.1.2'
 gem 'hoptoad_notifier'
-gem 'inherited_resources', "=1.0.6"
+gem 'inherited_resources', '=1.0.6'
 gem 'inherited_resources', '= 1.0.6'
 gem 'json_pure'
-gem 'money', "~> 3.5"
-gem 'paperclip', "= 2.3.11"
+gem 'money', '~> 3.5'
+gem 'paperclip', '= 2.3.11'
+gem 'rack-timeout'
 gem 'rails', '2.3.12'
 gem 'rdoc'
 gem 'sass', '=3.1.4'
 gem 'settingslogic'
+gem 'spreadsheet'
+gem 'SystemTimer', :require => 'system_timer', :platforms => :ruby_18
 gem 'validates_timeliness', '~> 2.3'
 gem 'version'
-gem 'will_paginate', "~> 2.3.11"
+gem 'will_paginate', '~> 2.3.11'
+gem 'state_machine'
 
 # Bundle gems for the local environment. Make sure to
 # put test-only gems in this group so their generators
@@ -30,9 +34,9 @@ gem 'will_paginate', "~> 2.3.11"
 
 group :development do
   gem 'annotate'
-  gem 'awesome_print', :require => "ap"
+  gem 'awesome_print', :require => 'ap'
   gem 'factory_girl', '1.2.4' # moving it here so not loaded by spork prefork. NB. some specs fail with 1.3.3
-  gem 'google_currency', "=1.2.0" # for currency cacher
+  gem 'google_currency', '=1.2.0' # for currency cacher
   gem 'heroku', '>= 2.1.2'
   gem 'hirb'
   gem 'interactive_editor'

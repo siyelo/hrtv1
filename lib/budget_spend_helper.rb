@@ -2,20 +2,6 @@
 module BudgetSpendHelper
   include NumberHelper
 
-  def self.included(base)
-    base.class_eval do
-
-      ### Callbacks
-      if base.eql?(FundingFlow)
-        before_save :update_cached_usd_amounts
-      end
-
-      if base.eql?(Activity)
-        before_save :update_cached_usd_amounts
-      end
-    end
-  end
-
   def spend?
     !spend.nil? and spend > 0
   end
@@ -33,7 +19,9 @@ module BudgetSpendHelper
   end
 
   def smart_sum(collection, method)
-    s = collection.reject{|e| e.nil? or e.send(method).nil?}.sum{|e| e.send(method)}
+    s = collection.reject do |e|
+      e.nil? or e.send(method).nil? or e.marked_for_destruction?
+    end.sum{ |e| e.send(method) }
     s || 0
   end
 

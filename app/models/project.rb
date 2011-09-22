@@ -1,4 +1,5 @@
 require 'validators'
+require 'spreadsheet'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
@@ -45,9 +46,11 @@ class Project < ActiveRecord::Base
     :reject_if => Proc.new { |attrs| attrs['organization_id_from'].blank? }
   accepts_nested_attributes_for :activities
 
+  ### Callbacks
   before_validation :assign_project_to_in_flows
   before_validation :assign_project_to_activities
   before_validation :strip_leading_spaces
+  after_save :update_activity_amount_cache
 
   ### Validations
   # also see validations in BudgetSpendHelper
@@ -67,64 +70,79 @@ class Project < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,:data_response_id,
-                  :start_date, :end_date, :currency, :data_response, :activities, :activities_attributes,
-                  :in_flows_attributes, :am_approved, :am_approved_date, :in_flows, :updated_at
+                  :start_date, :end_date, :currency, :data_response, :activities,
+                  :activities_attributes, :in_flows_attributes, :am_approved,
+                  :am_approved_date, :in_flows, :updated_at
 
   ### Delegates
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
 
   ### Callbacks
-  # also see callbacks in BudgetSpendHelper
-  after_save :update_cached_currency_amounts, :if => Proc.new {|p| p.currency_changed?}
+  after_save   :update_cached_currency_amounts, :if => Proc.new { |p| p.currency_changed? }
+  after_create :start_response_if_unstarted
+  after_destroy :unstart_response_if_all_projects_removed
 
   ### Named Scopes
-  named_scope :sorted,           {:order => "projects.name" }
+  named_scope :sorted, { :order => "projects.name" }
 
   ### Class methods
 
   def self.export_all(response)
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
-      response.projects.sorted.each do |project|
-        row = []
-        row << project.name.slice(0..MAX_NAME_LENGTH-1)
-        row << project.description
-        row << project.start_date
-        row << project.end_date
-        if project.activities.empty?
-          csv << row
-        else
-          project.activities.roots.sorted.each_with_index do |activity, index|
-            4.times do
-              row << "" if index > 0 # dont re-print project details on each line
-            end
-            row << activity.name.slice(0..MAX_NAME_LENGTH-1)
-            row << activity.description
-            if activity.implementer_splits.empty?
-              csv << row
-            else
-              activity.implementer_splits.sorted.each_with_index do |split, index|
-                6.times do
-                  row << "" if index > 0 # dont re-print activity details on each line
-                end
-                row << split.id
-                row << split.provider.try(:name)
-                row << split.spend
-                row << split.budget
-                csv << row
-                row = []
+    rows = []
+    response.projects.sorted.each do |project|
+      row = []
+      row << EncodingHelper::sanitize_encoding(project.name.slice(0..MAX_NAME_LENGTH-1))
+      row << EncodingHelper::sanitize_encoding(project.description)
+      row << project.start_date.to_s
+      row << project.end_date.to_s
+      if project.activities.empty?
+        rows << row
+      else
+        project.activities.roots.sorted.each_with_index do |activity, index|
+          4.times do
+            row << "" if index > 0 # dont re-print project details on each line
+          end
+          row << EncodingHelper::sanitize_encoding(activity.name.slice(0..MAX_NAME_LENGTH-1))
+          row << EncodingHelper::sanitize_encoding(activity.description)
+          if activity.implementer_splits.empty?
+            rows << row
+          else
+            activity.implementer_splits.sorted.each_with_index do |split, index|
+              6.times do
+                row << "" if index > 0 # dont re-print activity details on each line
               end
+              row << split.id
+              row << split.provider.try(:name)
+              row << split.spend.to_f
+              row << split.budget.to_f
+              rows << row
+              row = []
             end
           end
         end
       end
     end
+
+    self.download_template(rows)
+
   end
 
-  def self.download_template
-    FasterCSV.generate do |csv|
-      csv << Project::FILE_UPLOAD_COLUMNS
+  def self.download_template(rows = [])
+    Spreadsheet.client_encoding = "UTF-8//IGNORE"
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+
+    rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
+
+    rows.each_with_index do |row, row_index|
+      row.each_with_index do |cell, column_index|
+        sheet1[row_index, column_index] = cell
+      end
     end
+
+    data = StringIO.new ''
+    book.write data
+    return data
   end
 
 
@@ -412,6 +430,10 @@ class Project < ActiveRecord::Base
       self.description = self.description.strip if self.description
     end
 
+    def update_activity_amount_cache
+      activities.each { |a| a.send(:update_cached_usd_amounts) } if currency_changed?
+    end
+
     # work arround for validates_presence_of :project issue
     # children relation can do only validation by :project, not :project_id
     # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
@@ -423,12 +445,15 @@ class Project < ActiveRecord::Base
     def assign_project_to_activities
       activities.each {|a| a.project = self}
     end
+
+    def start_response_if_unstarted
+      response.start! if response.unstarted?
+    end
+
+    def unstart_response_if_all_projects_removed
+      response.unstart! if response.projects.empty?
+    end
 end
-
-
-
-
-
 
 # == Schema Information
 #

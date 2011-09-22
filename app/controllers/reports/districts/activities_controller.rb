@@ -19,23 +19,16 @@ class Reports::Districts::ActivitiesController < Reports::BaseController
     load_comment_resources(@activity)
     @spent_pie_values  = Charts::DistrictPies::activity_spent_ratio(@location, @activity, current_request.id)
     @budget_pie_values = Charts::DistrictPies::activity_budget_ratio(@location, @activity, current_request.id)
-    @pie               = params[:chart_type] == "pie" || params[:chart_type].blank?
     code_type          = get_code_type_and_initialize(params[:code_type])
     @chart_name        = get_chart_name(params[:code_type])
 
+    if @hssp2_strat_prog || @hssp2_strat_obj
+      @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, true, current_request.id, [@activity])
+      @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, false, current_request.id, [@activity])
 
-    if @pie
-      if @hssp2_strat_prog || @hssp2_strat_obj
-        @code_spent_values   = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, true, current_request.id, [@activity])
-        @code_budget_values  = Charts::DistrictPies::hssp2_strat_activities_pie(@location, code_type, false, current_request.id, [@activity])
-
-      else
-        @code_spent_values  = Charts::DistrictPies::activity_pie(@location, @activity, code_type, true, current_request.id)
-        @code_budget_values = Charts::DistrictPies::activity_pie(@location, @activity, code_type, false, current_request.id)
-      end
     else
-      @code_spent_values  = Charts::DistrictTreemaps::treemap(current_request.id, @location, code_type, [@activity], true)
-      @code_budget_values = Charts::DistrictTreemaps::treemap(current_request.id, @location, code_type, [@activity], false)
+      @code_spent_values  = Charts::DistrictPies::activity_pie(@location, @activity, code_type, true, current_request.id)
+      @code_budget_values = Charts::DistrictPies::activity_pie(@location, @activity, code_type, false, current_request.id)
     end
 
     @charts_loaded  = @spent_pie_values && @budget_pie_values &&

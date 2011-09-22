@@ -3,8 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 include DelayedJobSpecHelper
 
 describe DataResponse do
-
-  describe "associations" do
+  describe "Associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
     it { should have_many(:activities).dependent(:destroy) }
@@ -16,14 +15,27 @@ describe DataResponse do
     it { should have_many(:comments).dependent(:destroy) }
   end
 
-  describe "validations" do
+  describe "Validations" do
     subject { basic_setup_response; @response }
     it { should validate_presence_of(:data_request_id) }
     it { should validate_presence_of(:organization_id) }
     it { should validate_uniqueness_of(:data_request_id).scoped_to(:organization_id) }
+
+    it "cannot assign nil state" do
+      basic_setup_response
+      @response.state = nil
+      @response.valid?.should be_false
+    end
+
+    it "cannot assign unexisting state" do
+      basic_setup_response
+      @response.state = 'invalid'
+      @response.valid?
+      @response.errors.on(:state).should include('is not included in the list')
+    end
   end
 
-  describe "counter cache" do
+  describe "Counter cache" do
     context "comments cache" do
       before :each do
         basic_setup_response
@@ -50,18 +62,84 @@ describe DataResponse do
     end
   end
 
-  describe "searching for in-progress data responses" do
-    it "should not be in progress on creation" do
-      basic_setup_response
-      run_delayed_jobs
-      DataResponse.in_progress.should_not include(@response)
+  describe "State machine" do
+    before :each do
+      organization = Factory(:organization)
+      request      = Factory(:data_request, :organization => organization)
+      @response    = organization.latest_response
     end
 
-    # NOTE: will be removed with the new state machine for responses
-    it "should be in progress if it has an activity" do
-      basic_setup_activity
-      run_delayed_jobs
-      DataResponse.in_progress.should include(@response)
+    it "sets unstarted as default state" do
+      @response.state.should == 'unstarted'
+    end
+
+    context "first project is created" do
+      it "transitions from unstarted to started when first project is created" do
+        @response.state.should == 'unstarted'
+        Factory(:project, :data_response => @response)
+        @response.state.should == 'started'
+      end
+
+      it "does not transitions back to in progress if it's in rejected state" do
+        @response.state = 'rejected'
+        Factory(:project, :data_response => @response)
+        @response.state.should == 'rejected'
+      end
+    end
+
+    context "all projects are destroyed" do
+      it "moves the response into unstarted state" do
+        @response.state.should == 'unstarted'
+        project = Factory(:project, :data_response => @response)
+        @response.state.should == 'started'
+        project.destroy
+        @response.reload.state.should == 'unstarted'
+      end
+    end
+
+    context "response is submitted and activity is deleted" do
+      it "moves the response into started state" do
+        @response.state.should == 'unstarted'
+        project = Factory(:project, :data_response => @response)
+        @response.state.should == 'started'
+        activity1 = Factory(:activity, :data_response => @response,
+                            :project => project)
+        activity2 = Factory(:activity, :data_response => @response,
+                            :project => project)
+        @response.submit!
+        @response.state.should == 'submitted'
+        activity1.destroy
+        @response.reload.state.should == 'submitted'
+        activity2.destroy
+        @response.reload.state.should == 'started'
+      end
+    end
+
+    describe "#submittable?" do
+      it "can be submitted when is started" do
+        @response.state = 'started'
+        @response.submittable?.should be_true
+      end
+
+      it "can be submitted when is rejected" do
+        @response.state = 'rejected'
+        @response.submittable?.should be_true
+      end
+
+      it "cannot be submitted when is unstarted" do
+        @response.state = 'unstarted'
+        @response.submittable?.should be_false
+      end
+
+      it "cannot be submitted when is submitted" do
+        @response.state = 'submitted'
+        @response.submittable?.should be_false
+      end
+
+      it "cannot be submitted when is approved" do
+        @response.state = 'approved'
+        @response.submittable?.should be_false
+      end
     end
   end
 
@@ -156,37 +234,19 @@ describe DataResponse do
   end
 end
 
-        #Factory(:activity, :data_response => @response, :project => project,
-                #:spend => 100, :budget => 200)
-        #Factory(:other_cost, :data_response => @response, :project => project,
-                #:spend => 100, :budget => 200)
-        #Factory(:other_cost, :data_response => @response,
-                #:spend => 100, :budget => 200)
-        #@response.budget.to_f.should == 400 # 100 + 100 + 200
-        #@response.spend.to_f.should == 200 # 50 + 50 + 100
-
 # == Schema Information
 #
 # Table name: data_responses
 #
-#  id                                :integer         primary key
-#  data_request_id                   :integer
-#  complete                          :boolean         default(FALSE)
-#  created_at                        :timestamp
-#  updated_at                        :timestamp
-#  organization_id                   :integer
-#  currency                          :string(255)
-#  fiscal_year_start_date            :date
-#  fiscal_year_end_date              :date
-#  contact_name                      :string(255)
-#  contact_position                  :string(255)
-#  contact_phone_number              :string(255)
-#  contact_main_office_phone_number  :string(255)
-#  contact_office_location           :string(255)
-#  submitted                         :boolean
-#  submitted_at                      :timestamp
+#  id                                :integer         not null, primary key
+#  data_request_id                   :integer         indexed
+#  created_at                        :datetime
+#  updated_at                        :datetime
+#  organization_id                   :integer         indexed
 #  comments_count                    :integer         default(0)
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)
 #  activities_without_projects_count :integer         default(0)
+#  unclassified_activities_count     :integer         default(0)
+#  state                             :string(255)
 #

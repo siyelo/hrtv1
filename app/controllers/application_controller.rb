@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   include ApplicationHelper
   include SslRequirement
+  include Exporter
 
   class AccessDenied < StandardError; end
   rescue_from AccessDenied do |exception|
@@ -20,7 +21,6 @@ class ApplicationController < ActionController::Base
   rescue_from ActionController::MethodNotAllowed, :with => :invalid_method
 
   protected
-
     # Require SSL for all actions in all controllers
     # redefined method from SSL requirement plugin
     # This method is redefined in static pages controller for actions: :index, :about, :contact, :news
@@ -30,12 +30,6 @@ class ApplicationController < ActionController::Base
       else
         false
       end
-    end
-
-    def send_csv(text, filename)
-      send_data text,
-                :type => 'text/csv; charset=iso-8859-1; header=present',
-                :disposition => "attachment; filename=#{filename}"
     end
 
     # load vars for pretty charts
@@ -84,6 +78,15 @@ class ApplicationController < ActionController::Base
       unless current_user && current_user.sysadmin?
         store_location
         flash[:error] = "You must be an administrator to access that page"
+        redirect_to login_url
+        return false
+      end
+    end
+
+    def require_activity_manager
+      unless current_user && current_user.activity_manager?
+        store_location
+        flash[:error] = "You must be an activity manager to access that page"
         redirect_to login_url
         return false
       end
@@ -243,5 +246,38 @@ class ApplicationController < ActionController::Base
       headers["Cache-Control"] = "must-revalidate"
       headers["Cache-Control"] = "no-cache"
       headers["Cache-Control"] = "no-store"
+    end
+
+    def warn_if_not_classified(outlay)
+      type = outlay.class.to_s.titleize
+      check_delayed_jobs_for(outlay)
+
+      if outlay.approved? || outlay.am_approved?
+        flash.now[:error] = "Classification for approved activity cannot be changed." unless flash[:error]
+      elsif !outlay.classified?
+        if flash[:warning].blank? && ( session['flash'].blank? ||
+          session['warning'].present? && session['warning'][:notice].blank? )
+          flash.now[:warning] = "This #{type} has not been fully classified.
+            #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
+            to see what still needs to be classified"}"
+        end
+      else
+        if flash[:notice].blank? && ( session['flash'].blank? ||
+            session['flash'].present? && session['flash'][:notice].blank? )
+          flash.now[:notice] = "This #{type} has been fully classified."
+        end
+      end
+    end
+
+    def check_delayed_jobs_for(outlay)
+      dj = Delayed::Job.find(:first,
+        :conditions => "handler LIKE '%object: LOAD;#{outlay.class.to_s};#{outlay.id}\nmethod: :update_classified_amount_cache_without_delay%'")
+
+      if dj
+        flash.now[:warning] = "We are still busy processing changes to the
+          classification tree. Please reload the page to see whether this
+          #{outlay.class.to_s.titleize} has been
+          fully classified."
+      end
     end
 end

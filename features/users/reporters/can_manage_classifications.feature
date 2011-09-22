@@ -145,10 +145,34 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "activity[classifications][coding_spend][1]" with "100"
       And I press "Save"
       Then I should see "Activity was successfully updated."
+      And I should see "We are still busy processing changes to the classification tree."
       When I run delayed jobs
         And I refresh the page
+      Then I should see "This Activity has not been fully classified"
       Then the "spend_purposes" checkbox should be checked
         And the "budget_purposes" checkbox should be checked
+
+    Scenario: Reporter classify Locations for other cost and see flash error
+      Given an other cost exists with name: "othercost1", data_response: the data_response, project: the project
+      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the other cost
+      And a location exists with short_display: "National", id: 5
+      When I follow "Projects"
+      And I follow "othercost1"
+      #since we used a factory above, need save to refresh cache by saving activity
+      And I press "Save"
+      And I follow "Locations" within ".section_nav"
+      Then the "spend_locations" checkbox should not be checked
+      And the "budget_locations" checkbox should not be checked
+      When I fill in "other_cost[classifications][coding_budget_district][5]" with "100"
+      And I fill in "other_cost[classifications][coding_spend_district][5]" with "100"
+      And I press "Save"
+      Then I should see "Other Cost was successfully updated."
+      And I should see "We are still busy processing changes to the classification tree."
+      When I run delayed jobs
+        And I refresh the page
+      Then I should see "This Other Cost has been fully classified"
+      Then the "spend_locations" checkbox should be checked
+        And the "budget_locations" checkbox should be checked
 
     @javascript
     Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
@@ -160,7 +184,6 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "activity[classifications][coding_budget][1]" with "100"
       And I follow "Copy across Budget classifications to Expenditure classifications"
       And I press "Save"
-      Then I should see "This Activity has not been fully classified"
       And the "activity[classifications][coding_budget][1]" field should contain "100"
       And the "activity[classifications][coding_spend][1]" field should contain "100"
 
@@ -174,7 +197,6 @@ Feature: Reporter can enter a code breakdown for each activity
       And I fill in "activity[classifications][coding_spend][1]" with "100"
       And I follow "Copy across Expenditure classifications to Budget classifications"
       And I press "Save"
-      Then I should see "This Activity has not been fully classified"
       And the "activity[classifications][coding_budget][1]" field should contain "100"
       And the "activity[classifications][coding_spend][1]" field should contain "100"
 

@@ -5,6 +5,7 @@ class Activity < ActiveRecord::Base
   include Activity::Classification
   include Activity::Validations
   include AutocreateHelper
+  include BudgetSpendHelper
 
   ### Constants
   MAX_NAME_LENGTH = 64
@@ -29,14 +30,18 @@ class Activity < ActiveRecord::Base
     :organization_ids, :csv_project_name,
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
     :outputs_attributes, :am_approved_date, :user_id, :data_response_id,
-    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3, :planned_for_gor_q4, :updated_at
+    :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3,
+    :planned_for_gor_q4, :updated_at
 
   ### Associations
-  #TODO: provider now only used for sub-activities, so should be removed from activity altogether
+  #TODO: provider now only used for sub-activities, so should be removed
+  # from activity altogether
   # implementer is better, more generic. (Service) Provider is too specific.
-  belongs_to :provider, :foreign_key => :provider_id, :class_name => "Organization" # deprecate plox k thx
+  belongs_to :provider, :foreign_key => :provider_id,
+    :class_name => "Organization" # deprecate plox k thx
   belongs_to :data_response #deprecated
-  belongs_to :response, :foreign_key => :data_response_id, :class_name => "DataResponse" #TODO: rename class
+  belongs_to :response, :foreign_key => :data_response_id,
+    :class_name => "DataResponse" #TODO: rename class
   belongs_to :project
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
@@ -76,16 +81,16 @@ class Activity < ActiveRecord::Base
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
 
   ### Callbacks
-  # also see callbacks in BudgetSpendHelper
-  before_validation :strip_input_fields, :unless => :is_implementer_split?
-  before_save   :update_implementer_cache, :unless => :is_implementer_split?
-  before_save   :auto_create_project, :unless => :is_implementer_split?
-  after_save    :update_counter_cache, :unless => :is_implementer_split?
-  after_destroy :update_counter_cache, :unless => :is_implementer_split?
-  before_update :update_all_classified_amount_caches, :unless => :is_implementer_split?
-
-  ### Other callbacks
-  include BudgetSpendHelper # we want the currency callback to run after update_implementer_cache
+  before_validation :strip_input_fields, :unless => :implementer_split?
+  before_save       :update_implementer_cache, :unless => :implementer_split?
+  before_save       :auto_create_project, :unless => :implementer_split?
+  before_save       :update_cached_usd_amounts
+  after_save        :update_counter_cache, :unless => :implementer_split?
+  after_destroy     :update_counter_cache, :unless => :implementer_split?
+  after_destroy     :restart_response_if_all_activities_removed,
+    :unless => :implementer_split?
+  before_update     :update_all_classified_amount_caches,
+    :unless => :implementer_split?
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -94,14 +99,15 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  validate :approved_activity_cannot_be_changed, :unless => :is_implementer_split?
-  validate :cannot_approve_unclassified_activity, :unless => :is_implementer_split?
+  validate :approved_activity_cannot_be_changed, :unless => :implementer_split?
+  validate :cannot_approve_unclassified_activity, :unless => :implementer_split?
   validates_presence_of :name, :if => :is_activity_or_other_cost?
   validates_presence_of :description, :if => :is_activity_or_other_cost?
-  validates_presence_of :project_id, :if => :is_activity?, :unless => Proc.new{|a| a.project && a.project.new_record?}
+  validates_presence_of :project_id, :if => :is_activity?,
+    :unless => Proc.new{|a| a.project && a.project.new_record?}
   validates_presence_of :data_response_id
-  validates_length_of :name, :within => 3..MAX_NAME_LENGTH, :if => :is_activity_or_other_cost?,
-    :allow_blank => true
+  validates_length_of :name, :within => 3..MAX_NAME_LENGTH,
+    :if => :is_activity_or_other_cost?, :allow_blank => true
 
   ### Scopes
   named_scope :roots,                { :conditions => "activities.type IS NULL" }
@@ -177,7 +183,7 @@ class Activity < ActiveRecord::Base
   ### Instance Methods
 
   def update_attributes(params)
-    update_classifications_from_params(params) unless is_implementer_split?
+    update_classifications_from_params(params) unless implementer_split?
     super(params)
   end
 
@@ -219,9 +225,9 @@ class Activity < ActiveRecord::Base
   def update_classified_amount_cache(type)
     # disable update_all_classified_amount_caches
     # callback to be run again on save !!
-    Activity.before_update.reject! {|callback|
-      callback.method.to_s == 'update_all_classified_amount_caches' }
-
+    Activity.before_update.reject! do |callback|
+      callback.method.to_s == 'update_all_classified_amount_caches'
+    end
     set_classified_amount_cache(type)
     self.save(false) # save the activity even if it's approved
   end
@@ -243,8 +249,6 @@ class Activity < ActiveRecord::Base
 
   def deep_clone
     clone = self.clone
-    clone.implementer_splits = [] #this is because implementer splits are created upon initialization
-    # HABTM's
     %w[organizations beneficiaries].each do |assoc|
       clone.send("#{assoc}=", self.send(assoc))
     end
@@ -320,7 +324,7 @@ class Activity < ActiveRecord::Base
 
   #saves the subactivities totals into the buget/spend fields
   def update_implementer_cache
-    unless is_implementer_split? # to be doubly sure!
+    unless implementer_split? # to be doubly sure!
       [:budget, :spend].each do |method|
         write_attribute(method, implementer_splits_totals(method))
       end
@@ -357,8 +361,6 @@ class Activity < ActiveRecord::Base
     end
 
   private
-
-    ### Instance methods
 
     # NOTE: respond_to? is used on some fields because
     # some previous data fixes use this method and at that point
@@ -416,7 +418,7 @@ class Activity < ActiveRecord::Base
       self.class.eql?(Activity)
     end
 
-    def is_implementer_split?
+    def implementer_split?
       self.class.eql?(SubActivity)
     end
 
@@ -433,8 +435,7 @@ class Activity < ActiveRecord::Base
       when 'CodingSpend' then :coding_spend_valid
       when 'CodingSpendCostCategorization' then :coding_spend_cc_valid
       when 'CodingSpendDistrict' then :coding_spend_district_valid
-      else
-        raise "Unknown type #{type}".to_yaml
+      else raise "Unknown type #{type}".to_yaml
       end
     end
 
@@ -443,13 +444,18 @@ class Activity < ActiveRecord::Base
         project = data_response.projects.find_by_name(name)
         unless project
           self_funder = FundingFlow.new(:from => self.organization,
-                        :spend => self.spend, :budget => self.budget)
+            :spend => self.spend, :budget => self.budget)
           project = Project.create(:name => name, :start_date => Time.now,
-                                :end_date => Time.now + 1.year, :data_response => data_response,
-                                :in_flows => [self_funder])
+            :end_date => Time.now + 1.year, :data_response => data_response,
+            :in_flows => [self_funder])
         end
         self.project = project
       end
+    end
+
+    def restart_response_if_all_activities_removed
+      # use .length since .empty? uses counter cache that isnt updated yet.
+      response.restart! if self.response.activities.length == 0
     end
 end
 

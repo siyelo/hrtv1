@@ -52,7 +52,7 @@ Feature: Reporter can manage other costs
     When I follow "Add Other Costs now"
     And I fill in "Name" with "other_cost1"
     And I fill in "Description" with "other_cost1"
-    # self org should already be present/selected
+    # self org should already be selected
     And I fill in "other_cost[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "other_cost[implementer_splits_attributes][0][budget]" with "19"
     And I press "Save"

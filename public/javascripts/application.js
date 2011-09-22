@@ -642,52 +642,6 @@ function get_random_color() {
     return color;  //return random color so that two charts next to each other don't have the same colors for different slices
 }
 
-var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
-  return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;
-};
-
-var drawTreemap = function (element_type, element_id, chart_type, chart_element) {
-  var urlEndpoint = get_treemap_chart_element_endpoint(element_type, chart_type, element_id);
-  $.getJSON(urlEndpoint, function (response) {
-    var data_rows = response;
-
-    // Create and populate the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Code');
-    data.addColumn('string', 'Parent');
-    data.addColumn('number', 'Market trade volume (size)');
-    data.addColumn('number', 'Market increase/decrease (color)');
-    data.addRows(data_rows)
-
-    // Create and draw the visualization.
-    var tree = new google.visualization.TreeMap(chart_element[0]);
-    tree.draw(data, {
-      minColor: '#35ff35',
-      midColor: '#09c500',
-      maxColor: '#08a100',
-      headerHeight: 20,
-      fontColor: 'black',
-      fontSize: '12',
-      headerColor: '#E6EDF3',
-      showScale: false,
-      showTooltips: false
-    });
-
-    // manual tipsy
-    chart_element.tipsy({gravity: $.fn.tipsy.autoWE, trigger: 'manual'})
-
-    google.visualization.events.addListener(tree, 'onmouseover', function (e) {
-      chart_element.attr('title', data_rows[e.row][0]);
-      chart_element.tipsy('show');
-    });
-
-    google.visualization.events.addListener(tree, 'onmouseout', function (e) {
-      chart_element.attr('title', '');
-      chart_element.tipsy('hide');
-    });
-  });
-};
-
 var build_data_response_review_screen = function () {
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
   $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
@@ -843,8 +797,9 @@ var activity_classification = function () {
   if (mode != 'locations') {
     addCollabsibleButtons('tab1');
   }
-  checkRootNodes('.budget:first');
-  checkRootNodes('.spend:first');
+  checkRootNodes('budget');
+  checkRootNodes('spend');
+  checkAllChildren();
 
   showSubtotalIcons();
 
@@ -856,8 +811,8 @@ var activity_classification = function () {
   $('.js_submit_btn').click(function (e) {
     var ajaxLoader = $(this).closest('ol').find('.ajax-loader');
     ajaxLoader.show();
-    checkRootNodes('.spend:first');
-    checkRootNodes('.budget:first');
+    checkRootNodes('spend');
+    checkRootNodes('budget');
     if ($('.invalid_node').size() > 0){
       e.preventDefault();
       alert('The classification tree could not be saved.  Please correct all errors and try again')
@@ -875,7 +830,8 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_spend input').val(element.val());
       });
-      checkRootNodes('.spend');
+      checkRootNodes('spend');
+      checkAllChildren();
     };
   });
 
@@ -888,31 +844,34 @@ var activity_classification = function () {
         var element = $(this);
         element.parents('.js_values').find('.js_budget input').val(element.val());
       });
-      checkRootNodes('.budget');
+      checkRootNodes('budget');
+      checkAllChildren();
     };
   });
 
   $(".percentage_box").keyup(function(event) {
     var element = $(this);
     var isSpend = element.parents('div:first').hasClass('spend')
-    var type = (isSpend) ? '.spend:first' : '.budget:first';
-    var parentTotal = element.parents('ul:first').prev('div:first').find(type).find('input');
-    var siblingLi = element.parents('ul:first').children('li');
+    var type = (isSpend) ? 'spend' : 'budget';
     var childLi = element.parents('li:first').children('ul:first').children('li');
 
     updateSubTotal(element);
     updateTotalValue(element);
 
     if (element.val().length == 0 && childLi.size() > 0) {
-      clearChildNodes(element, event,type);
-    }
-    if (event.keyCode != 9){
-      updateParentNodes(siblingLi, type, parentTotal)
+      clearChildNodes(element, event, type);
     }
 
+    var period = 190;
+    var bksp = 46;
+    var del = 8;
+    //update parent nodes if: numeric keys, backspace/delete, period or undefined (i.e. called from another function)
+    if (typeof event.keyCode == 'undefined' || (event.keyCode >= 48 && event.keyCode <= 57 ) || event.keyCode == period || event.keyCode == del || event.keyCode == bksp || event.keyCode >= 37 && event.keyCode <= 40){
+      updateParentNodes(element, type)
+    }
     //check whether children (1 level deep) are equal to my total
     if (childLi.size() > 0){
-      compareChildrenToParent(element, childLi, type);
+      compareChildrenToParent(element, type);
     };
 
     //check whether root nodes are = 100%
@@ -920,26 +879,33 @@ var activity_classification = function () {
 
   });
 
-  numericInputField(".percentage_boxi, .js_spend, .js_budget");
+  numericInputField(".percentage_box, .js_spend, .js_budget");
 
-  var updateParentNodes = function(siblingLi, type, parentTotal){
+  var updateParentNodes = function(element, type){
+    type = '.' + type + ':first'
+    var parentElement = element.parents('ul:first').prev('div:first').find(type).find('input');
+    var siblingLi = element.parents('ul:first').children('li');
+
     var siblingValue = 0;
     var siblingTotal = 0;
     siblingLi.each(function (){
       siblingValue = parseFloat($(this).find(type).find('input:first').val());
-      if (!isNaN(siblingValue)) {
+      if ( !isNaN(siblingValue) ) {
         siblingTotal = siblingTotal + siblingValue;
       }; 
     });
-    siblingTotal = siblingTotal == 0 ? '' : siblingTotal
-    parentTotal.val(siblingTotal);
-    parentTotal.trigger('keyup');
+    if ( siblingTotal !== 0 ) {
+      parentElement.val(siblingTotal);
+      parentElement.trigger('keyup');
+    }
   }
 
   var clearChildNodes = function(element, event, type){
     var bksp = 46;
     var del = 8;
-    if ((event.keyCode == bksp || event.keyCode == del)){
+    type = '.' + type + ':first'
+
+    if ( (event.keyCode == bksp || event.keyCode == del) ){
       childNodes = element.parents('li:first').children('ul:first').find('li').find(type).find('input');
 
       var childTotal = 0;
@@ -950,9 +916,9 @@ var activity_classification = function () {
         };
       });
 
-      if (childTotal > 0 && confirm('Would you like to clear the value of all child nodes?')){
+      if ( childTotal > 0 && confirm('Would you like to clear the value of all child nodes?') ){
         childNodes.each(function(){
-          if ($(this).val !== ''){
+          if ( $(this).val !== '' ){
             $(this).val(' ');
             updateSubTotal($(this));
           }
@@ -960,31 +926,6 @@ var activity_classification = function () {
       }
     }
   }
-
-  var compareChildrenToParent = function(parentTotal, childLi, type){
-
-    var childValue = 0;
-    var childTotal = 0;
-
-    childLi.each(function (){
-      childValue = parseFloat($(this).find(type).find('input:first').val())
-      if (!isNaN(childValue)) {
-        childTotal = childTotal + childValue
-      };
-    });
-
-    var parentValue = parseFloat(parentTotal.val()).toFixed(2)
-    childTotal = childTotal.toFixed(2)
-
-    if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
-      parentTotal.addClass('invalid_node tooltip')
-      var message = "This amount is not the same as the sum of the amounts underneath (" ;
-      message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
-      parentTotal.attr('original-title', message) ;
-    } else {
-      parentTotal.removeClass('invalid_node tooltip')
-    };
-  };
 
   var updateSubTotal = function(element){
     var activity_budget = parseFloat(element.parents('ul:last').attr('activity_budget'));
@@ -994,7 +935,7 @@ var activity_classification = function () {
     var subtotal = element.siblings('.subtotal_icon');
     var isSpend = element.parents('div:first').hasClass('spend')
 
-    if (elementValue > 0){
+    if ( elementValue > 0 ){
       subtotal.removeClass('hidden')
       subtotal.attr('title', (isSpend ? activity_spend : activity_budget * (elementValue/100)).toFixed(2) + ' ' + activity_currency);
     } else {
@@ -1004,10 +945,47 @@ var activity_classification = function () {
   };
 }
 
+var checkAllChildren = function(){
+  var inputs = $('.percentage_box')
+  inputs.each(function(){
+    if ( $(this).val !== '' ){
+      var type = $(this).hasClass('js_spend') ? 'spend' : 'budget'
+      compareChildrenToParent($(this), type);
+    }
+  });
+}
+
+var compareChildrenToParent = function(parentElement, type){
+  var childValue = 0;
+  var childTotal = 0;
+  var childLi = parentElement.parents('li:first').children('ul:first').children('li');
+  type = '.' + type + ':first'
+
+  childLi.each(function (){
+    childValue = parseFloat($(this).find(type).find('input:first').val())
+    if (!isNaN(childValue)) {
+      childTotal = childTotal + childValue
+    };
+  });
+
+  var parentValue = parseFloat(parentElement.val()).toFixed(2)
+  childTotal = childTotal.toFixed(2)
+
+  if ( (Math.abs(childTotal - parentValue) > ALLOWED_VARIANCE) && childTotal > 0){
+    parentElement.addClass('invalid_node tooltip')
+    var message = "This amount is not the same as the sum of the amounts underneath (" ;
+    message += parentValue + "% - " + childTotal + "% = " + (parentValue - childTotal) + "%)";
+    parentElement.attr('original-title', message) ;
+  } else {
+    parentElement.removeClass('invalid_node tooltip')
+  };
+};
+
 var checkRootNodes = function(type){
   var topNodes =  $('.activity_tree').find('li:first').siblings().andSelf();
   var total = 0;
   var value = 0;
+  type = '.' + type + ':first'
 
   topNodes.each(function(){
     value = $(this).find(type).find('input').val();
@@ -1103,52 +1081,6 @@ function drawPieChart(id, data_rows, width, height) {
   chart.draw(data, {width: width, height: height, chartArea: {width: 360, height: 220}});
 };
 
-var drawTreemapChart = function (id, data_rows, treemap_gravity) {
-  if (typeof(data_rows) === "undefined") {
-    return;
-  }
-
-  var chart_element = $("#" + id);
-  chart_element.css({width: "450px", height: "300px"});
-
-  var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Code');
-  data.addColumn('string', 'Parent');
-  data.addColumn('number', 'Market trade volume (size)');
-  data.addColumn('number', 'Market increase/decrease (color)');
-  data.addRows(data_rows)
-
-  // Create and draw the visualization.
-  var tree = new google.visualization.TreeMap(chart_element[0]);
-  tree.draw(data, {
-    minColor: '#35ff35',
-    midColor: '#09c500',
-    maxColor: '#08a100',
-    headerHeight: 20,
-    fontColor: 'black',
-    fontSize: '12',
-    headerColor: '#E6EDF3',
-    showScale: false,
-    showTooltips: false
-  });
-
-  // manual tipsy
-  if (typeof(treemap_gravity) === "undefined") {
-    treemap_gravity = $.fn.tipsy.autoWE
-  }
-  chart_element.tipsy({gravity: treemap_gravity, trigger: 'manual'})
-
-  google.visualization.events.addListener(tree, 'onmouseover', function (e) {
-    chart_element.attr('title', data_rows[e.row][0]);
-    chart_element.tipsy('show');
-  });
-
-  google.visualization.events.addListener(tree, 'onmouseout', function (e) {
-    chart_element.attr('title', '');
-    chart_element.tipsy('hide');
-  });
-}
-
 var reports_districts_show = reports_countries_show = {
   run: function () {
     drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
@@ -1181,13 +1113,8 @@ var reports_districts_activities_show = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values, 450, 300);
     drawPieChart('budget_pie', _budget_pie_values, 450, 300);
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1232,13 +1159,8 @@ var reports_districts_organizations_index = {
 
 var reports_districts_organizations_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1251,13 +1173,8 @@ var reports_countries_organizations_index = {
 
 var reports_countries_organizations_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1270,13 +1187,8 @@ var reports_countries_activities_index = {
 
 var reports_countries_activities_show = {
   run: function () {
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1457,6 +1369,7 @@ var projects_index = {
         if (hash == '/new_project'){
           hideAll();
           $('#new_project_form').fadeIn();
+          validateDates($('.start_date'), $('.end_date'));
         }else if (hash == '/new_activity'){
           hideAll();
           $('#new_activity_form').fadeIn();
@@ -1729,13 +1642,6 @@ var activity_form = function () {
     $('.add_organization').slideToggle();
   });
 
-  if (typeof(namespace) === 'undefined') {
-    validateDates($('#activity_start_date'), $('#activity_end_date'));
-  } else {
-    // it injects the namespace in the activity form !?
-    validateDates($('#' + namespace + '_activity_start_date'), $('#' + namespace + '_activity_end_date'));
-  }
-
   $('.js_target_field').live('keydown', function (e) {
     var block = $(this).parents('.js_targets');
 
@@ -1828,7 +1734,7 @@ var admin_organizations_create = admin_organizations_edit = {
 var projects_new = projects_create = projects_edit = projects_update = {
   run: function () {
     commentsInit();
-    validateDates($('#project_start_date'), $('#project_end_date'));
+    validateDates($('.start_date'), $('.end_date'));
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
   }

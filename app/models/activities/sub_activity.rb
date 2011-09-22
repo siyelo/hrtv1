@@ -69,11 +69,19 @@ class SubActivity < Activity
   end
 
   def budget=(amount)
-    write_attribute(:budget, amount)
+    if is_number?(amount)
+      write_attribute(:budget, amount.to_f.round_with_precision(2))
+    else
+      write_attribute(:budget, amount)
+    end
   end
 
   def spend=(amount)
-    write_attribute(:spend, amount)
+    if is_number?(amount)
+      write_attribute(:spend, amount.to_f.round_with_precision(2))
+    else
+      write_attribute(:spend, amount)
+    end
   end
 
   def locations # TODO: deprecate

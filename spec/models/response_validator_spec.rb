@@ -57,7 +57,7 @@ describe DataResponse do #validations
 
   describe "ready to submit" do
     before :each do
-      @activity        = Factory(:activity_budget_spend_coded, :data_response => @response,
+      @activity        = Factory(:classified_activity, :data_response => @response,
                                  :project => @project)
       @sa              = Factory(:sub_activity, :activity => @activity,
                                  :data_response => @response, :budget => 100, :spend => 80)
@@ -87,11 +87,6 @@ describe DataResponse do #validations
       @response.ready_to_submit?.should == true
     end
 
-    it "allows submit if everything is coded" do
-      @response.stub(:uncoded_activities) { [] }
-      @response.submit!.should == true
-    end
-
     context "projects not linked" do
       before :each do
         @funder.project_from_id = nil; @funder.save
@@ -109,11 +104,6 @@ describe DataResponse do #validations
       end
     end
 
-    it "disallows submit! if not complete" do
-      @activity.destroy
-      @response.submit!.should == false
-    end
-
     it "fails if there are no activities" do
       @activity.destroy
       @response.activities_coded?.should == false
@@ -123,13 +113,20 @@ describe DataResponse do #validations
     it "fails if there are uncoded activities" do
       activity2 = Factory(:activity, :data_response => @response, :project => @project)
       sa = Factory(:sub_activity, :data_response => @response, :activity => activity2, :budget => 54)
+      sa.save
+      activity2.reload
+      activity2.save
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false
     end
 
     it "fails if an activity is missing a coding split" do
+      sa = Factory(:sub_activity, :data_response => @response, :activity => @activity, :spend => 100)
+      sa.save
+      @activity.reload
       cs = @activity.coding_spend.first
-      @activity.coding_budget_valid = false; @activity.save; @activity.reload
+      @activity.coding_budget_valid = false
+      @activity.save
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should == false
       @response.ready_to_submit?.should == false

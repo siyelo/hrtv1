@@ -7,13 +7,17 @@ class Organization < ActiveRecord::Base
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
 
-  ORGANIZATION_TYPES = ["Bilateral", "Central Govt Revenue",
-    "Clinic/Cabinet Medical", "Communal FOSA", "Dispensary", "District",
-    "District Hospital", "Government", "Govt Insurance", "Health Center",
-    "Health Post", "International NGO", "Local NGO", "MOH central",
-    "Military Hospital", "MoH unit", "Multilateral", "National Hospital",
-    "Non-Reporting", "Other ministries", "Parastatal", "Prison Clinic",
-    "RBC institutions"]
+  ORGANIZATION_TYPES = ['Bilateral', 'Central Govt Revenue',
+    'Clinic/Cabinet Medical', 'Communal FOSA', 'Dispensary', 'District',
+    'District Hospital', 'Government', 'Govt Insurance', 'Health Center',
+    'Health Post', 'International NGO', 'Local NGO', 'MOH central',
+    'Military Hospital', 'MoH unit', 'Multilateral', 'National Hospital',
+    'Non-Reporting', 'Other ministries', 'Parastatal', 'Prison Clinic',
+    'RBC institutions']
+
+  NON_REPORTING_TYPES = ['Clinic/Cabinet Medical', 'Communal FOSA',
+    'Dispensary', 'District', 'District Hospital', 'Health Center',
+    'Health Post', 'Non-Reporting', 'Other ministries', 'Prison Clinic']
 
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
@@ -28,12 +32,12 @@ class Organization < ActiveRecord::Base
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
-  has_many :out_flows, :class_name => "FundingFlow", :foreign_key => "organization_id_from",
-    :dependent => :nullify
+  has_many :out_flows, :class_name => "FundingFlow",
+             :foreign_key => "organization_id_from", :dependent => :nullify
   has_many :donor_for, :through => :out_flows, :source => :project
-  has_many :provider_for, :class_name => "Activity", :foreign_key => :provider_id,
-    :dependent => :nullify
   has_many :projects, :through => :data_responses
+  has_many :implemented_activities, :class_name => "Activity",
+             :foreign_key => :provider_id, :dependent => :nullify
   has_many :activities, :through => :data_responses
 
   ### Validations
@@ -60,44 +64,12 @@ class Organization < ActiveRecord::Base
   named_scope :without_users, :conditions => 'users_count = 0'
   named_scope :ordered, :order => 'lower(name) ASC, created_at DESC'
   named_scope :with_type, lambda { |type| {:conditions => ["organizations.raw_type = ?", type]} }
-  named_scope :with_submitted_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.submitted = ? AND
-                                 (data_responses.submitted_for_final IS NULL OR data_responses.submitted_for_final = ? ) AND
-                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
-                                  request.id, true, false, false]} }
-  named_scope :with_submitted_for_final_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.submitted_for_final = ? AND
-                                 (data_responses.complete IS NULL OR data_responses.complete = ?)",
-                                  request.id, true, false]} }
-  named_scope :with_complete_responses_for, lambda { |request|
-                 {:joins => "LEFT JOIN data_responses ON organizations.id = data_responses.organization_id",
-                 :conditions => ["data_responses.data_request_id = ? AND
-                                 data_responses.complete = ?",
-                                  request.id, true]} }
-  named_scope :with_empty_responses_for, lambda { |request|
-                {:joins => ["LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
-                             LEFT JOIN activities ON data_responses.id = activities.data_response_id
-                             LEFT JOIN projects ON data_responses.id = projects.data_response_id"],
-                 :conditions => ["activities.data_response_id IS NULL AND
-                                  projects.data_response_id IS NULL AND
-                                  data_responses.data_request_id = ?", request.id],
-                 :from => ["organizations"]}}
-  named_scope :with_in_progress_responses_for, lambda { |request|
-                 {:conditions => ["organizations.id in (
-                     SELECT organizations.id
-                       FROM organizations
-                  LEFT JOIN data_responses ON organizations.id = data_responses.organization_id
-                  INNER JOIN projects ON data_responses.id = projects.data_response_id
-                  INNER JOIN activities ON data_responses.id = activities.data_response_id
-                      WHERE data_responses.data_request_id = ? AND
-                            (data_responses.submitted IS NULL OR
-                            data_responses.submitted = ?))", request.id, false]}}
-  named_scope :reporting, :conditions => "raw_type != 'Non-Reporting'"
-  named_scope :nonreporting, :conditions => "raw_type = 'Non-Reporting'"
+  named_scope :reporting, :conditions => ['raw_type not in (?)', NON_REPORTING_TYPES]
+  named_scope :nonreporting, :conditions => ['raw_type in (?)', NON_REPORTING_TYPES]
+  named_scope :responses_by_states, lambda { |request, states|
+    { :joins => {:data_responses => :data_request },
+      :conditions => ["data_requests.id = ? AND
+                       data_responses.state IN (?)", request.id, states]} }
 
 
   ### Class Methods
@@ -107,7 +79,21 @@ class Organization < ActiveRecord::Base
   end
 
   def self.merge_organizations!(target, duplicate)
-    target.location = duplicate.location
+    duplicate.responses.each do |response|
+      target_response = target.responses.find(:first,
+                   :conditions => ["data_request_id = ?", response.data_request_id])
+      target_response.projects << response.projects
+      target_response.projects.each do |project|
+        project.in_flows.each do |in_flow|
+          if in_flow.from == duplicate
+            in_flow.from = target
+            in_flow.save(false)
+          end
+        end
+      end
+      target_response.activities << response.activities
+    end
+
     target.users << duplicate.users
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
   end
@@ -134,10 +120,31 @@ class Organization < ActiveRecord::Base
     return saved, errors
   end
 
+  def self.unstarted_responses(request)
+    responses_by_states(request, ['unstarted'])
+  end
+
+  def self.started_responses(request)
+    responses_by_states(request, ['started'])
+  end
+
+  def self.submitted_responses(request)
+    responses_by_states(request, ['submitted'])
+  end
+
+  def self.rejected_responses(request)
+    responses_by_states(request, ['rejected'])
+  end
+
+  def self.accepted_responses(request)
+    responses_by_states(request, ['accepted'])
+  end
+
   ### Instance Methods
 
+  # TODO CHECK ME
   def is_empty?
-    if users.empty? && out_flows.empty? && provider_for.empty? &&
+    if users.empty? && out_flows.empty? && implemented_activities.empty? &&
       location.nil? && activities.empty? &&
       data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
@@ -225,15 +232,33 @@ class Organization < ActiveRecord::Base
   end
 
   def reporting?
-    raw_type != 'Non-Reporting'
+    !nonreporting?
   end
 
   def nonreporting?
-    raw_type == 'Non-Reporting'
+    NON_REPORTING_TYPES.include?(raw_type)
   end
 
   def currency
     read_attribute(:currency).blank? ? "USD" : read_attribute(:currency)
+  end
+
+  def last_user_logged_in
+    users.select{ |a,b| a.last_login_at.present? }.max do |a,b|
+      a.last_login_at <=> b.last_login_at
+    end
+  end
+
+  # last login at will return nil on first login, but current will be set
+  def current_user_logged_in
+    users.select{ |a,b| a.current_login_at.present? }.max do |a,b|
+      a.current_login_at <=> b.current_login_at
+    end
+  end
+
+  #workaround for authlogic not setting last to current on first login
+  def last_or_current_user_logged_in
+    last_user_logged_in || current_user_logged_in
   end
 
   protected
@@ -278,7 +303,6 @@ class Organization < ActiveRecord::Base
       end
     end
 end
-
 
 # == Schema Information
 #

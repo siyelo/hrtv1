@@ -27,7 +27,7 @@ describe Organization do
     it { should have_many(:dr_activities) }
     it { should have_many(:out_flows).dependent(:nullify) }
     it { should have_many(:donor_for) }
-    it { should have_many(:provider_for).dependent(:nullify) }
+    it { should have_many(:implemented_activities).dependent(:nullify) }
     it { should have_and_belong_to_many :managers }
   end
 
@@ -112,41 +112,84 @@ describe Organization do
 
   describe "Named Scopes" do
     before :each do
-      @request1 = Factory(:data_request)
-      @request2 = Factory(:data_request)
-      @org = Factory(:organization, :name => "Responder Organization")
-      @response = @org.responses.find_by_data_request_id(@request1.id)
+      request_org   = Factory(:organization)
+      @response_org = Factory(:organization)
+      @request1     = Factory(:data_request, :organization => request_org)
+      @response1    = @response_org.latest_response
+      @request2     = Factory(:data_request, :organization => request_org)
+      @response2    = @response_org.latest_response
     end
 
-    it "should find submitted responses" do
-      @response.submitted = true
-      @response.save(false)
-      Organization.with_submitted_responses_for(@request1).should == [@org]
-      Organization.with_submitted_for_final_responses_for(@request1).should_not == [@org]
-      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    it "returns responses by states" do
+      Organization.responses_by_states(@request1, ['started']).should be_empty
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should be_empty
+
+      @response1.state = 'started'
+      @response1.save
+
+      Organization.responses_by_states(@request1, ['started']).should == [@response_org]
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should be_empty
+
+      @response2.state = 'rejected'
+      @response2.save
+
+      Organization.responses_by_states(@request1, ['started']).should == [@response_org]
+      Organization.responses_by_states(@request2, ['started']).should be_empty
+      Organization.responses_by_states(@request1, ['rejected']).should be_empty
+      Organization.responses_by_states(@request2, ['rejected']).should == [@response_org]
+      Organization.responses_by_states(@request1, ['started', 'rejected']).should == [@response_org]
+    end
+  end
+
+  describe "Responses" do
+    before :each do
+      @organization1 = Factory(:organization)
+      @organization2 = Factory(:organization)
+      @request       = Factory(:data_request, :organization => @organization1)
+      @response1    = @organization1.latest_response
+      @response2    = @organization2.latest_response
     end
 
-    it "should find submitted for final review responses" do
-      @response.submitted_for_final = true
-      @response.save(false)
-      Organization.with_submitted_for_final_responses_for(@request1).should == [@org]
-      Organization.with_complete_responses_for(@request1).should_not == [@org]
+    it "returns unstarted responses" do
+      responses = Organization.unstarted_responses(@request)
+      responses.should include(@organization1)
+      responses.should include(@organization2)
     end
 
-    it "should find completed responses" do
-      @response.complete = true
-      @response.save(false)
-      Organization.with_complete_responses_for(@request1).should == [@org]
+    it "returns started responses" do
+      @response1.state = 'started'
+      @response1.save!
+      responses = Organization.started_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
 
-    it "should find empty responses" do
-      Organization.with_empty_responses_for(@request1).should have(3).items
+    it "returns submitted responses" do
+      @response1.state = 'submitted'
+      @response1.save!
+      responses = Organization.submitted_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
 
-    it "should find in progress responses (i.e. at least one activity) " do
-      @project = Factory(:project, :data_response => @response)
-      @activity = Factory(:activity, :project => @project, :data_response => @response)
-      Organization.with_in_progress_responses_for(@request1).should == [@org]
+    it "returns rejected responses" do
+      @response1.state = 'rejected'
+      @response1.save!
+      responses = Organization.rejected_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
+    end
+
+    it "returns accepted responses" do
+      @response1.state = 'accepted'
+      @response1.save!
+      responses = Organization.accepted_responses(@request)
+      responses.should include(@organization1)
+      responses.should_not include(@organization2)
     end
   end
 
@@ -192,6 +235,40 @@ describe Organization do
 
         org_requester.data_responses.should be_empty
       end
+    end
+  end
+
+  describe "#last logged in user" do
+    before :each do
+      @org = Factory.build(:organization)
+      @user = Factory.build(:user,
+        :last_login_at => DateTime.parse('2009-05-04 02:00:00'),
+        :current_login_at => DateTime.parse('2009-06-04 02:00:00'))
+      @org.users << @user
+    end
+
+    it "returns the last user in that organization that logged in if there is one user" do
+      @org.last_user_logged_in.should == @user
+      @org.current_user_logged_in.should == @user
+      @org.last_or_current_user_logged_in.should == @user
+    end
+
+    it "returns nil when nobody has ever logged in" do
+      @user.last_login_at = nil
+      @user.current_login_at = nil
+      user2 = Factory.build(:user, :organization => @org)
+      @org.users << @user; @org.users << user2
+      @org.last_user_logged_in.should be_nil
+      @org.current_user_logged_in.should be_nil
+      @org.last_or_current_user_logged_in.should be_nil
+    end
+
+    # authlogic idiosyncracy
+    it " returns last logged in as nil on first sign in" do
+      @user.last_login_at = nil
+      @org.last_user_logged_in.should be_nil
+      @org.current_user_logged_in.should == @user
+      @org.last_or_current_user_logged_in.should == @user
     end
   end
 
@@ -241,14 +318,13 @@ describe Organization do
     end
 
     it "is not empty when it has out flows" do
+      # project factory creates out flow from organization to this project
       project = Factory(:project, :data_response => @response)
-      Factory(:funding_flow,
-              :from => @organization, :project => project)
       @organization.reload
       @organization.is_empty?.should_not be_true
     end
 
-    it "is not empty when it has provider_for" do
+    it "is not empty when it has implemented activities" do
       project  = Factory(:project, :data_response => @response)
       activity = Factory(:activity, :data_response => @response, :project => project)
       @organization.reload
@@ -267,7 +343,6 @@ describe Organization do
       @organization.is_empty?.should_not be_true
     end
   end
-
 
   describe "CSV" do
     before :each do
@@ -289,43 +364,60 @@ describe Organization do
 
   describe "remove duplicate organization" do
     before :each do
-      @target       = Factory(:organization)
-      @duplicate    = Factory(:organization)
-      data_request1 = Factory(:data_request, :organization => @target)
-      data_request2 = Factory(:data_request, :organization => @duplicate)
-      @target_dr    = @target.latest_response
-      @duplicate_dr = @duplicate.latest_response
+      @organization = Factory(:organization)
+      Factory(:data_request, :organization => @organization)
+      @target_org         = Factory(:organization)
+      @duplicate_org      = Factory(:organization)
+      @target_response    = @target_org.latest_response
+      @duplicate_response = @duplicate_org.latest_response
+
+      Factory(:data_request, :organization => @organization)
+      @target_response2    = @target_org.latest_response
+      @duplicate_response2 = @duplicate_org.latest_response
     end
 
     it "deletes duplicate after merge" do
-      Organization.merge_organizations!(@target, @duplicate)
+      Organization.merge_organizations!(@target_org, @duplicate_org)
       all_organizations = Organization.all
-      all_organizations.should include(@target)
-      all_organizations.should_not include(@duplicate)
+      all_organizations.should include(@target_org)
+      all_organizations.should_not include(@duplicate_org)
+    end
+
+    it "moves projects from duplicate to target organization" do
+      project1 = Factory(:project, :data_response => @duplicate_response)
+      project2 = Factory(:project, :data_response => @duplicate_response2)
+
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      all_organizations = Organization.all
+      @target_response.projects.should include(project1)
+      @target_response2.projects.should include(project2)
+      all_organizations.should include(@target_org)
+      all_organizations.should_not include(@duplicate_org)
     end
 
     it "copies also invalid data responses from duplicate to @target" do
-      @duplicate.fiscal_year_start_date = "2010-02-01"
-      @duplicate.fiscal_year_end_date = "2010-01-01"
-      @duplicate.save(false)
-      duplicate_data_response = @duplicate.latest_response
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.data_responses.count.should == 2 # not 2, since our before block created a valid DR
+      @duplicate_org.fiscal_year_start_date = "2010-02-01"
+      @duplicate_org.fiscal_year_end_date = "2010-01-01"
+      @duplicate_org.save(false)
+      duplicate_data_response = @duplicate_org.latest_response
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.data_responses.count.should == 2 # not 2, since our before block created a valid DR
     end
 
-    it "copies location from duplicate to @target" do
-      @target.location = Factory(:location)
-      new_location = Factory(:location)
-      @duplicate.location = new_location
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.location.should == new_location
-    end
+    it "moves activities from duplicate to target organization" do
+      project1 = Factory(:project, :data_response => @duplicate_response)
+      project2 = Factory(:project, :data_response => @duplicate_response2)
+      activity1 = Factory(:activity, :data_response => @duplicate_response,
+                          :project => project1)
+      activity2 = Factory(:activity, :data_response => @duplicate_response2,
+                          :project => project2)
 
-    it "copies users from @duplicate to @target" do
-      Factory(:reporter, :organization => @target)
-      Factory(:reporter, :organization => @duplicate)
-      Organization.merge_organizations!(@target, @duplicate)
-      @target.users.count.should == 2
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+
+      @target_response.activities.should include(activity1)
+      @target_response2.activities.should include(activity2)
+      activity1.project.should == project1
+      activity2.project.should == project2
     end
   end
 
@@ -337,6 +429,23 @@ describe Organization do
       o.reload.users_count.should == 1
       Factory.create(:reporter, :organization => o)
       o.reload.users_count.should == 2
+    end
+
+    it "should update users count when user is moved to other organization" do
+      o1       = Factory(:organization)
+      o2       = Factory(:organization)
+      reporter = Factory.create(:reporter, :organization => o1)
+
+      reporter.organization.should == o1
+      o1.reload.users_count.should == 1
+      o2.reload.users_count.should == 0
+
+      reporter.organization_id = o2.id
+      reporter.save!
+
+      reporter.reload.organization.should == o2
+      o1.reload.users_count.should == 0
+      o2.reload.users_count.should == 1
     end
   end
 
@@ -361,19 +470,19 @@ describe Organization do
       Organization.ordered.should == [org2, org1]
     end
 
-    context "reporting & nonreporting" do
-      before :each do
-        @org1 = Factory(:organization, :raw_type => 'Bilateral')
-        @org2 = Factory(:organization, :raw_type => 'Non-Reporting')
+    it "returns (non/)reporting organizations" do
+      @org1 = Factory(:organization, :raw_type => 'Bilateral')
+
+      non_reporting_types = ['Clinic/Cabinet Medical', 'Communal FOSA',
+        'Dispensary', 'District', 'District Hospital', 'Health Center',
+        'Health Post', 'Non-Reporting', 'Other ministries',
+        'Prison Clinic']
+      non_reporting_types.each do |type|
+        Factory(:organization, :raw_type => type)
       end
 
-      it "returns reporting organizations" do
-        Organization.reporting.should == [@org1]
-      end
-
-      it "returns reporting organizations" do
-        Organization.nonreporting.should == [@org2]
-      end
+      Organization.reporting.should == [@org1]
+      Organization.nonreporting.count.should == non_reporting_types.count
     end
   end
 

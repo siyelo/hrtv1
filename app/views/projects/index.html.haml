@@ -40,6 +40,27 @@
         %li= link_to 'Import', '#', :id => "import_export"
         %li= link_to 'Export', export_response_projects_path(@response)
 
+    - if current_user.activity_manager?
+      %li
+        - link_to export_workplan_response_projects_path(@response), :class => 'dropdown dropless' do
+          Download Workplan
+
+        %ul.menu_items{:style => 'display: none'}
+          %li= link_to 'Import', '#', :id => "import_export"
+
+    - if current_user.sysadmin?
+      %li.js_dropdown_menu#state
+        - link_to '#', :class => 'js_dropdown_trigger dropdown' do
+          = "Status: #{state_to_name(@response.state)}"
+          = image_tag "icon_dropdown.png"
+
+        %ul.menu_items{:style => 'display: none'}
+          - if @response.submitted?
+            %li= link_to 'Reject!', reject_response_path(@response), :method => :put, :confirm => "Are you sure you want to Reject this response?"
+            %li= link_to 'Accept!', accept_response_path(@response), :method => :put, :confirm => "Are you sure you want to Accept this response?"
+          - else
+            %li= link_to "Already #{@response.state.capitalize}", '#'
+
   #import_export_box
     = render 'activities_import', :project => nil, :can_export => @response.activities.present?
 

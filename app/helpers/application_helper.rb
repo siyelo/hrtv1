@@ -142,11 +142,13 @@ module ApplicationHelper
   end
 
   # sortable columns
-  def sortable(column, title = nil)
+  def sortable(column, title = nil, reverse_sort = nil)
     title ||= column.titleize
     css_class = column == sort_column ? "current #{sort_direction}" : nil
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"
-    link_to title, {:sort => column, :direction => direction, :query => params[:query], :filter => params[:filter]}, {:class => css_class}
+    direction = "desc" if column != sort_column && reverse_sort
+    link_to title, {:sort => column, :direction => direction, :query => params[:query],
+        :filter => params[:filter]}, {:class => css_class}
   end
 
 
@@ -276,19 +278,6 @@ module ApplicationHelper
       sum{|rca| rca.percentage.to_f}
   end
 
-  def warn_if_not_classified
-    outlay = @activity || @other_cost
-    unless flash[:error]
-      if outlay.approved? || outlay.am_approved?
-        flash.now[:error] = "Classification for approved activity cannot be changed."
-      elsif !outlay.classified?
-        flash.now[:warning] = "This #{outlay.class == OtherCost ? "Other Cost" : "Activity"} has not been fully classified.
-                             #{"<a href=\"#\" rel=\"#uncoded_overlay\" class=\"overlay\">Click here</a>
-                             to see what still needs to be classified"}"
-      end
-    end
-  end
-
   def edit_activity_or_ocost_path(outlay, opts = nil)
     response = outlay.data_response
     outlay.class == Activity ?
@@ -320,5 +309,17 @@ module ApplicationHelper
       mode = nil
     end
     edit_activity_or_ocost_path(activity, :mode => mode)
+  end
+
+  def autotab
+    @current_tab ||= 0
+    @current_tab += 1
+  end
+
+  def sort_splits(splits)
+    blanks = splits.select{ |s| s.implementer.nil? }
+    blanks + splits.reject{ |s| s.implementer.nil?}.sort do
+      |a,b| a.implementer_name <=> b.implementer_name
+    end
   end
 end

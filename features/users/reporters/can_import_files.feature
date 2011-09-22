@@ -26,11 +26,7 @@ Feature: Reporter can import/export workplans
   Scenario: Adding malformed CSV file doesnt throw exception
     When I attach the file "spec/fixtures/malformed.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
-    Then I should see "There was a problem with your file. Did you use the template and save it after making changes as a CSV file instead of an Excel file? Please post a problem at"
+    Then I should see "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV? Please post a problem at TenderApp if you can't figure out what's wrong."
 
-  Scenario: Reporter can download Activities
-    Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
-    When I follow "Projects"
-    And I follow "Export" within ".activities_upload_box"
-    Then I should see "Activity1"
-    And I should see "Activity1 description"
+  Scenario: Reporter cannot export workplan
+    Then I should not see "Download Workplan"

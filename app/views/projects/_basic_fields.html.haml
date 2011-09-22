@@ -6,7 +6,7 @@
       %span.required *
       - link_to "#", :title => "A short name for this project", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :name, :size => "80", :tabindex => "1", :class => f.object.errors.on(:name) ? "error" : ""
+    = f.text_field :name, :size => "80", :tabindex => autotab, :class => f.object.errors.on(:name) ? "error" : ""
 
   %li#project_start_date_input.string.required
     .name
@@ -14,7 +14,7 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :start_date, :tabindex => "2", :class => f.object.errors.on(:start_date) ? "error date_picker" : "date_picker", :id => "project_start_date_#{project_id}"
+    = f.text_field :start_date, :tabindex => autotab, :class => f.object.errors.on(:start_date) ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
 
   %li#project_end_date_input.string.required
     .name
@@ -22,17 +22,18 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :end_date, :tabindex => "3", :class => f.object.errors.on(:end_date) ? "error date_picker" : "date_picker", :id => "project_end_date_#{project_id}"
+    = f.text_field :end_date, :tabindex => autotab, :class => f.object.errors.on(:end_date) ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
+
   %li#project_currency_input.select.required
     .name
       = f.label :currency, "Currency override"
       - link_to "#", :title => "Optionally override the currency for this Project. (Your default is #{@response.currency})", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.select :currency, currency_options_for_select, {:selected => @project.currency, :include_blank => true }, :class => f.object.errors.on(:currency) ? "error" : "", :tabindex => "4"
+    = f.select :currency, currency_options_for_select, {:selected => @project.currency, :include_blank => true }, :class => f.object.errors.on(:currency) ? "error" : "", :tabindex => autotab
   %br
   %li#project_description_input.text
     .name
       = f.label :description, "Description"
       - link_to "#", :title => "A general 1-2 sentence description of the purpose of the Project.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_area :description, :rows => 2, :tabindex => "5", :class => f.object.errors.on(:description) ? "error" : ""
+    = f.text_area :description, :rows => 2, :tabindex => autotab, :class => f.object.errors.on(:description) ? "error" : ""

@@ -1,5 +1,6 @@
 class ChartsController < ApplicationController
   include StringCleanerHelper # gives h method
+  TOP_ASSIGNMENTS = 4
 
   before_filter :require_user
 
@@ -47,21 +48,29 @@ class ChartsController < ApplicationController
   # csv format for AM pie chart:
   # title, value, ?, ?, ?, description
   def get_csv_string(records)
-    other = 0
+    other_total = 0
     csv_string = FasterCSV.generate do |csv|
-      records.each_with_index do |record, index|
-        if index < 10
-          csv << [first_n_words(h(record.name), 3), record.value.to_f, nil, nil, nil, h(record.name) ]
-        else
-          other += record.value.to_f
+      if records.present?
+        records.each_with_index do |record, index|
+          if index < TOP_ASSIGNMENTS
+            csv << [first_n_words(h(record.name), 3), record.value.to_f,
+                    nil, nil, nil, h(record.name) ]
+          else
+            other_total += record.value.to_f
+          end
         end
+        csv << ['Other', other_total, nil, nil, nil, 'Other'] if other_total > 0
+      else
+        csv << [] # when no data, add empty array so that flash chart doesn't cry
       end
-      csv << ['Other', other, nil, nil, nil, 'Other']
     end
+
     csv_string
   end
 
   def first_n_words(string, n)
-    string.split(' ').slice(0,n).join(' ') + '...'
+    words = string.split(' ')
+    name = words.slice(0, n).join(' ')
+    words.length <= n ? name : name + '...'
   end
 end

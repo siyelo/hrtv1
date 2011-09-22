@@ -1,11 +1,13 @@
-%br
-- f.inputs :class => 'inputs clearfix' do
-  = f.input :name, :label => 'Name', :hint => 'What is the name of the organization?'
-  = f.input :raw_type, :as => :select, :collection => Organization::ORGANIZATION_TYPES, :label => 'Raw type', :hint => 'Raw type of organization', :required => false
-  = f.input :fosaid, :label => 'Fosaid', :hint => 'Fosaid or organization', :required => false
-  = f.input :currency, :label => "Currency", :as => :select, :collection => currency_options_for_select, :include_blank => true, :hint => "Select The default currency for your organization", :required => false
-- f.buttons :class => 'buttons push-12' do
-  = f.commit_button((@organization.new_record? ? 'Create organization' : 'Update organization'), :button_html => {:class => 'next'})
+%fieldset.inputs
+  %ol
+    %li.last
+      %ul.section_form
+        = f.select :raw_type, options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type), { :include_blank => true  }, :label => 'Raw type', :hint => 'Raw type of organization', :label_html => { :class => 'indented' }, :input_html => { :class => 'string required' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
+        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => 'Currency', :hint => 'Select the default currency for your organization', :label_html => { :class => 'indented' }, :tabindex => autotab
+        = f.text_field :name, :label => "Name", :required => true, :hint => "What is the name of the organization?", :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
+        = f.text_field :fosaid, :label => "Fosaid", :required => true, :hint => "Fosaid or organization", :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
+        %br
+        = f.submit @organization.new_record? ? 'Create organization' : 'Update organization', :class => "next update"
 
 - unless @organization.new_record?
   .delete_section

@@ -114,16 +114,18 @@ describe FundingFlow do
 
       context "GOR FY" do
         it "sets budget_in_usd and spend_in_usd amounts" do
-          @organization = Factory(:organization, :currency => 'RWF',
-                                 :fiscal_year_start_date => "2010-07-01",
-                                 :fiscal_year_end_date => "2011-06-30")
-          @request      = Factory(:data_request, :organization => @organization)
-          @response     = @organization.latest_response
-          @project      = Factory(:project, :data_response => @response)
-          funding_flow = Factory(:funding_flow, :project => @project,
-                                 :from => @organization, :budget => 123, :spend => 456)
-          funding_flow.budget_in_usd.should == 12.3
-          funding_flow.spend_in_usd.should == 45.6
+          @organization  = Factory(:organization, :currency => 'RWF',
+                                  :fiscal_year_start_date => "2010-07-01",
+                                  :fiscal_year_end_date => "2011-06-30")
+          @request       = Factory(:data_request, :organization => @organization)
+          @response      = @organization.latest_response
+          @project       = Factory(:project, :data_response => @response)
+          in_flow        = @project.in_flows.first
+          in_flow.budget = 123
+          in_flow.spend  = 456
+          in_flow.save!
+          in_flow.budget_in_usd.should == 12.3
+          in_flow.spend_in_usd.should == 45.6
         end
       end
     end

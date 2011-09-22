@@ -1,35 +1,31 @@
 require 'set'
 class Admin::OrganizationsController < Admin::BaseController
-  SORTABLE_COLUMNS = ['name', 'raw_type', 'fosaid']
-  AVAILABLE_FILTERS = ["Not Started", "Submitted", "Submitted for Final Review", "Complete", "In Progress"]
+  include ResponseStatesHelper
+
+  SORTABLE_COLUMNS  = ['name', 'raw_type', 'fosaid', 'created_at']
+  AVAILABLE_FILTERS = ["Reporting", "Not Yet Started", "Started", "Submitted",
+    "Rejected", "Accepted", "Non-Reporting"]
+
   ### Inherited Resources
   inherit_resources
 
   helper_method :sort_column, :sort_direction
 
   def index
-    filter = params[:filter]
-    scope = Organization.scoped({})
-                         
-    if AVAILABLE_FILTERS.include?(filter)
-      scope = Organization.with_submitted_responses_for(current_request) if filter == "Submitted"
-      scope = Organization.with_submitted_for_final_responses_for(current_request) if filter == "Submitted for Final Review" 
-      scope = Organization.with_complete_responses_for(current_request)  if filter == "Complete"
-      scope = Organization.with_empty_responses_for(current_request) if filter == "Not Started" 
-      scope = Organization.with_in_progress_responses_for(current_request) if filter == "In Progress"
-    end
-    
+    scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
                                            UPPER(organizations.raw_type) LIKE UPPER(:q) OR
                                            UPPER(organizations.fosaid) LIKE UPPER(:q)",
                                            {:q => "%#{params[:query]}%"}]) if params[:query]
-    
+
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
-                    :order => "UPPER(organizations.#{sort_column}) #{sort_direction}")
+                    :order => "#{sort_column_query} #{sort_direction}")
+    @responses = current_request.data_responses
   end
 
   def show
-    @organization = Organization.find(params[:id])
+    @organization = Organization.find(params[:id], :include => [:projects,
+      :activities, :users, :location])
 
     respond_to do |format|
       format.js {render :partial => 'organization_info'}
@@ -86,7 +82,7 @@ class Admin::OrganizationsController < Admin::BaseController
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if duplicate.users.size > 0
+      if duplicate.users_count > 0
         render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
       else
         Organization.merge_organizations!(target, duplicate)
@@ -120,7 +116,7 @@ class Admin::OrganizationsController < Admin::BaseController
       redirect_to admin_organizations_url
     end
   end
-  
+
   private
 
     def render_error(message, path)
@@ -151,7 +147,29 @@ class Admin::OrganizationsController < Admin::BaseController
       SORTABLE_COLUMNS.include?(params[:sort]) ? params[:sort] : "name"
     end
 
+    def sort_column_query
+      col = "organizations.#{sort_column}"
+      col = "UPPER(#{col})" unless col == "organizations.created_at"
+      col
+    end
+
     def sort_direction
-      %w[asc desc].include?(params[:direction]) ? params[:direction] : "asc"
+      direction = sort_column == "created_at" ? "desc" : "asc"
+      %w[asc desc].include?(params[:direction]) ? params[:direction] : direction
+    end
+
+    # show reporting orgs by default.
+    def scope_organizations(filter)
+      if filter == 'Non-Reporting'
+        Organization.nonreporting
+      elsif allowed_filter?(params[:filter])
+        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
+      else
+        Organization.reporting
+      end
+    end
+
+    def allowed_filter?(filter)
+      AVAILABLE_FILTERS.include?(filter)
     end
 end

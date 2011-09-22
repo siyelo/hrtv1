@@ -175,6 +175,8 @@ module Charts::DistrictPies
         code_assignments = get_code_assignments_for_codes_pie(code_klass_string, coding_type, [activity])
         ratio   = district_coding.cached_amount_in_usd / activity_amount # % that this district has allocated
         prepare_pie_values(code_assignments, ratio)
+      else
+        build_empty_pie_values_json
       end
     end
 
@@ -186,6 +188,8 @@ module Charts::DistrictPies
         district_spent_ratio   = district_spend_coding.cached_amount_in_usd / activity.spend_in_usd # % that this district has allocated
         district_spent         = activity.spend_in_usd * district_spent_ratio
         prepare_ratio_pie_values(location, activity.spend_in_usd, district_spent)
+      else
+        build_empty_pie_values_json
       end
     end
 
@@ -197,6 +201,8 @@ module Charts::DistrictPies
         district_budgeted_ratio = district_budget_coding.cached_amount_in_usd / activity.budget_in_usd # % that this district has allocated
         district_budgeted       = activity.budget_in_usd * district_budgeted_ratio
         prepare_ratio_pie_values(location, activity.budget_in_usd, district_budgeted)
+      else
+        build_empty_pie_values_json
       end
     end
 
@@ -307,10 +313,14 @@ module Charts::DistrictPies
           values << [ca.code.short_display, (ca.value.to_f * ratio).round(2)]
         end
 
-        {
-          :values => values,
-          :names => {:column1 => 'Code name', :column2 => 'Amount'}
-        }.to_json
+        if values.present?
+          {
+            :values => values,
+            :names => {:column1 => 'Code name', :column2 => 'Amount'}
+          }.to_json
+        else
+          build_empty_pie_values_json
+        end
       end
 
       def prepare_ratio_pie_values(location, activity_amount, district_amount)
@@ -346,6 +356,5 @@ module Charts::DistrictPies
         end
         sum
       end
-
     end
 end

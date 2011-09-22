@@ -1,6 +1,35 @@
 class DataResponse < ActiveRecord::Base
   include NumberHelper
+  include ResponseStatesHelper
   extend ActiveSupport::Memoizable
+
+  STATES = ['unstarted', 'started', 'submitted', 'rejected', 'accepted']
+
+  state_machine :state, :initial => :unstarted do
+    event :start do
+      transition [:unstarted] => :started
+    end
+
+    event :unstart do
+      transition [:started, :submitted, :rejected, :accepted] => :unstarted
+    end
+
+    event :restart do
+      transition [:started, :submitted, :rejected, :accepted] => :started
+    end
+
+    event :submit do
+      transition [:started, :rejected] => :submitted
+    end
+
+    event :reject do
+      transition [:submitted] => :rejected
+    end
+
+    event :accept do
+      transition [:submitted] => :accepted
+    end
+  end
 
   ### Attributes
   attr_accessible :data_request_id
@@ -23,8 +52,9 @@ class DataResponse < ActiveRecord::Base
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   ### Validations
-  validates_presence_of :data_request_id, :organization_id
+  validates_presence_of   :data_request_id, :organization_id
   validates_uniqueness_of :data_request_id, :scope => :organization_id
+  validates_inclusion_of  :state, :in => STATES
 
   ### Named scopes
   named_scope :unfulfilled, :conditions => ["complete = ?", false]
@@ -43,15 +73,6 @@ class DataResponse < ActiveRecord::Base
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
 
-  #Includes
-  include NumberHelper
-
-  ### Meta Data for Meta Programming
-  ## GN TODO: refactor out getting collections of items failing
-  ## some validation method and defining those as "magic nicely named" methods
-  ## using metaprogramming
-  @@validation_methods = []
-
   def self.in_progress
     self.find :all,
               :select => 'data_responses.*,
@@ -62,22 +83,7 @@ class DataResponse < ActiveRecord::Base
                                (activities_count > 0)", false]
   end
 
-  # TODO: add this back in (GLN). This handles additional associations nicely...
-  # looks like changed one to left outer for some reason
-  def self.options_hash_for_empty
-    h = {}
-    h[:joins] = @@data_associations.collect do |assoc|
-      "LEFT JOIN #{assoc} ON data_responses.id = #{assoc}.data_response_id"
-    end
-    h[:conditions] = @@data_associations.collect do |assoc|
-      "#{assoc}.data_response_id IS NULL"
-    end.join(" AND ")
-    h
-  end
-
-  #named_scope :empty, options_hash_for_empty
-
-  # TODO: spec
+  # TODO: make a named scope if still in use
   def self.empty
     self.find :all,
       :select => 'data_responses.*, organizations.raw_type',
@@ -108,40 +114,17 @@ class DataResponse < ActiveRecord::Base
     activities.empty? && projects.empty?
   end
 
-  # TODO: spec
   def status
-    return "Complete" if complete
-    return "Submitted for Final Review" if submitted_for_final
-    return "Submitted" if submitted
-    return "Ready to Submit" if ready_to_submit?
-    return "Empty / Not Started" if empty?
-    return "In Progress"
+    state_to_name(state)
   end
 
-  # Checks if the response is "valid" and marks as Submitted.
-  def submit!
-    if ready_to_submit?
-      if request.final_review?
-        self.submitted_for_final    = true
-        self.submitted_for_final_at = Time.now
-      else # first time submission, or resubmission for initial review
-        self.submitted = true
-        self.submitted_at = Time.now
-      end
-      return self.save
-    else
-      errors.add_to_base("Projects are not yet entered.") unless projects_entered?
-      errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-      errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
-      errors.add_to_base("Activites are not yet classified.") unless activities_coded?
-      #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
-      errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
-      return false
-    end
-  end
-
-  def last_submitted_at
-    request.final_review? ? submitted_for_final_at : submitted_at
+  def load_validation_errors
+    errors.add_to_base("Projects are not yet entered.") unless projects_entered?
+    errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
+    errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
+    errors.add_to_base("Activites are not yet classified.") unless activities_coded?
+    #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
+    errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
   end
 
   ### Submission Validations
@@ -196,7 +179,6 @@ class DataResponse < ActiveRecord::Base
   def projects_linked?
     return false unless projects_entered?
     self.projects.each do |project|
-      #return false if project.in_flows.present? && !project.linked?
       return false unless project.linked?
     end
     true
@@ -218,14 +200,6 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_have_activities?
-    # NOTE: old code
-    #return false unless activities_entered?
-    #self.projects.each do |project|
-      #return false unless project.has_activities?
-    #end
-    #true
-
-    # NOTE: optimization
     activities.find(:first,
                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                     :conditions => {:type => nil, :project_id => projects}
@@ -239,17 +213,11 @@ class DataResponse < ActiveRecord::Base
   memoize :other_costs_entered?
 
   def projects_have_other_costs?
-    # NOTE: old code
-    #return false unless other_costs_entered?
-    #self.projects.each do |project|
-      #return false unless project.has_other_costs?
-    #end
-    #true
-    # NOTE: optimization
-    activities.find(:first,
+    other_costs = activities.find(:first,
                     :select => 'COUNT(DISTINCT(activities.project_id)) as total',
                     :conditions => {:type => 'OtherCost', :project_id => projects}
-                   ).total.to_i == projects.length
+                   ).total.to_i
+    other_costs > 0 && other_costs == projects.length
   end
   memoize :projects_have_other_costs?
 
@@ -326,6 +294,10 @@ class DataResponse < ActiveRecord::Base
     end
   end
 
+  def submittable?
+    started? || rejected?
+  end
+
   private
     def reject_uncoded(activities)
       activities.select{ |a| !a.budget_classified? || !a.spend_classified? }
@@ -356,24 +328,22 @@ class DataResponse < ActiveRecord::Base
 end
 
 
+
+
 # == Schema Information
 #
 # Table name: data_responses
 #
 #  id                                :integer         not null, primary key
 #  data_request_id                   :integer         indexed
-#  complete                          :boolean         default(FALSE)
 #  created_at                        :datetime
 #  updated_at                        :datetime
 #  organization_id                   :integer         indexed
-#  submitted                         :boolean
-#  submitted_at                      :datetime
 #  comments_count                    :integer         default(0)
 #  activities_count                  :integer         default(0)
 #  sub_activities_count              :integer         default(0)
 #  activities_without_projects_count :integer         default(0)
-#  submitted_for_final_at            :datetime
-#  submitted_for_final               :boolean
 #  unclassified_activities_count     :integer         default(0)
+#  state                             :string(255)
 #
 

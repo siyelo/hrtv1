@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(:version => 20110916153117) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -146,19 +147,15 @@ ActiveRecord::Schema.define(:version => 20110916153117) do
 
   create_table "data_responses", :force => true do |t|
     t.integer  "data_request_id"
-    t.boolean  "complete",                          :default => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
-    t.boolean  "submitted"
-    t.datetime "submitted_at"
     t.integer  "comments_count",                    :default => 0
     t.integer  "activities_count",                  :default => 0
     t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
-    t.datetime "submitted_for_final_at"
-    t.boolean  "submitted_for_final"
     t.integer  "unclassified_activities_count",     :default => 0
+    t.string   "state"
   end
 
   add_index "data_responses", ["data_request_id"], :name => "index_data_responses_on_data_request_id"
@@ -326,9 +323,8 @@ ActiveRecord::Schema.define(:version => 20110916153117) do
     t.string   "invite_token"
     t.boolean  "active",                   :default => false
     t.integer  "location_id"
+    t.datetime "current_login_at"
+    t.datetime "last_login_at"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

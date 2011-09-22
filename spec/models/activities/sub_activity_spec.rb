@@ -133,6 +133,32 @@ describe SubActivity do
     end
   end
 
+  describe "#budget= and #spend=" do
+    before :each do
+      basic_setup_activity
+      @sa = Factory.build(:sub_activity, :data_response => @response,
+                          :activity => @activity)
+    end
+
+    it "allows nil value" do
+      @sa.budget = @sa.spend = nil
+      @sa.budget.should == nil
+      @sa.spend.should == nil
+    end
+
+    it "rounds up to 2 decimals" do
+      @sa.budget = @sa.spend = 10.12745
+      @sa.budget.to_f.should == 10.13
+      @sa.spend.to_f.should == 10.13
+    end
+
+    it "rounds down to 2 decimals" do
+      @sa.budget = @sa.spend = 10.12245
+      @sa.budget.to_f.should == 10.12
+      @sa.spend.to_f.should == 10.12
+    end
+  end
+
   describe "saving sub activity updates the activity" do
     before :each do
       basic_setup_activity

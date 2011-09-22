@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'spork'
-require 'lib/delayed_job_spec_helper'
+require File.expand_path(File.join(File.dirname(__FILE__), 'lib', 'delayed_job_spec_helper'))
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -248,6 +248,29 @@ Spork.each_run do
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, {:data_response => @response,
                                         :project => @project}.merge(attributes))
+  end
+
+  def write_temp_xls(rows)
+    Spreadsheet.client_encoding = "UTF-8//IGNORE"
+    book = Spreadsheet::Workbook.new
+    sheet1 = book.create_worksheet
+
+    rows.each_with_index do |row, row_index|
+      row.each_with_index do |cell, column_index|
+        sheet1[row_index, column_index] = cell
+      end
+    end
+    filename =  File.join(Rails.root, 'tmp', 'temporary_spec.xls')
+    book.write filename
+    filename
+  end
+
+  def write_xls_with_header(rows)
+    row = ['Project Name','Project Description','Project Start Date',
+           'Project End Date','Activity Name','Activity Description',
+           'Id','Implementer','Past Expenditure','Current Budget']
+    rows.insert(0,row)
+    write_temp_xls(rows)
   end
 
   def write_temp_csv(csv_string)

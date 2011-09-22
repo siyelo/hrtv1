@@ -42,7 +42,7 @@ class FundingFlow < ActiveRecord::Base
   validates_uniqueness_of :organization_id_from, :scope => :project_id
 
   ### Callbacks
-  # see callbacks in BudgetSpendHelper
+  before_save :update_cached_usd_amounts
 
   ### Delegates
   delegate :organization, :to => :project  #allowing nil as a workaround for nested object creation via project

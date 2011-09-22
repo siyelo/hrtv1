@@ -642,52 +642,6 @@ function get_random_color() {
     return color;  //return random color so that two charts next to each other don't have the same colors for different slices
 }
 
-var get_treemap_chart_element_endpoint = function (element_type, chart_type, id) {
-  return '/charts/' + element_type + '_treemap?id=' + id + '&chart_type=' + chart_type;
-};
-
-var drawTreemap = function (element_type, element_id, chart_type, chart_element) {
-  var urlEndpoint = get_treemap_chart_element_endpoint(element_type, chart_type, element_id);
-  $.getJSON(urlEndpoint, function (response) {
-    var data_rows = response;
-
-    // Create and populate the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Code');
-    data.addColumn('string', 'Parent');
-    data.addColumn('number', 'Market trade volume (size)');
-    data.addColumn('number', 'Market increase/decrease (color)');
-    data.addRows(data_rows)
-
-    // Create and draw the visualization.
-    var tree = new google.visualization.TreeMap(chart_element[0]);
-    tree.draw(data, {
-      minColor: '#35ff35',
-      midColor: '#09c500',
-      maxColor: '#08a100',
-      headerHeight: 20,
-      fontColor: 'black',
-      fontSize: '12',
-      headerColor: '#E6EDF3',
-      showScale: false,
-      showTooltips: false
-    });
-
-    // manual tipsy
-    chart_element.tipsy({gravity: $.fn.tipsy.autoWE, trigger: 'manual'})
-
-    google.visualization.events.addListener(tree, 'onmouseover', function (e) {
-      chart_element.attr('title', data_rows[e.row][0]);
-      chart_element.tipsy('show');
-    });
-
-    google.visualization.events.addListener(tree, 'onmouseout', function (e) {
-      chart_element.attr('title', '');
-      chart_element.tipsy('hide');
-    });
-  });
-};
-
 var build_data_response_review_screen = function () {
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
   $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
@@ -1127,52 +1081,6 @@ function drawPieChart(id, data_rows, width, height) {
   chart.draw(data, {width: width, height: height, chartArea: {width: 360, height: 220}});
 };
 
-var drawTreemapChart = function (id, data_rows, treemap_gravity) {
-  if (typeof(data_rows) === "undefined") {
-    return;
-  }
-
-  var chart_element = $("#" + id);
-  chart_element.css({width: "450px", height: "300px"});
-
-  var data = new google.visualization.DataTable();
-  data.addColumn('string', 'Code');
-  data.addColumn('string', 'Parent');
-  data.addColumn('number', 'Market trade volume (size)');
-  data.addColumn('number', 'Market increase/decrease (color)');
-  data.addRows(data_rows)
-
-  // Create and draw the visualization.
-  var tree = new google.visualization.TreeMap(chart_element[0]);
-  tree.draw(data, {
-    minColor: '#35ff35',
-    midColor: '#09c500',
-    maxColor: '#08a100',
-    headerHeight: 20,
-    fontColor: 'black',
-    fontSize: '12',
-    headerColor: '#E6EDF3',
-    showScale: false,
-    showTooltips: false
-  });
-
-  // manual tipsy
-  if (typeof(treemap_gravity) === "undefined") {
-    treemap_gravity = $.fn.tipsy.autoWE
-  }
-  chart_element.tipsy({gravity: treemap_gravity, trigger: 'manual'})
-
-  google.visualization.events.addListener(tree, 'onmouseover', function (e) {
-    chart_element.attr('title', data_rows[e.row][0]);
-    chart_element.tipsy('show');
-  });
-
-  google.visualization.events.addListener(tree, 'onmouseout', function (e) {
-    chart_element.attr('title', '');
-    chart_element.tipsy('hide');
-  });
-}
-
 var reports_districts_show = reports_countries_show = {
   run: function () {
     drawPieChart('budget_i_pie', _budget_i_values, 400, 250);
@@ -1205,13 +1113,8 @@ var reports_districts_activities_show = {
   run: function () {
     drawPieChart('spent_pie', _spent_pie_values, 450, 300);
     drawPieChart('budget_pie', _budget_pie_values, 450, 300);
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1256,13 +1159,8 @@ var reports_districts_organizations_index = {
 
 var reports_districts_organizations_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1275,13 +1173,8 @@ var reports_countries_organizations_index = {
 
 var reports_countries_organizations_show = {
   run: function () {
-    if (_treemap) {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    } else {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1294,13 +1187,8 @@ var reports_countries_activities_index = {
 
 var reports_countries_activities_show = {
   run: function () {
-    if (_pie) {
-      drawPieChart('code_spent', _code_spent_values, 450, 300);
-      drawPieChart('code_budget', _code_budget_values, 450, 300);
-    } else {
-      drawTreemapChart('code_spent', _code_spent_values, 'w');
-      drawTreemapChart('code_budget', _code_budget_values, 'e');
-    }
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 

@@ -131,7 +131,7 @@ module Charts::HelperMethods
         end
       end
 
-      values << ['Other', other.round(2)]
+      values << ['Other', other.round(2)] if other > 0
 
       build_pie_values_json(values)
     end
@@ -145,10 +145,18 @@ module Charts::HelperMethods
     end
 
     def build_pie_values_json(values)
-      {
-        :values => values,
-        :names => {:column1 => 'Name', :column2 => 'Amount'}
-      }.to_json
+      if values.present?
+        {
+          :values => values,
+          :names => {:column1 => 'Name', :column2 => 'Amount'}
+        }.to_json
+      else
+        build_empty_pie_values_json
+      end
+    end
+
+    def build_empty_pie_values_json
+      { :values => [], :names => {} }.to_json
     end
 
     def get_summed_code_assignments(code_assignments, ratio = 1)

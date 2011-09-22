@@ -73,12 +73,6 @@ class DataResponse < ActiveRecord::Base
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
 
-  ### Meta Data for Meta Programming
-  ## GN TODO: refactor out getting collections of items failing
-  ## some validation method and defining those as "magic nicely named" methods
-  ## using metaprogramming
-  @@validation_methods = []
-
   def self.in_progress
     self.find :all,
               :select => 'data_responses.*,
@@ -89,22 +83,7 @@ class DataResponse < ActiveRecord::Base
                                (activities_count > 0)", false]
   end
 
-  # TODO: add this back in (GLN). This handles additional associations nicely...
-  # looks like changed one to left outer for some reason
-  def self.options_hash_for_empty
-    h = {}
-    h[:joins] = @@data_associations.collect do |assoc|
-      "LEFT JOIN #{assoc} ON data_responses.id = #{assoc}.data_response_id"
-    end
-    h[:conditions] = @@data_associations.collect do |assoc|
-      "#{assoc}.data_response_id IS NULL"
-    end.join(" AND ")
-    h
-  end
-
-  #named_scope :empty, options_hash_for_empty
-
-  # TODO: spec
+  # TODO: make a named scope if still in use
   def self.empty
     self.find :all,
       :select => 'data_responses.*, organizations.raw_type',

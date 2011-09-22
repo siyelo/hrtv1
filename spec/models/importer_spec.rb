@@ -158,6 +158,24 @@ EOS
     i.activities.first.implementer_splits.first.errors.on(:budget).should == "is not a number"
   end
 
+  it "should find implementer name in substring" do
+    csv_string = <<-EOS
+project,project description,01/01/2010,31/12/2010,activity,activity1 description,,lfimplemente,99.9,0
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.activities.first.implementer_splits.first.implementer.should == @split.implementer
+  end
+
+  it "should find implementer name by first word" do
+    csv_string = <<-EOS
+project,project description,01/01/2010,31/12/2010,activity,activity1 description,,selfimplementer1 blarpants,99.9,0
+EOS
+    i = Importer.new(@response, write_csv_with_header(csv_string))
+    i.import
+    i.activities.first.implementer_splits.first.implementer.should == @split.implementer
+  end
+
   it "should try parse different date formats" do
     csv_string = <<-EOS
 project,project description,2010-01-15,2010/12/31,activity,activity1 description,#{@split.id},selfimplementer1,99.9,100
@@ -234,6 +252,7 @@ EOS
       i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 99.9
       i.activities[0].implementer_splits.first.budget.to_f.should == 100.1
+      i.activities[0].implementer_splits.first.marked_for_destruction?.should == nil
     end
 
     it "should ignore trailing blank lines" do
@@ -261,7 +280,7 @@ EOS
       i.projects[0].name.should == 'Coordination, planning, M&E and partnership of the national HIV'
     end
 
-    it "should keep existing, unchanged records" do
+    it "should keep existing, unchanged splits" do
       @split.spend = 1
       @split.budget = 2
       @split.save!
@@ -275,6 +294,9 @@ EOS
       i.activities[0].implementer_splits.first.implementer_name.should == @split.implementer_name
       i.activities[0].implementer_splits.first.spend.to_f.should == @split.spend
       i.activities[0].implementer_splits.first.budget.to_f.should == @split.budget
+      i.activities[0].implementer_splits.first.changed?.should == true
+      i.activities[0].implementer_splits.first.marked_for_destruction?.should == nil
+
     end
 
     it "should discard duplicate implementer rows" do
@@ -404,6 +426,7 @@ EOS
         i.activities[0].implementer_splits[2].implementer_name.should == 'implementer3'
         i.activities[0].implementer_splits[2].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[2].budget.to_f.should == 4.0
+        i.activities[0].implementer_splits[2].marked_for_destruction?.should == nil
       end
 
       it "should update the project, plus the activity plus its multiple implementers" do
@@ -586,20 +609,20 @@ EOS
     end
   end
 
-  it "should assign to a self-implementer if implementer cant be found (new org name)" do
+  it "should assign to nil if implementer cant be found (new org name)" do
     # we dont want users bulk creating things in the db!
     csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,new implementer,2,4
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
-    i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
-    i.activities[0].implementer_splits.first.spend.to_f.should == 2
-    i.activities[0].implementer_splits.first.budget.to_f.should == 4
+    i.activities[0].implementer_splits.size.should == 2 # new one plus existing split
+    i.activities[0].implementer_splits[1].implementer.should == nil
+    i.activities[0].implementer_splits[1].spend.to_f.should == 2
+    i.activities[0].implementer_splits[1].budget.to_f.should == 4
   end
 
-  it "should assign to a self-implementer if implementer cant be found (left blank)" do
+  it "should assign to nil if implementer cant be found (left blank)" do
     @response.organization = Factory(:organization) # create a new org to check that it doesn't
                                                     # just return the first org in the db
     csv_string = <<-EOS
@@ -608,7 +631,7 @@ EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities[0].implementer_splits.size.should == 2
-    i.activities[0].implementer_splits[1].implementer_name.should == @response.organization.name
+    i.activities[0].implementer_splits[1].implementer.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
     i.activities[0].implementer_splits[1].budget.to_f.should == 4
   end
@@ -620,7 +643,7 @@ EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+    i.activities[0].implementer_splits.first.implementer.should == nil
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
     i.activities[0].spend.to_f.should == 2 # check the cache is up to date
@@ -635,10 +658,17 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
-    i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
-    i.activities[0].implementer_splits.first.spend.to_f.should == 4
-    i.activities[0].implementer_splits.first.budget.to_f.should == 8
+    i.activities[0].implementer_splits.size.should == 4
+    i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
+    i.activities[0].implementer_splits[1].implementer.should == nil
+    i.activities[0].implementer_splits[1].spend.to_f.should == 2
+    i.activities[0].implementer_splits[1].budget.to_f.should == 4
+    i.activities[0].implementer_splits[2].implementer.should == nil
+    i.activities[0].implementer_splits[2].spend.to_f.should == 3
+    i.activities[0].implementer_splits[2].budget.to_f.should == 6
+    i.activities[0].implementer_splits[3].implementer.should == nil
+    i.activities[0].implementer_splits[3].spend.to_f.should == 4
+    i.activities[0].implementer_splits[3].budget.to_f.should == 8
   end
 
   it "should allow an invalid implementer split on a valid activity to be corrected and saved" do

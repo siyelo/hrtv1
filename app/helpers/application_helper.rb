@@ -315,4 +315,11 @@ module ApplicationHelper
     @current_tab ||= 0
     @current_tab += 1
   end
+
+  def sort_splits(splits)
+    blanks = splits.select{ |s| s.implementer.nil? }
+    blanks + splits.reject{ |s| s.implementer.nil?}.sort do
+      |a,b| a.implementer_name <=> b.implementer_name
+    end
+  end
 end

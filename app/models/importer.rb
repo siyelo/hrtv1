@@ -26,7 +26,6 @@ class Importer
       project_name         = name_for(row['Project Name'], project_name)
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
-
       sub_activity_name   = EncodingHelper::sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
@@ -80,7 +79,7 @@ class Importer
       # we need to use the activity objects
 
       # try find the split based on the id. use the association, not AR find,
-      # so we reference the same object
+      # so we reference the same object. (AR find might pull out a new object)
       split = activity.implementer_splits.detect{ |is| is.id == split.id } || split
 
       assign_project_fields(project, project_name, project_description,
@@ -127,12 +126,23 @@ class Importer
   end
 
   def find_implementer(implementer_name)
-    implementer = @response.organization
+    implementer = nil
     unless implementer_name.blank?
-      implementer = Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
-          "%#{implementer_name.try(:downcase)}%"]) || implementer
+      implementer = find_implementer_by_full_name(implementer_name) ||
+        find_implementer_by_first_word(implementer_name) ||
+        implementer
     end
     implementer
+  end
+
+  def find_implementer_by_full_name(implementer_name = '')
+    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+        "%#{implementer_name.downcase}%"])
+  end
+
+  def find_implementer_by_first_word(implementer_name = '')
+    Organization.find(:first, :conditions => [ "LOWER(name) LIKE ?",
+        "#{implementer_name.split(' ')[0].downcase}%"])
   end
 
   def find_cached_split_using_split_id(implementer_split_id)
@@ -193,15 +203,15 @@ class Importer
     end
 
     def tidy_up_splits
-      @activities.each_with_index do |la, i|
+      @activities.each do |a|
         # blow away any splits that werent modified by upload
-        la.implementer_splits.each_with_index do |split, j|
-          la.implementer_splits[j].mark_for_destruction unless split.changed?
+        a.implementer_splits.select{ |is| !is.changed? }.each do |is|
+          is.mark_for_destruction
         end
-        la.implementer_splits.compact! # remove any nils
+        a.implementer_splits.compact! # remove any nils
         # we're not saving the activity yet, but we want to make sure the cached totals
         # from implementer_splits are up to date
-        la.update_implementer_cache
+        a.update_implementer_cache
       end
     end
 

@@ -19,7 +19,9 @@ module BudgetSpendHelper
   end
 
   def smart_sum(collection, method)
-    s = collection.reject{|e| e.nil? or e.send(method).nil?}.sum{|e| e.send(method)}
+    s = collection.reject do |e|
+      e.nil? or e.send(method).nil? or e.marked_for_destruction?
+    end.sum{ |e| e.send(method) }
     s || 0
   end
 

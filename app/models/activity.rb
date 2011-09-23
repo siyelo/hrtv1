@@ -104,7 +104,7 @@ class Activity < ActiveRecord::Base
   validates_presence_of :name, :if => :is_activity_or_other_cost?
   validates_presence_of :description, :if => :is_activity_or_other_cost?
   validates_presence_of :project_id, :if => :is_activity?,
-    :unless => Proc.new{|a| a.project && a.project.new_record?}
+    :unless => Proc.new{ |a| a.project && a.project.new_record? }
   validates_presence_of :data_response_id
   validates_length_of :name, :within => 3..MAX_NAME_LENGTH,
     :if => :is_activity_or_other_cost?, :allow_blank => true
@@ -445,7 +445,7 @@ class Activity < ActiveRecord::Base
         unless project
           self_funder = FundingFlow.new(:from => self.organization,
             :spend => self.spend, :budget => self.budget)
-          project = Project.create(:name => name, :start_date => Time.now,
+          project = Project.create!(:name => name, :start_date => Time.now,
             :end_date => Time.now + 1.year, :data_response => data_response,
             :in_flows => [self_funder])
         end

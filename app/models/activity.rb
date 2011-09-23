@@ -101,6 +101,7 @@ class Activity < ActiveRecord::Base
   # also see validations in BudgetSpendHelper
   validate :approved_activity_cannot_be_changed, :unless => :implementer_split?
   validate :cannot_approve_unclassified_activity, :unless => :implementer_split?
+  validate :validate_implementers_uniqueness, :unless => :implementer_split?
   validates_presence_of :name, :if => :is_activity_or_other_cost?
   validates_presence_of :description, :if => :is_activity_or_other_cost?
   validates_presence_of :project_id, :if => :is_activity?,
@@ -456,6 +457,13 @@ class Activity < ActiveRecord::Base
     def restart_response_if_all_activities_removed
       # use .length since .empty? uses counter cache that isnt updated yet.
       response.restart! if self.response.activities.length == 0
+    end
+
+    def validate_implementers_uniqueness
+      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:provider_id)
+      if splits.length != splits.uniq.length
+        errors.add_to_base "Duplicate Implementers"
+      end
     end
 end
 

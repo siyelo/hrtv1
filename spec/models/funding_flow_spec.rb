@@ -60,10 +60,45 @@ describe FundingFlow do
     end
 
     it "should validate one OR the other" do
-       @funding_flow = Factory.build(:funding_flow, :project => @project,
-                               :from => @donor, :budget => "", :spend => "123.00")
-       @funding_flow.save.should == true
-     end
+      @funding_flow = Factory.build(:funding_flow, :project => @project,
+                              :from => @donor, :budget => "", :spend => "123.00")
+      @funding_flow.save.should == true
+    end
+
+    # in flows are saved in the context of project
+    # and that's how they should be validated
+    context "project" do
+      context "new in flows" do
+        it "cannot create project with duplicate funders" do
+          basic_setup_response
+          in_flow1 = Factory.build(:funding_flow, :from => @organization)
+          in_flow2 = Factory.build(:funding_flow, :from => @organization)
+
+          project = Factory.build(:project, :data_response => @response,
+                                  :in_flows => [in_flow1, in_flow2])
+
+          project.valid?.should be_false
+          project.errors[:base].should include('Duplicate Project Funding Sources')
+        end
+      end
+
+      context "existing in flows" do
+        it "cannot create project with duplicate funders" do
+          basic_setup_response
+          in_flow1 = Factory.build(:funding_flow, :from => @organization)
+
+          project = Factory.build(:project, :data_response => @response,
+                                  :in_flows => [in_flow1])
+
+          project.save.should be_true
+
+          in_flow2 = Factory.build(:funding_flow, :from => @organization)
+          project.in_flows = [in_flow1, in_flow2]
+          project.valid?.should be_false
+          project.errors[:base].should include('Duplicate Project Funding Sources')
+        end
+      end
+    end
   end
 
   describe "Callbacks" do

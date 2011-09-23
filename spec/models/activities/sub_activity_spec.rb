@@ -61,13 +61,13 @@ describe SubActivity do
             }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
         @activity.reload
         @activity.update_attributes(attributes).should be_false
-        @activity.implementer_splits[1].errors.on(:provider_id).should == "must be unique"
+        @activity.errors.full_messages.should include("Duplicate Implementers")
       end
 
       it "should enforce uniqueness via SubActivity api" do
         basic_setup_sub_activity
         @sub_activity.should be_valid #sanity
-        @sub_activity1 = Factory.build(:sub_activity, :data_response => @response,
+        @sub_activity1 = Factory(:sub_activity, :data_response => @response,
                                 :activity => @activity, :provider => @organization)
         @sub_activity1.should_not be_valid
         @sub_activity1.errors.on(:provider_id).should == "must be unique"

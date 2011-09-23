@@ -702,15 +702,17 @@ EOS
   end
 
   it "should allow an invalid activity with valid implementers and a valid project can be corrected and saved" do
+    organization2 = Factory(:organization, :name => 'selfimplementer2')
     csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,ac,activity1 description,,selfimplementer1,2,4
-,,,,,,,selfimplementer1,3,6
+,,,,,,,selfimplementer2,3,6
 EOS
     i = Importer.new(@response, write_csv_with_header(csv_string))
     i.import
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].save.should == false
     i.activities[0].name = "Activity Name"
+    i.activities[0].valid?
     i.activities[0].save.should == true
     i.activities[0].implementer_splits.size.should == 2
   end

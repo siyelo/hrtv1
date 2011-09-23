@@ -15,8 +15,11 @@ class ResponsesController < Reporter::BaseController
   def submit
     @projects = @response.projects.find(:all, :include => :normal_activities)
     if @response.ready_to_submit?
-      @response.submit!
-      flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
+      if @response.submit
+        flash[:notice] = "Successfully submitted. We will review your data and get back to you with any questions. Thank you."
+      else
+        flash[:error] = "This response has been already submited."
+      end
       redirect_to review_response_url(@response)
     else
       @response.load_validation_errors

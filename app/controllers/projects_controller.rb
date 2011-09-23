@@ -149,7 +149,7 @@ class ProjectsController < Reporter::BaseController
 
     def js_redirect(status)
       render :json => {:status => status,
-                       :html => render_to_string(:partial => 'projects/bulk_review',
+                       :html => render_to_string(:partial => 'projects/bulk_result',
                        :layout => false,
                        :locals => {:project => @project,
                                    :response => @response})}

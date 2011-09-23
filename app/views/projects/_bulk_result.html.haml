@@ -1,0 +1,35 @@
+- @project = project
+- project_activities = @activities ? @activities.select{|a| a.project == project} : @project.activities
+- split_errors = project_activities.select{|a| a.implementer_splits.select{|is| !is.errors.empty?}}.empty?
+- activity_errors = project_activities.select{|a| !a.errors.empty?}.empty?
+- all_ok = project.valid? && activity_errors && !split_errors
+
+.header.section_nav
+  - if all_ok
+    %span.indicator.collapsed
+    = image_tag "tick_12.png", :class => 'hidden saved_tick js_unsaved'
+  - else
+    %span.indicator
+    = image_tag "warning_12.png", :title => "This project has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip js_unsaved'
+
+  = link_to nice_name(project, 50), "#"
+
+.main.dashboard_section{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
+
+  - if all_ok
+    %p Saved OK
+  - else
+    .errorsNested
+      %p Please correct these errors in your file, and re-import.
+      %ol
+        - project.errors.each do |attr,msg|
+          - unless attr =~ /^activities/
+            %li= "Project : #{attr} #{msg}"
+        - project_activities.each do |a|
+          - a.errors.each do |attr,msg|
+            - unless attr =~ /^implementer_splits/
+              %li= "Activity \"#{nice_name(a, 15)}\" : #{attr} #{msg}"
+          %ul
+            - a.implementer_splits.each do |is|
+              - is.errors.each do |attr,msg|
+                %li= "Implementer \"#{is.provider.try(:name)}\" : #{attr} #{msg}"

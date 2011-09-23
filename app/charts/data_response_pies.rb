@@ -7,7 +7,7 @@ module Charts::DataResponsePies
   class << self
     def data_response_pie(data_response, codings_type = nil, code_type = nil)
       if VIRTUAL_TYPES.include?(codings_type.to_sym)
-        get_virtual_codes(data_response.activities, codings_type)
+        get_virtual_codes(data_response.activities.roots, codings_type)
       else
         scope = Code.scoped({:conditions => ["data_responses.id = ?", data_response.id]})
         scope = scope.scoped({:conditions => ["code_assignments.type = ?", codings_type]}) if codings_type

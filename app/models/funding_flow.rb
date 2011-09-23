@@ -39,7 +39,6 @@ class FundingFlow < ActiveRecord::Base
     :unless => lambda {|fs| fs["project_from_id"].blank?}
   # if we pass "-1" then the user somehow selected "Add an Organization..."
   validates_numericality_of :organization_id_from, :greater_than_or_equal_to => 0
-  validates_uniqueness_of :organization_id_from, :scope => :project_id
 
   ### Callbacks
   before_save :update_cached_usd_amounts

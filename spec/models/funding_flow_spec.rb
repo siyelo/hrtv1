@@ -36,12 +36,6 @@ describe FundingFlow do
     it { should validate_numericality_of(:spend) }
   end
 
-  describe "Validations that require a record" do
-    before{ basic_setup_funding_flow }
-    subject { @funding_flow }
-    it { should validate_uniqueness_of(:organization_id_from).scoped_to(:project_id) }
-  end
-
   describe "Custom validations" do
     before :each do
       @donor        = Factory(:organization)

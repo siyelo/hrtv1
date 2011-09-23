@@ -679,10 +679,6 @@ strong
 td.error, tr.error td
   background-color: #ffebeb !important
 
-#projects_import
-  .error
-    border: 1px solid #ffbaba !important
-
 .error
   background: #FFDDDD !important
 
@@ -872,14 +868,18 @@ a.tooltip
   .condensed_fields
     li
       min-width: 0px
-      margin-right: 0px
       textarea
         width: 700px !important
   .activity_wrapper
     display: inline-block
     border-top: 1px solid $primary_border
-    margin-left: -19px
+    margin-left: -20px
     padding: 10px 0px 10px 20px
+    &.error
+      border: 1px solid #ffbaba !important
+      background: #fff !important
+    li.error
+      background: #fff !important
 
 #activity_name_input
   width: 50% !important

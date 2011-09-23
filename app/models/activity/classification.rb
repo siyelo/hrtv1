@@ -167,6 +167,8 @@ module Activity::Classification
       end
 
       def virtual_codes(klass, code_assignments, code_ids_maping)
+        CodeAssignment.send(:preload_associations, code_assignments, :code)
+
         assignments = []
 
         code_ids_maping.each do |code_name, code_ids|

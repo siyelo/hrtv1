@@ -40,7 +40,7 @@
               %span.ui-autocomplete= ff.object.try(:implementer).try(:name) || "< n/a >"
             %td= ff.text_field :spend, :class => 'js_spend'
             %td= ff.text_field :budget, :class => 'js_budget'
-            %td= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}
+            %td= link_to_remove_fields "x", ff, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}
 
       - blank_rows.times do
         - f.object.implementer_splits.build unless f.object.implementer_splits.length > 0

@@ -125,7 +125,6 @@ class ActivitiesController < BaseController
     def confirm_activity_type
       @activity = Activity.find(params[:id])
       return redirect_to edit_response_other_cost_path(@response, @activity) if @activity.class.eql? OtherCost
-      return redirect_to edit_response_activity_path(@response, @activity.activity) if @activity.class.eql? SubActivity
     end
 
     def prepare_classifications(activity)
@@ -147,7 +146,7 @@ class ActivitiesController < BaseController
     # run validations on the models independently of any save action
     # useful if you want to show (existing) errors without having to save the form first.
     def load_validation_errors(resource)
-      resource.implementer_splits.find(:all, :include => :provider).each {|is| is.valid?}
+      resource.implementer_splits.find(:all, :include => :organization).each {|is| is.valid?}
       resource.valid?
     end
 

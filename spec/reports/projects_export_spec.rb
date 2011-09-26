@@ -10,11 +10,12 @@ describe Reports::ProjectsExport do
       @project       = Factory(:project, :data_response => @response)
       @activity      = Factory(:activity, :data_response => @response,
                                :project => @project)
-      sub_activity   = Factory(:sub_activity, :activity => @activity,
-                               :data_response => @response, :provider => @organization)
-      sub_activity2  = Factory(:sub_activity, :activity => @activity,
-                               :data_response => @response, :provider => @organization2)
-      @activity.reload; @activity.save!
+      split = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization)
+      split2 = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization)
+
+      @activity.save!
 
       xls = Reports::ProjectsExport.new(@response).to_xls
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
@@ -25,10 +26,10 @@ describe Reports::ProjectsExport do
       rows[1,3].should == @project.try(:end_date).to_s
       rows[1,4].should == @activity.name
       rows[1,5].should == @activity.description
-      rows[1,6].should == sub_activity.id
-      rows[1,7].should == sub_activity.provider.try(:name)
-      rows[1,8].should == sub_activity.spend.to_f
-      rows[1,9].should == sub_activity.budget.to_f
+      rows[1,6].should == split.id
+      rows[1,7].should == split.organization_name
+      rows[1,8].should == split.spend.to_f
+      rows[1,9].should == split.budget.to_f
 
       rows[2,0].should == nil
       rows[2,1].should == nil
@@ -36,10 +37,10 @@ describe Reports::ProjectsExport do
       rows[2,3].should == nil
       rows[2,4].should == nil
       rows[2,5].should == nil
-      rows[2,6].should == sub_activity2.id
-      rows[2,7].should == sub_activity2.provider.try(:name)
-      rows[2,8].should == sub_activity2.spend.to_f
-      rows[2,9].should == sub_activity2.budget.to_f
+      rows[2,6].should == split2.id
+      rows[2,7].should == split2.organization_name
+      rows[2,8].should == split2.spend.to_f
+      rows[2,9].should == split2.budget.to_f
     end
 
     it "should return import template" do

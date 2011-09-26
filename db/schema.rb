@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110929101034) do
+ActiveRecord::Schema.define(:version => 20111006105522) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(:version => 20110929101034) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -150,7 +151,6 @@ ActiveRecord::Schema.define(:version => 20110929101034) do
     t.integer  "organization_id"
     t.integer  "comments_count",                    :default => 0
     t.integer  "activities_count",                  :default => 0
-    t.integer  "sub_activities_count",              :default => 0
     t.integer  "activities_without_projects_count", :default => 0
     t.integer  "unclassified_activities_count",     :default => 0
     t.string   "state"
@@ -224,6 +224,15 @@ ActiveRecord::Schema.define(:version => 20110929101034) do
   create_table "help_requests", :force => true do |t|
     t.string   "email"
     t.text     "message"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "implementer_splits", :force => true do |t|
+    t.integer  "activity_id"
+    t.integer  "organization_id"
+    t.decimal  "spend"
+    t.decimal  "budget"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -324,8 +333,5 @@ ActiveRecord::Schema.define(:version => 20110929101034) do
     t.datetime "current_login_at"
     t.datetime "last_login_at"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

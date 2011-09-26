@@ -4,7 +4,7 @@ include DelayedJobSpecHelper
 
 describe Importer do
   before :each do
-    basic_setup_sub_activity
+    basic_setup_implementer_split
     @project.name = 'project1'; @project.save!
     @activity.name = 'activity1'; @activity.save!
     @organization.name = 'selfimplementer1'; @organization.save!
@@ -13,8 +13,8 @@ describe Importer do
   describe 'API' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2 = Factory(:sub_activity, :data_response => @response,
-                              :activity => @activity, :provider => @implementer2)
+      @split2    = Factory(:implementer_split, :activity => @activity, 
+                   :organization => @implementer2)
       @csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 ,,,,,,#{@split2.id},selfimplementer2,3,6
@@ -65,8 +65,8 @@ EOS
   describe 'importing excel files' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2 = Factory(:sub_activity, :data_response => @response,
-                              :activity => @activity, :provider => @implementer2)
+      @split2    = Factory(:implementer_split, :activity => @activity, 
+                   :organization => @implementer2)
       rows = []
       rows << ['project1','project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
       rows << ['','','','','','',"#{@split2.id}",'selfimplementer2','3','6']
@@ -149,7 +149,7 @@ project,project description,01/01/2010,31/12/2010,,activity1 description,#{@spli
 EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
-    i.activities.first.errors.on(:name).should == "can't be blank"
+    i.activities.first.errors.on(:name)[0].should == "can't be blank"
   end
 
   it "should show implementer split errors on import" do
@@ -167,7 +167,7 @@ project,project description,01/01/2010,31/12/2010,activity,activity1 description
 EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
-    i.activities.first.implementer_splits.first.implementer.should == @split.implementer
+    i.activities.first.implementer_splits.first.organization.should == @split.organization
   end
 
   it "should find implementer name by first word" do
@@ -176,7 +176,7 @@ project,project description,01/01/2010,31/12/2010,activity,activity1 description
 EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
-    i.activities.first.implementer_splits.first.implementer.should == @split.implementer
+    i.activities.first.implementer_splits.first.organization.should == @split.organization
   end
 
   it "should try parse different date formats" do
@@ -250,7 +250,7 @@ EOS
       i.import(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
-      i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 99.9
       i.activities[0].implementer_splits.first.budget.to_f.should == 100.1
       i.activities[0].implementer_splits.first.marked_for_destruction?.should == nil
@@ -265,7 +265,7 @@ EOS
       i.import(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
-      i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 99.9
       i.activities[0].implementer_splits.first.budget.to_f.should == 100.1
     end
@@ -286,13 +286,13 @@ EOS
       @split.budget = 2
       @split.save!
       csv_string = <<-EOS
-project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},#{@split.implementer_name},#{@split.spend},#{@split.budget}
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},#{@split.organization_name},#{@split.spend},#{@split.budget}
 EOS
       i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
       i.projects.size.should == 1
       i.activities.size.should == 1
-      i.activities[0].implementer_splits.first.implementer_name.should == @split.implementer_name
+      i.activities[0].implementer_splits.first.organization_name.should == @split.organization_name
       i.activities[0].implementer_splits.first.spend.to_f.should == @split.spend
       i.activities[0].implementer_splits.first.budget.to_f.should == @split.budget
       i.activities[0].implementer_splits.first.changed?.should == true
@@ -307,7 +307,7 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
       i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
-      i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 3
       i.activities[0].implementer_splits.first.budget.to_f.should == 6
       i.activities[0].spend.to_f.should == 3
@@ -322,7 +322,7 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
       i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
-      i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 4
       i.activities[0].implementer_splits.first.budget.to_f.should == 8
       i.activities[0].spend.to_f.should == 4
@@ -342,8 +342,8 @@ EOS
     context "when multiple existing implementers" do
       before :each do
         @implementer2  = Factory(:organization, :name => "implementer2")
-        @split2 = Factory(:sub_activity, :data_response => @response,
-                    :activity => @activity, :provider => @implementer2)
+        @split2 = Factory :implementer_split, :activity => @activity,
+          :organization => @implementer2
       end
 
       it "should find a previously imported project with a stripped & truncated name" do
@@ -364,10 +364,10 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
         i = Importer.new
         i.import(@response, write_csv_with_header(csv_string))
-        i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+        i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
         i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
-        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+        i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
         i.activities[0].spend.to_f.should == 5
@@ -382,7 +382,7 @@ EOS
         i.import(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.size.should == 2
         i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
-        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+        i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
       end
 
       it "should not create dummy self implementer on brand new activities" do
@@ -393,7 +393,7 @@ EOS
         i.import(@response, write_csv_with_header(csv_string))
         i.activities[0].implementer_splits.size.should == 2
         i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
-        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+        i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
       end
 
       it "should update 1 activity plus its multiple implementers" do
@@ -404,10 +404,10 @@ EOS
         i = Importer.new
         i.import(@response, write_csv_with_header(csv_string))
         i.activities[0].description.should == 'activity1 NEW description'
-        i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+        i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
         i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
-        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+        i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
         i.activities[0].spend.to_f.should == 5
@@ -424,7 +424,7 @@ EOS
         i.activities[0].implementer_splits.size.should == 3
         i.activities[0].implementer_splits[0].marked_for_destruction?.should == true
         i.activities[0].implementer_splits[1].marked_for_destruction?.should == true
-        i.activities[0].implementer_splits[2].implementer_name.should == 'implementer3'
+        i.activities[0].implementer_splits[2].organization_name.should == 'implementer3'
         i.activities[0].implementer_splits[2].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[2].budget.to_f.should == 4.0
         i.activities[0].implementer_splits[2].marked_for_destruction?.should == nil
@@ -441,10 +441,10 @@ EOS
         i.activities.size.should == 1
         i.projects[0].description.should == 'project NEW description'
         i.activities[0].description.should == 'activity1 NEW description'
-        i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+        i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
         i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
-        i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+        i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
         i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
         i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
         i.activities[0].spend.to_f.should == 5
@@ -455,50 +455,47 @@ EOS
     it "should update multiple activities and their implementers" do
       @activity2 = Factory(:activity, :data_response => @response, :project => @project)
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2 = Factory(:sub_activity, :data_response => @response,
-                             :activity => @activity2, :provider => @implementer2)
+      @split2 = Factory :implementer_split, :activity => @activity2,
+        :organization => @implementer2
       csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 project1,project description,01/01/2010,31/12/2010,activity2,activity2 description,#{@split2.id},implementer2,3.0,6.0
 EOS
-       i = Importer.new
+      i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
-      i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits.first.spend.to_f.should == 2.0
       i.activities[0].implementer_splits.first.budget.to_f.should == 4.0
-      i.activities[1].implementer_splits.first.implementer_name.should == 'implementer2'
+      i.activities[1].implementer_splits.first.organization_name.should == 'implementer2'
       i.activities[1].implementer_splits.first.spend.to_f.should == 3.0
       i.activities[1].implementer_splits.first.budget.to_f.should == 6.0
     end
 
     it "should update multiple implementers" do
-      @split2 = Factory(:sub_activity, :data_response => @response,
-                             :activity => @activity, :provider => Factory(:organization,
-                               :name => "implementer2"))
-      @split3 = Factory(:sub_activity, :data_response => @response,
-                             :activity => @activity, :provider => Factory(:organization,
-                               :name => "implementer3"))
-      @split4 = Factory(:sub_activity, :data_response => @response,
-                             :activity => @activity, :provider => Factory(:organization,
-                               :name => "implementer4"))
+      @split2 = Factory :implementer_split, :activity => @activity,
+        :organization => Factory(:organization, :name => "implementer2")
+      @split3 = Factory :implementer_split, :activity => @activity,
+        :organization => Factory(:organization, :name => "implementer3")
+      @split4 = Factory :implementer_split, :activity => @activity,
+        :organization => Factory(:organization, :name => "implementer4")
       csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2.0,4.0
 ,,,,,,#{@split2.id},implementer2,3.0,6.0
 ,,,,,,#{@split3.id},implementer3,4.0,6.0
 ,,,,,,#{@split4.id},implementer4,5.0,6.0
 EOS
-       i = Importer.new
+      i = Importer.new
       i.import(@response, write_csv_with_header(csv_string))
-      i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+      i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
       i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
       i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
-      i.activities[0].implementer_splits[1].implementer_name.should == 'implementer2'
+      i.activities[0].implementer_splits[1].organization_name.should == 'implementer2'
       i.activities[0].implementer_splits[1].spend.to_f.should == 3.0
       i.activities[0].implementer_splits[1].budget.to_f.should == 6.0
-      i.activities[0].implementer_splits[2].implementer_name.should == 'implementer3'
+      i.activities[0].implementer_splits[2].organization_name.should == 'implementer3'
       i.activities[0].implementer_splits[2].spend.to_f.should == 4.0
       i.activities[0].implementer_splits[2].budget.to_f.should == 6.0
-      i.activities[0].implementer_splits[3].implementer_name.should == 'implementer4'
+      i.activities[0].implementer_splits[3].organization_name.should == 'implementer4'
       i.activities[0].implementer_splits[3].spend.to_f.should == 5.0
       i.activities[0].implementer_splits[3].budget.to_f.should == 6.0
     end
@@ -508,15 +505,12 @@ EOS
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
         @activity3 = Factory(:activity, :data_response => @response, :project => @project)
         @activity4 = Factory(:activity, :data_response => @response, :project => @project)
-        @split2 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity2, :provider => Factory(:organization,
-                                 :name => "implementer2"))
-        @split3 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity3, :provider => Factory(:organization,
-                                 :name => "implementer3"))
-        @split4 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity4, :provider => Factory(:organization,
-                                 :name => "implementer4"))
+        @split2    = Factory(:implementer_split, :activity => @activity2, 
+                      :organization => Factory(:organization, :name => "implementer2"))
+        @split3    = Factory(:implementer_split, :activity => @activity3, 
+                      :organization => Factory(:organization, :name => "implementer3"))
+        @split4 = Factory(:implementer_split, :activity => @activity4,
+                      :organization => Factory(:organization, :name => "implementer4"))
       end
 
       it "should update 2 existing activities" do
@@ -526,10 +520,10 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
         i = Importer.new
         i.import(@response, write_csv_with_header(csv_string))
-        i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+        i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
-        i.activities[1].implementer_splits[0].implementer_name.should == 'implementer2'
+        i.activities[1].implementer_splits[0].organization_name.should == 'implementer2'
         i.activities[1].implementer_splits[0].spend.to_f.should == 3.0
         i.activities[1].implementer_splits[0].budget.to_f.should == 6.0
       end
@@ -543,16 +537,16 @@ project1,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
         i = Importer.new
         i.import(@response, write_csv_with_header(csv_string))
-        i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+        i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
         i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
         i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
-        i.activities[1].implementer_splits[0].implementer_name.should == 'implementer2'
+        i.activities[1].implementer_splits[0].organization_name.should == 'implementer2'
         i.activities[1].implementer_splits[0].spend.to_f.should == 3.0
         i.activities[1].implementer_splits[0].budget.to_f.should == 6.0
-        i.activities[2].implementer_splits[0].implementer_name.should == 'implementer3'
+        i.activities[2].implementer_splits[0].organization_name.should == 'implementer3'
         i.activities[2].implementer_splits[0].spend.to_f.should == 4.0
         i.activities[2].implementer_splits[0].budget.to_f.should == 6.0
-        i.activities[3].implementer_splits[0].implementer_name.should == 'implementer4'
+        i.activities[3].implementer_splits[0].organization_name.should == 'implementer4'
         i.activities[3].implementer_splits[0].spend.to_f.should == 5.0
         i.activities[3].implementer_splits[0].budget.to_f.should == 6.0
       end
@@ -561,8 +555,8 @@ EOS
         before :each do
           @project2      = Factory(:project, :data_response => @response)
           @activity21    = Factory(:activity, :data_response => @response, :project => @project2)
-          @split21 = Factory(:sub_activity, :data_response => @response,
-                       :activity => @activity21, :provider => @organization)
+          @split21    = Factory(:implementer_split, :activity => @activity21, 
+                       :organization => @organization)
         end
 
         it "should update existing activities across multiple projects" do
@@ -572,10 +566,10 @@ project1,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id},se
 EOS
           i = Importer.new
           i.import(@response, write_csv_with_header(csv_string))
-          i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+          i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[0].implementer_splits[0].spend.to_f.should == 2.0
           i.activities[0].implementer_splits[0].budget.to_f.should == 4.0
-          i.activities[1].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+          i.activities[1].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[1].implementer_splits[0].spend.to_f.should == 3.0
           i.activities[1].implementer_splits[0].budget.to_f.should == 6.0
         end
@@ -590,19 +584,19 @@ project1,project1 description,01/01/2010,31/12/2010,activity1,d1,#{@split.id},se
 EOS
           i = Importer.new
           i.import(@response, write_csv_with_header(csv_string))
-          i.activities[0].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+          i.activities[0].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[0].implementer_splits[0].spend.to_f.should == 1.0
           i.activities[0].implementer_splits[0].budget.to_f.should == 2.0
-          i.activities[1].implementer_splits[0].implementer_name.should == 'selfimplementer1'
+          i.activities[1].implementer_splits[0].organization_name.should == 'selfimplementer1'
           i.activities[1].implementer_splits[0].spend.to_f.should == 2.0
           i.activities[1].implementer_splits[0].budget.to_f.should == 3.0
-          i.activities[2].implementer_splits[0].implementer_name.should == 'implementer2'
+          i.activities[2].implementer_splits[0].organization_name.should == 'implementer2'
           i.activities[2].implementer_splits[0].spend.to_f.should == 3.0
           i.activities[2].implementer_splits[0].budget.to_f.should == 6.0
-          i.activities[3].implementer_splits[0].implementer_name.should == 'implementer3'
+          i.activities[3].implementer_splits[0].organization_name.should == 'implementer3'
           i.activities[3].implementer_splits[0].spend.to_f.should == 4.0
           i.activities[3].implementer_splits[0].budget.to_f.should == 6.0
-          i.activities[4].implementer_splits[0].implementer_name.should == 'implementer4'
+          i.activities[4].implementer_splits[0].organization_name.should == 'implementer4'
           i.activities[4].implementer_splits[0].spend.to_f.should == 5.0
           i.activities[4].implementer_splits[0].budget.to_f.should == 6.0
         end
@@ -618,7 +612,7 @@ EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2 # new one plus existing split
-    i.activities[0].implementer_splits[1].implementer.should == nil
+    i.activities[0].implementer_splits[1].organization.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
     i.activities[0].implementer_splits[1].budget.to_f.should == 4
   end
@@ -632,7 +626,7 @@ EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
-    i.activities[0].implementer_splits[1].implementer.should == nil
+    i.activities[0].implementer_splits[1].organization.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
     i.activities[0].implementer_splits[1].budget.to_f.should == 4
   end
@@ -644,7 +638,7 @@ EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer.should == nil
+    i.activities[0].implementer_splits.first.organization.should == nil
     i.activities[0].implementer_splits.first.spend.to_f.should == 2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
     i.activities[0].spend.to_f.should == 2 # check the cache is up to date
@@ -661,13 +655,13 @@ EOS
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 4
     i.activities[0].implementer_splits.first.marked_for_destruction?.should == true
-    i.activities[0].implementer_splits[1].implementer.should == nil
+    i.activities[0].implementer_splits[1].organization.should == nil
     i.activities[0].implementer_splits[1].spend.to_f.should == 2
     i.activities[0].implementer_splits[1].budget.to_f.should == 4
-    i.activities[0].implementer_splits[2].implementer.should == nil
+    i.activities[0].implementer_splits[2].organization.should == nil
     i.activities[0].implementer_splits[2].spend.to_f.should == 3
     i.activities[0].implementer_splits[2].budget.to_f.should == 6
-    i.activities[0].implementer_splits[3].implementer.should == nil
+    i.activities[0].implementer_splits[3].organization.should == nil
     i.activities[0].implementer_splits[3].spend.to_f.should == 4
     i.activities[0].implementer_splits[3].budget.to_f.should == 8
   end
@@ -679,7 +673,7 @@ EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 1
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+    i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
     i.activities[0].implementer_splits.first.spend =  2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
@@ -695,7 +689,7 @@ EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
     i.activities[0].implementer_splits.size.should == 2
-    i.activities[0].implementer_splits.first.implementer_name.should == 'selfimplementer1'
+    i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
     i.activities[0].implementer_splits.first.spend =  2
     i.activities[0].implementer_splits.first.budget.to_f.should == 4
@@ -729,7 +723,7 @@ EOS
     i.projects.size.should == 1
     i.activities[0].implementer_splits.size.should == 2
     i.activities[0].save.should == false
-    i.activities[0].errors.on(:name).should == "can't be blank"
+    i.activities[0].errors.on(:name)[0].should == "can't be blank"
     i.activities[0].name.should == ""
   end
 
@@ -777,16 +771,10 @@ EOS
       @i.activities[0].project.should == @project
     end
 
-    it "should create a budget and spend automatically for the activities" do
-      @i.activities[0].implementer_splits.should have(1).item
-      @i.activities[0].implementer_splits[0].data_response.should == @response
-      @i.activities[0].implementer_splits[0].organization.should == @organization
-    end
-
     it "recognizes the correct implementer: 'Shyira HD District Hospital | Nyabihu'" do
       @i.activities.should have(1).item
       @i.activities[0].save.should == true
-      @i.activities[0].implementer_splits.first.implementer.should == @implementer2
+      @i.activities[0].implementer_splits.first.organization.should == @implementer2
     end
   end
 

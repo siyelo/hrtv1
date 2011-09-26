@@ -36,7 +36,7 @@ class Organization < ActiveRecord::Base
   has_many :donor_for, :through => :out_flows, :source => :project
   has_many :projects, :through => :data_responses
   has_many :implemented_activities, :class_name => "Activity",
-             :foreign_key => :provider_id, :dependent => :nullify
+             :foreign_key => :provider_id, :dependent => :nullify# FIXME: remove this association
   has_many :activities, :through => :data_responses
 
   ### Validations

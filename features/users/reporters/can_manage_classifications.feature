@@ -36,7 +36,7 @@ Feature: Reporter can enter a code breakdown for each activity
     ############
     Scenario: Reporter can classify Purposes for activity (first level)
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       #since we used a factory above, need save to refresh cache by saving activity
@@ -124,7 +124,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter classify Purposes for activity and see flash error
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       #since we used a factory above, need save to refresh cache by saving activity
@@ -154,7 +154,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter classify Locations for other cost and see flash error
       Given an other cost exists with name: "othercost1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the other cost
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the other_cost
       And a location exists with short_display: "National", id: 5
       When I follow "Projects"
       And I follow "othercost1"
@@ -177,7 +177,7 @@ Feature: Reporter can enter a code breakdown for each activity
     @javascript
     Scenario: Reporter can copy Purposes from Current Budget to Past Expenditure
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -190,7 +190,7 @@ Feature: Reporter can enter a code breakdown for each activity
     @javascript
     Scenario: Reporter can copy Purposes from Past Expenditure to Current Budget
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Purposes" within ".section_nav"
@@ -202,7 +202,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter cannot clasify approved Activity
       Given an activity exists with name: "activity2", data_response: the data_response, project: the project, am_approved: true
-      And a sub_activity exists with budget: "5", spend: "6", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity2"
       And I follow "Purposes" within ".section_nav"
@@ -216,7 +216,7 @@ Feature: Reporter can enter a code breakdown for each activity
     ############
     Scenario: Reporter can enter Inputs for activity
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       And I follow "Inputs" within ".section_nav"
@@ -232,7 +232,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can enter Inputs for activity and see flash error
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-      And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+      And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
       And I follow "activity1"
       #since we used a factory above, need save to refresh cache by saving activity
@@ -258,7 +258,7 @@ Feature: Reporter can enter a code breakdown for each activity
 
     Scenario: Reporter can follow classification workflow for activity
       Given an activity exists with name: "activity1", data_response: the data_response, project: the project
-        And a sub_activity exists with budget: "5000000", spend: "6000000", data_response: the data_response, activity: the activity
+        And an implementer_split exists with budget: "5000000", spend: "6000000", organization: the organization, activity: the activity
       When I follow "Projects"
         And I follow "activity1"
       When I press "Save & Add Locations >"

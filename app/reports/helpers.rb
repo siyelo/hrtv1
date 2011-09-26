@@ -100,7 +100,7 @@ module Reports::Helpers
   memoize :get_funding_sources
 
   def get_sub_implementers(activity)
-    activity.sub_implementers.map{|si| si.name}.join(' | ')
+    activity.implementers.map{|si| si.name}.join(' | ')
   end
 
   def get_locations(activity)
@@ -196,18 +196,6 @@ module Reports::Helpers
 
   def provider_fosaid(activity)
     activity.provider ? "#{h activity.provider.fosaid}" : " "
-  end
-
-  def is_activity(activity)
-    activity.class == SubActivity ? "yes" : ""
-  end
-
-  def parent_activity_budget(activity)
-    activity.class == SubActivity ? activity.activity.budget_in_usd : ""
-  end
-
-  def parent_activity_spend(activity)
-    activity.class == SubActivity ? activity.activity.spend_in_usd : ""
   end
 
   def is_budget?(type)

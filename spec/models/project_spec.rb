@@ -11,7 +11,6 @@ describe Project do
     it { should have_many(:in_flows) }
     it { should have_many(:out_flows) }
     it { should have_many(:comments) }
-    it { should have_many(:providers) }
     it { should have_many(:comments) }
   end
 
@@ -103,7 +102,7 @@ describe Project do
             {"0"=>{"name"=>"Activity name not more than 64 characters otherwise you will not",
              "data_response_id" => @response.id , "implementer_splits_attributes"=>
               {"0"=>{"updated_at"=>"", "spend"=>"6000.0", "data_response_id"=>"#{@response.id}",
-                     "provider_mask"=>"#{@organization.id}", "budget"=>"10000.0", "_destroy"=>""}},
+                     "organization_mask"=>"#{@organization.id}", "budget"=>"10000.0", "_destroy"=>""}},
            "description"=>"Description of activity"}}}
       )
       p.in_flows.should have(1).item

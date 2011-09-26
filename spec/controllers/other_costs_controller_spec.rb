@@ -77,7 +77,7 @@ describe OtherCostsController do
          :name => "new other_cost", :description => "description",
          "implementer_splits_attributes"=>
            {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-             "provider_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+             "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       @new_other_cost = Activity.find_by_name('new other_cost')
       @new_other_cost.project.name.should == @new_other_cost.name
     end

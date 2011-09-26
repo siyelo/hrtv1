@@ -74,7 +74,7 @@ class Reports::MapDistrictsByNsp
           end
         else
           @district_proportions_hash[activity] = {}
-          activity.budget_district_coding_adjusted.each do |ca|
+          activity.coding_budget_district.each do |ca|
             proportion = ca.proportion_of_activity
             location = ca.code
             @district_proportions_hash[activity][location] = proportion

@@ -59,7 +59,7 @@ class Reports::ProjectsExport
                   row << "" if index > 0 # dont re-print activity details on each line
                 end
                 row << split.id
-                row << split.provider.try(:name)
+                row << split.organization_name
                 row << split.spend.to_f
                 row << split.budget.to_f
                 rows << row

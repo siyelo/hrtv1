@@ -1,5 +1,4 @@
 module Activity::Classification
-
   def self.included(base)
     base.send(:extend, ClassMethods)
     base.send(:include, InstanceMethods)
@@ -103,14 +102,6 @@ module Activity::Classification
       progress = ((coded.to_f / 6) * 100).to_i # dont need decimal places
     end
 
-    def budget_district_coding_adjusted
-      district_coding_adjusted(CodingBudgetDistrict, coding_budget_district, budget)
-    end
-
-    def spend_district_coding_adjusted
-      district_coding_adjusted(CodingSpendDistrict, coding_spend_district, spend)
-    end
-
     def budget_stratprog_coding
       virtual_codes(HsspBudget, coding_budget, STRAT_PROG_TO_CODES_FOR_TOTALING)
     end
@@ -144,27 +135,6 @@ module Activity::Classification
     end
 
     private
-      def district_coding_adjusted(klass, assignments, amount)
-        if assignments.present?
-          assignments
-        elsif implementer_splits.present?
-          district_codings_from_implementer_splits(klass)
-        elsif amount
-          locations.map{|location| fake_ca(klass, location, amount / locations.size)}
-        else
-          []
-        end
-      end
-
-      def district_codings_from_implementer_splits(klass)
-        code_assignments = implementer_split_district_code_assignments_if_complete(klass.name)
-        location_amounts = {}
-        code_assignments.each do |ca|
-          location_amounts[ca.code] = 0 unless location_amounts[ca.code]
-          location_amounts[ca.code] += ca.cached_amount
-        end
-        location_amounts.map{|location, amount| fake_ca(klass, location, amount)}
-      end
 
       def virtual_codes(klass, code_assignments, code_ids_maping)
         CodeAssignment.send(:preload_associations, code_assignments, :code)

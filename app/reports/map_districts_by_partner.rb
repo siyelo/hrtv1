@@ -47,7 +47,7 @@ class Reports::MapDistrictsByPartner
       preload_district_associations(activities, @is_budget) # eager-load
       activities.each do |activity|
         code_assignments = @is_budget ?
-          activity.budget_district_coding_adjusted : activity.spend_district_coding_adjusted
+          activity.coding_budget_district : activity.coding_spend_district
         code_assignments.each do |ca|
           amount = ca.cached_amount_in_usd
           location = ca.code

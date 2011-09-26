@@ -30,10 +30,11 @@ describe Reports::OrganizationResponses do
     before :each do
       @project1 = Factory :project, :data_response => @response1
       @act = Factory(:activity, :project => @project1, :data_response => @response1)
-      @sact = Factory(:sub_activity, :activity => @act, :data_response => @response1,
-                      :budget => 10, :spend => 5)
+      @split    = Factory(:implementer_split, :activity => @act, 
+                    :organization => @organization1, :budget => 10, :spend => 5)
       @act.reload; @act.save!;
     end
+
 
     it "should show project totals" do
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
@@ -42,10 +43,10 @@ describe Reports::OrganizationResponses do
 
     it "should show project totals with cents if present" do
       @act1 = Factory(:activity, :project => @project1, :data_response => @response1)
-      @sact1 = Factory(:sub_activity, :activity => @act1, :data_response => @response1,
-                       :spend => "0.20", :budget => "0")
+      @split1    = Factory(:implementer_split, :activity => @act1, 
+                    :organization => @organization1, :spend => "0.20", :budget => "0")
       @act1.reload; @act1.save!;
-      @project1.save(false)
+      @project1.reload; @project1.save(false)
       Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
         'org1,Started,5.20,5.20,0.00,10.00,10.00,0.00'
     end
@@ -53,9 +54,11 @@ describe Reports::OrganizationResponses do
     context "with activities" do
       before :each do
         @activity1 = Factory(:activity, :project => @project1, :data_response => @response1)
-        @sactivit1 = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
-                             :budget => "6", :spend => "12")
-        @activity1.reload; @activity1.save!;
+        # @sactivit1 = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
+        #                      :budget => "6", :spend => "12")
+        @sactivity1 = Factory(:implementer_split, :activity => @activity1, 
+                       :organization => @organization1, :budget => "6", :spend => "12")
+        @activity1.reload; @activity1.save!; 
       end
 
       it "should show activity totals" do
@@ -70,7 +73,7 @@ describe Reports::OrganizationResponses do
 
       it "should show differences as positive if project exceeds activity" do
         #@activity1.write_attribute(:spend, 2)
-        @sactivit1.spend = 2; @sactivit1.save; @activity1.reload; @activity1.save!;
+        @sactivity1.spend = 2; @sactivity1.save; @activity1.reload; @activity1.save!;
         Reports::OrganizationResponses.new(@request).csv.split("\n")[1].should ==
           'org1,Started,7.00,7.00,0.00,16.00,16.00,0.00'
       end
@@ -79,8 +82,8 @@ describe Reports::OrganizationResponses do
     context "with other costs" do
       before :each do
         @other_cost1 = Factory(:other_cost, :data_response => @response1)
-        @osa1        = Factory(:sub_activity, :activity => @other_cost1,
-                        :data_response => @response1, :budget => "6", :spend => "12")
+        @osa1    = Factory(:implementer_split, :activity => @other_cost1, 
+                      :organization => @organization1, :budget => "6", :spend => "12")
         @other_cost1.reload; @other_cost1.save!;
       end
 
@@ -100,12 +103,12 @@ describe Reports::OrganizationResponses do
     before :each do
       @project1  = Factory(:project, :data_response => @response1)
       @activity1 = Factory(:activity, :project => @project1, :data_response => @response1)
-      @sa1       = Factory(:sub_activity, :activity => @activity1, :data_response => @response1,
-                           :budget => 6, :spend => 12)
+      @sa1    = Factory(:implementer_split, :activity => @activity1, 
+                    :organization => @organization1, :budget => 6, :spend => 12)
       @project2  = Factory(:project, :data_response => @response2)
       @activity2 = Factory(:activity, :project => @project2, :data_response => @response2)
-      @sa2       = Factory(:sub_activity, :activity => @activity2, :data_response => @response2,
-                           :budget => 9, :spend => 18)
+      @sa2    = Factory(:implementer_split, :activity => @activity2, 
+                    :organization => @organization1, :budget => 9, :spend => 18)
       @activity1.reload; @activity1.save!;
       @activity2.reload; @activity2.save!;
     end

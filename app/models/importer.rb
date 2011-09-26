@@ -33,13 +33,14 @@ class Importer
       activity = find_cached_activity_using_split_id(sub_activity_id)
 
       begin
-        split = SubActivity.find(sub_activity_id) unless split
+        # refactor
+        split = ImplementerSplit.find(sub_activity_id) unless split
       rescue ActiveRecord::RecordNotFound
         #go on and try to find the activity or project
       end
 
       #split ID is present and valid - use split's activity & project
-      if split && split.response == @response
+      if split
         activity = split.activity unless activity
         project  = activity.project
       else
@@ -63,7 +64,7 @@ class Importer
         activity = Activity.new unless activity
         activity.project = project
         split = activity.implementer_splits.find(:first,
-                        :conditions => { :provider_id => implementer.id}) if implementer
+                        :conditions => { :organization_id => implementer.id}) if implementer
         split = create_new_implementer_split(activity) unless split
       end
 
@@ -249,7 +250,7 @@ class Importer
     end
 
     def create_new_implementer_split(activity)
-      split = SubActivity.new # dont use activity.implementer_splits.new as it loads a new
+      split = ImplementerSplit.new # dont use activity.implementer_splits.new as it loads a new
                               # association object
       split.activity = activity
       @new_splits << split
@@ -276,8 +277,7 @@ class Importer
     end
 
     def assign_split_fields(split, implementer, spend, budget)
-      split.provider      = implementer
-      split.data_response = @response
+      split.organization  = implementer
       split.spend         = spend
       split.budget        = budget
       split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below

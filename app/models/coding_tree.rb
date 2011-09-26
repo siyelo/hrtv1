@@ -152,7 +152,6 @@ class CodingTree
             descendants = true
           end
         end
-
         total += cached_amount
       end
 

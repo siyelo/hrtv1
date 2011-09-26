@@ -6,11 +6,8 @@ module ActiveRecord
         configuration = { :on => :save } # run the validations on record save
 
         send(validation_method(configuration[:on]), configuration) do |record|
-
-          unless record.class.eql?(SubActivity) # dont run this on Sub Activities!! FIXME
-            if record.send(start_date).present? && record.send(end_date).present?
-              record.errors.add(start_date, options[:message]) unless record.send(start_date) < record.send(end_date)
-            end
+          if record.send(start_date).present? && record.send(end_date).present?
+            record.errors.add(start_date, options[:message]) unless record.send(start_date) < record.send(end_date)
           end
         end
       end

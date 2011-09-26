@@ -37,8 +37,8 @@ describe Reports::OrganizationWorkplan do
         @input2    = Factory(:input, :short_display => 'input2', :external_id => 2)
         @activity = Factory.build(:activity, :name => 'a name', :description => 'a descr',
                       :project => @project, :data_response => @response)
-        @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                 :spend => 4, :budget => 20000.01)
+        @split = Factory(:implementer_split, :activity => @activity,
+                         :organization => @organization, :budget => 20000.01, :spend => 4)
         @activity.reload; @activity.save!
 
         Factory(:coding_budget_cost_categorization, :activity => @activity,
@@ -65,7 +65,8 @@ describe Reports::OrganizationWorkplan do
       it "should not repeat project details on consecutive lines" do
         @activity2 = Factory(:activity, :name => 'a2 name', :description => 'a2 descr',
                              :project => @project, :data_response => @response)
-        @sa2       = Factory(:sub_activity, :budget => 10, :activity => @activity2, :data_response => @response)
+        @split2 = Factory(:implementer_split, :activity => @activity2,
+                         :organization => @organization, :budget => 10)
         @activity2.reload; @activity2.save!
         Factory(:coding_budget_district, :activity => @activity2, :code => @location1)
         Factory(:coding_budget_cost_categorization, :activity => @activity2,

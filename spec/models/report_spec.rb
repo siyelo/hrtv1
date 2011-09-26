@@ -50,26 +50,24 @@ describe Report do
 
   describe "#generate_csv_zip" do
     before :each do
-      mtef_code     = Factory(:mtef_code)
-      nsp_code      = Factory(:nsp_code)
-      cc_code       = Factory(:cost_category_code)
-      location      = Factory(:location)
-      @organization = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :data_response => @response,
-                              :project => @project)
-      @sa           = Factory(:sub_activity, :data_response => @response,
-                              :activity => @activity,
-                              :budget => 10, :spend => 10)
-
+      mtef_code          = Factory(:mtef_code)
+      nsp_code           = Factory(:nsp_code)
+      cost_category_code = Factory(:cost_category_code)
+      location           = Factory(:location)
+      @organization      = Factory(:organization)
+      @request           = Factory(:data_request, :organization => @organization)
+      @response          = @organization.latest_response
+      @project           = Factory(:project, :data_response => @response)
+      @activity          = Factory(:activity, :data_response => @response,
+                                   :project => @project)
+      @split2            = Factory(:implementer_split, :activity => @activity,
+                            :organization => @organization, :budget => 10, :spend => 10)
       Factory(:coding_budget, :activity => @activity,
               :percentage => 100, :code => mtef_code)
       Factory(:coding_budget_district, :activity => @activity,
               :percentage => 100, :code => location)
       Factory(:coding_budget_cost_categorization, :activity => @activity,
-              :percentage => 100, :code => cc_code)
+              :percentage => 100, :code => cost_category_code)
     end
 
 

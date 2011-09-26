@@ -17,9 +17,6 @@ class Report < ActiveRecord::Base
     'map_districts_by_all_codes_budget',
     'map_facilities_by_partner_budget',
     'map_facilities_by_partner_spent',
-    'activities_summary',
-    'activities_by_district',
-    'activities_one_row_per_district',
     'activities_by_budget_coding',
     'activities_by_budget_cost_categorization',
     'activities_by_expenditure_coding',
@@ -83,12 +80,6 @@ class Report < ActiveRecord::Base
           Reports::MapFacilitiesByPartner.new(:budget, data_request)
         when 'map_facilities_by_partner_spent'
           Reports::MapFacilitiesByPartner.new(:spent, data_request)
-        when 'activities_summary'
-          Reports::ActivitiesSummary.new(data_request)
-        when 'activities_by_district'
-          Reports::ActivitiesByDistrict.new(data_request)
-        when 'activities_one_row_per_district'
-          Reports::ActivitiesOneRowPerDistrict.new(data_request)
         when 'activities_by_budget_coding'
           Reports::ActivitiesByCoding.new(:budget, data_request)
         when 'activities_by_budget_cost_categorization'

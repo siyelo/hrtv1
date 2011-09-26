@@ -35,8 +35,8 @@ describe Project, "Validations" do
     context "project has no error" do
       it "returns no response errors" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
-        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 10, :spend => 10)
+        @split    = Factory(:implementer_split, :organization => @organization,
+                            :activity => @activity, :budget => 10, :spend => 10)
         Factory(:funding_flow, :from => @organization,
                 :project => @project, :project_from => @project, :budget => 10, :spend => 10)
         @project.validation_errors.should == []
@@ -48,11 +48,11 @@ describe Project, "Validations" do
     context "activity amounts and in flow amounts are equal" do
       it "returns true" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
-        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 1, :spend => 9)
+        @split    = Factory(:implementer_split, :organization => @organization,
+                            :activity => @activity, :budget => 1, :spend => 9)
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
-        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity2,
-                            :budget => 9, :spend => 1)
+        @split    = Factory(:implementer_split, :organization => @organization,
+                            :activity => @activity2, :budget => 9, :spend => 1)
         @activity.reload; @activity.save # refresh cached amounts
         @activity2.reload; @activity2.save # refresh cached amounts
         @project.reload
@@ -67,8 +67,8 @@ describe Project, "Validations" do
     context "activity amounts and in flow amounts are not equal" do
       it "returns false" do
         @activity = Factory(:activity, :data_response => @response, :project => @project)
-        @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 1, :spend => 9)
+        @split    = Factory(:implementer_split, :organization => @organization,
+                            :activity => @activity, :budget => 1, :spend => 9)
         @activity.save # refresh cached amounts
         Factory(:funding_flow, :from => @organization,
                 :project => @project, :budget => 4, :spend => 4)

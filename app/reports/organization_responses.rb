@@ -55,6 +55,5 @@ class Reports::OrganizationResponses
       row << sprintf("%.2f", proj_budget - activity_and_ocost_budget)
       row
     end
-
 end
 

@@ -159,6 +159,14 @@ class CodeAssignment < ActiveRecord::Base
     end
   end
 
+  # Checks if it's a budget code assignment
+  def budget?
+    ['CodingBudget',
+     'CodingBudgetCostCategorization',
+     'CodingBudgetDistrict',
+     'HsspBudget'].include?(type.to_s)
+  end
+
   private
 
     # currency is derived from the parent activity/project/DR
@@ -166,13 +174,6 @@ class CodeAssignment < ActiveRecord::Base
       self.cached_amount_in_usd = (cached_amount || 0) * currency_rate(currency, :USD)
     end
 
-    # Checks if it's a budget code assignment
-    def budget?
-      ['CodingBudget',
-       'CodingBudgetCostCategorization',
-       'CodingBudgetDistrict',
-       'HsspBudget'].include?(type.to_s)
-    end
 end
 
 

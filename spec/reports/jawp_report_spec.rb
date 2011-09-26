@@ -6,11 +6,9 @@ describe Reports::JawpReport do
   def setup_classified_data(response, splits)
     impl_splits = []
     splits.each do |split|
-      impl_splits << Factory.build(:sub_activity, :data_response => response,
-                      :provider => split[:organization],
+      impl_splits << Factory.build(:implementer_split, :organization => split[:organization],
                       :budget => split[:budget])
     end
-
     activity     = Factory.build(:activity, :data_response => response,
                      :implementer_splits => impl_splits,
                      :name => 'activity1')
@@ -18,10 +16,8 @@ describe Reports::JawpReport do
                      :activities => [activity],
                      :in_flows => [Factory.build(:funding_flow,
                                                  :from => @donor, :budget => 30)])
-
     CodingBudget.update_classifications(activity, { @code1.id => 50, @code2.id => 50})
     CodingBudgetCostCategorization.update_classifications(activity, { @code_cc.id => 100})
-
     run_delayed_jobs
   end
 

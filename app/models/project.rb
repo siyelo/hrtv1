@@ -25,8 +25,6 @@ class Project < ActiveRecord::Base
   has_many :in_flows, :class_name => "FundingFlow"
   has_many :out_flows, :class_name => "FundingFlow",
            :conditions => [ 'organization_id_from = #{organization.id}' ]
-  has_many :providers, :through => :funding_flows, :class_name => "Organization",
-           :source => :to
   has_many :comments, :as => :commentable, :dependent => :destroy
 
   # Nested attributes
@@ -77,10 +75,6 @@ class Project < ActiveRecord::Base
 
   ### Instance methods
   #
-  def implementers
-    providers
-  end
-
   def response
     data_response
   end

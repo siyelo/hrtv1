@@ -80,7 +80,6 @@ class OtherCostsController < BaseController
     def confirm_activity_type
       @other_cost = OtherCost.find(params[:id])
       return redirect_to edit_response_activity_path(@response, @other_cost) if @other_cost.class.eql? Activity
-      return redirect_to edit_response_activity_path(@response, @other_cost.activity) if @other_cost.class.eql? SubActivity
     end
 
     def prepare_classifications(other_cost)

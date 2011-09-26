@@ -10,7 +10,6 @@ class Activity < ActiveRecord::Base
   ### Constants
   MAX_NAME_LENGTH = 64
   HUMANIZED_ATTRIBUTES = {
-    :sub_activities => "Implementers",
     :implementer_splits => "Implementers",
     :budget => "Current Budget",
     :spend => "Past Expenditure" }
@@ -34,11 +33,8 @@ class Activity < ActiveRecord::Base
     :planned_for_gor_q4, :updated_at
 
   ### Associations
-  #TODO: provider now only used for sub-activities, so should be removed
-  # from activity altogether
-  # implementer is better, more generic. (Service) Provider is too specific.
   belongs_to :provider, :foreign_key => :provider_id,
-    :class_name => "Organization" # deprecate plox k thx
+    :class_name => "Organization" # FIXME: deprecate plox k thx
   belongs_to :data_response #deprecated
   belongs_to :response, :foreign_key => :data_response_id,
     :class_name => "DataResponse" #TODO: rename class
@@ -46,15 +42,8 @@ class Activity < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-  has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
-    :dependent => :destroy #TODO - use non-sti model
-  has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
-  # deprecated
-  has_many :sub_activities, :class_name => "SubActivity",
-                            :foreign_key => :activity_id,
-                            :dependent => :destroy
-  #deprecated
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider
+  has_many :implementer_splits, :dependent => :delete_all
+  has_many :implementers, :through => :implementer_splits, :source => :organization
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
@@ -71,26 +60,21 @@ class Activity < ActiveRecord::Base
 
   ### Nested attributes
   accepts_nested_attributes_for :implementer_splits, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
-  #deprecated
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+    :reject_if => Proc.new { |attrs| attrs['organization_mask'].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
   accepts_nested_attributes_for :outputs, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
 
   ### Callbacks
-  before_validation :strip_input_fields, :unless => :implementer_split?
-  before_save       :update_implementer_cache, :unless => :implementer_split?
-  before_save       :auto_create_project, :unless => :implementer_split?
+  before_validation :strip_input_fields
+  before_save       :update_implementer_cache
+  before_save       :auto_create_project
   before_save       :update_cached_usd_amounts
-  after_save        :update_counter_cache, :unless => :implementer_split?
-  after_destroy     :update_counter_cache, :unless => :implementer_split?
-  after_destroy     :restart_response_if_all_activities_removed,
-    :unless => :implementer_split?
-  before_update     :update_all_classified_amount_caches,
-    :unless => :implementer_split?
+  after_save        :update_counter_cache
+  after_destroy     :update_counter_cache
+  after_destroy     :restart_response_if_all_activities_removed
+  before_update     :update_all_classified_amount_caches
 
   ### Delegates
   delegate :currency, :to => :project, :allow_nil => true
@@ -99,16 +83,15 @@ class Activity < ActiveRecord::Base
 
   ### Validations
   # also see validations in BudgetSpendHelper
-  validate :approved_activity_cannot_be_changed, :unless => :implementer_split?
-  validate :cannot_approve_unclassified_activity, :unless => :implementer_split?
-  validate :validate_implementers_uniqueness, :unless => :implementer_split?
-  validates_presence_of :name, :if => :is_activity_or_other_cost?
-  validates_presence_of :description, :if => :is_activity_or_other_cost?
+  validate :approved_activity_cannot_be_changed
+  validate :cannot_approve_unclassified_activity
+  validate :validate_implementers_uniqueness
+  validates_presence_of :name
+  validates_presence_of :description
   validates_presence_of :project_id, :if => :is_activity?,
     :unless => Proc.new{ |a| a.project && a.project.new_record? }
   validates_presence_of :data_response_id
-  validates_length_of :name, :within => 3..MAX_NAME_LENGTH,
-    :if => :is_activity_or_other_cost?, :allow_blank => true
+  validates_length_of :name, :within => 3..MAX_NAME_LENGTH
 
   ### Scopes
   named_scope :roots,                { :conditions => "activities.type IS NULL" }
@@ -136,9 +119,7 @@ class Activity < ActiveRecord::Base
                                     ON data_responses.id = activities.data_response_id
                                     INNER JOIN organizations
                                     ON data_responses.organization_id = organizations.id" }
-  named_scope :implemented_by_health_centers, { :joins => [:provider],
-                                    :conditions => ["organizations.raw_type = ?",
-                                                    "Health Center"]}
+
   named_scope :canonical_with_scope, {
     :select => 'DISTINCT activities.*',
     :joins =>
@@ -189,7 +170,7 @@ class Activity < ActiveRecord::Base
   ### Instance Methods
 
   def update_attributes(params)
-    update_classifications_from_params(params) unless implementer_split?
+    update_classifications_from_params(params)
     super(params)
   end
 
@@ -302,12 +283,12 @@ class Activity < ActiveRecord::Base
     !implementer_split_district_code_assignments_if_complete(coding_type).empty?
   end
 
-  def amount_for_provider(provider, field)
+  def amount_for_provider(organization, field)
     if implementer_splits.empty?
-      return self.send(field) if self.provider == provider
+      return self.send(field) if self.organization == organization
     else
       sum = 0
-      implementer_splits.select{|a| a.provider == provider}.each do |a|
+      implementer_splits.select{ |a| a.organization == organization }.each do |a|
         if a.nil?
           puts "had nil in subactivities in proj #{project.id}"
         else
@@ -332,10 +313,8 @@ class Activity < ActiveRecord::Base
 
   #saves the subactivities totals into the buget/spend fields
   def update_implementer_cache
-    unless implementer_split? # to be doubly sure!
-      [:budget, :spend].each do |method|
-        write_attribute(method, implementer_splits_totals(method))
-      end
+    [:budget, :spend].each do |method|
+      write_attribute(method, implementer_splits_totals(method))
     end
   end
 
@@ -393,17 +372,6 @@ class Activity < ActiveRecord::Base
       self.send("#{get_valid_attribute_name(type)}=".to_sym, coding_tree.valid?)
     end
 
-    def implementer_split_district_code_assignments_if_complete(coding_type)
-      case coding_type
-      when 'CodingBudgetDistrict'
-        cas = implementer_splits.collect{|sub_activity| sub_activity.budget_district_coding_adjusted }
-      when 'CodingSpendDistrict'
-        cas = implementer_splits.collect{|sub_activity| sub_activity.spend_district_coding_adjusted }
-      end
-      return [] if cas.include?([])
-      cas.flatten
-    end
-
     def approved_activity_cannot_be_changed
       message = "Activity was approved by SysAdmin and cannot be changed"
       errors.add(:base, message) if changed? && approved? && !changed.include?("approved")
@@ -414,20 +382,8 @@ class Activity < ActiveRecord::Base
       errors.add(:base, message) if changed? && !classified? && changed.include?("approved")
     end
 
-    def is_activity_or_other_cost?
-      self.class.eql?(Activity) || self.class.eql?(OtherCost)
-    end
-
-    def is_simple?
-      is_activity_or_other_cost?
-    end
-
     def is_activity?
       self.class.eql?(Activity)
-    end
-
-    def implementer_split?
-      self.class.eql?(SubActivity)
     end
 
     def strip_input_fields
@@ -467,7 +423,7 @@ class Activity < ActiveRecord::Base
     end
 
     def validate_implementers_uniqueness
-      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:provider_id)
+      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:organization_id)
       if splits.length != splits.uniq.length
         errors.add_to_base "Duplicate Implementers"
       end

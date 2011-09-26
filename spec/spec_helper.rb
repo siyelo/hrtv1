@@ -151,10 +151,6 @@ Spork.each_run do
     end
   end
 
-  def bd(integer)
-    BigDecimal.new(integer.to_s)
-  end
-
   def login_as_admin
     # mock current_response_is_latest? method for Users
     # CAUTION: current_response_is_latest? method of model
@@ -213,15 +209,14 @@ Spork.each_run do
     @other_cost   = Factory(:other_cost, :data_response => @response, :project => @project)
   end
 
-  def basic_setup_sub_activity
+  def basic_setup_implementer_split
     @organization = Factory(:organization)
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
-    @sub_activity = Factory(:sub_activity, :data_response => @response,
-                            :activity => @activity, :provider => @organization)
-    @split = @sub_activity # sub_activity is deprecated
+    @split = Factory(:implementer_split, :activity => @activity,
+      :organization => @organization)
   end
 
   def basic_setup_funding_flow
@@ -232,15 +227,6 @@ Spork.each_run do
     @project      = Factory(:project, :data_response => @response)
     @funding_flow = Factory(:funding_flow, :project => @project,
                             :from => @donor)
-  end
-
-  def debug_model_objects
-    p "organizations: #{Organization.count}"
-    p "requests: #{DataRequest.count}"
-    p "responses: #{DataResponse.count}"
-    p "projects: #{Project.count}"
-    p "activities: #{Activity.count}"
-    p "sub_activities: #{SubActivity.count}"
   end
 
   def setup_activity_in_fiscal_year(fy_start, fy_end, attributes, currency = 'USD')

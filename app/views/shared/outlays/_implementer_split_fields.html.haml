@@ -9,7 +9,7 @@
     .js_implementer_container.ui_widget
       = f.hidden_field :updated_at, :value => Time.now
       - # this can be a perf issue
-      = f.select :provider_mask, funding_organizations_select, {:prompt => true}, :class => 'name js_implementer_select js_combobox f_from'
+      = f.select :organization_mask, funding_organizations_select, {:prompt => true}, :class => 'name js_implementer_select js_combobox f_from'
 
   %td= f.text_field :spend, :class => 'js_spend no_style', :tabindex => autotab
   %td= f.text_field :budget, :class => 'js_budget no_style', :tabindex => autotab

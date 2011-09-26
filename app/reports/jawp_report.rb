@@ -11,7 +11,7 @@ class Reports::JawpReport
     @activities                    = activities
     @code_deepest_nesting          = Code.deepest_nesting
     @cost_category_deepest_nesting = CostCategory.deepest_nesting
-    @hc_implementer_splits         = SubActivity.implemented_by_health_centers.
+    @hc_implementer_splits         = ImplementerSplit.implemented_by_health_centers.
       find(:all, :select => 'activity_id, COUNT(*) AS total',
            :group => 'activity_id')
 
@@ -36,11 +36,11 @@ class Reports::JawpReport
       if @is_budget
         amount_total          = activity.budget
         amount_total_in_usd   = activity.budget_in_usd
-        is_national           = (activity.budget_district_coding_adjusted.empty? ? 'yes' : 'no')
+        is_national           = (activity.coding_budget_district.empty? ? 'yes' : 'no') # fixme
       else
         amount_total          = activity.spend
         amount_total_in_usd   = activity.spend_in_usd
-        is_national           = (activity.spend_district_coding_adjusted.empty? ? 'yes' : 'no')
+        is_national           = (activity.coding_spend_district.empty? ? 'yes' : 'no') # fixme
       end
       row = []
       row << activity.project.try(:name)
@@ -50,7 +50,7 @@ class Reports::JawpReport
       row << get_locations(activity)
       row << activity.implementer_splits.length
       row << get_hc_sub_activity_count(activity)
-      row << activity.implementer_splits.map{ |s| s.name }.join(' | ')
+      row << activity.implementer_splits.map{ |s| s.organization_name }.join(' | ')
       row << activity.organization.try(:name)
       row << get_institutions_assisted(activity)
       row << get_beneficiaries(activity)
@@ -66,11 +66,11 @@ class Reports::JawpReport
     def build_code_assignment_rows(csv, base_row, activity, amount_total, amount_total_in_usd)
       if @is_budget
         codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_budget)
-        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.budget_district_coding_adjusted)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_budget_district)
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_budget_cost_categorization)
       else
         codings               = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend)
-        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.spend_district_coding_adjusted)
+        district_codings      = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_district)
         cost_category_codings = fake_one_assignment_if_none(amount_total, amount_total_in_usd, activity.coding_spend_cost_categorization)
       end
       parent_activity = activity
@@ -116,7 +116,7 @@ class Reports::JawpReport
         if activity != parent_activity
           if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
             if activity.budget?
-              district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
+              district_codings = activity.coding_budget_district
               amount_total = activity.budget
               amount_total_in_usd = parent_amount_total_in_usd * activity.budget / parent_activity.budget
             else
@@ -124,7 +124,7 @@ class Reports::JawpReport
             end
           else
             if activity.spend?
-              district_codings = activity.spend_district_coding_adjusted if use_sub_activity_district_coding
+              district_codings = activity.coding_spend_district
               amount_total = activity.spend
               amount_total_in_usd = parent_amount_total_in_usd * activity.spend / parent_activity.spend
             else

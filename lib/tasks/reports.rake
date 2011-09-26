@@ -66,21 +66,6 @@ namespace :reports do
     update_report(t)
   end
 
-  desc "Caches 'activities_summary' report"
-  task :activities_summary => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_district' report"
-  task :activities_by_district => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_one_row_per_district' report"
-  task :activities_one_row_per_district => :environment do |t|
-    update_report(t)
-  end
-
   desc "Caches 'activities_by_budget_coding' report"
   task :activities_by_budget_coding => :environment do |t|
     update_report(t)
@@ -137,7 +122,7 @@ namespace :reports do
   end
 
   desc "Cache reports"
-  task :fast => [
+  task :all => [
     'districts_by_nsp_budget',
     'districts_by_all_codes_budget',
     'users_by_organization',
@@ -147,9 +132,6 @@ namespace :reports do
     'map_districts_by_all_codes_budget',
     'map_facilities_by_partner_budget',
     'map_facilities_by_partner_spent',
-    'activities_summary',
-    'activities_by_district',
-    'activities_one_row_per_district',
     'activities_by_budget_coding',
     'activities_by_budget_cost_categorization',
     'activities_by_budget_districts',
@@ -163,13 +145,6 @@ namespace :reports do
     'activities_by_nha_subimps',
     'activities_by_all_codes_budget'
   ]
-
-  task :slow => [
-    'activities_by_district'
-  ]
-
-  desc "Cache all reports"
-  task :all => [ 'fast', 'slow']
 
 
 end

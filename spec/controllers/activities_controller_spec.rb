@@ -149,7 +149,7 @@ describe ActivitiesController do
         :activity => {:project_id => '-1', :name => "new activity", :description => "description",
           "implementer_splits_attributes"=>
             {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
-              "provider_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+              "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
       response.should be_redirect
       @new_activity = Activity.find_by_name('new activity')
       @new_activity.project.name.should == @new_activity.name

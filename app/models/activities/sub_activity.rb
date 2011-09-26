@@ -30,8 +30,6 @@ class SubActivity < Activity
 
   ### Callbacks
   before_validation :strip_mask_fields
-  after_create    :update_counter_cache
-  after_destroy   :update_counter_cache
 
   ### Delegates
   [:projects, :name, :description, :approved,
@@ -131,12 +129,6 @@ class SubActivity < Activity
   memoize :coding_spend_cost_categorization
 
   private
-
-    # TODO - move this to a rails counter_cache once STI removed
-    def update_counter_cache
-      self.data_response.sub_activities_count = data_response.implementer_splits.count
-      self.data_response.save(false)
-    end
 
     # if the provider is a clinic or hospital it has only one location
     # so put all the money towards that location

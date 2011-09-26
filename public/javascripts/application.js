@@ -1418,6 +1418,42 @@ var activities_new = activities_create = activities_edit = activities_update = o
       $(document).find('.js_add_nested').trigger('click');
     }
     numericInputField(".js_implementer_spend, .js_implementer_budget");
+
+    $(".edit_implementer_row").live('click', function (e) {
+      e.preventDefault();
+      var element = $(this);
+      var parent = $(this).parent().parent().find('.implementer_search');
+      var providerMask = parent.find('select');
+      var dr_id = parent.find('input');
+      var _prev_row_id = parent.find('input').attr('id').split("_")[_POSITION]
+      var _provider = parent.find('input')[2].value;
+      var _provider_name = parent.find('span.ui-autocomplete').text();
+      // field number so that formatastic accepts the hash
+      var fieldNumber = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
+      parent.html(inputBox + selectBox);
+      parent.find('select').addClass('js_combobox');
+      $(".js_combobox" ).combobox();
+      var providerMask = parent.find('select');
+      var dr_id = parent.find('input');
+      var spendInput = element.parent().parent().find('td.spend').find('input.js_spend')
+      var budgetInput = element.parent().parent().find('td.budget').find('input.js_budget')
+      var deleteInput = element.parent().parent().find('td.edit').find('input')
+      providerMask.attr('id', _TYPE+ "_implementer_splits_attributes_" + fieldNumber + "_provider_mask");
+      providerMask.attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][provider_mask]");
+      dr_id.find('input').attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_data_response_id");
+      dr_id.find('input').attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][data_response_id]");
+      spendInput.attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_spend");
+      spendInput.attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][spend]");
+      budgetInput.attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_budget");
+      budgetInput.attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][budget]");
+      deleteInput.attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "__destroy");
+      deleteInput.attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][_destroy]");
+      element.parent().parent().parent().find("#" + _TYPE + "_implementer_splits_attributes_" + _prev_row_id + "_id").attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_id");
+      element.parent().parent().parent().find("#" + _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_id").attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][id]");
+      parent.find('select').val(_provider);
+      parent.find('input').val(_data_response_id);
+      parent.find('input.ui-autocomplete-input').val(_provider_name);
+    });
   }
 };
 

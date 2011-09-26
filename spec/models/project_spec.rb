@@ -126,7 +126,7 @@ describe Project do
       @activity.reload; @activity.save!
 
       xls = Project.export_all(@response)
-      rows = Spreadsheet.open(xls).worksheet(0)
+      rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
       rows.row(0).should == Project::FILE_UPLOAD_COLUMNS
       rows[1,0].should == sub_activity.activity.project.try(:name)
       rows[1,1].should == sub_activity.activity.project.try(:description)

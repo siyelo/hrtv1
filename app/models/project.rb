@@ -1,5 +1,4 @@
 require 'validators'
-require 'spreadsheet'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
@@ -130,21 +129,8 @@ class Project < ActiveRecord::Base
   end
 
   def self.download_template(rows = [])
-    Spreadsheet.client_encoding = "UTF-8//IGNORE"
-    book = Spreadsheet::Workbook.new
-    sheet1 = book.create_worksheet
-
     rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
-
-    rows.each_with_index do |row, row_index|
-      row.each_with_index do |cell, column_index|
-        sheet1[row_index, column_index] = cell
-      end
-    end
-
-    data = StringIO.new ''
-    book.write data
-    return data
+    Exporter::create_spreadsheet(rows)
   end
 
 

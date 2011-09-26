@@ -115,7 +115,6 @@ Feature: Admin can manage organizations
     And I should see "org1" within "table"
     And I should not see "org2" within "table"
 
-  @run
   Scenario: admin can see available filters
     Then I should see "Reporting" within a link in the filters list
     And I should see "Not Yet Started" within a link in the filters list

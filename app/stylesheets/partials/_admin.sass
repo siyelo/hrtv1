@@ -71,23 +71,12 @@ body.app
     font-size: 12px
     margin-top: 10px
     width: 100%
+
     td
       &:first-child
         padding-left: 7px
       &:last-child
         padding-right: 5px
-
-      &.contacts
-        ul
-          li
-            margin: 4px 0
-            font-size: 11px
-
-            span
-              color: #758493
-              display: inline-block
-              font-weight: bold
-              width: 100px
 
     th
       border-bottom: 1px solid $light-blue
@@ -513,3 +502,55 @@ body.app #content .tabs
     font-style: italic
     font-size: 10px
     padding: 0px 5px 5px
+
+
+.modern_table.am_organizations
+  line-height: 18px
+  th.center, td.center
+    text-align: center
+
+  th.am_organization
+    width: 30%
+  th.am_contacts
+    width: 35%
+  th.am_activities
+    width: 10%
+  th.am_status
+    width: 10%
+  th.am_download
+    width: 20%
+  th
+    padding: 5px
+
+  td
+    padding: 5px
+
+  a.download_workplan
+    background: -moz-linear-gradient(center top , #F8F8F8 0%, #E8E8E8 100%) repeat scroll 0 0 #EEEEEE
+    border: 1px solid #C1CED9
+    border-radius: 2px 2px 2px 2px
+    color: #449FEB
+    display: inline-block
+    font-size: 10px
+    font-weight: bold
+    text-decoration: none
+    text-shadow: 0 1px 0 white
+    padding: 3px 5px
+
+    &:hover, &:focus
+      background: $green
+      border: 1px solid $green - #222
+      color: #fff
+      +linear-gradient(color-stops($green, $green - #222))
+      +text-shadow($green - #222, 0, 0, 1px)
+
+
+  ul
+    &:first-child
+      margin-bottom: 8px !important
+    li
+      margin: 2px 8px 4px 0
+      font-size: 11px
+
+      span
+        color: #49637D

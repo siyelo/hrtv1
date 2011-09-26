@@ -738,6 +738,10 @@ var build_flash_charts = function () {
     tabs.find('> div.' + target_tab).show();
   });
 
+  if ( typeof(_dr_id) === 'undefined' ) {
+    return false;
+  }
+
   // Data Response charts
   createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
   createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});

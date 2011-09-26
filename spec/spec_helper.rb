@@ -31,6 +31,11 @@ Spork.prefork do
     config.before :each do
       DatabaseCleaner.strategy = :truncation#, {:except => %w[currencies]}
       DatabaseCleaner.clean
+      DeferredGarbageCollection.start
+    end
+
+    config.after(:all) do
+      DeferredGarbageCollection.reconsider
     end
 
     config.include(EmailSpec::Helpers)

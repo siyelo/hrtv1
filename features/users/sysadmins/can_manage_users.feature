@@ -17,7 +17,7 @@ Feature: Admin can manage users
     And I select "organization1" from "Organization"
     And I fill in "Email" with "pink.panter1@hrtapp.com"
     And I fill in "Full name" with "Pink Panter"
-    And I select "Reporter" from "Role"
+    And I select "Reporter" from "Assign roles to this user"
     And I press "Create New User"
     Then I should see "User was successfully created"
     And "pink.panter1@hrtapp.com" should receive an email
@@ -142,14 +142,14 @@ Feature: Admin can manage users
     And I select "organization1" from "Organization"
     And I fill in "Email" with "pink.panter1@hrtapp.com"
     And I fill in "Full name" with "Pink Panter"
-    And I select "Activity manager" from "Role"
-    And I select "organization2" from "Organizations"
-    And I select "organization3" from "Organizations"
+    And I select "Activity manager" from "Assign roles to this user"
+    And I select "organization2" from "Assign organizations to this Activity Manager"
+    And I select "organization3" from "Assign organizations to this Activity Manager"
     And I press "Create New User"
     Then I should see "User was successfully created"
     When I follow "Pink Panter"
-    Then the "Organizations" combobox should contain "organization2"
-    And the "Organizations" combobox should contain "organization3"
+    Then the "Assign organizations to this Activity Manager" combobox should contain "organization2"
+    And the "Assign organizations to this Activity Manager" combobox should contain "organization3"
 
 
   Scenario: An admin can create District Manager and assign districts for managing
@@ -160,7 +160,7 @@ Feature: Admin can manage users
     And I select "Non-reporting org" from "Organization"
     And I fill in "Email" with "pink.panter1@hrtapp.com"
     And I fill in "Full name" with "Pink Panter"
-    And I select "District manager" from "Role"
+    And I select "District manager" from "Assign roles to this user"
     And I select "district1" from "District"
     And I press "Create New User"
     Then I should see "User was successfully created"

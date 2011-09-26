@@ -72,6 +72,7 @@ class Project < ActiveRecord::Base
   ### Named Scopes
   named_scope :sorted, { :order => "projects.name" }
 
+
   ### Instance methods
   #
   def response

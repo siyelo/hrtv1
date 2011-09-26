@@ -7,7 +7,7 @@ describe CodeAssignment do
     subject { basic_setup_activity; Factory(:code_assignment, :activity => @activity) }
     it { should validate_presence_of(:activity_id) }
     it { should validate_presence_of(:code_id) }
-    it { should ensure_inclusion_of(:percentage).in_range(1..100).with_message("must be between 1 and 100") }
+    it { should ensure_inclusion_of(:percentage).in_range(0..100).with_message("must be between 0 and 100") }
 
     it "does not validate percentage when it is not present" do
       subject.percentage = nil
@@ -35,8 +35,8 @@ describe CodeAssignment do
     # allow strings
     it { should allow_value("100").for(:percentage) }
     it { should allow_value("1").for(:percentage) }
+    it { should allow_value("0").for(:percentage) }
     it { should_not allow_value("101").for(:percentage) }
-    it { should_not allow_value("0").for(:percentage) }
   end
 
   describe "named scopes" do
@@ -272,7 +272,6 @@ describe CodeAssignment do
           it "creates code assignments" do
             classifications = { @code1.id => 100, @code2.id => 20 }
             CodingBudget.update_classifications(@activity, classifications)
-
             CodingBudget.count.should == 2
             assignments = CodingBudget.all
             assignments.detect{|ca| ca.code_id == @code1.id}.percentage.should == 100

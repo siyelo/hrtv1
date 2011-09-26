@@ -502,6 +502,21 @@ describe CodingTree do
         ct.roots[0].ca.cached_amount.should == 20
         ct.roots[0].ca.sum_of_children.should == 0
       end
+
+      it "sets cached_amount and sum_of_children for code assignment with percentage" do
+        cb = Factory.build(:coding_budget, :activity => @activity, :code => @code1,
+                       :percentage => 0.1, :cached_amount => nil, :sum_of_children => nil)
+        cb.save!
+        ct = CodingTree.new(@activity, CodingBudget)
+        ct.stub(:root_codes).and_return([@code1, @code2]) # stub root_codes
+
+        ct.set_cached_amounts!
+        ct.reload!
+
+        @activity.code_assignments.length.should == 1
+        ct.roots[0].ca.cached_amount.should == 0.1
+        ct.roots[0].ca.sum_of_children.should == 0
+      end
     end
 
     context "root and children code assignment" do

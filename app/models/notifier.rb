@@ -30,4 +30,18 @@ class Notifier < ActionMailer::Base
                   :sys_admin_org => inviter.organization ? "(#{inviter.organization.try(:name)})" : '',
                   :inviter_name => inviter.full_name ||= inviter.email
   end
+
+  def response_rejected_notification(response)
+    subject       "Your #{response.title} response is Rejected"
+    from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
+    recipients    response.organization.users.map{ |u| u.email }
+    sent_on       Time.now
+  end
+
+  def response_accepted_notification(response)
+    subject       "Your #{response.title} response is Accepted"
+    from          "HRT Notifier <hrt-do-not-reply@hrtapp.com>"
+    recipients    response.organization.users.map{ |u| u.email }
+    sent_on       Time.now
+  end
 end

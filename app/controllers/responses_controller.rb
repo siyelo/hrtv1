@@ -1,6 +1,7 @@
 class ResponsesController < Reporter::BaseController
   before_filter :require_user
   before_filter :load_response_from_id
+  before_filter :require_admin, :only => [:reject, :accept]
 
   def review
     # NOTE: old code
@@ -30,11 +31,13 @@ class ResponsesController < Reporter::BaseController
   def reject
     @response.reject!
     flash[:notice] = "Response was successfully rejected"
+    Notifier.deliver_response_rejected_notification(@response)
     redirect_to response_projects_path(@response)
   end
 
   def accept
     @response.accept!
+    Notifier.deliver_response_accepted_notification(@response)
     flash[:notice] = "Response was successfully accepted"
     redirect_to response_projects_path(@response)
   end

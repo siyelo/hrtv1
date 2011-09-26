@@ -1,0 +1,23 @@
+:javascript
+
+- show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
+- if (bulk_review || show_only_errors) || outlay.errors.empty?
+  - # a performance-friendly version of implementer_split_fields
+  - # doesnt load all the big organization selects
+  - styling = ""
+  - styling = "error" unless ff.object.errors.empty?
+  - styling += " deleting" if ff.object.marked_for_destruction?
+
+  %tr.overflow_fix.fields{:class => styling}
+    %td.implementer_search
+      = ff.hidden_field :data_response_id, :value => @response.id
+      = ff.hidden_field :updated_at, :value => Time.now
+      = ff.hidden_field :organization_mask, :value => ff.object.try(:organization_id) 
+      -# = ff.select :provider_mask, funding_organizations_select, {:prompt => true}, :class => 'name js_implementer_select js_combobox f_from'
+      -# perf hack - non editable provider name
+      %span.ui-autocomplete= ff.object.provider.try(:name) || "< n/a >"
+    %td.spend= ff.text_field :spend, :class => 'js_spend'
+    %td.budget= ff.text_field :budget, :class => 'js_budget'
+    %td.edit
+      = link_to 'e', '#', { :class =>  'edit_button edit_implementer_row' }
+      = link_to_remove_fields "x", ff, {:class => 'delete_button totals_callback', :callback => 'updateTotalsValuesCallback'}

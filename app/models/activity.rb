@@ -181,6 +181,11 @@ class Activity < ActiveRecord::Base
     self.find(:all).select {|a| !a.classified?}
   end
 
+  def self.approve_all_budgets(ids, user_id)
+    Activity.update_all({:user_id => user_id, :am_approved => true,
+                         :am_approved_date => Time.now}, ["id IN (?)", ids])
+  end
+
   ### Instance Methods
 
   def update_attributes(params)

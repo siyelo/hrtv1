@@ -41,4 +41,20 @@ class ResponsesController < Reporter::BaseController
     flash[:notice] = "Response was successfully accepted"
     redirect_to response_projects_path(@response)
   end
+
+  def approve_all_budgets
+    case params[:type]
+    when 'activities'
+      ids = @response.projects.find(params[:project_id]).normal_activities
+    when 'other_costs'
+      ids = @response.projects.find(params[:project_id]).other_costs
+    when 'other_costs_no_project'
+      ids = @response.other_costs.without_a_project
+    else
+      ids = []
+    end
+
+    Activity.approve_all_budgets(ids.map(&:id), current_user.id)
+    redirect_to response_projects_path(current_or_last_response)
+  end
 end

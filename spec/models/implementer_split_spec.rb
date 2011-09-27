@@ -169,13 +169,15 @@ describe ImplementerSplit do
     end
 
     it "should update the spend field on the parent activity" do
-      @split = Factory.build(:implementer_split, :activity => @activity, :spend => 74)
+      @split = Factory.build :implementer_split, :activity => @activity,
+        :spend => 74
       @split.save; @activity.reload; @activity.save
       @activity.spend.to_f.should == 74
     end
 
     it "should update the budget field on the parent activity" do
-      @split = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :budget => 74)
+      @split = Factory.build :implementer_split, :activity => @activity,
+        :budget => 74
       @split.save; @activity.reload;
       @activity.save # this updates the cache
       @activity.budget.to_f.should == 74
@@ -183,7 +185,7 @@ describe ImplementerSplit do
   end
 
   it "should return provider_mask as the org id" do
-    org = Factory.build(:organization)
+    org = Factory.build :organization
     split = Factory.build :implementer_split, :organization => org
     split.provider_mask.should == org.id
   end

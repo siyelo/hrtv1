@@ -1,6 +1,7 @@
 require 'iconv'
 
 class Importer
+  include EncodingHelper
 
   attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
 
@@ -26,7 +27,7 @@ class Importer
       project_name         = name_for(row['Project Name'], project_name)
       project_description  = description_for(row['Project Description'],
                                             project_description, row['Project Name'])
-      sub_activity_name   = EncodingHelper::sanitize_encoding(row['Implementer'].try(:strip))
+      sub_activity_name   = sanitize_encoding(row['Implementer'].try(:strip))
       sub_activity_id     = row['Id']
 
       # find implementer based on name or set self-implementer if not found
@@ -101,7 +102,7 @@ class Importer
   end
 
   def name_for(current_row_name, previous_name)
-    name = EncodingHelper::sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
+    name = sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
     name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
                                                                  # any trailing spaces
   end
@@ -113,7 +114,7 @@ class Importer
     if description.blank? && name.blank?
       result = previous_description
     end
-    EncodingHelper::sanitize_encoding(result)
+    sanitize_encoding(result)
   end
 
   def date_for(date_row, existing_date)

@@ -95,19 +95,13 @@ describe ProjectsController do
         response.header["Content-Type"].should == "application/excel"
         response.header["Content-Disposition"].should == "attachment; filename=import_template.xls"
       end
-
-      it "downloads csv workplan" do
-        get :export_workplan, :response_id => 1
-        response.should be_redirect
-        flash[:error].should == "You must be an activity manager to access that page"
-      end
     end
   end
 
   describe "as a activity_manager" do
     before :each do
       @organization = Factory :organization, :name => "Reporter Org"
-      @user = Factory.create(:activity_manager, :organization => @organization)
+      @user = Factory.create(:reporter, :organization => @organization)
       @organization = @user.organization
       login @user
       @data_response = mock_model(DataResponse)
@@ -117,12 +111,16 @@ describe ProjectsController do
     describe "import / export" do
       it "downloads csv workplan" do
         @data_response.should_receive(:organization).and_return(@organization)
-        Reports::OrganizationWorkplan.stub_chain(:new, :csv).and_return('dummy,csv,header')
+        @data_response.stub_chain(:projects, :sorted).and_return([])
+        @organization.stub(:name).and_return('Org Name')
+
+        workplan = Reports::OrganizationWorkplan.new(@data_response)
+        workplan.stub(:data).and_return(StringIO.new('dummy,xls,header'))
         get :export_workplan, :response_id => 1
         response.should be_success
-        response.header["Content-Type"].should == "text/csv; charset=iso-8859-1; header=present"
-        expected_name = 'reporter_org_workplan.csv'
-        response.header["Content-Disposition"].should == "attachment; filename=#{expected_name}"
+        response.header["Content-Type"].should == "application/excel"
+        filename = "#{@organization.name.split.join('_').downcase.underscore}_workplan.xls"
+        response.header["Content-Disposition"].should == "attachment; filename=#{filename}"
       end
     end
   end

@@ -2,54 +2,69 @@ require 'fastercsv'
 
 class Reports::OrganizationWorkplan
   include Reports::Helpers
+  include EncodingHelper
 
-  attr_accessor :csv, :response
+  attr_accessor :response
 
   def initialize(response)
     @response = response
-    self.to_csv
+  end
+
+  def to_xls
+    Exporter.to_xls(build_rows)
   end
 
   def to_csv
-    @csv = FasterCSV.generate do |csv|
-      csv << header
+    Exporter.to_csv(build_rows)
+  end
+
+  protected
+    def build_rows
+      rows = []
+      rows << header
       @response.projects.sorted.each do |project|
         row = []
-        row << project.name
-        row << project.description
+        row << sanitize_encoding(project.name)
+        row << sanitize_encoding(project.description)
         if project.activities.empty?
-          csv << row
+          rows << row
         else
           project.activities.sorted.each_with_index do |activity, index|
-            csv << add_activity_columns(activity, index, row)
+            rows << add_activity_columns(activity, index, row)
             row = []
           end
         end
       end
+
+      rows
     end
-  end
 
-  def header
-    row = []
-    row << "Project Name"
-    row << "Project Description"
-    row << "Activity Name"
-    row << "Activity Description"
-    row << "Budget (Dollars)"
-    row << "Districts Worked In"
-    row << "Inputs"
-    row
-  end
+    def header
+      row = []
+      row << "Project Name"
+      row << "Project Description"
+      row << "Activity Name"
+      row << "Activity Description"
+      row << "Budget (Dollars)"
+      row << "Districts Worked In"
+      row << "Inputs"
+      row
+    end
 
-  def add_activity_columns(activity, index, row)
-    row << "" if index > 0 # dont re-print project details on each line
-    row << "" if index > 0
-    row << ApplicationController.helpers.nice_name(activity, 50)
-    row << activity.description
-    row << n2c(activity.budget_in_usd, "", "")
-    row << activity.locations.map{ |l| l.short_display }.join(', ')
-    row << activity.coding_budget_cost_categorization.map{|ca| ca.code.short_display}.join(', ')
-    row
-  end
+    def add_activity_columns(activity, index, row)
+      row << "" if index > 0 # dont re-print project details on each line
+      row << "" if index > 0
+      row << nice_activity_name(activity, 50)
+      row << sanitize_encoding(activity.description)
+      row << n2c(activity.budget_in_usd, "", "")
+      row << activity.locations.map{ |l| l.short_display }.join(', ')
+      row << activity.coding_budget_cost_categorization.map{|ca| ca.code.short_display}.join(', ')
+      row
+    end
+
+    def nice_activity_name(activity, length)
+      nice_name = ApplicationController.helpers.nice_name(activity, length)
+      sanitize_encoding(nice_name)
+    end
 end
 

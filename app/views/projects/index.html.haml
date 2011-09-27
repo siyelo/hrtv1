@@ -40,13 +40,12 @@
         %li= link_to 'Import', '#', :id => "import_export"
         %li= link_to 'Export', export_response_projects_path(@response)
 
-    - if current_user.activity_manager?
-      %li
-        - link_to export_workplan_response_projects_path(@response), :class => 'dropdown dropless' do
-          Download Workplan
+    %li
+      - link_to export_workplan_response_projects_path(@response), :class => 'dropdown dropless' do
+        Download Workplan
 
-        %ul.menu_items{:style => 'display: none'}
-          %li= link_to 'Import', '#', :id => "import_export"
+      %ul.menu_items{:style => 'display: none'}
+        %li= link_to 'Import', '#', :id => "import_export"
 
     - if current_user.sysadmin?
       %li.js_dropdown_menu#state

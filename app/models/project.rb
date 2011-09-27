@@ -1,5 +1,4 @@
 require 'validators'
-require 'spreadsheet'
 
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
@@ -7,17 +6,6 @@ class Project < ActiveRecord::Base
   include NumberHelper
   include Project::Validations
 
-  ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name",
-                         "Project Description",
-                         "Project Start Date",
-                         "Project End Date",
-                         "Activity Name",
-                         "Activity Description",
-                         "Id",
-                         "Implementer",
-                         "Past Expenditure",
-                         "Current Budget"]
   MAX_NAME_LENGTH = 64
 
   strip_commas_from_all_numbers
@@ -86,67 +74,6 @@ class Project < ActiveRecord::Base
 
   ### Named Scopes
   named_scope :sorted, { :order => "projects.name" }
-
-  ### Class methods
-
-  def self.export_all(response)
-    rows = []
-    response.projects.sorted.each do |project|
-      row = []
-      row << EncodingHelper::sanitize_encoding(project.name.slice(0..MAX_NAME_LENGTH-1))
-      row << EncodingHelper::sanitize_encoding(project.description)
-      row << project.start_date.to_s
-      row << project.end_date.to_s
-      if project.activities.empty?
-        rows << row
-      else
-        project.activities.roots.sorted.each_with_index do |activity, index|
-          4.times do
-            row << "" if index > 0 # dont re-print project details on each line
-          end
-          row << EncodingHelper::sanitize_encoding(activity.name.slice(0..MAX_NAME_LENGTH-1))
-          row << EncodingHelper::sanitize_encoding(activity.description)
-          if activity.implementer_splits.empty?
-            rows << row
-          else
-            activity.implementer_splits.sorted.each_with_index do |split, index|
-              6.times do
-                row << "" if index > 0 # dont re-print activity details on each line
-              end
-              row << split.id
-              row << split.provider.try(:name)
-              row << split.spend.to_f
-              row << split.budget.to_f
-              rows << row
-              row = []
-            end
-          end
-        end
-      end
-    end
-
-    self.download_template(rows)
-
-  end
-
-  def self.download_template(rows = [])
-    Spreadsheet.client_encoding = "UTF-8//IGNORE"
-    book = Spreadsheet::Workbook.new
-    sheet1 = book.create_worksheet
-
-    rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
-
-    rows.each_with_index do |row, row_index|
-      row.each_with_index do |cell, column_index|
-        sheet1[row_index, column_index] = cell
-      end
-    end
-
-    data = StringIO.new ''
-    book.write data
-    return data
-  end
-
 
   ### Instance methods
   #

@@ -2,8 +2,6 @@ require 'set'
 class ProjectsController < Reporter::BaseController
   SORTABLE_COLUMNS = ['name', 'spend', 'budget']
 
-  before_filter :require_activity_manager, :only => :export_workplan
-
   inherit_resources
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'
   helper_method :sort_column, :sort_direction
@@ -86,18 +84,18 @@ class ProjectsController < Reporter::BaseController
   end
 
   def download_template
-    template = Project.download_template
-    send_xls(template.string, 'import_template.xls')
+    template = Reports::ProjectsExport.template
+    send_xls(template, 'import_template.xls')
   end
 
   def export
-    template = Project.export_all(@response)
-    send_xls(template.string, "all_activities.xls")
+    template = Reports::ProjectsExport.new(@response).to_xls
+    send_xls(template, "all_activities.xls")
   end
 
   def export_workplan
-    filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.csv"
-    send_csv(Reports::OrganizationWorkplan.new(@response).csv, filename)
+    filename = "#{@response.organization.name.split.join('_').downcase.underscore}_workplan.xls"
+    send_xls(Reports::OrganizationWorkplan.new(@response).to_xls, filename)
   end
 
   protected

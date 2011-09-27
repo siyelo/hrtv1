@@ -347,6 +347,14 @@ Then /^I should receive a csv file(?: "([^"]*)")?/ do |file|
   result
 end
 
+Then /^I should receive a xls file(?: "([^"]*)")?/ do |file|
+  result = page.response_headers['Content-Type'].should == "application/excel"
+  if result
+    result = page.response_headers['Content-Disposition'].should =~ /#{file}/
+  end
+  result
+end
+
 When /^I hover over "([^"]*)"(?: within "([^"]*)")?$/ do |element, selector|
   with_scope(selector) do
     page.execute_script("$('#{element}').mouseover();")

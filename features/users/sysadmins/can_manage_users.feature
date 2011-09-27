@@ -37,14 +37,14 @@ Feature: Admin can manage users
 
   Scenario: Admin can see last login
     Given now is "01-01-2011 21:30:00 +0000"
-    Given an organization exists with name: "reporting_org"
-    And a data_response should exist with data_request: the data_request, organization: the organization
-    And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
+      And an organization exists with name: "reporting_org"
+      And a data_response should exist with data_request: the data_request, organization: the organization
+      And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     When I follow "Sign Out"
-    And I am signed in as "reporter@hrtapp.com"
-    And I follow "Sign Out"
-    And I am signed in as "sysadmin@hrtapp.com"
-    And I follow "Users"
+      And I am signed in as "reporter@hrtapp.com"
+      And I follow "Sign Out"
+      And I am signed in as "sysadmin@hrtapp.com"
+      And I follow "Users"
     Then I should see "01 Jan '11 21:30"
 
 
@@ -107,6 +107,7 @@ Feature: Admin can manage users
        | Full name 2      | Full name 1      |
        | organization2    | organization3    |
        | organization3    | organization2    |
+
 
   Scenario Outline: An admin can sort users
     Given an organization exists with name: "organization2"

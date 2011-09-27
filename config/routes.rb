@@ -1,6 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
-  # ROOT
-  map.root :controller => 'static_page', :action => 'index'
+# ROOT
+map.root :controller => 'static_page', :action => 'index'
 
   # LOGIN/LOGOUT
   map.resource  :user_session
@@ -49,7 +49,8 @@ ActionController::Routing::Routes.draw do |map|
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
     :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.
-    :member => {:review => :get, :review => :get, :submit => :put,
+    :member => {:review => :get, :submit => :put,
+                :send_data_response => :put, :approve_all_budgets => :put,
                 :reject => :put, :accept => :put} do |response|
     response.resources :projects, :except => [:show],
       :collection => {:download_template => :get,

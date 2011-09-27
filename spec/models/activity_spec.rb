@@ -366,6 +366,27 @@ describe Activity do
       @activity.locations.should include(location2)
     end
   end
+
+  describe "approve all budgets" do
+    it "approves all budgets for activities" do
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response,
+                              :project => @project, :user_id => nil, :am_approved => nil)
+      @activity2    = Factory(:activity, :data_response => @response,
+                              :project => @project, :user_id => nil, :am_approved => nil)
+      activity_manager = Factory(:activity_manager)
+      Activity.approve_all_budgets([@activity.id, @activity2.id], activity_manager.id)
+      @activity.reload
+      @activity2.reload
+      @activity.am_approved.should be_true
+      @activity.user_id.should == activity_manager.id
+      @activity2.am_approved.should be_true
+      @activity2.user_id.should == activity_manager.id
+    end
+  end
 end
 
 

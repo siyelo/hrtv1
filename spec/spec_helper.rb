@@ -213,15 +213,19 @@ Spork.each_run do
     @other_cost   = Factory(:other_cost, :data_response => @response, :project => @project)
   end
 
-  def basic_setup_sub_activity
+  def basic_setup_implementer_split
     @organization = Factory(:organization)
     @request      = Factory(:data_request, :organization => @organization)
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
-    @sub_activity = Factory(:sub_activity, :data_response => @response,
-                            :activity => @activity, :provider => @organization)
-    @split = @sub_activity # sub_activity is deprecated
+    @split = Factory(:implementer_split, :activity => @activity,
+      :organization => @organization)
+  end
+
+  def basic_setup_sub_activity
+    puts "WARNING: DEPRECATED"
+    basic_setup_implementer_split
   end
 
   def basic_setup_funding_flow

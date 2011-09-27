@@ -46,9 +46,8 @@ class Activity < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-  has_many :implementer_splits, :class_name => "SubActivity", :foreign_key => :activity_id,
-    :dependent => :destroy #TODO - use non-sti model
-  has_many :implementers, :through => :sub_activities, :source => :provider #TODO - use non-sti model
+  has_many :implementer_splits, :dependent => :destroy
+  has_many :implementers, :through => :implementer_splits, :source => :organization
   # deprecated
   has_many :sub_activities, :class_name => "SubActivity",
                             :foreign_key => :activity_id,
@@ -460,7 +459,7 @@ class Activity < ActiveRecord::Base
     end
 
     def validate_implementers_uniqueness
-      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:provider_id)
+      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:organization_id)
       if splits.length != splits.uniq.length
         errors.add_to_base "Duplicate Implementers"
       end

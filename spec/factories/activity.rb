@@ -24,17 +24,6 @@ Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
   f.sequence(:name) { |i| "other_cost_name_#{i}" }
 end
 
-Factory.define :implementer_split, :class => SubActivity, :parent => :activity do |f|
-  f.sequence(:name) { |i| "implementer_split_name_#{i}" }
-  f.description     { 'implementer_split_descr' }
-  f.provider        { Factory.create(:provider) }
-  f.spend           { 1.23 }
-end
-
-#deprecated
-Factory.define :sub_activity, :class => SubActivity, :parent => :implementer_split do |f|
-end
-
 ### Partial factories: just to keep it DRY
 Factory.define :_budget_coded, :class => Activity, :parent => :activity  do |f|
   f.coding_budget_valid           { true }

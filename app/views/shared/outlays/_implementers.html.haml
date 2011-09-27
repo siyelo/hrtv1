@@ -4,8 +4,8 @@
 - # show splits with errors if there are more than 50 errors
 
 :javascript
-  var selectBox = "#{escape_javascript select_tag :activity_implementer_splits_attributes_provider_mask, options_for_select(Organization.find(:all).map { |o| [o.display_name(100), o.id]},  :class => "name js_implementer_select js_combobox f_from" )}"
-  var inputBox = "#{escape_javascript hidden_field_tag :data_response_id, :html => {:class => "data_response_id"}}"
+  var selectBox = "#{escape_javascript(select_tag :activity_implementer_splits_attributes_provider_mask, options_for_select(funding_organizations_select),  :class => "name js_implementer_select js_combobox f_from" )}"
+  var inputBox = "#{escape_javascript(hidden_field_tag :data_response_id, :html => {:class => "data_response_id"})}"
   var _data_response_id = "#{@response.id}"
   var _POSITION = "#{controller.controller_name == "activities" ? "4" : "5"}"
   var _TYPE = "#{controller.controller_name.singularize}"

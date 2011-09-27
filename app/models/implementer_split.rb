@@ -36,6 +36,30 @@ class ImplementerSplit < ActiveRecord::Base
     @provider_mask   = self.organization_id
   end
 
+  def budget
+    read_attribute(:budget)
+  end
+
+  def spend
+    read_attribute(:spend)
+  end
+
+  def budget=(amount)
+    if is_number?(amount)
+      write_attribute(:budget, amount.to_f.round_with_precision(2))
+    else
+      write_attribute(:budget, amount)
+    end
+  end
+
+  def spend=(amount)
+    if is_number?(amount)
+      write_attribute(:spend, amount.to_f.round_with_precision(2))
+    else
+      write_attribute(:spend, amount)
+    end
+  end
+
   private
     # remove any leading/trailing spaces from the percentage/amount input
     def strip_mask_fields

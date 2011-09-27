@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe Reports::OrganizationWorkplan do
   before :each do
-    @header = "Project Name,Project Description,Activity Name,Activity Description,Amount In Dollars," +
+    @header = "Project Name,Project Description,Activity Name,Activity Description,Budget (Dollars)," +
       "Districts Worked In,Inputs\n"
     @organization = Factory(:organization, :currency => "USD")
     @request      = Factory(:data_request, :organization => @organization)

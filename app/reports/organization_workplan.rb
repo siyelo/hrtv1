@@ -35,7 +35,7 @@ class Reports::OrganizationWorkplan
     row << "Project Description"
     row << "Activity Name"
     row << "Activity Description"
-    row << "Amount In Dollars"
+    row << "Budget (Dollars)"
     row << "Districts Worked In"
     row << "Inputs"
     row

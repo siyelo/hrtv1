@@ -1,30 +1,43 @@
-.form_aside.section_form.single
-- f.inputs :class => 'wrap-80 inputs' do
+-button_label = @user.new_record? ? "Create New User" : "Update User"
+- f.inputs :class => 'inputs' do
   %li.last
     %h3 User details
-    %ul.dashboard_section
+    %ul.section_form
       = f.input :organization_id, :label => "Organization", :as => :select, :collection => Organization.ordered, :hint => "The organization this user is associated with"
-      = f.input :full_name, :hint => "Full name of the user", :required => false
-      = f.input :email, :hint => "Email of the user"
-      = f.input :roles, :label => 'Roles', :hint => "Assign roles to this user", :required => true, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple, :size => 3, :class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}
+      %li
+        = f.label :full_name, "Full name"
+        = f.text_field :full_name
+        %p.inline-hints
+          Full name of the user
 
-  %li.last
+      %li
+        = f.label :email, "Email*"
+        = f.text_field :email, :class =>  f.object.errors.on(:email) ? 'error' : ''
+        %p.inline-hints
+          Email of the user
+
+
+  %li
+    %h3 Roles
+    %ul.section_form.last
+      = f.input :roles, :label => "Assign roles to this user", :required => false, :as => :select, :collection => User::ROLES.map{|u| [u.humanize, u]}, :input_html => {:multiple => :multiple,:class => 'multiselect'}, :include_blank => false, :wrapper_html => {:class => 'roles'}, :error_class => 'input-errors'
+
+  %li.js_manage_orgs
     %h3 Organizations to Manage
-    %ul.dashboard_section
-      = f.input :organizations, :label => 'Organizations', :hint => "Assign organizations to this Activity Manager to manage", :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}
+    %ul.section_form.last
+      = f.input :organizations, :label => "Assign organizations to this Activity Manager", :required => false, :as => :select, :collection => Organization.with_users, :input_html => {:class => 'multiselect'}, :wrapper_html => {:class => 'organizations', :style => 'visibility: hidden;'}, :error_class => 'input-errors'
 
-  %li.last
+  %li.js_manage_districts
     %h3 Districts to Manage
-    %ul.dashboard_section
-      = f.input :location, :label => "District", :hint => 'Assign districts to this district manager to manage', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC', :select => 'short_display, id'), :required => false, :input_html => {:class => 'js_combobox'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
+    %ul.section_form.last
+      = f.input :location, :label => "District", :hint => 'Assign districts to this district manager', :as => :select, :collection => Location.find(:all, :order => 'short_display ASC', :select => 'short_display, id'), :required => false, :input_html => {:class => 'js_combobox'}, :wrapper_html => {:class => 'locations', :style => 'visibility: hidden;'}
 
-- f.buttons :class => 'wrap-80 buttons' do
-  = f.commit_button @user.new_record? ? "Create New User" : "Update User", :class => "last"
+  - f.buttons :class => 'buttons' do
+    = f.commit_button button_label, :button_html => {:class => "next"}
 
-.wrap-80
-  - unless @user.new_record?
-    .delete_section
-      = link_to "Delete this User", admin_user_path(@user), :confirm => "Are you sure you want to delete this User?", :method => :delete, :class => 'delete_action'
-      %p
-        %strong Warning:
-        Once you delete an User, you will lose all data associated with it, and there is no undo.
+- unless @user.new_record?
+  .delete_section
+    = link_to "Delete this User", admin_user_path(@user), :confirm => "Are you sure you want to delete this User?", :method => :delete, :class => 'delete_action'
+    %p
+      %strong Warning:
+      Once you delete an User, you will lose all data associated with it, and there is no undo.

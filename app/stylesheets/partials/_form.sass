@@ -96,7 +96,7 @@ input[type="text"], input[type="password"], textarea, select
         padding: 0 0 10px !important
     label
       float: left
-      margin-top: 7px
+      margin: 7px 0px 7px
       width: 18%
       &.indented
         position: relative
@@ -653,25 +653,65 @@ h3.form_heading
   label
     display: block !important
     float: none !important
-
-.organizations, .locations
-  .multiselect
-    display: block
     width: 100% !important
-    height: 200px !important
-
-.roles
-  .multiselect
-    display: block
-    width: 100% !important
-    height: 120px !important
 
 .comment
   .ajax-loader
     margin: 5px 10px
 
-.ui-widget-header
-  height: 25px
+/*Multi-select on User form*/
+#admin_users_edit, #admin_users_update
+  .organizations, .locations
+    .multiselect
+      display: block
+      width: 100% !important
+      height: 207px !important
+
+  .roles
+    .multiselect
+      display: block
+      width: 100% !important
+      height: 150px !important
+
+  .ui-widget-header
+    height: 25px
+    background: $primary_dark
+    a
+      font-weight: normal
+      color: white
+      padding-right: 10px
+      text-decoration: none
+      &:hover, &:focus
+        color: $orange
+
+  .ui-multiselect
+    width: 911px !important
+    border: 1px solid $primary_border
+
+  .ui-state-default
+    padding-bottom: 5px
+    overflow: hidden
+    background: none
+    width: 96%
+
+  .available
+    width: 455px !important
+    border-left: 0px none
+    ul
+      width: 100% !important
+
+  .selected
+    width: 455px !important
+    border-right: 1px solid $primary_border
+    ul
+      width: 100% !important
+
+  .ui-corner-all
+    -moz-border-radius: 0px
+    -webkit-border-radius: 0px
+    -khtml-border-radius: 0px
+    border-radius: 0px
+
 
 .search
   padding: 0 !important
@@ -684,6 +724,9 @@ td.error, tr.error td
 
 .error
   background: #FFDDDD !important
+
+li.error
+  background: #FFF !important
 
 // New form styles
 .condensed_fields

@@ -1683,16 +1683,21 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
   run: function () {
     var toggleMultiselect = function (element) {
       var ac_selected = $('#user_roles option[value="activity_manager"]:selected').length > 0;
+      var dm_selected = $('#user_roles option[value="district_manager"]:selected').length > 0;
       if (element.val() && ac_selected) {
         $(".organizations").show().css('visibility', 'visible');
+        $(".js_manage_orgs").slideDown();
       } else {
+        $(".js_manage_orgs").slideUp();
         $(".organizations").hide().css('visibility', 'hidden');
       }
 
-      if (element.val()) {
+      if (element.val() && dm_selected) {
         $(".locations").show().css('visibility', 'visible');
+        $(".js_manage_districts").slideDown();
       } else {
         $(".locations").hide().css('visibility', 'hidden');
+        $(".js_manage_districts").slideUp();
       }
     };
 

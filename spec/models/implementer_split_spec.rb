@@ -67,7 +67,7 @@ describe ImplementerSplit do
         @activity.errors.full_messages.should include("Duplicate Implementers")
       end
 
-      it "should enforce uniqueness via SubActivity api" do
+      it "should enforce uniqueness via ImplementerSplit api" do
         basic_setup_implementer_split
         @split1 = Factory(:implementer_split, :activity => @activity,
           :organization => @organization)
@@ -77,6 +77,110 @@ describe ImplementerSplit do
     end
   end
 
+  describe "Custom validations" do
+    before :each do
+      basic_setup_activity
+    end
+
+    it "should validate Expenditure and/or Budget is present if nil" do
+      @split = ImplementerSplit.new(:activity => @activity,
+                 :budget => nil, :spend => nil)
+      @split.save.should == false
+      @split.errors.on(:spend).should include(' and/or Budget must be present')
+    end
+
+    it "should validate Expenditure and/or Budget is present if blank" do
+      @split = ImplementerSplit.new(:activity => @activity,
+                  :budget => "", :spend => "")
+      @split.save.should == false
+      @split.errors.on(:spend).should include(' and/or Budget must be present')
+    end
+
+    it "should fail when trying to create a split without spend/budget via Activity API " do
+      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        "implementer_splits_attributes"=>
+          {"0"=> {"updated_at" => Time.now, "spend"=>"", "budget"=>"",
+            "activity_id"=>"#{@activity.id}",
+            "provider_mask"=>"#{@organization.id}"},
+          }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      @activity.reload
+      @activity.update_attributes(attributes).should be_false
+      @activity.implementer_splits[0].errors.on(:spend).should == ' and/or Budget must be present'
+    end
+
+    it "should fail when trying to create a split without spend/budget via Activity API " do
+      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        "implementer_splits_attributes"=>
+          {"0"=> {"updated_at" => Time.now, "spend"=>"", "budget"=>"",
+            "activity_id"=>"#{@activity.id}",
+              "provider_mask"=>"#{@organization.id}"},
+          }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      @activity.reload
+      @activity.update_attributes(attributes).should be_false
+      @activity.implementer_splits[0].errors.on(:spend).should == ' and/or Budget must be present'
+    end
+
+    it "should only update splits via Activity API if updated_at is set" do
+      attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
+        "implementer_splits_attributes"=>
+          {"0"=> {"spend"=>"0", "budget"=>"0",
+            "activity_id"=>"#{@activity.id}",
+            "provider_mask"=>"#{@organization.id}"},
+          }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
+      @activity.reload
+      @activity.update_attributes(attributes).should be_true
+    end
+
+    it "should validate one OR the other" do
+      @split = ImplementerSplit.new(:activity => @activity,
+                  :budget => nil, :spend => "123.00", :organization => @organization)
+      @split.save.should == true
+    end
+  end
+
+  describe "#budget= and #spend=" do
+    before :each do
+      basic_setup_activity
+      @split = Factory.build(:implementer_split, :activity => @activity)
+    end
+
+    it "allows nil value" do
+      @split.budget = @split.spend = nil
+      @split.budget.should == nil
+      @split.spend.should == nil
+    end
+
+    it "rounds up to 2 decimals" do
+      @split.budget = @split.spend = 10.12745
+      @split.budget.to_f.should == 10.13
+      @split.spend.to_f.should == 10.13
+    end
+
+    it "rounds down to 2 decimals" do
+      @split.budget = @split.spend = 10.12245
+      @split.budget.to_f.should == 10.12
+      @split.spend.to_f.should == 10.12
+    end
+  end
+
+  describe "saving sub activity updates the activity" do
+    before :each do
+      basic_setup_activity
+    end
+
+    it "should update the spend field on the parent activity" do
+      @split = Factory.build(:implementer_split, :activity => @activity, :spend => 74)
+      @split.save; @activity.reload; @activity.save
+      @activity.spend.to_f.should == 74
+    end
+
+    it "should update the budget field on the parent activity" do
+      @split = Factory.build(:sub_activity, :data_response => @response, :activity => @activity, :budget => 74)
+      @split.save; @activity.reload;
+      @activity.save # this updates the cache
+      @activity.budget.to_f.should == 74
+    end
+  end
 
   it "should return provider_mask as the org id" do
     org = Factory.build(:organization)

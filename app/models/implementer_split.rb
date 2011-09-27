@@ -1,8 +1,12 @@
 class ImplementerSplit < ActiveRecord::Base
+  include NumberHelper
+  include AutocreateHelper
+
   belongs_to :activity
   belongs_to :organization
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,
+    :provider_mask, :organization,
     :updated_at #TODO: remove updated_at
 
   ### Validations
@@ -19,7 +23,6 @@ class ImplementerSplit < ActiveRecord::Base
 
   ### Callbacks
   before_validation :strip_mask_fields
-
 
   ### Instance methods
 

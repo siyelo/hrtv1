@@ -27,14 +27,14 @@
   =image_tag "icon_reporter.png", :class => "heading_icon"
   Organizations List
 .dashboard_section
-  %table.modern_table.am_organizations
+  %table.modern_table.am_organizations.clickable
     %thead
       %tr
         %th.am_organization Organization
         %th.am_contacts Contacts
         %th.am_activities.center Approved Activities
         %th.am_status.center Status
-        %th.am_download.center Download
+        %th.am_download.center Actions
     %tbody
       - @organizations.each do |organization|
         - response = organization.data_responses.detect { |dr| dr.data_request_id == current_request.id }
@@ -43,14 +43,14 @@
           %td
             %ul
               %li
-                %span= organization.contact_name
-                = "(#{organization.contact_position})" if organization.contact_position.present?
+                = organization.contact_name
+                %span= "(#{organization.contact_position})" if organization.contact_position.present?
               %li
                 = organization.contact_phone_number.presence || organization.contact_main_office_phone_number
             %ul
               - organization.user_emails(2).each do |email|
                 %li= mail_to email
 
-          %td.center= response.nil? ? "n/a" : "#{response.activities.manager_approved.count}/#{response.activities_count}"
-          %td.center= response.nil? ? "n/a" : response.status
+          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities_count}", response_projects_path(response)
+          %td.center= link_to response.status, response_projects_path(response)
           %td.center= link_to "Download Workplan", export_workplan_response_projects_path(response), :class => 'download_workplan'

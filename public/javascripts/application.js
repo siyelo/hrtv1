@@ -1443,9 +1443,9 @@ var activities_new = activities_create = activities_edit = activities_update = o
       $(".js_combobox" ).combobox();
       var providerMask = parent.find('select');
       var dr_id = parent.find('input');
-      var spendInput = element.parent().parent().find('td.spend').find('input.js_spend')
-      var budgetInput = element.parent().parent().find('td.budget').find('input.js_budget')
-      var deleteInput = element.parent().parent().find('td.edit').find('input')
+      var spendInput = element.parent().siblings('td.spend').find('input.js_spend')
+      var budgetInput = element.parent().siblings('td.budget').find('input.js_budget')
+      var deleteInput = element.siblings('input')
       providerMask.attr('id', _TYPE+ "_implementer_splits_attributes_" + fieldNumber + "_provider_mask");
       providerMask.attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][provider_mask]");
       dr_id.find('input').attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_data_response_id");
@@ -1464,6 +1464,9 @@ var activities_new = activities_create = activities_edit = activities_update = o
     });
   }
 };
+
+function rename_implementer_fields() {
+}
 
 var activity_form = function () {
 

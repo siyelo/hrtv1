@@ -15,9 +15,9 @@
     %span.large= @pending_activities
   %h3.tracked.last
     %br
-    %span.light Recently Submitted for Approval
+    %span.light Recently Submitted
     - unless @recent_responses.empty?
-      %ul
+      %ul.recently_submitted
         - @recent_responses.each do |r|
           %li= link_to r.organization.name, response_projects_path(r)
     - else

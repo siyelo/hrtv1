@@ -6,17 +6,6 @@ class Project < ActiveRecord::Base
   include NumberHelper
   include Project::Validations
 
-  ### Constants
-  FILE_UPLOAD_COLUMNS = ["Project Name",
-                         "Project Description",
-                         "Project Start Date",
-                         "Project End Date",
-                         "Activity Name",
-                         "Activity Description",
-                         "Id",
-                         "Implementer",
-                         "Past Expenditure",
-                         "Current Budget"]
   MAX_NAME_LENGTH = 64
 
   strip_commas_from_all_numbers

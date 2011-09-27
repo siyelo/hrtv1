@@ -3,12 +3,24 @@ require 'fastercsv'
 class Reports::ProjectsExport
   include EncodingHelper
 
+  ### Constants
+  FILE_UPLOAD_COLUMNS = ["Project Name",
+                         "Project Description",
+                         "Project Start Date",
+                         "Project End Date",
+                         "Activity Name",
+                         "Activity Description",
+                         "Id",
+                         "Implementer",
+                         "Past Expenditure",
+                         "Current Budget"]
+
   def initialize(response)
     @response = response
   end
 
   def self.template(rows = [])
-    rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
+    rows.insert(0, FILE_UPLOAD_COLUMNS)
     Exporter.to_xls(rows)
   end
 
@@ -17,7 +29,7 @@ class Reports::ProjectsExport
   end
 
   def to_csv
-    rows = build_rows.insert(0,Project::FILE_UPLOAD_COLUMNS)
+    rows = build_rows.insert(0, FILE_UPLOAD_COLUMNS)
     Exporter.to_csv(rows)
   end
 

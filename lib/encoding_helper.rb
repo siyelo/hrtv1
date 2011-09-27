@@ -1,5 +1,5 @@
 module EncodingHelper
-  def self.sanitize_encoding(string)
+  def sanitize_encoding(string)
     if string
       begin
         # //IGNORE ignores invalid byte sequences unless they occur

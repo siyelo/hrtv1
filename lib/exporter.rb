@@ -15,7 +15,7 @@ module Exporter
               :disposition=>"attachment; filename=#{filename}"
   end
 
-  def self.create_spreadsheet(rows = [])
+  def self.to_xls(rows = [])
     Spreadsheet.client_encoding = "UTF-8//IGNORE"
     book = Spreadsheet::Workbook.new
     sheet1 = book.create_worksheet
@@ -29,5 +29,13 @@ module Exporter
     data = StringIO.new ''
     book.write data
     data.string
+  end
+
+  def self.to_csv(rows = [])
+    FasterCSV.generate do |csv|
+      rows.each do |row|
+        csv << row
+      end
+    end
   end
 end

@@ -10,7 +10,7 @@ describe Reports::OrganizationWorkplan do
   end
 
   it "should return the header with an empty response" do
-    xls = Reports::OrganizationWorkplan.new(@response).data
+    xls = Reports::OrganizationWorkplan.new(@response).to_xls
     rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)
     rows.row(0).should == @header
   end
@@ -22,7 +22,7 @@ describe Reports::OrganizationWorkplan do
     end
 
     it "should include a project details" do
-      @xls = Reports::OrganizationWorkplan.new(@response).data
+      @xls = Reports::OrganizationWorkplan.new(@response).to_xls
       @rows = Spreadsheet.open(StringIO.new(@xls)).worksheet(0)
 
       @rows.row(0).should == @header
@@ -55,7 +55,7 @@ describe Reports::OrganizationWorkplan do
       end
 
       it "should include a project + activity details" do
-        @xls = Reports::OrganizationWorkplan.new(@response).data
+        @xls = Reports::OrganizationWorkplan.new(@response).to_xls
         @rows = Spreadsheet.open(StringIO.new(@xls)).worksheet(0)
 
         @rows.row(0).should == @header
@@ -72,7 +72,7 @@ describe Reports::OrganizationWorkplan do
           :amount => 10, :cached_amount => 10)
         @activity2.update_classified_amount_cache(CodingBudget)
         @activity2.update_classified_amount_cache(CodingBudgetCostCategorization)
-        @xls = Reports::OrganizationWorkplan.new(@response).data
+        @xls = Reports::OrganizationWorkplan.new(@response).to_xls
         @rows = Spreadsheet.open(StringIO.new(@xls)).worksheet(0)
 
         @rows.row(0).should == @header

@@ -68,6 +68,8 @@ class Project < ActiveRecord::Base
   validate :has_in_flows?, :if => Proc.new {|model| model.in_flows.reject{ |attrs|
     attrs['organization_id_from'].blank? || attrs.marked_for_destruction? }.empty?}
 
+  validate :validate_funder_uniqueness
+
   ### Attributes
   attr_accessible :name, :description, :spend, :user_id,:data_response_id,
                   :start_date, :end_date, :currency, :data_response, :activities,
@@ -452,6 +454,13 @@ class Project < ActiveRecord::Base
 
     def unstart_response_if_all_projects_removed
       response.unstart! if response.projects.empty?
+    end
+
+    def validate_funder_uniqueness
+      funders = in_flows.select{|e| !e.marked_for_destruction? }.map(&:organization_id_from)
+      if funders.length != funders.uniq.length
+        errors.add_to_base "Duplicate Project Funding Sources"
+      end
     end
 end
 

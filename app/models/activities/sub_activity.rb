@@ -20,7 +20,8 @@ class SubActivity < Activity
   ### Validations
   validates_presence_of :provider_mask
   # this seems to be bypassed on activity update if you pass two of the same providers
-  validates_uniqueness_of :provider_id, :scope => :activity_id, :message => "must be unique"
+  validates_uniqueness_of :provider_id, :scope => :activity_id,
+    :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
   validates_numericality_of :spend, :if => Proc.new {|is|is.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|is| is.budget.present?}
   validates_presence_of :spend, :if => lambda {|is| (!((is.budget || 0) > 0)) &&

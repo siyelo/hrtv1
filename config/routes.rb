@@ -34,7 +34,7 @@ ActionController::Routing::Routes.draw do |map|
                       :download_template => :get, :create_from_file => :post}
     admin.resources :reports, :member => {:generate => :get}
     admin.resources :currencies, :only => [:index, :new, :create, :update, :destroy]
-    admin.resources :users,
+    admin.resources :users, :except => [:show],
       :collection => {:create_from_file => :post, :download_template => :get}
     admin.resources :codes,
       :collection => {:create_from_file => :post, :download_template => :get}

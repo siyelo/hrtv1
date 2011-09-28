@@ -419,7 +419,7 @@ class Activity < ActiveRecord::Base
     end
 
     def implementer_split?
-      self.class.eql?(SubActivity)
+      self.class.eql?(ImplementerSplit)
     end
 
     def strip_input_fields

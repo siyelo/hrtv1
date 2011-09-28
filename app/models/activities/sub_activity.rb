@@ -9,7 +9,7 @@ class SubActivity < Activity
   }
 
   ### Associations
-  belongs_to :activity, :counter_cache => true
+  belongs_to :activity
   # implementer is better, more generic. (Service) Provider is too specific.
   belongs_to :implementer, :foreign_key => :provider_id, :class_name => "Organization" #TODO rename actual column
 
@@ -24,9 +24,9 @@ class SubActivity < Activity
     :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
   validates_numericality_of :spend, :if => Proc.new {|is|is.spend.present?}
   validates_numericality_of :budget, :if => Proc.new {|is| is.budget.present?}
-  validates_presence_of :spend, :if => lambda {|is| (!((is.budget || 0) > 0)) &&
-                                                    (!((is.spend || 0) > 0))},
-    :message => " and/or Budget must be present"
+  validates_presence_of :spend, :message => " and/or Budget must be present",
+    :if => lambda {|is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0))}
+
 
   ### Callbacks
   before_validation :strip_mask_fields

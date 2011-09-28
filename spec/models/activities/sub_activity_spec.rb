@@ -276,7 +276,7 @@ describe SubActivity do
           autosplit.type.should == @district_coding.to_s.camelcase #e.g. CodingSpendDistrict
         end
       end
-   end
+    end
 
    ### Shared examples for the next part
 

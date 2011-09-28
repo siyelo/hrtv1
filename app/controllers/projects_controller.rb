@@ -1,6 +1,6 @@
 require 'set'
 class ProjectsController < Reporter::BaseController
-  SORTABLE_COLUMNS = ['name', 'spend', 'budget']
+  SORTABLE_COLUMNS = ['name']
 
   inherit_resources
   belongs_to :data_response, :route_name => 'response', :instance_name => 'response'

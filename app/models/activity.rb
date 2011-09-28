@@ -46,14 +46,14 @@ class Activity < ActiveRecord::Base
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided
   has_and_belongs_to_many :beneficiaries # codes representing who benefits from this activity
-  has_many :implementer_splits, :dependent => :destroy
+  has_many :implementer_splits, :dependent => :delete_all
   has_many :implementers, :through => :implementer_splits, :source => :organization
   # deprecated
-  has_many :sub_activities, :class_name => "SubActivity",
-                            :foreign_key => :activity_id,
-                            :dependent => :destroy
-  #deprecated
-  has_many :sub_implementers, :through => :sub_activities, :source => :provider
+  # has_many :sub_activities, :class_name => "SubActivity",
+  #                           :foreign_key => :activity_id,
+  #                           :dependent => :destroy
+  # #deprecated
+  # has_many :sub_implementers, :through => :sub_activities, :source => :provider
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
@@ -72,8 +72,8 @@ class Activity < ActiveRecord::Base
   accepts_nested_attributes_for :implementer_splits, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
   #deprecated
-  accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
-    :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
+  # accepts_nested_attributes_for :sub_activities, :allow_destroy => true,
+  #   :reject_if => Proc.new { |attrs| attrs['provider_mask'].blank? }
   accepts_nested_attributes_for :targets, :allow_destroy => true,
     :reject_if => Proc.new { |attrs| attrs['description'].blank? }
   accepts_nested_attributes_for :outputs, :allow_destroy => true,

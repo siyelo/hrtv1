@@ -54,17 +54,17 @@ class Report < ActiveRecord::Base
   end
 
   def generate_csv_zip
-    self.run_report
-    self.create_tmp_csv
-    self.zip_file
-    self.attach_zip_file
+    run_report
+    create_tmp_csv
+    zip_file
+    attach_zip_file
   end
 
   protected
 
     def run_report
       self.report =
-        case self.key
+        case key
         when 'districts_by_nsp_budget'
           Reports::DistrictsByNsp.new(simple_activities_for_request, :budget)
         when 'districts_by_all_codes_budget'
@@ -110,7 +110,7 @@ class Report < ActiveRecord::Base
         else
           raise "Invalid report request '#{self.key}'"
         end
-      self.raw_csv = self.report.csv #force the report to run.
+      self.raw_csv = report.csv #force the report to run.
     end
 
     def create_tmp_csv
@@ -136,21 +136,16 @@ class Report < ActiveRecord::Base
       File.delete self.zip_file_name if self.zip_file_name
     end
 
+    def simple_activities_for_request_with_associations
+      simple_activities_for_request.find(:all,
+        :include => [:provider, :beneficiaries,
+                      {:data_response => :organization}])
+    end
+
     def simple_activities_for_request
       Activity.only_simple_with_request(self.data_request)
     end
-
-    def simple_activities_for_request_with_associations
-      self.simple_activities_for_request.find(:all,
-        :include => [:provider, :organizations, :beneficiaries,
-                      {:data_response => :organization}])
-    end
 end
-
-
-
-
-
 
 # == Schema Information
 #

@@ -9,16 +9,16 @@ class Reports::JawpReport
     @include_subs = false
     @is_budget  = is_budget?(type)
     @activities = activities
-    @hc_implementer_splits = Activity.with_type('SubActivity').
-      implemented_by_health_centers.find(:all,
-                                         :select => 'activity_id, COUNT(*) AS total',
-                                         :group => 'activity_id')
+    @hc_implementer_splits = SubActivity.implemented_by_health_centers.find(:all,
+      :select => 'activity_id, COUNT(*) AS total', :group => 'activity_id')
   end
 
   def csv
     FasterCSV.generate(:encoding => 'u') do |csv|
       csv << build_header
-      @activities.each{|activity| build_rows(csv, activity)}
+      @activities.each{ |activity| build_rows(csv, activity) }
+      # for debugging purposes
+      # [Activity.find(8952)].each{|activity| build_rows(csv, activity)}
     end
   end
 
@@ -98,7 +98,6 @@ class Reports::JawpReport
       # TODO move this into helper in get_funding_sources for all reports!
       if funding_sources_total == 0
         funding_sources = [{:ufs => nil, :fa => nil, :spend => 1, :budget => 1}]
-        #funding_sources = fake_one_funding_source_if_none( [] )
         funding_sources_total = 1
       end
 
@@ -249,18 +248,6 @@ class Reports::JawpReport
       fake_ca.cached_amount = amount_total # update the fake ca with current activity amount
       fake_ca.cached_amount_in_usd = amount_total_in_usd
       codings.empty? ? [fake_ca] : codings
-    end
-
-    def fake_one_funding_source_if_none(funding_sources)
-      if funding_sources.empty?
-        if @is_budget
-          [FundingFlow.new(:budget => 1)]
-        else
-          [FundingFlow.new(:spend => 1)]
-        end
-      else
-        funding_sources
-      end
     end
 
     def get_institutions_assisted(activity)

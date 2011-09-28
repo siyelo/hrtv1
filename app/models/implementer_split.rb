@@ -143,3 +143,17 @@ class ImplementerSplit < ActiveRecord::Base
       return new_assignments
     end
 end
+
+# == Schema Information
+#
+# Table name: implementer_splits
+#
+#  id              :integer         not null, primary key
+#  activity_id     :integer
+#  organization_id :integer
+#  spend           :decimal(, )
+#  budget          :decimal(, )
+#  created_at      :datetime
+#  updated_at      :datetime
+#
+

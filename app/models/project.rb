@@ -239,7 +239,7 @@ class Project < ActiveRecord::Base
     end
 
     self.in_flows.each do |in_flow|
-      in_flow.save
+      in_flow.save unless in_flow.marked_for_destruction?
     end
   end
 

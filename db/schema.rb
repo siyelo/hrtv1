@@ -123,6 +123,16 @@ ActiveRecord::Schema.define(:version => 20110927135116) do
   add_index "comments", ["commentable_type"], :name => "index_comments_on_commentable_type"
   add_index "comments", ["user_id"], :name => "index_comments_on_user_id"
 
+  create_table "commodities", :force => true do |t|
+    t.string   "commodity_type"
+    t.text     "description"
+    t.decimal  "unit_cost",        :default => 0.0
+    t.integer  "quantity"
+    t.integer  "data_response_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "currencies", :force => true do |t|
     t.string   "conversion"
     t.float    "rate"
@@ -184,6 +194,15 @@ ActiveRecord::Schema.define(:version => 20110927135116) do
     t.datetime "updated_at"
   end
 
+  create_table "field_helps", :force => true do |t|
+    t.string   "attribute_name"
+    t.string   "short"
+    t.text     "long"
+    t.integer  "model_help_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "funding_flows", :force => true do |t|
     t.integer  "organization_id_from"
     t.integer  "project_id"
@@ -237,6 +256,15 @@ ActiveRecord::Schema.define(:version => 20110927135116) do
     t.decimal  "budget"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "model_helps", :force => true do |t|
+    t.string   "model_name"
+    t.string   "short"
+    t.text     "long"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "comments_count", :default => 0
   end
 
   create_table "organizations", :force => true do |t|

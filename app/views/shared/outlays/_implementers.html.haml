@@ -19,7 +19,7 @@
 
       - if outlay.new_record? && splits.empty?
         - self_org_id = outlay.organization.id
-        - splits.build(:provider_id => self_org_id, :data_response_id => outlay.data_response_id)
+        - splits.build(:organization_id => self_org_id, :data_response_id => outlay.data_response_id)
 
       - sort_splits(splits).each do |is|
         - f.semantic_fields_for :implementer_splits, is do |ff|
@@ -35,9 +35,9 @@
               = ff.hidden_field :updated_at, :value => Time.now
               -# the importer intentionally returns nil implementers
               -# which should fail on save
-              = ff.hidden_field :provider_mask, :value => ff.object.try(:implementer).try(:id)
+              = ff.hidden_field :provider_mask, :value => ff.object.try(:organization).try(:id)
               -# perf hack - non editable provider name
-              %span.ui-autocomplete= ff.object.try(:implementer).try(:name) || "< n/a >"
+              %span.ui-autocomplete= ff.object.try(:organization).try(:name) || "< n/a >"
             %td= ff.text_field :spend, :class => 'js_spend'
             %td= ff.text_field :budget, :class => 'js_budget'
             %td= link_to_remove_fields "x", ff, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}

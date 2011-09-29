@@ -41,10 +41,10 @@ describe Reports::OrganizationWorkplan do
                  :spend => 4, :budget => 20000.01)
         @activity.reload; @activity.save!
 
-        Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input1,
-          :amount => 5, :cached_amount => 5)
-        Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input2,
-          :amount => 15, :cached_amount => 15)
+        Factory(:coding_budget_cost_categorization, :activity => @activity,
+                :code => @input1, :cached_amount => 5)
+        Factory(:coding_budget_cost_categorization, :activity => @activity,
+                :code => @input2, :cached_amount => 15)
         Factory(:coding_budget_district, :activity => @activity, :code => @location1)
         Factory(:coding_budget_district, :activity => @activity, :code => @location2)
         @activity.reload; @activity.save!
@@ -68,8 +68,8 @@ describe Reports::OrganizationWorkplan do
         @sa2       = Factory(:sub_activity, :budget => 10, :activity => @activity2, :data_response => @response)
         @activity2.reload; @activity2.save!
         Factory(:coding_budget_district, :activity => @activity2, :code => @location1)
-        Factory(:coding_budget_cost_categorization, :activity => @activity2, :code => @input1,
-          :amount => 10, :cached_amount => 10)
+        Factory(:coding_budget_cost_categorization, :activity => @activity2,
+                :code => @input1, :cached_amount => 10)
         @activity2.update_classified_amount_cache(CodingBudget)
         @activity2.update_classified_amount_cache(CodingBudgetCostCategorization)
         @xls = Reports::OrganizationWorkplan.new(@response).to_xls

@@ -24,17 +24,12 @@ module Reports::Helpers
   # and what it returns is what should be used for a report
   # TODO: refactor methods here into code assignment or coding class
   def get_coding_only_nodes_with_local_amounts(codings)
-    if codings.size == 1 && codings.first.code_id.nil?
-      #coding was faked, just return this correctly
-      #return [[codings.first, ["No Code Specified"]]]
-    end
     coding_with_parent_codes = []
     coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
 
     real_codings  = codings.select do |ca|
-      code = codes_cache[ca.code_id]
-      (ca.amount.present? || ca.percentage.present?) &&
-      code && ca.has_amount_not_in_children?
+      ca.percentage.present? && codes_cache[ca.code_id] &&
+        ca.has_amount_not_in_children?
     end
 
     real_codings.each do |ca|

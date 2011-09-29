@@ -205,7 +205,7 @@ class Reports::JawpReport
       row << "# of implemeneters"
       row << "# of facilities implementing"
       row << "Implementers"
-      row << "Data Source"
+      row << "Organization"
       row << "Institutions Assisted"
       row << "Beneficiaries"
       row << "ID"

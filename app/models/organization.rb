@@ -2,7 +2,6 @@ require 'validators'
 
 class Organization < ActiveRecord::Base
   include ActsAsDateChecker
-  include Organization::FiscalYear
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]

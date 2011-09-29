@@ -187,9 +187,9 @@ describe Code do
       @code      = Factory.create(:code, :short_display => 'Code')
 
       Factory.create(:coding_budget, :activity => @activity1, :code => @code,
-                     :amount => 6000, :cached_amount => 6000)
+                     :cached_amount => 6000)
       Factory.create(:coding_budget, :activity => @activity2, :code => @code,
-                     :amount => 6000, :cached_amount => 6000)
+                     :cached_amount => 6000)
     end
 
     it "returns sum of code assignments when no activities" do
@@ -212,11 +212,15 @@ describe Code do
       @request      = Factory(:data_request, :organization => @organization)
       @response     = @organization.latest_response
       @project      = Factory(:project, :data_response => @response)
-      @activity1    = Factory(:activity, :data_response => @response, :project => @project)
-      @activity2    = Factory(:activity, :data_response => @response, :project => @project)
+      @activity1    = Factory(:activity, :data_response => @response,
+                              :project => @project)
+      @activity2    = Factory(:activity, :data_response => @response,
+                              :project => @project)
       @code1        = Factory(:code, :short_display => 'code1')
-      @code11       = Factory(:code, :short_display => 'code11', :parent => @code1)
-      @code12       = Factory(:code, :short_display => 'code12', :parent => @code1)
+      @code11       = Factory(:code, :short_display => 'code11',
+                              :parent => @code1)
+      @code12       = Factory(:code, :short_display => 'code12',
+                              :parent => @code1)
     end
 
     it "returns empty array when no activities" do
@@ -226,33 +230,39 @@ describe Code do
     it "returns empty array when no leaf" do
       @code1.stub(:leaf?) { false }
 
-      @a1ca1  = Factory.create(:coding_budget, :activity => @activity2, :code => @code11,
-                             :amount => 5, :cached_amount => 5, :sum_of_children => 5)
-      @a1ca11 = Factory.create(:coding_budget, :activity => @activity1, :code => @code11,
-                             :amount => 2, :cached_amount => 2)
+      @a1ca1  = Factory.create(:coding_budget, :activity => @activity2,
+                               :code => @code11, :cached_amount => 5,
+                               :sum_of_children => 5)
+      @a1ca11 = Factory.create(:coding_budget, :activity => @activity1,
+                               :code => @code11, :cached_amount => 2)
 
-      @code1.leaf_assignments_for_activities(CodingBudget, [@activity1, @activity2]).should == []
+      @code1.leaf_assignments_for_activities(CodingBudget,
+        [@activity1, @activity2]).should == []
     end
 
     it "returns only leaves with sum_of_children 0" do
-      a1ca1  = Factory.create(:coding_budget, :activity => @activity2, :code => @code11,
-                             :amount => 5, :cached_amount => 5, :sum_of_children => 5)
-      a1ca11 = Factory.create(:coding_budget, :activity => @activity1, :code => @code11,
-                             :amount => 2, :cached_amount => 2)
+      a1ca1  = Factory.create(:coding_budget, :activity => @activity2,
+                              :code => @code11, :cached_amount => 5,
+                              :sum_of_children => 5)
+      a1ca11 = Factory.create(:coding_budget, :activity => @activity1,
+                              :code => @code11, :cached_amount => 2)
 
-      a1ca12 = Factory.create(:coding_budget, :activity => @activity2, :code => @code11,
-                             :amount => 2, :cached_amount => 2, :sum_of_children => 5)
+      a1ca12 = Factory.create(:coding_budget, :activity => @activity2,
+                              :code => @code11, :cached_amount => 2,
+                              :sum_of_children => 5)
 
-      @code11.leaf_assignments_for_activities(CodingBudget, [@activity1, @activity2]).should == [a1ca11]
+      @code11.leaf_assignments_for_activities(CodingBudget,
+        [@activity1, @activity2]).should == [a1ca11]
     end
 
     it "orders code assignments by cached_amount desc" do
-      a2ca11 = Factory.create(:coding_budget, :activity => @activity1, :code => @code11,
-                             :amount => 2, :cached_amount => 2)
-      a2ca12 = Factory.create(:coding_budget, :activity => @activity2, :code => @code11,
-                             :amount => 3, :cached_amount => 3)
+      a2ca11 = Factory.create(:coding_budget, :activity => @activity1,
+                              :code => @code11, :cached_amount => 2)
+      a2ca12 = Factory.create(:coding_budget, :activity => @activity2,
+                              :code => @code11, :cached_amount => 3)
 
-      @code11.leaf_assignments_for_activities(CodingBudget, [@activity1, @activity2]).should == [a2ca12, a2ca11]
+      @code11.leaf_assignments_for_activities(CodingBudget,
+        [@activity1, @activity2]).should == [a2ca12, a2ca11]
     end
   end
 end

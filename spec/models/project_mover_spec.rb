@@ -40,15 +40,10 @@ describe ProjectMover do
     lambda { @mover.move! }.should raise_error
   end
 
-  context "invalid relations" do
-    before :each do
-      @project.name  = nil
-      @project.save(false)
-      @mover = ProjectMover.new(@dr2, @project)
-    end
-
-    it "should barf if one of the AR objects are somehow invalid" do
-      lambda { @clone_project = @mover.move! }.should raise_error
-    end
+  it "should barf if one of the AR objects are somehow invalid" do
+    @project.name  = nil
+    @project.save(false)
+    @mover = ProjectMover.new(@dr2, @project)
+    lambda { @clone_project = @mover.move! }.should raise_error
   end
 end

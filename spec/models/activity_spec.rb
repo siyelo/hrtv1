@@ -287,7 +287,6 @@ describe Activity do
       save_and_deep_clone
       @clone.code_assignments.count.should == 1
       @clone.code_assignments[0].code.should == @ca.code
-      @clone.code_assignments[0].amount.should == @ca.amount
       @clone.code_assignments[0].activity.should_not == @activity
       @clone.code_assignments[0].activity.should == @clone
     end
@@ -338,12 +337,12 @@ describe Activity do
       @purpose1    = Factory(:purpose, :short_display => 'purp1')
       @purpose2    = Factory(:mtef_code, :short_display => 'purp2')
       @input       = Factory(:input, :short_display => 'input')
-      Factory(:coding_budget, :activity => @activity, :code => @purpose1,
-        :amount => 5, :cached_amount => 5)
-      Factory(:coding_budget, :activity => @activity, :code => @purpose2,
-                 :amount => 15, :cached_amount => 15)
-      Factory(:coding_budget_cost_categorization, :activity => @activity, :code => @input,
-        :amount => 5, :cached_amount => 5)
+      Factory(:coding_budget, :activity => @activity,
+              :code => @purpose1, :cached_amount => 5)
+      Factory(:coding_budget, :activity => @activity,
+              :code => @purpose2, :cached_amount => 15)
+      Factory(:coding_budget_cost_categorization, :activity => @activity,
+              :code => @input, :cached_amount => 5)
       @activity.purposes.should == [@purpose1, @purpose2]
     end
   end

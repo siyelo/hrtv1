@@ -185,32 +185,6 @@ describe CodeAssignment do
                          :budget => 100, :spend => 200)
       @assignment = Factory(:code_assignment, :activity => activity)
     end
-
-    it "should allow updating of amount with ints and floats" do
-      [1234, 1234.4, 123.45, 123.4567].each do |value|
-        @assignment.amount = value
-        @assignment.save.should == true
-        @assignment.reload
-        @assignment.amount.should == value
-      end
-    end
-
-    it "should allow updating of amount with strings" do
-      update_amount_and_check(@assignment, '1234', '1234.0')
-    end
-
-    it "should allow updating of float amounts with strings" do
-      ['1234.4', '123.45', '123.4567'].each do |value|
-        update_amount_and_check(@assignment, value, value)
-      end
-    end
-  end
-
-  def update_amount_and_check(assignment, input, output)
-    assignment.amount = input
-    assignment.save.should == true
-    assignment.reload
-    assignment.amount.to_s.should == output
   end
 
   describe "keeping USD cached amounts in-sync" do
@@ -226,7 +200,6 @@ describe CodeAssignment do
 
       ###
       @ca               = Factory.build(:code_assignment, :activity => @activity)
-      @ca.amount        = 123.45
       @ca.cached_amount = 123.45
       @ca.save
       @ca.reload
@@ -301,8 +274,9 @@ describe CodeAssignment do
 
         context "when submitting percentages" do
           it "creates code assignments" do
-            Factory(:coding_budget, :activity => @activity, :code => @code1, :percentage => 10)
-            Factory(:coding_budget, :activity => @activity, :code => @code2, :amount => 20) #TODO - DEPRECATE
+            Factory(:coding_budget, :activity => @activity,
+                    :code => @code1, :percentage => 10)
+            Factory(:coding_budget, :activity => @activity, :code => @code2)
             CodingBudget.count.should == 2
 
             # when submitting existing classifications, it updates them

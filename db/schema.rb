@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110927120958) do
+ActiveRecord::Schema.define(:version => 20110929101034) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -77,7 +77,6 @@ ActiveRecord::Schema.define(:version => 20110927120958) do
   create_table "code_assignments", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "code_id"
-    t.decimal  "amount"
     t.string   "type"
     t.decimal  "percentage"
     t.decimal  "cached_amount",        :default => 0.0

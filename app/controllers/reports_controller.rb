@@ -25,9 +25,9 @@ class ReportsController < BaseController
       when 'locations'
         Reports::AllCodes.new(Location)
       when 'activities_by_nsp_budget'
-        Reports::ActivitiesByNsp.new(@response.activities, :budget, current_user.admin?)
+        Reports::ActivitiesByNsp.new(activities, :budget)
       when 'activities_by_all_codes_budget'
-        Reports::ActivitiesByAllCodes.new(@response.activities, :budget, current_user.admin? )
+        Reports::ActivitiesByAllCodes.new(activities, :budget)
       when 'districts_by_nsp_budget'
         Reports::DistrictsByNsp.new(@response.activities, :budget)
       when 'districts_by_all_codes_budget'

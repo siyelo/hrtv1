@@ -128,11 +128,7 @@ class CodingTree
         ca = @coding_klass.with_activity(activity).with_code_id(code.id).first
         children = cached_children(code)
         if ca
-          if ca.amount.present? && ca.amount > 0
-            cached_amount = ca.amount
-            bucket = self.codings_sum(children, activity, max)
-            sum_of_children = bucket[:amount]
-          elsif ca.percentage.present? && ca.percentage > 0
+          if ca.percentage.present? && ca.percentage > 0
             cached_amount = ca.percentage * max / 100
             bucket = self.codings_sum(children, activity, max)
             sum_of_children = bucket[:amount]

@@ -33,16 +33,16 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li=  link_to "Grouped by NSP", reporter_report_path('activities_by_nsp_budget', :dr_id => current_response.id), :class => "target"
-      %li= link_to "Grouped by All Codes", reporter_report_path('activities_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
+      %li=  link_to "Grouped by NSP", response_report_path(@response, 'activities_by_nsp_budget'), :class => "target"
+      %li= link_to "Grouped by All Codes", response_report_path(@response, 'activities_by_all_codes_budget'), :class => "target"
 
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Districts
   .dashboard_section
     %ul.admin_reports
-      %li=  link_to "Grouped by NSP", reporter_report_path('districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
-      %li= link_to "Grouped by All Codes", reporter_report_path('districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
+      %li=  link_to "Grouped by NSP", response_report_path(@response, 'districts_by_nsp_budget'), :class => "target"
+      %li= link_to "Grouped by All Codes", response_report_path(@response, 'districts_by_all_codes_budget'), :class => "target"
 
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
@@ -60,15 +60,15 @@
   .dashboard_section
     %ul
       %li
-        - link_to reporter_report_path('purposes'), :class => "target" do
+        - link_to response_report_path(@response, 'purposes'), :class => "target" do
           Purposes
           %span.hint from current budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('inputs'), :class => "target" do
+        - link_to response_report_path(@response, 'inputs'), :class => "target" do
           Inputs
           %span.hint from current budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('locations'), :class => "target" do
+        - link_to response_report_path(@response, 'locations'), :class => "target" do
           Locations
           %span.hint from current budget and expenditure classifications screen
 
@@ -77,12 +77,12 @@
     Users
   .dashboard_section
     %ul
-      %li= link_to "Users In My Organization", reporter_report_path('users_in_my_organization'), :class => "target"
+      %li= link_to "Users In My Organization", response_report_path(@response, 'users_in_my_organization'), :class => "target"
 
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"
     Maps by Districts
   .dashboard_section
     %ul
-      %li=  link_to "Grouped by NSP", reporter_report_path('map_districts_by_nsp_budget', :dr_id => current_response.id), :class => "target"
-      %li=  link_to "Grouped by All Codes", reporter_report_path('map_districts_by_all_codes_budget', :dr_id => current_response.id), :class => "target"
+      %li=  link_to "Grouped by NSP", response_report_path(@response, 'map_districts_by_nsp_budget'), :class => "target"
+      %li=  link_to "Grouped by All Codes", response_report_path(@response, 'map_districts_by_all_codes_budget'), :class => "target"

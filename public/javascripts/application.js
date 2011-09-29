@@ -611,7 +611,7 @@ var admin_responses_show = {
   }
 };
 
-var reporter_reports_index = {
+var reports_index = {
   run: function () {
     ajaxifyResources('comments');
     drawPieChart('code_spent', _code_spent_values, 450, 300);

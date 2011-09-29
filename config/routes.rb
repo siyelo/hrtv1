@@ -69,17 +69,13 @@ map.root :controller => 'static_page', :action => 'index'
       district.resources :organizations, :only => [:index, :show],
         :controller => "districts/organizations"
     end
+
+    response.resources :reports, :only => [:index, :show]
   end
 
   map.resources :activities
   map.resources :organizations, :only => [:edit, :update],
     :collection => { :export => :get }
-
-  # REPORTER USER
-  map.namespace :reporter do |reporter|
-    reporter.set_latest_response 'set_latest_response', :controller => 'responses', :action => :set_latest
-    reporter.resources :reports, :only => [:index, :show]
-  end
 
   # REPORTS
   map.charts 'charts/:action', :controller => 'charts' # TODO: convert to resource

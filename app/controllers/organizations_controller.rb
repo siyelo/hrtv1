@@ -1,9 +1,9 @@
-class OrganizationsController < Reporter::BaseController
-  before_filter :load_organization
+class OrganizationsController < BaseController
+  SORTABLE_COLUMNS = ['email', 'full_name', 'last_login_at']
 
   helper_method :sort_column, :sort_direction
 
-  SORTABLE_COLUMNS = ['email', 'full_name', 'last_login_at']
+  before_filter :load_organization, :only => [:edit, :update]
 
   def edit
     @organization.valid? # trigger validation errors

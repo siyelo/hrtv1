@@ -17,7 +17,8 @@ describe DataRequest do
 
   describe "Associations" do
     it { should belong_to :organization }
-    it { should have_many :data_responses }
+    it { should have_many(:data_responses).dependent(:destroy) }
+    it { should have_many(:reports).dependent(:destroy) }
   end
 
   describe "Validations" do

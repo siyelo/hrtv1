@@ -8,6 +8,7 @@ class DataRequest < ActiveRecord::Base
   ### Associations
   belongs_to :organization
   has_many :data_responses, :dependent => :destroy
+  has_many :reports, :dependent => :destroy
 
   ### Validations
   validates_presence_of :organization_id, :title

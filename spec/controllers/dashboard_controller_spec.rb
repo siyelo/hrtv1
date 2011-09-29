@@ -47,6 +47,8 @@ describe DashboardController do
 
   context "as an admin" do
     before :each do
+      @organization = Factory(:organization)
+      @data_request = Factory(:data_request, :organization => @organization) # we need a request in the system first
       @admin = Factory.create(:admin)
       login @admin
     end

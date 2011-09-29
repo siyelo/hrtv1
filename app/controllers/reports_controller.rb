@@ -1,6 +1,8 @@
-class Reporter::ReportsController < Reporter::BaseController
+class ReportsController < BaseController
   include ReportsControllerHelpers
   include PrepareCharts
+
+  before_filter :load_response
 
   def index
     load_dashboard_charts
@@ -23,24 +25,19 @@ class Reporter::ReportsController < Reporter::BaseController
       when 'locations'
         Reports::AllCodes.new(Location)
       when 'activities_by_nsp_budget'
-        Reports::ActivitiesByNsp.new(activities, :budget, current_user.admin?)
+        Reports::ActivitiesByNsp.new(@response.activities, :budget, current_user.admin?)
       when 'activities_by_all_codes_budget'
-        Reports::ActivitiesByAllCodes.new(activities, :budget, current_user.admin? )
+        Reports::ActivitiesByAllCodes.new(@response.activities, :budget, current_user.admin? )
       when 'districts_by_nsp_budget'
-        Reports::DistrictsByNsp.new(activities, :budget)
+        Reports::DistrictsByNsp.new(@response.activities, :budget)
       when 'districts_by_all_codes_budget'
-        Reports::DistrictsByAllCodes.new(activities, :budget)
+        Reports::DistrictsByAllCodes.new(@response.activities, :budget)
       when 'map_districts_by_nsp_budget'
-        Reports::MapDistrictsByNsp.new(activities, :budget)
+        Reports::MapDistrictsByNsp.new(@response.activities, :budget)
       when 'map_districts_by_all_codes_budget'
-        Reports::MapDistrictsByAllCodes.new(activities, :budget)
+        Reports::MapDistrictsByAllCodes.new(@response.activities, :budget)
       else
         raise "Invalid report request '#{params[:id]}'" #TODO GN this should do security exception
       end
-    end
-
-    def activities
-      dr = current_user.data_responses.find(params[:dr_id])
-      @activities = dr.activities
     end
 end

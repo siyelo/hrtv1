@@ -79,14 +79,14 @@
   .dashboard_section
     %ul
       %li
-        - link_to reporter_report_path('purposes'), :class => 'target' do
+        - link_to response_report_path(@response, 'purposes'), :class => 'target' do
           Purpose (MTEF, NSP, NHA, etc) Codes
           %span.hint from current budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('inputs'), :class => 'target' do
+        - link_to response_report_path(@response, 'inputs'), :class => 'target' do
           Inputs
           %span.hint from current budget and expenditure classifications screen
       %li
-        - link_to reporter_report_path('locations'), :class => 'target' do
+        - link_to response_report_path(@response, 'locations'), :class => 'target' do
           Location (District) Codes
           %span.hint from current budget and expenditure classifications screen

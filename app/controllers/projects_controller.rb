@@ -1,5 +1,5 @@
 require 'set'
-class ProjectsController < Reporter::BaseController
+class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
 
   inherit_resources

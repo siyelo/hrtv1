@@ -1,4 +1,4 @@
-class CommentsController < Reporter::BaseController
+class CommentsController < BaseController
 
   def index
     dr_ids    = current_user.organization.data_responses.map(&:id)

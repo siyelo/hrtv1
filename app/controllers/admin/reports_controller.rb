@@ -5,7 +5,9 @@ class Admin::ReportsController < Admin::BaseController
   before_filter :find_report, :only => [:show, :edit, :update]
 
   def index
-    @reports = Report.all
+    @request    = current_user.current_request
+    @response   = current_response
+    @reports    = @request.reports.all
     @report_map = @reports.map_to_hash{|r| {r.key => r}}
   end
 
@@ -49,5 +51,4 @@ class Admin::ReportsController < Admin::BaseController
     def find_report
       @report = Report.find params[:id]
     end
-
 end

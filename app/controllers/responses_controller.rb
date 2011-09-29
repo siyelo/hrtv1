@@ -1,4 +1,4 @@
-class ResponsesController < Reporter::BaseController
+class ResponsesController < BaseController
   before_filter :require_user
   before_filter :load_response_from_id
   before_filter :require_admin, :only => [:reject, :accept]

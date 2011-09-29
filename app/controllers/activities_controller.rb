@@ -1,5 +1,4 @@
-require 'set'
-class ActivitiesController < Reporter::BaseController
+class ActivitiesController < BaseController
   SORTABLE_COLUMNS = ['projects.name', 'description', 'spend', 'budget']
 
   inherit_resources

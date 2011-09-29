@@ -23,8 +23,10 @@ describe Activity, "Currency" do
       project       = Factory(:project, :data_response => @dr)
       @a            = Factory(:activity, :data_response => @dr,
                               :project => project)
-      @sa           = Factory(:sub_activity, :data_response => @dr, :activity => @a,
-                              :budget => 123.45, :spend => 123.45)
+      # @sa           = Factory(:sub_activity, :data_response => @dr, :activity => @a,
+      #                         :budget => 123.45, :spend => 123.45)
+      @split = Factory :implementer_split, :activity => @a,
+        :spend => 123.45, :budget => 123.45, :organization => @organization
       @organization.reload # needs reload for dr_activities association to work
       @a.reload
       @a.save
@@ -35,8 +37,7 @@ describe Activity, "Currency" do
     end
 
     it "should update spend in USD on update" do
-      @sa.spend = 456.78
-      @sa.save
+      @split.spend = 456.78; @sa.save
       @a.reload; @a.save # re-cache
       @a.spend_in_usd.to_f.should == 456.78
     end
@@ -62,7 +63,7 @@ describe Activity, "Currency" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
-      @sa.spend = 7893.10; @sa.save
+      @split.spend = 7893.10; @split.save
       @a.reload; @a.save
       @a.spend_in_usd.to_f.should == 15.7862
     end
@@ -72,7 +73,7 @@ describe Activity, "Currency" do
     end
 
     it "should update budget in USD on update" do
-      @sa.budget = 456.79; @sa.save
+      @split.budget = 456.79; @split.save
       @a.reload; @a.save
       @a.budget_in_usd.to_f.should == 456.79
     end
@@ -81,7 +82,7 @@ describe Activity, "Currency" do
       @p = @a.project
       @p.currency = 'RWF'
       @p.save
-      @sa.budget = 789.10; @sa.save
+      @split.budget = 789.10; @split.save
       @a.reload; @a.save
       @a.budget_in_usd.to_f.should ==  789.10 * 0.002
     end

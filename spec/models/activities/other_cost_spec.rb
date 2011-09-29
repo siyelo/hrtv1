@@ -7,7 +7,7 @@ describe OtherCost do
     it { should belong_to :project }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
-    it { should have_many :sub_implementers }
+    it { should have_many :implementer_splits }
     it { should have_many :codes }
     it { should have_many :code_assignments }
     it { should have_many :coding_budget }
@@ -46,8 +46,10 @@ describe OtherCost do
       @project      = Factory(:project, :data_response => @response)
       @activity     = Factory(:other_cost_fully_coded,
                               :data_response => @response, :project => @project)
-      @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                              :budget => 50, :spend => 40)
+      # @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
+      #                         :budget => 50, :spend => 40)
+      @split1 = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization, :budget => 50, :spend => 40)
 
       @activity.stub(:coding_budget_district_valid?) { true }
       @activity.stub(:coding_spend_district_classified?) { true }

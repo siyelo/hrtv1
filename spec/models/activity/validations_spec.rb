@@ -9,8 +9,8 @@ describe Activity, "Validations" do
     it "will return true if the activity has a budget" do
       @activity = Factory(:activity, :data_response => @response,
                           :project => @project)
-      @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 20, :spend => nil)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => nil, :budget => 20, :organization => @organization
       @activity.reload
       @activity.has_budget_or_spend?.should be_true
     end
@@ -18,8 +18,8 @@ describe Activity, "Validations" do
     it "will return false if the activity has a spend" do
       @activity = Factory(:activity, :data_response => @response,
                           :project => @project)
-      @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => nil, :spend => 20)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 20, :budget => nil, :organization => @organization
       @activity.reload
       @activity.has_budget_or_spend?.should be_true
     end
@@ -28,8 +28,8 @@ describe Activity, "Validations" do
   describe "#classification_errors_by_type" do
     before :each do
       basic_setup_activity
-      @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 20, :spend => 20)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 20, :budget => 20, :organization => @organization
       @activity.reload
     end
 

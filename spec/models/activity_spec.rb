@@ -155,8 +155,8 @@ describe Activity do
   describe "gets budget and spend from sub activities" do
     before :each do
       basic_setup_activity
-      @sa = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-              :budget => 25, :spend => 10)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 10, :budget => 25, :organization => @organization
       @activity.reload; @activity.save;
     end
 
@@ -169,15 +169,15 @@ describe Activity do
     end
 
     it "refreshes the amount if the amount of the sub-activity changes" do
-      @sa.spend = 13; @sa.budget = 29; @sa.save!; @activity.reload; @activity.save;
+      @split.spend = 13; @split.budget = 29; @split.save!; @activity.reload; @activity.save;
       @activity.spend.to_f.should == 13
       @activity.budget.to_f.should == 29
     end
 
     describe "works with more than one sub activity" do
       before :each do
-        @sa1 = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                :budget => 125, :spend => 100)
+        @split1 = Factory :implementer_split, :activity => @activity,
+          :spend => 100, :budget => 125, :organization => @organization
         @activity.reload; @activity.save;
       end
 
@@ -190,7 +190,7 @@ describe Activity do
       end
 
       it "refreshes the amount if the amount of the sub-activity changes" do
-        @sa.spend = 20; @sa.budget = 35; @sa.save!; @activity.reload; @activity.save;
+        @split.spend = 20; @split.budget = 35; @split.save!; @activity.reload; @activity.save;
         @activity.spend.to_f.should == 120
         @activity.budget.to_f.should == 160
       end

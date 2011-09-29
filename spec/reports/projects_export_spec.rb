@@ -10,11 +10,16 @@ describe Reports::ProjectsExport do
       @project       = Factory(:project, :data_response => @response)
       @activity      = Factory(:activity, :data_response => @response,
                                :project => @project)
-      sub_activity   = Factory(:sub_activity, :activity => @activity,
-                               :data_response => @response, :provider => @organization)
-      sub_activity2  = Factory(:sub_activity, :activity => @activity,
-                               :data_response => @response, :provider => @organization2)
-      @activity.reload; @activity.save!
+      # sub_activity   = Factory(:sub_activity, :activity => @activity,
+                               # :data_response => @response, :provider => @organization)
+      # sub_activity2  = Factory(:sub_activity, :activity => @activity,
+                               # :data_response => @response, :provider => @organization2)
+      @split = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization)
+      @split2 = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization)
+
+      @activity.save!
 
       xls = Reports::ProjectsExport.new(@response).to_xls
       rows = Spreadsheet.open(StringIO.new(xls)).worksheet(0)

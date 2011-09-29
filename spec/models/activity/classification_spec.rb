@@ -5,11 +5,12 @@ include DelayedJobSpecHelper
 describe Activity, "Classification" do
   describe "coding_budget_classified?" do
     it "is classified when activity budget is equal to coded budget" do
+      #before :Each
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -23,8 +24,8 @@ describe Activity, "Classification" do
     it "is not classified when activity budget is not equal to coded budget" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -42,8 +43,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -59,8 +60,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -79,8 +80,8 @@ describe Activity, "Classification" do
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
 
       activity.reload
       activity.save
@@ -96,8 +97,8 @@ describe Activity, "Classification" do
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :budget => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :budget => 100, :organization => @organization
       activity.reload
       activity.save
       activity.coding_budget_district_classified?.should be_false
@@ -113,8 +114,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -129,8 +130,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       code     = Factory(:mtef_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -148,8 +149,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -164,8 +165,8 @@ describe Activity, "Classification" do
       basic_setup_project
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       code     = Factory(:cost_category_code, :short_display => 'code')
       activity.reload
       activity.save
@@ -183,8 +184,8 @@ describe Activity, "Classification" do
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       activity.coding_spend_district_classified?.should be_false
       params = {code.id.to_s => 100}
       CodingSpendDistrict.update_classifications(activity, params)
@@ -197,8 +198,8 @@ describe Activity, "Classification" do
       code     = Factory(:location, :short_display => 'code')
       activity = Factory(:activity, :data_response => @response,
                          :project => @project)
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => activity, :spend => 100)
+      split = Factory :implementer_split, :activity => activity,
+        :spend => 100, :organization => @organization
       activity.reload
       activity.save
       activity.coding_spend_district_classified?.should be_false
@@ -212,8 +213,8 @@ describe Activity, "Classification" do
   describe "budget_classified?" do
     before :each do
       basic_setup_activity
-      @sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => @activity, :spend => 100, :budget => 100)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save
     end
@@ -247,10 +248,8 @@ describe Activity, "Classification" do
     end
 
     it "is budget_classified? when no budgets are classified & budget is blank or zero" do
-      @sa.budget = nil
-      @sa.save
-      @activity.reload
-      @activity.save
+      @split.budget = nil; @split.save
+      @activity.reload; @activity.save
       @activity.stub(:coding_budget_classified?) { false }
       @activity.stub(:coding_budget_district_classified?) { false }
       @activity.stub(:coding_budget_cc_classified?) { false }
@@ -261,8 +260,8 @@ describe Activity, "Classification" do
   describe "spend_classified?" do
     before :each do
       basic_setup_activity
-      @sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => @activity, :spend => 100, :budget => 100)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save
     end
@@ -296,10 +295,8 @@ describe Activity, "Classification" do
     end
 
     it "is spend_classified? when no spends are classified & spend is blank or zero" do
-      @sa.spend = nil
-      @sa.save
-      @activity.reload
-      @activity.save
+      @split.spend = nil; @sa.save
+      @activity.reload; @activity.save
       @activity.stub(:coding_spend_classified?) { false }
       @activity.stub(:coding_spend_district_classified?) { false }
       @activity.stub(:coding_spend_cc_classified?) { false }
@@ -310,8 +307,8 @@ describe Activity, "Classification" do
   describe "classified?" do
     before :each do
       basic_setup_activity
-      sa       = Factory(:sub_activity, :data_response => @response,
-                         :activity => @activity, :spend => 100, :budget => 100)
+      @split = Factory :implementer_split, :activity => @activity,
+        :spend => 100, :budget => 100, :organization => @organization
       @activity.reload
       @activity.save
     end
@@ -386,9 +383,11 @@ describe Activity, "Classification" do
       it "returns empty array when sole implementer doesn't have a location " do
         # this spec assumes the Factory didnt create a provider
         # with a location
-        sa       = Factory(:sub_activity, :data_response => @response,
-                           :activity => @activity, @field => 100,
-                           :provider => Factory(:provider, :location => nil))
+        # sa       = Factory(:sub_activity, :data_response => @response,
+        #                    :activity => @activity, @field => 100,
+        #                    :provider => Factory(:provider, :location => nil))
+        @split = Factory :implementer_split, :activity => @activity,
+          @field => 100, :organization => Factory(:provider, :location => nil)
         @activity.reload
         @activity.save
         @activity.send(method).should == []
@@ -407,16 +406,21 @@ describe Activity, "Classification" do
           implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
           implementer2  = Factory(:ngo, :name => 'Implementer2', :location => @location2)
 
-          @activity.implementer_splits << Factory.build(:sub_activity, :data_response => @response,
-                                                    :activity => @activity,
-                                                    :provider => implementer1,
-                                                    :data_response => @response,
-                                                    @field => 4)
-          @activity.implementer_splits << Factory.build(:sub_activity, :data_response => @response,
-                                                    :activity => @activity,
-                                                    :provider => implementer2,
-                                                    :data_response => @response,
-                                                    @field => 3)
+          @activity.implementer_splits << Factory(:implementer_split, :activity => @activity,
+                                            @field => 4, :organization => implementer1)
+          # Factory.build(:sub_activity, :data_response => @response,
+          #                                           :activity => @activity,
+          #                                           :provider => implementer1,
+          #                                           :data_response => @response,
+          #                                           @field => 4)
+          @activity.implementer_splits << Factory(:implementer_split, :activity => @activity,
+                                            @field => 4, :organization => implementer2)
+
+          # Factory.build(:sub_activity, :data_response => @response,
+          #                                           :activity => @activity,
+          #                                           :provider => implementer2,
+          #                                           :data_response => @response,
+          #                                           @field => 3)
 
           @activity.save!
           adjusted_split = @activity.send(method)
@@ -435,22 +439,29 @@ describe Activity, "Classification" do
           @location1    = Factory(:location, :short_display => 'Location1')
           implementer1  = Factory(:ngo, :name => 'Implementer1', :location => @location1)
           implementer2  = Factory(:ngo, :name => 'Implementer2')# , :location => @location2)
-          @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
-                                                    :provider => implementer1,
-                                                    :data_response => @response,
-                                                    @field => 4)
-          @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
-                                                    :provider => implementer2,
-                                                    :data_response => @response,
-                                                    @field => 3)
+          @activity.implementer_splits << Factory(:implementer_split, :activity => @activity,
+                                            @field => 4, :organization => implementer1)
+          # @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
+          #                                           :provider => implementer1,
+          #                                           :data_response => @response,
+          #                                           @field => 4)
+          @activity.implementer_splits << Factory(:implementer_split, :activity => @activity,
+                                            @field => 3, :organization => implementer2)
+          # @activity.implementer_splits << Factory.build(:sub_activity, :activity => @activity,
+          #                                           :provider => implementer2,
+          #                                           :data_response => @response,
+          #                                           @field => 3)
+          @activity.reload!; @activity.save
           @activity.send(method).should be_empty
         end
 
         context "when implementer_splits does not have #{@field} district code assignments" do
           it "returns even split on activity locations when activity has locations" do
-            sa       = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity, @field => 100,
-                               :provider => Factory(:provider, :location => nil))
+            split = Factory :implementer_split, :activity => @activity,
+              @field => 100, :organization => Factory(:provider, :location => nil)
+            # sa       = Factory(:sub_activity, :data_response => @response,
+            #                    :activity => @activity, @field => 100,
+            #                    :provider => Factory(:provider, :location => nil))
             @activity.reload
             @activity.save # get updated budget/spend cache
             @location1    = Factory(:location, :short_display => 'Location1')
@@ -483,8 +494,10 @@ describe Activity, "Classification" do
       basic_setup_project
       @activity = Factory(:activity, :data_response => @response, :project => @project,
                           :name => 'Activity 1')
-      @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                          :budget => 100)
+      @split = Factory :implementer_split, :activity => @activity,
+        :budget => 100, :organization => @organization
+      # @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
+      #                     :budget => 100)
       @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
       @code2    = Factory(:code, :short_display => 'code2', :external_id => 2)
       @code3    = Factory(:code, :short_display => 'code3', :external_id => 3)

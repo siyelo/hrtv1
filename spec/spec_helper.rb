@@ -224,7 +224,7 @@ Spork.each_run do
   end
 
   def basic_setup_sub_activity
-    puts "WARNING: DEPRECATED"
+    warn "[DEPRECATION] `basic_setup_sub_activity` is deprecated.  Please use `basic_setup_implementer_split` instead."
     basic_setup_implementer_split
   end
 

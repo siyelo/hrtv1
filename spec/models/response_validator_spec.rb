@@ -14,7 +14,8 @@ describe DataResponse do #validations
     before :each do
       #need to redo the factories so this test is worth something
       @activity   = Factory(:activity_fully_coded, :data_response => @response, :project => @project)
-      @sa         = Factory(:sub_activity, :data_response => @response, :activity => @activity, :budget => 40, :spend => 40)
+      @split = Factory.build :implementer_split, :activity => @activity,
+        :budget => 40, :spend => 40, :organization => @organization
       @other_cost = Factory(:other_cost_fully_coded, :data_response => @response, :project => @project)
       #@osa        = Factory(:sub_activity, :data_response => @response, :activity => @other_cost, :budget => 40, :spend => 40)
     end
@@ -59,8 +60,8 @@ describe DataResponse do #validations
     before :each do
       @activity        = Factory(:classified_activity, :data_response => @response,
                                  :project => @project)
-      @sa              = Factory(:sub_activity, :activity => @activity,
-                                 :data_response => @response, :budget => 100, :spend => 80)
+      @split = Factory.build :implementer_split, :activity => @activity,
+        :budget => 100, :spend => 100, :organization => @organization
       @activity.save
       @other_cost      = Factory(:other_cost_fully_coded, :data_response => @response,
                                  :project => @project)
@@ -112,8 +113,8 @@ describe DataResponse do #validations
 
     it "fails if there are uncoded activities" do
       activity2 = Factory(:activity, :data_response => @response, :project => @project)
-      sa = Factory(:sub_activity, :data_response => @response, :activity => activity2, :budget => 54)
-      sa.save
+      @split = Factory :implementer_split, :activity => activity2,
+        :budget => 54, :organization => @organization
       activity2.reload
       activity2.save
       @response.activities_coded?.should == false
@@ -121,8 +122,8 @@ describe DataResponse do #validations
     end
 
     it "fails if an activity is missing a coding split" do
-      sa = Factory(:sub_activity, :data_response => @response, :activity => @activity, :spend => 100)
-      sa.save
+      @split = Factory :implementer_split, :activity => @activity,
+        :budget => 100, :spend => 100, :organization => @organization
       @activity.reload
       cs = @activity.coding_spend.first
       @activity.coding_budget_valid = false
@@ -133,8 +134,8 @@ describe DataResponse do #validations
     end
 
     it "fails if there are uncoded other costs" do
-      sa = Factory(:sub_activity, :data_response => @response, :activity => @other_cost,
-                   :budget => 54)
+      @split = Factory.build :implementer_split, :activity => @activity,
+        :budget => 54, :organization => @organization
       @other_cost.reload;
       @other_cost.code_assignments = [];
       @other_cost.coding_budget_district_valid = false; #usually happens in a callback

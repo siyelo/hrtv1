@@ -108,7 +108,7 @@ module Reports::Helpers
   memoize :get_funding_sources
 
   def get_sub_implementers(activity)
-    activity.sub_implementers.map{|si| si.name}.join(' | ')
+    activity.implementers.map{|si| si.name}.join(' | ')
   end
 
   def get_locations(activity)

@@ -45,8 +45,10 @@ describe Report do
       @response          = @organization.latest_response
       @project           = Factory(:project, :data_response => @response)
       @activity          = Factory(:activity, :data_response => @response, :project => @project)
-      @sa                = Factory(:sub_activity, :data_response => @response, :activity => @activity, 
-                                   :budget => 10, :spend => 10)
+      # @sa                = Factory(:sub_activity, :data_response => @response, :activity => @activity, 
+      #                              :budget => 10, :spend => 10)
+      @split2            = Factory(:implementer_split, :activity => @activity, 
+                            :organization => @organization, :budget => 10, :spend => 10)
 
       Factory(:coding_budget, :activity => @activity,
               :amount => 10, :code => mtef_code)

@@ -53,7 +53,7 @@ class Activity < ActiveRecord::Base
   #                           :foreign_key => :activity_id,
   #                           :dependent => :destroy
   # #deprecated
-  # has_many :sub_implementers, :through => :sub_activities, :source => :provider
+  # has_many :sub_implementers, :through => :implementer_splits, :source => :organization
   has_many :codes, :through => :code_assignments
   has_many :purposes, :through => :code_assignments,
     :conditions => ["codes.type in (?)", Code::PURPOSES], :source => :code
@@ -294,12 +294,12 @@ class Activity < ActiveRecord::Base
     !implementer_split_district_code_assignments_if_complete(coding_type).empty?
   end
 
-  def amount_for_provider(provider, field)
+  def amount_for_provider(organization, field)
     if implementer_splits.empty?
-      return self.send(field) if self.provider == provider
+      return self.send(field) if self.organization == organization
     else
       sum = 0
-      implementer_splits.select{|a| a.provider == provider}.each do |a|
+      implementer_splits.select{ |a| a.organization == organization }.each do |a|
         if a.nil?
           puts "had nil in subactivities in proj #{project.id}"
         else

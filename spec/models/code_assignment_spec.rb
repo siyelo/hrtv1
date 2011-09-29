@@ -41,10 +41,11 @@ describe CodeAssignment do
 
   describe "named scopes" do
     it "with_code_id" do
+      # refactor each block should be here
       basic_setup_project
-      activity = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      activity = Factory(:activity, :data_response => @response, :project => @project)
+      split    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
 
       code1    = Factory.create(:code, :short_display => 'code1')
       code2    = Factory.create(:code, :short_display => 'code2')
@@ -58,8 +59,8 @@ describe CodeAssignment do
     it "with_code_ids" do
       basic_setup_project
       activity = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      split    = Factory :implementer_split, :activity => activity,
+                          :budget => 100, :spend => 200, :organization => @organization
 
       code1    = Factory.create(:code, :short_display => 'code1')
       code2    = Factory.create(:code, :short_display => 'code2')
@@ -77,11 +78,15 @@ describe CodeAssignment do
     it "with_activity" do
       basic_setup_project
       activity1 = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity1, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity1, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split1    = Factory(:implementer_split, :activity => activity1,
+                         :budget => 100, :spend => 200, :organization => @organization)
       activity2 = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity2, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity2, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split2    = Factory(:implementer_split, :activity => activity2,
+                         :budget => 100, :spend => 200, :organization => @organization)
 
       code      = Factory.create(:code, :short_display => 'code1')
 
@@ -94,14 +99,20 @@ describe CodeAssignment do
     it "with_activities" do
       basic_setup_project
       activity1 = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity1, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity1, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split1    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
       activity2 = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity2, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity2, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split2    = Factory(:implementer_split, :activity => activity2,
+                         :budget => 100, :spend => 200, :organization => @organization)
       activity3 = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity3, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity3, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split3    = Factory(:implementer_split, :activity => activity3,
+                         :budget => 100, :spend => 200, :organization => @organization)
       code      = Factory.create(:code, :short_display => 'code1')
 
       ca1       = Factory.create(:coding_budget, :activity => activity1, :code => code)
@@ -114,8 +125,8 @@ describe CodeAssignment do
     it "with_type" do
       basic_setup_project
       activity = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      split    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
       code     = Factory.create(:code, :short_display => 'code1')
 
       ca1      = Factory.create(:coding_budget, :activity => activity, :code => code)
@@ -127,9 +138,9 @@ describe CodeAssignment do
 
     it "automatically calculates the cached amount from the given % (and corresponding sub-activity rollup amount)" do
       basic_setup_project
-      activity = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      activity = Factory(:activity, :data_response => @response, :project => @project)
+      split    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
       code     = Factory.create(:mtef_code, :short_display => 'code1')
       activity.reload
       activity.save # get new cached implementer split total
@@ -160,8 +171,8 @@ describe CodeAssignment do
       project      = Factory(:project, :data_response => response)
       activity1    = Factory.create(:activity,
                                     :data_response => response, :project => project)
-      sa           = Factory(:sub_activity, :activity => activity1, :data_response => response,
-                         :budget => 100, :spend => 200)
+      split    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
       code1        = Factory.create(:mtef_code, :short_display => 'code1')
       code2        = Factory.create(:mtef_code, :short_display => 'code2')
       activity1.reload
@@ -181,8 +192,10 @@ describe CodeAssignment do
     before :each do
       basic_setup_project
       activity = Factory.create(:activity, :data_response => @response, :project => @project)
-      sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
-                         :budget => 100, :spend => 200)
+      # sa       = Factory(:sub_activity, :activity => activity, :data_response => @response,
+      #                    :budget => 100, :spend => 200)
+      split    = Factory(:implementer_split, :activity => activity,
+                         :budget => 100, :spend => 200, :organization => @organization)
       @assignment = Factory(:code_assignment, :activity => activity)
     end
 

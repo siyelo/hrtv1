@@ -7,10 +7,8 @@ describe Activity do
     it { should belong_to :project }
     it { should have_and_belong_to_many :organizations }
     it { should have_and_belong_to_many :beneficiaries }
-    it { should have_many(:implementer_splits).dependent(:destroy) }
-    it { should have_many(:sub_activities).dependent(:destroy) } #TODO deprecate
+    it { should have_many(:implementer_splits).dependent(:delete_all) }
     it { should have_many(:implementers) }
-    it { should have_many(:sub_implementers) } #TODO deprecate
     it { should have_many(:codes) }
     it { should have_many(:purposes) }
     it { should have_many(:code_assignments).dependent(:destroy) }
@@ -91,7 +89,7 @@ describe Activity do
 
       it "should maintain the activites budget/spend cache when creating a new sub_activity" do
         @activity.implementer_splits.size.should == 1
-        @activity.implementer_splits[0].implementer.should == @organization
+        @activity.implementer_splits[0].organization.should == @organization
         @activity.implementer_splits[0].spend.to_f.should == 10
         @activity.implementer_splits[0].budget.to_f.should == 20
         @activity.reload
@@ -106,17 +104,20 @@ describe Activity do
 
     context "when two implementer_splits" do
       before :each do
-        basic_setup_sub_activity
+        # basic_setup_sub_activity
+        basic_setup_implementer_split
         @implementer2 = Factory :organization
-        @sub_activity2 = Factory(:sub_activity, :data_response => @response,
-                                 :activity => @activity, :provider => @implementer2)
+        # @sub_activity2 = Factory(:sub_activity, :data_response => @response,
+        #                          :activity => @activity, :provider => @implementer2)
+        @split2 = Factory :implementer_split, :activity => @activity,
+           :organization => @implementer2
 
         attributes = {"name"=>"dsf",  "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
             {"0"=>
-              {"spend"=>"10", "id"=>"#{@sub_activity.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget"=>"20.0"},
+              {"spend"=>"10", "id"=>"#{@split.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@organization.id}", "budget"=>"20.0"},
             "1"=>
-              {"spend"=>"20", "id"=>"#{@sub_activity2.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget"=>"40.0"}
+              {"spend"=>"20", "id"=>"#{@split.id}", "data_response_id"=>"#{@response.id}", "provider_mask"=>"#{@implementer2.id}", "budget"=>"40.0"}
             }, "description"=>"adfasdf"}
         @activity.reload
         @activity.update_attributes(attributes).should be_true
@@ -177,7 +178,7 @@ describe Activity do
     describe "works with more than one sub activity" do
       before :each do
         @split1 = Factory :implementer_split, :activity => @activity,
-          :spend => 100, :budget => 125, :organization => @organization
+          :spend => 100, :budget => 125, :organization => Factory(:organization)
         @activity.reload; @activity.save;
       end
 
@@ -226,13 +227,14 @@ describe Activity do
     end
 
     it "updates spend_in_usd and budget_in_usd fields on currency change" do
-      @sa = Factory.build(:sub_activity, :data_response => @response,
-                          :spend => 20, :budget => 30)
-      @activity = Factory.build(:activity, :data_response => @response,
-                          :implementer_splits => [@sa])
+      @activity = Factory.build(:activity, :data_response => @response)
+      @split1 = Factory(:implementer_split, :activity => @activity,
+        :spend => 20, :budget => 30, :organization => @organization)
       @project = Factory(:project, :data_response => @response,
                          :activities => [@activity])
 
+      @activity.save
+      @activity.reload
       @activity.spend_in_usd.should == 20
       @activity.budget_in_usd.should == 30
 
@@ -270,8 +272,8 @@ describe Activity do
     it "caches sub activities count" do
       basic_setup_activity
       @activity.sub_activities_count.should == 0
-      Factory(:sub_activity, :data_response => @response,
-              :provider => @organization, :activity => @activity)
+      Factory(:implementer_split, :activity => @activity,
+        :budget => 10, :organization => @organization)
       @activity.reload.sub_activities_count.should == 1
     end
   end
@@ -324,10 +326,10 @@ describe Activity do
 
     context "sub activities" do
       it "looks for amount in sub-activity" do
-        @subact = Factory(:sub_activity, :data_response => @response,
-                          :activity => @activity, :budget => 10)
+        @split = Factory(:implementer_split, :activity => @activity,
+          :budget => 10, :organization => @organization)
         @activity.implementer_splits.reload
-        @activity.amount_for_provider(@subact.provider, :budget).should == 10
+        @activity.amount_for_provider(@split.organization, :budget).should == 10
       end
     end
   end

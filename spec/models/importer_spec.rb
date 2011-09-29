@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Importer do
   before :each do
-    basic_setup_sub_activity
+    basic_setup_implementer_split
     @project.name = 'project1'; @project.save!
     @activity.name = 'activity1'; @activity.save!
     @organization.name = 'selfimplementer1'; @organization.save!
@@ -11,8 +11,10 @@ describe Importer do
   describe 'API' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2 = Factory(:sub_activity, :data_response => @response,
-                              :activity => @activity, :provider => @implementer2)
+      # @split2 = Factory(:sub_activity, :data_response => @response,
+      #                         :activity => @activity, :provider => @implementer2)
+      split    = Factory(:implementer_split, :activity => @activity, 
+                   :organization => @organization)
       @csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
 ,,,,,,#{@split2.id},selfimplementer2,3,6
@@ -507,15 +509,21 @@ EOS
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
         @activity3 = Factory(:activity, :data_response => @response, :project => @project)
         @activity4 = Factory(:activity, :data_response => @response, :project => @project)
-        @split2 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity2, :provider => Factory(:organization,
-                                 :name => "implementer2"))
-        @split3 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity3, :provider => Factory(:organization,
-                                 :name => "implementer3"))
-        @split4 = Factory(:sub_activity, :data_response => @response,
-                               :activity => @activity4, :provider => Factory(:organization,
-                                 :name => "implementer4"))
+        @split2    = Factory(:implementer_split, :activity => @activity, 
+                      :organization => Factory(:organization, :name => "implementer2"))
+        # @split2 = Factory(:sub_activity, :data_response => @response,
+        #                        :activity => @activity2, :provider => Factory(:organization,
+        #                          :name => "implementer2"))
+        # @split3 = Factory(:sub_activity, :data_response => @response,
+        #                        :activity => @activity3, :provider => Factory(:organization,
+        #                          :name => "implementer3"))
+        @split3    = Factory(:implementer_split, :activity => @activity, 
+                      :organization => Factory(:organization, :name => "implementer3"))
+        # @split4 = Factory(:sub_activity, :data_response => @response,
+        #                        :activity => @activity4, :provider => Factory(:organization,
+        #                          :name => "implementer4"))
+        @split4 = Factory(:implementer_split, :activity => @activity, 
+                      :organization => Factory(:organization, :name => "implementer4"))
       end
 
       it "should update 2 existing activities" do

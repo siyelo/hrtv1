@@ -72,7 +72,7 @@ class Importer
         activity = Activity.new unless activity
         activity.project = project
         split = activity.implementer_splits.find(:first,
-                        :conditions => { :provider_id => implementer.id}) if implementer
+                        :conditions => { :organization_id => implementer.id}) if implementer
         split = create_new_implementer_split(activity) unless split
       end
 
@@ -260,7 +260,7 @@ class Importer
     end
 
     def assign_split_fields(split, implementer, spend, budget)
-      split.provider      = implementer
+      split.organization  = implementer
       split.data_response = @response
       split.spend         = spend
       split.budget        = budget

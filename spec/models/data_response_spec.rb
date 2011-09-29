@@ -8,8 +8,8 @@ describe DataResponse do
     it { should belong_to(:data_request) }
     it { should have_many(:activities).dependent(:destroy) }
     it { should have_many(:other_costs).dependent(:destroy) }
-    it { should have_many(:implementer_splits).dependent(:destroy) }
-    it { should have_many(:sub_activities).dependent(:destroy) } #TODO: deprecate
+    # it { should have_many(:implementer_splits).dependent(:destroy) }
+    # it { should have_many(:sub_activities).dependent(:destroy) } #TODO: deprecate
     it { should have_many(:projects).dependent(:destroy) }
     it { should have_many(:users_currently_completing) }
     it { should have_many(:comments).dependent(:destroy) }
@@ -56,8 +56,10 @@ describe DataResponse do
     it "caches sub activities count" do
       basic_setup_activity
       @response.sub_activities_count.should == 0
-      @sub_activity = Factory(:sub_activity, :data_response => @response,
-                              :activity => @activity, :provider => @organization)
+      # @sub_activity = Factory(:sub_activity, :data_response => @response,
+      #                         :activity => @activity, :provider => @organization)
+      split        = Factory(:implementer_split, :activity => @activity,
+                             :budget => 200, :spend => 100, :organization => @organization)
       @response.reload.sub_activities_count.should == 1
     end
   end
@@ -154,8 +156,8 @@ describe DataResponse do
                               :currency => nil)
       @activity     = Factory(:activity, :data_response => @response,
                               :project => @project)
-      @sa           = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                              :budget => 1000, :spend => 2000)
+      split        = Factory(:implementer_split, :activity => @activity,
+                             :budget => 1000, :spend => 2000, :organization => @organization)
       @activity.reload
       @activity.save
     end
@@ -185,23 +187,23 @@ describe DataResponse do
 
   describe "#budget & #spend" do
     before :each do
-      organization = Factory(:organization, :currency => 'USD')
-      request      = Factory(:data_request, :organization => organization)
-      @response    = organization.latest_response
+      @organization = Factory(:organization, :currency => 'USD')
+      request      = Factory(:data_request, :organization => @organization)
+      @response    = @organization.latest_response
     end
 
     context "same currency" do
       it "returns total" do
         project      = Factory(:project, :data_response => @response)
         @activity    = Factory(:activity, :data_response => @response, :project => project)
-        @sa          = Factory(:sub_activity, :activity => @activity, :data_response => @response,
-                               :budget => 200, :spend => 100)
+        split        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => @organization)
         @oc1         = Factory(:other_cost, :data_response => @response, :project => project)
-        @sa2         = Factory(:sub_activity, :activity => @oc1, :data_response => @response,
-                               :budget => 200, :spend => 100)
+        split        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => @organization)
         @oc2         = Factory(:other_cost, :data_response => @response)
-        @sa          = Factory(:sub_activity, :activity => @oc2, :data_response => @response,
-                               :budget => 200, :spend => 100)
+        split        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => @organization)
         @activity.reload; @activity.save;
         @oc1.reload; @oc1.save;
         @oc2.reload; @oc2.save;
@@ -215,15 +217,21 @@ describe DataResponse do
         Money.default_bank.add_rate(:RWF, :USD, 0.5)
         Money.default_bank.add_rate(:USD, :RWF,  2)
         project      = Factory(:project, :data_response => @response, :currency => 'RWF')
-        @activity1 = Factory(:activity, :data_response => @response, :project => project)
-        @sa1       = Factory(:sub_activity, :data_response => @response, :activity => @activity1,
-                             :spend => 100, :budget => 200)
-        @other_cost1 = Factory(:other_cost, :data_response => @response, :project => project)
-        @sa2         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost1,
-                               :spend => 100, :budget => 200)
+        @activity1   = Factory(:activity, :data_response => @response, :project => project)
+        # @sa1         = Factory(:sub_activity, :data_response => @response, :activity => @activity1,
+        #                      :spend => 100, :budget => 200)
+        split1        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => organization)
+        @other_cost1  = Factory(:other_cost, :data_response => @response, :project => project)
+        # @sa2          = Factory(:sub_activity, :data_response => @response, :activity => @other_cost1,
+        #                        :spend => 100, :budget => 200)
+        split2        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => organization)
         @other_cost2 = Factory(:other_cost, :data_response => @response)
-        @sa3         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost2,
-                               :spend => 100, :budget => 200)
+        # @sa3         = Factory(:sub_activity, :data_response => @response, :activity => @other_cost2,
+        #                        :spend => 100, :budget => 200)
+        split        = Factory(:implementer_split, :activity => @activity,
+                               :budget => 200, :spend => 100, :organization => organization)
         @activity1.reload; @activity1.save;
         @other_cost1.reload; @other_cost1.save;
         @other_cost2.reload; @other_cost2.save;

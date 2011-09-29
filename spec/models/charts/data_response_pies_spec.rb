@@ -15,8 +15,8 @@ describe Charts::DataResponsePies do
                           :percentage => 60, :cached_amount => 60
       @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
                           :percentage => 40, :cached_amount => 40
-      @sa             = Factory :sub_activity, :activity => @activity,
-                          :data_response => @response, :budget => 100
+      @split          = Factory :implementer_split, :activity => @activity,
+                          :budget => 100, :organization => @organization
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code1.name
@@ -31,8 +31,8 @@ describe Charts::DataResponsePies do
                           :percentage => 60, :cached_amount => 60
       @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
                           :percentage => 40, :cached_amount => 40
-      @sa             = Factory :sub_activity, :activity => @activity,
-                          :data_response => @response, :budget => 100
+      @split          = Factory :implementer_split, :activity => @activity,
+                          :budget => 100, :organization => @organization
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code11.name
@@ -47,8 +47,8 @@ describe Charts::DataResponsePies do
                                 :percentage => 60, :cached_amount => 60
       @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
                                 :percentage => 40, :cached_amount => 40
-      @sa             = Factory :sub_activity, :activity => @activity,
-                                :data_response => @response, :budget => 100
+      @split          = Factory :implementer_split, :activity => @activity,
+                          :budget => 100, :organization => @organization
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code1.name
@@ -63,8 +63,8 @@ describe Charts::DataResponsePies do
                                 :percentage => 60, :cached_amount => 60
       @purpose_split2 = Factory :coding_budget, :code => @code2, :activity => @activity,
                                 :percentage => 40, :cached_amount => 40
-      @sa             = Factory :sub_activity, :activity => @activity,
-                                :data_response => @response, :budget => 100
+      @split          = Factory :implementer_split, :activity => @activity,
+                          :budget => 100, :organization => @organization
       @assignments = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @assignments.should have(2).items
       @assignments[0].name.should == @code11.name
@@ -82,8 +82,8 @@ describe Charts::DataResponsePies do
                           :activity => @activity, :percentage => 60, :cached_amount => 60
       @purpose_split2 = Factory :coding_budget, :code => @code2,
                           :activity => @activity, :percentage => 40, :cached_amount => 40
-      @sa             = Factory :sub_activity, :activity => @activity,
-                          :data_response => @response, :budget => 100
+      @split          = Factory :implementer_split, :activity => @activity,
+                          :budget => 100, :organization => @organization
 
       @chart_items = Charts::DataResponsePies.data_response_pie(@response, 'CodingBudget', 'Mtef')
       @chart_items.size.should == 2

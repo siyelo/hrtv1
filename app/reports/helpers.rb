@@ -89,9 +89,6 @@ module Reports::Helpers
   end
 
   def get_funding_sources(activity)
-    #TODO fake one if none so works correctly, w name of Not Entered
-    #TODO handle case with one funding source with 0 amts in it, if 1 then assume all there
-    # TODO take logic from jawp report that replaces bad funding sources, marked with a TODO
     funding_sources = []
     if activity.project
       activity.project.in_flows.each do |funding_source|
@@ -168,6 +165,7 @@ module Reports::Helpers
     code.official_name ? "#{code.official_name}" : "#{code.short_display}"
   end
 
+  # TODO: improve speed here
   def add_all_codes_hierarchy(row, code)
     counter = 0
     Code.each_with_level(code.self_and_ancestors) do |other_code, level|

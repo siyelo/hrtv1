@@ -1,10 +1,10 @@
 class DashboardController < ApplicationController
   COMMENT_LIMIT = 25
+  include PrepareCharts
 
   ### Filters
   before_filter :require_user
   before_filter :load_comments
-  before_filter :load_charts, :only => :index
 
   ### Public Methods
 
@@ -13,10 +13,10 @@ class DashboardController < ApplicationController
     load_activity_manager if current_user.activity_manager? && !current_user.sysadmin?
     load_requests
     warn_if_not_current_request unless current_user.district_manager?
+    load_dashboard_charts unless current_user.district_manager? || current_user.sysadmin?
   end
 
   protected
-
     # load Activity Manager-specific dashboard items
     def load_activity_manager
       @organizations = current_user.organizations

@@ -604,157 +604,6 @@ var admin_organizations_duplicate = {
   }
 };
 
-
-var get_chart_element_id = function (element_type, options) {
-  return element_type + "_" + options.id + "_" + options.chart_type + '_pie';
-};
-
-var get_pie_chart_element_endpoint = function (element_type, options) {
-  return '/charts/' + element_type + '_pie?id=' + options.id + "&codings_type=" + options.codings_type + "&code_type=" + options.code_type;
-};
-
-var createPieChart = function (element_type, options) {
-  var domId = get_chart_element_id(element_type, options)
-  var urlEndpoint = get_pie_chart_element_endpoint(element_type, options)
-
-  var so = new SWFObject("/ampie/ampie.swf", "ampie", "465", "220", "2", "#FFF");
-  so.addVariable("path", "/ampie/");
-  so.addVariable("settings_file", escape("/ampie/ampie_settings.xml,/ampie/additional_settings.xml"));
-  so.addVariable("data_file", encodeURIComponent(urlEndpoint));
-  so.addVariable("additional_chart_settings", encodeURIComponent(
-    '<settings>' +
-      '<pie>' +
-        '<colors>'  +
-          get_random_color() +
-        '</colors>' +
-      '</pie>' +
-    '</settings>')
-  );
-  so.write(domId);
-};
-
-function get_random_color() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.round(Math.random() * 15)];
-    }
-    return color;  //return random color so that two charts next to each other don't have the same colors for different slices
-}
-
-var build_data_response_review_screen = function () {
-  $('.tooltip').tipsy({gravity: $.fn.tipsy.autoNS});
-  $('.comments_tooltip').tipsy({fade: true, gravity: 'w', html: true});
-  $('.treemap_tooltip').tipsy({fade: true, gravity: 'sw', html: true, live: true});
-
-  $('.project.entry_header').click(function (e) {
-    collapse_expand(e, $(this), 'project');
-  });
-
-  $('.activity.entry_header').click(function (e) {
-    collapse_expand(e, $(this), 'activity');
-  });
-
-  $('.sub_activity.entry_header').click(function (e) {
-    collapse_expand(e, $(this), 'sub_activity');
-  });
-
-  // bind click events for tabs
-  $(".classifications ul li").live('click', function (e) {
-    e.preventDefault();
-    var element = $(this);
-    var root = element.parents('.activity_classifications');
-    root.find(".classifications ul li").removeClass('selected');
-    element.addClass('selected');
-    root.find(".activity_classification > div").hide();
-    root.find(".activity_classification > div:eq(" + element.index() + ")").show();
-    // same as previous
-    //root.find(".activity_classification > div::nth-child(" + (element.index() + 1) + ")").show();
-  });
-
-
-
-  // bind click events for project chart sub-tabs (Pie | Tree)
-  $(".tabs ul.inline_tab li").live('click', function (e) {
-    e.preventDefault();
-    var element = $(this);
-    if (element) {
-      element.parents('.inline_tab').find('li').removeClass('selected');
-      element.addClass('selected');
-      var tab = element.parent('ul').parent();
-
-      var matchArr = element.attr("class").match(/(.*)_tree/);
-
-      // toggle tabs
-      if (matchArr) {
-        tab.find(".pie").hide()
-        tab.find(".tree").show()
-
-        // draw treemap chart
-        var treemap_type = matchArr[1];
-        if (treemap_type) {
-          if (tab.find(".tree iframe").length == 0) {
-            var chart_element = tab.find(".tree .chart");
-            var element_type = tab.attr('data-chart_type');
-            var element_id = tab.attr('data-id');
-            drawTreemap(element_type, element_id, treemap_type, chart_element);
-          }
-        } else {
-          throw "Unknown chart type:" + treemap_type;
-        }
-      } else {
-        tab.find(".tree").hide()
-        tab.find(".pie").show()
-      }
-    }
-   });
-
-   build_flash_charts();
-};
-
-var build_flash_charts = function () {
-  // bind click events for tabs
-  // Assumes this convention
-  //  .tabs_nav
-  //    ul > li, li, li
-  // tab content
-  //  .tabs > .tab1, .tab2, .tab3
-  // BUT if you supply an id (e.g. tab1), it will use that
-  // (useful if tab nav has non-clickable items in the list)
-  $(".tabs_nav ul li").live('click', function (e) {
-    e.preventDefault();
-    var element = $(this);
-    var target_tab = 'tab1'
-
-    if (element.attr("id")) {
-      target_tab = element.attr("id");
-    } else {
-      target_tab = "tab" + (element.index() + 1); //there is no tab0
-    }
-    element.parents('.tabs_nav').find("li").removeClass('selected');
-    element.addClass('selected');
-    var tabs = element.parents(".tabs_nav").next(".tabs")
-    tabs.find("> div").hide();
-    tabs.find('> div.' + target_tab).show();
-  });
-
-  if ( typeof(_dr_id) === 'undefined' ) {
-    return false;
-  }
-
-  // Data Response charts
-  createPieChart("data_response", {id: _dr_id, title: "MTEF Budget", chart_type: 'mtef_budget', codings_type: 'CodingBudget', code_type: 'Mtef'});
-  createPieChart("data_response", {id: _dr_id, title: "MTEF Expenditure", chart_type: 'mtef_spend', codings_type: 'CodingSpend', code_type: 'Mtef'});
-  createPieChart("data_response", {id: _dr_id, title: "NSP Budget", chart_type: 'nsp_budget', codings_type: 'CodingBudget', code_type: 'Nsp'});
-  createPieChart("data_response", {id: _dr_id, title: "NSP Expenditure", chart_type: 'nsp_spend', codings_type: 'CodingSpend', code_type: 'Nsp'});
-  createPieChart("data_response", {id: _dr_id, title: "Input Budget", chart_type: 'cc_budget', codings_type: 'CodingBudgetCostCategorization', code_type: 'CostCategory'});
-  createPieChart("data_response", {id: _dr_id, title: "Input Expenditure", chart_type: 'cc_spend', codings_type: 'CodingSpendCostCategorization', code_type: 'CostCategory'});
-  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Budget", chart_type: 'stratprog_budget', codings_type: 'budget_stratprog_coding', code_type: 'HsspStratProg'});
-  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Program Spend", chart_type: 'stratprog_spend', codings_type: 'spend_stratprog_coding', code_type: 'HsspStratProg'});
-  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Budget", chart_type: 'stratobj_budget', codings_type: 'budget_stratobj_coding', code_type: 'HsspStratObj'});
-  createPieChart("data_response", {id: _dr_id, title: "HSSPII Strategic Objective Spend", chart_type: 'stratobj_spend', codings_type: 'spend_stratobj_coding', code_type: 'HsspStratObj'});
-};
-
 var admin_responses_show = {
   run: function (){
     build_data_response_review_screen();
@@ -764,9 +613,9 @@ var admin_responses_show = {
 
 var reporter_reports_index = {
   run: function () {
-    build_data_response_review_screen();
     ajaxifyResources('comments');
-    $('#tab1').find('a').click();
+    drawPieChart('code_spent', _code_spent_values, 450, 300);
+    drawPieChart('code_budget', _code_budget_values, 450, 300);
   }
 };
 
@@ -1718,9 +1567,10 @@ var admin_users_new = admin_users_create = admin_users_edit = admin_users_update
 var dashboard_index = {
   run: function () {
     $('.dropdown_trigger').click(function (e) {e.preventDefault()});
-
-    build_flash_charts();
-    $('#tab1').find('a').click();
+    if (typeof(_code_spent_values) !== 'undefined' || typeof(_code_budget_values) !== 'undefined') {
+      drawPieChart('code_spent', _code_spent_values, 450, 300);
+      drawPieChart('code_budget', _code_budget_values, 450, 300);
+    }
 
     $('.dropdown_menu').hover(function (e){
       e.preventDefault();

@@ -3,12 +3,10 @@ require 'fastercsv'
 class Reports::ActivitiesByAllCodes
   include Reports::Helpers
 
-  def initialize(activities, type, show_organization = false)
+  def initialize(activities, type)
     @is_budget         = is_budget?(type)
     @coding_class      = @is_budget ? CodingBudget : CodingSpend
     @activities        = activities
-    @show_organization = show_organization
-    @leaves            = Code.leaves.select{|s| %w[Nsp Nha Nasa].include?(s.class.to_s)}
   end
 
   def csv
@@ -28,7 +26,7 @@ class Reports::ActivitiesByAllCodes
       row << "Activity Description"
       row << "Funding Source"
       row << "Districts"
-      row << "Data Source" if @show_organization
+      row << "Organization"
       row << "Implementer"
       row << "Institutions Assisted"
       row << "# of HC's implementing"
@@ -67,8 +65,8 @@ class Reports::ActivitiesByAllCodes
           row << activity_description(activity)
           row << funding_source_name(activity)
           row << activity.locations.join(' | ')
-          row << activity.organization.try(:short_name) if @show_organization
-          row << get_provider_name(activity) # TODO: use provider_name(assignment.activity)
+          row << activity.organization.try(:short_name)
+          row << provider_name(activity)
           row << activity.organizations.join(' | ')
           row << number_of_health_centers(activity)
           row << activity.beneficiaries.join(' | ')
@@ -77,9 +75,5 @@ class Reports::ActivitiesByAllCodes
           csv << row
         end
       end
-    end
-
-    def get_provider_name(activity)
-      activity.provider ? activity.provider.try(:short_name) : "No Implementer Specified"
     end
 end

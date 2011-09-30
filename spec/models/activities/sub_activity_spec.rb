@@ -262,7 +262,7 @@ describe SubActivity do
 
         describe "#{@input_coding}" do
           it "should return adjusted activity code_assignments" do
-            Factory(@input_coding, :activity => @activity, :amount => 10, :cached_amount => 10)
+            Factory(@input_coding, :activity => @activity, :cached_amount => 10)
             @sa.send(@input_coding).length.should == 1
             @sa.send(@input_coding)[0].cached_amount.to_f.should == 10
             @sa.send(@input_coding)[0].type.should == @input_coding.to_s.camelcase
@@ -299,8 +299,11 @@ describe SubActivity do
      end
    end
 
-    [ [:budget, :coding_budget_district, 'CodingBudgetDistrict', :budget_district_coding_adjusted],
-      [:spend, :coding_spend_district, 'CodingSpendDistrict', :spend_district_coding_adjusted]
+    [
+      [:budget, :coding_budget_district,
+        'CodingBudgetDistrict', :budget_district_coding_adjusted],
+      [:spend, :coding_spend_district,
+        'CodingSpendDistrict', :spend_district_coding_adjusted]
     ].each do |amount_sym, coding_sym, coding_class, district_adjust_method_sym|
       describe "#{district_adjust_method_sym.to_s}:" do
         before :each do
@@ -364,10 +367,10 @@ describe SubActivity do
         context "with existing location splits (code assignments)" do
           before :each do
             @location2 = Factory(:location, :short_display => 'Location 1')
-            Factory(coding_sym, :code => @location, :activity => @activity,
-              :amount => 40, :cached_amount => 40)
-            Factory(coding_sym, :code => @location2, :activity => @activity,
-              :amount => 60, :cached_amount => 60)
+            Factory(coding_sym, :code => @location,
+                    :activity => @activity, :cached_amount => 40)
+            Factory(coding_sym, :code => @location2,
+                    :activity => @activity, :cached_amount => 60)
             @implementer_split.reload
           end
 

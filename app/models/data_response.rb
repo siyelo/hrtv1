@@ -68,7 +68,7 @@ class DataResponse < ActiveRecord::Base
   delegate :currency, :fiscal_year_start_date, :fiscal_year_end_date,
     :contact_name, :contact_position, :contact_phone_number,
     :contact_main_office_phone_number, :contact_office_location,
-    :quarter_label, :to => :organization
+    :to => :organization
 
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]

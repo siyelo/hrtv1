@@ -4,7 +4,7 @@ class CodeAssignment < ActiveRecord::Base
   strip_commas_from_all_numbers
 
   ### Attributes
-  attr_accessible :activity, :code, :amount, :percentage,
+  attr_accessible :activity, :code, :percentage,
                   :sum_of_children, :cached_amount, :cached_amount_in_usd
                   #FIXME!!: deprecate :sum_of_children, :cached_amount, :cached_amount_in_usd
                   # we only use percentage API now...
@@ -16,7 +16,8 @@ class CodeAssignment < ActiveRecord::Base
   ### Validations
   validates_presence_of :activity_id, :code_id
   validates_inclusion_of :percentage, :in => 0..100,
-    :if => Proc.new { |model| model.percentage.present? }, :message => "must be between 0 and 100"
+    :if => Proc.new { |model| model.percentage.present? },
+    :message => "must be between 0 and 100"
 
   ### Callbacks
   before_save :update_cached_amount_in_usd

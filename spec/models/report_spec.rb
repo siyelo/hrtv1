@@ -37,36 +37,39 @@ describe Report do
   describe "Encoding" do
     it "should encode csv files as Windows-1252" do
       @request      = Factory(:data_request)
-      @organization = Factory(:organization, :name => "ààââàûçÿ")
+      @organization = Factory(:organization, :name => "ààââàûçÿ",
+                              :raw_type => 'Bilateral')
       @user         = Factory(:user, :organization => @organization)
       report        = Report.new(:key => 'users_by_organization',
                                  :data_request_id => @request.id)
       report.generate_csv_zip
       converted_csv = Iconv.conv("UTF-8","WINDOWS-1252",report.raw_csv)
-      converted_csv.split("\n")[1].should == "#{@user.id},#{@user.email},#{@user.name},ààââàûçÿ,Organization,Not Yet Started"
+      converted_csv.split("\n")[1].should == "#{@user.id},#{@user.email},#{@user.name},ààââàûçÿ,Bilateral,Not Yet Started"
     end
   end
 
   describe "#generate_csv_zip" do
     before :each do
-      mtef_code          = Factory(:mtef_code)
-      nsp_code           = Factory(:nsp_code)
-      cost_category_code = Factory(:cost_category_code)
-      location           = Factory(:location)
-      @organization      = Factory(:organization)
-      @request           = Factory(:data_request, :organization => @organization)
-      @response          = @organization.latest_response
-      @project           = Factory(:project, :data_response => @response)
-      @activity          = Factory(:activity, :data_response => @response, :project => @project)
-      @sa                = Factory(:sub_activity, :data_response => @response, :activity => @activity,
-                                   :budget => 10, :spend => 10)
+      mtef_code     = Factory(:mtef_code)
+      nsp_code      = Factory(:nsp_code)
+      cc_code       = Factory(:cost_category_code)
+      location      = Factory(:location)
+      @organization = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :data_response => @response,
+                              :project => @project)
+      @sa           = Factory(:sub_activity, :data_response => @response,
+                              :activity => @activity,
+                              :budget => 10, :spend => 10)
 
       Factory(:coding_budget, :activity => @activity,
-              :amount => 10, :code => mtef_code)
+              :percentage => 100, :code => mtef_code)
       Factory(:coding_budget_district, :activity => @activity,
-              :amount => 10, :code => location)
+              :percentage => 100, :code => location)
       Factory(:coding_budget_cost_categorization, :activity => @activity,
-              :amount => 10, :code => cost_category_code)
+              :percentage => 100, :code => cc_code)
     end
 
 

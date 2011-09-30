@@ -26,8 +26,8 @@ class Reports::ActivitiesByNha
       row << "contact main office phone number"
       row << "contact office location"
       row << 'Funding Source(s)'
-      row << 'Org type'
-      row << 'Data Source'
+      row << 'Organization type'
+      row << 'Organization'
       row << 'Implementer'
       row << 'District'
       row << 'Implementer'

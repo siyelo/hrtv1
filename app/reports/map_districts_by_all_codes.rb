@@ -9,7 +9,6 @@ class Reports::MapDistrictsByAllCodes
     @activities                = activities
     @district_proportions_hash = {} # activity => {location => proportion}
     @districts_hash            = {}
-    @leaves                    = Nsp.leaves
     @codes                     = []
 
     Code.all.each do |code|

@@ -183,8 +183,7 @@ module Activity::Classification
 
       def fake_ca(klass, code, amount, percentage = nil)
         klass.new(:activity => self, :code => code,
-                  :amount => amount, :percentage => percentage,
-                  :cached_amount => amount)
+                  :percentage => percentage, :cached_amount => amount)
       end
   end
 

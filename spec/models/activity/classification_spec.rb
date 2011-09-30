@@ -379,8 +379,8 @@ describe Activity, "Classification" do
           @coding = :coding_spend_district
         end
         basic_setup_project
-        @activity = Factory(:activity, :data_response => @response, :project => @project,
-                            :name => 'Activity 1')
+        @activity = Factory(:activity, :data_response => @response,
+                            :project => @project, :name => 'Activity 1')
       end
 
       it "returns empty array when sole implementer doesn't have a location " do
@@ -396,7 +396,7 @@ describe Activity, "Classification" do
 
       it "returns existing activity #{@field} district code assignments" do
         code_assignment = Factory(@coding, :activity => @activity,
-                                  :amount => 10, :cached_amount => 10)
+                                  :percentage => 10, :cached_amount => 10)
         @activity.send(method).should == [code_assignment]
       end
 
@@ -481,8 +481,8 @@ describe Activity, "Classification" do
   describe "Strat Coding" do
     before :each do
       basic_setup_project
-      @activity = Factory(:activity, :data_response => @response, :project => @project,
-                          :name => 'Activity 1')
+      @activity = Factory(:activity, :data_response => @response,
+                          :project => @project, :name => 'Activity 1')
       @sa       = Factory(:sub_activity, :data_response => @response, :activity => @activity,
                           :budget => 100)
       @code1    = Factory(:code, :short_display => 'code1', :external_id => 1)
@@ -500,11 +500,11 @@ describe Activity, "Classification" do
       context "budget_stratprog_coding" do
         it "should return code assignments" do
           Factory(:coding_budget, :activity => @activity, :code => @code1,
-                         :amount => 10, :cached_amount => 10)
+                         :percentage => 10, :cached_amount => 10)
           Factory(:coding_budget, :activity => @activity, :code => @code2,
-                         :amount => 30, :cached_amount => 30)
+                         :percentage => 30, :cached_amount => 30)
           Factory(:coding_budget, :activity => @activity, :code => @code3,
-                         :amount => 35, :cached_amount => 35)
+                         :percentage => 35, :cached_amount => 35)
 
           @activity.budget_stratprog_coding.length.should == 2
           @activity.budget_stratprog_coding[0].type.should == 'HsspBudget'
@@ -517,11 +517,11 @@ describe Activity, "Classification" do
       context "spend_stratprog_coding" do
         it "spend_stratprog_coding should return code assignments" do
           Factory(:coding_spend, :activity => @activity, :code => @code1,
-                         :amount => 10, :cached_amount => 10)
+                         :percentage => 10, :cached_amount => 10)
           Factory(:coding_spend, :activity => @activity, :code => @code2,
-                         :amount => 30, :cached_amount => 30)
+                         :percentage => 30, :cached_amount => 30)
           Factory(:coding_spend, :activity => @activity, :code => @code3,
-                         :amount => 35, :cached_amount => 35)
+                         :percentage => 35, :cached_amount => 35)
 
           @activity.spend_stratprog_coding.length.should == 2
           @activity.spend_stratprog_coding[0].type.should == 'HsspSpend'
@@ -542,11 +542,11 @@ describe Activity, "Classification" do
       context "budget_stratobj_coding" do
         it "should return code assignments" do
           Factory(:coding_budget, :activity => @activity, :code => @code1,
-                         :amount => 10, :cached_amount => 10)
+                         :percentage => 10, :cached_amount => 10)
           Factory(:coding_budget, :activity => @activity, :code => @code2,
-                         :amount => 30, :cached_amount => 30)
+                         :percentage => 30, :cached_amount => 30)
           Factory(:coding_budget, :activity => @activity, :code => @code3,
-                         :amount => 35, :cached_amount => 35)
+                         :percentage => 35, :cached_amount => 35)
 
           @activity.budget_stratobj_coding.length.should == 2
           @activity.budget_stratobj_coding[0].type.should == 'HsspBudget'
@@ -559,11 +559,11 @@ describe Activity, "Classification" do
       context "budget_stratobj_coding" do
         it "should return code assignments" do
           Factory(:coding_spend, :activity => @activity, :code => @code1,
-                         :amount => 10, :cached_amount => 10)
+                         :percentage => 10, :cached_amount => 10)
           Factory(:coding_spend, :activity => @activity, :code => @code2,
-                         :amount => 30, :cached_amount => 30)
+                         :percentage => 30, :cached_amount => 30)
           Factory(:coding_spend, :activity => @activity, :code => @code3,
-                         :amount => 35, :cached_amount => 35)
+                         :percentage => 35, :cached_amount => 35)
 
           @activity.spend_stratobj_coding.length.should == 2
           @activity.spend_stratobj_coding[0].type.should == 'HsspSpend'
@@ -586,31 +586,32 @@ describe Activity, "Classification" do
     end
 
     it "returns coding_budget_sum_in_usd" do
-      @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_budget, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
+      @activity = Factory(:activity, :data_response => @response,
+                          :project => @project)
+      Factory(:coding_budget, :activity => @activity,
+              :code => @code1, :cached_amount => 6000)
+      Factory(:coding_budget, :activity => @activity,
+              :code => @code2, :cached_amount => 18000)
 
       @activity.coding_budget_sum_in_usd.should == 48
     end
 
     it "returns coding_spend_sum_in_usd" do
       @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_spend, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
+      Factory(:coding_spend, :activity => @activity,
+              :code => @code1, :cached_amount => 6000)
+      Factory(:coding_spend, :activity => @activity,
+              :code => @code2, :cached_amount => 18000)
 
       @activity.coding_spend_sum_in_usd.should == 48
     end
 
     it "returns coding_budget_district_sum_in_usd" do
       @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_budget_district, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_budget_district, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
+      Factory(:coding_budget_district, :activity => @activity,
+              :code => @code1, :cached_amount => 6000)
+      Factory(:coding_budget_district, :activity => @activity,
+              :code => @code2, :cached_amount => 18000)
 
       @activity.coding_budget_district_sum_in_usd(@code1).should == 12
       @activity.coding_budget_district_sum_in_usd(@code2).should == 36
@@ -618,10 +619,10 @@ describe Activity, "Classification" do
 
     it "returns coding_spend_district_sum_in_usd" do
       @activity = Factory(:activity, :data_response => @response, :project => @project)
-      Factory(:coding_spend_district, :activity => @activity, :code => @code1,
-                     :amount => 6000, :cached_amount => 6000)
-      Factory(:coding_spend_district, :activity => @activity, :code => @code2,
-                     :amount => 18000, :cached_amount => 18000)
+      Factory(:coding_spend_district, :activity => @activity,
+              :code => @code1, :cached_amount => 6000)
+      Factory(:coding_spend_district, :activity => @activity,
+              :code => @code2, :cached_amount => 18000)
 
       @activity.coding_spend_district_sum_in_usd(@code1).should == 12
       @activity.coding_spend_district_sum_in_usd(@code2).should == 36

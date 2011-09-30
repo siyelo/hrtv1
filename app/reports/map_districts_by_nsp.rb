@@ -8,7 +8,6 @@ class Reports::MapDistrictsByNsp
     @coding_class              = @is_budget ? CodingBudget : CodingSpend
     @activities                = activities
     @codes                     = Nsp.all
-    @leaves                    = Nsp.leaves
     @districts_hash            = {}
     @district_proportions_hash = {} # activity => {location => proportion}
 

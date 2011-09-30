@@ -7,7 +7,6 @@ class Reports::DistrictsByAllCodes
     @is_budget                 = is_budget?(type)
     @coding_class              = @is_budget ? CodingBudget : CodingSpend
     @activities                = activities
-    @leaves                    = Nsp.leaves
     @codes_to_include          = []
     @districts_hash            = {}
     @district_proportions_hash = {} # activity => {location => proportion}

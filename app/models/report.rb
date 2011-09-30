@@ -102,11 +102,11 @@ class Report < ActiveRecord::Base
         when 'dynamic_query_report_spent'
           Reports::JawpReport.new(:spent, simple_activities_for_request_with_associations)
         when 'activities_by_nsp_budget'
-          Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget, true)
+          Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget)
         when 'activities_by_nha'
           Reports::ActivitiesByNha.new(simple_activities_for_request)
         when 'activities_by_all_codes_budget'
-          Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget, true)
+          Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget)
         else
           raise "Invalid report request '#{self.key}'"
         end

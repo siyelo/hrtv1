@@ -11,7 +11,7 @@ Feature: Admin can approve a code breakdown for each activity
       And a project exists with name: "TB Treatment Project", data_response: the data_response
       And an activity exists with name: "TB Drugs procurement", data_response: the data_response, project: the project
       And a mtef_code exists with short_display: "Mtef code"
-      And a coding_budget exists with code: the mtef_code, activity: the activity, amount: "1000"
+      And a coding_budget exists with code: the mtef_code, activity: the activity
 
     # NB: this scenario will only work for 1 activity, 1 classification
     @javascript @wip

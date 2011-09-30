@@ -1,13 +1,13 @@
 module PrepareCharts
   def get_code_type_and_initialize(code_type)
     case code_type
-    when 'mtef'
+    when 'mtef', '', nil
       @mtef = true
+      code_type = 'mtef'
     when 'cost_category'
       @cost_category = true
-    when 'nsp', '', nil
+    when 'nsp'
       @nsp = true
-      code_type = 'nsp'
     when 'hssp2_strat_prog'
       @hssp2_strat_prog = true
     when 'hssp2_strat_obj'

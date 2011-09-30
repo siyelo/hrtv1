@@ -44,7 +44,7 @@ describe Report do
                                  :data_request_id => @request.id)
       report.generate_csv_zip
       converted_csv = Iconv.conv("UTF-8","WINDOWS-1252",report.raw_csv)
-      converted_csv.split("\n")[1].should == "1,#{@user.email},#{@user.name},ààââàûçÿ,Bilateral,Not Yet Started"
+      converted_csv.split("\n")[1].should == "#{@user.id},#{@user.email},#{@user.name},ààââàûçÿ,Bilateral,Not Yet Started"
     end
   end
 

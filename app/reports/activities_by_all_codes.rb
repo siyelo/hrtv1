@@ -7,7 +7,6 @@ class Reports::ActivitiesByAllCodes
     @is_budget         = is_budget?(type)
     @coding_class      = @is_budget ? CodingBudget : CodingSpend
     @activities        = activities
-    #@activities        = Activity.find([12218])
     Activity.send(:preload_associations, @activities,
       [{ :project => {:in_flows => :from} }, { :data_response => :organization },
        :organizations, :provider]) # wierd selects when preloading :beneficiaries

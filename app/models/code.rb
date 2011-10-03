@@ -35,10 +35,7 @@ class Code < ActiveRecord::Base
     if @depest_nesting
       @depest_nesting
     else
-      levels = []
-      self.each_with_level(self.root.self_and_descendants) do |code, level|
-        levels << level
-      end
+      levels = self.roots_with_level.collect{|a| a[0]}
       @depest_nesting = levels.present? ? (levels.max + 1) : 0
       @depest_nesting
     end

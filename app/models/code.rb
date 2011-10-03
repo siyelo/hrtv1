@@ -52,14 +52,8 @@ class Code < ActiveRecord::Base
   end
 
   def leaf_assignments_for_activities(type, activities)
-    if leaf?
-      code_assignments.with_type(type.to_s).
-                       with_activities(activities).
-                       cached_amount_desc.
-                       find(:all, :conditions => ["sum_of_children = 0"])
-    else
-      []
-    end
+    code_assignments.with_type(type.to_s).with_activities(activities).
+      leaves.with_amount.cached_amount_desc
   end
 
   def sum_of_assignments_for_activities(coding_klass, activities)

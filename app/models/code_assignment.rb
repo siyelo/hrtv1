@@ -64,6 +64,8 @@ class CodeAssignment < ActiveRecord::Base
                     ON data_responses.data_request_id = data_requests.id AND
                     data_responses.data_request_id = #{request_id}",
               }}
+  named_scope :leaves, :conditions => ["code_assignments.sum_of_children = 0"]
+  named_scope :with_amount, :conditions => ["cached_amount_in_usd > 0"]
 
 
 

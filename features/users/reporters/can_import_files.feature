@@ -27,3 +27,7 @@ Feature: Reporter can import/export workplans
     When I attach the file "spec/fixtures/malformed.csv" to "File" within ".activities_upload_box"
     And I press "Import" within ".activities_upload_box"
     Then I should see "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV? Please post a problem at TenderApp if you can't figure out what's wrong."
+
+  Scenario: Reporter cannot import and save without reviewing
+    Then I should not see "Bulk Import"
+    And I should not see "As the System Administrator, you can upload large files"

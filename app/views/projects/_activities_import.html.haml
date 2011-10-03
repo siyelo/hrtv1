@@ -15,3 +15,9 @@
       - if can_export
         = link_to "Export", export_response_projects_path(@response, url_params), :class => "create_alt right"
       = link_to "Get Template", download_template_response_projects_path(@response), :class => "create_alt right"
+      -if current_user.sysadmin?
+        = link_to "Bulk Import", '#', :class => "create_alt right overlay", :rel => "#delayed_import"
+
+-if current_user.sysadmin?
+  = render 'delayed_import', :url_params => url_params
+

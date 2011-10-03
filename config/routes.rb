@@ -56,7 +56,8 @@ map.root :controller => 'static_page', :action => 'index'
       :collection => {:download_template => :get,
                       :export_workplan => :get,
                       :export => :get,
-                      :import => :post}
+                      :import => :post,
+                      :import_and_save => :post}
     response.resources :activities, :except => [:index, :show],
       :member => {:sysadmin_approve => :put, :activity_manager_approve => :put},
       :collection => {:template => :get,

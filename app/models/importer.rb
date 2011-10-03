@@ -5,16 +5,9 @@ class Importer
 
   attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
 
-  def initialize(response, filename)
-    @response = response
-    @filename = filename
-    @file = open_xls_or_csv(@filename)
-    @projects = @activities = @new_splits = []
-  end
+  def import(response, filename)
+    internal_initialize(response, filename)
 
-  def import
-    @activities = []
-    @projects = []
     activity_name = project_name = sub_activity_name = ''
     project_description = activity_description = ''
     @new_splits = []
@@ -101,6 +94,18 @@ class Importer
     return @projects, @activities
   end
 
+  def import_and_save(response, filename)
+    internal_initialize(response, filename)
+    @projects, @activities = import(response, filename)
+
+    @projects.each do |project|
+      project_activities = @activities.find_all{ |a| a.project == project }
+      project.activities << project_activities
+      project.save(false)
+    end
+  end
+  handle_asynchronously :import_and_save
+
   def name_for(current_row_name, previous_name)
     name = sanitize_encoding(current_row_name.blank? ? previous_name : current_row_name)
     name = name.strip.slice(0..Project::MAX_NAME_LENGTH-1).strip # strip again after truncation in case there are
@@ -174,13 +179,26 @@ class Importer
 
   protected
 
+    # Instance variables cannot be assigned in the initializer because
+    # delayed_job will not recognize them - they have to be initialized
+    # within the method which is handled asynchronously
+
+    def internal_initialize(response, filename)
+      @response = response
+      @filename = filename
+      @file ||= open_xls_or_csv(@filename)
+      @projects = []
+      @activities = []
+      @new_splits = []
+    end
+
     def open_xls_or_csv(filename)
       begin
-        worksheet = Spreadsheet.open(@filename).worksheet(0)
+        worksheet = Spreadsheet.open(filename).worksheet(0)
         @file = create_hash_from_header(worksheet)
       rescue Ole::Storage::FormatError
         # try import the file as a csv if it is not an spreadsheet
-        @file = FasterCSV.open(@filename, {:headers => true, :skip_blanks => true})
+        @file = FasterCSV.open(filename, {:headers => true, :skip_blanks => true})
       end
 
       @file

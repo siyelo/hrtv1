@@ -4,7 +4,7 @@ class Reports::AllCodes
   include Reports::Helpers
 
   def initialize(klass = Mtef)
-    @max_level = Code.deepest_nesting
+    @deepest_nesting = Code.deepest_nesting
     @klass = klass
   end
 
@@ -20,7 +20,7 @@ class Reports::AllCodes
     def build_header
       row = []
 
-      @max_level.times{ |i| row << "Code" }
+      @deepest_nesting.times{ |i| row << "Code" }
       row << "Simple Display"
       row << "Description"
       row << "Type (MTEF, NSP, etc)"
@@ -37,7 +37,7 @@ class Reports::AllCodes
 
       current_level.times{|i| row << '' }
       row << code.short_display
-      (@max_level - (current_level + 1)).times{ |i| row << '' }
+      (@deepest_nesting - (current_level + 1)).times{ |i| row << '' }
       row << code.short_display
       row << code.description
       row << code.type

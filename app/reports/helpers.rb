@@ -166,22 +166,22 @@ module Reports::Helpers
   end
 
   # TODO: improve speed here
-  def add_all_codes_hierarchy(row, code)
+  def add_all_codes_hierarchy(row, code, deepest_nesting)
     counter = 0
     Code.each_with_level(code.self_and_ancestors) do |other_code, level|
       counter += 1
       row << (code == other_code ? official_name_w_sum(other_code) : nil)
     end
-    (Code.deepest_nesting - counter).times{ row << nil }
+    (deepest_nesting - counter).times{ row << nil }
   end
 
-  def add_nsp_codes_hierarchy(row, code)
+  def add_nsp_codes_hierarchy(row, code, deepest_nesting)
     counter = 0
     Nsp.each_with_level(code.self_and_nsp_ancestors) do |other_code, level|
       counter += 1
       row << (code == other_code ? official_name_w_sum(other_code) : nil)
     end
-    (Nsp.deepest_nesting - counter).times{ row << nil }
+    (deepest_nesting - counter).times{ row << nil }
   end
 
   def cache_activities(code_assignments)

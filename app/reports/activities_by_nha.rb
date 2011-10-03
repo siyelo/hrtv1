@@ -5,9 +5,8 @@ class Reports::ActivitiesByNha
 
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
-       #:conditions => ["activities.id IN (?)", [889]], # NOTE: FOR DEBUG ONLY
-       #:conditions => ["activities.id IN (?)", [4498, 4499]], # NOTE: FOR DEBUG ONLY
        :include => [:provider, :organizations, {:data_response => :organization}])
+    @deepest_nesting  = Code.deepest_nesting
   end
 
   def csv
@@ -44,7 +43,7 @@ class Reports::ActivitiesByNha
       row << "Code nha code"
       row << "Code nasa code"
       row << 'NHA/NASA Code'
-      Code.deepest_nesting.times{ row << 'Code' }
+      @deepest_nesting.times{ row << 'Code' }
 
       row
     end
@@ -104,7 +103,7 @@ class Reports::ActivitiesByNha
         row << last_code.try(:nasa_code)
         row << get_nha_or_nasa(last_code)
 
-        add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
+        add_codes_to_row(row, codes, @deepest_nesting, :short_display)
 
         csv << row
       end

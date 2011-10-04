@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe Importer do
   before :each do
     basic_setup_sub_activity
@@ -790,11 +792,13 @@ EOS
 
   it "should import and save a file" do
     csv_string = <<-EOS
-project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,99.9,100.1
+project2,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,99.9,100.1
 EOS
+    @response.projects.count.should == 1
     i = Importer.new
     i.import_and_save(@response, write_csv_with_header(csv_string))
-    @response.projects.count.should == 1
+    run_delayed_jobs
+    @response.projects.count.should == 2
   end
 
 end

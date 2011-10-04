@@ -9,6 +9,7 @@ class ProjectsController < BaseController
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
+  before_filter :require_admin, :only => [:import_and_save]
 
   def index
     scope = @response.projects.scoped({})
@@ -86,13 +87,9 @@ class ProjectsController < BaseController
   def import_and_save
     begin
       if params[:file].present?
-        if current_user.sysadmin?
-          @i = Importer.new
-          @i.import_and_save(@response, params[:file].path)
-          flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
-        else
-          flash[:error] = 'You are not authorised to proceed with this action'
-        end
+        @i = Importer.new
+        @i.import_and_save(@response, params[:file].path)
+        flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
         flash[:error] = 'Please select a file to upload'
       end

@@ -796,7 +796,7 @@ project2,project description,01/01/2010,31/12/2010,activity1,activity1 descripti
 EOS
     @response.projects.count.should == 1
     i = Importer.new
-    i.import_and_save(@response, write_csv_with_header(csv_string))
+    i.import_and_save(@response, File.open(write_csv_with_header(csv_string)).read)
     run_delayed_jobs
     @response.projects.count.should == 2
   end

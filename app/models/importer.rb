@@ -1,11 +1,9 @@
-require 'iconv'
-
 class Importer
   include EncodingHelper
 
   attr_accessor :response, :file, :filename, :projects, :activities, :new_splits
 
-  def import(response, filename)
+  def import(response, filename = '')
     internal_initialize(response, filename)
 
     activity_name = project_name = sub_activity_name = ''
@@ -94,10 +92,10 @@ class Importer
     return @projects, @activities
   end
 
-  def import_and_save(response, filename)
-    internal_initialize(response, filename)
-    @projects, @activities = import(response, filename)
-
+  def import_and_save(response, file)
+    @file = FasterCSV.parse(file, {:headers => true})
+    internal_initialize(response)
+    @projects, @activities = import(response)
     @projects.each do |project|
       project_activities = @activities.find_all{ |a| a.project == project }
       project.activities << project_activities
@@ -177,48 +175,48 @@ class Importer
     [split, activity]
   end
 
+  def self.open_xls_or_csv(filename)
+    begin
+      worksheet = Spreadsheet.open(filename).worksheet(0)
+      file = self.create_hash_from_header(worksheet)
+    rescue Ole::Storage::FormatError
+      # try import the file as a csv if it is not an spreadsheet
+      file = FasterCSV.open(filename, {:headers => true, :skip_blanks => true})
+    end
+
+    file
+  end
+
+  def self.create_hash_from_header(xls_worksheet)
+    file = []
+    header = []
+    xls_worksheet.each_with_index do |row, row_index|
+      if row_index == 0
+        header = row
+      else
+        h = Hash.new
+        row.each_with_index do |cell, col_index|
+          h[header[col_index]] = cell
+        end
+        file << h
+      end
+    end
+    file
+  end
+
   protected
 
     # Instance variables cannot be assigned in the initializer because
     # delayed_job will not recognize them - they have to be initialized
     # within the method which is handled asynchronously
 
-    def internal_initialize(response, filename)
+    def internal_initialize(response, filename = '')
       @response = response
       @filename = filename
-      @file ||= open_xls_or_csv(@filename)
+      @file ||= Importer.open_xls_or_csv(@filename)
       @projects = []
       @activities = []
       @new_splits = []
-    end
-
-    def open_xls_or_csv(filename)
-      begin
-        worksheet = Spreadsheet.open(filename).worksheet(0)
-        @file = create_hash_from_header(worksheet)
-      rescue Ole::Storage::FormatError
-        # try import the file as a csv if it is not an spreadsheet
-        @file = FasterCSV.open(filename, {:headers => true, :skip_blanks => true})
-      end
-
-      @file
-    end
-
-    def create_hash_from_header(xls_worksheet)
-      file = []
-      header = []
-      xls_worksheet.each_with_index do |row, row_index|
-        if row_index == 0
-          header = row
-        else
-          h = Hash.new
-          row.each_with_index do |cell, col_index|
-            h[header[col_index]] = cell
-          end
-          file << h
-        end
-      end
-      file
     end
 
     def tidy_up_splits

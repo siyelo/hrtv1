@@ -1,4 +1,5 @@
 require 'set'
+
 class ProjectsController < BaseController
   SORTABLE_COLUMNS = ['name']
 
@@ -87,8 +88,9 @@ class ProjectsController < BaseController
   def import_and_save
     begin
       if params[:file].present?
+        file = params[:file].open.read
         @i = Importer.new
-        @i.import_and_save(@response, params[:file].path)
+        @i.import_and_save(@response, file)
         flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
         flash[:error] = 'Please select a file to upload'

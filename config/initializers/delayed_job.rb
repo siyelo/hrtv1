@@ -2,3 +2,4 @@
 # in your config/initializers/delayed_job.rb
 
 Delayed::Worker.backend = :active_record
+require 'importer'

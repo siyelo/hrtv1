@@ -5,6 +5,8 @@
   .dashboard_section
     %p Create one or more projects and activities from an XLS or CSV file. Export your existing projects and activities, edit them in your preferred spreadsheet application (e.g. Microsoft Excel), save the file and  upload it here.
     %br
+    %p Please note that the file import currently supports files with around 50 rows - if you are having problems with the file upload, please try upload individual projects/activities in separate files.  If you encounter a timeout error, please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> and the support team will assist you.
+    %br
     - form_tag(import_response_projects_path(@response, url_params), :multipart => true) do
 
       .upbox
@@ -15,3 +17,9 @@
       - if can_export
         = link_to "Export", export_response_projects_path(@response, url_params), :class => "create_alt right"
       = link_to "Get Template", download_template_response_projects_path(@response), :class => "create_alt right"
+      -if current_user.sysadmin?
+        = link_to "Bulk Import", '#', :class => "create_alt right overlay", :rel => "#delayed_import"
+
+-if current_user.sysadmin?
+  = render 'delayed_import', :url_params => url_params
+

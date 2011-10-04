@@ -9,6 +9,7 @@ class ProjectsController < BaseController
   before_filter :strip_commas_from_in_flows, :only => [:create, :update]
   before_filter :warn_if_not_current_request, :only => [:index, :new, :edit]
   before_filter :prevent_browser_cache, :only => [:index, :edit, :update] # firefox misbehaving
+  before_filter :require_admin, :only => [:import_and_save]
 
   def index
     scope = @response.projects.scoped({})
@@ -68,14 +69,31 @@ class ProjectsController < BaseController
   def import
     begin
       if params[:file].present?
-        @i = Importer.new(@response, params[:file].path)
-        @i.import
+        @i = Importer.new
+        @i.import(@response, params[:file].path)
         @projects = @i.projects
         @activities = @i.activities
       else
         flash[:error] = 'Please select a file to upload'
         redirect_to response_projects_url(@response)
       end
+    rescue FasterCSV::MalformedCSVError
+      flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
+                       Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."
+      redirect_to response_projects_url(@response)
+    end
+  end
+
+  def import_and_save
+    begin
+      if params[:file].present?
+        @i = Importer.new
+        @i.import_and_save(@response, params[:file].path)
+        flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
+      else
+        flash[:error] = 'Please select a file to upload'
+      end
+      redirect_to response_projects_url(@response)
     rescue FasterCSV::MalformedCSVError
       flash[:error] = "There was a problem with your file. Did you use the template provided and save the file as either XLS or CSV?
                        Please post a problem at <a href='https://hrtapp.tenderapp.com/kb'>TenderApp</a> if you can't figure out what's wrong."

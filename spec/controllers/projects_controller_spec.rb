@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include ControllerStubs
+
 describe ProjectsController do
   describe "Routing shortcuts for Projects (projects/1) should map" do
     it "response_projects_path(1) to /responses/1/projects" do
@@ -96,6 +98,42 @@ describe ProjectsController do
         response.header["Content-Disposition"].should == "attachment; filename=import_template.xls"
       end
     end
+
+    describe "Import and Save" do
+      before :each do
+        @data_response = mock_model(DataResponse)
+        DataResponse.stub(:find).and_return(@data_response)
+      end
+
+      context "reporter" do
+        it "cannot import and save using delayed_job" do
+          user = stub_logged_in_reporter
+          user.stub_chain(:data_responses, :find).and_return(@data_response)
+
+          post :import_and_save, :response_id => 1
+
+          response.should redirect_to(login_url)
+          flash[:error].should == "You must be an administrator to access that page"
+        end
+      end
+
+      context "sysadmin" do
+        it "can import and save using delayed_job" do
+          user = stub_logged_in_sysadmin
+          DataResponse.stub(:find).with('1').and_return(@data_response)
+          csv_string = <<-EOS
+project2,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,99.9,100.1
+EOS
+          params[:file].stub(:present?).and_return(true)
+          params[:file].stub(:path).and_return(write_csv_with_header(csv_string))
+          post :import_and_save, :response_id => 1
+
+          response.should redirect_to(response_projects_path(@data_response))
+          flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
+        end
+      end
+    end
+
   end
 
   describe "as a activity_manager" do

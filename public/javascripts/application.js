@@ -1445,6 +1445,7 @@ var activities_new = activities_create = activities_edit = activities_update = o
     if ($('.js_target_field').size() == 0) {
       $(document).find('.js_add_nested').trigger('click');
     }
+    numericInputField(".js_implementer_spend, .js_implementer_budget");
   }
 };
 
@@ -1515,12 +1516,56 @@ var activity_form = function () {
     close_activity_funding_sources_fields(fields);
   });
 
+  $('.js_implementer_spend').live('keyup', function(e) {
+    var page_spend = parseFloat($('body').attr('page_spend'));
+    var current_spend = implementer_page_total('spend');
+    var difference = page_spend - current_spend;
+    var total = parseFloat($('body').attr('total_spend'));
+    $('.js_total_spend').find('.amount').html((total - difference).toFixed(2))
+  });
+
+  $('.js_implementer_budget').live('keyup', function(e) {
+    var page_budget = parseFloat($('body').attr('page_budget'));
+    var current_budget = implementer_page_total('budget');
+    var difference = page_budget - current_budget;
+    var total = parseFloat($('body').attr('total_budget'));
+    $('.js_total_budget').find('.amount').html((total - difference).toFixed(2))
+  });
+
   approveBudget();
   approveAsAdmin();
   commentsInit();
   dynamicUpdateTotalsInit();
   close_activity_funding_sources_fields($('.funding_sources .fields'));
+  store_implementer_page_total();
 };
+
+var store_implementer_page_total = function(){
+  $('body').attr('total_spend', $('.js_total_spend').find('.amount').html() )
+  $('body').attr('total_budget', $('.js_total_budget').find('.amount').html() )
+
+  if( $('.js_implementer_budget').length > 0 ){
+    page_budget = implementer_page_total('budget')
+    $('body').attr('page_budget',page_budget);
+  }
+
+  if( $('.js_implementer_spend').length > 0 ){
+    page_spend = implementer_page_total('spend')
+    $('body').attr('page_spend',page_spend);
+  }
+};
+
+var implementer_page_total = function(type){
+  var page_total = 0;
+    inputs = (type == 'budget') ? $('.js_implementer_budget') : $('.js_implementer_spend');
+    inputs.each(function(){
+      float_val = parseFloat($(this).val());
+      if( !(isNaN(float_val)) ){
+        page_total += parseFloat($(this).val());
+      }
+    });
+    return page_total
+}
 
 var admin_activities_new = admin_activities_create = admin_activities_edit = admin_activities_update = {
   run: function () {

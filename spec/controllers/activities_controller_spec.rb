@@ -219,4 +219,39 @@ describe ActivitiesController do
       @activity.user.should == manager
     end
   end
+
+  describe "pagination" do
+    before :each do
+      @organization = Factory(:organization)
+      @data_request = Factory(:data_request, :organization => @organization)
+      @user = Factory(:reporter, :organization => @organization)
+      @data_response = @organization.latest_response
+      @project = Factory(:project, :data_response => @data_response)
+      @activity = Factory(:activity, :project => @project,
+                          :data_response => @data_response, :am_approved => false)
+      @project.reload
+      login @user
+    end
+
+    it "should paginate implementer splits" do
+      @split = Factory(:sub_activity, :data_response => @data_response,
+               :activity => @activity, :provider => @organization)
+      @activity.reload
+      get :edit, :id => @activity.id, :response_id => @data_response.id
+      assigns(:split_errors).should be_nil
+      assigns(:splits).should == @activity.implementer_splits
+      assigns(:splits).total_pages == 1
+    end
+
+    it "should not paginate implementer splits when there are errors" do
+      post :update, :id => @activity.id, :response_id => @data_response.id,
+           :activity => {:project_id => @project.id, :name => "new activity", :description => "description",
+           "implementer_splits_attributes"=>
+            {"0"=> {"updated_at" => Time.now, "spend"=>"", "data_response_id"=>"#{@data_response.id}",
+              "provider_mask"=>"#{@organization.id}", "budget"=>""}}}
+      assigns(:split_errors).size.should == 1
+      assigns(:splits).should be_nil
+    end
+  end
+
 end

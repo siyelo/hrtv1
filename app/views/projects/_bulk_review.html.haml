@@ -63,7 +63,7 @@
                 = ff.input :updated_at, :as => :hidden
 
                 %li
-                  = render 'shared/outlays/implementers', :f => ff, :outlay => ff.object, :blank_rows => 0, :show_buttons => false
+                  = render 'shared/outlays/implementers', :f => ff, :outlay => ff.object, :blank_rows => 0, :bulk_review => true
 
       %li.borderless.marginless
         %br

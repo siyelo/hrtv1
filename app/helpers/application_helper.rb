@@ -317,9 +317,13 @@ module ApplicationHelper
   end
 
   def sort_splits(splits)
-    blanks = splits.select{ |s| s.organization.nil? }
-    blanks + splits.reject{ |s| s.organization.nil?}.sort do
-      |a,b| a.organization_name <=> b.organization_name
+    if splits.empty?
+      splits
+    else
+      blanks = splits.select{ |s| s.organization.nil? }
+      blanks + splits.reject{ |s| s.organization.nil?}.sort do
+        |a,b| a.organization_name <=> b.organization_name
+      end
     end
   end
 end

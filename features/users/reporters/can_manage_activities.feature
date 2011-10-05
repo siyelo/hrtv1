@@ -77,6 +77,14 @@ Feature: Reporter can manage activities
     And the "activity[implementer_splits_attributes][0][spend]" field should contain "99"
     And the "activity[implementer_splits_attributes][0][budget]" field should contain "19"
 
+  @javascript
+  Scenario: Reporter can see live total being updated
+    When I follow "Projects"
+    And I follow "Add Activities now"
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][1][spend]" with "100"
+    Then I should see "199"
+
   Scenario: A reporter can create comments for a Activity
     Given an activity exists with project: the project, name: "Activity1", description: "Activity1 description", data_response: the data_response
     When I follow "Projects"

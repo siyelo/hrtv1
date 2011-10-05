@@ -9,7 +9,7 @@
 
   %li
     Total activities:
-    = @organization.activities.count
+    = @organization.activities.only_simple.count
 
   %li
     Location:

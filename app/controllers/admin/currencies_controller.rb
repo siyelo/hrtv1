@@ -1,4 +1,4 @@
-class Admin::CurrenciesController < ApplicationController
+class Admin::CurrenciesController < Admin::BaseController
 
   def index
     if params[:query]

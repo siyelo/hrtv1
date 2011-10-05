@@ -22,6 +22,7 @@ describe SubActivity do
   describe "Validations:" do
     #it { should validate_presence_of(:provider_mask) } # done below
     #it { should validate_uniqueness_of(:provider_id).scoped_to(:activity_id) } done below
+    it { should validate_presence_of(:provider_id) }
     it { should validate_numericality_of(:spend) }
     it { should validate_numericality_of(:budget) }
 

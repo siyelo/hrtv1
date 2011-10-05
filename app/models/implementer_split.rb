@@ -47,6 +47,12 @@ class ImplementerSplit < ActiveRecord::Base
   def spend=(amount)
     write_attribute(:spend, is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
   end
+
+  def possible_duplicate?
+    # NOTE: optimize provider.projects.count call
+    organization && organization != activity.organization &&
+      organization.reporting? && organization.projects.count > 0
+  end
 end
 
 # == Schema Information

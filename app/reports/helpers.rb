@@ -130,7 +130,7 @@ module Reports::Helpers
   end
 
   def get_ratio(amount_total, amount)
-    amount_total && amount_total > 0 ? amount / amount_total : 0
+    amount && amount_total && amount_total > 0 ? amount / amount_total : 0
   end
 
   def provider_name(activity)

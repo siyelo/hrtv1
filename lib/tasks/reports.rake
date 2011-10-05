@@ -121,6 +121,11 @@ namespace :reports do
     update_report(t)
   end
 
+  desc "Caches 'deduplication' report"
+  task :deduplication => :environment do |t|
+    update_report(t)
+  end
+
   desc "Cache reports"
   task :all => [
     'districts_by_nsp_budget',
@@ -143,7 +148,8 @@ namespace :reports do
     'activities_by_nsp_budget',
     'activities_by_nha',
     'activities_by_nha_subimps',
-    'activities_by_all_codes_budget'
+    'activities_by_all_codes_budget',
+    'deduplication'
   ]
 
 

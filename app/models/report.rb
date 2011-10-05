@@ -25,7 +25,8 @@ class Report < ActiveRecord::Base
     'dynamic_query_report_spent',
     'activities_by_nsp_budget',
     'activities_by_nha',
-    'activities_by_all_codes_budget'
+    'activities_by_all_codes_budget',
+    'deduplication'
   ]
 
   ### Attributes
@@ -98,6 +99,8 @@ class Report < ActiveRecord::Base
           Reports::ActivitiesByNha.new(simple_activities_for_request)
         when 'activities_by_all_codes_budget'
           Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget)
+        when 'deduplication'
+          Reports::Deduplication.new(data_request)
         else
           raise "Invalid report request '#{self.key}'"
         end

@@ -197,4 +197,53 @@ describe ImplementerSplit do
   it "should respond to assign_or_create_organization" do
     Factory.build(:implementer_split).should respond_to(:assign_or_create_organization)
   end
+
+  describe "#possible_duplicate?" do
+    before :each do
+      @donor        = Factory(:organization, :name => "donor")
+      @organization = Factory(:organization, :name => "self-implementer")
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project      = Factory(:project, :data_response => @response)
+      @activity     = Factory(:activity, :project => @project,
+                              :data_response => @response)
+    end
+
+    context "self implementer" do
+      it "does not mark double count" do
+        implementer_split = Factory(:implementer_split, :activity => @activity,
+                                    :organization => @organization)
+
+        implementer_split.possible_duplicate?.should be_false
+      end
+    end
+
+    context "non-hrt implementer" do
+      it "does not mark double count" do
+        organization2 = Factory(:organization, :raw_type => 'Non-Reporting')
+        implementer_split = Factory(:implementer_split, :activity => @activity,
+                                    :organization => organization2)
+
+        implementer_split.possible_duplicate?.should be_false
+      end
+    end
+
+    context "another hrt implementer" do
+      it "marks double counting" do
+        organization2 = Factory(:organization, :name => "other-hrt-implementer")
+        response2     = organization2.latest_response
+        project2      = Factory(:project, :data_response => response2)
+        activity2     = Factory(:activity, :data_response => response2,
+                                :project => project2)
+
+        implementer_split = Factory(:implementer_split,
+                                    :activity => @activity,
+                                    :organization => organization2)
+        Factory(:implementer_split, :activity => activity2,
+                :organization => organization2)
+
+        implementer_split.possible_duplicate?.should be_true
+      end
+    end
+  end
 end

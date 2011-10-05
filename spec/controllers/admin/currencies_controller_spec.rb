@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Admin::CurrenciesController do
+  before :each do
+    login_as_admin
+  end
+
   describe "Routing shortcuts should map" do
     it "GET (index) with /admin/currencies" do
       params_from(:get, '/admin/currencies').should == {:controller => "admin/currencies", :action => "index"}

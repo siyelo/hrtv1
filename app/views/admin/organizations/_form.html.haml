@@ -15,13 +15,13 @@
         %table.standard.rounded
           %thead
             %tr
-              %th Project
               %th Organization
+              %th Project
           %tbody
             - @organization.out_flows.each do |of|
               %tr
-                %td= of.project.name
                 %td= of.organization.name
+                %td= of.project.name
 
 
     %h2 Implementer For:
@@ -30,13 +30,13 @@
         %table.standard.rounded
           %thead
             %tr
-              %th Activity
               %th Organization
+              %th Activity
           %tbody
             - @organization.implementer_splits.each do |is|
               %tr
-                %td= is.activity.name
                 %td= is.organization_name
+                %td= is.activity.name
 
 - unless @organization.new_record?
   .delete_section

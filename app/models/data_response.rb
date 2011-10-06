@@ -37,11 +37,14 @@ class DataResponse < ActiveRecord::Base
   ### Associations
   belongs_to :organization
   belongs_to :data_request
-  has_many :activities, :dependent => :destroy
-  has_many :normal_activities, :class_name => "Activity",
-           :conditions => [ "activities.type IS NULL"], :dependent => :destroy
-  has_many :other_costs, :dependent => :destroy
   has_many :projects, :dependent => :destroy
+  has_many :activities
+  # until we get rid of sub-activities, we refer to 'real' activities like this
+  # normal_activities deprecates self.activities.roots
+  has_many :normal_activities, :class_name => "Activity",
+           :conditions => [ "activities.type IS NULL"]
+  has_many :other_costs, :dependent => :destroy
+  has_many :implementer_splits, :through => :activities
   has_many :users_currently_completing,
            :class_name => "User",
            :foreign_key => :data_response_id_current

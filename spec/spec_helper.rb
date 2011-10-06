@@ -217,6 +217,12 @@ Spork.each_run do
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
     @split = Factory(:implementer_split, :activity => @activity,
       :organization => @organization)
+    @activity.save #recalculate implementer split total on activity
+  end
+
+  def basic_setup_sub_activity
+    warn "deprecated. Use basic_setup_implementer_split()"
+    basic_setup_implementer_split
   end
 
   def basic_setup_funding_flow

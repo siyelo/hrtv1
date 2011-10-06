@@ -11,8 +11,6 @@ class Report < ActiveRecord::Base
     'districts_by_nsp_budget',
     'districts_by_all_codes_budget',
     'users_by_organization',
-    'map_districts_by_partner_budget',
-    'map_districts_by_partner_spent',
     'map_districts_by_nsp_budget',
     'map_districts_by_all_codes_budget',
     'map_facilities_by_partner_budget',
@@ -68,10 +66,6 @@ class Report < ActiveRecord::Base
           Reports::DistrictsByAllCodes.new(simple_activities_for_request, :budget)
         when 'users_by_organization'
           Reports::UsersByOrganization.new
-        when 'map_districts_by_partner_budget'
-          Reports::MapDistrictsByPartner.new(:budget, data_request)
-        when 'map_districts_by_partner_spent'
-          Reports::MapDistrictsByPartner.new(:spent, data_request)
         when 'map_districts_by_nsp_budget'
           Reports::MapDistrictsByNsp.new(simple_activities_for_request, :budget)
         when 'map_districts_by_all_codes_budget'

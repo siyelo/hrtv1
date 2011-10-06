@@ -1,6 +1,6 @@
 .organization
   Organization:
-  = @organization.name
+  = link_to friendly_name(@organization), edit_admin_organization_path(@organization)
 
 %ul
   %li
@@ -18,3 +18,13 @@
   %li
     Total users:
     = @organization.users.count
+
+  %li
+    Total (External) Funder References:
+    = @organization.out_flows.length
+    = link_to "View", edit_admin_organization_path(@organization)
+
+  %li
+    Total (External) Implementer References:
+    = @organization.implementer_splits.length
+    = link_to "View", edit_admin_organization_path(@organization)

@@ -60,9 +60,12 @@ class FundingFlow < ActiveRecord::Base
   end
 
   ### Instance Methods
+  def to_s
+    "Project: #{project.name}; From: #{from.name}; To: #{to.name}"
+  end
 
   def name
-    "From: #{from.name} - To: #{to.name}"
+    self.to_s
   end
 
   def organization_id_from=(id_or_name)

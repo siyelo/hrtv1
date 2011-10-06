@@ -93,7 +93,13 @@ module ApplicationHelper
 
   def friendly_name(object, truncate_length = 45)
     return "n/a" unless object
-    name = object.name.blank? ? object.description : object.name
+    name = object.name
+    if name.blank?
+      begin
+        name = object.description
+      rescue NoMethodError
+      end
+    end
     return "n/a" if name.blank?
     return truncate(name.titleize, :length => truncate_length)
   end
@@ -196,10 +202,8 @@ module ApplicationHelper
   # given a project or activity, render a nice name from either
   # the name() or description()
   def nice_name(object, length = 16)
-    descr = object.name.presence ||
-            object.description.presence ||
-            "Unnamed #{object.class.to_s.titleize}"
-    truncate(descr, :length => length)
+    warn "nice_name() is deprecated in favour of friendly_name()."
+    friendly_name(object, length)
   end
 
   def coding_progress_style(progress)

@@ -67,16 +67,14 @@ class Admin::OrganizationsController < Admin::BaseController
     url = request.env['HTTP_REFERER'].to_s.match(/duplicate/) ?
       duplicate_admin_organizations_url : admin_organizations_url
 
-    if @organization.is_empty?
-      @organization.destroy
+    if @organization.destroy
       render_notice("Organization was successfully destroyed.", url)
     else
-      render_error("You cannot delete an organization that has users or data associated with it.", url)
+      render_error("You cannot delete an organization that has data referencing it.", url)
     end
   end
 
   def duplicate
-    @organizations_without_users = Organization.without_users.ordered
     @all_organizations = Organization.ordered
   end
 
@@ -89,11 +87,10 @@ class Admin::OrganizationsController < Admin::BaseController
       duplicate = Organization.find(params[:duplicate_organization_id])
       target = Organization.find(params[:target_organization_id])
 
-      if duplicate.users_count > 0
-        render_error("Duplicate organization #{duplicate.name} has users.", duplicate_admin_organizations_path)
-      else
-        Organization.merge_organizations!(target, duplicate)
+      if Organization.merge_organizations!(target, duplicate)
         render_notice("Organizations successfully merged.", duplicate_admin_organizations_path)
+      else
+        render_error("Organizations could not be merged. Did you remove all references to the duplicate first?", duplicate_admin_organizations_path)
       end
     end
   end

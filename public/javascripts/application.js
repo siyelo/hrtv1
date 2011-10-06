@@ -561,13 +561,6 @@ var replaceOrganization = function (form) {
   });
 };
 
-var destroyOrganization = function (organization_id, type) {
-  $.post('/admin/organizations/' + organization_id + '.js', {'_method': 'delete'}, function (data, status, response) {
-    var data = $.parseJSON(data)
-    response.status === 206 ? displayFlashForReplaceOrganization('error', data.message) : removeOrganizationFromLists(organization_id, type);
-  });
-}
-
 var admin_organizations_duplicate = {
   run: function () {
     $("#duplicate_organization_id, #target_organization_id").change(function() {
@@ -586,19 +579,6 @@ var admin_organizations_duplicate = {
       var form = element.parents('form')
       if (confirm('Are you sure?')) {
         replaceOrganization(form);
-      }
-    });
-
-    $(".destroy_btn").click(function (e) {
-      e.preventDefault();
-      var element = $(this);
-      var type = element.parents('.box').attr('data-type');
-      var select_element;
-
-      select_element = (type === 'duplicate') ? $("#duplicate_organization_id") : $("#target_organization_id");
-
-      if (confirm('Are you sure you want to delete "' + select_element.find('option:selected').text() + '"?')) {
-        destroyOrganization(select_element.val(), type);
       }
     });
   }

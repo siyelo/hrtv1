@@ -38,7 +38,7 @@ class DataResponse < ActiveRecord::Base
   belongs_to :organization
   belongs_to :data_request
   has_many :projects, :dependent => :destroy
-  has_many :activities
+  has_many :activities #leave it to projects to destroy activities
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"]
   has_many :other_costs, :dependent => :destroy

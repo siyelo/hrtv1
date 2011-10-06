@@ -210,11 +210,17 @@ Spork.each_run do
   end
 
   def basic_setup_implementer_split
+    basic_setup_implementer_split_for_controller
+    @request = @data_request
+    @response = @data_response
+  end
+
+  def basic_setup_implementer_split_for_controller
     @organization = Factory(:organization)
-    @request      = Factory(:data_request, :organization => @organization)
-    @response     = @organization.latest_response
-    @project      = Factory(:project, :data_response => @response)
-    @activity     = Factory(:activity, :data_response => @response, :project => @project)
+    @data_request      = Factory(:data_request, :organization => @organization)
+    @data_response     = @organization.latest_response
+    @project      = Factory(:project, :data_response => @data_response)
+    @activity     = Factory(:activity, :data_response => @data_response, :project => @project)
     @split = Factory(:implementer_split, :activity => @activity,
       :organization => @organization)
     @activity.save #recalculate implementer split total on activity

@@ -39,19 +39,19 @@ begin
   end
 
   namespace :cucumber do
-    Cucumber::Rake::Task.new({:ok => ['db:test:prepare', 'db:seed']}, 'Run features that should pass') do |t|
+    Cucumber::Rake::Task.new({:ok => ['db:test:load', 'db:seed']}, 'Run features that should pass') do |t|
       t.binary = vendored_cucumber_bin # If nil, the gem's binary is used.
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'default'
     end
 
-    Cucumber::Rake::Task.new({:wip => ['db:test:prepare', 'db:seed']}, 'Run features that are being worked on') do |t|
+    Cucumber::Rake::Task.new({:wip => ['db:test:load', 'db:seed']}, 'Run features that are being worked on') do |t|
       t.binary = vendored_cucumber_bin
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'wip'
     end
 
-    Cucumber::Rake::Task.new({:run => ['db:test:prepare', 'db:seed']}, 'Run features that are tagged to run') do |t|
+    Cucumber::Rake::Task.new({:run => ['db:test:load', 'db:seed']}, 'Run features that are tagged to run') do |t|
       t.binary = vendored_cucumber_bin
       t.fork = true # You may get faster startup if you set this to false
       t.profile = 'run'

@@ -234,8 +234,8 @@ describe ActivitiesController do
     end
 
     it "should paginate implementer splits" do
-      @split = Factory(:sub_activity, :data_response => @data_response,
-               :activity => @activity, :provider => @organization)
+      @split = Factory(:implementer_split, :activity => @activity,
+        :organization => @organization)
       @activity.reload
       get :edit, :id => @activity.id, :response_id => @data_response.id
       assigns(:split_errors).should be_nil
@@ -247,8 +247,8 @@ describe ActivitiesController do
       post :update, :id => @activity.id, :response_id => @data_response.id,
            :activity => {:project_id => @project.id, :name => "new activity", :description => "description",
            "implementer_splits_attributes"=>
-            {"0"=> {"updated_at" => Time.now, "spend"=>"", "data_response_id"=>"#{@data_response.id}",
-              "provider_mask"=>"#{@organization.id}", "budget"=>""}}}
+            {"0"=> {"updated_at" => Time.now, "spend"=>"",
+              "organization_mask"=>"#{@organization.id}", "budget"=>""}}}
       assigns(:split_errors).size.should == 1
       assigns(:splits).should be_nil
     end

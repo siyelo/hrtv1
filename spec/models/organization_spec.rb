@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Organization do
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:location_id) }
@@ -22,12 +21,12 @@ describe Organization do
     it { should belong_to(:location) }
     it { should have_many(:users) }
     it { should have_many(:data_requests) }
-    it { should have_many(:data_responses) }
+    it { should have_many(:data_responses).dependent(:destroy) }
     it { should have_many(:projects) }
     it { should have_many(:dr_activities) }
-    it { should have_many(:out_flows).dependent(:nullify) }
+    it { should have_many(:out_flows) }
     it { should have_many(:donor_for) }
-    it { should have_many(:implemented_activities).dependent(:nullify) }
+    it { should have_many(:implemented_activities) }
     it { should have_and_belong_to_many :managers }
   end
 
@@ -529,6 +528,30 @@ describe Organization do
     it "is nonreporting when raw_type is 'Non-Reporting'" do
       organization = Factory.build(:organization, :raw_type => 'Non-Reporting')
       organization.nonreporting?.should be_true
+    end
+  end
+
+  describe "destroying" do
+    it "should not allow deletion when data request exists" do
+      @org     = Factory(:organization)
+      @request = Factory(:data_request, :organization => @org)
+      @org.destroy.should be_false
+      @org.errors.on(:base).should include "Cannot delete organization with Requests"
+    end
+
+    it "should not allow deletion when Funder references exist" do
+      basic_setup_project
+      @other_org.destroy.should be_false
+      @other_org.errors.on(:base).should include "Cannot delete organization with Funder references"
+    end
+
+    it "should not allow deletion when Implementer references exist (and no Purpose splits exist)" do
+      basic_setup_implementer_split # nb: sets up a self-implementer
+      other_org    = Factory(:organization)
+      @implementer_split = Factory(:implementer_split, :data_response => @response,
+        :activity => @activity, :provider => other_org)
+      other_org.destroy.should be_false
+      other_org.errors.on(:base).should include "Cannot delete organization with Implementer references"
     end
   end
 end

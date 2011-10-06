@@ -6,11 +6,11 @@ describe DataResponse do
   describe "Associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
-    it { should have_many(:activities).dependent(:destroy) }
-    it { should have_many(:other_costs).dependent(:destroy) }
-    it { should have_many(:implementer_splits).dependent(:destroy) }
-    it { should have_many(:sub_activities).dependent(:destroy) } #TODO: deprecate
     it { should have_many(:projects).dependent(:destroy) }
+    it { should have_many(:activities)} # delegate destroy to project
+    it { should have_many(:other_costs).dependent(:destroy) }
+    it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
+    it { should have_many(:sub_activities) } #TODO: deprecate
     it { should have_many(:users_currently_completing) }
     it { should have_many(:comments).dependent(:destroy) }
   end

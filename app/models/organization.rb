@@ -31,12 +31,14 @@ class Organization < ActiveRecord::Base
   has_many :data_requests
   has_many :data_responses, :dependent => :destroy
   has_many :dr_activities, :through => :data_responses, :source => :activities
+
   has_many :out_flows, :class_name => "FundingFlow",
-             :foreign_key => "organization_id_from", :dependent => :nullify
+             :foreign_key => "organization_id_from"
   has_many :donor_for, :through => :out_flows, :source => :project
-  has_many :projects, :through => :data_responses
   has_many :implemented_activities, :class_name => "Activity",
-             :foreign_key => :provider_id, :dependent => :nullify
+             :foreign_key => :provider_id
+  # convenience
+  has_many :projects, :through => :data_responses
   has_many :activities, :through => :data_responses
 
   ### Validations
@@ -55,6 +57,9 @@ class Organization < ActiveRecord::Base
   ### Callbacks
   after_save :update_cached_currency_amounts
   after_create :create_data_responses
+  before_destroy :check_no_requests
+  before_destroy :check_no_funder_references
+  before_destroy :check_no_implementer_references
 
   ### Delegates
   delegate :name, :to => :location, :prefix => true, :allow_nil => true # gives you location_name - oh lordy!
@@ -268,6 +273,30 @@ class Organization < ActiveRecord::Base
       n = n.gsub("Health Post", "HP")
       n = n.gsub("Dispensary", "Disp")
       n
+    end
+
+    def check_no_requests
+      unless data_requests.count == 0
+        errors.add_to_base "Cannot delete organization with Requests"
+        return false
+      end
+      true
+    end
+
+    def check_no_funder_references
+      unless out_flows.count == 0
+        errors.add_to_base "Cannot delete organization with Funder references"
+        return false
+      end
+      true
+    end
+
+    def check_no_implementer_references
+      unless implemented_activities.count == 0
+        errors.add_to_base "Cannot delete organization with Implementer references"
+        return false
+      end
+      true
     end
 
   private

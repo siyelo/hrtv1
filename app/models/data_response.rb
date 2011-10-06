@@ -39,13 +39,10 @@ class DataResponse < ActiveRecord::Base
   belongs_to :data_request
   has_many :projects, :dependent => :destroy
   has_many :activities
-  # until we get rid of sub-activities, we refer to 'real' activities like this
-  # normal_activities deprecates self.activities.roots
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"]
   has_many :other_costs, :dependent => :destroy
-  has_many :implementer_splits, :class_name => "SubActivity"
-  has_many :sub_activities #deprecate
+  has_many :implementer_splits, :through => :activities
   has_many :users_currently_completing,
            :class_name => "User",
            :foreign_key => :data_response_id_current
@@ -160,7 +157,7 @@ class DataResponse < ActiveRecord::Base
 
   def activities_have_budget_or_spend?
     activities.each do |activity|
-      return false if !activity.has_budget_or_spend? 
+      return false if !activity.has_budget_or_spend?
     end
     true
   end

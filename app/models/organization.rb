@@ -35,8 +35,9 @@ class Organization < ActiveRecord::Base
   has_many :out_flows, :class_name => "FundingFlow",
              :foreign_key => "organization_id_from"
   has_many :donor_for, :through => :out_flows, :source => :project
-  has_many :implemented_activities, :class_name => "Activity",
-             :foreign_key => :provider_id
+
+  has_many :implementer_splits # this is NOT project.activity.implementer_splits
+
   # convenience
   has_many :projects, :through => :data_responses
   has_many :activities, :through => :data_responses
@@ -148,7 +149,7 @@ class Organization < ActiveRecord::Base
 
   # TODO CHECK ME
   def is_empty?
-    if users.empty? && out_flows.empty? && implemented_activities.empty? &&
+    if users.empty? && out_flows.empty? && implementer_splits.empty? &&
       location.nil? && activities.empty? &&
       data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
@@ -280,7 +281,6 @@ class Organization < ActiveRecord::Base
         errors.add_to_base "Cannot delete organization with Requests"
         return false
       end
-      true
     end
 
     def check_no_funder_references
@@ -288,15 +288,13 @@ class Organization < ActiveRecord::Base
         errors.add_to_base "Cannot delete organization with Funder references"
         return false
       end
-      true
     end
 
     def check_no_implementer_references
-      unless implemented_activities.count == 0
+      unless implementer_splits.count == 0
         errors.add_to_base "Cannot delete organization with Implementer references"
         return false
       end
-      true
     end
 
   private

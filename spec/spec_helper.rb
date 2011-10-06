@@ -215,20 +215,9 @@ Spork.each_run do
     @response     = @organization.latest_response
     @project      = Factory(:project, :data_response => @response)
     @activity     = Factory(:activity, :data_response => @response, :project => @project)
-<<<<<<< HEAD
     @split = Factory(:implementer_split, :activity => @activity,
       :organization => @organization)
-=======
-    @sub_activity = Factory(:sub_activity, :data_response => @response,
-                            :activity => @activity, :provider => @organization)
     @activity.save #recalculate implementer split total on activity
-    @split = @sub_activity # sub_activity is deprecated
->>>>>>> e09edfc... [fixes #19281305] [fixes #19281187] admin can delete org without any references to it
-  end
-
-  def basic_setup_sub_activity
-    warn "deprecated. Use basic_setup_implementer_split()"
-    basic_setup_implementer_split
   end
 
   def basic_setup_funding_flow

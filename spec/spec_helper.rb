@@ -220,11 +220,6 @@ Spork.each_run do
     @activity.save #recalculate implementer split total on activity
   end
 
-  def basic_setup_sub_activity
-    warn "deprecated. Use basic_setup_implementer_split()"
-    basic_setup_implementer_split
-  end
-
   def basic_setup_funding_flow
     @donor = Factory(:organization)
     @organization = Factory(:organization)

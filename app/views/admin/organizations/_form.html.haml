@@ -9,6 +9,35 @@
         %br
         = f.submit @organization.new_record? ? 'Create organization' : 'Update organization', :class => "next update"
 
+    %h2 Funder For:
+    %li.last
+      %ul.section_form
+        %table.standard.rounded
+          %thead
+            %tr
+              %th Project
+              %th Organization
+          %tbody
+            - @organization.out_flows.each do |of|
+              %tr
+                %td= of.project.name
+                %td= of.organization.name
+
+
+    %h2 Implementer For:
+    %li.last
+      %ul.section_form
+        %table.standard.rounded
+          %thead
+            %tr
+              %th Activity
+              %th Organization
+          %tbody
+            - @organization.implementer_splits.each do |is|
+              %tr
+                %td= is.activity.name
+                %td= is.organization_name
+
 - unless @organization.new_record?
   .delete_section
     = link_to "Delete this Organization", admin_organization_path(@organization), :confirm => "Are you sure you want to delete this Organization?", :method => :delete, :class => 'delete_action'

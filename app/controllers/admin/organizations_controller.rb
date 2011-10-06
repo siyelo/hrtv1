@@ -41,8 +41,15 @@ class Admin::OrganizationsController < Admin::BaseController
     end
   end
 
+  def edit
+    @organization = Organization.find(params[:id])
+    @users = @organization.users
+    edit!
+  end
+
   def update
     @organization = Organization.find(params[:id])
+    @users = @organization.users
     @organization.attributes = params[:organization]
     if @organization.save(false)
       flash[:notice] = 'Organization was successfully updated'

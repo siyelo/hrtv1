@@ -9,6 +9,14 @@
         %br
         = f.submit @organization.new_record? ? 'Create organization' : 'Update organization', :class => "next update"
 
+- if @users && !@users.empty?
+  %h2 Users
+  %fieldset.inputs
+    %ol
+      %li.last
+        %ul.section_form
+          = render "admin/users/users", :show_organization => false
+
 - unless @organization.new_record?
   .delete_section
     = link_to "Delete this Organization", admin_organization_path(@organization), :confirm => "Are you sure you want to delete this Organization?", :method => :delete, :class => 'delete_action'

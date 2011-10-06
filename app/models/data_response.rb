@@ -160,7 +160,7 @@ class DataResponse < ActiveRecord::Base
 
   def activities_have_budget_or_spend?
     activities.each do |activity|
-      return false if !activity.has_budget_or_spend? 
+      return false if !activity.has_budget_or_spend?
     end
     true
   end

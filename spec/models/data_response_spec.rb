@@ -6,13 +6,10 @@ describe DataResponse do
   describe "Associations" do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
-<<<<<<< HEAD
     it { should have_many(:activities).dependent(:destroy) }
     it { should have_many(:other_costs).dependent(:destroy) }
-=======
->>>>>>> e09edfc... [fixes #19281305] [fixes #19281187] admin can delete org without any references to it
     it { should have_many(:projects).dependent(:destroy) }
-    it { should have_many(:activities)} # delegate destroy to project
+    it { should have_many(:activities)}
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:implementer_splits) } # delegate destroy to project -> activity
     it { should have_many(:sub_activities) } #TODO: deprecate

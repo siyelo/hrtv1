@@ -27,9 +27,9 @@ class User < ActiveRecord::Base
   belongs_to :location
 
   ### Validations
+  # AuthLogic handles email uniqueness validation
   validates_presence_of :full_name, :email, :organization_id
   validates_presence_of :location_id, :message => "can't be blank", :if => Proc.new{ |model| model.roles.include?('district_manager') }
-  validates_uniqueness_of :email, :case_sensitive => false
   validate :validate_inclusion_of_roles
   validate :validate_organization
 

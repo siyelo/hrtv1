@@ -660,18 +660,21 @@ h3.form_heading
     margin: 5px 10px
 
 /*Multi-select on User form*/
-#admin_users_edit, #admin_users_update, #admin_users_new
-  .organizations, .locations
-    .multiselect
-      display: block
-      width: 100% !important
-      height: 207px !important
+.organizations, .locations
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 207px !important
 
-  .roles
-    .multiselect
-      display: block
-      width: 100% !important
-      height: 150px !important
+.roles
+  .multiselect
+    display: block
+    width: 100% !important
+    height: 150px !important
+
+.ui-multiselect
+  width: 911px !important
+  border: 1px solid $primary_border
 
   .ui-widget-header
     height: 25px
@@ -683,10 +686,6 @@ h3.form_heading
       text-decoration: none
       &:hover, &:focus
         color: $orange
-
-  .ui-multiselect
-    width: 911px !important
-    border: 1px solid $primary_border
 
   .ui-state-default
     padding-bottom: 5px

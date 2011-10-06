@@ -20,8 +20,8 @@
           %tbody
             - @organization.out_flows.each do |of|
               %tr
-                %td= of.organization.name
-                %td= of.project.name
+                %td= link_to of.organization.name, response_projects_path(organization_response(current_request, of.organization))
+                %td= link_to of.project.name, edit_response_project_path(of.project.response, of.project)
 
 
     %h2 Implementer For:
@@ -35,8 +35,8 @@
           %tbody
             - @organization.implementer_splits.each do |is|
               %tr
-                %td= is.organization_name
-                %td= is.activity.name
+                %td= link_to is.organization_name, response_projects_path(organization_response(current_request, is.organization))
+                %td= link_to is.activity.name, edit_response_activity_path(is.activity.response, is.activity)
 
 - unless @organization.new_record?
   .delete_section

@@ -1,11 +1,19 @@
 require 'spec_helper'
+include OrganizationsHelper
 
 describe Admin::OrganizationsHelper do
+  describe "#return_organization_response" do
+    it "should return the correct response for the organization" do
+      basic_setup_response
+      OrganizationsHelper.organization_response(@request, @organization).should == @response
+    end
 
-  #Delete this example and add some real ones or delete this file
-  it "should be included in the object returned by #helper" do
-    included_modules = (class << helper; self; end).send :included_modules
-    included_modules.should include(Admin::OrganizationsHelper)
+    it "should return the correct response for the organization" do
+      basic_setup_response
+      org = Factory(:organization)
+      req = Factory(:data_request)
+      dr1 = org.latest_response
+      OrganizationsHelper.organization_response(@request, org).should_not == @response
+    end
   end
-
 end

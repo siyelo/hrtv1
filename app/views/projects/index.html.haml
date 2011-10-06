@@ -87,15 +87,16 @@
         %th
 
     %tbody
-      - unless @projects.empty?
-        - @projects.each do |project|
-          = render "project", :project => project
-        = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+      - @projects.each do |project|
+        = render "project", :project => project
 
-      - else
+      = render 'other_costs_no_project', :response => @response, :other_costs => @response.other_costs
+
+      - if @projects.empty? && @response.other_costs.empty?
         %tr
           %td{:colspan => 100}
             = render 'no_projects_yet'
+
       %tr.filler
         %td{:colspan => 2}
         %td.total TOTAL

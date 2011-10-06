@@ -15,6 +15,7 @@ class OtherCostsController < BaseController
     warn_if_not_classified(resource)
     prepare_classifications(resource)
     load_comment_resources(resource)
+    paginate_splits(resource)
     edit!
   end
 
@@ -44,6 +45,7 @@ class OtherCostsController < BaseController
                                       "on #{@other_cost.am_approved_date}") if @other_cost.am_approved?
                      prepare_classifications(resource)
                      load_comment_resources(resource)
+                     paginate_splits(resource)
                      render :action => 'edit'
                    }
      end

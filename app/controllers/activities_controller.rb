@@ -18,6 +18,7 @@ class ActivitiesController < BaseController
     prepare_classifications(resource)
     load_comment_resources(resource)
     load_validation_errors(resource) if on_implementers_page?
+    paginate_splits(resource)
     edit!
   end
 
@@ -47,6 +48,7 @@ class ActivitiesController < BaseController
                                       "#{@activity.am_approved_date}") if @activity.am_approved?
                       prepare_classifications(resource)
                       load_comment_resources(resource)
+                      paginate_splits(resource)
                       render :action => 'edit'
                     }
       end

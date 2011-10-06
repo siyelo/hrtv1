@@ -15,9 +15,10 @@
           = render 'shared/outlays/classification', :outlay => outlay
 
   - elsif params[:mode].nil?
-    %li.last.sub_activities
-      %ul.section_form
-        = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :show_buttons => true
+    - if outlay.errors.empty? || (!outlay.errors.empty? && @split_errors)
+      %li.last.sub_activities
+        %ul.section_form
+          = render 'shared/outlays/implementers', :f => f, :outlay => outlay, :blank_rows => 3, :bulk_review => false
 
   - elsif params[:mode] == 'outputs'
     = render 'shared/outlays/outputs_targets_benefs', :f => f, :outlay => outlay

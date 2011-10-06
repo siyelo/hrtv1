@@ -4,11 +4,12 @@ class Reports::DistrictsByNsp
   include Reports::Helpers
 
   def initialize(activities, type)
-    @is_budget                 = is_budget?(type)
-    @coding_class              = @is_budget ? CodingBudget : CodingSpend
-    @activities                = activities
-    @nsp_codes                 = Nsp.all
-    @locations                 = Location.all
+    @is_budget    = is_budget?(type)
+    @coding_class = @is_budget ? CodingBudget : CodingSpend
+    @activities   = activities
+    @nsp_codes    = Nsp.all
+    @locations    = Location.all
+    @deepest_nesting    = Nsp.deepest_nesting
 
     preload_district_associations(activities, @is_budget) # eager-load
   end
@@ -28,7 +29,7 @@ class Reports::DistrictsByNsp
     def build_header
       row = []
 
-      Nsp.deepest_nesting.times{|i| row << "NSP Code"}
+      @deepest_nesting.times{|i| row << "NSP Code"}
       row << "District"
       row << "Current Budget"
 
@@ -46,7 +47,7 @@ class Reports::DistrictsByNsp
       coding_sum = @coding_sums[code.id] || 0
       if coding_sum > 0
         row = []
-        add_nsp_codes_hierarchy(row, code)
+        add_nsp_codes_hierarchy(row, code, @deepest_nesting)
         row << nil
         row << nil
         row << "Total Budget - " + n2c(coding_sum)
@@ -60,7 +61,7 @@ class Reports::DistrictsByNsp
       @code_amounts[code].each do |location, amount|
         if amount != 0
           row = []
-          add_nsp_codes_hierarchy(row, code)
+          add_nsp_codes_hierarchy(row, code, @deepest_nesting)
 
           row << location.to_s.upcase
           row << n2c(amount)

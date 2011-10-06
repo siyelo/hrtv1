@@ -4,9 +4,10 @@ class Reports::ActivitiesByAllCodes
   include Reports::Helpers
 
   def initialize(activities, type)
-    @is_budget         = is_budget?(type)
-    @coding_class      = @is_budget ? CodingBudget : CodingSpend
-    @activities        = activities
+    @is_budget    = is_budget?(type)
+    @coding_class = @is_budget ? CodingBudget : CodingSpend
+    @activities   = activities
+    @deepest_nesting    = Code.deepest_nesting
     Activity.send(:preload_associations, @activities,
       [{ :project => {:in_flows => :from} }, { :data_response => :organization },
        :organizations, :provider]) # wierd selects when preloading :beneficiaries
@@ -24,7 +25,7 @@ class Reports::ActivitiesByAllCodes
     def build_header
       row = []
 
-      Code.deepest_nesting.times{|i| row << "Code"}
+      @deepest_nesting.times{|i| row << "Code"}
       row << "Current Budget"
       row << "Activity Description"
       row << "Funding Source"
@@ -51,7 +52,7 @@ class Reports::ActivitiesByAllCodes
 
       if total > 0
         row = []
-        add_all_codes_hierarchy(row, code)
+        add_all_codes_hierarchy(row, code, @deepest_nesting)
         row << "Total Budget - " + n2c(total)
 
         csv << row
@@ -65,7 +66,7 @@ class Reports::ActivitiesByAllCodes
         if assignment.cached_amount
           activity = cached_activity(assignment)
           row      = []
-          add_all_codes_hierarchy(row, code)
+          add_all_codes_hierarchy(row, code, @deepest_nesting)
 
           row << n2c(assignment.cached_amount)
           row << activity_description(activity)

@@ -220,7 +220,9 @@ class Activity < ActiveRecord::Base
   end
 
   def possible_duplicate?
-    self.class.canonical_with_scope.find(:first, :conditions => {:id => id}).nil?
+    implementers.any? do |implementer|
+      implementer != organization && implementer.reporting?
+    end
   end
 
   def organization_name

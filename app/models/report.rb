@@ -117,7 +117,8 @@ class Report < ActiveRecord::Base
       self.temp_file_name = "#{RAILS_ROOT}/tmp/#{self.key}_#{data_request_id}_#{get_date()}.csv"
       # Convert to Windows-1252 encoding because Excel <2007 does not
       # recognize UTF8 encoded files.
-      self.raw_csv = Iconv.conv("WINDOWS-1252//IGNORE", "UTF-8", self.raw_csv)
+      # self.raw_csv = Iconv.conv("WINDOWS-1252//IGNORE", "UTF-8", self.raw_csv)
+      self.raw_csv = self.raw_csv
       File.open(self.temp_file_name, 'w')  {|f| f.write(self.raw_csv)}
     end
 

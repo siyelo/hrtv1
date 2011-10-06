@@ -4,9 +4,10 @@ class Reports::ActivitiesByNsp
   include Reports::Helpers
 
   def initialize(activities, type)
-    @is_budget         = is_budget?(type)
-    @coding_class      = @is_budget ? CodingBudget : CodingSpend
-    @activities        = activities
+    @is_budget       = is_budget?(type)
+    @coding_class    = @is_budget ? CodingBudget : CodingSpend
+    @activities      = activities
+    @deepest_nesting       = Nsp.deepest_nesting
   end
 
   def csv
@@ -19,7 +20,7 @@ class Reports::ActivitiesByNsp
   private
     def build_header
       row = []
-      Nsp.deepest_nesting.times{|i| row << "NSP Code"}
+      @deepest_nesting.times{|i| row << "NSP Code"}
       row << "Current Budget"
       row << "Activity Description"
       row << "Funding Source"
@@ -43,7 +44,7 @@ class Reports::ActivitiesByNsp
       code_total = code.sum_of_assignments_for_activities(@coding_class, @activities)
       if code_total > 0
         row = []
-        add_nsp_codes_hierarchy(row, code)
+        add_nsp_codes_hierarchy(row, code, @deepest_nesting)
         row << "Total Budget - " + n2c(code_total) #put total in Q1 column
         csv << row
       end
@@ -55,7 +56,7 @@ class Reports::ActivitiesByNsp
         if assignment.cached_amount
           activity = assignment.activity
           row = []
-          add_nsp_codes_hierarchy(row, code)
+          add_nsp_codes_hierarchy(row, code, @deepest_nesting)
           row << n2c(assignment.cached_amount_in_usd)
           row << activity_description(activity)
           row << funding_source_name(activity)

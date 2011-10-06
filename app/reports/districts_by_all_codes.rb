@@ -10,6 +10,7 @@ class Reports::DistrictsByAllCodes
     @codes_to_include          = []
     @districts_hash            = {}
     @district_proportions_hash = {} # activity => {location => proportion}
+    @deepest_nesting                 = Code.deepest_nesting
     Code.all.each do |e|
       @codes_to_include << e if [Mtef, Nha, Nsp, Nasa].include?(e.class)
     end
@@ -36,7 +37,7 @@ class Reports::DistrictsByAllCodes
     def build_header
       row = []
 
-      Code.deepest_nesting.times{|i| row << "Code"}
+      @deepest_nesting.times{|i| row << "Code"}
       row << "District"
       row << "Current Budget"
 
@@ -54,7 +55,7 @@ class Reports::DistrictsByAllCodes
         if amount != 0 && location != :total
           row = []
 
-          add_all_codes_hierarchy(row, code)
+          add_all_codes_hierarchy(row, code, @deepest_nesting)
           row << location.to_s.upcase
           row << n2c(amount)
 
@@ -69,7 +70,7 @@ class Reports::DistrictsByAllCodes
 
       if code_total > 0
         row = []
-        add_all_codes_hierarchy(row, code)
+        add_all_codes_hierarchy(row, code, @deepest_nesting)
         row << nil
         row << nil
         row << "Total Budget - " + n2c(code_total) #put total in Q1 column

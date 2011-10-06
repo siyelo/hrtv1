@@ -32,13 +32,8 @@ class Code < ActiveRecord::Base
   named_scope :ordered_by_short_display, :order => 'short_display ASC'
 
   def self.deepest_nesting
-    if @depest_nesting
-      @depest_nesting
-    else
-      levels = self.roots_with_level.collect{|a| a[0]}
-      @depest_nesting = levels.present? ? (levels.max + 1) : 0
-      @depest_nesting
-    end
+    levels = self.roots_with_level.collect{|a| a[0]}
+    levels.present? ? (levels.max + 1) : 0
   end
 
   def self.roots_with_level

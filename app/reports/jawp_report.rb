@@ -6,11 +6,18 @@ class Reports::JawpReport
   attr_accessor :include_subs # could be deprecated
 
   def initialize(type, activities)
-    @include_subs = false
-    @is_budget  = is_budget?(type)
-    @activities = activities
-    @hc_implementer_splits = SubActivity.implemented_by_health_centers.find(:all,
-      :select => 'activity_id, COUNT(*) AS total', :group => 'activity_id')
+    @include_subs                  = false
+    @is_budget                     = is_budget?(type)
+    @activities                    = activities
+    @code_deepest_nesting          = Code.deepest_nesting
+    @cost_category_deepest_nesting = CostCategory.deepest_nesting
+    @hc_implementer_splits         = SubActivity.implemented_by_health_centers.
+      find(:all, :select => 'activity_id, COUNT(*) AS total',
+           :group => 'activity_id')
+
+    Activity.send(:preload_associations, @activities, [:implementer_splits])
+      #[{ :project => {:in_flows => :from} }, { :data_response => :organization },
+       #:organizations, :provider]) # wierd selects when preloading :beneficiaries
   end
 
   def csv
@@ -41,9 +48,9 @@ class Reports::JawpReport
       row << activity.name
       row << activity.description.try(:gsub, /[\n\r-]+/, " ")
       row << get_locations(activity)
-      row << activity.sub_activities_count
+      row << activity.implementer_splits.length
       row << get_hc_sub_activity_count(activity)
-      row << get_sub_implementers(activity)
+      row << activity.implementer_splits.map{ |s| s.name }.join(' | ')
       row << activity.organization.try(:name)
       row << get_institutions_assisted(activity)
       row << get_beneficiaries(activity)
@@ -107,90 +114,91 @@ class Reports::JawpReport
       implementer_splits.each do |activity|
         break_out = false
         if activity != parent_activity
-            if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
-              if activity.budget?
-                district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
-                amount_total = activity.budget
-                amount_total_in_usd = parent_amount_total_in_usd * activity.budget / parent_activity.budget
-              else
-                break_out = true
-              end
+          if @is_budget #to get budget or past expenditure district codings and check this sub_activity has nonzero budget or spend
+            if activity.budget?
+              district_codings = activity.budget_district_coding_adjusted if use_sub_activity_district_coding
+              amount_total = activity.budget
+              amount_total_in_usd = parent_amount_total_in_usd * activity.budget / parent_activity.budget
             else
-              if activity.spend?
-                district_codings = activity.spend_district_coding_adjusted if use_sub_activity_district_coding
-                amount_total = activity.spend
-                amount_total_in_usd = parent_amount_total_in_usd * activity.spend / parent_activity.spend
-              else
-                break_out = true
-              end
+              break_out = true
             end
-        end
-        break if break_out
-        cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
-        cost_category_coding = cost_category_ca_coding[0]
-        cost_category_codes  = cost_category_ca_coding[1]
-
-        funding_sources.each do |funding_source|
-          coding_with_parent_codes.each do |ca_codes|
-            district_codings.each do |district_coding|
-              ca                    = ca_codes[0]
-              codes                 = ca_codes[1]
-              last_code             = codes.last
-              row                   = base_row.dup
-              funding_source_amount =  @is_budget ?
-                funding_source[:budget] : funding_source[:spend]
-
-              funding_source_amount =  0 if funding_source_amount.nil?
-              ratio = get_ratio(parent_amount_total, ca.amount_not_in_children) *
-                get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children) *
-                get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children) *
-                get_ratio(funding_sources_total, funding_source_amount)
-              amount = (amount_total || 0) * ratio
-              if activity.class == OtherCost
-                prov = "Administration - #{activity.data_response.organization.raw_type}"
-                prov_type = "Admin"
-              elsif activity.provider.nil?
-                prov = "Unspecified"
-                prov_type = "Unspecified"
-              else
-                prov = activity.provider.name
-                prov_type = activity.provider.raw_type
-              end
-              row << activity.possible_duplicate?
-              row << prov
-              row << prov_type
-              row << funding_source[:ufs].try(:name)
-              row << funding_source[:ufs].try(:raw_type)
-              row << funding_source[:fa].try(:name)
-              row << funding_source[:fa].try(:raw_type)
-              row << amount
-              row << ratio
-              row << amount_total_in_usd * ratio
-              obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val)
-              if obj.blank?
-                obj = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
-              end
-              prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val)
-              if prog.blank?
-                prog = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
-              end
-              row << obj
-              row << prog
-              add_codes_to_row(row, codes, Code.deepest_nesting, :short_display)
-              add_codes_to_row(row, codes, Code.deepest_nesting, :official_name)
-              row << last_code.try(:short_display)
-              row << last_code.try(:official_name)
-              row << last_code.try(:type)
-              row << last_code.try(:sub_account)
-              row << last_code.try(:nha_code)
-              row << last_code.try(:nasa_code)
-              row << codes_cache[district_coding.code_id].try(:short_display)
-              add_codes_to_row(row, cost_category_codes, CostCategory.deepest_nesting, :short_display)
-              csv << row
+          else
+            if activity.spend?
+              district_codings = activity.spend_district_coding_adjusted if use_sub_activity_district_coding
+              amount_total = activity.spend
+              amount_total_in_usd = parent_amount_total_in_usd * activity.spend / parent_activity.spend
+            else
+              break_out = true
             end
           end
         end
-      end
+        break if break_out
+
+        cost_category_coding_with_parent_codes.each do |cost_category_ca_coding|
+          cost_category_coding = cost_category_ca_coding[0]
+          cost_category_codes  = cost_category_ca_coding[1]
+
+          funding_sources.each do |funding_source|
+            coding_with_parent_codes.each do |ca_codes|
+              district_codings.each do |district_coding|
+                ca                    = ca_codes[0]
+                codes                 = ca_codes[1]
+                last_code             = codes.last
+                row                   = base_row.dup
+                funding_source_amount =  @is_budget ?
+                  funding_source[:budget] : funding_source[:spend]
+
+                funding_source_amount =  0 if funding_source_amount.nil?
+                ratio = get_ratio(parent_amount_total, ca.amount_not_in_children) *
+                  get_ratio(use_sub_activity_district_coding ? amount_total : parent_amount_total, district_coding.amount_not_in_children) *
+                  get_ratio(parent_amount_total, cost_category_coding.amount_not_in_children) *
+                  get_ratio(funding_sources_total, funding_source_amount)
+                amount = (amount_total || 0) * ratio
+                if activity.class == OtherCost
+                  prov = "Administration - #{activity.data_response.organization.raw_type}"
+                  prov_type = "Admin"
+                elsif activity.provider.nil?
+                  prov = "Unspecified"
+                  prov_type = "Unspecified"
+                else
+                  prov = activity.provider.name
+                  prov_type = activity.provider.raw_type
+                end
+                row << activity.possible_duplicate?
+                row << prov
+                row << prov_type
+                row << funding_source[:ufs].try(:name)
+                row << funding_source[:ufs].try(:raw_type)
+                row << funding_source[:fa].try(:name)
+                row << funding_source[:fa].try(:raw_type)
+                row << amount
+                row << ratio
+                row << amount_total_in_usd * ratio
+                obj = codes_cache[ca.code_id].try(:hssp2_stratobj_val)
+                if obj.blank?
+                  obj = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
+                end
+                prog = codes_cache[ca.code_id].try(:hssp2_stratprog_val)
+                if prog.blank?
+                  prog = codes_cache[ca.code_id].try(:type) != "OtherCostCode" ? "Too Vague" : "Other Cost"
+                end
+                row << obj
+                row << prog
+                add_codes_to_row(row, codes, @code_deepest_nesting, :short_display)
+                add_codes_to_row(row, codes, @code_deepest_nesting, :official_name)
+                row << last_code.try(:short_display)
+                row << last_code.try(:official_name)
+                row << last_code.try(:type)
+                row << last_code.try(:sub_account)
+                row << last_code.try(:nha_code)
+                row << last_code.try(:nasa_code)
+                row << codes_cache[district_coding.code_id].try(:short_display)
+                add_codes_to_row(row, cost_category_codes, @cost_category_deepest_nesting, :short_display)
+                csv << row
+              end
+            end
+          end
+        end
       end #implementer_splits
     end
 
@@ -226,8 +234,8 @@ class Reports::JawpReport
       row << "Converted Classified #{amount_type} (USD)"
       row << "HSSPII Strat obj"
       row << "HSSPII Strat prog"
-      Code.deepest_nesting.times{ row << "Code" }
-      Code.deepest_nesting.times{ row << "Official Code" }
+      @code_deepest_nesting.times{ row << "Code" }
+      @code_deepest_nesting.times{ row << "Official Code" }
       row << "Lowest level Code"
       row << "Lowest level Official Code"
       row << "Code type"
@@ -235,7 +243,7 @@ class Reports::JawpReport
       row << "Code nha code"
       row << "Code nasa code"
       row << "District"
-      CostCategory.deepest_nesting.times{ row << "Input" }
+      @cost_category_deepest_nesting.times{ row << "Input" }
       row
     end
 

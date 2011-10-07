@@ -13,7 +13,7 @@ describe Importer do
   describe 'API' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2    = Factory(:implementer_split, :activity => @activity, 
+      @split2    = Factory(:implementer_split, :activity => @activity,
                    :organization => @implementer2)
       @csv_string = <<-EOS
 project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,#{@split.id},selfimplementer1,2,4
@@ -65,7 +65,7 @@ EOS
   describe 'importing excel files' do
     before :each do
       @implementer2  = Factory(:organization, :name => "implementer2")
-      @split2    = Factory(:implementer_split, :activity => @activity, 
+      @split2    = Factory(:implementer_split, :activity => @activity,
                    :organization => @implementer2)
       rows = []
       rows << ['project1','project description','01/01/2010','31/12/2010','activity1','activity1 description',"#{@split.id}",'selfimplementer1','2','4']
@@ -154,7 +154,7 @@ EOS
 
   it "should show implementer split errors on import" do
     csv_string = <<-EOS
-project,project description,01/01/2010,31/12/2010,activity,activity1 description,#{@split.id},selfimplementer1,99.9,aaa
+project,project description,01/01/2010,31/12/2010,activity,activity1 description,#{@split.id},selfimplementer1,,aaa
 EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
@@ -505,9 +505,9 @@ EOS
         @activity2 = Factory(:activity, :data_response => @response, :project => @project)
         @activity3 = Factory(:activity, :data_response => @response, :project => @project)
         @activity4 = Factory(:activity, :data_response => @response, :project => @project)
-        @split2    = Factory(:implementer_split, :activity => @activity2, 
+        @split2    = Factory(:implementer_split, :activity => @activity2,
                       :organization => Factory(:organization, :name => "implementer2"))
-        @split3    = Factory(:implementer_split, :activity => @activity3, 
+        @split3    = Factory(:implementer_split, :activity => @activity3,
                       :organization => Factory(:organization, :name => "implementer3"))
         @split4 = Factory(:implementer_split, :activity => @activity4,
                       :organization => Factory(:organization, :name => "implementer4"))
@@ -555,7 +555,7 @@ EOS
         before :each do
           @project2      = Factory(:project, :data_response => @response)
           @activity21    = Factory(:activity, :data_response => @response, :project => @project2)
-          @split21    = Factory(:implementer_split, :activity => @activity21, 
+          @split21    = Factory(:implementer_split, :activity => @activity21,
                        :organization => @organization)
         end
 
@@ -668,7 +668,7 @@ EOS
 
   it "should allow an invalid implementer split on a valid activity to be corrected and saved" do
     csv_string = <<-EOS
-project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,
 EOS
     i = Importer.new
     i.import(@response, write_csv_with_header(csv_string))
@@ -676,13 +676,12 @@ EOS
     i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
     i.activities[0].implementer_splits.first.spend =  2
-    i.activities[0].implementer_splits.first.budget.to_f.should == 4
     i.activities[0].implementer_splits.first.save.should == true
   end
 
   it "should allow an invalid implementer split on a valid activity with other valid implementers to be corrected and saved" do
     csv_string = <<-EOS
-project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,4
+project1,project description,01/01/2010,31/12/2010,activity1,activity1 description,,selfimplementer1,aaaa,
 ,,,,,,,organization2,3,6
 EOS
     @organization2 = Factory(:organization, :name => 'organization2')
@@ -692,7 +691,6 @@ EOS
     i.activities[0].implementer_splits.first.organization_name.should == 'selfimplementer1'
     i.activities[0].implementer_splits.first.save.should == false
     i.activities[0].implementer_splits.first.spend =  2
-    i.activities[0].implementer_splits.first.budget.to_f.should == 4
     i.activities[0].implementer_splits.first.save.should == true
   end
 

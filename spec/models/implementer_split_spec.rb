@@ -35,6 +35,18 @@ describe ImplementerSplit do
       @split.save.should == false
       @split.errors.on(:spend).should == "must be greater than 0"
       @split.errors.on(:budget).should == "must be greater than 0"
+
+      @split = ImplementerSplit.new(:data_response => @response,
+        :activity => @activity, :organization => @organization,
+        :spend => 0, :budget => "")
+      @split.save.should == false
+      @split.errors.on(:spend).should == "must be greater than 0"
+
+      @split = ImplementerSplit.new(:data_response => @response,
+        :activity => @activity, :organization => @organization,
+        :spend => 1, :budget => 0)
+      @split.save.should == true
+      @split.errors.on(:budget).should be_nil
     end
 
     describe "implementer uniqueness" do

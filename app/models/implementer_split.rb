@@ -16,9 +16,9 @@
     :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
   validates_presence_of :organization_id
   validates_numericality_of :spend, :greater_than => 0,
-    :if => Proc.new { |is|is.spend.present? }
+    :if => Proc.new { |is| is.spend.present? && (!is.budget.present? || is.budget == 0)  }
   validates_numericality_of :budget, :greater_than => 0,
-    :if => Proc.new { |is| is.budget.present? }
+    :if => Proc.new { |is| is.budget.present? && (!is.spend.present? || is.spend == 0) }
   validates_presence_of :spend, :message => " and/or Budget must be present",
     :if => lambda { |is| (!((is.budget || 0) > 0)) && (!((is.spend || 0) > 0)) }
 

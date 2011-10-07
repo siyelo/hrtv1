@@ -79,8 +79,9 @@ Feature: Reporter can manage activities
 
   @javascript
   Scenario: Reporter can see live total being updated
+    Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"
-    And I follow "Add Activities now"
+    And I follow "existing activity"
     And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
     And I fill in "activity[implementer_splits_attributes][1][spend]" with "100"
     Then I should see "199"

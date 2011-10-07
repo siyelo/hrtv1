@@ -144,6 +144,43 @@ describe Organization do
     end
   end
 
+  describe "named_scopes" do
+    it "returns empty array when there are no organizations" do
+      Organization.without_users.should be_empty
+    end
+
+    it "returns organizations without users" do
+      req = Factory :request
+      requestor = req.organization
+      org1 = Factory(:organization, :name => 'Org1')
+      Factory(:reporter, :organization => org1, :current_response => org1.responses.first)
+      org2 = Factory(:organization, :name => 'Org2')
+      Organization.without_users.should == [requestor, org2]
+    end
+
+    it "order organizations by name" do
+      org1 = Factory(:organization, :name => 'Org2')
+      org2 = Factory(:organization, :name => 'Org1')
+
+      Organization.ordered.should == [org2, org1]
+    end
+
+    it "returns (non/)reporting organizations" do
+      @org1 = Factory(:organization, :raw_type => 'Bilateral')
+
+      non_reporting_types = ['Clinic/Cabinet Medical', 'Communal FOSA',
+        'Dispensary', 'District', 'District Hospital', 'Health Center',
+        'Health Post', 'Non-Reporting', 'Other ministries',
+        'Prison Clinic']
+      non_reporting_types.each do |type|
+        Factory(:organization, :raw_type => type)
+      end
+
+      Organization.reporting.should == [@org1]
+      Organization.nonreporting.count.should == non_reporting_types.count
+    end
+  end
+
   describe "Responses" do
     before :each do
       @organization1 = Factory(:organization)
@@ -448,40 +485,45 @@ describe Organization do
     end
   end
 
-  describe "named_scopes" do
-    it "returns empty array when there are no organizations" do
-      Organization.without_users.should be_empty
-    end
-
-    it "returns organizations without users" do
-      req = Factory :request
-      requestor = req.organization
-      org1 = Factory(:organization, :name => 'Org1')
-      Factory(:reporter, :organization => org1, :current_response => org1.responses.first)
-      org2 = Factory(:organization, :name => 'Org2')
-      Organization.without_users.should == [requestor, org2]
-    end
-
-    it "order organizations by name" do
-      org1 = Factory(:organization, :name => 'Org2')
-      org2 = Factory(:organization, :name => 'Org1')
-
-      Organization.ordered.should == [org2, org1]
-    end
-
-    it "returns (non/)reporting organizations" do
-      @org1 = Factory(:organization, :raw_type => 'Bilateral')
-
-      non_reporting_types = ['Clinic/Cabinet Medical', 'Communal FOSA',
-        'Dispensary', 'District', 'District Hospital', 'Health Center',
-        'Health Post', 'Non-Reporting', 'Other ministries',
-        'Prison Clinic']
-      non_reporting_types.each do |type|
-        Factory(:organization, :raw_type => type)
+  describe "associations" do
+    describe "#organization_managers" do
+      before :each do
+        @organization = Factory(:organization)
       end
 
-      Organization.reporting.should == [@org1]
-      Organization.nonreporting.count.should == non_reporting_types.count
+      it "should only return activity managers from the organization passed to it" do
+        u1 = Factory(:reporter, :organization => @organization)
+        u2 = Factory(:sysadmin, :organization => @organization)
+        u3 = Factory(:activity_manager, :organization => @organization)
+        u3.organizations << @organization
+        @organization.managers.should include(u3)
+        @organization.managers.should_not include(u1)
+        @organization.managers.should_not include(u2)
+      end
+
+      it "should return all activity managers from the organization passed to it" do
+        u1 = Factory(:reporter, :organization => @organization)
+        u2 = Factory(:sysadmin, :organization => @organization)
+        u3 = Factory(:activity_manager, :organization => @organization)
+        u4 = Factory(:activity_manager, :organization => @organization)
+        u3.organizations << @organization; u4.organizations << @organization
+        @organization.managers.should include(u3)
+        @organization.managers.should include(u4)
+        @organization.managers.should_not include(u1)
+        @organization.managers.should_not include(u2)
+      end
+
+      it "should return activity managers that are able to manage the organization even if they aren't part of it" do
+        org = Factory(:organization)
+        u1 = Factory(:reporter, :organization => @organization)
+        u2 = Factory(:sysadmin, :organization => @organization)
+        u3 = Factory(:activity_manager, :organization => org)
+        u3.organizations << @organization
+        @organization.managers.should include(u3)
+        @organization.managers.should_not include(u1)
+        @organization.managers.should_not include(u2)
+      end
+
     end
   end
 

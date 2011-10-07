@@ -17,8 +17,8 @@
   .column2
     %h3== Beneficiaries
     %ul.section_form.last
-      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'borderless beneficiaries_boxes' }, :input_html => { :tabindex => autotab }
-      = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2, :tabindex => autotab }, :as => :text, :required => false, :wrapper_html => { :class => 'other_beneficiaries' }
+      = f.input :beneficiaries, :label => false, :as => :check_boxes, :wrapper_html => { :class => 'borderless beneficiaries_boxes' }
+      = f.input :text_for_beneficiaries, :label => 'Other Beneficiaries' , :input_html => { :rows => 2 }, :as => :text, :required => false, :wrapper_html => { :class => 'other_beneficiaries' }
 
   .column2.last
     - hint = 'Indicate whether the activity is planned to be implemented in any of these Government Of Rwanda Fiscal Quarters'
@@ -28,16 +28,16 @@
     %fieldset
       %ol.section_form.last.planned_dates_boxes
         %li
-          = f.check_box :planned_for_gor_q1, :class => 'left', :tabindex => autotab
+          = f.check_box :planned_for_gor_q1, :class => 'left'
           = f.label :planned_for_gor_q1, next_fy_q1(@response)
         %li
-          = f.check_box :planned_for_gor_q2, :class => 'left', :tabindex => autotab
+          = f.check_box :planned_for_gor_q2, :class => 'left'
           = f.label :planned_for_gor_q2, next_fy_q2(@response)
         %li
-          = f.check_box :planned_for_gor_q3, :class => 'left', :tabindex => autotab
+          = f.check_box :planned_for_gor_q3, :class => 'left'
           = f.label :planned_for_gor_q3, next_fy_q3(@response)
         %li
-          = f.check_box :planned_for_gor_q4, :class => 'left', :tabindex => autotab
+          = f.check_box :planned_for_gor_q4, :class => 'left'
           = f.label :planned_for_gor_q4, next_fy_q4(@response)
 
 

@@ -10,6 +10,6 @@
       - # this can be a perf issue
       = f.select :organization_mask, funding_organizations_select, {:prompt => true}, :class => 'name js_implementer_select js_combobox f_from'
 
-  %td= f.text_field :spend, :class => 'js_spend no_style', :tabindex => autotab
-  %td= f.text_field :budget, :class => 'js_budget no_style', :tabindex => autotab
+  %td= f.text_field :spend, :class => 'js_spend no_style'
+  %td= f.text_field :budget, :class => 'js_budget no_style'
   %td.delete= link_to_remove_fields "x", f, {:class => 'delete_button totals_callback', :callback => 'updateTotalsValuesCallback'}

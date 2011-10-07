@@ -6,6 +6,6 @@
     .js_implementer_container.ui_widget
       = f.select :organization_id_from, options_for_select(funding_organizations_select, f.object.organization_id_from), {:prompt => true}, :class => 'js_implementer_select js_combobox f_from'
 
-  %td= f.text_field :spend, :class => 'js_spend no_style', :tabindex => autotab
-  %td= f.text_field :budget, :class => 'js_budget no_style', :tabindex => autotab
+  %td= f.text_field :spend, :class => 'js_spend no_style'
+  %td= f.text_field :budget, :class => 'js_budget no_style'
   %td.delete= link_to_remove_fields "x", f, {:class => 'delete_row totals_callback'}

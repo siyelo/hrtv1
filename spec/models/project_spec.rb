@@ -95,7 +95,7 @@ describe Project do
       basic_setup_response
       p = Project.new(
         {"name"=>"Kuraneza", "start_date"=>"2011-08-29",
-         "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"0", "budget"=>"0"}},
+         "in_flows_attributes"=> {"0"=>{"organization_id_from"=>"#{@organization.id}", "spend"=>"1", "budget"=>"1"}},
          "data_response_id"=>"#{@response.id}", "_destroy"=>"", "currency"=>"RWF", "description"=>"Describe the proje",
          "end_date"=>"2012-08-29",
          "activities_attributes"=>

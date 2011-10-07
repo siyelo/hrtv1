@@ -59,10 +59,21 @@ describe FundingFlow do
       @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
-    it "should validate one OR the other" do
+    it "should validate spend or budget greater than 0" do
       @funding_flow = Factory.build(:funding_flow, :project => @project,
-                              :from => @donor, :budget => "", :spend => "123.00")
+                              :from => @donor, :budget => "0.00", :spend => "0.00")
+      @funding_flow.save.should == false
+      @funding_flow.errors.on(:spend).should include(' greater than 0')
+      @funding_flow.errors.on(:budget).should include(' greater than 0')
+
+      @funding_flow = Factory.build(:funding_flow, :project => @project,
+                              :from => @donor, :budget => "0.00", :spend => "222")
       @funding_flow.save.should == true
+
+      @funding_flow = Factory.build(:funding_flow, :project => @project,
+                              :from => @donor, :budget => "", :spend => "0.00")
+      @funding_flow.save.should == false
+      @funding_flow.errors.on(:spend).should include(' greater than 0')
     end
 
     # in flows are saved in the context of project
@@ -166,15 +177,15 @@ describe FundingFlow do
     end
 
     it "should validate the spend fields" do
-      @funding_flow = Factory.build(:funding_flow,
-                                    :project => @project, :spend => 'abcd',
+      @funding_flow = Factory.build(:funding_flow,:project => @project,
+                                    :spend => 'abcd', :budget => '',
                                     :from => @organization)
       @funding_flow.save.should be_false
     end
 
     it "should validate the budget fields" do
-      @funding_flow = Factory.build(:funding_flow,
-                                    :project => @project, :budget => 'abcd',
+      @funding_flow = Factory.build(:funding_flow,:project => @project,
+                                    :spend => '', :budget => 'abcd',
                                     :from => @organization)
       @funding_flow.save.should be_false
     end

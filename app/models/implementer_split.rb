@@ -13,7 +13,7 @@
   validates_presence_of :organization_mask
   # this seems to be bypassed on activity update if you pass two of the same orgs
   validates_uniqueness_of :organization_id, :scope => :activity_id,
-    :message => "must be unique", :unless => Proc.new { |m| m.new_record? }
+    :message => "must be unique", :unless => Proc.new { |m| m.new_record?}
   validates_presence_of :organization_id
   validates_numericality_of :spend, :greater_than => 0,
     :if => Proc.new { |is| is.spend.present? && (!is.budget.present? || is.budget == 0)  }

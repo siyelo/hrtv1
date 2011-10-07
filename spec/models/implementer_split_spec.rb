@@ -27,6 +27,16 @@ describe ImplementerSplit do
       @split.errors.on(:organization_mask).should == "can't be blank"
     end
 
+    it "should validate spend/budget greater than 0" do
+      basic_setup_activity
+      @split = ImplementerSplit.new(:data_response => @response,
+        :activity => @activity, :organization => @organization,
+        :spend => 0, :budget => 0)
+      @split.save.should == false
+      @split.errors.on(:spend).should == "must be greater than 0"
+      @split.errors.on(:budget).should == "must be greater than 0"
+    end
+
     describe "implementer uniqueness" do
       # A known rails issue ? http://stackoverflow.com/questions/5482777/rails-3-uniqueness-validation-for-nested-fields-for
       it "should fail when trying to create two sub-activities with the same provider via Activity nested attribute API" do
@@ -122,7 +132,7 @@ describe ImplementerSplit do
     it "should only update splits via Activity API if updated_at is set" do
       attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
-          {"0"=> {"spend"=>"0", "budget"=>"0",
+          {"0"=> {"spend"=>"1", "budget"=>"1",
             "activity_id"=>"#{@activity.id}",
             "organization_mask"=>"#{@organization.id}"},
           }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}

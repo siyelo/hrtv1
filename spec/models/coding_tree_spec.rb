@@ -553,8 +553,8 @@ describe CodingTree do
       it "sets cached_amount and sum_of_children when children has percentage and activity amount is 0" do
         basic_setup_project
         activity = Factory(:activity, :data_response => @response, :project => @project)
-        split    = Factory(:implementer_split, :activity => @activity, 
-                      :budget => 0, :spend => 200, :organization => @organization)
+        split    = Factory(:implementer_split, :activity => @activity,
+                      :budget => 1, :spend => 200, :organization => @organization)
         Factory(:coding_budget, :activity => activity, :code => @code11,
                        :percentage => 10, :cached_amount => nil, :sum_of_children => nil)
         ct = CodingTree.new(activity, CodingBudget)

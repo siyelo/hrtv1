@@ -1,3 +1,5 @@
+- activity_managers = organization_activity_managers(@organization)
+
 %fieldset.inputs
   %ol
     %li.last
@@ -8,41 +10,61 @@
         = f.text_field :fosaid, :label => "Fosaid", :required => true, :hint => "Fosaid or organization", :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
         %br
         = f.submit @organization.new_record? ? 'Create organization' : 'Update organization', :class => "next update"
-        
-    %h2 Funder For:
-    %li.last
-      %ul.section_form
-        %table.standard.rounded
-          %thead
-            %tr
-              %th Organization
-              %th Project
-          %tbody
-            - @organization.out_flows.each do |of|
+
+    - unless activity_managers.empty?
+      %h2 Activity Mangers:
+      %li.last
+        %ul.section_form
+          %table.standard.rounded
+            %thead
               %tr
-                %td= link_to of.organization.name, response_projects_path(organization_response(of.organization))
-                %td= link_to of.project.name, edit_response_project_path(of.project.response, of.project)
+                %th= sortable "full_name"
+                %th= sortable "email"
+                %th.login= sortable "last_login_at", "Last login"
+                %th= sortable "roles_mask", "Role"
+            %tbody
+              - activity_managers.each do |user|
+                %tr{:class => cycle("even", "odd")}
+                  %td= link_to "#{user.full_name}", edit_admin_user_path(user)
+                  %td= mail_to user.email
+                  %td= last_signin_for(user)
+                  %td= user.roles.map{|role| role.humanize}.join(', ')
 
-
-    %h2 Implementer For:
-    %li.last
-      %ul.section_form
-        %table.standard.rounded
-          %thead
-            %tr
-              %th Organization
-              %th Activity
-          %tbody
-            - @organization.implementer_splits.each do |is|
-              %tr
-                %td= link_to is.organization_name, response_projects_path(organization_response(is.organization))
-                %td= link_to is.activity.name, edit_response_activity_path(is.activity.response, is.activity)
-
-    - if @users && !@users.empty?
+    - if !@users.blank?
       %h2 Users
       %li.last
         %ul.section_form
           = render "admin/users/users", :show_organization => false
+
+    - unless @organization.out_flows.empty?
+      %h2 Funder For:
+      %li.last
+        %ul.section_form
+          %table.standard.rounded
+            %thead
+              %tr
+                %th Organization
+                %th Project
+            %tbody
+              - @organization.out_flows.each do |of|
+                %tr
+                  %td= link_to of.organization.name, response_projects_path(organization_response(of.organization))
+                  %td= link_to of.project.name, edit_response_project_path(of.project.response, of.project)
+
+    - unless @organization.implementer_splits.empty?
+      %h2 Implementer For:
+      %li.last
+        %ul.section_form
+          %table.standard.rounded
+            %thead
+              %tr
+                %th Organization
+                %th Activity
+            %tbody
+              - @organization.implementer_splits.each do |is|
+                %tr
+                  %td= link_to is.organization_name, response_projects_path(organization_response(is.organization))
+                  %td= link_to is.activity.name, edit_response_activity_path(is.activity.response, is.activity)
 
 - unless @organization.new_record?
   .delete_section

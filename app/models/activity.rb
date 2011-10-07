@@ -55,6 +55,18 @@ class Activity < ActiveRecord::Base
   has_many :coding_spend, :dependent => :destroy
   has_many :coding_spend_cost_categorization, :dependent => :destroy
   has_many :coding_spend_district, :dependent => :destroy
+  has_many :budget_purposes, :dependent => :destroy,
+    :class_name => 'CodingBudget'
+  has_many :budget_inputs, :dependent => :destroy,
+    :class_name => 'CodingBudgetCostCategorization'
+  has_many :budget_locations, :dependent => :destroy,
+    :class_name => 'CodingBudgetDistrict'
+  has_many :spend_purposes, :dependent => :destroy,
+    :class_name => 'CodingSpend'
+  has_many :spend_inputs, :dependent => :destroy,
+    :class_name => 'CodingSpendCostCategorization'
+  has_many :spend_locations, :dependent => :destroy,
+    :class_name => 'CodingSpendDistrict'
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
 
@@ -198,12 +210,6 @@ class Activity < ActiveRecord::Base
     "Activity"
   end
 
-  def possible_duplicate?
-    implementers.any? do |implementer|
-      implementer != organization && implementer.reporting?
-    end
-  end
-
   def organization_name
     organization.name
   end
@@ -218,7 +224,7 @@ class Activity < ActiveRecord::Base
     set_classified_amount_cache(type)
     self.save(false) # save the activity even if it's approved
   end
-  handle_asynchronously :update_classified_amount_cache
+  #handle_asynchronously :update_classified_amount_cache
 
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches

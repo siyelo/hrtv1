@@ -3,45 +3,6 @@ module Reports::Helpers
   include StringCleanerHelper # gives h method
   extend ActiveSupport::Memoizable
 
-  def get_coding_with_parent_codes(codings)
-    coding_with_parent_codes = []
-    coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
-
-    real_codings  = codings.select do |ca|
-      code = codes_cache[ca.code_id]
-      (ca.amount.present? || ca.percentage.present?) &&
-      code && lowest_level_code?(code, coded_codes)
-    end
-
-    real_codings.each do |ca|
-      coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
-    end
-
-    coding_with_parent_codes
-  end
-
-  # replacing method above, leaving above in case referenced elsewhere
-  # and what it returns is what should be used for a report
-  # TODO: refactor methods here into code assignment or coding class
-  def get_coding_only_nodes_with_local_amounts(codings)
-    coding_with_parent_codes = []
-    coded_codes = codings.collect{|ca| codes_cache[ca.code_id]}
-
-    real_codings  = codings.select do |ca|
-      ca.percentage.present? && codes_cache[ca.code_id] &&
-        ca.has_amount_not_in_children?
-    end
-
-    real_codings.each do |ca|
-      coding_with_parent_codes << [ca, ca.code.self_and_ancestors]
-    end
-
-    # TODO FIX BUG, sometimes this returns an [] when codings is non-empty
-    # should NEVER have code assignments which have no real codings
-    # raise codings.to_yaml if coding_with_parent_codes.size == 0
-    coding_with_parent_codes
-  end
-
   def codes_cache
     return @codes_cache if @codes_cache
 
@@ -108,25 +69,19 @@ module Reports::Helpers
   end
 
   def add_codes_to_row(row, codes, deepest_nesting, attr)
-    last_code_found = 0
     deepest_nesting.times do |i|
       code = codes[i]
       if code
         row << codes_cache[code.id].try(attr)
-        last_code_found = i
       else
-        if last_code_found == i - 1
-          row << "Not Disaggregated Further"
-        else
-          row << "At Level Above"
-        end
+        row << nil
       end
     end
   end
 
   def get_funding_sources_total(activity, funding_sources, is_budget)
     method = is_budget ? :budget_in_usd : :spend_in_usd
-    funding_sources.inject(0){|acc, fs| acc + fs.send(method)}
+    funding_sources.inject(0){|acc, fs| acc + (fs.send(method) || 0) }
   end
 
   def get_ratio(amount_total, amount)

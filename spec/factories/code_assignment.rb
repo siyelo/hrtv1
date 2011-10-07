@@ -36,3 +36,27 @@ end
 Factory.define :coding_spend_cost_categorization, :class => CodingSpendCostCategorization, :parent => :code_assignment do |f|
   f.code            { Factory.create :cost_category_code }
 end
+
+Factory.define :budget_purpose, :class => CodingBudget, :parent => :code_assignment do |f|
+  f.code            { Factory.create :mtef_code }
+end
+
+Factory.define :budget_location, :class => CodingBudgetDistrict, :parent => :code_assignment do |f|
+  f.code            { Factory.create :location }
+end
+
+Factory.define :budget_input, :class => CodingBudgetCostCategorization, :parent => :code_assignment do |f|
+  f.code            { Factory.create :cost_category_code }
+end
+
+Factory.define :spend_purpose, :class => CodingSpend, :parent => :code_assignment do |f|
+  f.code            { Factory.create :mtef_code }
+end
+
+Factory.define :spend_location, :class => CodingSpendDistrict, :parent => :code_assignment do |f|
+  f.code            { Factory.create :location }
+end
+
+Factory.define :spend_input, :class => CodingSpendCostCategorization, :parent => :code_assignment do |f|
+  f.code            { Factory.create :cost_category_code }
+end

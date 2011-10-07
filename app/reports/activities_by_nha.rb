@@ -6,6 +6,8 @@ class Reports::ActivitiesByNha
   def initialize(current_user)
     @activities = Activity.only_simple.canonical_with_scope.find(:all,
        :include => [:provider, :organizations, {:data_response => :organization}])
+
+    @activities = @activities.first(10)
     @deepest_nesting  = Code.deepest_nesting
   end
 
@@ -87,11 +89,11 @@ class Reports::ActivitiesByNha
     end
 
     def build_code_assignment_rows(csv, activity, base_row, funding_source_ratio)
-      coding_with_parent_codes = get_coding_with_parent_codes(activity.coding_spend)
+      cas = activity.coding_spend.leaves.
+        with_amount.find(:all,  :include => :code)
 
-      coding_with_parent_codes.each do |ca_codes|
-        ca        = ca_codes[0]
-        codes     = ca_codes[1]
+      cas.each do |ca|
+        codes     = ca.code.self_and_ancestors
         last_code = codes.last
         row       = base_row.dup
 

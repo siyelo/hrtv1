@@ -84,9 +84,9 @@ class Report < ActiveRecord::Base
         when 'activities_by_expenditure_cost_categorization'
           Reports::ActivitiesByCostCategorization.new(:spent, data_request)
         when 'dynamic_query_report_budget'
-          Reports::JawpReport.new(:budget, simple_activities_for_request_with_associations)
+          Reports::JawpReport.new(data_request, :budget)
         when 'dynamic_query_report_spent'
-          Reports::JawpReport.new(:spent, simple_activities_for_request_with_associations)
+          Reports::JawpReport.new(data_request, :spent)
         when 'activities_by_nsp_budget'
           Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget)
         when 'activities_by_nha'
@@ -123,12 +123,6 @@ class Report < ActiveRecord::Base
     def cleanup_temp_files
       File.delete self.temp_file_name if self.temp_file_name
       File.delete self.zip_file_name if self.zip_file_name
-    end
-
-    def simple_activities_for_request_with_associations
-      simple_activities_for_request.find(:all,
-        :include => [:provider, :beneficiaries,
-                      {:data_response => :organization}])
     end
 
     def simple_activities_for_request

@@ -149,7 +149,7 @@ class Organization < ActiveRecord::Base
 
   # TODO CHECK ME
   def is_empty?
-    if users.empty? && out_flows.empty? && implemented_activities.empty? &&
+    if users.empty? && out_flows.empty? && implementer_splits.empty? &&
       location.nil? && activities.empty? &&
       data_responses.select{|dr| dr.empty?}.length == data_responses.size
       true
@@ -291,7 +291,7 @@ class Organization < ActiveRecord::Base
     end
 
     def check_no_implementer_references
-      unless implemented_activities.count == 0
+      unless implementer_splits.count == 0
         errors.add_to_base "Cannot delete organization with Implementer references"
         return false
       end

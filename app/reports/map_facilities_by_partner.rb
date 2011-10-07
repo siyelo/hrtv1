@@ -26,7 +26,7 @@ class Reports::MapFacilitiesByPartner
         @districts_hash[organization][:total] = 0
         @districts_hash[organization][:partners] = {} # partner => amount
         dr = organization.data_responses.find_by_data_request_id(@request.id)
-        activities = organization.implemented_activities.canonical
+        activities = organization.implementer_splits.canonical
         #preload_district_associations(activities, @is_budget) # eager-load
         activities.each do |activity|
           if activity.data_request == @request

@@ -26,7 +26,7 @@ describe Organization do
     it { should have_many(:dr_activities) }
     it { should have_many(:out_flows) }
     it { should have_many(:donor_for) }
-    it { should have_many(:implemented_activities) }
+    it { should have_many(:implementer_splits) }
     it { should have_and_belong_to_many :managers }
   end
 
@@ -548,8 +548,8 @@ describe Organization do
     it "should not allow deletion when Implementer references exist (and no Purpose splits exist)" do
       basic_setup_implementer_split # nb: sets up a self-implementer
       other_org    = Factory(:organization)
-      @implementer_split = Factory(:implementer_split, :data_response => @response,
-        :activity => @activity, :provider => other_org)
+      @implementer_split = Factory(:implementer_split,
+        :activity => @activity, :organization => other_org)
       other_org.destroy.should be_false
       other_org.errors.on(:base).should include "Cannot delete organization with Implementer references"
     end

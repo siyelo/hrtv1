@@ -141,6 +141,10 @@ describe ActivitiesController do
           :activity => {:project_id => '-1', :name => @activity.name, :start_date => @activity.start_date, :end_date => @activity.end_date}
       @activity.reload
       @activity.project.name.should == @activity.name
+      @activity.project.in_flows.count.should == 1
+      @activity.project.in_flows.first.budget.should be_nil
+      @activity.project.in_flows.first.spend.should be_nil
+      @activity.project.in_flows.first.valid?.should == false
     end
 
     it "should allow a project to be created automatically on create" do

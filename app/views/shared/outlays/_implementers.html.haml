@@ -4,11 +4,7 @@
 - # show splits with errors if there are more than 50 errors
 
 :javascript
-  var selectBox = "#{escape_javascript(select_tag :activity_implementer_splits_attributes_provider_mask, options_for_select(funding_organizations_select),  :class => "name js_implementer_select js_combobox f_from" )}"
-  var inputBox = "#{escape_javascript(hidden_field_tag :data_response_id, :html => {:class => "data_response_id"})}"
-  var _data_response_id = "#{@response.id}"
-  var _POSITION = "#{controller.controller_name == "activities" ? "4" : "5"}"
-  var _TYPE = "#{controller.controller_name.singularize}"
+  var selectOptions = "#{escape_javascript(options_for_select(funding_organizations_select))}"
 
 %ul.wrapped.last
   - unless bulk_review || outlay.new_record? || @split_errors
@@ -37,7 +33,8 @@
         - @splits.build(:organization_id => self_org_id, :data_response_id => outlay.data_response_id)
       - @splits.each do |is|
         - f.semantic_fields_for :implementer_splits, is do |ff|
-          = render 'shared/outlays/implementer_splits', :ff => ff
+          - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
+          = render 'shared/outlays/implementer_splits', :ff => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
 
       - if @splits.size < 50 || @split_errors
         - blank_rows.times do

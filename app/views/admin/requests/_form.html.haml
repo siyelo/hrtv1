@@ -8,7 +8,7 @@
   - [:purposes, :locations, :inputs, :final_review].each do |type|
     %li
       = f.label type, type.to_s.titleize
-      = f.check_box type, :class => 'left', :tabindex => autotab
+      = f.check_box type, :class => 'left'
       %p.inline-hints
         - if type == :final_review
           = "Is this data request in the final review stage?"

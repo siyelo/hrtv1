@@ -1427,41 +1427,14 @@ var activities_new = activities_create = activities_edit = activities_update = o
     }
     numericInputField(".js_implementer_spend, .js_implementer_budget");
 
-    $(".edit_implementer_row").live('click', function (e) {
-      e.preventDefault();
-      var element = $(this);
-      var parent = $(this).parent().parent().find('.implementer_search');
-      var _prev_row_id = parent.find('input').attr('id').split("_")[_POSITION]
-      var _provider = parent.find('input')[2].value;
-      var _provider_name = parent.find('span.ui-autocomplete').text();
-      // field number so that formatastic accepts the hash
-      var fieldNumber = Math.floor(Math.random() * (1000 - 100 + 1)) + 100
-      parent.html(inputBox + selectBox);
-      parent.find('select').addClass('js_combobox');
-      $(".js_combobox" ).combobox();
-      var providerMask = parent.find('select');
-      var dr_id = parent.find('input');
-      var spendInput = element.parent().siblings('td.spend').find('input.js_spend')
-      var budgetInput = element.parent().siblings('td.budget').find('input.js_budget')
-      var deleteInput = element.siblings('input')
-      setInputAttributes(providerMask, fieldNumber, "provider_mask")
-      setInputAttributes(spendInput, fieldNumber, "spend")
-      setInputAttributes(budgetInput, fieldNumber, "budget")
-      setInputAttributes(deleteInput, fieldNumber, "_destroy")
-      element.parent().parent().parent().find("#" + _TYPE + "_implementer_splits_attributes_" + _prev_row_id + "_id").attr('id', _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_id");
-      element.parent().parent().parent().find("#" + _TYPE + "_implementer_splits_attributes_" + fieldNumber + "_id").attr('name', _TYPE + "[implementer_splits_attributes][" + fieldNumber + "][id]");
-      parent.find('select').val(_provider);
-      parent.find('input').val(_data_response_id);
-      parent.find('input.ui-autocomplete-input').val(_provider_name);
+    $('.ui-autocomplete-input').live('focusin', function () {
+      var element = $(this).siblings('select');
+      if(element.children('option').length < 2) { // because there is already one in to show default
+        element.append(selectOptions);
+      }
     });
-
-    function setInputAttributes(inputField, number, field) {
-      inputField.attr('id', _TYPE + "_implementer_splits_attributes_" + number + "_" + field);
-      inputField.attr('name', _TYPE + "[implementer_splits_attributes][" + number + "]" + "[" + field + "]");
-    }
   }
 };
-
 
 var activity_form = function () {
 
@@ -1646,6 +1619,7 @@ var dashboard_index = {
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
     $(".js_combobox" ).combobox();
+    jsAutoTab();
   }
 };
 
@@ -1656,6 +1630,18 @@ var projects_new = projects_create = projects_edit = projects_update = {
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
   }
+}
+
+// Autotabs a page using javascript
+var jsAutoTab = function () {
+  var tabindex = 1;
+  $('input, select, textarea, checkbox').each(function() {
+    if (this.type != "hidden") {
+      var $input = $(this);
+      $input.attr("tabindex", tabindex);
+      tabindex++;
+    }
+  });
 }
 
 // DOM LOAD
@@ -1670,6 +1656,9 @@ $(function () {
 
   //combobox everywhere!
   $( ".js_combobox" ).combobox();
+
+  // keep below combobox
+  jsAutoTab();
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, fade: true, live: true, html: true});

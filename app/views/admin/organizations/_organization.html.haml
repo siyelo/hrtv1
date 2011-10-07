@@ -1,6 +1,6 @@
 - date_format = '%d %b \'%y %H:%M'
 - short_date_format = '%d %b \'%y'
-- response = organization_response(current_request, organization)
+- response = organization_response(organization)
 - response_link = link_to organization.name, response_projects_path(response) if response
 - user = organization.last_or_current_user_logged_in
 %tr

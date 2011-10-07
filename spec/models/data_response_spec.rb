@@ -7,7 +7,7 @@ describe DataResponse do
     it { should belong_to(:organization) }
     it { should belong_to(:data_request) }
     it { should have_many(:projects).dependent(:destroy) }
-    it { should have_many(:activities)} # delegate destroy to project
+    it { should have_many(:activities)}
     it { should have_many(:other_costs).dependent(:destroy) }
     it { should have_many(:implementer_splits).through(:activities) } # delegate destroy to project -> activity
     it { should have_many(:users_currently_completing) }

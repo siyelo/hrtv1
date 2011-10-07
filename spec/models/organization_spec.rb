@@ -330,56 +330,6 @@ describe Organization do
     end
   end
 
-  describe "empty organization" do
-    before :each do
-      @organization = Factory(:organization)
-      @request      = Factory(:data_request, :organization => @organization)
-      @response     = @organization.latest_response
-    end
-
-    it "is empty when it has empty data response" do
-      @organization.is_empty?.should be_true
-    end
-
-    it "is not empty when it has non empty data response" do
-      Factory(:project, :data_response => @response)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has users" do
-      Factory(:reporter, :organization => @organization)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has out flows" do
-      # project factory creates out flow from organization to this project
-      project = Factory(:project, :data_response => @response)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has implemented activities" do
-      project  = Factory(:project, :data_response => @response)
-      activity = Factory(:activity, :data_response => @response, :project => project)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has a location" do
-      @organization.location = Factory.create(:location)
-      @organization.is_empty?.should_not be_true
-    end
-
-    it "is not empty when it has activities" do
-      project  = Factory(:project, :data_response => @response)
-      activity = Factory(:activity, :data_response => @response, :project => project)
-      @organization.reload
-      @organization.is_empty?.should_not be_true
-    end
-  end
-
   describe "CSV" do
     before :each do
       @organization = Factory(:organization, :name => 'blarorg', :raw_type => 'NGO', :fosaid => "13")
@@ -402,14 +352,21 @@ describe Organization do
     before :each do
       @organization = Factory(:organization)
       Factory(:data_request, :organization => @organization)
-      @target_org         = Factory(:organization)
-      @duplicate_org      = Factory(:organization)
+      @target_org         = Factory(:organization, :name => "Target org")
+      @duplicate_org      = Factory(:organization, :name => "Duplicate org")
       @target_response    = @target_org.latest_response
       @duplicate_response = @duplicate_org.latest_response
-
       Factory(:data_request, :organization => @organization)
       @target_response2    = @target_org.latest_response
       @duplicate_response2 = @duplicate_org.latest_response
+    end
+
+    it "should move users" do
+      target_org_user = Factory(:user, :organization => @target_org)
+      duplicate_org_user = Factory(:user, :organization => @duplicate_org)
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_org.users.should == [target_org_user, duplicate_org_user]
+      @target_org.reload.users.should == [target_org_user, duplicate_org_user]
     end
 
     it "deletes duplicate after merge" do
@@ -454,6 +411,48 @@ describe Organization do
       @target_response2.activities.should include(activity2)
       activity1.project.should == project1
       activity2.project.should == project2
+    end
+
+    it "should move other costs without a project" do
+      oc = Factory(:other_cost_fully_coded, :data_response => @duplicate_response)
+      Organization.merge_organizations!(@target_org, @duplicate_org)
+      @target_response.other_costs.should include(oc)
+      oc.reload
+      oc.organization.should == @target_org
+      oc.data_response.should == @target_response
+    end
+
+    context "when referenced" do
+      before :each do
+        organization  = Factory(:organization, :name => "other org")
+        data_response = organization.latest_response
+        @other_project = Project.new(:data_response => data_response,
+                          :name => "p1",
+                          :description => "proj descr",
+                          :start_date => "2010-01-01",
+                          :end_date => "2011-01-01",
+                          :in_flows_attributes => [
+                            :organization_id_from => @duplicate_org.id,
+                            :budget => 10, :spend => 20])
+        @other_project.save!
+        @other_activity = Factory(:activity, :data_response => data_response,
+          :project => @other_project)
+        split = Factory(:implementer_split, :activity => @other_activity,
+          :organization => @duplicate_org)
+        @other_activity.reload.save #recalculates IS total of activity
+      end
+
+      it "should point funder references to new target org" do
+        Organization.merge_organizations!(@target_org, @duplicate_org)
+        @other_project.reload.in_flows.first.from.should == @target_org
+        @target_org.out_flows.should == [@other_project.in_flows.first]
+      end
+
+      it "should point implementer references to new target org" do
+        @other_activity.implementer_splits.first.organization.should == @duplicate_org
+        Organization.merge_organizations!(@target_org, @duplicate_org)
+        @other_activity.reload.implementer_splits.first.organization.should == @target_org
+      end
     end
   end
 
@@ -573,7 +572,35 @@ describe Organization do
     end
   end
 
-  describe "destroying" do
+  # swap the requesting organization
+  def the_old_switcheroo
+    other_org    = Factory(:organization)
+    @request.organization = other_org
+    @request.save
+  end
+
+  describe "#destroy" do
+    it "should allow deletion if they have not created any requests" do
+      basic_setup_implementer_split
+      the_old_switcheroo
+      @response.submit!
+      @organization.latest_response.status.should == "Submitted"
+      result = @organization.destroy
+      @organization.errors.on(:base).should == nil
+      result.should be_true
+    end
+
+    it "should allow deletion if they have non-project costs. FIXME: see #19381309" do
+      basic_setup_implementer_split
+      oc = Factory(:other_cost_fully_coded, :data_response => @response) #non-project OC!
+      the_old_switcheroo
+      @response.submit!
+      @organization.latest_response.status.should == "Submitted"
+      result = @organization.destroy
+      @organization.errors.on(:base).should == nil
+      result.should be_true
+    end
+
     it "should not allow deletion when data request exists" do
       @org     = Factory(:organization)
       @request = Factory(:data_request, :organization => @org)

@@ -19,13 +19,13 @@ Feature: Admin can manage organizations
   Scenario: Admin can CRUD organizations
     And I follow "Create Organization"
     And I fill in "Name" with "Organization name"
-    And I select "Bilateral" from "Raw type"
+    And I select "Bilateral" from "Type"
     And I fill in "Fosaid" with "123"
     And I press "Create organization"
     Then I should see "Organization was successfully created"
     And the "Name" field should contain "Organization name"
     And the "Fosaid" field should contain "123"
-    And the "Raw type" field should contain "Bilateral"
+    And the "Type" field should contain "Bilateral"
     When I fill in "Name" with "My new organization"
     And I press "Update organization"
     Then I should see "Organization was successfully updated"
@@ -38,7 +38,7 @@ Feature: Admin can manage organizations
   Scenario Outline: Merge duplicate organizations
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
-    And I select "<duplicate>" from "Duplicate organization"
+    And I select "<duplicate>" from "Potential problem organization (duplicate)"
     And I select "<target>" from "Replacement organization"
     And I press "Replace"
     Then I should see "<message>"
@@ -48,11 +48,11 @@ Feature: Admin can manage organizations
       | org3       | org3 - 0 users   | Same organizations for duplicate and target selected. |
       | org3       | org2 - 1 user    | Organizations successfully merged.                    |
 
-  @javascript
+  @javascript @run
   Scenario Outline: Merge duplicate organizations (with JS)
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
-    And I select "<duplicate>" from "Duplicate organization"
+    And I select "<duplicate>" from "Potential problem organization (duplicate)"
     And I select "<target>" from "Replacement organization"
     And wait a moment
     And I should see "Organization: <duplicate_box>" within "#duplicate"
@@ -60,39 +60,12 @@ Feature: Admin can manage organizations
     And I press "Replace"
     And I confirm the popup dialog
     Then I should see "<message>"
-    And "<removed_duplicates>" should not be an option for "Duplicate organization"
+    And "<removed_duplicates>" should not be an option for "Potential problem organization (duplicate)"
 
     Examples:
-      | duplicate | target         | duplicate_box | target_box | message                                               | remaining_duplicates |
-      | org3      | org3 - 0 users | org3          | org3       | Same organizations for duplicate and target selected. |                      |
-      | org3      | org2 - 1 user  | org3          | org2       | Organizations successfully merged.                    | org1                 |
-
-
-  @javascript
-  Scenario Outline: Delete organization on merge duplicate organizations screen (with JS)
-    Given an organization exists with name: "org3"
-    And I follow "Fix duplicate organizations"
-    And I select "<organization>" from "<select_type>"
-    And I follow "Delete" within "<info_block>"
-    And I confirm the popup dialog
-    Then the "Duplicate organization" text should not be "<organization>"
-    And the "Replacement organization" text should not be "<organization>"
-
-    Examples:
-      | organization   | select_type              | info_block                  |
-      | org3           | Duplicate organization   | .box[data-type='duplicate'] |
-      | org3 - 0 users | Replacement organization | .box[data-type='target']    |
-
-
-  @javascript
-  Scenario: Try to delete non-empty organization (with JS)
-    And I follow "Fix duplicate organizations"
-    And I select "org2 - 1 user" from "Replacement organization"
-    And I confirm the popup dialog
-    And I follow "Delete" within ".box[data-type='target']"
-    # Check that org2 organization is not deleted
-    Then the "Replacement organization" text should match "org2 - 1 user"
-    And I should see "You cannot delete an organization that has users or data associated with it."
+      | duplicate      | target         | duplicate_box | target_box | message                                               | remaining_duplicates |
+      | org3 - 0 users | org3 - 0 users | org3          | org3       | Same organizations for duplicate and target selected. |                      |
+      | org3 - 0 users | org2 - 1 user  | org3          | org2       | Organizations successfully merged.                    | org1                 |
 
   Scenario Outline: An admin can sort organizations
     And I follow "<column_name>"

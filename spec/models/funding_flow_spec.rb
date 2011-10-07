@@ -203,7 +203,7 @@ describe FundingFlow do
 
       from = Factory(:organization, :name => 'Organization 1')
       funding_flow = Factory(:funding_flow, :project => @project, :from => from)
-      funding_flow.name.should == "From: #{from} - To: #{@organization}"
+      funding_flow.name.should == "Project: #{@project.name}; From: #{from.name}; To: #{@organization}"
     end
   end
 

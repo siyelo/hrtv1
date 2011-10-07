@@ -1,6 +1,7 @@
 module Admin::OrganizationsHelper
+
   def organization_name_w_num_users(organization)
-    "#{organization.name} - #{pluralize(organization.users_count, 'user')}"
+    "#{friendly_name(organization, 255)} - #{pluralize(organization.users_count, 'user')}"
   end
 
   def search_and_filter_message(count, query, filter)
@@ -17,6 +18,10 @@ module Admin::OrganizationsHelper
     end
 
     message
+  end
+
+  def select_with_all_orgs_plus_user_count(orgs)
+    options_for_select(orgs.map{ |o| [organization_name_w_num_users(o), o.id] })
   end
 end
 

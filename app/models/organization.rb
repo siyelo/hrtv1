@@ -76,7 +76,6 @@ class Organization < ActiveRecord::Base
       :conditions => ["data_requests.id = ? AND
                        data_responses.state IN (?)", request.id, states]} }
 
-
   ### Class Methods
 
   def self.with_users
@@ -86,8 +85,9 @@ class Organization < ActiveRecord::Base
   def self.merge_organizations!(target, duplicate)
     duplicate.responses.each do |response|
       target_response = target.responses.find(:first,
-                   :conditions => ["data_request_id = ?", response.data_request_id])
+        :conditions => ["data_request_id = ?", response.data_request_id])
       target_response.projects << response.projects
+      ### move Funder references of Duplicate to Target
       target_response.projects.each do |project|
         project.in_flows.each do |in_flow|
           if in_flow.from == duplicate
@@ -99,6 +99,8 @@ class Organization < ActiveRecord::Base
       target_response.activities << response.activities
     end
 
+    duplicate.move_funder_references!(target)
+    duplicate.move_implementer_references!(target)
     target.users << duplicate.users
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
   end
@@ -146,17 +148,6 @@ class Organization < ActiveRecord::Base
   end
 
   ### Instance Methods
-
-  # TODO CHECK ME
-  def is_empty?
-    if users.empty? && out_flows.empty? && implementer_splits.empty? &&
-      location.nil? && activities.empty? &&
-      data_responses.select{|dr| dr.empty?}.length == data_responses.size
-      true
-    else
-      false
-    end
-  end
 
   # Convenience until we deprecate the "data_" prefixes
   def responses
@@ -266,6 +257,22 @@ class Organization < ActiveRecord::Base
     last_user_logged_in || current_user_logged_in
   end
 
+  # Merge helper
+  def move_funder_references!(target_org)
+    self.out_flows.each do |referencing_flow|
+      referencing_flow.from = target_org
+      referencing_flow.save(false)
+    end
+  end
+
+  # Merge helper
+  def move_implementer_references!(target_org)
+    self.implementer_splits.each do |referencing_split|
+      referencing_split.organization = target_org
+      referencing_split.save(false)
+    end
+  end
+
   protected
 
     def tidy_name(n)
@@ -284,14 +291,14 @@ class Organization < ActiveRecord::Base
     end
 
     def check_no_funder_references
-      unless out_flows.count == 0
+      unless out_flows.empty?
         errors.add_to_base "Cannot delete organization with Funder references"
         return false
       end
     end
 
     def check_no_implementer_references
-      unless implementer_splits.count == 0
+      unless implementer_splits.empty?
         errors.add_to_base "Cannot delete organization with Implementer references"
         return false
       end

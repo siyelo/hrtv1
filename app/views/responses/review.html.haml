@@ -50,9 +50,9 @@
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
             %ul
               - @projects.each do |project|
-                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
               - @projects.each do |project|
-                %li= link_to nice_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
+                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
       %li
         %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
@@ -73,7 +73,7 @@
             // currently just takes to edit page for activity, very confusing
             %ul.push
               - @response.activities_without_amounts.each do |activity|
-                %li= link_to nice_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
+                %li= link_to friendly_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
         %h3{:class => other_costs_class(@response)}

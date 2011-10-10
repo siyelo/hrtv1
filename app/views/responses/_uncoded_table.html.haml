@@ -22,7 +22,7 @@
     %tbody
       - activities.each do |activity|
         %tr
-          %td= nice_name(activity, 64)
+          %td= friendly_name(activity, 64)
           - if @data_request.locations?
             %td= check_box_tag "", "", activity.coding_spend_district_classified? && activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
           - unless other_costs

@@ -1,6 +1,6 @@
 %ul.breadcrumb
   %li= link_to "Projects", response_projects_path(current_or_last_response)
   - if params[:action] == "edit"
-    %li.last= nice_name(project)
+    %li.last= friendly_name(project)
   - elsif params[:action] == "new"
     %li.last New

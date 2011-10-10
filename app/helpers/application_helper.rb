@@ -199,13 +199,6 @@ module ApplicationHelper
     "http://hrtapp.tenderapp.com/discussions"
   end
 
-  # given a project or activity, render a nice name from either
-  # the name() or description()
-  def nice_name(object, length = 16)
-    warn "nice_name() is deprecated in favour of friendly_name()."
-    friendly_name(object, length)
-  end
-
   def coding_progress_style(progress)
     style = ''
     style = "background: #ccff00" if progress < 90

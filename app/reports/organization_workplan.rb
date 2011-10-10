@@ -63,7 +63,7 @@ class Reports::OrganizationWorkplan
     end
 
     def nice_activity_name(activity, length)
-      nice_name = ApplicationController.helpers.nice_name(activity, length)
+      nice_name = ApplicationController.helpers.friendly_name(activity, length)
       sanitize_encoding(nice_name)
     end
 end

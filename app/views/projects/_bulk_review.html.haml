@@ -8,7 +8,7 @@
   - else
     = image_tag "warning_12.png", :title => "This project has not been saved because you need to add more information and/or correct any errors. Click here to open the activity if it is closed", :class => 'tooltip js_unsaved'
 
-  = link_to nice_name(project, 50), "#"
+  = link_to friendly_name(project, 50), "#"
 
 .main.dashboard_section{:style => (project.valid? && params[:format] != 'js' ? 'display: none;' : nil)}
 

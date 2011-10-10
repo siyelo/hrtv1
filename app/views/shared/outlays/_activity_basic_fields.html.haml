@@ -1,9 +1,5 @@
 - klass = f.object.class.to_s
 
-- sorted_projects = @response.projects.sort_by{|p| p.name}.collect{|u| [u.name, u.id]}
-- sorted_projects = sorted_projects.insert(0,["<Automatically create a project for me>", -1])
-- sorted_projects = sorted_projects.insert(1,["<No project>", nil]) if klass == "OtherCost"
-
 %ul.section_form.main.first.condensed_fields
   %li#activity_name_input.string.required
     .name
@@ -18,7 +14,7 @@
       = f.label :project_id, "Project"
       - link_to "#", :title => "The Project which this #{klass} belongs to", :class => 'tooltip' do
         =image_tag"tooltip.png"
-    = f.select :project_id, [['Select a project...', '']] + sorted_projects, {}, :tabindex => autotab, :class => f.object.errors.on(:project_id) ? "error" : ""
+    = f.select :project_id, sorted_project_select(@response, klass), {}, :tabindex => autotab, :class => f.object.errors.on(:project_id) ? "error" : ""
   %li.select.required
     .name
       = f.label :currency, "Currency"

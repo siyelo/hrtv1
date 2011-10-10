@@ -1,6 +1,8 @@
 class LoadServiceLevels < ActiveRecord::Migration
   def self.up
-    load 'db/seed_files/service_levels.rb'
+    if Rails.env != "test" && Rails.env != "cucumber"
+      load 'db/seed_files/service_levels.rb'
+    end
   end
 
   def self.down

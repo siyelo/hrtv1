@@ -1,6 +1,8 @@
 class LoadDistrictsSeeds < ActiveRecord::Migration
   def self.up
-    load 'db/seed_files/district_details.rb'
+    if Rails.env != "test" && Rails.env != "cucumber"
+      load 'db/seed_files/district_details.rb'
+    end
   end
 
   def self.down

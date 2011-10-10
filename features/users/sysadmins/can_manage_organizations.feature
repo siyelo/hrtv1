@@ -35,6 +35,7 @@ Feature: Admin can manage organizations
     And I should not see "Organization name"
     And I should not see "My new organization"
 
+  @javascript
   Scenario Outline: Merge duplicate organizations
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
@@ -44,11 +45,11 @@ Feature: Admin can manage organizations
     Then I should see "<message>"
 
     Examples:
-      | duplicate  | target           | message                                               |
-      | org3       | org3 - 0 users   | Same organizations for duplicate and target selected. |
-      | org3       | org2 - 1 user    | Organizations successfully merged.                    |
+      | duplicate      | target         | message                                               |
+      | Org3 - 0 users | Org3 - 0 users | Same organizations for duplicate and target selected. |
+      | Org3 - 0 users | Org2 - 1 user  | Organizations successfully merged.                    |
 
-  @javascript @run
+  @javascript
   Scenario Outline: Merge duplicate organizations (with JS)
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
@@ -63,9 +64,9 @@ Feature: Admin can manage organizations
     And "<removed_duplicates>" should not be an option for "Potential problem organization (duplicate)"
 
     Examples:
-      | duplicate      | target         | duplicate_box | target_box | message                                               | remaining_duplicates |
-      | org3 - 0 users | org3 - 0 users | org3          | org3       | Same organizations for duplicate and target selected. |                      |
-      | org3 - 0 users | org2 - 1 user  | org3          | org2       | Organizations successfully merged.                    | org1                 |
+      | duplicate      | target         | duplicate_box  | target_box     | message                                               | remaining_duplicates |
+      | Org3 - 0 users | Org3 - 0 users | Org3 | Org3 | Same organizations for duplicate and target selected. |                      |
+      | Org3 - 0 users | Org2 - 1 user  | Org3 | Org2 | Organizations successfully merged.                    | org1                 |
 
   Scenario Outline: An admin can sort organizations
     And I follow "<column_name>"

@@ -59,7 +59,7 @@ describe Reports::OrganizationWorkplan do
         @rows = Spreadsheet.open(StringIO.new(@xls)).worksheet(0)
 
         @rows.row(0).should == @header
-        @rows.row(1).should == ['p name','p descr','a name','a descr','20000.01','loc1, loc2','input1, input2']
+        @rows.row(1).should == ['p name','p descr','A Name','a descr','20000.01','loc1, loc2','input1, input2']
       end
 
       it "should not repeat project details on consecutive lines" do
@@ -77,8 +77,8 @@ describe Reports::OrganizationWorkplan do
         @rows = Spreadsheet.open(StringIO.new(@xls)).worksheet(0)
 
         @rows.row(0).should == @header
-        @rows.row(1).should == ['p name','p descr','a name','a descr','20000.01','loc1, loc2','input1, input2']
-        @rows.row(2).should == [nil,nil,'a2 name','a2 descr','10.00','loc1','input1']
+        @rows.row(1).should == ['p name','p descr','A Name','a descr','20000.01','loc1, loc2','input1, input2']
+        @rows.row(2).should == [nil,nil,'A2 Name','a2 descr','10.00','loc1','input1']
 
       end
     end

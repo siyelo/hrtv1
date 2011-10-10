@@ -242,22 +242,11 @@ class Organization < ActiveRecord::Base
     read_attribute(:currency).blank? ? "USD" : read_attribute(:currency)
   end
 
-  def last_user_logged_in
-    users.select{ |a,b| a.last_login_at.present? }.max do |a,b|
-      a.last_login_at <=> b.last_login_at
-    end
-  end
-
   # last login at will return nil on first login, but current will be set
   def current_user_logged_in
     users.select{ |a,b| a.current_login_at.present? }.max do |a,b|
       a.current_login_at <=> b.current_login_at
     end
-  end
-
-  #workaround for authlogic not setting last to current on first login
-  def last_or_current_user_logged_in
-    last_user_logged_in || current_user_logged_in
   end
 
   # Merge helper

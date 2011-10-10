@@ -3,7 +3,7 @@ class Admin::UsersController < Admin::BaseController
 
   ### Constants
   SORTABLE_COLUMNS = ['email', 'full_name', 'organizations.name',
-    'last_login_at', 'roles_mask', 'invite_token']
+    'current_login_at', 'roles_mask', 'invite_token']
 
   ### Inherited Resources
   inherit_resources
@@ -13,12 +13,15 @@ class Admin::UsersController < Admin::BaseController
 
   def index
     scope  = User.scoped({:joins => :organization, :include => :organization})
-    scope  = scope.scoped(:conditions => ["UPPER(email) LIKE UPPER(:q) OR
-                                          UPPER(full_name) LIKE UPPER(:q) OR
-                                          UPPER(organizations.name) LIKE UPPER(:q)",
-              {:q => "%#{params[:query]}%"}]) if params[:query]
+    if params[:query]
+      scope  = scope.scoped(:conditions => ["UPPER(email) LIKE UPPER(:q) OR
+        UPPER(full_name) LIKE UPPER(:q) OR
+        UPPER(organizations.name) LIKE UPPER(:q) OR
+        UPPER(#{CURRENT_LOGIN_TO_CHAR}) LIKE UPPER(:q)",
+        {:q => "%#{params[:query]}%"}])
+    end
     @users = scope.paginate(:page => params[:page], :per_page => 100,
-                    :order => "#{sort_column} #{sort_direction}")
+      :order => "#{sort_column} #{sort_direction}")
   end
 
   def create

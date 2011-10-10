@@ -2,7 +2,7 @@
 - short_date_format = '%d %b \'%y'
 - response = organization_response(organization, current_user.current_request)
 - response_link = link_to organization.name, response_projects_path(response) if response
-- user = organization.last_or_current_user_logged_in
+- user = organization.current_user_logged_in
 %tr
   %td.title= response_link || organization.name
   %td= mail_to user.email, user.name if user

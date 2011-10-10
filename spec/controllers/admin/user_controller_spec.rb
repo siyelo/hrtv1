@@ -20,43 +20,24 @@ describe Admin::UsersController do
     end
   end
 
-  describe "District manager validations" do
-    it "should not allow you to create a DM without a location" do
-      @dm = Factory.build(:district_manager, :location_id => nil)
-      @dm.save.should be_false
-    end
+  describe 'admin protected endpoints' do
+    it "should search by current login date" do
+      Timecop.freeze(Date.parse("2010-01-15"))
+      @user1 = Factory :user
+      login(@user1)
+      Timecop.freeze(Date.parse("2010-02-20")) # Timecop seems to be doing a -1 on the date ?!
 
-    it "should allow you to create a DM with a location" do
-      @location = Factory(:location)
-      @dm = Factory.build(:district_manager, :location => @location)
-      @dm.save.should be_true
-    end
-
-    it "should not allow you to create a DM with a reporting organization" do
-      @org = Factory(:reporting_organization)
-      @dm = Factory.build(:district_manager, :organization => @org)
-      @dm.save.should be_false
-    end
-
-    it "should allow you to create a DM with a non-reporting organization" do
-      @org = Factory(:nonreporting_organization)
-      @dm = Factory.build(:district_manager, :organization => @org)
-      @dm.save.should be_true
-    end
-
-    it "should remove the location id if a DM is removed from a users roles" do
-      @org = Factory(:reporting_organization)
-      @user = Factory(:district_manager)
-      @user.organization_id = @org.id; @user.roles = ['reporter']; @user.save; @user.reload #need to set organization because reporters require organizations
-      @user.location_id.should be_nil
-      @user.location.should be_nil
-    end
-
-    it "should remove the organization id if activity_manager is removed from a users role" do
-      @user = Factory(:activity_manager)
-      @user.roles = ['reporter']; @user.save; @user.reload
-      @user.organizations.should be_empty
-      # @user.organization_id.should be_nil
+      @user2 = Factory :user
+      login(@user2)
+      Timecop.return
+      login(Factory.create(:admin))
+      # sqlite doesnt support month names
+      # so our test will have to use the SQLITE format to be safe
+      # i.e. we cant use the form '19 Feb' in the query
+      # Timecop seems to be doing a -1 on the date ?!
+      get :index, :query => '19 02', :direction => 'asc'
+      response.should render_template('admin/users/index')
+      assigns(:users).should == [@user2]
     end
   end
 end

@@ -1,5 +1,5 @@
 class OrganizationsController < BaseController
-  SORTABLE_COLUMNS = ['email', 'full_name', 'last_login_at']
+  SORTABLE_COLUMNS = ['email', 'full_name', 'current_login_at']
 
   helper_method :sort_column, :sort_direction
 

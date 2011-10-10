@@ -5,7 +5,7 @@
       %th= sortable "email"
       - if show_organization
         %th.org= sortable "organizations.name", "Organization"
-      %th.login= sortable "last_login_at", "Last login"
+      %th.login= sortable "current_login_at", "Last login"
       %th= sortable "roles_mask", "Role"
       %th.invitation= sortable "invite_token", "Invitation"
       - if current_user.sysadmin?

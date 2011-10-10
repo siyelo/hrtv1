@@ -284,9 +284,7 @@ describe Organization do
     end
 
     it "returns the last user in that organization that logged in if there is one user" do
-      @org.last_user_logged_in.should == @user
       @org.current_user_logged_in.should == @user
-      @org.last_or_current_user_logged_in.should == @user
     end
 
     it "returns nil when nobody has ever logged in" do
@@ -294,17 +292,13 @@ describe Organization do
       @user.current_login_at = nil
       user2 = Factory.build(:user, :organization => @org)
       @org.users << @user; @org.users << user2
-      @org.last_user_logged_in.should be_nil
       @org.current_user_logged_in.should be_nil
-      @org.last_or_current_user_logged_in.should be_nil
     end
 
     # authlogic idiosyncracy
     it " returns last logged in as nil on first sign in" do
       @user.last_login_at = nil
-      @org.last_user_logged_in.should be_nil
       @org.current_user_logged_in.should == @user
-      @org.last_or_current_user_logged_in.should == @user
     end
   end
 

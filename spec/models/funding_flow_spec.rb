@@ -176,18 +176,39 @@ describe FundingFlow do
       basic_setup_project
     end
 
-    it "should validate the spend fields" do
-      @funding_flow = Factory.build(:funding_flow,:project => @project,
-                                    :spend => 'abcd', :budget => '',
+    it "should validate Spend and/or Budget is present if nil" do
+      @funding_flow = Factory.build(:funding_flow,
+                                    :spend => nil,
+                                    :budget => nil,
+                                    :project => @project,
                                     :from => @organization)
-      @funding_flow.save.should be_false
+
+      @funding_flow.valid?.should be_false
+      @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
     end
 
-    it "should validate the budget fields" do
-      @funding_flow = Factory.build(:funding_flow,:project => @project,
-                                    :spend => '', :budget => 'abcd',
+    it "should validate Spend and/or Budget is present if blank" do
+      @funding_flow = Factory.build(:funding_flow,
+                                    :spend => '',
+                                    :budget => '',
+                                    :project => @project,
                                     :from => @organization)
-      @funding_flow.save.should be_false
+
+      @funding_flow.valid?.should be_false
+      @funding_flow.errors.on(:spend).should include(' and/or Planned must be present')
+    end
+
+    it "should validate one or the other" do
+      @funding_flow = Factory.build(:funding_flow,
+                                    :spend => nil,
+                                    :budget => 1,
+                                    :project => @project,
+                                    :from => @organization)
+      @funding_flow.valid?.should be_true
+
+      @funding_flow.spend = 1
+      @funding_flow.budget = nil
+      @funding_flow.valid?.should be_true
     end
   end
 

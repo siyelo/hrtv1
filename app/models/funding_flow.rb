@@ -25,9 +25,9 @@ class FundingFlow < ActiveRecord::Base
   #validates_presence_of :project_id # See: https://rails.lighthouseapp.com/projects/8994-ruby-on-rails/tickets/2815-nested-models-build-should-directly-assign-the-parent
                                      # and workaround is in project.rb
   validates_numericality_of :spend, :greater_than => 0,
-    :if => Proc.new {|ff| ff.spend.present? && (!ff.budget.present? || ff.budget == 0) }
+    :if => Proc.new { |ff| ff.spend.present? && (!ff.budget.present? || ff.budget == 0)  }
   validates_numericality_of :budget, :greater_than => 0,
-    :if => Proc.new {|ff| ff.budget.present? && (!ff.spend.present? || ff.spend == 0)}
+    :if => Proc.new { |ff| ff.budget.present? && (!ff.spend.present? || ff.spend == 0) }
   validates_presence_of :organization_id_from
   # either budget or spend must be present
   validates_presence_of :spend, :if => lambda {|ff| !ff.budget? && !ff.spend?},

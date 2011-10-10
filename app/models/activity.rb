@@ -71,8 +71,6 @@ class Activity < ActiveRecord::Base
   before_save       :update_implementer_cache
   before_save       :auto_create_project
   before_save       :update_cached_usd_amounts
-  after_save        :update_counter_cache
-  after_destroy     :update_counter_cache
   after_destroy     :restart_response_if_all_activities_removed
   before_update     :update_all_classified_amount_caches
 
@@ -348,24 +346,6 @@ class Activity < ActiveRecord::Base
     end
 
   private
-
-    # NOTE: respond_to? is used on some fields because
-    # some previous data fixes use this method and at that point
-    # some counter cache fields didn't existed
-    # TODO: remove the respond_to? when data fixes
-    # gets removed from the migrations folder
-    def update_counter_cache
-      if (dr = self.data_response)
-        dr.activities_count = dr.activities.only_simple.count
-        dr.activities_without_projects_count = dr.activities.roots.without_a_project.count
-        if dr.respond_to?(:unclassified_activities_count)
-          dr.unclassified_activities_count = dr.activities.only_simple.unclassified.count
-        end
-        dr.save(false)
-      end
-    end
-    handle_asynchronously :update_counter_cache
-
     def set_classified_amount_cache(type)
       coding_tree = CodingTree.new(self, type)
       coding_tree.set_cached_amounts!
@@ -434,6 +414,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -464,8 +445,6 @@ end
 #  budget_q3                    :decimal(, )
 #  budget_q4                    :decimal(, )
 #  budget_q4_prev               :decimal(, )
-#  comments_count               :integer         default(0)
-#  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer

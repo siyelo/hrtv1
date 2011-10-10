@@ -10,7 +10,7 @@ class Comment < ActiveRecord::Base
 
   ### Associations
   belongs_to :user
-  belongs_to :commentable, :polymorphic => true, :counter_cache => true
+  belongs_to :commentable, :polymorphic => true
 
   ### Scopes
   default_scope :order => 'created_at ASC'

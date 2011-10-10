@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe User do
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:full_name) }
     it { should allow_mass_assignment_of(:email) }

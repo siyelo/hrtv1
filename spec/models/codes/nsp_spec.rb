@@ -69,4 +69,3 @@ describe Nsp do
     end
   end
 end
-

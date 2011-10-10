@@ -22,4 +22,3 @@ describe Nasa do
     end
   end
 end
-

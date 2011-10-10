@@ -51,6 +51,6 @@
               - organization.user_emails(2).each do |email|
                 %li= mail_to email
 
-          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities_count}", response_projects_path(response)
+          %td.center= link_to "#{response.activities.manager_approved.count}/#{response.activities.count}", response_projects_path(response)
           %td.center= link_to response.status, response_projects_path(response)
           %td.center= link_to "Download Workplan", export_workplan_response_projects_path(response), :class => 'download_workplan'

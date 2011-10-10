@@ -2,7 +2,7 @@
   include NumberHelper
   include AutocreateHelper
 
-  belongs_to :activity, :counter_cache => :sub_activities_count #FIXME: see #19326965
+  belongs_to :activity
   belongs_to :organization # the implementer
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,

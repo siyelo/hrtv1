@@ -87,21 +87,3 @@ describe DataRequest do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: data_requests
-#
-#  id              :integer         not null, primary key
-#  organization_id :integer
-#  title           :string(255)
-#  complete        :boolean         default(FALSE)
-#  pending_review  :boolean         default(FALSE)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  start_date      :date
-#  end_date        :date
-#  budget          :boolean
-#  spent           :boolean
-#
-

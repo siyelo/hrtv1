@@ -118,17 +118,3 @@ describe Comment do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: comments
-#
-#  id               :integer         primary key
-#  comment          :text            default("")
-#  commentable_id   :integer
-#  commentable_type :string(255)
-#  user_id          :integer
-#  created_at       :timestamp
-#  updated_at       :timestamp
-#
-

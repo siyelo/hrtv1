@@ -22,4 +22,3 @@ describe Nha do
     end
   end
 end
-

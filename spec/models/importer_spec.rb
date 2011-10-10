@@ -786,5 +786,4 @@ EOS
     run_delayed_jobs
     @response.projects.count.should == 2
   end
-
 end

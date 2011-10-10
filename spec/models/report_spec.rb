@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Report do
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:key) }
     it { should allow_mass_assignment_of(:data_request_id) }
@@ -92,23 +91,3 @@ describe Report do
     end
   end
 end
-
-
-# == Schema Information
-#
-# Table name: reports
-#
-#  id                         :integer         primary key
-#  key                        :string(255)
-#  created_at                 :timestamp
-#  updated_at                 :timestamp
-#  csv_file_name              :string(255)
-#  csv_content_type           :string(255)
-#  csv_file_size              :integer
-#  csv_updated_at             :timestamp
-#  formatted_csv_file_name    :string(255)
-#  formatted_csv_content_type :string(255)
-#  formatted_csv_file_size    :integer
-#  formatted_csv_updated_at   :timestamp
-#
-

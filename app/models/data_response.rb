@@ -54,10 +54,10 @@ class DataResponse < ActiveRecord::Base
   validates_inclusion_of  :state, :in => STATES
 
   ### Named scopes
-  named_scope :unfulfilled, :conditions => ["complete = ?", false]
-  named_scope :submitted,   :conditions => ["submitted = ?", true]
   named_scope :ordered, :joins => :data_request, :order => 'data_requests.due_date DESC'
   named_scope :latest_first, {:order => "data_request_id DESC" }
+  named_scope :submitted, :conditions => ["state = ?", 'submitted']
+  named_scope :started, :conditions => ["state = ?", 'started']
 
   ### Delegates
   delegate :name, :to => :data_request
@@ -69,16 +69,6 @@ class DataResponse < ActiveRecord::Base
 
   FILE_UPLOAD_COLUMNS = %w[project_name project_description activity_name activity_description
                            amount_in_dollars districts functions inputs]
-
-  def self.in_progress
-    self.find :all,
-              :select => 'data_responses.*,
-                          (SELECT COUNT(*) AS activities_count FROM activities
-                            WHERE activities.data_response_id = data_responses.id)',
-              :include => [:organization, :projects],
-              :conditions => ["(submitted = ? OR submitted is NULL) AND
-                               (activities_count > 0)", false]
-  end
 
   # TODO: make a named scope if still in use
   def self.empty
@@ -327,20 +317,17 @@ end
 
 
 
+
+
 # == Schema Information
 #
 # Table name: data_responses
 #
-#  id                                :integer         not null, primary key
-#  data_request_id                   :integer         indexed
-#  created_at                        :datetime
-#  updated_at                        :datetime
-#  organization_id                   :integer         indexed
-#  comments_count                    :integer         default(0)
-#  activities_count                  :integer         default(0)
-#  sub_activities_count              :integer         default(0)
-#  activities_without_projects_count :integer         default(0)
-#  unclassified_activities_count     :integer         default(0)
-#  state                             :string(255)
+#  id              :integer         not null, primary key
+#  data_request_id :integer         indexed
+#  created_at      :datetime
+#  updated_at      :datetime
+#  organization_id :integer         indexed
+#  state           :string(255)
 #
 

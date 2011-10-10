@@ -76,14 +76,6 @@ Spork.each_run do
     it { should set_the_flash.to("You must be logged in to access this page") }
   end
 
-  shared_examples_for "comments_cacher" do
-    it "caches comments count" do
-      @commentable.comments_count.should == 0
-      Factory.create(:comment, :commentable => @commentable)
-      @commentable.reload.comments_count.should == 1
-    end
-  end
-
   def save_and_deep_clone
     @original.save!
     @clone = @original.deep_clone

@@ -34,25 +34,6 @@ describe DataResponse do
     end
   end
 
-  describe "Counter cache" do
-    context "comments cache" do
-      before :each do
-        basic_setup_response
-        @commentable = @response
-      end
-
-      it_should_behave_like "comments_cacher"
-    end
-
-    it "caches activities count" do
-      basic_setup_project
-      @response.activities_count.should == 0
-      Factory.create(:activity, :data_response => @response, :project => @project)
-      run_delayed_jobs
-      @response.reload.activities_count.should == 1
-    end
-  end
-
   describe "State machine" do
     before :each do
       organization = Factory(:organization)
@@ -224,20 +205,3 @@ describe DataResponse do
     end
   end
 end
-
-# == Schema Information
-#
-# Table name: data_responses
-#
-#  id                                :integer         not null, primary key
-#  data_request_id                   :integer         indexed
-#  created_at                        :datetime
-#  updated_at                        :datetime
-#  organization_id                   :integer         indexed
-#  comments_count                    :integer         default(0)
-#  activities_count                  :integer         default(0)
-#  sub_activities_count              :integer         default(0)
-#  activities_without_projects_count :integer         default(0)
-#  unclassified_activities_count     :integer         default(0)
-#  state                             :string(255)
-#

@@ -385,6 +385,7 @@ class Project < ActiveRecord::Base
     end
 end
 
+
 # == Schema Information
 #
 # Table name: projects
@@ -398,6 +399,5 @@ end
 #  updated_at       :datetime
 #  currency         :string(255)
 #  data_response_id :integer         indexed
-#  comments_count   :integer         default(0)
 #
 

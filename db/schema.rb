@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111006105522) do
+ActiveRecord::Schema.define(:version => 20111010141559) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -218,13 +218,6 @@ ActiveRecord::Schema.define(:version => 20111006105522) do
     t.decimal  "spend",               :default => 0.0
     t.decimal  "budget_in_usd",       :default => 0.0
     t.decimal  "spend_in_usd",        :default => 0.0
-  end
-
-  create_table "help_requests", :force => true do |t|
-    t.string   "email"
-    t.text     "message"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "implementer_splits", :force => true do |t|

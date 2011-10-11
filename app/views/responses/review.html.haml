@@ -55,7 +55,7 @@
                 %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
 
       %li
-        %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
+        %h3{:class => ready(@response.projects_have_activities? && @response.activities_have_budget_or_spend?)}
           Activities Entered
           - unless @response.projects_have_activities?
             - if !@response.projects_entered?
@@ -76,7 +76,7 @@
                 %li= link_to friendly_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
-        %h3{:class => other_costs_class(@response)}
+        %h3{:class => other_costs_class}
           (Other Costs Entered)
           - unless @response.other_costs_entered?
             - unless @response.projects_entered?
@@ -87,6 +87,15 @@
               %span.info
                 Other Costs help you include any financial information at the national level and/or administrative expenses.
                 = link_to "Start adding your Other Costs now.", response_projects_path(@response)
+
+      %li
+        %h3{:class => activities_have_splits_class}
+          Activities/Other Costs have splits
+          - unless @response.activities_have_splits?
+            %span.info
+              The following activities don't have implementer splits
+              = render 'activities_without_splits', :activities => @response.activities.select { |a| a.implementer_splits.empty? }
+
 
   %li.alt
     %h2 Classifications

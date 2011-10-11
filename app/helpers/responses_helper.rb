@@ -3,8 +3,8 @@ module ResponsesHelper
     expr ? "ready" : "not-ready"
   end
 
-  def other_costs_class(data_response)
-    !data_response.other_costs_entered? ? "info" : "ready"
+  def other_costs_class
+    !@response.other_costs_entered? ? "info" : "ready"
   end
 
   def projects_class
@@ -12,12 +12,8 @@ module ResponsesHelper
     @response.projects_have_activities?)
   end
 
-  def projects_linked_class
-    if @response.request.final_review?
-      return ready(@response.projects_linked?)
-    else
-      return @response.projects_linked? ? "ready" : "info"
-    end
+  def activities_have_splits_class
+    ready(@response.activities_have_splits?)
   end
 
   def data_verification_class

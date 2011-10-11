@@ -102,6 +102,8 @@ class Organization < ActiveRecord::Base
     duplicate.move_funder_references!(target)
     duplicate.move_implementer_references!(target)
     target.users << duplicate.users
+    Organization.reset_counters(target.id,:users)
+    target.reload
     duplicate.reload.destroy # reload other organization so that it does not remove the previously assigned data_responses
   end
 

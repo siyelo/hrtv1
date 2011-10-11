@@ -367,6 +367,7 @@ describe Organization do
       Organization.merge_organizations!(@target_org, @duplicate_org)
       @target_org.users.should == [target_org_user, duplicate_org_user]
       @target_org.reload.users.should == [target_org_user, duplicate_org_user]
+      @target_org.users_count.should == @target_org.users.size
     end
 
     it "deletes duplicate after merge" do

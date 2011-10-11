@@ -35,9 +35,9 @@ class Activity < ActiveRecord::Base
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id,
     :class_name => "Organization" # FIXME: deprecate plox k thx
-  belongs_to :data_response #deprecated
+  belongs_to :data_response
   belongs_to :response, :foreign_key => :data_response_id,
-    :class_name => "DataResponse" #TODO: rename class
+    :class_name => "DataResponse" #convenience.
   belongs_to :project
   belongs_to :user
   has_and_belongs_to_many :organizations # organizations targeted by this activity / aided

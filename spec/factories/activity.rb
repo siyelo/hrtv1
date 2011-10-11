@@ -80,9 +80,12 @@ end
 
 Factory.define :other_cost, :class => OtherCost, :parent => :activity do |f|
   f.sequence(:name) { |i| "other_cost_name_#{i}" }
+  f.description     { 'other cost' }
 end
 
 Factory.define :other_cost_w_spend_coding, :class => OtherCost, :parent => :_spend_coded  do |f|
+  f.sequence(:name) { |i| "other_cost_name_#{i}" }
+  f.description     { 'other cost' }
   f.coding_budget_valid           { true }
   f.coding_budget_cc_valid        { true }
   f.coding_budget_district_valid  { true }

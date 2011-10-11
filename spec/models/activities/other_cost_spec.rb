@@ -50,15 +50,15 @@ describe OtherCost do
         :organization => @organization, :budget => 50, :spend => 40)
 
       @activity.stub(:coding_budget_district_valid?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
+      @activity.stub(:coding_spend_district_valid?) { true }
       @activity.save
       @activity.reload
     end
 
     it "is classified? when only locations are classified" do
-      @activity.coding_budget_district_classified?.should == true
+      @activity.coding_budget_district_valid?.should == true
       @activity.budget_classified?.should == true
-      @activity.coding_spend_district_classified?.should == true
+      @activity.coding_spend_district_valid?.should == true
       @activity.spend_classified?.should == true
       @activity.classified?.should be_true
     end

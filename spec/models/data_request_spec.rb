@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe DataRequest do
-
   describe "Attributes" do
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:title) }
@@ -9,9 +8,6 @@ describe DataRequest do
     it { should allow_mass_assignment_of(:end_date) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:purposes) }
-    it { should allow_mass_assignment_of(:locations) }
-    it { should allow_mass_assignment_of(:inputs) }
     it { should allow_mass_assignment_of(:final_review) }
   end
 

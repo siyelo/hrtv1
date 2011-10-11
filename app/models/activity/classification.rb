@@ -1,6 +1,5 @@
 module Activity::Classification
   def self.included(base)
-    base.send(:extend, ClassMethods)
     base.send(:include, InstanceMethods)
   end
 
@@ -24,68 +23,56 @@ module Activity::Classification
     "a. FP/MCH/RH/Nutrition services" => ["605","609","6010", "8"]
   }
 
-  module ClassMethods
-  end
-
   module InstanceMethods
-    def coding_budget_classified? #purposes
-      !data_response.request.purposes? || coding_budget_valid?
-    end
 
-    def coding_budget_cc_classified? #inputs
-      !data_response.request.inputs? || coding_budget_cc_valid?
-    end
-
-    def coding_budget_district_classified? #locations
-      !data_response.request.locations? || coding_budget_district_valid?
-    end
-
-    def coding_spend_classified?
-      !data_response.request.purposes? || coding_spend_valid?
-    end
-
-    def coding_spend_cc_classified?
-      !data_response.request.inputs? || coding_spend_cc_valid?
-    end
-
-    def coding_spend_district_classified?
-      !data_response.request.locations? || coding_spend_district_valid?
+    def spend_classified?
+      spend.blank? || spend.to_i == 0 ||
+      coding_spend_valid? &&
+      coding_spend_district_valid? &&
+      coding_spend_cc_valid?
     end
 
     def budget_classified?
       budget.blank? || budget.to_i == 0 ||
-      coding_budget_classified? &&
-      coding_budget_district_classified? &&
-      coding_budget_cc_classified?
-    end
-
-    def spend_classified?
-      spend.blank? || spend.to_i == 0 ||
-      coding_spend_classified? &&
-      coding_spend_district_classified? &&
-      coding_spend_cc_classified?
+      coding_budget_valid? &&
+      coding_budget_district_valid? &&
+      coding_budget_cc_valid?
     end
 
     # An activity can be considered classified if at least one of these are populated.
     def classified?
-      budget_classified? && spend_classified?
+      budget_classified? || spend_classified?
+    end
+
+    # check if the purposes add up to 100%, regardless of what
+    # activity.spend or budget is
+    def purposes_classified?
+      coding_spend_valid? || coding_budget_valid?
+    end
+
+    def locations_classified?
+      coding_spend_district_valid? || coding_budget_district_valid?
+    end
+
+    def inputs_classified?
+      coding_spend_cc_valid? || coding_budget_cc_valid?
     end
 
     # TODO: spec
     def classified_by_type?(coding_type)
       case coding_type
       when 'CodingBudget'
-        coding_budget_classified?
+        coding_budget_valid?
       when 'CodingBudgetDistrict'
-        coding_budget_district_classified?
+        coding_budget_district_valid?
       when 'CodingBudgetCostCategorization'
-        coding_budget_cc_classified?
+        coding_budget_cc_valid?
       when 'CodingSpend'
-        coding_spend_classified?
+        coding_spend_valid?
       when 'CodingSpendDistrict'
-        coding_spend_district_classified?
+        coding_spend_district_valid?
       when 'CodingSpendCostCategorization'
-        coding_spend_cc_classified?
+        coding_spend_cc_valid?
       else
         raise "Unknown type #{coding_type}".to_yaml
       end
@@ -93,12 +80,12 @@ module Activity::Classification
 
     def coding_progress
       coded = 0
-      coded += 1 if coding_budget_classified?
-      coded += 1 if coding_budget_district_classified?
-      coded += 1 if coding_budget_cc_classified?
-      coded += 1 if coding_spend_classified?
-      coded += 1 if coding_spend_district_classified?
-      coded += 1 if coding_spend_cc_classified?
+      coded += 1 if coding_budget_valid?
+      coded += 1 if coding_budget_district_valid?
+      coded += 1 if coding_budget_cc_valid?
+      coded += 1 if coding_spend_valid?
+      coded += 1 if coding_spend_district_valid?
+      coded += 1 if coding_spend_cc_valid?
       progress = ((coded.to_f / 6) * 100).to_i # dont need decimal places
     end
 

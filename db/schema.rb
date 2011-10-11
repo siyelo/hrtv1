@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111011085437) do
+ActiveRecord::Schema.define(:version => 20111011092811) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -137,9 +137,6 @@ ActiveRecord::Schema.define(:version => 20111011085437) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "final_review",      :default => false
-    t.boolean  "purposes",          :default => true
-    t.boolean  "locations",         :default => true
-    t.boolean  "inputs",            :default => true
     t.boolean  "budget_by_quarter", :default => false
   end
 

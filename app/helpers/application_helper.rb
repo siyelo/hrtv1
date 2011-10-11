@@ -157,7 +157,6 @@ module ApplicationHelper
         :filter => params[:filter]}, {:class => css_class}
   end
 
-
   # Helper for adding remove link to nested form models
   def link_to_remove_fields(name, f, options = {})
     class_name = options[:class] || 'remove_nested'
@@ -296,11 +295,11 @@ module ApplicationHelper
 
   def link_to_unclassified(activity)
     case
-    when !activity.coding_spend_district_classified? || !activity.coding_budget_district_classified?
+    when !activity.locations_classified?
       mode = 'locations'
-    when !activity.coding_spend_classified? || !activity.coding_budget_classified?
+    when !activity.purposes_classified?
       mode = 'purposes'
-    when !activity.coding_spend_cc_classified? || !activity.coding_budget_cc_classified?
+    when !activity.inputs_classified?
       mode = 'inputs'
     else
       mode = nil

@@ -35,8 +35,16 @@ Feature: Admin can manage organizations
     And I should not see "Organization name"
     And I should not see "My new organization"
 
+<<<<<<< HEAD
   @javascript
   @run
+=======
+  # This spec is throwing a java.util.ConcurrentModificationException on some
+  # environments (usually locally)
+  # Potentially fixed in JRuby 1.6.4 ?  http://jruby.org/2011/08/22/jruby-1-6-4.html
+  # Also noted here: http://jira.codehaus.org/browse/JRUBY-5209?page=com.atlassian.streams.streams-jira-plugin%3Aactivity-stream-issue-tab#issue-tabs
+  @javascript @wip
+>>>>>>> f4cf3e6... [fixes #19381309] fix transition back to started when no projects but other costs exist,
   Scenario Outline: Merge duplicate organizations
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
@@ -50,13 +58,12 @@ Feature: Admin can manage organizations
       | Org3 - 0 users | Org3 - 0 users | Same organizations for duplicate and target selected. |
       | Org3 - 0 users | Org2 - 1 user  | Organizations successfully merged.                    |
 
-  @javascript
+  @javascript @wip
   Scenario Outline: Merge duplicate organizations (with JS)
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"
     And I select "<duplicate>" from "Potential problem organization (duplicate)"
     And I select "<target>" from "Replacement organization"
-    And wait a moment
     And I should see "Organization: <duplicate_box>" within "#duplicate"
     And I should see "Organization: <target_box>" within "#target"
     And I press "Replace"

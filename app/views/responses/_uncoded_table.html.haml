@@ -1,9 +1,8 @@
 - other_costs = false
 - other_costs = true if activities.first.class == OtherCost
-- @data_request = activities.first.data_response.data_request
 - colspan = 0
 - ["purposes", "locations", "inputs"].each do |request|
-  - colspan += 1 if @data_request.send(request.to_sym)
+  - colspan += 1
   - colspan -= 1 if request != "locations" && activities.first.class == OtherCost
 
 .simple_table.push
@@ -11,24 +10,18 @@
     %thead
       %tr
         %th Name
-        - if @data_request.locations?
-          %th Locations
+        %th Locations
         - unless other_costs
-          - if @data_request.purposes?
-            %th Purposes
-          - if @data_request.inputs?
-            %th Inputs
+          %th Purposes
+          %th Inputs
         %th.manage Manage
     %tbody
       - activities.each do |activity|
         %tr
           %td= friendly_name(activity, 64)
-          - if @data_request.locations?
-            %td= check_box_tag "", "", activity.coding_spend_district_classified? && activity.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          %td= check_box_tag "", "", activity.locations_classified?
           - unless other_costs
-            - if @data_request.purposes?
-              %td= check_box_tag "", "", activity.coding_spend_classified? && activity.coding_budget_classified?, {:disabled => "disabled"} if @data_request.purposes?
-            - if @data_request.inputs?
-              %td= check_box_tag "", "", activity.coding_spend_cc_classified? && activity.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+            %td= check_box_tag "", "", activity.purposes_classified?
+            %td= check_box_tag "", "", activity.coding_spend_cc_valid? && activity.coding_budget_cc_valid?
           %td= link_to 'Classify', link_to_unclassified(activity)
 

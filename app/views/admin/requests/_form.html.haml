@@ -5,15 +5,10 @@
   = f.input :start_date, :as => :string, :label => 'Start date', :input_html => {:class => 'date_picker'}, :hint => 'What is the start date of period for which data is requested?'
   = f.input :end_date, :as => :string, :label => 'End date', :input_html => {:class => 'date_picker'}, :hint => 'What is the end date of period for which data is requested?'
 
-  - [:purposes, :locations, :inputs, :final_review].each do |type|
-    %li
-      = f.label type, type.to_s.titleize
-      = f.check_box type, :class => 'left', :tabindex => autotab
-      %p.inline-hints
-        - if type == :final_review
-          = "Is this data request in the final review stage?"
-        - else
-          = "Allow the users to classify #{type.to_s.titleize}"
+  %li
+    = f.label :final_review, "Final Review"
+    = f.check_box :final_review, :class => 'left', :tabindex => autotab
+    %p.inline-hints= "Is this data request in the final review stage?"
 
 - f.buttons :class => 'buttons push-12', :style => 'float: none' do
   = f.commit_button((@request.new_record? ? 'Create request' : 'Update request'), :button_html => {:class => 'next'})

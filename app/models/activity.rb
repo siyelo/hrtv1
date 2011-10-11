@@ -387,11 +387,11 @@ class Activity < ActiveRecord::Base
       if project_id == AUTOCREATE
         project = data_response.projects.find_by_name(name)
         unless project
-          self_funder = FundingFlow.new(:from => self.organization,
-            :spend => self.spend, :budget => self.budget)
-          project = Project.create!(:name => name, :start_date => Time.now,
+          self_funder = FundingFlow.new(:from => self.organization)
+          project = Project.new(:name => name, :start_date => Time.now,
             :end_date => Time.now + 1.year, :data_response => data_response,
             :in_flows => [self_funder])
+          project.save(false)
         end
         self.project = project
       end

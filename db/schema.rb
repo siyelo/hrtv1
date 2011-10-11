@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111006105523) do
+ActiveRecord::Schema.define(:version => 20111011085437) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -19,25 +19,14 @@ ActiveRecord::Schema.define(:version => 20111006105523) do
     t.text     "description"
     t.string   "type"
     t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
     t.date     "start_date"
     t.date     "end_date"
     t.decimal  "spend"
     t.text     "text_for_provider"
     t.text     "text_for_beneficiaries"
-    t.decimal  "spend_q4_prev"
     t.integer  "data_response_id"
     t.integer  "activity_id"
     t.boolean  "approved"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
-    t.integer  "sub_activities_count",         :default => 0
     t.decimal  "spend_in_usd",                 :default => 0.0
     t.decimal  "budget_in_usd",                :default => 0.0
     t.integer  "project_id"
@@ -85,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20111006105523) do
     t.decimal  "cached_amount_in_usd", :default => 0.0
   end
 
+  add_index "code_assignments", ["activity_id", "code_id", "type"], :name => "index_code_assignments_on_activity_id_and_code_id_and_type"
   add_index "code_assignments", ["code_id"], :name => "index_code_assignments_on_code_id"
 
   create_table "codes", :force => true do |t|
@@ -319,8 +309,5 @@ ActiveRecord::Schema.define(:version => 20111006105523) do
     t.datetime "current_login_at"
     t.datetime "last_login_at"
   end
-
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
 
 end

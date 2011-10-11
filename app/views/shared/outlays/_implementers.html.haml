@@ -40,10 +40,6 @@
 
             %tr.overflow_fix.fields{:class => styling}
               %td
-                = ff.hidden_field :data_response_id, :value => @response.id
-                = ff.hidden_field :updated_at, :value => Time.now
-                -# the importer intentionally returns nil implementers
-                -# which should fail on save
                 = ff.hidden_field :organization_mask, :value => ff.object.try(:organization).try(:id)
                 -# perf hack - non editable provider name
                 %span.ui-autocomplete= ff.object.try(:organization).try(:name) || "< n/a >"

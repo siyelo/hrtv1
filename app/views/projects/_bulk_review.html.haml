@@ -19,7 +19,6 @@
 
       .project_heading Project
       = f.input :data_response_id, :as => :hidden
-      = f.input :updated_at, :as => :hidden
       %li.section_form
         = render "projects/basic_fields", :f => f
         %table.input_table
@@ -60,7 +59,6 @@
                 -unless ff.object.new_record?
                   = ff.input :id, :as => :hidden
                 = ff.input :data_response_id, :as => :hidden
-                = ff.input :updated_at, :as => :hidden
 
                 %li
                   = render 'shared/outlays/implementers', :f => ff, :outlay => ff.object, :blank_rows => 0, :bulk_review => true

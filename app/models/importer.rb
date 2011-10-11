@@ -262,7 +262,6 @@ class Importer
       project.data_response       = @response
       project.name                = name
       project.description         = description.try(:strip)
-      project.updated_at          = Time.now
       project.start_date          = date_for(start_date, project.start_date)
       project.end_date            = date_for(end_date, project.end_date)
       create_self_funder_for(project)
@@ -273,14 +272,13 @@ class Importer
       activity.project       = project
       activity.name          = name
       activity.description   = description.try(:strip)
-      activity.updated_at    = Time.now
     end
 
     def assign_split_fields(split, implementer, spend, budget)
       split.organization  = implementer
       split.spend         = spend
       split.budget        = budget
-      split.updated_at    = Time.now # always mark it as changed, so it doesnt get hosed below
+      split.organization_id_will_change!
     end
 end
 

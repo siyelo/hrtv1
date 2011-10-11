@@ -30,7 +30,7 @@ class Activity < ActiveRecord::Base
     :csv_provider, :csv_beneficiaries, :csv_targets, :targets_attributes,
     :outputs_attributes, :am_approved_date, :user_id, :data_response_id,
     :planned_for_gor_q1, :planned_for_gor_q2, :planned_for_gor_q3,
-    :planned_for_gor_q4, :updated_at
+    :planned_for_gor_q4
 
   ### Associations
   belongs_to :provider, :foreign_key => :provider_id,

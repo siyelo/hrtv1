@@ -36,6 +36,7 @@ Feature: Admin can manage organizations
     And I should not see "My new organization"
 
   @javascript
+  @run
   Scenario Outline: Merge duplicate organizations
     Given an organization exists with name: "org3"
     And I follow "Fix duplicate organizations"

@@ -44,18 +44,15 @@
               = render 'projects/no_projects_yet'
 
       %li
-        %h3{:class => ready(@response.check_projects_funding_sources_have_organizations?)}
+        %h3{:class => ready(@response.projects_have_funding_sources?)}
           All Projects have Funding Sources
-          - unless @response.check_projects_funding_sources_have_organizations?
-            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization
+          - unless @response.projects_have_funding_sources?
+            %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization or budget/spend
             %ul
-              - @projects.each do |project|
-                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
-              - @projects.each do |project|
-                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project) unless project.funding_sources_have_organizations?
-
+              - @response.projects_without_funding_sources.each do |project|
+                %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project)
       %li
-        %h3{:class => ready(@response.projects_have_activities? &&           @response.activities_have_budget_or_spend?)}
+        %h3{:class => ready(@response.projects_have_activities? && @response.activities_have_budget_or_spend?)}
           Activities Entered
           - unless @response.projects_have_activities?
             - if !@response.projects_entered?

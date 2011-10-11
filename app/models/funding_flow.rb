@@ -119,10 +119,9 @@ class FundingFlow < ActiveRecord::Base
     self.organization == self.from
   end
 
-  private
-    def spend_is_greater_than_zero
-      errors.add(:spend, "for funding must be greater than 0") unless (spend || 0) > 0
-    end
+  def has_organization_and_amounts?
+    organization_id_from && (spend || 0) + (budget || 0) > 0
+  end
 end
 
 

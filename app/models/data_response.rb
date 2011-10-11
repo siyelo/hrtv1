@@ -119,6 +119,7 @@ class DataResponse < ActiveRecord::Base
   def basics_done?
     projects_entered? &&
     projects_have_activities? &&
+    projects_have_funding_sources? &&
     activity_amounts_entered? &&
     activities_coded? &&
     (projects_have_other_costs? ? other_costs_coded? : true)
@@ -156,11 +157,13 @@ class DataResponse < ActiveRecord::Base
     projects.select{ |p| !p.budget_entered? }
   end
 
-  def check_projects_funding_sources_have_organizations?
-    projects.each do |project|
-      return false unless project.funding_sources_have_organizations?
-    end
-    true
+  def projects_have_funding_sources?
+    projects_without_funding_sources.present?
+  end
+  memoize :projects_have_funding_sources?
+
+  def projects_without_funding_sources
+    projects.select { |p| p.funding_sources_have_organizations_and_amounts?}
   end
 
   def projects_linked?

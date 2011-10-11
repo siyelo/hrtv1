@@ -4,4 +4,4 @@
 
 %h2 Enter organization information
 - form_for @organization, :builder => CustomFormBuilder, :url => admin_organizations_path, :html => {:class => 'basic_form js_form'} do |f|
-  = render 'form', :f => f
+  = render '/organizations/form', :f => f

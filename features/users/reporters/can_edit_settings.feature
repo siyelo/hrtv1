@@ -15,7 +15,7 @@ Feature: Reporter can manage data response
       And I select "Euro (EUR)" from "Default Currency"
       And I fill in "Start of Fiscal Year" with "<start_date>"
       And I fill in "End of Fiscal Year" with "<end_date>"
-      And I press "Update Settings"
+      And I press "Update organization"
     Then I should see "<message>"
       And I should see "<specific_message>"
 

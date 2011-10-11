@@ -609,19 +609,79 @@ describe Organization do
       @org.errors.on(:base).should include "Cannot delete organization with Requests"
     end
 
-    it "should not allow deletion when Funder references exist" do
-      basic_setup_project
-      @other_org.destroy.should be_false
-      @other_org.errors.on(:base).should include "Cannot delete organization with Funder references"
+    describe "internal vs external Funder references" do
+      it "should not allow deletion when external Funder references exist" do
+        basic_setup_project
+        @other_org.destroy.should be_false
+        @other_org.errors.on(:base).should include "Cannot delete organization with (external) Funder references"
+      end
+
+      it "should allow deletion when only internal Funder references exist" do
+        basic_setup_project
+        the_old_switcheroo
+        self_funded(@project)
+        @project.in_flows.first.destroy #at this point, proj is self-funded
+        @organization.destroy.should be_true
+      end
+
+      def setup_a_project_that_references_funder(funder)
+        organization = Factory(:organization)
+        response     = organization.latest_response
+        project      = Project.new(:data_response => response,
+                          :name => "non_factory_project_name_#{rand(100_000_000)}",
+                          :description => "proj descr",
+                          :start_date => "2010-01-01",
+                          :end_date => "2011-01-01",
+                          :in_flows_attributes => [:organization_id_from => funder.id,
+                              :budget => 10, :spend => 20])
+        project.save!
+      end
+
+      it "should not allow deletion when both internal & external Funder references exist" do
+        basic_setup_project
+        the_old_switcheroo
+        self_funded(@project)
+        setup_a_project_that_references_funder(@organization)
+        @organization.destroy.should be_false
+        @organization.errors.on(:base).should include "Cannot delete organization with (external) Funder references"
+      end
     end
 
-    it "should not allow deletion when Implementer references exist (and no Purpose splits exist)" do
-      basic_setup_implementer_split # nb: sets up a self-implementer
-      other_org    = Factory(:organization)
-      @implementer_split = Factory(:implementer_split,
-        :activity => @activity, :organization => other_org)
-      other_org.destroy.should be_false
-      other_org.errors.on(:base).should include "Cannot delete organization with Implementer references"
+    describe "internal vs external Implementer references" do
+      it "should not allow deletion when external Implementer references exist (and no Purpose splits exist)" do
+        basic_setup_implementer_split # nb: sets up a self-implementer
+        other_org    = Factory(:organization)
+        @implementer_split = Factory(:implementer_split,
+          :activity => @activity, :organization => other_org)
+        other_org.destroy.should be_false
+        other_org.errors.on(:base).should include "Cannot delete organization with (external) Implementer references"
+      end
+
+      it "should allow deletion when only internal Implementer references exist" do
+        basic_setup_implementer_split
+        the_old_switcheroo
+        @split.organization = @organization
+        @split.save!
+        @organization.destroy.should be_true
+      end
+
+      def setup_an_activity_that_references_implementer(implementer)
+        organization = Factory(:organization)
+        data_response = organization.latest_response
+        project      = Factory(:project, :data_response => data_response)
+        activity     = Factory(:activity, :data_response => data_response, :project => project)
+        split = Factory(:implementer_split, :activity => activity,
+         :organization => implementer)
+        activity.save! #recalculate implementer split total on activity
+      end
+
+      it "should not allow deletion when both internal & external Funder references exist" do
+        basic_setup_implementer_split
+        the_old_switcheroo
+        setup_an_activity_that_references_implementer(@organization)
+        @organization.destroy.should be_false
+        @organization.errors.on(:base).should include "Cannot delete organization with (external) Implementer references"
+      end
     end
   end
 end

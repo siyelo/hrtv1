@@ -294,14 +294,14 @@ class Organization < ActiveRecord::Base
 
     def check_no_funder_references
       unless out_flows.empty?
-        errors.add_to_base "Cannot delete organization with Funder references"
+        errors.add_to_base "Cannot delete organization with (external) Funder references"
         return false
       end
     end
 
     def check_no_implementer_references
       unless implementer_splits.empty?
-        errors.add_to_base "Cannot delete organization with Implementer references"
+        errors.add_to_base "Cannot delete organization with (external) Implementer references"
         return false
       end
     end

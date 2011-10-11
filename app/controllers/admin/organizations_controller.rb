@@ -70,7 +70,7 @@ class Admin::OrganizationsController < Admin::BaseController
     if @organization.destroy
       render_notice("Organization was successfully destroyed.", url)
     else
-      render_error("You cannot delete an organization that has data referencing it.", url)
+      render_error("You cannot delete an organization that has (external) data referencing it.", url)
     end
   end
 

@@ -122,7 +122,7 @@ describe Admin::OrganizationsController do
 
       it "sets flash notice" do
         delete :destroy, :id => @organization.id
-        flash[:error].should == "You cannot delete an organization that has data referencing it."
+        flash[:error].should == "You cannot delete an organization that has (external)data referencing it."
       end
 
       it "redirects to the duplicate_admin_organizations_path" do
@@ -133,7 +133,7 @@ describe Admin::OrganizationsController do
 
       it "returns proper json when request is with js format" do
         delete :destroy, :id => @organization.id, :format => "js"
-        response.body.should == '{"message":"You cannot delete an organization that has data referencing it."}'
+        response.body.should == '{"message":"You cannot delete an organization that has (external) data referencing it."}'
       end
 
       it "does not redirect with js" do

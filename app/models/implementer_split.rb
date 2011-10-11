@@ -6,8 +6,7 @@
   belongs_to :organization # the implementer
 
   attr_accessible :activity_id, :organization_id, :budget, :spend,
-    :organization_mask, :organization,
-    :updated_at #TODO: remove updated_at
+    :organization_mask, :organization
 
   ### Validations
   validates_presence_of :organization_mask

@@ -11,7 +11,6 @@ describe ImplementerSplit do
     it { should allow_mass_assignment_of(:organization_id) }
     it { should allow_mass_assignment_of(:budget) }
     it { should allow_mass_assignment_of(:spend) }
-    it { should allow_mass_assignment_of(:updated_at) }
   end
 
   describe "Validations:" do
@@ -57,10 +56,10 @@ describe ImplementerSplit do
         attributes = {"name"=>"dsf", "start_date"=>"2010-08-02",
           "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
-            {"0"=> {"updated_at" => Time.now, "spend"=>"2",
+            {"0"=> {"spend"=>"2",
               "activity_id"=>"#{@activity.id}",
               "organization_mask"=>"#{@organization.id}", "budget"=>"4"},
-            "1"=> {"updated_at" => Time.now, "spend"=>"3",
+            "1"=> {"spend"=>"3",
               "activity_id"=>"#{@activity.id}",
               "organization_mask"=>"#{@organization.id}", "budget"=>"6"}
             }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
@@ -74,12 +73,12 @@ describe ImplementerSplit do
         attributes = {"name"=>"dsf", "start_date"=>"2010-08-02",
           "project_id"=>"#{@project.id}",
           "implementer_splits_attributes"=>
-            {"0"=> {"updated_at" => Time.now,"spend"=>"10",
+            {"0"=> {"spend"=>"10",
               "id"=>"#{@split.id}",
               "activity_id"=>"#{@activity.id}",
               "organization_mask"=>"#{@organization.id}",
               "budget"=>"20.0"},
-            "1"=> {"updated_at" => Time.now, "spend"=>"30",
+            "1"=> {"spend"=>"30",
               "activity_id"=>"#{@activity.id}",
               "organization_mask"=>"#{@organization.id}", "budget"=>"40.0"}
             }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
@@ -120,7 +119,7 @@ describe ImplementerSplit do
     it "should fail when trying to create a split without spend/budget via Activity API " do
       attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
-          {"0"=> {"updated_at" => Time.now, "spend"=>"", "budget"=>"",
+          {"0"=> {"spend"=>"", "budget"=>"",
             "activity_id"=>"#{@activity.id}",
             "organization_mask"=>"#{@organization.id}"},
           }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}
@@ -132,7 +131,7 @@ describe ImplementerSplit do
     it "should fail when trying to create a split without spend/budget via Activity API " do
       attributes = {"name"=>"dsf", "start_date"=>"2010-08-02", "project_id"=>"#{@project.id}",
         "implementer_splits_attributes"=>
-          {"0"=> {"updated_at" => Time.now, "spend"=>"", "budget"=>"",
+          {"0"=> {"spend"=>"", "budget"=>"",
             "activity_id"=>"#{@activity.id}",
               "organization_mask"=>"#{@organization.id}"},
           }, "description"=>"adfasdf", "end_date"=>"2010-08-04"}

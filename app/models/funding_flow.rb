@@ -13,7 +13,7 @@ class FundingFlow < ActiveRecord::Base
                   :self_provider_flag, :organization_id_from,
                   :spend, :spend_q4_prev, :spend_q1, :spend_q2, :spend_q3, :spend_q4,
                   :budget, :budget_q4_prev, :budget_q1, :budget_q2, :budget_q3,
-                  :budget_q4, :updated_at
+                  :budget_q4
 
   ### Associations
   belongs_to :from, :class_name => "Organization", :foreign_key => "organization_id_from"

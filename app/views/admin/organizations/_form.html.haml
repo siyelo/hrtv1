@@ -62,7 +62,7 @@
             %tbody
               - @organization.implementer_splits.each do |is|
                 %tr
-                  %td= link_to is.organization_name, response_projects_path(organization_response(is.organization, current_user.current_request))
+                  %td= link_to is.activity.organization_name, response_projects_path(organization_response(is.organization, current_user.current_request))
                   %td= link_to is.activity.name, edit_response_activity_path(is.activity.response, is.activity)
 
 - unless @organization.new_record?

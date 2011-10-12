@@ -32,7 +32,9 @@ map.root :controller => 'static_page', :action => 'index'
     admin.resources :organizations,
       :collection => {:duplicate => :get, :remove_duplicate  => :put,
                       :download_template => :get, :create_from_file => :post}
-    admin.resources :reports, :member => {:generate => :get}
+    admin.resources :reports,
+      :member => { :generate => :get },
+      :collection => { :mark_implementer_splits => :put}
     admin.resources :currencies, :only => [:index, :new, :create, :update, :destroy]
     admin.resources :users, :except => [:show],
       :collection => {:create_from_file => :post, :download_template => :get}

@@ -1,10 +1,8 @@
-- @data_request = @response.data_request
 - colspan = 0
 - is_other_cost = outlay.class == OtherCost ? true : false
 - ["purposes", "locations", "inputs"].each do |request|
-  - colspan += 1 if @data_request.send(request.to_sym)
-  - if @data_request.locations?
-    - colspan -= 1 if request == "locations" && is_other_cost
+  - colspan += 1
+  - colspan -= 1 if request == "locations" && is_other_cost
 
 #uncoded_overlay.simple_overlay
   %ul.review
@@ -29,26 +27,16 @@
       %tbody
         %tr
           %td Past Expenditure
-          - if @data_request.locations?
-            %td
-              = check_box_tag "spend_locations", "", outlay.coding_spend_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          %td
+            = check_box_tag "spend_locations", "", outlay.coding_spend_district_valid?
           - unless is_other_cost
-            - if @data_request.purposes?
-              %td
-                =check_box_tag "spend_purposes", "", outlay.coding_spend_classified?, {:disabled => "disabled", :label => false} if @data_request.purposes?
-            - if @data_request.inputs?
-              %td
-                = check_box_tag "spend_inputs", "", outlay.coding_spend_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+            %td=check_box_tag "spend_purposes", "", outlay.coding_spend_valid?
+            %td= check_box_tag "spend_inputs", "", outlay.coding_spend_cc_valid?
 
         %tr
           %td Current Budget
-          - if @data_request.locations?
-            %td
-              = check_box_tag "budget_locations", "", outlay.coding_budget_district_classified?, {:disabled => "disabled"} if @data_request.locations?
+          %td
+            = check_box_tag "budget_locations", "", outlay.coding_budget_district_valid?
           - unless is_other_cost
-            - if @data_request.purposes?
-              %td
-                = check_box_tag "budget_purposes", "", outlay.coding_budget_classified?, {:disabled => "disabled", :label => false}
-            - if @data_request.inputs?
-              %td
-                = check_box_tag "budget_inputs", "", outlay.coding_budget_cc_classified?, {:disabled => "disabled"} if @data_request.inputs?
+            %td= check_box_tag "budget_purposes", "", outlay.coding_budget_valid?
+            %td= check_box_tag "budget_inputs", "", outlay.coding_budget_cc_valid?

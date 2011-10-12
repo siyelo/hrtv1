@@ -68,7 +68,7 @@ class Project < ActiveRecord::Base
   ### Callbacks
   after_save   :update_cached_currency_amounts, :if => Proc.new { |p| p.currency_changed? }
   after_create :start_response_if_unstarted
-  after_destroy :unstart_response_if_all_projects_removed
+  after_destroy :unstart_response_if_no_data
 
   ### Named Scopes
   named_scope :sorted, { :order => "projects.name" }
@@ -373,8 +373,9 @@ class Project < ActiveRecord::Base
       response.start! if response.unstarted?
     end
 
-    def unstart_response_if_all_projects_removed
-      response.unstart! if response.projects.empty?
+    def unstart_response_if_no_data
+      response.unstart! if response.projects.empty? &&
+                           response.other_costs.without_a_project.empty?
     end
 
     def validate_funder_uniqueness

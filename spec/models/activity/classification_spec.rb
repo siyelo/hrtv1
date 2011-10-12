@@ -7,197 +7,44 @@ describe Activity, "Classification" do
     basic_setup_project
   end
 
-  describe "coding_budget_classified?" do
-    it "is classified when activity budget is equal to coded budget" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity.reload
-      activity.save
-      activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingBudget.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_classified?.should be_true
-    end
 
-    it "is not classified when activity budget is not equal to coded budget" do
-      activity = Factory(:activity, :data_response => @response, :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity.reload
-      activity.save
+  [['coding_budget_valid?', CodingBudget, :budget, :mtef_code, 'purposes_classified?'],
+   ['coding_spend_valid?', CodingSpend, :spend, :mtef_code, 'purposes_classified?'],
+   ['coding_budget_district_valid?', CodingBudgetDistrict, :budget, :location, 'locations_classified?'],
+   ['coding_spend_district_valid?', CodingSpendDistrict, :spend,  :location, 'locations_classified?'],
+   ['coding_budget_cc_valid?', CodingBudgetCostCategorization, :budget, :cost_category_code, 'inputs_classified?'],
+   ['coding_spend_cc_valid?', CodingSpendCostCategorization, :spend,  :cost_category_code, 'inputs_classified?']
+   ].each do |valid_method, klass, amount_field, code_type, all_valid_method|
+    describe "#{valid_method}" do
+      before :each do
+        @activity = Factory(:activity, :data_response => @response,
+                           :project => @project)
+        @split = Factory :implementer_split, :activity => @activity,
+          amount_field => 100, :organization => @organization
+        @code     = Factory code_type
+        @activity.reload
+        @activity.save
+      end
 
-      activity.coding_budget_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingBudget.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_classified?.should be_false
-    end
-  end
+      it "is classified when #{amount_field} equals 100 percent" do
+        @activity.send(valid_method).should be_false #sanity
+        params = {@code.id.to_s => 100}
+        klass.update_classifications(@activity, params)
+        run_delayed_jobs
+        @activity.reload
+        @activity.send(valid_method).should be_true
+        @activity.send(all_valid_method).should be_true
+      end
 
-  describe "coding_budget_cc_classified?" do
-    it "is classified when activity budget is equal to coded cost category budget" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity.reload
-      activity.save
-
-      activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingBudgetCostCategorization.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_cc_classified?.should be_true
-    end
-
-    it "is not classified when activity budget is not equal to coded cost category budget" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity.reload
-      activity.save
-
-      activity.coding_budget_cc_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingBudgetCostCategorization.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_cc_classified?.should be_false
-    end
-  end
-
-  describe "coding_budget_district_classified?" do
-    it "is classified when activity budget is equal to coded location budget" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-
-      activity.reload
-      activity.save
-      activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingBudgetDistrict.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_district_classified?.should be_true
-    end
-
-    it "is not classified when activity budget is not equal to coded location budget" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :budget => 100, :organization => @organization
-      activity.reload
-      activity.save
-      activity.coding_budget_district_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingBudgetDistrict.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_budget_district_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_classified?" do
-    it "is classified when activity spend is equal to coded spend" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity.reload
-      activity.save
-      activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingSpend.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_spend_classified?.should be_true
-    end
-
-    it "is not classified when activity spend is not equal to coded spend" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      code     = Factory(:mtef_code, :short_display => 'code')
-      activity.reload
-      activity.save
-
-      activity.coding_spend_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingSpend.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_spend_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_cc_classified?" do
-    it "is classified when activity spend is equal to coded cost category spend" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity.reload
-      activity.save
-      activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingSpendCostCategorization.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_spend_cc_classified?.should be_true
-    end
-
-    it "is not classified when activity spend is not equal to coded cost category spend" do
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      code     = Factory(:cost_category_code, :short_display => 'code')
-      activity.reload
-      activity.save
-      activity.coding_spend_cc_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingSpendCostCategorization.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_spend_cc_classified?.should be_false
-    end
-  end
-
-  describe "coding_spend_district_classified?" do
-    it "is classified when activity spend is equal to coded location spend" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => 100}
-      CodingSpendDistrict.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.reload.coding_spend_district_classified?.should be_true
-    end
-
-    it "is not classified when activity spend is not equal to coded activity spend" do
-      code     = Factory(:location, :short_display => 'code')
-      activity = Factory(:activity, :data_response => @response,
-                         :project => @project)
-      split = Factory :implementer_split, :activity => activity,
-        :spend => 100, :organization => @organization
-      activity.reload
-      activity.save
-      activity.coding_spend_district_classified?.should be_false
-      params = {code.id.to_s => 99}
-      CodingSpendDistrict.update_classifications(activity, params)
-      run_delayed_jobs
-      activity.coding_spend_district_classified?.should be_false
+      it "is not classified when #{amount_field} does not equal 100%" do
+        @activity.send(valid_method).should be_false #sanity
+        params = {@code.id.to_s => 99}
+        klass.update_classifications(@activity, params)
+        run_delayed_jobs
+        @activity.reload
+        @activity.send(valid_method).should be_false
+        @activity.send(all_valid_method).should be_false
+      end
     end
   end
 
@@ -211,39 +58,39 @@ describe Activity, "Classification" do
     end
 
     it "is budget_classified? when all budgets are classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:coding_budget_valid?) { true }
+      @activity.stub(:coding_budget_district_valid?) { true }
+      @activity.stub(:coding_budget_cc_valid?) { true }
       @activity.budget_classified?.should be_true
     end
 
     it "is not budget_classified? when budget is not classified" do
-      @activity.stub(:coding_budget_classified?) { false }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:coding_budget_valid?) { false }
+      @activity.stub(:coding_budget_district_valid?) { true }
+      @activity.stub(:coding_budget_cc_valid?) { true }
       @activity.budget_classified?.should be_false
     end
 
     it "is not budget_classified? when districts are not classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { false }
-      @activity.stub(:coding_budget_cc_classified?) { true }
+      @activity.stub(:coding_budget_valid?) { true }
+      @activity.stub(:coding_budget_district_valid?) { false }
+      @activity.stub(:coding_budget_cc_valid?) { true }
       @activity.budget_classified?.should be_false
     end
 
     it "is not budget_classified? when cost categories are not classified" do
-      @activity.stub(:coding_budget_classified?) { true }
-      @activity.stub(:coding_budget_district_classified?) { true }
-      @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.stub(:coding_budget_valid?) { true }
+      @activity.stub(:coding_budget_district_valid?) { true }
+      @activity.stub(:coding_budget_cc_valid?) { false }
       @activity.budget_classified?.should be_false
     end
 
     it "is budget_classified? when no budgets are classified & budget is blank or zero" do
       @split.budget = nil; @split.save
       @activity.reload; @activity.save
-      @activity.stub(:coding_budget_classified?) { false }
-      @activity.stub(:coding_budget_district_classified?) { false }
-      @activity.stub(:coding_budget_cc_classified?) { false }
+      @activity.stub(:coding_budget_valid?) { false }
+      @activity.stub(:coding_budget_district_valid?) { false }
+      @activity.stub(:coding_budget_cc_valid?) { false }
       @activity.budget_classified?.should be_true
     end
   end
@@ -257,39 +104,39 @@ describe Activity, "Classification" do
       @activity.save
     end
     it "is spend_classified? when all spends are classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:coding_spend_valid?) { true }
+      @activity.stub(:coding_spend_district_valid?) { true }
+      @activity.stub(:coding_spend_cc_valid?) { true }
       @activity.spend_classified?.should be_true
     end
 
     it "is not spend_classified? when spend is not classified" do
-      @activity.stub(:coding_spend_classified?) { false }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:coding_spend_valid?) { false }
+      @activity.stub(:coding_spend_district_valid?) { true }
+      @activity.stub(:coding_spend_cc_valid?) { true }
       @activity.spend_classified?.should be_false
     end
 
     it "is not spend_classified? when districts are not classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { false }
-      @activity.stub(:coding_spend_cc_classified?) { true }
+      @activity.stub(:coding_spend_valid?) { true }
+      @activity.stub(:coding_spend_district_valid?) { false }
+      @activity.stub(:coding_spend_cc_valid?) { true }
       @activity.spend_classified?.should be_false
     end
 
     it "is not spend_classified? when cost categories are not classified" do
-      @activity.stub(:coding_spend_classified?) { true }
-      @activity.stub(:coding_spend_district_classified?) { true }
-      @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.stub(:coding_spend_valid?) { true }
+      @activity.stub(:coding_spend_district_valid?) { true }
+      @activity.stub(:coding_spend_cc_valid?) { false }
       @activity.spend_classified?.should be_false
     end
 
     it "is spend_classified? when no spends are classified & spend is blank or zero" do
       @split.spend = nil; @split.save
       @activity.reload; @activity.save
-      @activity.stub(:coding_spend_classified?) { false }
-      @activity.stub(:coding_spend_district_classified?) { false }
-      @activity.stub(:coding_spend_cc_classified?) { false }
+      @activity.stub(:coding_spend_valid?) { false }
+      @activity.stub(:coding_spend_district_valid?) { false }
+      @activity.stub(:coding_spend_cc_valid?) { false }
       @activity.spend_classified?.should be_true
     end
   end
@@ -309,16 +156,16 @@ describe Activity, "Classification" do
       @activity.classified?.should be_true
     end
 
-    it "is not classified? when budget is not classified" do
+    it "is true when only budget is classified" do
       @activity.stub(:budget_classified?) { false }
       @activity.stub(:spend_classified?) { true }
-      @activity.classified?.should be_false
+      @activity.classified?.should be_true
     end
 
-    it "is not classified? when spend is not classified" do
+    it "is true when only spend is classified" do
       @activity.stub(:budget_classified?) { true }
       @activity.stub(:spend_classified?) { false }
-      @activity.classified?.should be_false
+      @activity.classified?.should be_true
     end
 
     it "is not classified? when both are not classified" do
@@ -328,35 +175,7 @@ describe Activity, "Classification" do
     end
   end
 
-  describe "codings required is decided by data_request" do
-    def custom_basic_setup_activity(options)
-      @organization = Factory(:organization)
-      @request      = Factory(:data_request, {:organization => @organization}.merge(options))
-      @response     = @organization.latest_response
-      @project      = Factory(:project, :data_response => @response)
-      @activity     = Factory(:activity, :data_response => @response, :project => @project)
-    end
-
-    it "will return true if the data_request doesn't require inputs and none are entered" do
-      custom_basic_setup_activity({:inputs => false})
-      @activity.coding_budget_cc_classified?.should be_true
-      @activity.coding_spend_cc_classified?.should be_true
-    end
-
-    it "will return true if the data_request doesn't require locations and none are entered" do
-      custom_basic_setup_activity({:locations => false})
-      @activity.coding_budget_district_classified?.should be_true
-      @activity.coding_spend_district_classified?.should be_true
-    end
-
-    it "will return true if the data_request doesn't require purposes and none are entered" do
-      custom_basic_setup_activity({:purposes => false})
-      @activity.coding_budget_classified?.should be_true
-      @activity.coding_spend_classified?.should be_true
-    end
-  end
-
-  describe "Strat Coding" do
+  describe "HSSP Strat Coding" do
     before :each do
       basic_setup_project
       @activity = Factory(:activity, :data_response => @response, :project => @project,
@@ -506,4 +325,7 @@ describe Activity, "Classification" do
       @activity.coding_spend_district_sum_in_usd(@code2).should == 36
     end
   end
+
+
+
 end

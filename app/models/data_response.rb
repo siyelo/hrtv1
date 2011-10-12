@@ -291,8 +291,8 @@ class DataResponse < ActiveRecord::Base
     end
 
     def reject_uncoded_locations(other_costs)
-      other_costs.select{ |a| !a.coding_budget_district_classified? ||
-          !a.coding_spend_district_classified? }
+      other_costs.select{ |oc| !oc.coding_budget_district_valid? ||
+          !oc.coding_spend_district_valid? }
     end
 
     # Find all complete Activities

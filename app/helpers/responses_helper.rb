@@ -13,7 +13,9 @@ module ResponsesHelper
   end
 
   def activities_have_splits_class
-    ready(@response.activities_have_splits?)
+    ready(@response.projects_have_activities? &&
+      @response.activities_without_implementer_splits.empty? &&
+      @response.invalid_implementer_splits.empty?)
   end
 
   def flag

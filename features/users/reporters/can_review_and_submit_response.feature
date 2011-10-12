@@ -3,7 +3,6 @@ Feature: Reporter can Review & Submit response
   As a reporter
   I want to be able to Review & Submit response
 
-
   Scenario: Reporter can Review & Submit response when it's ready
     Given an organization exists
       And a data_request exists with organization: the organization

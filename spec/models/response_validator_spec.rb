@@ -35,6 +35,10 @@ describe DataResponse do #validations
                                  :project => @project)
       @other_cost      = Factory(:other_cost_fully_coded, :data_response => @response,
                                  :project => @project)
+      @split1 = Factory :implementer_split, :activity => @other_cost,
+        :budget => 100, :spend => 100, :organization => @organization
+      @other_cost.save
+      @other_cost.reload
       @funder_org      = Factory(:organization)
       @request         = Factory(:data_request, :organization => @organization)
       @funder_response = @organization.latest_response
@@ -46,27 +50,23 @@ describe DataResponse do #validations
       @funder = @project.in_flows.first
     end
 
-    it "returns true if all activities have splits" do
+    it "returns true if all activities have splits and the splits are valid" do
       @asplit = Factory(:implementer_split, :organization => @organization, :activity => @activity,
-                        :budget => 10, :spend => 20)
-      @osplit = Factory(:implementer_split, :organization => @organization, :activity => @other_cost,
                         :budget => 10, :spend => 20)
       @activity.reload
       @activity.save
-      @other_cost.reload
-      @other_cost.save
-      # @activity.stub(:implementer_splits).and_return([])
-      # @other_cost.stub(:implementer_splits).and_return([])
-      @response.activities_have_splits?.should be_true
+      @response.implementer_splits_entered_and_valid?.should be_true
     end
 
-    it "returns false if all activities don't have splits" do
+    it "returns false if any activity doesn't have splits or a split is invalid" do
       @activity.stub(:implementer_splits).and_return([])
       @other_cost.stub(:implementer_splits).and_return([])
-      @response.activities_have_splits?.should be_false
+      @response.implementer_splits_entered_and_valid?.should be_false
     end
 
     it "is OK if everything is entered" do
+      @asplit = Factory.build(:implementer_split, :organization => @organization,
+        :activity => @activity, :budget => 10, :spend => 20)
       @response.stub(:uncoded_activities) { [] }
       @response.projects_entered?.should be_true
       @response.activity_amounts_entered?.should be_true
@@ -75,9 +75,9 @@ describe DataResponse do #validations
       @response.projects_have_activities?.should be_true
       @response.projects_have_valid_funding_sources?.should be_true
       @response.projects_have_other_costs?.should be_true
-      @activity.stub(:implementer_splits).and_return(['stub split'])
+      @activity.stub(:implementer_splits).and_return([@asplit])
       @response.stub(:activities).and_return([@activity])
-      @response.activities_have_splits?.should be_true
+      @response.implementer_splits_entered_and_valid?.should be_true
       @response.ready_to_submit?.should be_true
     end
 
@@ -94,24 +94,6 @@ describe DataResponse do #validations
       @funder.save(false)
       @response.projects_have_valid_funding_sources?.should == false
       @response.ready_to_submit?.should == false
-    end
-
-    context "projects not linked" do
-      before :each do
-        @funder.project_from_id = nil; @funder.save
-      end
-
-      it "succeeds if request not in final review" do
-        @response.stub(:uncoded_activities) { [] }
-        @response.stub(:activities_have_splits?) { true }
-        @request.final_review = false; @request.save; @response.reload
-        @response.ready_to_submit?.should be_true
-      end
-
-      it "fails if in final review " do
-        @request.final_review = true; @request.save; @funder_response.reload
-        @funder_response.ready_to_submit?.should be_false
-      end
     end
 
     it "fails if there are no activities" do
@@ -131,12 +113,14 @@ describe DataResponse do #validations
     end
 
     it "fails if an activity is missing a coding split" do
-      @split = Factory :implementer_split, :activity => @activity,
+      @activity1 = Factory(:activity, :data_response => @response,
+                                 :project => @project)
+      @split = Factory :implementer_split, :activity => @activity1,
         :budget => 100, :spend => 100, :organization => @organization
-      @activity.reload
-      cs = @activity.coding_spend.first
-      @activity.coding_budget_valid = false
-      @activity.save
+      cs = @activity1.coding_spend.first
+      @activity1.coding_budget_valid = false
+      @activity1.reload
+      @activity1.save
       @response.uncoded_activities.should have(1).item
       @response.activities_coded?.should be_false
       @response.ready_to_submit?.should be_false

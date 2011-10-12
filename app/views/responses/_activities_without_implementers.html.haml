@@ -1,0 +1,7 @@
+%span.info
+  The activities below are missing amounts, click to edit and add amounts
+  // GN TODO: handle sub activities better here
+  // currently just takes to edit page for activity, very confusing
+%ul.push
+  - activities.each do |activity|
+    %li= link_to friendly_name(activity, 50), edit_response_activity_path(@response, activity)

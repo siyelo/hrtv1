@@ -1,0 +1,12 @@
+%table.standard.rounded
+  %thead
+    %tr
+      %th Organization
+      %th Project
+  %tbody
+    - org.out_flows.each do |of|
+      - response = organization_response(of.organization, current_request)
+      - proj_path = edit_response_project_path(response, of.project)
+      %tr
+        %td= link_to of.organization.name, response_projects_path(response)
+        %td= link_to of.project.name, proj_path

@@ -1433,6 +1433,13 @@ var activities_new = activities_create = activities_edit = activities_update = o
         element.append(selectOptions);
       }
     });
+
+    $('.ui-autocomplete-input').live('blur', function () {
+      var element = $(this).siblings('select');
+      var selectedElement = element.children('option:selected')[0];
+      element.children('option').remove();
+      element.append(selectedElement);
+    });
   }
 };
 

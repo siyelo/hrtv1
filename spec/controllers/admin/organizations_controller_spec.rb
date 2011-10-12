@@ -122,7 +122,7 @@ describe Admin::OrganizationsController do
 
       it "sets flash notice" do
         delete :destroy, :id => @organization.id
-        flash[:error].should == "You cannot delete an organization that has (external)data referencing it."
+        flash[:error].should == "You cannot delete an organization that has (external) data referencing it."
       end
 
       it "redirects to the duplicate_admin_organizations_path" do

@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Reports::Deduplication do
+describe Reports::ActivityOverview do
   before :each do
     @donor1        = Factory(:organization, :name => "donor1")
     @organization1 = Factory(:organization, :name => "organization1")
@@ -23,7 +23,7 @@ describe Reports::Deduplication do
               :budget => 200, :spend => 100)
 
       @response1.state = 'accepted'; @response1.save!
-      report = Reports::Deduplication.new(@request)
+      report = Reports::ActivityOverview.new(@request)
       csv = report.csv
 
       #File.open('debug.csv', 'w') { |f| f.puts report.csv }
@@ -74,7 +74,7 @@ describe Reports::Deduplication do
               :budget => 100, :spend => 50)
 
       @response1.state = 'accepted'; @response1.save!
-      report = Reports::Deduplication.new(@request)
+      report = Reports::ActivityOverview.new(@request)
       csv = report.csv
 
       #File.open('debug.csv', 'w') { |f| f.puts report.csv }
@@ -139,7 +139,7 @@ describe Reports::Deduplication do
               :budget => 100, :spend => 50)
 
       @response1.state = 'accepted'; @response1.save!
-      report = Reports::Deduplication.new(@request)
+      report = Reports::ActivityOverview.new(@request)
       csv = report.csv
 
       #File.open('debug.csv', 'w') { |f| f.puts report.csv }

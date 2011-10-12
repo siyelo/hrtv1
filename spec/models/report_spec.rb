@@ -13,7 +13,7 @@ describe Report do
   end
 
   describe "Validations" do
-    subject { Report.create!(:key => 'users_by_organization', :data_request_id => Factory(:data_request).id)}
+    subject { Report.create!(:key => 'activity_overview', :data_request_id => Factory(:data_request).id)}
     it { should be_valid }
     it { should validate_presence_of(:key) }
     it { should validate_presence_of(:data_request_id) }
@@ -26,7 +26,7 @@ describe Report do
   describe "Attachments" do
     it "should save attachments" do
       @request      = Factory(:data_request)
-      report        = Report.new(:key => 'users_by_organization',
+      report        = Report.new(:key => 'activity_overview',
                                  :data_request_id => @request.id)
       report.should_receive(:save_attached_files).twice.and_return(true)
       report.save.should == true

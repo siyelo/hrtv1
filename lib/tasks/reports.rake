@@ -21,81 +21,6 @@ def update_report(t)
 end
 
 namespace :reports do
-  desc "Caches 'districts_by_nsp_budget' report"
-  task :districts_by_nsp_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'districts_by_all_codes_budget' report"
-  task :districts_by_all_codes_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'users_by_organization' report"
-  task :users_by_organization => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_districts_by_partner_budget' report"
-  task :map_districts_by_partner_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_districts_by_partner_spent' report"
-  task :map_districts_by_partner_spent => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_districts_by_nsp_budget' report"
-  task :map_districts_by_nsp_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_districts_by_all_codes_budget' report"
-  task :map_districts_by_all_codes_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_facilities_by_partner_budget' report"
-  task :map_facilities_by_partner_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'map_facilities_by_partner_spent' report"
-  task :map_facilities_by_partner_spent => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_budget_coding' report"
-  task :activities_by_budget_coding => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_budget_cost_categorization' report"
-  task :activities_by_budget_cost_categorization => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_budget_districts' report"
-  task :activities_by_budget_districts => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_expenditure_coding' report"
-  task :activities_by_expenditure_coding => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_expenditure_cost_categorization' report"
-  task :activities_by_expenditure_cost_categorization => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_expenditure_districts' report"
-  task :activities_by_expenditure_districts => :environment do |t|
-    update_report(t)
-  end
-
   desc "Caches 'dynamic_query_report_budget' report"
   task :dynamic_query_report_budget => :environment do |t|
     update_report(t)
@@ -106,21 +31,6 @@ namespace :reports do
     update_report(t)
   end
 
-  desc "Caches 'activities_by_nsp_budget' report"
-  task :activities_by_nsp_budget => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_nha' report"
-  task :activities_by_nha => :environment do |t|
-    update_report(t)
-  end
-
-  desc "Caches 'activities_by_all_codes_budget' report"
-  task :activities_by_all_codes_budget => :environment do |t|
-    update_report(t)
-  end
-
   desc "Caches 'deduplication' report"
   task :deduplication => :environment do |t|
     update_report(t)
@@ -128,29 +38,9 @@ namespace :reports do
 
   desc "Cache reports"
   task :all => [
-    'districts_by_nsp_budget',
-    'districts_by_all_codes_budget',
-    'users_by_organization',
-    'map_districts_by_partner_budget',
-    'map_districts_by_partner_spent',
-    'map_districts_by_nsp_budget',
-    'map_districts_by_all_codes_budget',
-    'map_facilities_by_partner_budget',
-    'map_facilities_by_partner_spent',
-    'activities_by_budget_coding',
-    'activities_by_budget_cost_categorization',
-    'activities_by_budget_districts',
-    'activities_by_expenditure_coding',
-    'activities_by_expenditure_cost_categorization',
-    'activities_by_expenditure_districts',
     'dynamic_query_report_budget',
     'dynamic_query_report_spent',
-    'activities_by_nsp_budget',
-    'activities_by_nha',
     'activities_by_nha_subimps',
-    'activities_by_all_codes_budget',
     'deduplication'
   ]
-
-
 end

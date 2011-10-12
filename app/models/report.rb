@@ -8,23 +8,9 @@ class Report < ActiveRecord::Base
 
   ### Constants
   REPORTS = [
-    'districts_by_nsp_budget',
-    'districts_by_all_codes_budget',
-    'users_by_organization',
-    'map_districts_by_nsp_budget',
-    'map_districts_by_all_codes_budget',
-    'map_facilities_by_partner_budget',
-    'map_facilities_by_partner_spent',
-    'activities_by_budget_coding',
-    'activities_by_budget_cost_categorization',
-    'activities_by_expenditure_coding',
-    'activities_by_expenditure_cost_categorization',
     'dynamic_query_report_budget',
     'dynamic_query_report_spent',
-    'activities_by_nsp_budget',
-    'activities_by_nha',
-    'activities_by_all_codes_budget',
-    'deduplication'
+    'activity_overview'
   ]
 
   ### Attributes
@@ -61,40 +47,12 @@ class Report < ActiveRecord::Base
     def run_report
       self.report =
         case key
-        when 'districts_by_nsp_budget'
-          Reports::DistrictsByNsp.new(simple_activities_for_request, :budget)
-        when 'districts_by_all_codes_budget'
-          Reports::DistrictsByAllCodes.new(simple_activities_for_request, :budget)
-        when 'users_by_organization'
-          Reports::UsersByOrganization.new
-        when 'map_districts_by_nsp_budget'
-          Reports::MapDistrictsByNsp.new(simple_activities_for_request, :budget)
-        when 'map_districts_by_all_codes_budget'
-          Reports::MapDistrictsByAllCodes.new(simple_activities_for_request, :budget)
-        when 'map_facilities_by_partner_budget'
-          Reports::MapFacilitiesByPartner.new(:budget, data_request)
-        when 'map_facilities_by_partner_spent'
-          Reports::MapFacilitiesByPartner.new(:spent, data_request)
-        when 'activities_by_budget_coding'
-          Reports::ActivitiesByCoding.new(:budget, data_request)
-        when 'activities_by_budget_cost_categorization'
-          Reports::ActivitiesByCostCategorization.new(:budget, data_request)
-        when 'activities_by_expenditure_coding'
-          Reports::ActivitiesByCoding.new(:spent, data_request)
-        when 'activities_by_expenditure_cost_categorization'
-          Reports::ActivitiesByCostCategorization.new(:spent, data_request)
         when 'dynamic_query_report_budget'
           Reports::JawpReport.new(data_request, :budget)
         when 'dynamic_query_report_spent'
           Reports::JawpReport.new(data_request, :spent)
-        when 'activities_by_nsp_budget'
-          Reports::ActivitiesByNsp.new(simple_activities_for_request, :budget)
-        when 'activities_by_nha'
-          Reports::ActivitiesByNha.new(simple_activities_for_request)
-        when 'activities_by_all_codes_budget'
-          Reports::ActivitiesByAllCodes.new(simple_activities_for_request, :budget)
-        when 'deduplication'
-          Reports::Deduplication.new(data_request)
+        when 'activity_overview'
+          Reports::ActivityOverview.new(data_request)
         else
           raise "Invalid report request '#{self.key}'"
         end

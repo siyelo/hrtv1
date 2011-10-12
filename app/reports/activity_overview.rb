@@ -1,6 +1,6 @@
 require 'fastercsv'
 
-class Reports::Deduplication
+class Reports::ActivityOverview
 
   def initialize(request)
     @implementer_splits = ImplementerSplit.find :all,

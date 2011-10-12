@@ -6,8 +6,7 @@
     %span.hint= "(updated #{distance_of_time_in_words_to_now(rep.csv_updated_at)} ago)" if rep.csv_updated_at
   %ul.report_actions
     %li= link_to image_tag("icon_edit.png"), edit_admin_report_path(rep)
-    - if Rails.env == 'development'
-      %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
+    %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report'
     %li.separator
     - if rep.formatted_csv?
       %li= link_to "Formatted", admin_report_path(rep, :formatted => true), :title => 'Formatted report', :class => "sml_btn"

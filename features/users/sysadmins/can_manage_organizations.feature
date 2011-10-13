@@ -161,9 +161,3 @@ Feature: Admin can manage organizations
     Then I should see "Users" within "h2"
     And I should see "sysadmin@hrtapp.com"
 
-  Scenario: An admin should not see the user's table if there are no users for the org
-    Given an organization exists with name: "a new org"
-    When I follow "Organizations"
-    When I follow "Edit" within a link in the 1st row of the table
-    Then I should not see "Users" within "h2"
-

@@ -224,7 +224,7 @@ class Activity < ActiveRecord::Base
     set_classified_amount_cache(type)
     self.save(false) # save the activity even if it's approved
   end
-  #handle_asynchronously :update_classified_amount_cache
+  handle_asynchronously :update_classified_amount_cache
 
   # Updates classified amount caches if budget or spend have been changed
   def update_all_classified_amount_caches

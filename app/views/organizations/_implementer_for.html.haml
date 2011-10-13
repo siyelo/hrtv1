@@ -1,0 +1,14 @@
+%table.standard.rounded
+  %thead
+    %tr
+      %th Organization
+      %th Activity
+  %tbody
+    - org.implementer_splits.each do |is|
+      - referencing_org = is.activity.organization
+      - response = organization_response(referencing_org, current_request)
+      - activity_path = edit_response_activity_path(response, is.activity)
+      %tr
+        %td= link_to referencing_org.name, response_projects_path(response)
+        %td= link_to is.activity.name, activity_path
+

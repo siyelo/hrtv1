@@ -1,77 +1,65 @@
-.form_aside.section_form.single
-  %h3 What currency should I use?
-  %p Use the primary currency of all your projects and activities. If a specific project uses a different currency, you can override the currency in the project settings.
-  %br
-  %h3 How do I enter my fiscal year?
-  %p
-    If you follow GoR fiscal year, you will be reporting:
-    %ul
-      %li Expenditure: July 2010 – June 2011
-      %li Budget: July 2011 – June 2012
-  %p
-    If you follow USG fiscal year, you will be reporting:
-    %ul
-      %li Expenditure: October 2010 – September 2011
-      %li Budget: October 2011 – September 2012
-  %p
-    If your fiscal year follows the calendar year, you will be reporting:
-    %ul
-      %li Expenditure: January 2010 – December 2010
-      %li Budget: January 2011 – December 2011
-  %p
-    If your fiscal year runs from April to March, you will be reporting
-    %ul
-      %li Expenditure: April 2010 – March 2011
-      %li Budget: April 2011 – March 2012
-  %p
-    If your fiscal year does not fit any of the above, please
-    = link_to "raise a support request", help_link, :target => "_blank"
+- activity_managers = @organization.managers
+= render '/organizations/help_sidebar'
 
-%fieldset.wrap-80.inputs
+%fieldset.inputs
   %ol
     %li.last
       %h2 Basics
       %ul.section_form
-        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => "Default Currency", :required => true, :hint => "You can override the currency for individual projects should you deem it necessary.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
-        = f.text_field :fiscal_year_start_date, :class => 'date_picker', :label => "Start of Fiscal Year", :required => true, :hint => "The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc.", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
-        = f.text_field :fiscal_year_end_date, :class => 'date_picker', :label => "End of Fiscal Year", :required => true, :hint => "The End of the Fiscal Year", :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
+        = f.text_field :name, :label => 'Name', :required => true, :hint => 'What is the name of the organization?', :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab, :size => 50
+        = f.select :raw_type, options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type), { :include_blank => true  }, :label => 'Type', :hint => 'Raw type of organization', :label_html => { :class => 'indented' }, :input_html => { :class => 'string required' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
+        = f.text_field :fosaid, :label => 'Fosaid', :required => true, :hint => 'Fosaid or organization', :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :tabindex => autotab
+        = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => 'Default Currency', :required => true, :hint => 'You can override the currency for individual projects should you deem it necessary.', :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
+        = f.text_field :fiscal_year_start_date, :class => 'date_picker', :label => 'Start of Fiscal Year', :required => true, :hint => 'The start of the Fiscal Year (FY) that you wish to report in. This may correspond to the FY of your organization, donors, country etc.', :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
+        = f.text_field :fiscal_year_end_date, :class => 'date_picker', :label => 'End of Fiscal Year', :required => true, :hint => 'The End of the Fiscal Year', :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}, :tabindex => autotab
 
     %li.last
       %h2 Contact Details
       %ul.section_form
-        = f.text_field :contact_name, :label => "Contact Name", :required => true, :hint => "The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
-        = f.text_field :contact_position, :label => "Contact Position", :required => true, :hint => "The position of the contact at your organization.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
-        = f.text_field :contact_phone_number, :label => "Phone number", :required => true, :hint => "A telephone number that can be used to contact the contact person.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
-        = f.text_field :contact_main_office_phone_number, :label => "Office number", :required => true, :hint => "The telephone number of the organizations main office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
-        = f.text_field :contact_office_location, :label => "Office location", :required => true, :hint => "The geographic location of the office.", :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_name, :label => 'Contact Name', :required => true, :hint => 'The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_position, :label => 'Contact Position', :required => true, :hint => 'The position of the contact at your organization.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_phone_number, :label => 'Phone Number', :required => true, :hint => 'A telephone number that can be used to contact the contact person.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_main_office_phone_number, :label => 'Office Number', :required => true, :hint => 'The telephone number of the organizations main office.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
+        = f.text_field :contact_office_location, :label => 'Office Location', :required => true, :hint => 'The geographic location of the office.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
 
-    %li.last
-      %h2 Users
-      %ul.section_form.last
-        %table.standard.rounded
-          %thead
-            %tr
-              %th= sortable "full_name"
-              %th= sortable "email"
-              %th= sortable "last_login_at"
-              %th= "Role"
-              - if current_user.sysadmin?
-                %th
-
-          %tbody
-            - if @users
-              - @users.each do |user|
-                %tr{:class => cycle("even", "odd")}
-                  %td= link_to "#{user.full_name}", edit_admin_user_path(user)
-                  %td= mail_to user.email
-                  %td= user.last_login_at.strftime('%d %b %Y %T %z') if user.last_login_at
-                  %td= user.roles.map{|role| role.humanize}.join(', ')
-                  - if current_user.sysadmin?
-                    %td
-                      %ul.manage_bar
-                        %li= link_to "Edit", edit_admin_user_path(user)
-                        %li= link_to "x", admin_user_path(user), :confirm => "Are you sure you want to delete this user?", :method => :delete, :class => "right"
-
-      %fieldset.wrap-80.buttons.push-12
+      %fieldset.buttons.push-12
         %ol
-          = f.submit "Update Settings", :class => "next update"
+          - button_label = @organization.new_record? ? 'Create organization' : 'Update organization'
+          = f.submit button_label, :class => 'next update'
+
+- if !@organization.new_record? && current_user.sysadmin?
+  .delete_section
+    = link_to 'Delete this Organization', admin_organization_path(@organization), :confirm => 'Are you sure you want to delete this Organization?', :method => :delete, :class => 'delete_action'
+    %p
+      %strong Warning:
+      Once you delete an Organization, you will lose all data associated with it, and there is no undo.
+
+%h2 Users
+.section_form
+  - unless @users.empty?
+    = render 'admin/users/users', :users => @users, :show_organization => false
+  - else
+    %p There are no users in this organization
+
+%h2 Activity Managers:
+.section_form
+  - unless activity_managers.empty?
+    = render 'admin/users/users', :users => activity_managers, :show_organization => false
+  - else
+    %p There are no Activity Managers for this organization
+
+- if current_user.sysadmin?
+  %h2 Funder For:
+  .section_form
+    - if !@organization.out_flows.empty? &&
+      = render 'organizations/funder_for', :org => @organization
+    - else
+      %p There are no projects referencing this organization as the funder
+
+  %h2 Implementer For:
+  .section_form
+    - if !@organization.implementer_splits.empty?
+      = render 'organizations/implementer_for', :org => @organization
+    - else
+      %p There are no activities referencing this organization as the implementer
+

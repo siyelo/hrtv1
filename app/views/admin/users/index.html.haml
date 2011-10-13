@@ -33,6 +33,6 @@
     = "Users containing #{params[:query]}"
     = link_to "(Back to complete users listing)", admin_users_path
 
-= render "admin/users/users", :show_organization => true
+= render "admin/users/users", :users => @users, :show_organization => true
 
 = will_paginate @users

@@ -75,6 +75,7 @@ class Organization < ActiveRecord::Base
     { :joins => {:data_responses => :data_request },
       :conditions => ["data_requests.id = ? AND
                        data_responses.state IN (?)", request.id, states]} }
+  named_scope :sorted, { :order => "LOWER(organizations.name) ASC" }
 
   ### Class Methods
 

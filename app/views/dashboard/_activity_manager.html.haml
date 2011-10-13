@@ -23,7 +23,9 @@
     - else
       %span.none No responses submitted recently
 
-%h2
+
+%h2.overflow_hidden
+  = link_to "Download Combined Workplan", activity_manager_workplan_path, :class => 'dropdown dropless right heading_button'
   =image_tag "icon_reporter.png", :class => "heading_icon"
   Organizations List
 .dashboard_section

@@ -43,6 +43,9 @@ map.root :controller => 'static_page', :action => 'index'
     admin.resources :comments
   end
 
+  # ACTIVITY MANAGER
+  map.activity_manager_workplan 'activity_manager/workplan', :controller => 'users', :action => :activity_manager_workplan
+
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
     :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.

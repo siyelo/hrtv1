@@ -15,5 +15,4 @@
 - else # If report wasnt generated yet, allow user to regen it.
   = link_to title, generate_admin_report_path(key), :title => 'Generate report', :class => "drill_down grayed-out target"
   %ul.report_actions
-    - if Rails.env == 'development'
-      %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report', :class => "regenerate"
+    %li= link_to image_tag("icon_regenerate.png"), generate_admin_report_path(key), :title => 'Regenerate report', :class => "regenerate"

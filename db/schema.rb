@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111012105330) do
+ActiveRecord::Schema.define(:version => 20111012121002) do
 
   create_table "activities", :force => true do |t|
     t.string   "name"
@@ -209,6 +209,7 @@ ActiveRecord::Schema.define(:version => 20111012105330) do
     t.decimal  "budget"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "duplicate",       :default => false
   end
 
   create_table "organizations", :force => true do |t|

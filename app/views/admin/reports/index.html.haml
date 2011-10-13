@@ -33,3 +33,14 @@
       %li= render 'report_row', :title => "Activity Overview Report", :key => 'activity_overview'
       -#%li= render 'report_row', :title => "Dynamic Query By Current Budget (beta)", :key => 'dynamic_query_report_budget'
       -#%li= render 'report_row', :title => "Dynamic Query By Expenditure (beta)", :key => 'dynamic_query_report_spent'
+
+.second-half
+  %h2
+    =image_tag "icon_reporter.png", :class => "heading_icon"
+    Mark Double Counting
+  .dashboard_section
+    %ul.admin_reports
+      - form_tag mark_implementer_splits_admin_reports_path, :method => :put, :multipart => true do
+        = file_field_tag :file
+        = submit_tag :upload, :value => "Upload"
+        %span.hint Mark duplicates in Activity Overview Report and upload the CSV file

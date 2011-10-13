@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+include DelayedJobSpecHelper
+
 describe ImplementerSplit do
   describe "Associations:" do
     it { should belong_to :activity }
@@ -265,6 +267,38 @@ describe ImplementerSplit do
 
         implementer_split.possible_duplicate?.should be_true
       end
+    end
+  end
+
+  describe "#mark_double_counting" do
+    it "marks double counting" do
+      donor    = Factory(:organization, :name => 'donor')
+      request  = Factory(:data_request, :organization => donor)
+      response = donor.latest_response
+      org1     = Factory(:organization, :name => "organization1")
+      org2     = Factory(:organization, :name => "organization2")
+      project  = Factory(:project, :data_response => response)
+      activity = Factory(:activity, :id => 1, :data_response => response,
+                         :project => project)
+      split1 = Factory(:implementer_split, :id => 1,
+        :activity => activity, :organization => org1, :duplicate => false)
+      split2 = Factory(:implementer_split, :id => 2,
+        :activity => activity, :organization => org2, :duplicate => false)
+
+      file = File.open('spec/fixtures/activity_overview.csv')
+
+      report = Reports::ActivityOverview.new(request)
+      rows = FasterCSV.parse(file, {:headers => true})
+
+      rows.each{ |row| row['Actual Duplicate?'] = true }
+
+      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+
+      run_delayed_jobs
+
+      splits = ImplementerSplit.all
+      splits[0].duplicate.should be_true
+      splits[1].duplicate.should be_true
     end
   end
 end

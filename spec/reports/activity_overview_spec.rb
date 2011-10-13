@@ -40,7 +40,7 @@ describe Reports::ActivityOverview do
       table[0]['Expenditure ($)'].should == '100.0'
       table[0]['Budget ($)'].should == '200.0'
       table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == ''
+      table[0]['Actual Duplicate?'].should == 'false'
     end
   end
 
@@ -91,7 +91,7 @@ describe Reports::ActivityOverview do
       table[0]['Expenditure ($)'].should == '50.0'
       table[0]['Budget ($)'].should == '100.0'
       table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == ''
+      table[0]['Actual Duplicate?'].should == 'false'
 
       # row 2
       table[1]['Organization'].should == 'organization1'
@@ -102,7 +102,7 @@ describe Reports::ActivityOverview do
       table[1]['Expenditure ($)'].should == '50.0'
       table[1]['Budget ($)'].should == '100.0'
       table[1]['Possible Duplicate?'].should == 'true'
-      table[1]['Actual Duplicate?'].should == ''
+      table[1]['Actual Duplicate?'].should == 'false'
     end
   end
 
@@ -156,7 +156,7 @@ describe Reports::ActivityOverview do
       table[0]['Expenditure ($)'].should == '50.0'
       table[0]['Budget ($)'].should == '100.0'
       table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == ''
+      table[0]['Actual Duplicate?'].should == 'false'
 
       # row 2
       table[1]['Organization'].should == 'organization1'
@@ -167,7 +167,7 @@ describe Reports::ActivityOverview do
       table[1]['Expenditure ($)'].should == '50.0'
       table[1]['Budget ($)'].should == '100.0'
       table[1]['Possible Duplicate?'].should == 'true'
-      table[1]['Actual Duplicate?'].should == ''
+      table[1]['Actual Duplicate?'].should == 'false'
     end
   end
 end

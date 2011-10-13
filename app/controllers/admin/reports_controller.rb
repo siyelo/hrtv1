@@ -37,6 +37,18 @@ class Admin::ReportsController < Admin::BaseController
     end
   end
 
+  def mark_implementer_splits
+    if params[:file].present?
+      file = params[:file].open.read
+      ImplementerSplit.mark_double_counting(file)
+      flash[:notice] = 'Double counting was successfully marked'
+    else
+      flash[:error] = 'Please select a file to upload'
+    end
+
+    redirect_to admin_reports_url
+  end
+
   # regenerate the report csv.
   # find it using the report key, if it exists.
   def generate

@@ -56,6 +56,23 @@
     organization && organization != activity.organization &&
       organization.reporting? && organization.projects.count > 0
   end
+
+  class << self
+    def mark_double_counting(file)
+      hash = {}
+      rows = FasterCSV.parse(file, {:headers => true})
+
+      rows.map do
+        |row| hash[row['Implementer Split ID']] = row['Actual Duplicate?']
+      end
+
+      ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
+        split.duplicate = hash[split.id.to_s]
+        split.save(false)
+      end
+    end
+    handle_asynchronously :mark_double_counting
+  end
 end
 
 # == Schema Information

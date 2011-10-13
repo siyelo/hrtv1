@@ -3,25 +3,25 @@ require File.dirname(__FILE__) + '/../../spec_helper'
 describe User, "District Managers" do
   it "should not allow you to create a DM without a location" do
     @dm = Factory.build(:district_manager, :location_id => nil)
-    @dm.save.should be_false
+    @dm.valid?.should be_false
   end
 
   it "should allow you to create a DM with a location" do
     @location = Factory(:location)
     @dm = Factory.build(:district_manager, :location => @location)
-    @dm.save.should be_true
+    @dm.valid?.should be_true
   end
 
   it "should not allow you to create a DM with a reporting organization" do
     @org = Factory(:reporting_organization)
     @dm = Factory.build(:district_manager, :organization => @org)
-    @dm.save.should be_false
+    @dm.valid?.should be_false
   end
 
   it "should allow you to create a DM with a non-reporting organization" do
     @org = Factory(:nonreporting_organization)
     @dm = Factory.build(:district_manager, :organization => @org)
-    @dm.save.should be_true
+    @dm.valid?.should be_true
   end
 
   it "should remove the location id if a DM is removed from a users roles" do
@@ -36,6 +36,5 @@ describe User, "District Managers" do
     @user = Factory(:activity_manager)
     @user.roles = ['reporter']; @user.save; @user.reload
     @user.organizations.should be_empty
-    # @user.organization_id.should be_nil
   end
 end

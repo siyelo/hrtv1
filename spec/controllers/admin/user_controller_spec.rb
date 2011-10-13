@@ -30,7 +30,7 @@ describe Admin::UsersController do
       @user2 = Factory :user
       login(@user2)
       Timecop.return
-      login(Factory.create(:admin))
+      login Factory(:admin)
       # sqlite doesnt support month names
       # so our test will have to use the SQLITE format to be safe
       # i.e. we cant use the form '19 Feb' in the query

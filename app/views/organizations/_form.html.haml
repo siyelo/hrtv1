@@ -36,7 +36,7 @@
 
 %h2 Users
 .section_form
-  - unless @users.empty?
+  - if @users && !@users.empty?
     = render 'admin/users/users', :users => @users, :show_organization => false
   - else
     %p There are no users in this organization

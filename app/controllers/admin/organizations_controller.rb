@@ -10,6 +10,7 @@ class Admin::OrganizationsController < Admin::BaseController
   inherit_resources
 
   helper_method :sort_column, :sort_direction
+  before_filter :load_users, :only => [:edit, :update]
 
   def index
     scope = scope_organizations(params[:filter])
@@ -43,13 +44,11 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def edit
     @organization = Organization.find(params[:id])
-    @users = @organization.users
     edit!
   end
 
   def update
     @organization = Organization.find(params[:id])
-    @users = @organization.users
     @organization.attributes = params[:organization]
     if @organization.save(false)
       flash[:notice] = 'Organization was successfully updated'
@@ -122,6 +121,10 @@ class Admin::OrganizationsController < Admin::BaseController
   end
 
   private
+
+    def load_users
+      @users = @organization.users
+    end
 
     def render_error(message, path)
       respond_to do |format|

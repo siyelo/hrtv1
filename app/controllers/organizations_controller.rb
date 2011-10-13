@@ -4,10 +4,10 @@ class OrganizationsController < BaseController
   helper_method :sort_column, :sort_direction
 
   before_filter :load_organization, :only => [:edit, :update]
+  before_filter :load_users, :only => [:edit, :update]
 
   def edit
     @organization.valid? # trigger validation errors
-    @users = @organization.users.find(:all, :order => "#{sort_column} #{sort_direction}")
   end
 
   def update
@@ -35,6 +35,10 @@ class OrganizationsController < BaseController
   private
     def load_organization
       @organization = current_user.sysadmin? ? Organization.find(params[:id]) : current_user.organization
+    end
+
+    def load_users
+      @users = @organization.users.find(:all, :order => "#{sort_column} #{sort_direction}")
     end
 
     def sort_column

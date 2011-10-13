@@ -54,7 +54,7 @@
   def possible_duplicate?
     # NOTE: optimize provider.projects.count call
     organization && organization != activity.organization &&
-      organization.reporting? && organization.projects.count > 0
+      organization.reporting? && activity.data_response.projects_count > 0
   end
 
   class << self

@@ -69,6 +69,18 @@ class Activity < ActiveRecord::Base
     :class_name => 'CodingSpendDistrict'
   has_many :targets, :dependent => :destroy
   has_many :outputs, :dependent => :destroy
+  has_many :leaf_budget_purposes, :dependent => :destroy,
+    :class_name => 'CodingBudget',
+    :conditions => ["code_assignments.sum_of_children = 0"]
+  has_many :leaf_spend_purposes, :dependent => :destroy,
+    :class_name => 'CodingSpend',
+    :conditions => ["code_assignments.sum_of_children = 0"]
+  has_many :leaf_budget_inputs, :dependent => :destroy,
+    :class_name => 'CodingBudgetCostCategorization',
+    :conditions => ["code_assignments.sum_of_children = 0"]
+  has_many :leaf_spend_inputs, :dependent => :destroy,
+    :class_name => 'CodingSpendCostCategorization',
+    :conditions => ["code_assignments.sum_of_children = 0"]
 
   ### Nested attributes
   accepts_nested_attributes_for :implementer_splits, :allow_destroy => true,

@@ -11,7 +11,7 @@ class Project < ActiveRecord::Base
   strip_commas_from_all_numbers
 
   ### Associations
-  belongs_to :data_response
+  belongs_to :data_response, :counter_cache => true
   belongs_to :user
   has_one :organization, :through => :data_response
   has_many :activities, :dependent => :destroy

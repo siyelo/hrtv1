@@ -21,6 +21,10 @@ describe Activity do
     it { should have_many(:coding_spend_district).dependent(:destroy) }
     it { should have_many(:targets).dependent(:destroy) }
     it { should have_many(:outputs).dependent(:destroy) }
+    it { should have_many(:leaf_budget_purposes) }
+    it { should have_many(:leaf_spend_purposes) }
+    it { should have_many(:leaf_budget_inputs) }
+    it { should have_many(:leaf_spend_inputs) }
   end
 
   describe "Attributes" do

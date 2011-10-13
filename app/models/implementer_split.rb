@@ -27,7 +27,9 @@
   ### Named Scopes
   named_scope :implemented_by_health_centers, { :joins => [:organization],
     :conditions => ["organizations.raw_type = ?", "Health Center"]}
-  named_scope :sorted, {:joins => [:organization], :order => "organizations.name"}
+  named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
+    organizations.id = implementer_splits.organization_id",
+    :order => "organizations.name"}
 
   ### Instance methods
 

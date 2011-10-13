@@ -369,4 +369,52 @@ describe Activity do
       @activity2.user_id.should == activity_manager.id
     end
   end
+  describe "#am_approved?" do
+    before :each do
+      basic_setup_activity
+    end
+
+    context "no user" do
+      it "#am_approved? should return true if true" do
+        @activity.am_approved = false; @activity.save
+        @activity.am_approved?.should be_false
+      end
+
+      it "#am_approved? should return false if falase" do
+        @activity.am_approved = true; @activity.save
+        @activity.am_approved?.should be_true
+      end
+    end
+
+    context "sysadmin" do
+      before :each do
+        @user = Factory(:sysadmin, :organization => @organization)
+      end
+
+      it "should return false when current user is a sysadmin and activity is approved" do
+        @activity.am_approved = true; @activity.save(false)
+        @activity.am_approved?(@user).should be_false
+      end
+
+      it "should return false when current user is a sysadmin and it is not approved" do
+        @activity.am_approved = false; @activity.save(false)
+        @activity.am_approved?(@user).should be_false
+      end
+    end
+    context "reporter" do
+      before :each do
+        @user = Factory(:reporter, :organization => @organization)
+      end
+
+      it "should return false when current user is not a sysadmin and it is not approved" do
+        @activity.am_approved = false; @activity.save(false)
+        @activity.am_approved?(@user).should be_false
+      end
+
+      it "should return true when current user is not a sysadmin and it is approved" do
+        @activity.am_approved = true; @activity.save(false)
+        @activity.am_approved?(@user).should be_true
+      end
+    end
+  end
 end

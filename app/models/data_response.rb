@@ -158,12 +158,12 @@ class DataResponse < ActiveRecord::Base
   end
 
   def projects_have_funding_sources?
-    projects_without_funding_sources.present?
+    projects_without_funding_sources.empty?
   end
   memoize :projects_have_funding_sources?
 
   def projects_without_funding_sources
-    projects.select { |p| p.funding_sources_have_organizations_and_amounts?}
+    projects.select { |p| !p.funding_sources_have_organizations_and_amounts?}
   end
 
   def projects_linked?

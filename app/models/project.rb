@@ -174,7 +174,8 @@ class Project < ActiveRecord::Base
   end
 
   def funding_sources_have_organizations_and_amounts?
-    in_flows.select { |ff| ff.has_organization_and_amounts? }.present?
+    return false if in_flows.empty?
+    in_flows.all? { |ff| ff.has_organization_and_amounts? }
   end
 
   def has_activities?

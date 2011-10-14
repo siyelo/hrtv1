@@ -15,7 +15,7 @@ class Report < ActiveRecord::Base
 
   ### Attributes
   attr_accessible :key, :csv, :formatted_csv, :data_request_id
-  attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name
+  attr_accessor :report, :raw_csv, :temp_file_name, :zip_file_name, :unzip_file_name
 
   ### Attachments
   has_attached_file :csv, Settings.paperclip.to_options
@@ -71,6 +71,11 @@ class Report < ActiveRecord::Base
     def zip_file
       self.zip_file_name = self.temp_file_name + ".zip"
       cmd = "zip -j -9 #{self.zip_file_name} #{self.temp_file_name}"
+      output = %x(#{cmd})
+    end
+
+    def self.unzip_csv(file_path)
+      cmd = "unzip -p #{file_path}"
       output = %x(#{cmd})
     end
 

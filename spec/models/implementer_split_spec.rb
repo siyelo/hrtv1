@@ -271,9 +271,9 @@ describe ImplementerSplit do
   end
 
   describe "#mark_double_counting" do
-    it "marks double counting" do
+    before :each do
       donor    = Factory(:organization, :name => 'donor')
-      request  = Factory(:data_request, :organization => donor)
+      @request  = Factory(:data_request, :organization => donor)
       response = donor.latest_response
       org1     = Factory(:organization, :name => "organization1")
       org2     = Factory(:organization, :name => "organization2")
@@ -284,10 +284,12 @@ describe ImplementerSplit do
         :activity => activity, :organization => org1, :duplicate => false)
       split2 = Factory(:implementer_split, :id => 2,
         :activity => activity, :organization => org2, :duplicate => false)
+    end
 
+    it "marks double counting from csv file" do
       file = File.open('spec/fixtures/activity_overview.csv')
 
-      report = Reports::ActivityOverview.new(request)
+      report = Reports::ActivityOverview.new(@request)
       rows = FasterCSV.parse(file, {:headers => true})
 
       rows.each{ |row| row['Actual Duplicate?'] = true }

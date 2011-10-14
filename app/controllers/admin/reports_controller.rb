@@ -38,9 +38,14 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   def mark_implementer_splits
-    if params[:file].present?
-      file = params[:file].open.read
-      ImplementerSplit.mark_double_counting(file)
+    file = params[:file]
+    if file
+      if is_zip?(file)
+        csv = Report.unzip_csv(file.path)
+      else
+        csv = file.open.read
+      end
+      ImplementerSplit.mark_double_counting(csv)
       flash[:notice] = 'Double counting was successfully marked'
     else
       flash[:error] = 'Please select a file to upload'
@@ -59,6 +64,10 @@ class Admin::ReportsController < Admin::BaseController
   end
 
   protected
+
+    def is_zip?(file)
+      File.extname(params[:file].original_filename).include? "zip"
+    end
 
     def find_report
       @report = Report.find params[:id]

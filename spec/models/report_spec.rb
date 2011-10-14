@@ -33,20 +33,6 @@ describe Report do
     end
   end
 
-  #describe "Encoding" do
-    #it "should encode csv files as Windows-1252" do
-      #@request      = Factory(:data_request)
-      #@organization = Factory(:organization, :name => "ààââàûçÿ",
-                              #:raw_type => 'Bilateral')
-      #@user         = Factory(:user, :organization => @organization)
-      #report        = Report.new(:key => 'users_by_organization',
-                                 #:data_request_id => @request.id)
-      #report.generate_csv_zip
-      #converted_csv = Iconv.conv("UTF-8","WINDOWS-1252",report.raw_csv)
-      #converted_csv.split("\n")[1].should == "#{@user.id},#{@user.email},#{@user.name},ààââàûçÿ,Bilateral,Not Yet Started"
-    #end
-  #end
-
   describe "#generate_csv_zip" do
     before :each do
       mtef_code          = Factory(:mtef_code)
@@ -88,6 +74,24 @@ describe Report do
         report.save.should be_true
         Report.count.should == 1
       end
+    end
+  end
+
+  describe "upload" do
+    it "should unzip an uploaded file" do
+      csv = Report.unzip_csv("#{RAILS_ROOT}/spec/fixtures/activity_overview.zip")
+      csv.should == File.open("#{RAILS_ROOT}/spec/fixtures/activity_overview.csv").read
+    end
+  end
+
+  describe "generate zip" do
+    it "should create a temp zip file for user download" do
+      @request      = Factory(:data_request)
+      report        = Report.new(:key => 'activity_overview',
+                                 :data_request_id => @request.id)
+      report.temp_file_name = "#{RAILS_ROOT}/spec/fixtures/activity_overview.csv"
+      report.send(:zip_file).should == "  adding: activity_overview.csv (deflated 50%)\n"
+      %x(rm "#{report.zip_file_name}") ## removing the file it saved
     end
   end
 end

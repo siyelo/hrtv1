@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_filter :require_user
+  before_filter :require_activity_manager, :only => [:activity_manager_workplan]
 
   # set the user's 'current response' based on the given Request id
   def set_request
@@ -21,6 +22,11 @@ class UsersController < ApplicationController
     current_user.set_current_response_to_latest!
     flash[:notice] = request_message(current_user.current_response.request)
     redirect_back
+  end
+
+  def activity_manager_workplan
+    workplan = Reports::ActivityManagerWorkplan.new(current_user.current_response, current_user.organizations)
+    send_xls(workplan.to_xls,"combined_workplan.xls")
   end
 
   private

@@ -75,10 +75,10 @@ class Reports::ActivityManagerWorkplan
       row << activity.class.to_s.titleize
       row << n2c(activity.budget_in_usd, "", "")
       row << sanitize_encoding(activity.implementer_splits.map{|is| is.organization.name}.join(', '))
-      row << sanitize_encoding(activity.targets.join(', '))
-      row << sanitize_encoding(activity.beneficiaries.join(', '))
-      row << sanitize_encoding(activity.outputs.join(', '))
-      row << sanitize_encoding(activity.locations.map{ |l| l.short_display }.join(', '))
+      row << sanitize_encoding(activity.targets.map{ |e| e.description }.join(', '))
+      row << sanitize_encoding(activity.beneficiaries.map{ |e| e.short_display }.join(', '))
+      row << sanitize_encoding(activity.outputs.map{ |e| e.description }.join(', '))
+      row << sanitize_encoding(activity.locations.map{ |e| e.short_display }.join(', '))
       row
     end
 

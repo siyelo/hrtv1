@@ -1,4 +1,5 @@
 module Charts::HelperMethods
+  include NumberHelper
   MTEF_CODE_LEVEL = 0 # users may not code activities to level 1 of MTEF codes
                       # so use level 0 for completeness
 
@@ -171,5 +172,15 @@ module Charts::HelperMethods
       end
 
       values.to_a
+    end
+
+    def convert_value_to_usd(records)
+      records.each do |record|
+        unless record.currency.blank?
+          record.value = universal_currency_converter(record.value.to_f, record.currency, 'USD')
+        end
+      end
+
+      records
     end
 end

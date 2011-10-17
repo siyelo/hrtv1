@@ -112,6 +112,7 @@ class DataResponse < ActiveRecord::Base
     errors.add_to_base("Activites are not yet classified.") unless activities_coded?
     #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
     errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
+    errors.add_to_base("Projects have invalid funding sources.") if projects_have_valid_funding_sources?
   end
 
   ### Submission Validations
@@ -119,6 +120,7 @@ class DataResponse < ActiveRecord::Base
   def basics_done?
     projects_entered? &&
     projects_have_activities? &&
+    projects_have_valid_funding_sources? &&
     activity_amounts_entered? &&
     activities_coded? &&
     (projects_have_other_costs? ? other_costs_coded? : true)
@@ -156,11 +158,15 @@ class DataResponse < ActiveRecord::Base
     projects.select{ |p| !p.budget_entered? }
   end
 
-  def check_projects_funding_sources_have_organizations?
-    projects.each do |project|
-      return false unless project.funding_sources_have_organizations?
+  def projects_have_valid_funding_sources?
+    projects_with_invalid_funding_sources.empty?
+  end
+  memoize :projects_have_valid_funding_sources?
+
+  def projects_with_invalid_funding_sources
+    projects.select do |p|
+      p.in_flows.empty? || !p.funding_sources_have_organizations_and_amounts?
     end
-    true
   end
 
   def projects_linked?

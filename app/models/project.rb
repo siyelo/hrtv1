@@ -173,11 +173,8 @@ class Project < ActiveRecord::Base
     ufs
   end
 
-  def funding_sources_have_organizations?
-    in_flows.each do |in_flow|
-      return false unless in_flow.organization_id_from
-    end
-    true
+  def funding_sources_have_organizations_and_amounts?
+    in_flows.all? { |ff| ff.has_organization_and_amounts? }
   end
 
   def has_activities?

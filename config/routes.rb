@@ -43,11 +43,6 @@ map.root :controller => 'static_page', :action => 'index'
     admin.resources :comments
   end
 
-  # POLICY MAKER
-  map.namespace :policy_maker do |policy_maker|
-    policy_maker.resources :responses, :only => [:show, :index]
-  end
-
   # REPORTER USER: DATA ENTRY
   map.resources :responses,
     :except => [:index, :new, :create, :edit, :update, :destroy],  # yeah, ridicuI know.

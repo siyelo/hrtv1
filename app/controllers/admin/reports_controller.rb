@@ -46,7 +46,7 @@ class Admin::ReportsController < Admin::BaseController
         csv = file.open.read
       end
       ImplementerSplit.mark_double_counting(csv)
-      flash[:notice] = 'Double counting was successfully marked'
+      flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
     else
       flash[:error] = 'Please select a file to upload'
     end

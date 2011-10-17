@@ -18,7 +18,7 @@ describe Admin::ReportsController do
         file = ActionController::TestUploadedFile.new('spec/fixtures/activity_overview.csv', "text/csv")
         ImplementerSplit.should_receive(:mark_double_counting).and_return(true)
         put :mark_implementer_splits, :file => file
-        flash[:notice].should == "Double counting was successfully marked"
+        flash[:notice].should == "Your file is being processed, please reload this page in a couple of minutes to see the results"
       end
     end
   end

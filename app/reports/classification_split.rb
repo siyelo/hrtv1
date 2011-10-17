@@ -97,8 +97,7 @@ class Reports::ClassificationSplit
         row << implementer_split.duplicate?
         codes = classification.code ?
           cached_self_and_ancestors(classification.code) : []
-        add_codes_to_row(row, codes,
-                         @code_deepest_nesting, :short_display)
+        add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
 
         csv << row
       end

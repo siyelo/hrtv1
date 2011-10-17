@@ -30,4 +30,16 @@ describe ApplicationHelper do
       helper.link_to_unclassified(@activity).should == edit_response_activity_path(@response, @activity, :mode => 'locations')
     end
   end
+
+  describe "#formatted_date" do
+    it "should return the date in dd-mm-yy format" do
+      date = Date.parse('31-12-2010')
+      helper.formatted_date(date).should == "31-12-2010"
+    end
+
+    it "should not fail if the date passed is nil" do
+      date = nil
+      helper.formatted_date(date).should == nil
+    end
+  end
 end

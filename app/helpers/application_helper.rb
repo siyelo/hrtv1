@@ -235,6 +235,10 @@ module ApplicationHelper
     "#{date.strftime('%Y').to_i + i}"
   end
 
+  def formatted_date(date)
+    date.strftime('%d-%m-%Y') if date
+  end
+
   def prev_fy(response)
     "FY #{rough_fiscal_year(response.request.start_date, -1)} / #{rough_fiscal_year(response.request.end_date, -1)}"
   end

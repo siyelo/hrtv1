@@ -1,14 +1,16 @@
-- f.inputs :class => 'inputs' do
-  = f.input :title, :as => :string, :label => 'Title', :hint => 'Descriptive name of the data request'
-  = f.input :organization, :label => 'Organization', :hint => 'Which organization is requesting data?', :collection => Organization.ordered
-  = f.input :due_date, :as => :string, :label => 'Due date', :input_html => {:class => 'date_picker'}, :hint => 'Due when users have to enter their data?'
-  = f.input :start_date, :as => :string, :label => 'Start date', :input_html => {:class => 'date_picker'}, :hint => 'What is the start date of period for which data is requested?'
-  = f.input :end_date, :as => :string, :label => 'End date', :input_html => {:class => 'date_picker'}, :hint => 'What is the end date of period for which data is requested?'
+%fieldset.inputs
+  %ol
+    %li.last
+      %h2 Enter data request information
+      %ul.section_form
+        = f.text_field :title, :label => 'Title', :hint => 'Descriptive name of the data request'
+        = f.select :organization_id, options_for_select(funding_organizations_select, f.object.organization_id),  {:include_blank => true}, :value => f.object.organization_id, :label => 'Organization', :hint => 'Which organization is requesting data?'
+        = f.text_field :due_date, :value => formatted_date(f.object.due_date), :label => 'Due date', :class => 'date_picker', :hint => 'Due when users have to enter their data?'
+        = f.text_field :start_date, :value => formatted_date(f.object.start_date), :label => 'Start date', :class => 'date_picker', :hint => 'What is the start date of period for which data is requested?'
+        = f.text_field :end_date, :value => formatted_date(f.object.end_date), :label => 'End date', :class => 'date_picker', :hint => 'What is the end date of period for which data is requested?'
+        = f.check_box :final_review, :label => 'Final Review?', :hint => 'What is the end date of period for which data is requested?'
 
-  %li
-    = f.label :final_review, "Final Review"
-    = f.check_box :final_review, :class => 'left', :tabindex => autotab
-    %p.inline-hints= "Is this data request in the final review stage?"
-
-- f.buttons :class => 'buttons push-12', :style => 'float: none' do
-  = f.commit_button((@request.new_record? ? 'Create request' : 'Update request'), :button_html => {:class => 'next'})
+      %fieldset.buttons.push-12
+        %ol
+          - button_label = @request.new_record? ? 'Create request' : 'Update request'
+          = f.submit button_label, :class => 'next update'

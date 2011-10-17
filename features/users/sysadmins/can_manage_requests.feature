@@ -12,20 +12,20 @@ Feature: Admin can manage data requests
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
        And I follow "Create Data Request"
-       And I select "org1" from "Organization"
-       And I fill in "Title" with "My data response title"
-       And I fill in "Due date" with "2011-09-01"
-       And I fill in "Start date" with "2010-01-01"
-       And I fill in "End date" with "2011-01-01"
+       And I select "org1" from "data_request_organization_id"
+       And I fill in "data_request_title" with "My data response title"
+       And I fill in "data_request_due_date" with "2011-09-01"
+       And I fill in "data_request_start_date" with "2010-01-01"
+       And I fill in "data_request_end_date" with "2011-01-01"
        And I press "Create request"
       Then I should see "Request was successfully created"
-       And I should see "My data response title"
        And I should see "org1"
 
       When I follow "Edit"
+       And the "data_request_title" field should contain "My data response title"
        And I fill in "Title" with "My new data response title"
        And I press "Update request"
-      Then I should see "Request was successfully updated"
+       Then I should see "Request was successfully updated"
        And I should see "My new data response title"
 
       # delete both request

@@ -1,5 +1,6 @@
 module Reports::Helpers
-  include NumberHelper # gives n2c method
+  # remove me
+  include CurrencyNumberHelper # gives n2c method
   include StringCleanerHelper # gives h method
   extend ActiveSupport::Memoizable
 

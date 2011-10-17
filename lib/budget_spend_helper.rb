@@ -1,6 +1,6 @@
 # This module is included in Activity, Project and FundingFlow models
 module BudgetSpendHelper
-  include NumberHelper
+  include CurrencyNumberHelper
 
   def spend?
     !spend.nil? and spend > 0

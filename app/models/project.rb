@@ -3,7 +3,6 @@ require 'validators'
 class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include BudgetSpendHelper
-  include NumberHelper
   include Project::Validations
 
   MAX_NAME_LENGTH = 64

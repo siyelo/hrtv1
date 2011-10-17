@@ -1,7 +1,7 @@
 require 'validators'
 
 class Activity < ActiveRecord::Base
-  include NumberHelper
+  include CurrencyNumberHelper
   include Activity::Classification
   include Activity::Validations
   include AutocreateHelper

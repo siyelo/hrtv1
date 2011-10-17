@@ -1,7 +1,7 @@
 require 'spec_helper'
-include NumberHelper
+include CurrencyNumberHelper
 
-describe NumberHelper do
+describe CurrencyNumberHelper do
   before :each do
     Money.default_bank.set_rate(:EUR, :USD, 1.5)
     Money.default_bank.set_rate(:USD, :EUR, 0.720461095)
@@ -29,11 +29,5 @@ describe NumberHelper do
 
   it "when a conversion to USD is not possible by one currency" do
     universal_currency_converter(1000, "AOA", "EUR").should == 1000
-  end
-
-  describe "#n2cs" do
-    it "should format number with currency in front" do
-      n2cs("12345.67", "USD").should == "<span class=\"currency\">USD</span> 12,345.67"
-    end
   end
 end

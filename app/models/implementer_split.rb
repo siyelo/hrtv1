@@ -1,5 +1,4 @@
  class ImplementerSplit < ActiveRecord::Base
-  include NumberHelper
   include AutocreateHelper
 
   belongs_to :activity
@@ -44,11 +43,11 @@
   end
 
   def budget=(amount)
-    write_attribute(:budget, is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
+    write_attribute(:budget, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
   end
 
   def spend=(amount)
-    write_attribute(:spend, is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
+    write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
   end
 
   def possible_duplicate?

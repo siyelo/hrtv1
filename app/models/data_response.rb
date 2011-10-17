@@ -1,5 +1,5 @@
 class DataResponse < ActiveRecord::Base
-  include NumberHelper
+  include CurrencyNumberHelper
   include ResponseStatesHelper
   extend ActiveSupport::Memoizable
 

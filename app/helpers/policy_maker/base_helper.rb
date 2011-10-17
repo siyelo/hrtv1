@@ -1,2 +1,0 @@
-module PolicyMaker::BaseHelper
-end

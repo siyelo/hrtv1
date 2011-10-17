@@ -606,15 +606,7 @@ var responses_review = {
   }
 };
 
-var policy_maker_data_responses_show = {
-  run: function () {
-    build_data_response_review_screen();
-    ajaxifyResources('comments');
-  }
-};
-
 var activity_classification = function () {
-
   /*
    * Adds collapsible checkbox tree functionality for a tab and validates classification tree
    * @param {String} tab

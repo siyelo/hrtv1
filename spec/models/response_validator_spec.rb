@@ -84,7 +84,7 @@ describe DataResponse do #validations
       @response.activities_coded?.should == true
       @response.other_costs_coded?.should == true
       @response.projects_have_activities?.should == true
-      @response.projects_have_funding_sources?.should == true
+      @response.projects_have_valid_funding_sources?.should == true
       @response.projects_have_other_costs?.should == true
       @response.ready_to_submit?.should == true
     end
@@ -92,7 +92,7 @@ describe DataResponse do #validations
     it "fails if a project doesn't have an in flow" do
       @project.in_flows.first.destroy
       @project.reload
-      @response.projects_have_funding_sources?.should == false
+      @response.projects_have_valid_funding_sources?.should == false
       @response.ready_to_submit?.should == false
     end
 
@@ -100,7 +100,7 @@ describe DataResponse do #validations
       @funder.spend = 0
       @funder.budget = 0
       @funder.save(false)
-      @response.projects_have_funding_sources?.should == false
+      @response.projects_have_valid_funding_sources?.should == false
       @response.ready_to_submit?.should == false
     end
 

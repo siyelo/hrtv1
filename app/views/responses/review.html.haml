@@ -44,12 +44,12 @@
               = render 'projects/no_projects_yet'
 
       %li
-        %h3{:class => ready(@response.projects_have_funding_sources?)}
+        %h3{:class => ready(@response.projects_have_valid_funding_sources?)}
           All Projects have Funding Sources
-          - unless @response.projects_have_funding_sources?
+          - unless @response.projects_have_valid_funding_sources?
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization or budget/spend
             %ul
-              - @response.projects_without_funding_sources.each do |project|
+              - @response.projects_with_invalid_funding_sources.each do |project|
                 %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project)
       %li
         %h3{:class => ready(@response.projects_have_activities? && @response.activities_have_budget_or_spend?)}

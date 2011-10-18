@@ -421,9 +421,19 @@ class Activity < ActiveRecord::Base
     end
 
     def validate_implementers_uniqueness
-      splits = implementer_splits.select{|e| !e.marked_for_destruction? }.map(&:organization_id)
-      if splits.length != splits.uniq.length
-        errors.add_to_base "Duplicate Implementers"
+      implementer_orgs = implementer_splits.select do |e|
+        !e.marked_for_destruction?
+      end.map(&:organization_id)
+
+      if implementer_orgs.length != implementer_orgs.uniq.length
+        # Reject splits where Org Id appears once & find unique ID of duplicates
+        dup_ids = implementer_orgs.reject {|org_id| implementer_orgs.one? { |id| id == org_id } }
+        # Find implmenter splits with an organization that has been duplicated
+        duplicates = implementer_splits.select { |is| dup_ids.include?(is.organization_id) }
+        self.errors.add_to_base("Duplicate Implementers")
+        duplicates.each do |dup|
+          dup.errors.add_to_base("Duplicate Implementer")
+        end
       end
     end
 end

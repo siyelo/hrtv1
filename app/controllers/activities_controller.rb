@@ -30,7 +30,7 @@ class ActivitiesController < BaseController
       end
     else
       respond_to do |format|
-        format.html { render :action => 'new' }
+        format.html { paginate_splits(resource); render :action => 'new' }
       end
     end
   end

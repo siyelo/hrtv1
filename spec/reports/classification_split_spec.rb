@@ -109,7 +109,7 @@ describe Reports::ClassificationSplit do
           table[2]["#{classification_name} Code"].should == code1_name
           table[2]["#{classification_name} Code Split"].should == '25.0'
           table[2]["Implementer Budget by #{classification_name}"].should == '12.5'
-          table[2]['Possible Duplicate?'].should == 'true'
+          table[2]['Possible Duplicate?'].should == 'false'
           table[2]['Actual Duplicate?'].should == 'false'
           table[2]["#{classification_name} Hierarchy"].should == code1_name
 
@@ -126,7 +126,7 @@ describe Reports::ClassificationSplit do
           table[3]["#{classification_name} Code"].should == code2_name
           table[3]["#{classification_name} Code Split"].should == '75.0'
           table[3]["Implementer Budget by #{classification_name}"].should == '37.5'
-          table[3]['Possible Duplicate?'].should == 'true'
+          table[3]['Possible Duplicate?'].should == 'false'
           table[3]['Actual Duplicate?'].should == 'false'
           table[3]["#{classification_name} Hierarchy"].should == code2_name
         end

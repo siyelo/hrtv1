@@ -9,7 +9,8 @@ class Reports::ActivityOverview
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ :project => { :in_flows => :from } },
-        { :data_response => :organization } ]}, :organization]
+        { :data_response => :organization } ]},
+        { :organization => :data_responses }]
   end
 
   def csv

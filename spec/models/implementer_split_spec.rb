@@ -252,20 +252,44 @@ describe ImplementerSplit do
     end
 
     context "another hrt implementer" do
-      it "marks double counting" do
-        organization2 = Factory(:organization, :name => "other-hrt-implementer")
-        response2     = organization2.latest_response
-        project2      = Factory(:project, :data_response => response2)
-        activity2     = Factory(:activity, :data_response => response2,
-                                :project => project2)
+      context "other implementer has submitted response" do
+        it "marks double counting" do
+          organization2 = Factory(:organization, :name => "other-hrt-implementer")
+          response2     = organization2.latest_response
+          project2      = Factory(:project, :data_response => response2)
+          activity2     = Factory(:activity, :data_response => response2,
+                                  :project => project2)
 
-        implementer_split = Factory(:implementer_split,
-                                    :activity => @activity,
-                                    :organization => organization2)
-        Factory(:implementer_split, :activity => activity2,
-                :organization => organization2)
+          implementer_split = Factory(:implementer_split,
+                                      :activity => @activity,
+                                      :organization => organization2)
+          Factory(:implementer_split, :activity => activity2,
+                  :organization => organization2)
 
-        implementer_split.reload.possible_duplicate?.should be_true
+          response2.state = 'accepted'; response2.save!
+
+          implementer_split.reload.possible_duplicate?.should be_true
+        end
+      end
+
+      context "other implementer has not submitted their response" do
+        it "does not marks double count" do
+          organization2 = Factory(:organization, :name => "other-hrt-implementer")
+          response2     = organization2.latest_response
+          project2      = Factory(:project, :data_response => response2)
+          activity2     = Factory(:activity, :data_response => response2,
+                                  :project => project2)
+
+          implementer_split = Factory(:implementer_split,
+                                      :activity => @activity,
+                                      :organization => organization2)
+          Factory(:implementer_split, :activity => activity2,
+                  :organization => organization2)
+
+          response2.state = 'started'; response2.save!
+
+          implementer_split.possible_duplicate?.should be_false
+        end
       end
     end
   end

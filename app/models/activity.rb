@@ -203,7 +203,7 @@ class Activity < ActiveRecord::Base
   end
 
   def am_approved?(user = nil)
-    !user.nil? && user.sysadmin? ? false : read_attribute(:am_approved)
+    user && user.sysadmin? ? false : read_attribute(:am_approved)
   end
 
   def to_s

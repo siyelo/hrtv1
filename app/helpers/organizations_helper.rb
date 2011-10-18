@@ -9,6 +9,18 @@ module OrganizationsHelper
     end
   end
 
+  def name_hint
+    "What is the name of the organization?"
+  end
+
+  def raw_type_hint
+    "Raw type of organization"
+  end
+
+  def fosaid_hint
+    "Fosaid or organization"
+  end
+
   def fiscal_year_start_date_hint
     "The start of the Fiscal Year (FY) that you wish to report in.
     This may correspond to the FY of your organization, donors, country etc."

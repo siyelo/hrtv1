@@ -7,7 +7,7 @@
       %h2 Basics
       %ul.section_form
         = f.text_field :name, :label => 'Name', :required => true, :hint => name_hint, :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :size => 50
-        = f.select :raw_type, options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type), { :include_blank => true  }, :label => 'Type', :hint => raw_type_hint :label_html => { :class => 'indented' }, :input_html => { :class => 'string required' }, :wrapper_html => { :class => 'input-wrapper' }
+        = f.select :raw_type, options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type), { :include_blank => true  }, :label => 'Type', :hint => raw_type_hint, :label_html => { :class => 'indented' }, :input_html => { :class => 'string required' }, :wrapper_html => { :class => 'input-wrapper' }
         = f.text_field :fosaid, :label => 'Fosaid', :required => true, :hint => fosaid_hint, :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }
         = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => 'Default Currency', :required => true, :hint => currency_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
         = f.text_field :fiscal_year_start_date, :value => formatted_date(f.object.fiscal_year_start_date), :class => 'date_picker', :label => 'Start of Fiscal Year', :required => true, :hint => fiscal_year_start_date_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
@@ -16,11 +16,11 @@
     %li.last
       %h2 Contact Details
       %ul.section_form
-        = f.text_field :contact_name, :label => 'Contact Name', :required => true, :hint => 'The primary contact at your organization that will help the Health Resource Tracker team if there are any questions throughout the process.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}, :tabindex => autotab
-        = f.text_field :contact_position, :label => 'Contact Position', :required => true, :hint => 'The position of the contact at your organization.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_phone_number, :label => 'Phone Number', :required => true, :hint => 'A telephone number that can be used to contact the contact person.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_main_office_phone_number, :label => 'Office Number', :required => true, :hint => 'The telephone number of the organizations main office.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_office_location, :label => 'Office Location', :required => true, :hint => 'The geographic location of the office.', :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_name, :label => 'Contact Name', :required => true, :hint => contact_name_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_position, :label => 'Contact Position', :required => true, :hint => contact_position_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_phone_number, :label => 'Phone Number', :required => true, :hint => phone_number_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_main_office_phone_number, :label => 'Office Number', :required => true, :hint => contact_main_office_phone_number_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_office_location, :label => 'Office Location', :required => true, :hint => office_location_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
 
       %fieldset.buttons.push-12
         %ol

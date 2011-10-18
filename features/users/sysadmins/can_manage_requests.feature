@@ -34,15 +34,14 @@ Feature: Admin can manage data requests
       Then I should see "Request was successfully deleted."
        And I should not see "My data response title"
 
-       @run
     Scenario Outline: See errors when creating data request
       When I follow "Requests"
        And I follow "Create Data Request"
        And I select "<organization>" from "Organization"
        And I fill in "Title" with "<title>"
-       And I fill in "Start date" with "<due_date>"
-       And I fill in "End date" with "<start_date>"
-       And I fill in "Due date" with "<end_date>"
+       And I fill in "Start date" with "<start_date>"
+       And I fill in "End date" with "<end_date>"
+       And I fill in "Due date" with "<due_date>"
        And I press "Create request"
       Then I should see "<message>"
 

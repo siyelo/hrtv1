@@ -265,7 +265,7 @@ describe ImplementerSplit do
         Factory(:implementer_split, :activity => activity2,
                 :organization => organization2)
 
-        implementer_split.possible_duplicate?.should be_true
+        implementer_split.reload.possible_duplicate?.should be_true
       end
     end
   end

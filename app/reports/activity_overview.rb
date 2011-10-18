@@ -1,6 +1,7 @@
 require 'fastercsv'
 
 class Reports::ActivityOverview
+  include Reports::Helpers
 
   def initialize(request)
     @implementer_splits = ImplementerSplit.find :all,
@@ -46,27 +47,18 @@ class Reports::ActivityOverview
 
       row = []
 
-      if activity.project
-        project_name     = activity.project.name
-        project_in_flows = activity.project.in_flows.map{ |f| f.from.name }.join(', ')
-      else
-        project_name     = ''
-        project_in_flows = ''
-      end
-
       row << activity.organization.name
-      row << project_name
+      row << activity.project.try(:name) # other costs does not have a project
       row << activity.name
       row << activity.id
-      row << project_in_flows
+      row << project_in_flows(activity.project)
       row << implementer_split.organization.try(:name)
       row << implementer_split.id
       row << (implementer_split.spend || 0) * rate
       row << (implementer_split.budget || 0) * rate
       row << implementer_split.possible_duplicate?
       # don't use duplicate?, we need to display if the value is nil
-      row << implementer_split.duplicate
-      row << ''
+      row << implementer_split.duplicate?
 
       row
     end

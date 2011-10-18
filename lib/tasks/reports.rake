@@ -21,26 +21,49 @@ def update_report(t)
 end
 
 namespace :reports do
-  desc "Caches 'dynamic_query_report_budget' report"
-  task :dynamic_query_report_budget => :environment do |t|
+  desc "Caches 'activity_overview' report"
+  task :activity_overview => :environment do |t|
     update_report(t)
   end
 
-  desc "Caches 'dynamic_query_report_spent' report"
-  task :dynamic_query_report_spent => :environment do |t|
+  desc "Caches 'budget_implementer_purpose' report"
+  task :budget_implementer_purpose => :environment do |t|
     update_report(t)
   end
 
-  desc "Caches 'deduplication' report"
-  task :deduplication => :environment do |t|
+  desc "Caches 'spend_implementer_purpose' report"
+  task :spend_implementer_purpose => :environment do |t|
+    update_report(t)
+  end
+
+  desc "Caches 'budget_implementer_input' report"
+  task :budget_implementer_input => :environment do |t|
+    update_report(t)
+  end
+
+  desc "Caches 'spend_implementer_input' report"
+  task :activity_overview => :environment do |t|
+    update_report(t)
+  end
+
+  desc "Caches 'budget_implementer_location' report"
+  task :budget_implementer_location => :environment do |t|
+    update_report(t)
+  end
+
+  desc "Caches 'spend_implementer_location' report"
+  task :spend_implementer_location => :environment do |t|
     update_report(t)
   end
 
   desc "Cache reports"
   task :all => [
-    'dynamic_query_report_budget',
-    'dynamic_query_report_spent',
-    'activities_by_nha_subimps',
-    'deduplication'
+    'activity_overview',
+    'budget_implementer_purpose',
+    'spend_implementer_purpose',
+    'budget_implementer_input',
+    'spend_implementer_input',
+    'budget_implementer_location',
+    'spend_implementer_location'
   ]
 end

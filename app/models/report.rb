@@ -8,9 +8,13 @@ class Report < ActiveRecord::Base
 
   ### Constants
   REPORTS = [
-    'dynamic_query_report_budget',
-    'dynamic_query_report_spent',
-    'activity_overview'
+    'activity_overview',
+    'budget_implementer_purpose',
+    'spend_implementer_purpose',
+    'budget_implementer_input',
+    'spend_implementer_input',
+    'budget_implementer_location',
+    'spend_implementer_location'
   ]
 
   ### Attributes
@@ -50,9 +54,21 @@ class Report < ActiveRecord::Base
         when 'dynamic_query_report_budget'
           Reports::JawpReport.new(data_request, :budget)
         when 'dynamic_query_report_spent'
-          Reports::JawpReport.new(data_request, :spent)
+          Reports::JawpReport.new(data_request, :spend)
         when 'activity_overview'
           Reports::ActivityOverview.new(data_request)
+        when 'budget_implementer_purpose'
+          Reports::ClassificationSplit.new(data_request, :budget, :purpose)
+        when 'budget_implementer_input'
+          Reports::ClassificationSplit.new(data_request, :budget, :input)
+        when 'budget_implementer_location'
+          Reports::ClassificationSplit.new(data_request, :budget, :location)
+        when 'spend_implementer_purpose'
+          Reports::ClassificationSplit.new(data_request, :spend, :purpose)
+        when 'spend_implementer_input'
+          Reports::ClassificationSplit.new(data_request, :spend, :input)
+        when 'spend_implementer_location'
+          Reports::ClassificationSplit.new(data_request, :spend, :location)
         else
           raise "Invalid report request '#{self.key}'"
         end

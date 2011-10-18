@@ -52,8 +52,14 @@ class FundingFlow < ActiveRecord::Base
   delegate :data_response, :to => :project
   delegate :currency, :to => :project, :allow_nil => true
 
+  ### Association aliases
   alias :response :data_response
   alias :to :organization
+
+  ### Named Scopes
+  named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
+    organizations.id = funding_flows.organization_id_from",
+    :order => "LOWER(organizations.name) ASC"}
 
   ### Class Methods
 

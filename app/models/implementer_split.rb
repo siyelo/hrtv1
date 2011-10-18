@@ -28,7 +28,7 @@
     :conditions => ["organizations.raw_type = ?", "Health Center"]}
   named_scope :sorted, { :joins => "LEFT OUTER JOIN organizations ON
     organizations.id = implementer_splits.organization_id",
-    :order => "organizations.name"}
+    :order => "LOWER(organizations.name) ASC"}
 
   ### Instance methods
 

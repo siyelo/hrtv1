@@ -3,6 +3,7 @@ require 'fastercsv'
 class Reports::OrganizationWorkplan
   include Reports::Helpers
   include EncodingHelper
+  include CurrencyViewNumberHelper
 
   attr_accessor :response
 

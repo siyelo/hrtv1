@@ -2,7 +2,7 @@
 # NoMethodError: undefined method `funding_streams' for #<Project:0xb5c1a6f0>
 load 'app/models/project.rb'
 
-include NumberHelper
+include CurrencyNumberHelper
 
 puts "Loading funding streams"
 

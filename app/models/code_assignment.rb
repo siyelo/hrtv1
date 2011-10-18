@@ -1,5 +1,5 @@
 class CodeAssignment < ActiveRecord::Base
-  include NumberHelper
+  include CurrencyNumberHelper
 
   strip_commas_from_all_numbers
 

@@ -39,14 +39,19 @@ class Admin::ReportsController < Admin::BaseController
 
   def mark_implementer_splits
     file = params[:file]
+
     if file
-      if is_zip?(file)
-        csv = Report.unzip_csv(file.path)
+      if valid_format?(file)
+        if is_zip?(file)
+          csv = Report.unzip_csv(file.path)
+        else
+          csv = file.open.read
+        end
+        ImplementerSplit.mark_double_counting(csv)
+        flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
       else
-        csv = file.open.read
+        flash[:error] = 'Invalid file format. Please select .csv or .zip format.'
       end
-      ImplementerSplit.mark_double_counting(csv)
-      flash[:notice] = 'Your file is being processed, please reload this page in a couple of minutes to see the results'
     else
       flash[:error] = 'Please select a file to upload'
     end
@@ -66,7 +71,11 @@ class Admin::ReportsController < Admin::BaseController
   protected
 
     def is_zip?(file)
-      File.extname(params[:file].original_filename).include? "zip"
+      File.extname(file.original_filename) == ".zip"
+    end
+
+    def valid_format?(file)
+      ['.csv', '.zip'].include?(File.extname(file.original_filename))
     end
 
     def find_report

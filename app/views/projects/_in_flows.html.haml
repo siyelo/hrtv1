@@ -14,8 +14,9 @@
           .right_justified= "Planned Disbursements (#{next_fy(@response)})"
         %th
     %tbody
-      - f.semantic_fields_for :in_flows do |ff|
-        = render "projects/in_flow_fields", :f => ff
+      - f.object.in_flows.sorted.each do |funder|
+        - f.semantic_fields_for :in_flows, funder do |ff|
+          = render "projects/in_flow_fields", :f => ff
       - 3.times do
         - f.object.in_flows.build unless f.object.in_flows.length > 0
         - new_object = f.object.class.reflect_on_association(:in_flows).klass.new

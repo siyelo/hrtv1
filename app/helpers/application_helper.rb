@@ -322,7 +322,7 @@ module ApplicationHelper
     else
       blanks = splits.select{ |s| s.organization.nil? }
       blanks + splits.reject{ |s| s.organization.nil?}.sort do
-        |a,b| a.organization_name <=> b.organization_name
+        |a,b| a.organization_name.downcase <=> b.organization_name.downcase
       end
     end
   end

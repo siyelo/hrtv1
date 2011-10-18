@@ -79,7 +79,7 @@ describe Activity do
   end
 
   describe "update attributes" do
-    context "when one sub_activity" do
+    context "when one implementer_split" do
       before :each do
         basic_setup_activity
         attributes = {"name"=>"dsf", "project_id"=>"#{@project.id}",
@@ -111,22 +111,44 @@ describe Activity do
         basic_setup_implementer_split
         @implementer2 = Factory :organization
         @split2 = Factory :implementer_split, :activity => @activity,
-           :organization => @implementer2
-
-        attributes = {"name"=>"dsf",  "project_id"=>"#{@project.id}",
-          "implementer_splits_attributes"=>
-            {"0"=>
-              {"id" => "#{@split.id}", "data_response_id"=>"#{@response.id}", "organization_mask"=>"#{@organization.id}", "spend"=>"10", "budget"=>"20.0"},
-              # {"spend"=>"10", "id"=>"#{@split.id}", "organization_id"=>"#{@organization.id}", "budget"=>"20.0"},
-            "1"=>
-              {"id" => "#{@split2.id}","data_response_id"=>"#{@response.id}", "organization_mask"=>"#{@implementer2.id}", "spend"=>"20", "budget"=>"40.0"},
-              # {"spend"=>"20", "id"=>"#{@split.id}", "organization_id"=>"#{@implementer2.id}", "budget"=>"40.0"}
-            }, "description"=>"adfasdf"}
-        @activity.reload
-        @activity.update_attributes(attributes).should be_true
+          :organization => @implementer2
       end
 
-      it "should maintain the activites budget/spend cache when creating a new sub_activity" do
+      it "should validate duplicate implementer splits when saving nested attr" do
+        attributes = {"name"=>"dsf", "description"=>"adfasdf",
+          "project_id"=>"#{@project.id}",
+          "implementer_splits_attributes"=>
+            {"0"=>
+              {"id" => "#{@split.id}", "data_response_id"=>"#{@response.id}",
+               "organization_mask"=>"#{@organization.id}", "spend"=>"10",
+               "budget"=>"20.0"},
+            "1"=>
+              {"id" => "#{@split2.id}","data_response_id"=>"#{@response.id}",
+               "organization_mask"=>"#{@organization.id}", "spend"=>"20",
+               "budget"=>"40.0"},
+            }}
+        @activity.reload
+        @activity.update_attributes(attributes).should be_false
+        @activity.implementer_splits[1].errors.on(:base).should include "Duplicate Implementer"
+        @activity.implementer_splits[0].errors.on(:base).should include "Duplicate Implementer"
+
+        #spec breaks if split into two seperate specs - objects persist in memory
+        attributes = {"name"=>"dsf", "description"=>"adfasdf",
+          "project_id"=>"#{@project.id}",
+          "implementer_splits_attributes"=>
+            {"0"=>
+              {"id" => "#{@split.id}", "data_response_id"=>"#{@response.id}",
+               "organization_mask"=>"#{@organization.id}", "spend"=>"10",
+               "budget"=>"20.0"},
+            "1"=>
+              {"id" => "#{@split2.id}","data_response_id"=>"#{@response.id}",
+               "organization_mask"=>"#{@implementer2.id}", "spend"=>"20",
+               "budget"=>"40.0"},
+            }}
+
+        @activity.reload
+        @activity.update_attributes(attributes).should be_true
+
         @activity.implementer_splits.size.should == 2
         @activity.implementer_splits[0].organization.should == @organization
         @activity.implementer_splits[0].spend.to_f.should == 10

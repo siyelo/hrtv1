@@ -77,6 +77,34 @@ Feature: Reporter can manage activities
     And the "activity[implementer_splits_attributes][0][spend]" field should contain "99"
     And the "activity[implementer_splits_attributes][0][budget]" field should contain "19"
 
+  Scenario: Reporter can see error message when adding duplicate implementers to new activity
+    When I follow "Add Activities now"
+    And I fill in "activity_name" with "activity1"
+    And I fill in "activity_description" with "activity1 description"
+    And I select "project1" from "Project"
+    # self org should already be present/selected
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
+    And I select "organization2" from "activity_implementer_splits_attributes_1_organization_mask"
+    And I fill in "activity[implementer_splits_attributes][1][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][1][budget]" with "19"
+    And I press "Save"
+    Then I should see "Duplicate Implementer"
+
+  Scenario: Reporter can see error message when adding duplicate implementers to existing activity
+    Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
+    When I follow "Projects"
+    And I follow "existing activity"
+    And I follow "Implementers" within ".section_nav"
+    And I select "organization2" from "activity_implementer_splits_attributes_0_organization_mask"
+    And I fill in "activity[implementer_splits_attributes][0][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][0][budget]" with "19"
+    And I select "organization2" from "activity_implementer_splits_attributes_1_organization_mask"
+    And I fill in "activity[implementer_splits_attributes][1][spend]" with "99"
+    And I fill in "activity[implementer_splits_attributes][1][budget]" with "19"
+    And I press "Save"
+    Then I should see "Duplicate Implementer"
+
   @javascript
   Scenario: Reporter can see live total being updated
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response

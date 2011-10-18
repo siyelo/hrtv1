@@ -1,3 +1,4 @@
+@run
 Feature: Admin can manage data requests
   In order to collect data in the system
   As a admin
@@ -11,6 +12,8 @@ Feature: Admin can manage data requests
 
     Scenario: Admin can CRUD data requests
       When I follow "Requests"
+       # delete existing data request
+       And I follow "Delete"
        And I follow "Create Data Request"
        And I select "org1" from "data_request_organization_id"
        And I fill in "data_request_title" with "My data response title"
@@ -28,9 +31,7 @@ Feature: Admin can manage data requests
        Then I should see "Request was successfully updated"
        And I should see "My new data response title"
 
-      # delete both request
       When I follow "Delete"
-        And I follow "Delete"
       Then I should see "Request was successfully deleted."
        And I should not see "My data response title"
 

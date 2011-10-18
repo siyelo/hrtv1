@@ -373,4 +373,61 @@ describe Activity do
       @activity2.user_id.should == activity_manager.id
     end
   end
+  describe "#am_approved?" do
+    before :each do
+      @activity = Factory.build(:activity)
+    end
+
+    context "no user" do
+      it "#am_approved? should return true if true" do
+        @activity.am_approved = false
+        @activity.am_approved?.should be_false
+      end
+
+      it "#am_approved? should return false if falase" do
+        @activity.am_approved = true
+        @activity.am_approved?.should be_true
+      end
+    end
+
+    context "sysadmin" do
+      before :each do
+        @user = Factory.build(:sysadmin)
+      end
+
+      context "am_approved value is false" do
+        it "should return false" do
+          @activity.am_approved = true
+          @activity.am_approved?(@user).should be_false
+        end
+      end
+
+      context "am_approved value is true" do
+        it "should return true" do
+          @activity.am_approved = false
+          @activity.am_approved?(@user).should be_false
+        end
+      end
+    end
+
+    context "reporter" do
+      before :each do
+        @user = Factory.build(:reporter)
+      end
+
+      context "am_approved value is false" do
+        it "should return false" do
+          @activity.am_approved = false
+          @activity.am_approved?(@user).should be_false
+        end
+      end
+
+      context "am_approved value is true" do
+        it "should return true" do
+          @activity.am_approved = true
+          @activity.am_approved?(@user).should be_true
+        end
+      end
+    end
+  end
 end

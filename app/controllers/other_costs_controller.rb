@@ -34,7 +34,7 @@ class OtherCostsController < BaseController
 
   def update
     @other_cost = OtherCost.find(params[:id])
-    if !@other_cost.am_approved? && @other_cost.update_attributes(params[:other_cost])
+    if !@other_cost.am_approved?(current_user) && @other_cost.update_attributes(params[:other_cost])
      respond_to do |format|
        format.html { success_flash("updated"); html_redirect }
      end
@@ -42,7 +42,7 @@ class OtherCostsController < BaseController
      respond_to do |format|
        format.html { flash[:error] = ("Other Cost was already approved by #{@other_cost.user.try(:full_name)} " +
                                       "(#{@other_cost.user.try(:email)}) " +
-                                      "on #{@other_cost.am_approved_date}") if @other_cost.am_approved?
+                                      "on #{@other_cost.am_approved_date}") if @other_cost.am_approved?(current_user)
                      prepare_classifications(resource)
                      load_comment_resources(resource)
                      paginate_splits(resource)

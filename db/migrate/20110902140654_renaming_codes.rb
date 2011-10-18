@@ -1,6 +1,6 @@
 class RenamingCodes < ActiveRecord::Migration
   def self.up
-    if Rails.env != "test"
+    if Rails.env != "test" && Rails.env != "cucumber"
       Code.reset_column_information
       parent_code = Code.find_by_short_display('Monitoring And Evaluation Of Health Activities')
       changing_code = Code.find(:first, :conditions => {:parent_id => parent_code.id, :short_display => 'Financial Support'})

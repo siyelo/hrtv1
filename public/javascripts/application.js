@@ -1672,7 +1672,7 @@ $(function () {
       changeMonth: true,
       changeYear: true,
       yearRange: '2000:2025',
-      dateFormat: 'yy-mm-dd'
+      dateFormat: 'dd-mm-yy'
     }).focus();
   });
 

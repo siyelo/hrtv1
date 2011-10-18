@@ -2,7 +2,5 @@
 
 = error_messages_for :request, :header_message  => nil, :message => "Oops, we couldn't save your changes."
 
-%h2 Enter data request information
-.dashboard_section
-  - semantic_form_for :request, @request, :url => admin_requests_path, :html => {:class => 'basic_form js_form'} do |f|
-    = render 'form', :f => f
+- form_for @request, :builder => CustomFormBuilder, :url => admin_requests_path, :html => {:class => 'basic_form js_form'} do |f|
+  = render 'form', :f => f

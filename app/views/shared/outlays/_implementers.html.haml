@@ -3,6 +3,9 @@
 - # Can't paginate form if there are errors therefore only
 - # show splits with errors if there are more than 50 errors
 
+:javascript
+  var selectOptions = "#{escape_javascript(options_for_select(funding_organizations_select))}"
+
 %ul.wrapped.last
   - unless bulk_review || outlay.new_record? || @split_errors
     = will_paginate @splits
@@ -31,21 +34,7 @@
       - @splits.each do |is|
         - f.semantic_fields_for :implementer_splits, is do |ff|
           - show_only_errors = @split_errors && ( @splits.size <= 50 || !ff.object.errors.empty?)
-          - if (bulk_review || show_only_errors) || outlay.errors.empty?
-            - # a performance-friendly version of implementer_split_fields
-            - # doesnt load all the big organization selects
-            - styling = ""
-            - styling = "error" unless ff.object.errors.empty?
-            - styling += " deleting" if ff.object.marked_for_destruction?
-
-            %tr.overflow_fix.fields{:class => styling}
-              %td
-                = ff.hidden_field :organization_mask, :value => ff.object.try(:organization).try(:id)
-                -# perf hack - non editable provider name
-                %span.ui-autocomplete= ff.object.try(:organization).try(:name) || "< n/a >"
-              %td= ff.text_field :spend, :class => 'js_spend'
-              %td= ff.text_field :budget, :class => 'js_budget'
-              %td= link_to_remove_fields "x", ff, {:class => 'delete_row totals_callback', :callback => 'updateTotalsValuesCallback'}
+          = render 'shared/outlays/implementer_splits', :ff => ff if (bulk_review || show_only_errors) || outlay.errors.empty?
 
       - if @splits.size < 50 || @split_errors
         - blank_rows.times do

@@ -1,0 +1,14 @@
+- # a performance-friendly version of implementer_split_fields
+- # doesnt load all the big organization selects
+- styling = ""
+- styling = "error" unless ff.object.errors.empty?
+- styling += " deleting" if ff.object.marked_for_destruction?
+
+%tr.overflow_fix.fields{:class => styling}
+  %td.implementer_search
+    = ff.select :organization_mask, [[ff.object.organization_name, ff.object.organization_mask]], {:prompt => true}, :class => 'name js_implementer_select js_combobox f_from'
+  %td.spend= ff.text_field :spend, :class => 'js_spend'
+  %td.budget= ff.text_field :budget, :class => 'js_budget'
+  %td.edit
+    = link_to_remove_fields "x", ff, {:class => 'delete_button totals_callback', :callback => 'updateTotalsValuesCallback'}
+

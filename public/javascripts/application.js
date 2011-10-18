@@ -1418,6 +1418,13 @@ var activities_new = activities_create = activities_edit = activities_update = o
       $(document).find('.js_add_nested').trigger('click');
     }
     numericInputField(".js_implementer_spend, .js_implementer_budget");
+
+    $('.ui-autocomplete-input').live('focusin', function () {
+      var element = $(this).siblings('select');
+      if(element.children('option').length < 2) { // because there is already one in to show default
+        element.append(selectOptions);
+      }
+    });
   }
 };
 
@@ -1604,6 +1611,7 @@ var dashboard_index = {
 var admin_organizations_create = admin_organizations_edit = {
   run: function () {
     $(".js_combobox" ).combobox();
+    jsAutoTab();
   }
 };
 
@@ -1614,6 +1622,18 @@ var projects_new = projects_create = projects_edit = projects_update = {
     dynamicUpdateTotalsInit();
     numericInputField(".js_spend, .js_budget");
   }
+}
+
+// Autotabs a page using javascript
+var jsAutoTab = function () {
+  var tabindex = 1;
+  $('input, select, textarea, checkbox').each(function() {
+    if (this.type != "hidden") {
+      var $input = $(this);
+      $input.attr("tabindex", tabindex);
+      tabindex++;
+    }
+  });
 }
 
 // DOM LOAD
@@ -1628,6 +1648,9 @@ $(function () {
 
   //combobox everywhere!
   $( ".js_combobox" ).combobox();
+
+  // keep below combobox
+  jsAutoTab();
 
   // tipsy tooltips everywhere!
   $('.tooltip').tipsy({gravity: $.fn.tipsy.autoWE, fade: true, live: true, html: true});

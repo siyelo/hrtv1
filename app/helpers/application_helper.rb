@@ -213,8 +213,8 @@ module ApplicationHelper
   end
 
   def funding_organizations_select
-    orgs = Organization.find(:all, :order => 'lower(name)')
-    orgs.map{|o| [o.display_name(100), o.id]}
+    orgs = Organization.find(:all, :order => 'lower(name)').
+      map{ |o| [o.display_name(100), o.id] }
   end
 
   def current_response
@@ -309,11 +309,6 @@ module ApplicationHelper
       mode = nil
     end
     edit_activity_or_ocost_path(activity, :mode => mode)
-  end
-
-  def autotab
-    @current_tab ||= 0
-    @current_tab += 1
   end
 
   def sort_splits(splits)

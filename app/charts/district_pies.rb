@@ -66,21 +66,28 @@ module Charts::DistrictPies
     end
 
     def implementers(location, amount_type, request_id)
-      records = FundingStream.find :all,
+      records = ImplementerSplit.find :all,
         :select => "organizations.id,
           organizations.name,
-          SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN projects ON projects.id = funding_streams.project_id
+          organizations.currency,
+          SUM(implementer_splits.#{amount_type}) as value",
+        :joins => "INNER JOIN organizations ON
+                    implementer_splits.organization_id = organizations.id
+                   INNER JOIN activities ON
+                    activities.id = implementer_splits.activity_id
+                   INNER JOIN projects ON
+                    projects.id = activities.project_id
                    INNER JOIN data_responses ON
-                    data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
-                   INNER JOIN activities ON activities.project_id = projects.id
-                   INNER JOIN organizations ON activities.provider_id = organizations.id
+                    data_responses.id = projects.data_response_id
+                    AND data_responses.data_request_id = #{request_id}
                    INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
-                     AND code_assignments.code_id = #{location.id}",
+                          AND code_assignments.code_id = #{location.id}",
         :group => "organizations.id,
-                   organizations.name",
-        :order => "value DESC"
+                   organizations.name,
+                   organizations.currency"
 
+      records = convert_value_to_usd(records)
+      records.sort! { |a,b| b.value.to_f <=> a.value.to_f}
       prepare_pie_values_json(records)
     end
 

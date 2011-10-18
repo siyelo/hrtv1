@@ -49,7 +49,7 @@ Feature: Reporter can manage activities
     And I press "Save"
     Then I should see "Activity was successfully updated. Click here to enter the funding sources for the automatically created project."
 
-  @javascript @run
+  @javascript
   Scenario: Reporter can add targets & outputs
     Given an activity exists with project: the project, name: "existing activity", description: "existing description", data_response: the data_response
     When I follow "Projects"

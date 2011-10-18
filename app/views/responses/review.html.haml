@@ -93,7 +93,7 @@
           Activities/Other Costs have splits
           - unless @response.activities_have_splits?
             %span.info
-              The following activities don't have implementer splits
+              The following activities don't have implementers
               = render 'activities_without_splits', :activities => @response.activities.select { |a| a.implementer_splits.empty? }
 
 

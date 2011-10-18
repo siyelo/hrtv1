@@ -1,4 +1,3 @@
-@run
 Feature: Reporter can Review & Submit response
   In order to send data information
   As a reporter

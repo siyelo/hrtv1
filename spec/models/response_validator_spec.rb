@@ -21,7 +21,7 @@ describe DataResponse do #validations
     end
 
     it "succeeds if activity has spend and budget" do
-      @response.activity_amounts_entered?.should == true
+      @response.activity_amounts_entered?.should be_true
     end
     it_should_behave_like "activity spend checker"
     it_should_behave_like "activity budget checker"
@@ -29,40 +29,10 @@ describe DataResponse do #validations
     it_should_behave_like "coded OtherCosts checker"
   end
 
-  describe "project linking" do
-    before :each do
-      @organization    = Factory(:organization)
-      @request         = Factory(:data_request, :organization => @organization)
-      @funder_response = @organization.latest_response
-      @funder_project  = Factory(:project, :data_response => @funder_response)
-    end
-
-    it "succeeds if projects are linked" do
-      @project.in_flows = [Factory.build(:funding_source,
-        :from => @funder_response.organization, :project_from_id => @funder_project.id)]
-      @project.save!; @response.reload
-      @response.projects_linked?.should == true
-    end
-
-    it "fails if no projects exist to link" do
-      @response.projects.delete_all
-      @response.reload
-      @response.projects_linked?.should == false
-    end
-
-    it "fails if projects not linked" do
-      @project.in_flows.count.should == 1 # the autocreated one
-      @response.projects_linked?.should == false
-    end
-  end
-
   describe "ready to submit" do
     before :each do
       @activity        = Factory(:classified_activity, :data_response => @response,
                                  :project => @project)
-      @split = Factory.build :implementer_split, :activity => @activity,
-        :budget => 100, :spend => 100, :organization => @organization
-      @activity.save
       @other_cost      = Factory(:other_cost_fully_coded, :data_response => @response,
                                  :project => @project)
       @funder_org      = Factory(:organization)
@@ -76,17 +46,39 @@ describe DataResponse do #validations
       @funder = @project.in_flows.first
     end
 
+    it "returns true if all activities have splits" do
+      @asplit = Factory(:implementer_split, :organization => @organization, :activity => @activity,
+                        :budget => 10, :spend => 20)
+      @osplit = Factory(:implementer_split, :organization => @organization, :activity => @other_cost,
+                        :budget => 10, :spend => 20)
+      @activity.reload
+      @activity.save
+      @other_cost.reload
+      @other_cost.save
+      # @activity.stub(:implementer_splits).and_return([])
+      # @other_cost.stub(:implementer_splits).and_return([])
+      @response.activities_have_splits?.should be_true
+    end
+
+    it "returns false if all activities don't have splits" do
+      @activity.stub(:implementer_splits).and_return([])
+      @other_cost.stub(:implementer_splits).and_return([])
+      @response.activities_have_splits?.should be_false
+    end
+
     it "is OK if everything is entered" do
       @response.stub(:uncoded_activities) { [] }
-      @response.projects_entered?.should == true
-      @response.projects_linked?.should == true
-      @response.activity_amounts_entered?.should == true
-      @response.activities_coded?.should == true
-      @response.other_costs_coded?.should == true
-      @response.projects_have_activities?.should == true
-      @response.projects_have_valid_funding_sources?.should == true
-      @response.projects_have_other_costs?.should == true
-      @response.ready_to_submit?.should == true
+      @response.projects_entered?.should be_true
+      @response.activity_amounts_entered?.should be_true
+      @response.activities_coded?.should be_true
+      @response.other_costs_coded?.should be_true
+      @response.projects_have_activities?.should be_true
+      @response.projects_have_valid_funding_sources?.should be_true
+      @response.projects_have_other_costs?.should be_true
+      @activity.stub(:implementer_splits).and_return(['stub split'])
+      @response.stub(:activities).and_return([@activity])
+      @response.activities_have_splits?.should be_true
+      @response.ready_to_submit?.should be_true
     end
 
     it "fails if a project doesn't have an in flow" do
@@ -111,20 +103,21 @@ describe DataResponse do #validations
 
       it "succeeds if request not in final review" do
         @response.stub(:uncoded_activities) { [] }
+        @response.stub(:activities_have_splits?) { true }
         @request.final_review = false; @request.save; @response.reload
-        @response.ready_to_submit?.should == true
+        @response.ready_to_submit?.should be_true
       end
 
       it "fails if in final review " do
         @request.final_review = true; @request.save; @funder_response.reload
-        @funder_response.ready_to_submit?.should == false
+        @funder_response.ready_to_submit?.should be_false
       end
     end
 
     it "fails if there are no activities" do
       @activity.destroy
-      @response.activities_coded?.should == false
-      @response.ready_to_submit?.should == false
+      @response.activities_coded?.should be_false
+      @response.ready_to_submit?.should be_false
     end
 
     it "fails if there are uncoded activities" do
@@ -133,8 +126,8 @@ describe DataResponse do #validations
         :budget => 54, :organization => @organization
       activity2.reload
       activity2.save
-      @response.activities_coded?.should == false
-      @response.ready_to_submit?.should == false
+      @response.activities_coded?.should be_false
+      @response.ready_to_submit?.should be_false
     end
 
     it "fails if an activity is missing a coding split" do
@@ -145,8 +138,8 @@ describe DataResponse do #validations
       @activity.coding_budget_valid = false
       @activity.save
       @response.uncoded_activities.should have(1).item
-      @response.activities_coded?.should == false
-      @response.ready_to_submit?.should == false
+      @response.activities_coded?.should be_false
+      @response.ready_to_submit?.should be_false
     end
 
     it "fails if there are uncoded other costs" do
@@ -157,8 +150,8 @@ describe DataResponse do #validations
       @other_cost.coding_budget_district_valid = false; #usually happens in a callback
       @other_cost.save!
       @response.reload
-      @response.other_costs_coded?.should == false
-      @response.ready_to_submit?.should == false
+      @response.other_costs_coded?.should be_false
+      @response.ready_to_submit?.should be_false
     end
   end
 end

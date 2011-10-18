@@ -110,9 +110,9 @@ class DataResponse < ActiveRecord::Base
     errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
     errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
     errors.add_to_base("Activites are not yet classified.") unless activities_coded?
-    #errors.add_to_base("Other Costs are not yet entered.") unless projects_have_other_costs?
     errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
     errors.add_to_base("Projects have invalid funding sources.") if projects_have_valid_funding_sources?
+    errors.add_to_base("Activities don't all have splits") unless activities_have_splits?
   end
 
   ### Submission Validations
@@ -123,7 +123,8 @@ class DataResponse < ActiveRecord::Base
     projects_have_valid_funding_sources? &&
     activity_amounts_entered? &&
     activities_coded? &&
-    (projects_have_other_costs? ? other_costs_coded? : true)
+    (projects_have_other_costs? ? other_costs_coded? : true) &&
+    activities_have_splits?
   end
 
   def basics_done_to_h
@@ -136,6 +137,13 @@ class DataResponse < ActiveRecord::Base
 
   def ready_to_submit?
     basics_done?
+  end
+
+  def activities_have_splits?
+    activities.each do |activity|
+      return false if activity.implementer_splits.empty?
+    end
+    true
   end
 
   def projects_entered?
@@ -168,15 +176,6 @@ class DataResponse < ActiveRecord::Base
       p.in_flows.empty? || !p.funding_sources_have_organizations_and_amounts?
     end
   end
-
-  def projects_linked?
-    return false unless projects_entered?
-    self.projects.each do |project|
-      return false unless project.linked?
-    end
-    true
-  end
-  memoize :projects_linked?
 
   def activities_entered?
     !normal_activities.empty?

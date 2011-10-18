@@ -10,6 +10,7 @@ Feature: Reporter can Review & Submit response
       And data_response should exist with data_request: the data_request, organization: the organization
       And a project exists with data_response: the data_response
       And a classified_activity exists with data_response: the data_response, project: the project
+      And an implementer_split exists with organization: the organization, activity: the activity, budget: 10, spend: 10
       And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
       And I am signed in as "reporter@hrtapp.com"
     When I follow "Projects & Activities"

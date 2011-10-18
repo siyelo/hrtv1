@@ -14,7 +14,7 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) When the Project (and it's related Activities) started.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :start_date, :tabindex => autotab, :class => f.object.errors.on(:start_date) ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
+    = f.text_field :start_date, :value => formatted_date(f.object.start_date), :tabindex => autotab, :class => f.object.errors.on(:start_date) ? "error date_picker start_date" : "date_picker start_date", :id => "project_start_date_#{project_id}"
 
   %li#project_end_date_input.string.required
     .name
@@ -22,7 +22,7 @@
       %span.required *
       - link_to "#", :title => "(YYYY-MM-DD) The end date for the Project’s implementation.", :class => 'tooltip' do
         = image_tag "tooltip.png"
-    = f.text_field :end_date, :tabindex => autotab, :class => f.object.errors.on(:end_date) ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
+    = f.text_field :end_date, :value => formatted_date(f.object.end_date), :tabindex => autotab, :class => f.object.errors.on(:end_date) ? "error date_picker end_date" : "date_picker end_date", :id => "project_end_date_#{project_id}"
 
   %li#project_currency_input.select.required
     .name

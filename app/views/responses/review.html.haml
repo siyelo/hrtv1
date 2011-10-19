@@ -1,3 +1,6 @@
+- invalid_implementers = @response.invalid_implementer_splits
+- activities_with_invalid_implementers = invalid_implementers.map(&:activity).uniq
+- activities_without_implementers = @response.activities_without_implementer_splits
 - title("Submit Response")
 
 - content_for :sub_nav do
@@ -48,7 +51,7 @@
           All Projects have Funding Sources
           - unless @response.projects_have_valid_funding_sources?
             %span.info The Projects below are missing Funding Sources or have Funding Sources without an organization or budget/spend
-            %ul
+            %ul.push
               - @response.projects_with_invalid_funding_sources.each do |project|
                 %li= link_to friendly_name(project, 100), edit_response_project_path(@response, project)
       %li
@@ -63,14 +66,6 @@
               %span.info
                 You have project(s), but not all have activities yet.
                 = link_to "Start by adding your activities here.", response_projects_path(@response)
-          - unless @response.activities_without_amounts.empty?
-            %span.info
-              The activities below are missing amounts, click to edit and add amounts
-            // GN TODO: handle sub activities better here
-            // currently just takes to edit page for activity, very confusing
-            %ul.push
-              - @response.activities_without_amounts.each do |activity|
-                %li= link_to friendly_name(activity, 50), edit_response_activity_path(@response, activity) unless activity.has_budget_or_spend?
 
       %li
         %h3{:class => other_costs_class}
@@ -87,12 +82,12 @@
 
       %li
         %h3{:class => activities_have_splits_class}
-          Activities/Other Costs have splits
-          - unless @response.activities_have_splits?
-            %span.info
-              The following activities don't have implementers
-              = render 'activities_without_splits', :activities => @response.activities.select { |a| a.implementer_splits.empty? }
+          All Activities and/or Other Costs have Implementers
+          - unless activities_without_implementers.empty?
+            = render 'activities_without_implementers', :activities => activities_without_implementers
 
+          - unless invalid_implementers.empty?
+            = render 'invalid_activities', :activities => activities_with_invalid_implementers, :invalid_implementers => invalid_implementers
 
   %li.alt
     %h2 Classifications

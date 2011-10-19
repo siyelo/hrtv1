@@ -1,0 +1,9 @@
+%span.info
+  The activities below have invalid implementers, click to edit and add amounts or implementer organization
+%ul.push
+  - activities.each do |activity|
+    %li= link_to friendly_name(activity, 50), edit_response_activity_path(@response, activity)
+    %ol.group
+      - invalid_implementers.each do |split|
+        - if split.activity == activity
+          %li= split.try(:organization).try(:name)

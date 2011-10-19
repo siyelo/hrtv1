@@ -108,11 +108,19 @@ class DataResponse < ActiveRecord::Base
   def load_validation_errors
     errors.add_to_base("Projects are not yet entered.") unless projects_entered?
     errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
-    errors.add_to_base("Activity expenditures and/or current budgets are not yet entered.") unless activity_amounts_entered?
     errors.add_to_base("Activites are not yet classified.") unless activities_coded?
-    errors.add_to_base("Other Costs are not yet classified.") if projects_have_other_costs? && !other_costs_coded?
     errors.add_to_base("Projects have invalid funding sources.") if projects_have_valid_funding_sources?
-    errors.add_to_base("Activities don't all have splits") unless activities_have_splits?
+    unless activity_amounts_entered?
+      errors.add_to_base("Activity expenditures and/or current budgets are not
+       yet entered.")
+    end
+    if projects_have_other_costs? && !other_costs_coded?
+      errors.add_to_base("Other Costs are not yet classified.")
+    end
+    if implementer_splits_entered_and_valid?
+      errors.add_to_base("Activities are missing implementers or implementer
+        splits are invalid.")
+    end
   end
 
   ### Submission Validations
@@ -122,28 +130,23 @@ class DataResponse < ActiveRecord::Base
     projects_have_activities? &&
     projects_have_valid_funding_sources? &&
     activity_amounts_entered? &&
+    implementer_splits_entered_and_valid? &&
     activities_coded? &&
-    (projects_have_other_costs? ? other_costs_coded? : true) &&
-    activities_have_splits?
+    (projects_have_other_costs? ? other_costs_coded? : true)
   end
 
   def basics_done_to_h
-    {:projects_entered =>                                  projects_entered?,
-    :projects_have_activities =>                           projects_have_activities?,
-    :activity_amounts_entered =>                           activity_amounts_entered?,
-    :activities_coded =>                                   activities_coded?,
-    :other_costs_coded =>   (projects_have_other_costs? ? other_costs_coded? : true)}
+    {:projects_entered => projects_entered?,
+    :projects_have_activities => projects_have_activities?,
+    :projects_have_valid_funding_sources => projects_have_valid_funding_sources?,
+    :activity_amounts_entered => activity_amounts_entered?,
+    :implementer_splits_entered => implementer_splits_entered_and_valid?,
+    :activities_coded  => activities_coded?,
+    :other_costs_coded => (projects_have_other_costs? ? other_costs_coded? : true)}
   end
 
   def ready_to_submit?
     basics_done?
-  end
-
-  def activities_have_splits?
-    activities.each do |activity|
-      return false if activity.implementer_splits.empty?
-    end
-    true
   end
 
   def projects_entered?
@@ -220,6 +223,24 @@ class DataResponse < ActiveRecord::Base
     a_total = project.direct_activities_total(m) || 0
     o_total = project.other_costs_total(m) || 0
     p_total + leeway >= a_total + o_total && p_total - leeway <= a_total + o_total
+  end
+
+  def implementer_splits_entered_and_valid?
+    activities_without_implementer_splits.empty? && invalid_implementer_splits.empty?
+  end
+
+  def invalid_implementer_splits
+    invalid = []
+    activities.each do |activity|
+      activity.implementer_splits.select{ |is| !is.valid? }.each do |split|
+        invalid << split
+      end
+    end
+    return invalid
+  end
+
+  def activities_without_implementer_splits
+    activities.select { |a| a.implementer_splits.empty? }
   end
 
   def uncoded_activities

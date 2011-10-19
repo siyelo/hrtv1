@@ -109,7 +109,7 @@ class DataResponse < ActiveRecord::Base
     errors.add_to_base("Projects are not yet entered.") unless projects_entered?
     errors.add_to_base("Activites are not yet entered.") unless projects_have_activities?
     errors.add_to_base("Activites are not yet classified.") unless activities_coded?
-    errors.add_to_base("Projects have invalid funding sources.") if projects_have_valid_funding_sources?
+    errors.add_to_base("Projects have invalid funding sources.") unless projects_have_valid_funding_sources?
     unless activity_amounts_entered?
       errors.add_to_base("Activity expenditures and/or current budgets are not
        yet entered.")
@@ -117,7 +117,7 @@ class DataResponse < ActiveRecord::Base
     if projects_have_other_costs? && !other_costs_coded?
       errors.add_to_base("Other Costs are not yet classified.")
     end
-    if implementer_splits_entered_and_valid?
+    unless implementer_splits_entered_and_valid?
       errors.add_to_base("Activities are missing implementers or implementer
         splits are invalid.")
     end

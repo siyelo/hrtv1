@@ -9,6 +9,25 @@ module OrganizationsHelper
     end
   end
 
+  def input_options(label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
+    return  :label => label, :required => required, :hint => hint,
+      :label_html => { :class => label_class }, :wrapper_html => { :class => wrapper_class }
+  end
+
+  def input_date(value, label = nil, hint = nil, required = true, label_class = 'indented', wrapper_class = 'input-wrapper')
+    return :value => formatted_date(value), :class => "date_picker",
+      :label => label, :required => required,
+      :hint => hint, :label_html => { :class => label_class },
+      :wrapper_html => { :class => wrapper_class }
+  end
+
+  def select_options(label = nil, hint = nil, label_class = 'indented', wrapper_class = 'input-wrapper', input_class = 'string required')
+    return :label => label, :hint => hint,
+      :label_html => { :class => label_class },
+      :wrapper_html => { :class => wrapper_class },
+      :input_html => { :class => input_class }
+  end
+
   def name_hint
     "What is the name of the organization?"
   end

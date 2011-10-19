@@ -61,7 +61,7 @@ class Reports::ActivityOverview
       row << (implementer_split.budget || 0) * rate
       row << implementer_split.possible_duplicate?
       # don't use duplicate?, we need to display if the value is nil
-      row << implementer_split.duplicate?
+      row << implementer_split.duplicate
 
       row
     end

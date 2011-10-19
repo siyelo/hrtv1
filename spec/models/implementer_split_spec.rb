@@ -221,7 +221,7 @@ describe ImplementerSplit do
     Factory.build(:implementer_split).should respond_to(:assign_or_create_organization)
   end
 
-  describe "#possible_duplicate?" do
+  describe "#possible_double_count?" do
     before :each do
       @donor        = Factory(:organization, :name => "donor")
       @organization = Factory(:organization, :name => "self-implementer")
@@ -237,7 +237,7 @@ describe ImplementerSplit do
         implementer_split = Factory(:implementer_split, :activity => @activity,
                                     :organization => @organization)
 
-        implementer_split.possible_duplicate?.should be_false
+        implementer_split.possible_double_count?.should be_false
       end
     end
 
@@ -247,7 +247,7 @@ describe ImplementerSplit do
         implementer_split = Factory(:implementer_split, :activity => @activity,
                                     :organization => organization2)
 
-        implementer_split.possible_duplicate?.should be_false
+        implementer_split.possible_double_count?.should be_false
       end
     end
 
@@ -268,7 +268,7 @@ describe ImplementerSplit do
 
           response2.state = 'accepted'; response2.save!
 
-          implementer_split.reload.possible_duplicate?.should be_true
+          implementer_split.reload.possible_double_count?.should be_true
         end
       end
 
@@ -288,7 +288,7 @@ describe ImplementerSplit do
 
           response2.state = 'started'; response2.save!
 
-          implementer_split.possible_duplicate?.should be_false
+          implementer_split.possible_double_count?.should be_false
         end
       end
     end
@@ -305,9 +305,9 @@ describe ImplementerSplit do
       activity = Factory(:activity, :id => 1, :data_response => response,
                          :project => project)
       split1 = Factory(:implementer_split, :id => 1,
-        :activity => activity, :organization => org1, :duplicate => false)
+        :activity => activity, :organization => org1, :double_count => false)
       split2 = Factory(:implementer_split, :id => 2,
-        :activity => activity, :organization => org2, :duplicate => false)
+        :activity => activity, :organization => org2, :double_count => false)
     end
 
     it "marks double counting from csv file" do
@@ -323,8 +323,8 @@ describe ImplementerSplit do
       run_delayed_jobs
 
       splits = ImplementerSplit.all
-      splits[0].duplicate.should be_true
-      splits[1].duplicate.should be_true
+      splits[0].double_count.should be_true
+      splits[1].double_count.should be_true
     end
   end
 end

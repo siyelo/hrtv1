@@ -39,8 +39,8 @@ describe Reports::ActivityOverview do
       table[0]['Implementer'].should == 'organization1'
       table[0]['Expenditure ($)'].should == '100.0'
       table[0]['Budget ($)'].should == '200.0'
-      table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == 'false'
+      table[0]['Possible Double-Count?'].should == 'false'
+      table[0]['Actual Double-Count?'].should == nil
     end
   end
 
@@ -91,8 +91,8 @@ describe Reports::ActivityOverview do
       table[0]['Implementer'].should == 'organization1'
       table[0]['Expenditure ($)'].should == '50.0'
       table[0]['Budget ($)'].should == '100.0'
-      table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == 'false'
+      table[0]['Possible Double-Count?'].should == 'false'
+      table[0]['Actual Double-Count?'].should == nil
 
       # row 2
       table[1]['Organization'].should == 'organization1'
@@ -102,8 +102,8 @@ describe Reports::ActivityOverview do
       table[1]['Implementer'].should == 'organization2'
       table[1]['Expenditure ($)'].should == '50.0'
       table[1]['Budget ($)'].should == '100.0'
-      table[1]['Possible Duplicate?'].should == 'true'
-      table[1]['Actual Duplicate?'].should == 'false'
+      table[1]['Possible Double-Count?'].should == 'true'
+      table[1]['Actual Double-Count?'].should == nil
     end
   end
 
@@ -157,8 +157,8 @@ describe Reports::ActivityOverview do
       table[0]['Implementer'].should == 'organization1'
       table[0]['Expenditure ($)'].should == '50.0'
       table[0]['Budget ($)'].should == '100.0'
-      table[0]['Possible Duplicate?'].should == 'false'
-      table[0]['Actual Duplicate?'].should == 'false'
+      table[0]['Possible Double-Count?'].should == 'false'
+      table[0]['Actual Double-Count?'].should == nil
 
       # row 2
       table[1]['Organization'].should == 'organization1'
@@ -168,8 +168,8 @@ describe Reports::ActivityOverview do
       table[1]['Implementer'].should == 'organization2'
       table[1]['Expenditure ($)'].should == '50.0'
       table[1]['Budget ($)'].should == '100.0'
-      table[1]['Possible Duplicate?'].should == 'true'
-      table[1]['Actual Duplicate?'].should == 'false'
+      table[1]['Possible Double-Count?'].should == 'true'
+      table[1]['Actual Double-Count?'].should == nil
     end
   end
 end

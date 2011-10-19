@@ -74,6 +74,7 @@ describe Reports::ActivityOverview do
               :budget => 100, :spend => 50)
 
       @response1.state = 'accepted'; @response1.save!
+      @response2.state = 'accepted'; @response2.save!
       report = Reports::ActivityOverview.new(@request)
       csv = report.csv
 
@@ -139,6 +140,7 @@ describe Reports::ActivityOverview do
               :budget => 100, :spend => 50)
 
       @response1.state = 'accepted'; @response1.save!
+      @response2.state = 'accepted'; @response2.save!
       report = Reports::ActivityOverview.new(@request)
       csv = report.csv
 

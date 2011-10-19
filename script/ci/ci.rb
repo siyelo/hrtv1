@@ -61,3 +61,4 @@ bundle_install
 setup_sqlite
 specs
 cukes
+run_or_die "rake clean"

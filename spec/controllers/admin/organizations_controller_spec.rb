@@ -73,7 +73,7 @@ describe Admin::OrganizationsController do
     end
 
     it "should display all organizations" do
-      organization1 = Factory(:organization, :raw_type => '')
+      organization1 = Factory.build(:organization, :raw_type => '')
       organization1.save(false)
 
       get :index, :filter => 'All'

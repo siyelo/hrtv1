@@ -45,7 +45,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def update
     @organization.attributes = params[:organization]
-    if @organization.save(false)
+    if @organization.save
       flash[:notice] = 'Organization was successfully updated'
       redirect_to edit_admin_organization_url(resource)
     else
@@ -166,14 +166,19 @@ class Admin::OrganizationsController < Admin::BaseController
 
     # show reporting orgs by default.
     def scope_organizations(filter)
-      if filter == 'Non-Reporting' || filter == 'Reporting'
-        Organization.send(filter.gsub('-','').downcase.to_sym)
-      elsif filter == 'All'
-        Organization.sorted
-      elsif allowed_filter?(filter)
-        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
-      else
+      case filter
+      when 'Non-Reporting'
+        Organization.nonreporting
+      when 'Reporting'
         Organization.reporting
+      when 'All'
+        Organization.sorted
+      else
+        if allowed_filter?(filter)
+          Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
+        else
+          Organization.reporting
+        end
       end
     end
 

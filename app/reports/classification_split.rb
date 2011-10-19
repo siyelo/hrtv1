@@ -2,6 +2,7 @@ require 'fastercsv'
 
 class Reports::ClassificationSplit
   include Reports::Helpers
+  include CurrencyHelper
 
   def initialize(request, amount_type, classification_type)
     @amount_type                = amount_type
@@ -49,11 +50,11 @@ class Reports::ClassificationSplit
       row << 'Data Response ID'
       row << 'Activity ID'
       row << 'Activity'
-      row << "Total Activity #{amount_name}"
+      row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
-      row << "Total Implementer #{amount_name}"
+      row << "Total Implementer #{amount_name} ($)"
       row << "#{classification_name} Code"
-      row << "#{classification_name} Code Split"
+      row << "#{classification_name} Code Split (%)"
       row << "Implementer #{amount_name} by #{classification_name}"
       row << 'Possible Duplicate?'
       row << 'Actual Duplicate?'
@@ -72,6 +73,11 @@ class Reports::ClassificationSplit
         activity_amount = activity.spend           || 0
         split_amount    = implementer_split.spend  || 0
       end
+
+      activity_amount = universal_currency_converter(activity_amount.to_f,
+        activity.currency, 'USD')
+      split_amount = universal_currency_converter(split_amount.to_f,
+        activity.currency, 'USD')
 
       # dont bother printing a row if theres nothing to report!
       if activity_amount > 0

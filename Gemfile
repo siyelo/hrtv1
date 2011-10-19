@@ -70,7 +70,7 @@ group :test do
   gem 'growl'
   gem 'guard'
   gem 'guard-bundler'
-  #gem 'guard-cucumber'
+  # gem 'guard-cucumber'
   gem 'guard-rspec'
   gem 'guard-spork'
   # gem 'libnotify'

@@ -51,6 +51,25 @@ class ApplicationController < ActionController::Base
       @current_user
     end
 
+    def check_activity_manager_permissions(org)
+      if cannot_edit_resource?(org)
+        flash[:error] = "You do not have permission to edit this resource"
+        return false
+      end
+      true
+    end
+
+    ## for any resource dependant on projects and activities
+    def can_edit_resource?(org)
+      return true if current_user.sysadmin?
+      !current_user.activity_manager? ||
+      (current_user.reporter? && current_user.organization.eql?(org))
+    end
+
+    def cannot_edit_resource?(org)
+      !can_edit_resource?(org)
+    end
+
     def current_request
       if current_user.district_manager?
         district_manager_current_request
@@ -104,7 +123,7 @@ class ApplicationController < ActionController::Base
     end
 
     def find_response(response_id)
-      if current_user.admin?
+      if current_user.sysadmin?
         @response = DataResponse.find(response_id)
       elsif current_user.activity_manager?
         # scope by the organizations the AM has access to
@@ -131,7 +150,7 @@ class ApplicationController < ActionController::Base
     end
 
     def find_organization(org_id)
-      if current_user.admin?
+      if current_user.sysadmin?
         @organization = Organization.reporting.find(org_id)
       elsif current_user.activity_manager?
         # scope by the organizations the AM has access to
@@ -149,7 +168,7 @@ class ApplicationController < ActionController::Base
     end
 
     def find_project(project_id)
-      if current_user.admin?
+      if current_user.sysadmin?
         Project.find(project_id)
       else
         current_user.current_response.projects.find(project_id)

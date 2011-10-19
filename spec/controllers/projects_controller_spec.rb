@@ -158,4 +158,117 @@ describe ProjectsController do
       end
     end
   end
+
+  describe "Permissions" do
+    context "Activity Manager" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :activity_manager, :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+        login @user
+      end
+
+      it "disallows an activity manager to create an project" do
+        request.env["HTTP_REFERER"] = new_response_project_path(@data_response)
+        post :create, :response_id => @data_response.id,
+          :project => {:name => "new project", :description => "description"}
+
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should render_template("new")
+      end
+
+      it "disallows an activity manager to update an project" do
+        request.env["HTTP_REFERER"] = edit_response_project_path(@data_response, @project)
+        put :update, :id => @project.id, :response_id => @data_response.id,
+          :project => {:description => "thedesc", :project_id => @project.id}
+
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should render_template("edit")
+        @project.description.should_not == "thedesc"
+      end
+
+
+      it "allows an activity manager to destroy an project" do
+        request.env["HTTP_REFERER"] = edit_response_project_url(@data_response, @project)
+        delete :destroy, :id => @project.id, :response_id => @data_response.id
+        flash[:error].should == "You do not have permission to edit this resource"
+      end
+    end
+
+    context "Reporter and Activity Manager" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+      end
+
+      it "allows the editing of the organization the reporter is in" do
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization
+        login @user
+
+        request.env["HTTP_REFERER"] = edit_response_project_url(@data_response, @project)
+        session[:return_to] = edit_response_project_path(@data_response, @project)
+        put :update, :id => @project.id, :response_id => @data_response.id,
+          :project => { :description => "thedesc" }
+
+        flash[:error].should_not == "You do not have permission to edit this project"
+        flash[:notice].should == "Project successfully updated"
+        response.should redirect_to(edit_response_project_url(@data_response, @project))
+      end
+
+      it "should not allow the editing of organization the reporter is not in" do
+        @organization2 = Factory :organization
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization2
+        @user.organizations << @organization
+        login @user
+        session[:return_to] = edit_response_project_url(@data_response, @project)
+        put :update, :id => @project.id, :response_id => @data_response.id,
+          :project => {:description => "thedesc", :project_id => @project.id}
+
+        @project.description.should_not == "thedesc"
+      end
+    end
+
+    context "who are sysadmins and activity managers" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :user, :roles => ['admin', 'activity_manager'],
+          :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+        login @user
+      end
+
+      it "allows user to create project" do
+        session[:return_to] = new_response_project_url(@data_response)
+        post :create, :response_id => @data_response.id,
+          :project => { :name => "new project", :description => "description",
+            :start_date => "09-12-2012", :end_date => "09-12-2013",
+            "in_flows_attributes"=>{"0"=>{
+              "organization_id_from"=>"#{@organization.id}",
+             "spend"=>"120.0", "budget"=>"130.0"}}
+          }
+
+        flash[:error].should_not == "You do not have permission to edit this project"
+        flash[:notice].should == "Project successfully created"
+      end
+
+      it "allows user to edit the project" do
+        session[:return_to] = edit_response_project_url(@data_response, @project)
+        put :update, :id => @project.id, :response_id => @data_response.id,
+          :project => {:description => "thedesc", :project_id => @project.id}
+
+        flash[:error].should_not == "You do not have permission to edit this project"
+        flash[:notice].should == "Project successfully updated"
+        response.should redirect_to(edit_response_project_url(@data_response, @project))
+        @project.reload.description.should == "thedesc"
+      end
+    end
+  end
 end

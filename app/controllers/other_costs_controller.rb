@@ -21,7 +21,7 @@ class OtherCostsController < BaseController
 
   def create
     @other_cost = @response.other_costs.new(params[:other_cost])
-    if @other_cost.save
+    if check_activity_manager_permissions(@other_cost.organization) && @other_cost.save
       respond_to do |format|
         format.html { success_flash("created"); html_redirect }
       end
@@ -34,7 +34,9 @@ class OtherCostsController < BaseController
 
   def update
     @other_cost = OtherCost.find(params[:id])
-    if !@other_cost.am_approved?(current_user) && @other_cost.update_attributes(params[:other_cost])
+    if check_activity_manager_permissions(@other_cost.organization) &&
+      !@other_cost.am_approved?(current_user) &&
+      @other_cost.update_attributes(params[:other_cost])
      respond_to do |format|
        format.html { success_flash("updated"); html_redirect }
      end
@@ -53,11 +55,16 @@ class OtherCostsController < BaseController
   end
 
   def destroy
-    destroy! do |success, failure|
-      success.html do
-        flash[:notice] = 'Other Cost was successfully destroyed'
-        redirect_to response_projects_url(@response)
+    @other_cost = OtherCost.find params[:id]
+    if check_activity_manager_permissions(@other_cost.organization)
+      destroy! do |success, failure|
+        success.html do
+          flash[:notice] = 'Other Cost was successfully destroyed'
+          redirect_to response_projects_url(@response)
+        end
       end
+    else
+      render :action => :edit
     end
   end
 

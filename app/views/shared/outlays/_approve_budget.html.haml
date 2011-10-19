@@ -1,7 +1,7 @@
 %li.js
   - if outlay.am_approved
     %span Budget Approved
-  - elsif current_user.admin? || current_user.activity_manager?
+  - elsif current_user.sysadmin? || current_user.activity_manager?
     - link_to "#", :class => "js_am_approve add_row #{'hidden' if params[:controller] == "projects"}", :"response-id" => @response.id, :"activity-id" => outlay.id do
       Approve Budget
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

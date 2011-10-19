@@ -35,7 +35,7 @@ class ProjectsController < BaseController
 
   def create
     @project = Project.new(params[:project].merge(:data_response => @response))
-    if @project.save
+    if check_activity_manager_permissions(@project.organization) && @project.save
       respond_to do |format|
         format.html {flash[:notice] = "Project successfully created";
               redirect_to response_projects_path(@response) }
@@ -51,7 +51,8 @@ class ProjectsController < BaseController
 
   def update
     @project = Project.find(params[:id])
-    if @project.update_attributes(params[:project])
+    if check_activity_manager_permissions(@project.organization) &&
+      @project.update_attributes(params[:project])
       respond_to do |format|
         format.html {
           flash[:notice] = "Project successfully updated";
@@ -64,6 +65,13 @@ class ProjectsController < BaseController
         format.html {load_comment_resources(resource); render :action => 'edit'}
         format.js {js_redirect('failed')}
       end
+    end
+  end
+
+  def destroy
+    @project = Project.find(params[:id])
+    if check_activity_manager_permissions(@project.organization)
+      destroy!
     end
   end
 

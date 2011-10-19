@@ -6,7 +6,7 @@
         %a{:href => dashboard_path}
           %span Home
 
-      - if current_user.admin? && is_admin_controller
+      - if current_user.sysadmin? && is_admin_controller
         - %w(organizations reports users currencies requests codes).each do |tab|
           = build_admin_nav_tab(tab)
       - elsif current_user.district_manager?

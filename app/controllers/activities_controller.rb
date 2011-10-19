@@ -24,7 +24,7 @@ class ActivitiesController < BaseController
 
   def create
     @activity = @response.activities.new(params[:activity])
-    if @activity.save
+    if check_activity_manager_permissions(@activity.organization) && @activity.save
       respond_to do |format|
         format.html { success_flash("created"); html_redirect }
       end
@@ -37,7 +37,9 @@ class ActivitiesController < BaseController
 
   def update
     @activity = Activity.find(params[:id])
-    if !@activity.am_approved?(current_user) && @activity.update_attributes(params[:activity])
+    if check_activity_manager_permissions(@activity.organization)&&
+      !@activity.am_approved?(current_user) &&
+      @activity.update_attributes(params[:activity])
       respond_to do |format|
         format.html { success_flash("updated"); html_redirect }
       end
@@ -57,7 +59,7 @@ class ActivitiesController < BaseController
 
   # call only via Ajax
   def sysadmin_approve
-    if current_user.admin?
+    if current_user.sysadmin?
       @activity = @response.activities.find(params[:id])
       unless @activity.approved?
         @activity.attributes = {:user_id => current_user.id, :approved => params[:approve]}
@@ -76,7 +78,7 @@ class ActivitiesController < BaseController
   # call only via Ajax
   # toggles approved status
   def activity_manager_approve
-    if current_user.admin? || current_user.activity_manager?
+    if current_user.sysadmin? || current_user.activity_manager?
       @activity = @response.activities.find(params[:id])
       toggle_approved = !@activity.am_approved?
       date = Time.now
@@ -101,8 +103,13 @@ class ActivitiesController < BaseController
   end
 
   def destroy
-    destroy! do |success, failure|
-      success.html { redirect_to response_projects_url(@response) }
+    @activity = Activity.find params[:id]
+    if check_activity_manager_permissions(@activity.organization)
+      destroy! do |success, failure|
+        success.html { redirect_to response_projects_url(@response) }
+      end
+    else
+      render :action => :edit
     end
   end
 

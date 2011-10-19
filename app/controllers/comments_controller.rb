@@ -122,7 +122,7 @@ class CommentsController < BaseController
     end
 
     def find_comment
-      if current_user.admin?
+      if current_user.sysadmin?
         Comment.find(params[:id])
       else
         dr_ids  = current_user.organization.data_responses.map(&:id)

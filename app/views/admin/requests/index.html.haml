@@ -21,8 +21,8 @@
         %td= request.organization.try(:name)
         %td= link_to request.title, set_request_path(request.id)
         %td= request.final_review
-        %td= request.start_date
-        %td= request.end_date
+        %td= formatted_date(request.start_date)
+        %td= formatted_date(request.end_date)
         %td.action
           %ul.manage_bar
             %li= link_to "Edit", edit_admin_request_path(request)

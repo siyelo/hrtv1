@@ -9,13 +9,13 @@ class Reports::ClassificationSplit
     @classification_association = classification_association(amount_type,
                                     classification_type)
     @code_deepest_nesting       = case classification_type
-    when :purpose
-      Code.deepest_nesting
-    when :input
-      CostCategory.deepest_nesting
-    else
-      1
-    end
+                                  when :purpose
+                                    Code.deepest_nesting
+                                  when :input
+                                    CostCategory.deepest_nesting
+                                  else
+                                    1
+                                  end
 
     @is_budget          = is_budget?(amount_type)
     @implementer_splits = ImplementerSplit.find :all,
@@ -72,34 +72,38 @@ class Reports::ClassificationSplit
         activity_amount = activity.spend           || 0
         split_amount    = implementer_split.spend  || 0
       end
-      classifications = activity.send(@classification_association)
 
-      base_row << activity.organization.name
-      base_row << activity.project.try(:name) # other costs does not have a project
-      base_row << project_in_flows(activity.project)
-      base_row << activity.data_response.id
-      base_row << activity.id
-      base_row << activity.name
-      base_row << activity_amount
-      # TODO: remove try after implementer_splits without implementer are fixed
-      base_row << implementer_split.organization.try(:name)
-      base_row << split_amount
+      # dont bother printing a row if theres nothing to report!
+      if activity_amount > 0
+        classifications = activity.send(@classification_association)
 
-      # iterate here over classifications
-      classifications.each do |classification|
-        percentage = classification.percentage || 0
-        row = base_row.dup
+        base_row << activity.organization.name
+        base_row << activity.project.try(:name) # other costs does not have a project
+        base_row << project_in_flows(activity.project)
+        base_row << activity.data_response.id
+        base_row << activity.id
+        base_row << activity.name
+        base_row << activity_amount
+        # TODO: remove try after implementer_splits without implementer are fixed
+        base_row << implementer_split.organization.try(:name)
+        base_row << split_amount
 
-        row << classification.code.short_display
-        row << percentage
-        row << percentage * split_amount / 100
-        row << implementer_split.possible_duplicate?
-        row << implementer_split.duplicate?
-        codes = classification.code ?
-          cached_self_and_ancestors(classification.code) : []
-        add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
+        # iterate here over classifications
+        classifications.each do |classification|
+          percentage = classification.percentage || 0
+          row = base_row.dup
 
-        csv << row
+          row << classification.code.short_display
+          row << percentage
+          row << percentage * split_amount / 100
+          row << implementer_split.possible_duplicate?
+          row << implementer_split.duplicate?
+          codes = classification.code ?
+            cached_self_and_ancestors(classification.code) : []
+          add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
+
+          csv << row
+        end
       end
     end
 

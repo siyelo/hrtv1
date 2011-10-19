@@ -1,10 +1,14 @@
 class OtherCost < Activity
+  include ResponseStateCallbacks
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[project_name description current_budget past_expenditure]
 
   ### Delegates
   delegate :currency, :to => :data_response, :allow_nil => true
+
+  ### Callbacks
+  # also check lib/response_state_callbacks
 
   ### Instance Methods
 

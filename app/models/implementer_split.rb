@@ -50,7 +50,7 @@
     write_attribute(:spend, NumberHelper.is_number?(amount) ? amount.to_f.round_with_precision(2) : amount)
   end
 
-  def possible_duplicate?
+  def possible_double_count?
     reporting_org         = activity.organization
     reporting_response    = activity.data_response
     implementing_org      = organization
@@ -72,7 +72,7 @@
       end
 
       ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|
-        split.duplicate = hash[split.id.to_s]
+        split.double_count = hash[split.id.to_s]
         split.save(false)
       end
     end

@@ -96,8 +96,8 @@ class Reports::ClassificationSplit
           row << classification.code.short_display
           row << percentage
           row << percentage * split_amount / 100
-          row << implementer_split.possible_duplicate?
-          row << implementer_split.duplicate?
+          row << implementer_split.possible_double_count?
+          row << implementer_split.double_count?
           codes = classification.code ?
             cached_self_and_ancestors(classification.code) : []
           add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)

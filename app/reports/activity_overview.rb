@@ -37,8 +37,8 @@ class Reports::ActivityOverview
       row << 'Implementer Split ID'
       row << 'Expenditure ($)'
       row << 'Budget ($)'
-      row << 'Possible Duplicate?'
-      row << 'Actual Duplicate?'
+      row << 'Possible Double-Count?'
+      row << 'Actual Double-Count?'
 
       row
     end
@@ -59,9 +59,9 @@ class Reports::ActivityOverview
       row << implementer_split.id
       row << (implementer_split.spend || 0) * rate
       row << (implementer_split.budget || 0) * rate
-      row << implementer_split.possible_duplicate?
-      # don't use duplicate?, we need to display if the value is nil
-      row << implementer_split.duplicate
+      row << implementer_split.possible_double_count?
+      # don't use double_count?, we need to display if the value is nil
+      row << implementer_split.double_count
 
       row
     end

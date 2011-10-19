@@ -24,11 +24,13 @@ class Reports::ActivityManagerWorkplan
         row << sanitize_encoding(organization.name)
         if org_response.projects.empty?
           rows << row
+          row = []
         else
           org_response.projects.sorted.each_with_index do |project, index|
             row = add_project_columns(project, index, row)
             if project.activities.empty?
               rows << row
+              row = []
             else
               project.activities.each_with_index do |activity, index|
                 rows << add_activity_columns(activity, index, row)

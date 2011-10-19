@@ -6,5 +6,6 @@ class ResetImplementerSplitDuplicateDefaultValue < ActiveRecord::Migration
 
   def self.down
     remove_column :implementer_splits, :duplicate
+    add_column :implementer_splits, :duplicate, :boolean, :default => false
   end
 end

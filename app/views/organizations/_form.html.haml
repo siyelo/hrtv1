@@ -6,21 +6,30 @@
     %li.last
       %h2 Basics
       %ul.section_form
-        = f.text_field :name, :label => 'Name', :required => true, :hint => name_hint, :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }, :size => 50
-        = f.select :raw_type, options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type), { :include_blank => true  }, :label => 'Type', :hint => raw_type_hint, :label_html => { :class => 'indented' }, :input_html => { :class => 'string required' }, :wrapper_html => { :class => 'input-wrapper' }
-        = f.text_field :fosaid, :label => 'Fosaid', :required => true, :hint => fosaid_hint, :label_html => { :class => 'indented' }, :wrapper_html => { :class => 'input-wrapper' }
+        = f.text_field :name, input_options('Name', name_hint)
+        = f.select :raw_type,
+          options_for_select(Organization::ORGANIZATION_TYPES, f.object.raw_type),
+          { :include_blank => true }, select_options("Raw Type", raw_type_hint)
+        = f.text_field :fosaid, input_options('Fosaid', fosaid_hint)
         = f.select :currency, options_for_select(currency_options_for_select, f.object.currency), { :include_blank => true }, :label => 'Default Currency', :required => true, :hint => currency_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
-        = f.text_field :fiscal_year_start_date, :value => formatted_date(f.object.fiscal_year_start_date), :class => 'date_picker', :label => 'Start of Fiscal Year', :required => true, :hint => fiscal_year_start_date_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
-        = f.text_field :fiscal_year_end_date, :value => formatted_date(f.object.fiscal_year_end_date),:class => 'date_picker', :label => 'End of Fiscal Year', :required => true, :hint => fiscal_year_end_date_hint, :label_html => {:class => 'indented'}, :wrapper_html => {:class => 'input-wrapper'}
+        = f.text_field :fiscal_year_start_date,
+          input_date(f.object.fiscal_year_start_date, "Start of Fiscal Year", fiscal_year_start_date_hint)
+        = f.text_field :fiscal_year_end_date,
+          input_date(f.object.fiscal_year_end_date, "End of Fiscal Year", fiscal_year_end_date_hint)
 
     %li.last
       %h2 Contact Details
       %ul.section_form
-        = f.text_field :contact_name, :label => 'Contact Name', :required => true, :hint => contact_name_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_position, :label => 'Contact Position', :required => true, :hint => contact_position_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_phone_number, :label => 'Phone Number', :required => true, :hint => phone_number_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_main_office_phone_number, :label => 'Office Number', :required => true, :hint => contact_main_office_phone_number_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
-        = f.text_field :contact_office_location, :label => 'Office Location', :required => true, :hint => office_location_hint, :wrapper_html => {:class => 'input-wrapper'}, :label_html => {:class => 'indented'}
+        = f.text_field :contact_name,
+          input_options('Contact Name', contact_name_hint)
+        = f.text_field :contact_position,
+          input_options('Contact Position', contact_position_hint)
+        = f.text_field :contact_phone_number,
+          input_options('Phone Number', phone_number_hint)
+        = f.text_field :contact_main_office_phone_number,
+          input_options('Office Number', contact_main_office_phone_number_hint)
+        = f.text_field :contact_office_location,
+          input_options('Office Location', office_location_hint)
 
       %fieldset.buttons.push-12
         %ol

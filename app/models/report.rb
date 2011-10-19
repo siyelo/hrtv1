@@ -51,10 +51,6 @@ class Report < ActiveRecord::Base
     def run_report
       self.report =
         case key
-        when 'dynamic_query_report_budget'
-          Reports::JawpReport.new(data_request, :budget)
-        when 'dynamic_query_report_spent'
-          Reports::JawpReport.new(data_request, :spend)
         when 'activity_overview'
           Reports::ActivityOverview.new(data_request)
         when 'budget_implementer_purpose'

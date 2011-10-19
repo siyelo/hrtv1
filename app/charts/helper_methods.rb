@@ -1,5 +1,5 @@
 module Charts::HelperMethods
-  include NumberHelper
+  include CurrencyNumberHelper
   MTEF_CODE_LEVEL = 0 # users may not code activities to level 1 of MTEF codes
                       # so use level 0 for completeness
 

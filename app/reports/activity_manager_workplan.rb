@@ -3,6 +3,7 @@ require 'fastercsv'
 class Reports::ActivityManagerWorkplan
   include Reports::Helpers
   include EncodingHelper
+  include CurrencyViewNumberHelper
 
   def initialize(response, organizations)
     @organizations = organizations

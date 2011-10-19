@@ -4,6 +4,7 @@ class Project < ActiveRecord::Base
   include ActsAsDateChecker
   include BudgetSpendHelper
   include Project::Validations
+  include ResponseStateCallbacks
 
   MAX_NAME_LENGTH = 64
 
@@ -32,10 +33,14 @@ class Project < ActiveRecord::Base
   accepts_nested_attributes_for :activities
 
   ### Callbacks
+  # also check lib/response_state_callbacks
   before_validation :assign_project_to_in_flows
   before_validation :assign_project_to_activities
   before_validation :strip_leading_spaces
-  after_save :update_activity_amount_cache
+  after_save        :update_activity_amount_cache
+  after_save        :update_cached_currency_amounts,
+    :if => Proc.new { |p| p.currency_changed? }
+
 
   ### Validations
   # also see validations in BudgetSpendHelper
@@ -63,11 +68,6 @@ class Project < ActiveRecord::Base
 
   ### Delegates
   delegate :organization, :to => :data_response, :allow_nil => true #workaround for object creation
-
-  ### Callbacks
-  after_save   :update_cached_currency_amounts, :if => Proc.new { |p| p.currency_changed? }
-  after_create :start_response_if_unstarted
-  after_destroy :unstart_response_if_no_data
 
   ### Named Scopes
   named_scope :sorted, { :order => "projects.name" }
@@ -364,15 +364,6 @@ class Project < ActiveRecord::Base
     #assign project object so nested attributes for activities pass the project_id validation
     def assign_project_to_activities
       activities.each {|a| a.project = self}
-    end
-
-    def start_response_if_unstarted
-      response.start! if response.unstarted?
-    end
-
-    def unstart_response_if_no_data
-      response.unstart! if response.projects.empty? &&
-                           response.other_costs.without_a_project.empty?
     end
 
     def validate_funder_uniqueness

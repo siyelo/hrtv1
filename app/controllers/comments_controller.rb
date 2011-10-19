@@ -1,5 +1,4 @@
 class CommentsController < BaseController
-
   def index
     dr_ids    = current_user.organization.data_responses.map(&:id)
     @comments = Comment.on_all(dr_ids).paginate :per_page => 20,

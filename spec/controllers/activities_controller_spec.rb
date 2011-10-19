@@ -138,7 +138,7 @@ describe ActivitiesController do
     it "should allow a project to be created automatically on update" do
       #if the project_id is -1 then the controller should create a new project with name, start date and end date equal to that of the activity
       put :update, :id => @activity.id, :response_id => @data_response.id,
-          :activity => {:project_id => '-1', :name => @activity.name, :start_date => @activity.start_date, :end_date => @activity.end_date}
+          :activity => {:project_id => '-1', :name => @activity.name}
       @activity.reload
       @activity.project.name.should == @activity.name
       @activity.project.in_flows.count.should == 1

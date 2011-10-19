@@ -29,6 +29,7 @@ class Reports::ActivityOverview
       row << 'Project'
       row << 'Activity'
       row << 'Activity ID'
+      row << 'Activity URL'
       row << 'Funding Source'
 
       row << 'Implementer'
@@ -51,6 +52,7 @@ class Reports::ActivityOverview
       row << activity.project.try(:name) # other costs does not have a project
       row << activity.name
       row << activity.id
+      row << activity_url(activity)
       row << project_in_flows(activity.project)
       row << implementer_split.organization.try(:name)
       row << implementer_split.id
@@ -75,5 +77,9 @@ class Reports::ActivityOverview
         Currency.all.map{|c| @currencies[c.conversion] = c.rate }
         @currencies
       end
+    end
+
+    def activity_url(activity)
+      "https://resourcetracking.heroku.com/responses/#{activity.data_response.id}/activities/#{activity.id}/edit"
     end
 end

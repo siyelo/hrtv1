@@ -1,6 +1,18 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Reports::ActivityOverview do
+  def run_report(request)
+    report = Reports::ActivityOverview.new(request)
+    csv = report.csv
+
+    #File.open('debug.csv', 'w') { |f| f.puts report.csv }
+
+    table = []
+    FasterCSV.parse(csv, :headers => true) { |row| table << row }
+
+    return table
+  end
+
   before :each do
     @donor1        = Factory(:organization, :name => "donor1")
     @organization1 = Factory(:organization, :name => "organization1")
@@ -23,13 +35,8 @@ describe Reports::ActivityOverview do
               :budget => 200, :spend => 100)
 
       @response1.state = 'accepted'; @response1.save!
-      report = Reports::ActivityOverview.new(@request)
-      csv = report.csv
 
-      #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
-      table = []
-      FasterCSV.parse(csv, :headers => true) { |row| table << row }
+      table = run_report(@request)
 
       # row 1
       table[0]['Organization'].should == 'organization1'
@@ -75,13 +82,8 @@ describe Reports::ActivityOverview do
 
       @response1.state = 'accepted'; @response1.save!
       @response2.state = 'accepted'; @response2.save!
-      report = Reports::ActivityOverview.new(@request)
-      csv = report.csv
 
-      #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
-      table = []
-      FasterCSV.parse(csv, :headers => true) { |row| table << row }
+      table = run_report(@request)
 
       # row 1
       table[0]['Organization'].should == 'organization1'
@@ -141,13 +143,8 @@ describe Reports::ActivityOverview do
 
       @response1.state = 'accepted'; @response1.save!
       @response2.state = 'accepted'; @response2.save!
-      report = Reports::ActivityOverview.new(@request)
-      csv = report.csv
 
-      #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-
-      table = []
-      FasterCSV.parse(csv, :headers => true) { |row| table << row }
+      table = run_report(@request)
 
       # row 1
       table[0]['Organization'].should == 'organization1'

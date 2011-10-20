@@ -2,6 +2,7 @@ require 'fastercsv'
 
 class Reports::ActivityOverview
   include Reports::Helpers
+  include CurrencyNumberHelper
 
   def initialize(request)
     @implementer_splits = ImplementerSplit.find :all,
@@ -64,10 +65,6 @@ class Reports::ActivityOverview
       row << implementer_split.double_count
 
       row
-    end
-
-    def currency_rate(from, to)
-      currencies["#{from}_TO_#{to}"] || 1
     end
 
     def currencies

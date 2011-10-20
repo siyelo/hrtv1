@@ -7,8 +7,9 @@ describe Reports::ClassificationSplit do
     report = Reports::ClassificationSplit.new(@request, :budget, classification_type.to_sym)
     csv = report.csv
     #File.open('debug.csv', 'w') { |f| f.puts report.csv }
-    @table = []
-    FasterCSV.parse(csv, :headers => true) { |row| @table << row }
+    table = []
+    FasterCSV.parse(csv, :headers => true) { |row| table << row }
+    return table
   end
 
   before :each do
@@ -66,124 +67,97 @@ describe Reports::ClassificationSplit do
         end
 
         it "generates proper report" do
-          run_report(classification_type)
+          table = run_report(classification_type)
           # row 1
-          @table[0]['Organization'].should == 'organization1'
-          @table[0]['Project'].should == 'project1'
-          @table[0]['Funding Source'].should == 'donor1'
-          @table[0]['Data Response ID'].should == @response1.id.to_s
-          @table[0]['Activity ID'].should == @activity1.id.to_s
-          @table[0]['Activity'].should == '@activity1'
-          @table[0]['Total Activity Budget ($)'].should == '150.0'
-          @table[0]['Implementer'].should == 'organization1'
-          @table[0]['Total Implementer Budget ($)'].should == '100.0'
-          @table[0]["#{@classification_name} Code"].should == @code1_name
-          @table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
-          @table[0]["Implementer Budget by #{@classification_name}"].should == '25.0'
-          @table[0]['Possible Duplicate?'].should == 'false'
-          @table[0]['Actual Duplicate?'].should == 'false'
-          @table[0]["#{@classification_name} Hierarchy"].should == @code1_name
+          table[0]['Organization'].should == 'organization1'
+          table[0]['Project'].should == 'project1'
+          table[0]['Funding Source'].should == 'donor1'
+          table[0]['Data Response ID'].should == @response1.id.to_s
+          table[0]['Activity ID'].should == @activity1.id.to_s
+          table[0]['Activity'].should == '@activity1'
+          table[0]['Total Activity Budget ($)'].should == '150.0'
+          table[0]['Implementer'].should == 'organization1'
+          table[0]['Total Implementer Budget ($)'].should == '100.0'
+          table[0]["#{@classification_name} Code"].should == @code1_name
+          table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
+          table[0]["Implementer Budget by #{@classification_name}"].should == '25.0'
+          table[0]['Possible Duplicate?'].should == 'false'
+          table[0]['Actual Duplicate?'].should == nil
+          table[0]["#{@classification_name} Hierarchy"].should == @code1_name
 
           # row 2
-          @table[1]['Organization'].should == 'organization1'
-          @table[1]['Project'].should == 'project1'
-          @table[1]['Funding Source'].should == 'donor1'
-          @table[1]['Data Response ID'].should == @response1.id.to_s
-          @table[1]['Activity ID'].should == @activity1.id.to_s
-          @table[1]['Activity'].should == '@activity1'
-          @table[1]['Total Activity Budget ($)'].should == '150.0'
-          @table[1]['Implementer'].should == 'organization1'
-          @table[1]['Total Implementer Budget ($)'].should == '100.0'
-          @table[1]["#{@classification_name} Code"].should == @code2_name
-          @table[1]["#{@classification_name} Code Split (%)"].should == '75.0'
-          @table[1]["Implementer Budget by #{@classification_name}"].should == '75.0'
-          @table[1]['Possible Duplicate?'].should == 'false'
-          @table[1]['Actual Duplicate?'].should == 'false'
-          @table[1]["#{@classification_name} Hierarchy"].should == @code2_name
+          table[1]['Organization'].should == 'organization1'
+          table[1]['Project'].should == 'project1'
+          table[1]['Funding Source'].should == 'donor1'
+          table[1]['Data Response ID'].should == @response1.id.to_s
+          table[1]['Activity ID'].should == @activity1.id.to_s
+          table[1]['Activity'].should == '@activity1'
+          table[1]['Total Activity Budget ($)'].should == '150.0'
+          table[1]['Implementer'].should == 'organization1'
+          table[1]['Total Implementer Budget ($)'].should == '100.0'
+          table[1]["#{@classification_name} Code"].should == @code2_name
+          table[1]["#{@classification_name} Code Split (%)"].should == '75.0'
+          table[1]["Implementer Budget by #{@classification_name}"].should == '75.0'
+          table[1]['Possible Duplicate?'].should == 'false'
+          table[1]['Actual Duplicate?'].should == nil
+          table[1]["#{@classification_name} Hierarchy"].should == @code2_name
 
           # row 3
-          @table[2]['Organization'].should == 'organization1'
-          @table[2]['Project'].should == 'project1'
-          @table[2]['Funding Source'].should == 'donor1'
-          @table[2]['Data Response ID'].should == @response1.id.to_s
-          @table[2]['Activity ID'].should == @activity1.id.to_s
-          @table[2]['Activity'].should == '@activity1'
-          @table[2]['Total Activity Budget ($)'].should == '150.0'
-          @table[2]['Implementer'].should == 'organization2'
-          @table[2]['Total Implementer Budget ($)'].should == '50.0'
-          @table[2]["#{@classification_name} Code"].should == @code1_name
-          @table[2]["#{@classification_name} Code Split (%)"].should == '25.0'
-          @table[2]["Implementer Budget by #{@classification_name}"].should == '12.5'
-          @table[2]['Possible Duplicate?'].should == 'false'
-          @table[2]['Actual Duplicate?'].should == 'false'
-          @table[2]["#{@classification_name} Hierarchy"].should == @code1_name
+          table[2]['Organization'].should == 'organization1'
+          table[2]['Project'].should == 'project1'
+          table[2]['Funding Source'].should == 'donor1'
+          table[2]['Data Response ID'].should == @response1.id.to_s
+          table[2]['Activity ID'].should == @activity1.id.to_s
+          table[2]['Activity'].should == '@activity1'
+          table[2]['Total Activity Budget ($)'].should == '150.0'
+          table[2]['Implementer'].should == 'organization2'
+          table[2]['Total Implementer Budget ($)'].should == '50.0'
+          table[2]["#{@classification_name} Code"].should == @code1_name
+          table[2]["#{@classification_name} Code Split (%)"].should == '25.0'
+          table[2]["Implementer Budget by #{@classification_name}"].should == '12.5'
+          table[2]['Possible Duplicate?'].should == 'false'
+          table[2]['Actual Duplicate?'].should == nil
+          table[2]["#{@classification_name} Hierarchy"].should == @code1_name
 
           # row 4
-          @table[3]['Organization'].should == 'organization1'
-          @table[3]['Project'].should == 'project1'
-          @table[3]['Funding Source'].should == 'donor1'
-          @table[3]['Data Response ID'].should == @response1.id.to_s
-          @table[3]['Activity ID'].should == @activity1.id.to_s
-          @table[3]['Activity'].should == '@activity1'
-          @table[3]['Total Activity Budget ($)'].should == '150.0'
-          @table[3]['Implementer'].should == 'organization2'
-          @table[3]['Total Implementer Budget ($)'].should == '50.0'
-          @table[3]["#{@classification_name} Code"].should == @code2_name
-          @table[3]["#{@classification_name} Code Split (%)"].should == '75.0'
-          @table[3]["Implementer Budget by #{@classification_name}"].should == '37.5'
-          @table[3]['Possible Duplicate?'].should == 'false'
-          @table[3]['Actual Duplicate?'].should == 'false'
-          @table[3]["#{@classification_name} Hierarchy"].should == @code2_name
+          table[3]['Organization'].should == 'organization1'
+          table[3]['Project'].should == 'project1'
+          table[3]['Funding Source'].should == 'donor1'
+          table[3]['Data Response ID'].should == @response1.id.to_s
+          table[3]['Activity ID'].should == @activity1.id.to_s
+          table[3]['Activity'].should == '@activity1'
+          table[3]['Total Activity Budget ($)'].should == '150.0'
+          table[3]['Implementer'].should == 'organization2'
+          table[3]['Total Implementer Budget ($)'].should == '50.0'
+          table[3]["#{@classification_name} Code"].should == @code2_name
+          table[3]["#{@classification_name} Code Split (%)"].should == '75.0'
+          table[3]["Implementer Budget by #{@classification_name}"].should == '37.5'
+          table[3]['Possible Duplicate?'].should == 'false'
+          table[3]['Actual Duplicate?'].should == nil
+          table[3]["#{@classification_name} Hierarchy"].should == @code2_name
         end
 
         it "does currency conversion to USD" do
           Money.default_bank.set_rate(:RWF, :USD, 0.1)
           @organization1.currency = 'RWF'
           @organization1.save!
-          run_report(classification_type)
-          @table[0]['Organization'].should == 'organization1'
-          @table[0]['Project'].should == 'project1'
-          @table[0]['Funding Source'].should == 'donor1'
-          @table[0]['Data Response ID'].should == @response1.id.to_s
-          @table[0]['Activity ID'].should == @activity1.id.to_s
-          @table[0]['Activity'].should == '@activity1'
-          @table[0]['Total Activity Budget ($)'].should == '15.0'
-          @table[0]['Implementer'].should == 'organization1'
-          @table[0]['Total Implementer Budget ($)'].should == '10.0'
-          @table[0]["#{@classification_name} Code"].should == @code1_name
-          @table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
-          @table[0]["Implementer Budget by #{@classification_name}"].should == '2.5'
-          @table[0]['Possible Duplicate?'].should == 'false'
-          @table[0]['Actual Duplicate?'].should == 'false'
-          @table[0]["#{@classification_name} Hierarchy"].should == @code1_name
+          table = run_report(classification_type)
+          table[0]['Organization'].should == 'organization1'
+          table[0]['Project'].should == 'project1'
+          table[0]['Funding Source'].should == 'donor1'
+          table[0]['Data Response ID'].should == @response1.id.to_s
+          table[0]['Activity ID'].should == @activity1.id.to_s
+          table[0]['Activity'].should == '@activity1'
+          table[0]['Total Activity Budget ($)'].should == '15.0'
+          table[0]['Implementer'].should == 'organization1'
+          table[0]['Total Implementer Budget ($)'].should == '10.0'
+          table[0]["#{@classification_name} Code"].should == @code1_name
+          table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
+          table[0]["Implementer Budget by #{@classification_name}"].should == '2.5'
+          table[0]['Possible Duplicate?'].should == 'false'
+          table[0]['Actual Duplicate?'].should == nil
+          table[0]["#{@classification_name} Hierarchy"].should == @code1_name
         end
-      end
-    end
-
-    context "input" do
-      before :each do
-      end
-    end
-
-    context "location" do
-      before :each do
-      end
-    end
-  end
-
-  context "spend" do
-    context "purpose" do
-      before :each do
-      end
-    end
-
-    context "input" do
-      before :each do
-      end
-    end
-
-    context "location" do
-      before :each do
       end
     end
   end

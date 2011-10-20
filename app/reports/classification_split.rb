@@ -2,7 +2,7 @@ require 'fastercsv'
 
 class Reports::ClassificationSplit
   include Reports::Helpers
-  include CurrencyHelper
+  include CurrencyNumberHelper
 
   def initialize(request, amount_type, classification_type)
     @amount_type                = amount_type
@@ -104,7 +104,7 @@ class Reports::ClassificationSplit
           row << percentage
           row << percentage * split_amount / 100
           row << implementer_split.possible_double_count?
-          row << implementer_split.double_count?
+          row << implementer_split.double_count
           codes = classification.code ?
             cached_self_and_ancestors(classification.code) : []
           add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)

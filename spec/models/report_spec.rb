@@ -33,7 +33,7 @@ describe Report do
     end
   end
 
-  describe "#generate_csv_zip" do
+  describe "#generate_report" do
     before :each do
       mtef_code          = Factory(:mtef_code)
       nsp_code           = Factory(:nsp_code)
@@ -60,7 +60,7 @@ describe Report do
       it "creates a new: #{key}" do
         report = Report.find_or_initialize_by_key_and_data_request_id(key, @request.id)
         Report.count.should == 0
-        report.generate_csv_zip
+        report.generate_report
         report.save.should be_true
         Report.count.should == 1
       end
@@ -70,7 +70,7 @@ describe Report do
       it "updates the existing: #{key}" do
         report = Report.create!(:key => key, :data_request_id => @request.id)
         Report.count.should == 1
-        report.generate_csv_zip
+        report.generate_report
         report.save.should be_true
         Report.count.should == 1
       end

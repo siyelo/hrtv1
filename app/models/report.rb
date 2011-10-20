@@ -30,21 +30,30 @@ class Report < ActiveRecord::Base
   validates_uniqueness_of :key, :scope => :data_request_id
   validates_inclusion_of :key, :in => REPORTS
 
-  ### Callbacks
-  after_save :cleanup_temp_files
-
-  ### Instance Methods
-
-  def to_s
-    self.key
+  ### Class Methods
+  def self.key_to_name(key)
+    case key
+    when 'activity_overview': 'Activity Overview Report'
+    when 'budget_implementer_purpose': 'Budget Implementer Purpose'
+    when 'budget_implementer_input' : 'Budget Implementer Input'
+    when 'budget_implementer_location' : 'Budget Implementer Location'
+    when 'spend_implementer_purpose' : 'Expenditure Implementer Purpose'
+    when 'spend_implementer_input' : 'Expenditure Implementer Input'
+    when 'spend_implementer_location' : 'Expenditure Implementer Location'
+    else
+      raise "Invalid report key #{key}".to_yaml
+    end
   end
 
-  def generate_csv_zip
-    run_report
-    create_tmp_csv
-    zip_file
-    attach_zip_file
+  def generate_report
+    create_report
   end
+
+  def generate_report_for_download(user)
+    create_report
+    Notifier.deliver_report_download_notification(user, self)
+  end
+  handle_asynchronously :generate_report_for_download
 
   protected
 
@@ -102,6 +111,15 @@ class Report < ActiveRecord::Base
 
     def simple_activities_for_request
       Activity.only_simple_with_request(self.data_request)
+    end
+
+    def create_report
+      run_report
+      create_tmp_csv
+      zip_file
+      attach_zip_file
+      self.save
+      cleanup_temp_files
     end
 end
 

@@ -30,13 +30,13 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li= render 'report_row', :title => "Activity Overview Report", :key => 'activity_overview'
-      %li= render 'report_row', :title => "Budget Implementer Purpose", :key => 'budget_implementer_purpose'
-      %li= render 'report_row', :title => "Budget Implementer Input", :key => 'budget_implementer_input'
-      %li= render 'report_row', :title => "Budget Implementer Location", :key => 'budget_implementer_location'
-      %li= render 'report_row', :title => "Expenditure Implementer Purpose", :key => 'spend_implementer_purpose'
-      %li= render 'report_row', :title => "Expenditure Implementer Input", :key => 'spend_implementer_input'
-      %li= render 'report_row', :title => "Expenditure Implementer Location", :key => 'spend_implementer_location'
+      %li= render 'report_row', :title => Report.key_to_name('activity_overview'), :key => 'activity_overview'
+      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_purpose'), :key => 'budget_implementer_purpose'
+      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_input'), :key => 'budget_implementer_input'
+      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_location'), :key => 'budget_implementer_location'
+      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_purpose'), :key => 'spend_implementer_purpose'
+      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_input'), :key => 'spend_implementer_input'
+      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_location'), :key => 'spend_implementer_location'
       -#%li= render 'report_row', :title => "Dynamic Query By Current Budget (beta)", :key => 'dynamic_query_report_budget'
       -#%li= render 'report_row', :title => "Dynamic Query By Expenditure (beta)", :key => 'dynamic_query_report_spent'
 

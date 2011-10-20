@@ -25,7 +25,8 @@ class Reports::ClassificationSplit
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ @classification_association => :code },
         { :project => { :in_flows => :from } },
-        { :data_response => :organization }]}, :organization]
+        { :data_response => :organization }]},
+        { :organization => :data_responses }]
   end
 
   def csv

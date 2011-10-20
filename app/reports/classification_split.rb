@@ -1,3 +1,5 @@
+# Report of all Implementers by Purpose/Location or Input
+# includes all Activities and Other Costs
 require 'fastercsv'
 
 class Reports::ClassificationSplit
@@ -56,7 +58,7 @@ class Reports::ClassificationSplit
       row << "Total Implementer #{amount_name} ($)"
       row << "#{classification_name} Code"
       row << "#{classification_name} Code Split (%)"
-      row << "Implementer #{amount_name} by #{classification_name}"
+      row << "Implementer #{amount_name} by #{classification_name} ($)"
       row << 'Possible Duplicate?'
       row << 'Actual Duplicate?'
       @code_deepest_nesting.times{ row << "#{classification_name} Hierarchy" }
@@ -82,7 +84,6 @@ class Reports::ClassificationSplit
 
       # dont bother printing a row if theres nothing to report!
       if activity_amount > 0
-        classifications = activity.send(@classification_association)
 
         base_row << activity.organization.name
         base_row << activity.project.try(:name) # other costs does not have a project
@@ -95,6 +96,8 @@ class Reports::ClassificationSplit
         base_row << implementer_split.organization.try(:name)
         base_row << split_amount
 
+        classifications, dummy_code = activity_or_ocost_classification(activity)
+
         # iterate here over classifications
         classifications.each do |classification|
           percentage = classification.percentage || 0
@@ -105,13 +108,35 @@ class Reports::ClassificationSplit
           row << percentage * split_amount / 100
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count?
-          codes = classification.code ?
-            cached_self_and_ancestors(classification.code) : []
-          add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
+
+          if dummy_code.nil?
+            codes = classification.code ?
+              cached_self_and_ancestors(classification.code) : []
+            add_codes_to_row(row, codes.reverse, @code_deepest_nesting, :short_display)
+          else
+            row << dummy_code.short_display
+          end
 
           csv << row
         end
       end
+    end
+
+    # Get the related Purpose/Location/Input classification splits for
+    # the given Activity or Other Cost
+    def activity_or_ocost_classification(activity)
+      classifications = activity.send(@classification_association)
+
+      # create dummy if the classification type doesnt exist for the
+      # given activity/other cost e.g. OtherCosts dont have Purposes/Inputs
+      dummy_code = nil
+      if classifications.empty?
+        dummy_code = Code.new(:short_display => "N/A - #{activity.type}")
+        klass = classification_class(@classification_association)
+        classifications << klass.new(:code => dummy_code,
+          :percentage => 100)
+      end
+      return classifications, dummy_code
     end
 
     def classification_association(amount_type, classification_type)
@@ -140,6 +165,12 @@ class Reports::ClassificationSplit
       else
         raise "Invalid amount type #{amount_type}".to_yaml
       end
+    end
+
+    # get the class name e.g. "CodingBudget" from the association
+    # "leaf_budget_purposes"
+    def classification_class(classification_association)
+      Activity.reflect_on_association(classification_association).klass
     end
 
     def cached_self_and_ancestors(code)

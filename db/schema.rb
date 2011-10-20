@@ -201,13 +201,6 @@ ActiveRecord::Schema.define(:version => 20111019121248) do
     t.decimal  "spend_in_usd",        :default => 0.0
   end
 
-  create_table "help_requests", :force => true do |t|
-    t.string   "email"
-    t.text     "message"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "implementer_splits", :force => true do |t|
     t.integer  "activity_id"
     t.integer  "organization_id"

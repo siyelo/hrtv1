@@ -41,8 +41,8 @@ class Reports::Targets
       row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
       row << 'Implementer Type'
-      row << "Total Implementer #{amount_name} ($)"
       row << 'Activity Target'
+      row << "Total Implementer #{amount_name} ($)"
       row << 'Possible Double-Count?'
       row << 'Actual Double-Count?'
 
@@ -52,6 +52,7 @@ class Reports::Targets
     def build_row(csv, implementer_split)
       activity = implementer_split.activity
       rate = currency_rate(activity.currency, 'USD')
+      split_amount = 0
 
       if @is_budget
         activity_amount = activity.budget          || 0
@@ -72,15 +73,14 @@ class Reports::Targets
       base_row << n2c(activity_amount * rate)
       base_row << implementer_split.organization.try(:name)
       base_row << implementer_split.organization.implementer_type
-      base_row << n2c(split_amount * rate)
 
       # fake target if none
       activity.targets.build(:description => 'n/a') if activity.targets.length == 0
-
-      # iterate here over targets
       activity.targets.each do |target|
         row = base_row.dup
+        amount_by_ratio = split_amount * (1.0/activity.targets.length)
         row << target.description
+        row << n2c(amount_by_ratio * rate, '', '')
         row << implementer_split.possible_double_count?
         # don't use double_count?, we need to display if the value is nil
         row << implementer_split.double_count

@@ -309,7 +309,4 @@ ActiveRecord::Schema.define(:version => 20111021075415) do
     t.datetime "last_login_at"
   end
 
-  add_index "users", ["email"], :name => "index_users_on_email"
-  add_index "users", ["perishable_token"], :name => "index_users_on_perishable_token"
-
 end

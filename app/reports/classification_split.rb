@@ -98,7 +98,7 @@ class Reports::ClassificationSplit
         base_row << split_amount
 
         classifications, dummy_code = activity_or_ocost_classification(activity)
-        total_percentage = classifications.inject do |sum, split|
+        total_percentage = classifications.inject(0) do |sum, split|
           sum + (split.percentage || 0)
         end
 

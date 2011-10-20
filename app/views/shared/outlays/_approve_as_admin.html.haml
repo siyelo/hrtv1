@@ -1,7 +1,7 @@
 %li.js
   - if outlay.approved
     %span Admin Approved
-  - elsif current_user.admin? || current_user.activity_manager?
+  - elsif current_user.sysadmin? || current_user.activity_manager?
     - link_to "#", :title => "#{'Cannot approve unclassified Activity/Other Cost' if !outlay.classified?}", :class => "js_sysadmin_approve add_row #{'frozen tooltip' if !outlay.classified?}", :"response-id" => @response.id, :"activity-id" => outlay.id do
       %span Approve (Admin)
     = image_tag "ajax-loader.gif", :class => "ajax-loader", :style => "display: none;"

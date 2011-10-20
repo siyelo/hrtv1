@@ -9,10 +9,11 @@ Feature: Reporter can manage data response
     And a data_response should exist with data_request: the data_request, organization: the organization
     And a reporter exists with email: "reporter@hrtapp.com", organization: the organization
     And I am signed in as "reporter@hrtapp.com"
+    And I follow "Settings"
 
   Scenario Outline: Reporter can edit settings and see feedback messages
-    When I follow "Settings"
-      And I select "Euro (EUR)" from "Default Currency"
+    When I select "Euro (EUR)" from "Default Currency"
+      And I should not see "Fosaid"
       And I fill in "Start of Fiscal Year" with "<start_date>"
       And I fill in "End of Fiscal Year" with "<end_date>"
       And I press "Update organization"

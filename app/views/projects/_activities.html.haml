@@ -3,7 +3,7 @@
     %h4
       Activities
   %td.js_approve_all_activities
-    -if (current_user.admin? || current_user.activity_manager?) && activities.detect{ |a| !a.am_approved? }
+    -if (current_user.sysadmin? || current_user.activity_manager?) && activities.detect{ |a| !a.am_approved? }
       = link_to "Approve all Budgets", approve_all_budgets_response_path(response, :type => 'activities', :project_id => project.id), :method => :put, :class => "add_row"
 
 - if activities.present?

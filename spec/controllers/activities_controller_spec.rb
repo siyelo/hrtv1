@@ -122,6 +122,129 @@ describe ActivitiesController do
     end
   end
 
+  describe "Permissions" do
+    context "Activity Manager" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :activity_manager, :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+        @activity = Factory :activity, :project => @project,
+          :data_response => @data_response, :am_approved => false
+        login @user
+      end
+
+      it "disallows creation of an activity" do
+        @activity.delete
+        request.env["HTTP_REFERER"] = new_response_activity_path(@data_response)
+        post :create, :response_id => @data_response.id,
+          :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+            "implementer_splits_attributes"=>
+              {"0"=> {"spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+                "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should render_template("new")
+      end
+
+      it "disallows updating of an activity" do
+        request.env["HTTP_REFERER"] = edit_response_activity_path(@data_response, @activity)
+        put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:description => "thedesc", :project_id => @project.id}
+
+        flash[:error].should == "You do not have permission to edit this resource"
+        response.should render_template("edit")
+        @activity.description.should_not == "thedesc"
+      end
+
+
+      it "allows the destroying of an activity" do
+        request.env["HTTP_REFERER"] = edit_response_activity_url(@data_response, @activity)
+        @activity = Factory(:activity, :data_response => @data_response, :project => @project)
+        delete :destroy, :id => @activity.id, :response_id => @data_response.id
+        flash[:error].should == "You do not have permission to edit this resource"
+      end
+    end
+
+    context "Reporter and Activity Manager" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+        @activity = Factory :activity, :project => @project,
+          :data_response => @data_response, :am_approved => false
+      end
+
+      it "allows the activity editing in the organization the reporter is in" do
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization
+        login @user
+
+        request.env["HTTP_REFERER"] = edit_response_activity_url(@data_response, @activity)
+        session[:return_to] = edit_response_activity_path(@data_response, @activity)
+        put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:description => "thedesc", :project_id => @project.id}
+
+        flash[:error].should_not == "You do not have permission to edit this activity"
+        flash[:notice].should == "Activity was successfully updated."
+        response.should redirect_to(edit_response_activity_url(@data_response, @activity))
+      end
+
+      it "should not allow the editing of organization the reporter is not in" do
+        @organization2 = Factory :organization
+        @user = Factory :user, :roles => ['reporter', 'activity_manager'],
+          :organization => @organization2
+        @user.organizations << @organization
+        login @user
+        session[:return_to] = edit_response_activity_url(@data_response, @activity)
+        put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:description => "thedesc", :project_id => @project.id}
+
+        @activity.reload.description.should_not == "thedesc"
+      end
+    end
+
+    context "Sysadmins and Activity Managers" do
+      before :each do
+        @organization = Factory :organization
+        @data_request = Factory :data_request, :organization => @organization
+        @user = Factory :user, :roles => ['admin', 'activity_manager'],
+          :organization => @organization
+        @data_response = @organization.latest_response
+        @project = Factory(:project, :data_response => @data_response)
+        @activity = Factory :activity, :project => @project,
+          :data_response => @data_response, :am_approved => false
+        login @user
+      end
+
+      it "should allow them to create an activity" do
+        @activity.delete
+        session[:return_to] = new_response_activity_url(@data_response)
+        post :create, :response_id => @data_response.id,
+          :activity => {:project_id => '-1', :name => "new activity", :description => "description",
+            "implementer_splits_attributes"=>
+              {"0"=> {"updated_at" => Time.now, "spend"=>"2", "data_response_id"=>"#{@data_response.id}",
+                "organization_mask"=>"#{@organization.id}", "budget"=>"4"}}}
+
+        flash[:error].should_not == "You do not have permission to edit this activity"
+        flash[:notice].should match("Activity was successfully created.")
+      end
+
+      it "should allow them to edit the activity" do
+        session[:return_to] = edit_response_activity_url(@data_response, @activity)
+        put :update, :id => @activity.id, :response_id => @data_response.id,
+          :activity => {:description => "thedesc", :project_id => @project.id}
+
+        flash[:error].should_not == "You do not have permission to edit this activity"
+        flash[:notice].should == "Activity was successfully updated."
+        response.should redirect_to(edit_response_activity_url(@data_response, @activity))
+        @activity.reload.description.should == "thedesc"
+      end
+    end
+  end
+
   describe "Update / Create" do
     before :each do
       @organization = Factory(:organization)

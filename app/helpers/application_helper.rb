@@ -42,7 +42,7 @@ module ApplicationHelper
   # Generates proper dashboard url link depending on the type of user
   def user_report_dashboard_path
     if current_user
-      if current_user.admin?
+      if current_user.sysadmin?
         admin_reports_path
       elsif current_user.district_manager?
         reports_district_path(current_user.location)

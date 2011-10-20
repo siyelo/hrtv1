@@ -89,11 +89,6 @@ class User < ActiveRecord::Base
     @roles || ROLES.reject { |r| ((roles_mask || 0) & 2**ROLES.index(r)).zero? }
   end
 
-  # deprecated - use sysadmin?
-  def admin?
-    sysadmin?
-  end
-
   def sysadmin?
     role?('admin')
   end

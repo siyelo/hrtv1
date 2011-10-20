@@ -5,7 +5,7 @@
       %h4
         Other Costs (Non-Project)
     %td.js_approve_all_other_costs_np
-      - if (current_user.admin? || current_user.activity_manager?) && other_costs.detect{ |a| !a.am_approved? }
+      - if (current_user.sysadmin? || current_user.activity_manager?) && other_costs.detect{ |a| !a.am_approved? }
         = link_to "Approve all Budgets", approve_all_budgets_response_path(response, :type => 'other_costs_no_project'), :method => :put, :class => "add_row"
   - if other_costs.present?
     - other_costs.each do |other_cost|

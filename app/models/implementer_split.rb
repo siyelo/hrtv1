@@ -68,7 +68,7 @@
       rows = FasterCSV.parse(file, {:headers => true})
 
       rows.map do
-        |row| hash[row['Implementer Split ID']] = row['Actual Duplicate?']
+        |row| hash[row['Implementer Split ID']] = row['Actual Double-Count?']
       end
 
       ImplementerSplit.find(:all, :conditions => ["id IN (?)", hash.keys]).each do |split|

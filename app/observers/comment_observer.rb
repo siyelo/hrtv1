@@ -1,6 +1,6 @@
 class CommentObserver < ActiveRecord::Observer
   def after_create(comment)
-    users = find_users_from_organization_commented_on comment
+    users = find_users_from_organization_commented_on(comment)
     Notifier.deliver_comment_notification(comment, users) if users.present?
   end
 

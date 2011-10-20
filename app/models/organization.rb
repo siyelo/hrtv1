@@ -4,7 +4,10 @@ class Organization < ActiveRecord::Base
   include ActsAsDateChecker
 
   ### Constants
-  FILE_UPLOAD_COLUMNS = %w[name raw_type fosaid currency]
+  FILE_UPLOAD_COLUMNS = %w[id name raw_type fosaid currency
+    fiscal_year_start_date fiscal_year_start_date contact_name
+    contact_position contact_phone_number contact_main_office_phone_number
+    contact_office_location location]
 
   ORGANIZATION_TYPES = ['Bilateral', 'Central Govt Revenue',
     'Clinic/Cabinet Medical', 'Communal FOSA', 'Dispensary', 'District',
@@ -110,8 +113,9 @@ class Organization < ActiveRecord::Base
       csv << Organization::FILE_UPLOAD_COLUMNS
       if organizations
         organizations.each do |org|
-          row = [org.name, org.raw_type, org.fosaid, org.currency]
-          csv << row
+          csv << Organization::FILE_UPLOAD_COLUMNS.collect do |field|
+            org.send(field.to_sym)
+          end
         end
       end
     end

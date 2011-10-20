@@ -14,7 +14,7 @@ module Admin::OrganizationsHelper
     end
 
     if query || filter
-      message += ". #{link_to "(Back to all organizations)", admin_organizations_url}"
+      message += ". #{link_to "(Back to all reporting organizations)", admin_organizations_url}"
     end
 
     message

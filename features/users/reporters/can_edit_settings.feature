@@ -24,6 +24,6 @@ Feature: Reporter can manage data response
         | 2010-01-01 | 2010-12-31 | Settings were successfully updated.  | Settings were successfully updated.   |
         |            | 2010-01-02 | Oops, we couldn't save your changes. | can't be blank                        |
         | 123        | 2010-01-02 | Oops, we couldn't save your changes. | is not a valid date                   |
-        | 2010-01-02 |            | Oops, we couldn't save your changes. | can't be blank                        |
+        | 2010-01-02 |            | Oops, we couldn't save your changes. | The end date must be exactly one year |
         | 2010-01-02 | 123        | Oops, we couldn't save your changes. | is not a valid date                   |
-        | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | Start date must come before End date. |
+        | 2010-05-05 | 2010-01-02 | Oops, we couldn't save your changes. | The end date must be exactly one year |

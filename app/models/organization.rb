@@ -43,17 +43,14 @@ class Organization < ActiveRecord::Base
   has_many :activities, :through => :data_responses
 
   ### Validations
-  validates_presence_of :name
+  validates_presence_of :name, :raw_type, :currency
   validates_uniqueness_of :name
-  validates_presence_of :currency, :contact_name, :contact_position,
-                        :contact_office_location, :contact_phone_number,
-                        :contact_main_office_phone_number, :on => :update
-  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}, :on => :update
-  validates_date :fiscal_year_start_date, :on => :update
-  validates_date :fiscal_year_end_date, :on => :update
-  validates_dates_order :fiscal_year_start_date, :fiscal_year_end_date,
-    :message => "Start date must come before End date.", :on => :update
-  validate :validates_date_range, :if => Proc.new { |model| model.fiscal_year_start_date.present? }
+  validates_inclusion_of :currency, :in => Money::Currency::TABLE.map{|k, v| "#{k.to_s.upcase}"}
+  validates_date :fiscal_year_start_date, :fiscal_year_end_date, :allow_blank => true
+  validates_presence_of :fiscal_year_start_date,
+   :if => Proc.new { |model| model.fiscal_year_end_date.present? }
+  validate :validates_date_range,
+   :if => Proc.new { |model| model.fiscal_year_start_date.present? }
 
   ### Callbacks
   after_save :update_cached_currency_amounts
@@ -327,6 +324,7 @@ class Organization < ActiveRecord::Base
         end
       end
     end
+
 end
 
 # == Schema Information

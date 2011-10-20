@@ -16,9 +16,9 @@ class Admin::OrganizationsController < Admin::BaseController
   def index
     scope = scope_organizations(params[:filter])
     scope = scope.scoped(:conditions => ["UPPER(organizations.name) LIKE UPPER(:q) OR
-                                           UPPER(organizations.raw_type) LIKE UPPER(:q) OR
-                                           UPPER(organizations.fosaid) LIKE UPPER(:q)",
-                                           {:q => "%#{params[:query]}%"}]) if params[:query]
+                                          UPPER(organizations.raw_type) LIKE UPPER(:q) OR
+                                          UPPER(organizations.fosaid) LIKE UPPER(:q)",
+                                          {:q => "%#{params[:query]}%"}]) if params[:query]
 
     @organizations = scope.paginate(:page => params[:page], :per_page => 200,
                     :order => "#{sort_column_query} #{sort_direction}")
@@ -45,7 +45,7 @@ class Admin::OrganizationsController < Admin::BaseController
 
   def update
     @organization.attributes = params[:organization]
-    if @organization.save(false)
+    if @organization.save
       flash[:notice] = 'Organization was successfully updated'
       redirect_to edit_admin_organization_url(resource)
     else
@@ -166,12 +166,19 @@ class Admin::OrganizationsController < Admin::BaseController
 
     # show reporting orgs by default.
     def scope_organizations(filter)
-      if filter == 'Non-Reporting'
+      case filter
+      when 'Non-Reporting'
         Organization.nonreporting
-      elsif allowed_filter?(params[:filter])
-        Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
-      else
+      when 'Reporting'
         Organization.reporting
+      when 'All'
+        Organization.sorted
+      else
+        if allowed_filter?(filter)
+          Organization.reporting.responses_by_states(current_request, [name_to_state(filter)])
+        else
+          Organization.reporting
+        end
       end
     end
 

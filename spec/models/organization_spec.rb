@@ -33,28 +33,8 @@ describe Organization do
   describe "Validations" do
     subject { Factory(:organization) }
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:raw_type) }
     it { should validate_uniqueness_of(:name) }
-
-    it "validates presence of attributes only on update" do
-      attributes = {
-        :currency => nil,
-        :contact_name => nil,
-        :contact_position => nil,
-        :contact_phone_number => nil,
-        :contact_main_office_phone_number => nil,
-        :contact_office_location => nil
-      }
-
-      organization = Factory(:organization, attributes) # create valid org
-
-      # try updating with invalid attributes
-      organization.update_attributes(attributes).should be_false
-      organization.errors.on(:contact_name).should_not be_blank
-      organization.errors.on(:contact_position).should_not be_blank
-      organization.errors.on(:contact_phone_number).should_not be_blank
-      organization.errors.on(:contact_main_office_phone_number).should_not be_blank
-      organization.errors.on(:contact_office_location).should_not be_blank
-    end
 
     it "is valid when currency is included in the list" do
       organization = Factory.build(:organization, :currency => 'USD')

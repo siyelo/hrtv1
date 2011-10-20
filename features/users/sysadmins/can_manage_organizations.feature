@@ -110,6 +110,7 @@ Feature: Admin can manage organizations
     And I should see "Rejected" within a link in the filters list
     And I should see "Accepted" within a link in the filters list
     And I should see "Non-Reporting" within a link in the filters list
+    And I should see "All" within a link in the filters list
 
   Scenario: An admin can filter organizations by response status
     Given the latest response for "org2" is submitted

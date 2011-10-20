@@ -58,6 +58,7 @@ class Reports::ClassificationSplit
       row << "Total Implementer #{amount_name} ($)"
       row << "#{classification_name} Code"
       row << "#{classification_name} Code Split (%)"
+      row << 'Total Classification Group (%)?'
       row << "Implementer #{amount_name} by #{classification_name} ($)"
       row << 'Possible Duplicate?'
       row << 'Actual Duplicate?'
@@ -97,6 +98,9 @@ class Reports::ClassificationSplit
         base_row << split_amount
 
         classifications, dummy_code = activity_or_ocost_classification(activity)
+        total_percentage = classifications.inject do |sum, split|
+          sum + (split.percentage || 0)
+        end
 
         # iterate here over classifications
         classifications.each do |classification|
@@ -106,6 +110,7 @@ class Reports::ClassificationSplit
           row << classification.code.short_display
           row << percentage
           row << percentage * split_amount / 100
+          row << total_percentage
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count
 

@@ -1,3 +1,4 @@
+- funders = f.object.errors.empty? ? f.object.in_flows.sorted : f.object.in_flows
 %h3
   Project Funding Sources
   %span
@@ -14,7 +15,7 @@
           .right_justified= "Planned Disbursements (#{next_fy(@response)})"
         %th
     %tbody
-      - f.object.in_flows.sorted.each do |funder|
+      - funders.each do |funder|
         - f.semantic_fields_for :in_flows, funder do |ff|
           = render "projects/in_flow_fields", :f => ff
       - 3.times do

@@ -44,8 +44,8 @@ describe Reports::ActivityOverview do
       table[0]['Activity'].should == 'activity1'
       table[0]['Funding Source'].should == 'donor1'
       table[0]['Implementer'].should == 'organization1'
-      table[0]['Expenditure ($)'].should == '100.0'
-      table[0]['Budget ($)'].should == '200.0'
+      table[0]['Expenditure ($)'].should == '100.00'
+      table[0]['Budget ($)'].should == '200.00'
       table[0]['Possible Double-Count?'].should == 'false'
       table[0]['Actual Double-Count?'].should == nil
     end
@@ -91,8 +91,8 @@ describe Reports::ActivityOverview do
       table[0]['Activity'].should == 'activity1'
       table[0]['Funding Source'].should == 'donor1'
       table[0]['Implementer'].should == 'organization1'
-      table[0]['Expenditure ($)'].should == '50.0'
-      table[0]['Budget ($)'].should == '100.0'
+      table[0]['Expenditure ($)'].should == '50.00'
+      table[0]['Budget ($)'].should == '100.00'
       table[0]['Possible Double-Count?'].should == 'false'
       table[0]['Actual Double-Count?'].should == nil
 
@@ -102,8 +102,8 @@ describe Reports::ActivityOverview do
       table[1]['Activity'].should == 'activity1'
       table[1]['Funding Source'].should == 'donor1'
       table[1]['Implementer'].should == 'organization2'
-      table[1]['Expenditure ($)'].should == '50.0'
-      table[1]['Budget ($)'].should == '100.0'
+      table[1]['Expenditure ($)'].should == '50.00'
+      table[1]['Budget ($)'].should == '100.00'
       table[1]['Possible Double-Count?'].should == 'true'
       table[1]['Actual Double-Count?'].should == nil
     end
@@ -152,8 +152,8 @@ describe Reports::ActivityOverview do
       table[0]['Activity'].should == 'activity1'
       table[0]['Funding Source'].should == 'donor1 | donor2'
       table[0]['Implementer'].should == 'organization1'
-      table[0]['Expenditure ($)'].should == '50.0'
-      table[0]['Budget ($)'].should == '100.0'
+      table[0]['Expenditure ($)'].should == '50.00'
+      table[0]['Budget ($)'].should == '100.00'
       table[0]['Possible Double-Count?'].should == 'false'
       table[0]['Actual Double-Count?'].should == nil
 
@@ -163,8 +163,8 @@ describe Reports::ActivityOverview do
       table[1]['Activity'].should == 'activity1'
       table[1]['Funding Source'].should == 'donor1 | donor2'
       table[1]['Implementer'].should == 'organization2'
-      table[1]['Expenditure ($)'].should == '50.0'
-      table[1]['Budget ($)'].should == '100.0'
+      table[1]['Expenditure ($)'].should == '50.00'
+      table[1]['Budget ($)'].should == '100.00'
       table[1]['Possible Double-Count?'].should == 'true'
       table[1]['Actual Double-Count?'].should == nil
     end

@@ -3,6 +3,7 @@ require 'fastercsv'
 class Reports::FundingSourceSplit
   include Reports::Helpers
   include CurrencyNumberHelper
+  include CurrencyViewNumberHelper
 
   def initialize(request, amount_type)
     @amount_type        = amount_type
@@ -79,11 +80,11 @@ class Reports::FundingSourceSplit
         base_row << activity.data_response.id
         base_row << activity.id
         base_row << activity.name
-        base_row << activity_amount
+        base_row << n2c(activity_amount)
 
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
-        base_row << split_amount # here
+        base_row << n2c(split_amount) # here
 
         # iterate here over funding sources
         activity.project.in_flows.each do |in_flow|
@@ -99,9 +100,9 @@ class Reports::FundingSourceSplit
 
           funder_ratio = (funders_total == 0 ? 0 : funder_amount / funders_total)
           row << in_flow.from.try(:name)
-          row << funder_amount
+          row << n2c(funder_amount)
           row << funder_ratio
-          row << funder_ratio * split_amount
+          row << n2c(funder_ratio * split_amount)
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count
 

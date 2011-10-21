@@ -59,8 +59,8 @@ class Reports::ClassificationSplit
       row << "#{classification_name} Code"
       row << "#{classification_name} Code Split (%)"
       row << "Implementer #{amount_name} by #{classification_name}"
-      row << 'Possible Duplicate?'
-      row << 'Actual Duplicate?'
+      row << 'Possible Double-Count?'
+      row << 'Actual Double-Count?'
       @code_deepest_nesting.times{ row << "#{classification_name} Hierarchy" }
 
       row

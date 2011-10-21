@@ -68,18 +68,4 @@ class Reports::ActivityOverview
 
       row
     end
-
-    def currencies
-      if @currencies
-        @currencies
-      else
-        @currencies = {}
-        Currency.all.map{|c| @currencies[c.conversion] = c.rate }
-        @currencies
-      end
-    end
-
-    def activity_url(activity)
-      "https://resourcetracking.heroku.com/responses/#{activity.data_response.id}/activities/#{activity.id}/edit"
-    end
 end

@@ -32,4 +32,8 @@ module Reports::Helpers
   def organization_funder_type(org)
     org.funder_type ? " (#{org.funder_type})" : ''
   end
+
+  def activity_url(activity)
+    "https://resourcetracking.heroku.com/responses/#{activity.data_response.id}/activities/#{activity.id}/edit"
+  end
 end

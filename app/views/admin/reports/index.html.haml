@@ -30,15 +30,21 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li= render 'report_row', :title => Report.key_to_name('activity_overview'), :key => 'activity_overview'
-      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_purpose'), :key => 'budget_implementer_purpose'
-      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_input'), :key => 'budget_implementer_input'
-      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_location'), :key => 'budget_implementer_location'
-      %li= render 'report_row', :title => Report.key_to_name('budget_implementer_funding_source'), :key => 'budget_implementer_funding_source'
-      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_purpose'), :key => 'spend_implementer_purpose'
-      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_input'), :key => 'spend_implementer_input'
-      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_location'), :key => 'spend_implementer_location'
-      %li= render 'report_row', :title => Report.key_to_name('spend_implementer_funding_source'), :key => 'spend_implementer_funding_source'
+      %li= render 'report_row', :key => 'activity_overview'
+      %li= render 'report_row', :key => 'budget_implementer_purpose'
+      %li= render 'report_row', :key => 'spend_implementer_purpose'
+      %li= render 'report_row', :key => 'budget_implementer_input'
+      %li= render 'report_row', :key => 'spend_implementer_input'
+      %li= render 'report_row', :key => 'budget_implementer_location'
+      %li= render 'report_row', :key => 'spend_implementer_location'
+      %li= render 'report_row', :key => 'budget_implementer_funding_source'
+      %li= render 'report_row', :key => 'spend_implementer_funding_source'
+      %li= render 'report_row', :key => 'budget_implementer_target'
+      %li= render 'report_row', :key => 'spend_implementer_target'
+      %li= render 'report_row', :key => 'budget_implementer_output'
+      %li= render 'report_row', :key => 'spend_implementer_output'
+      %li= render 'report_row', :key => 'budget_implementer_beneficiary'
+      %li= render 'report_row', :key => 'spend_implementer_beneficiary'
 
   %h2
     =image_tag "icon_reporter.png", :class => "heading_icon"

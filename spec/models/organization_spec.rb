@@ -5,6 +5,8 @@ describe Organization do
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:location_id) }
     it { should allow_mass_assignment_of(:raw_type) }
+    it { should allow_mass_assignment_of(:implementer_type) }
+    it { should allow_mass_assignment_of(:funder_type) }
     it { should allow_mass_assignment_of(:fosaid) }
     it { should allow_mass_assignment_of(:currency) }
     it { should allow_mass_assignment_of(:fiscal_year_end_date) }
@@ -53,12 +55,6 @@ describe Organization do
     it { should allow_mass_assignment_of(:contact_office_location) }
     it { should allow_value('2010-12-01').for(:fiscal_year_start_date) }
     it { should allow_value('2010-12-01').for(:fiscal_year_end_date) }
-    #it { should_not allow_value('').for(:fiscal_year_start_date) }
-    #it { should_not allow_value('').for(:fiscal_year_end_date) }
-    #it { should_not allow_value('2010-13-01').for(:fiscal_year_start_date) }
-    #it { should_not allow_value('2010-12-41').for(:fiscal_year_start_date) }
-    #it { should_not allow_value('2010-13-01').for(:fiscal_year_end_date) }
-    #it { should_not allow_value('2010-12-41').for(:fiscal_year_end_date) }
 
     it "accepts start date < end date (exactly 1 year)" do
       organization = Factory.build(:organization,

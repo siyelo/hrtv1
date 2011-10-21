@@ -80,6 +80,7 @@
   end
 end
 
+
 # == Schema Information
 #
 # Table name: implementer_splits
@@ -91,5 +92,6 @@ end
 #  budget          :decimal(, )
 #  created_at      :datetime
 #  updated_at      :datetime
+#  double_count    :boolean
 #
 

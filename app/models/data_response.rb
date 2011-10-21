@@ -345,6 +345,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: data_responses
@@ -355,5 +356,6 @@ end
 #  updated_at      :datetime
 #  organization_id :integer         indexed
 #  state           :string(255)
+#  projects_count  :integer         default(0)
 #
 

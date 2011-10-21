@@ -21,7 +21,8 @@ class Organization < ActiveRecord::Base
   ### Attributes
   attr_accessible :name, :raw_type, :fosaid, :currency, :fiscal_year_end_date,
     :fiscal_year_start_date, :contact_name, :contact_position, :contact_phone_number,
-    :contact_main_office_phone_number, :contact_office_location, :location_id
+    :contact_main_office_phone_number, :contact_office_location, :location_id,
+    :implementer_type, :funder_type
 
   ### Associations
   belongs_to :location
@@ -327,6 +328,7 @@ class Organization < ActiveRecord::Base
 
 end
 
+
 # == Schema Information
 #
 # Table name: organizations
@@ -347,5 +349,7 @@ end
 #  contact_main_office_phone_number :string(255)
 #  contact_office_location          :string(255)
 #  location_id                      :integer
+#  implementer_type                 :string(255)
+#  funder_type                      :string(255)
 #
 

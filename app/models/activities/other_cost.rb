@@ -58,6 +58,7 @@ end
 
 
 
+
 # == Schema Information
 #
 # Table name: activities
@@ -70,15 +71,12 @@ end
 #  description                  :text
 #  type                         :string(255)     indexed
 #  budget                       :decimal(, )
-#  start_date                   :date
-#  end_date                     :date
 #  spend                        :decimal(, )
 #  text_for_provider            :text
 #  text_for_beneficiaries       :text
 #  data_response_id             :integer         indexed
 #  activity_id                  :integer         indexed
 #  approved                     :boolean
-#  sub_activities_count         :integer         default(0)
 #  spend_in_usd                 :decimal(, )     default(0.0)
 #  budget_in_usd                :decimal(, )     default(0.0)
 #  project_id                   :integer
@@ -93,5 +91,9 @@ end
 #  coding_spend_valid           :boolean         default(FALSE)
 #  coding_spend_cc_valid        :boolean         default(FALSE)
 #  coding_spend_district_valid  :boolean         default(FALSE)
+#  planned_for_gor_q1           :boolean
+#  planned_for_gor_q2           :boolean
+#  planned_for_gor_q3           :boolean
+#  planned_for_gor_q4           :boolean
 #
 

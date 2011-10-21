@@ -36,8 +36,16 @@ module OrganizationsHelper
     "Raw type of organization"
   end
 
+  def funder_type_hint
+    "Funder type of organization"
+  end
+
+  def implementer_type_hint
+    "Implementer type of organization"
+  end
+
   def fosaid_hint
-    "Fosaid or organization"
+    "Fosaid of organization"
   end
 
   def fiscal_year_start_date_hint

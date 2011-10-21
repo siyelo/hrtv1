@@ -30,6 +30,7 @@
         %th.delete
     %tbody
       - if outlay.new_record? && @splits.empty?
+        - @splits = outlay.implementer_splits
         - self_org_id = outlay.organization.id
         - @splits.build(:organization_id => self_org_id, :data_response_id => outlay.data_response_id)
       - @splits.each do |is|

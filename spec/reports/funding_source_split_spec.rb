@@ -57,13 +57,13 @@ describe Reports::FundingSourceSplit do
         table[0]['Data Response ID'].should == @response1.id.to_s
         table[0]['Activity ID'].should == @activity1.id.to_s
         table[0]['Activity'].should == 'activity1'
-        table[0]["Total Activity #{amount_name} ($)"].should == '100.0'
+        table[0]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[0]['Implementer'].should == 'organization1'
-        table[0]["Total Implementer #{amount_name} ($)"].should == '50.0'
+        table[0]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[0]['Funding Source'].should == 'donor1'
-        table[0]["Total Funding Source #{amount_name} ($)"].should == '60.0'
+        table[0]["Total Funding Source #{amount_name} ($)"].should == '60.00'
         table[0]['Funding Source Ratio'].should == '0.6'
-        table[0]["Implementer #{amount_name} by Funding Source"] == '30.0'
+        table[0]["Implementer #{amount_name} by Funding Source"] == '30.00'
         table[0]['Possible Duplicate?'].should == 'false'
         table[0]['Actual Duplicate?'].should == nil
 
@@ -73,13 +73,13 @@ describe Reports::FundingSourceSplit do
         table[1]['Data Response ID'].should == @response1.id.to_s
         table[1]['Activity ID'].should == @activity1.id.to_s
         table[1]['Activity'].should == 'activity1'
-        table[1]["Total Activity #{amount_name} ($)"].should == '100.0'
+        table[1]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[1]['Implementer'].should == 'organization1'
-        table[1]["Total Implementer #{amount_name} ($)"].should == '50.0'
+        table[1]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[1]['Funding Source'].should == 'donor2'
-        table[1]["Total Funding Source #{amount_name} ($)"].should == '40.0'
+        table[1]["Total Funding Source #{amount_name} ($)"].should == '40.00'
         table[1]['Funding Source Ratio'].should == '0.4'
-        table[1]["Implementer #{amount_name} by Funding Source"] == '20.0'
+        table[1]["Implementer #{amount_name} by Funding Source"] == '20.00'
         table[1]['Possible Duplicate?'].should == 'false'
         table[1]['Actual Duplicate?'].should == nil
 
@@ -89,13 +89,13 @@ describe Reports::FundingSourceSplit do
         table[2]['Data Response ID'].should == @response1.id.to_s
         table[2]['Activity ID'].should == @activity1.id.to_s
         table[2]['Activity'].should == 'activity1'
-        table[2]["Total Activity #{amount_name} ($)"].should == '100.0'
+        table[2]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[2]['Implementer'].should == 'organization2'
-        table[2]["Total Implementer #{amount_name} ($)"].should == '50.0'
+        table[2]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[2]['Funding Source'].should == 'donor1'
-        table[2]["Total Funding Source #{amount_name} ($)"].should == '60.0'
+        table[2]["Total Funding Source #{amount_name} ($)"].should == '60.00'
         table[2]['Funding Source Ratio'].should == '0.6'
-        table[2]["Implementer #{amount_name} by Funding Source"] == '30.0'
+        table[2]["Implementer #{amount_name} by Funding Source"] == '30.00'
         table[2]['Possible Duplicate?'].should == 'false'
         table[2]['Actual Duplicate?'].should == nil
 
@@ -105,13 +105,13 @@ describe Reports::FundingSourceSplit do
         table[3]['Data Response ID'].should == @response1.id.to_s
         table[3]['Activity ID'].should == @activity1.id.to_s
         table[3]['Activity'].should == 'activity1'
-        table[3]["Total Activity #{amount_name} ($)"].should == '100.0'
+        table[3]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[3]['Implementer'].should == 'organization2'
-        table[3]["Total Implementer #{amount_name} ($)"].should == '50.0'
+        table[3]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[3]['Funding Source'].should == 'donor2'
-        table[3]["Total Funding Source #{amount_name} ($)"].should == '40.0'
+        table[3]["Total Funding Source #{amount_name} ($)"].should == '40.00'
         table[3]['Funding Source Ratio'].should == '0.4'
-        table[3]["Implementer #{amount_name} by Funding Source"] == '20.0'
+        table[3]["Implementer #{amount_name} by Funding Source"] == '20.00'
         table[3]['Possible Duplicate?'].should == 'false'
         table[3]['Actual Duplicate?'].should == nil
       end

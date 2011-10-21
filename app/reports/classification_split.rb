@@ -3,6 +3,7 @@ require 'fastercsv'
 class Reports::ClassificationSplit
   include Reports::Helpers
   include CurrencyNumberHelper
+  include CurrencyViewNumberHelper
 
   def initialize(request, amount_type, classification_type)
     @amount_type                = amount_type
@@ -90,10 +91,10 @@ class Reports::ClassificationSplit
         base_row << activity.data_response.id
         base_row << activity.id
         base_row << activity.name
-        base_row << activity_amount
+        base_row << n2c(activity_amount)
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
-        base_row << split_amount
+        base_row << n2c(split_amount)
 
         # iterate here over classifications
         classifications.each do |classification|
@@ -102,7 +103,7 @@ class Reports::ClassificationSplit
 
           row << classification.code.short_display
           row << percentage
-          row << percentage * split_amount / 100
+          row << n2c(percentage * split_amount / 100)
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count
           codes = classification.code ?

@@ -3,6 +3,7 @@ require 'fastercsv'
 class Reports::ActivityOverview
   include Reports::Helpers
   include CurrencyNumberHelper
+  include CurrencyViewNumberHelper
 
   def initialize(request)
     @implementer_splits = ImplementerSplit.find :all,
@@ -46,7 +47,6 @@ class Reports::ActivityOverview
 
     def build_row(implementer_split)
       activity = implementer_split.activity
-      rate = currency_rate(activity.currency, 'USD')
 
       row = []
 
@@ -58,8 +58,8 @@ class Reports::ActivityOverview
       row << project_in_flows(activity.project)
       row << implementer_split.organization.try(:name)
       row << implementer_split.id
-      row << (implementer_split.spend || 0) * rate
-      row << (implementer_split.budget || 0) * rate
+      row << n2c(universal_currency_converter(implementer_split.spend, activity.currency, 'USD'))
+      row << n2c(universal_currency_converter(implementer_split.budget, activity.currency, 'USD'))
       row << implementer_split.possible_double_count?
       # don't use double_count?, we need to display if the value is nil
       row << implementer_split.double_count

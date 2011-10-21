@@ -311,13 +311,13 @@ describe Organization do
 
     it "will return just the headers if no organizations are passed" do
       org_headers = Organization.download_template
-      org_headers.should == "id,name,raw_type,fosaid,currency,fiscal_year_start_date,fiscal_year_start_date,contact_name,contact_position,contact_phone_number,contact_main_office_phone_number,contact_office_location,location\n"
+      org_headers.should ==  "id,name,raw_type,fosaid,currency,fiscal_year_start_date,fiscal_year_end_date,contact_name,contact_position,contact_phone_number,contact_main_office_phone_number,contact_office_location,location\n"
     end
 
     it "will return a list of organizations if there are present" do
       organizations = Organization.all
       orgs = Organization.download_template(organizations)
-      orgs.should == "id,name,raw_type,fosaid,currency,fiscal_year_start_date,fiscal_year_start_date,contact_name,contact_position,contact_phone_number,contact_main_office_phone_number,contact_office_location,location\n1,blarorg,NGO,13,USD,2008-07-01,2008-07-01,Bob,Manager,123123123,234234234,Cape Town,\n"
+      orgs.should == "id,name,raw_type,fosaid,currency,fiscal_year_start_date,fiscal_year_end_date,contact_name,contact_position,contact_phone_number,contact_main_office_phone_number,contact_office_location,location\n45,blarorg,NGO,13,USD,2008-07-01,2009-06-30,Bob,Manager,123123123,234234234,Cape Town,\n"
     end
   end
 

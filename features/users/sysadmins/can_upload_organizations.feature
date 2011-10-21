@@ -6,7 +6,7 @@ Feature: Admin can manage organizations
   Background:
      Given an organization exists with name: "org1", raw_type: "Donor", fosaid: "111"
      And a data_request exists with title: "Req1", organization: the organization
-     And an admin exists with email: "sysadmin@hrtapp.com", organization: the organization
+     And an sysadmin exists with email: "sysadmin@hrtapp.com", organization: the organization
      And I am signed in as "sysadmin@hrtapp.com"
      And I follow "Organizations"
 
@@ -16,10 +16,10 @@ Feature: Admin can manage organizations
     And I attach the file "spec/fixtures/organizations.csv" to "File"
     And I press "Upload and Import"
     Then I should see "Created 4 of 4 organizations successfully"
-    And I should see "csv_org1"
-    And I should see "csv_org2"
-    And I should see "csv_org3"
-    And I should see "csv_org4"
+    And I should see "Iceicebaby"
+    And I should see "Getdownonit"
+    And I should see "Barbiegirl"
+    And I should see "Organization1"
 
   Scenario: An admin can see error if no csv file is not attached for upload
     When I follow "Organizations"

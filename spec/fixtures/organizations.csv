@@ -1,5 +1,1 @@
-name,raw_type,fosaid,currency
-csv_org1,Ngo,111,USD
-csv_org2,Ngo,222,USD
-csv_org3,Donor,333,USD
-csv_org4,Donor,444,USD
+id,name,raw_type,fosaid,currency,fiscal_year_start_date,fiscal_year_end_date,contact_name,contact_position,contact_phone_number,contact_main_office_phone_number,contact_office_location,location,Iceicebaby,NGO,,USD,7/1/10,6/30/11,Malika Cook/James Reilly,Division Director,1.240.333.6602/1.301.215.6511 ,Mcook@aabb.org/Jreilly@aabb.org,USA,,Getdownonit,NGO,,USD,7/1/10,6/30/11,Malika Cook/James Reilly,Division Director,1.240.333.6602/1.301.215.6511 ,Mcook@aabb.org/Jreilly@aabb.org,USA,,Barbiegirl,NGO,,USD,7/1/10,6/30/11,Malika Cook/James Reilly,Division Director,1.240.333.6602/1.301.215.6511 ,Mcook@aabb.org/Jreilly@aabb.org,USA,,Organization1,NGO,,USD,7/1/10,6/30/11,Malika Cook/James Reilly,Division Director,1.240.333.6602/1.301.215.6511 ,Mcook@aabb.org/Jreilly@aabb.org,USA,

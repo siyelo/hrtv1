@@ -5,7 +5,7 @@ class Organization < ActiveRecord::Base
 
   ### Constants
   FILE_UPLOAD_COLUMNS = %w[id name raw_type fosaid currency
-    fiscal_year_start_date fiscal_year_start_date contact_name
+    fiscal_year_start_date fiscal_year_end_date contact_name
     contact_position contact_phone_number contact_main_office_phone_number
     contact_office_location location]
 

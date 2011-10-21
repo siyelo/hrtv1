@@ -39,6 +39,7 @@ class Reports::Targets
       row << 'Activity URL'
       row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
+      row << 'Implementer Type'
       row << "Total Implementer #{amount_name} ($)"
       row << 'Activity Target'
       row << 'Possible Double-Count?'
@@ -69,6 +70,7 @@ class Reports::Targets
       base_row << activity_url(activity)
       base_row << n2c(activity_amount * rate)
       base_row << implementer_split.organization.try(:name)
+      base_row << implementer_split.organization.implementer_type
       base_row << n2c(split_amount * rate)
 
       # fake target if none

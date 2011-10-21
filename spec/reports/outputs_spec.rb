@@ -21,7 +21,8 @@ describe Reports::Outputs do
       before :each do
         @donor1        = Factory(:organization, :name => "donor1")
         @donor2        = Factory(:organization, :name => "donor2")
-        @organization1 = Factory(:organization, :name => "organization1")
+        @organization1 = Factory(:organization, :name => "organization1",
+                                 :implementer_type => "Implementer")
         @request       = Factory(:data_request, :organization => @organization1)
         @response1     = @organization1.latest_response
         in_flow1       = Factory.build(:funding_flow, :from => @donor1,
@@ -61,6 +62,7 @@ describe Reports::Outputs do
         table[0]['Activity ID'].should == @activity1.id.to_s
         table[0]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[0]['Implementer'].should == 'organization1'
+        table[0]['Implementer Type'].should == 'Implementer'
         table[0]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[0]['Activity Output'].should == 'output1'
         table[0]['Possible Double-Count?'].should == 'false'
@@ -74,6 +76,7 @@ describe Reports::Outputs do
         table[1]['Activity ID'].should == @activity1.id.to_s
         table[1]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[1]['Implementer'].should == 'organization1'
+        table[1]['Implementer Type'].should == 'Implementer'
         table[1]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[1]['Activity Output'].should == 'output2'
         table[1]['Possible Double-Count?'].should == 'false'
@@ -87,6 +90,7 @@ describe Reports::Outputs do
         table[2]['Activity ID'].should == @activity1.id.to_s
         table[2]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[2]['Implementer'].should == 'organization2'
+        table[2]['Implementer Type'].should be_nil
         table[2]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[2]['Activity Output'].should == 'output1'
         table[2]['Possible Double-Count?'].should == 'false'
@@ -100,6 +104,7 @@ describe Reports::Outputs do
         table[3]['Activity ID'].should == @activity1.id.to_s
         table[3]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[3]['Implementer'].should == 'organization2'
+        table[3]['Implementer Type'].should be_nil
         table[3]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[3]["Implementer #{amount_name} by Funding Source"] == '20.00'
         table[3]['Activity Output'].should == 'output2'

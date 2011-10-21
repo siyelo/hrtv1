@@ -14,8 +14,9 @@ describe Reports::ActivityOverview do
   end
 
   before :each do
-    @donor1        = Factory(:organization, :name => "donor1")
-    @organization1 = Factory(:organization, :name => "organization1")
+    @donor1        = Factory(:organization, :name => "donor1", :funder_type => "donor")
+    @organization1 = Factory(:organization, :name => "organization1",
+     :implementer_type => "implementer")
     @request       = Factory(:data_request, :organization => @organization1)
     @response1     = @organization1.latest_response
   end
@@ -42,8 +43,9 @@ describe Reports::ActivityOverview do
       table[0]['Organization'].should == 'organization1'
       table[0]['Project'].should == 'project1'
       table[0]['Activity'].should == 'activity1'
-      table[0]['Funding Source'].should == 'donor1'
+      table[0]['Funding Source'].should == 'donor1 (donor)'
       table[0]['Implementer'].should == 'organization1'
+      table[0]['Implementer Type'].should == 'implementer'
       table[0]['Expenditure ($)'].should == '100.00'
       table[0]['Budget ($)'].should == '200.00'
       table[0]['Possible Double-Count?'].should == 'false'
@@ -89,8 +91,9 @@ describe Reports::ActivityOverview do
       table[0]['Organization'].should == 'organization1'
       table[0]['Project'].should == 'project1'
       table[0]['Activity'].should == 'activity1'
-      table[0]['Funding Source'].should == 'donor1'
+      table[0]['Funding Source'].should == 'donor1 (donor)'
       table[0]['Implementer'].should == 'organization1'
+      table[0]['Implementer Type'].should == 'implementer'
       table[0]['Expenditure ($)'].should == '50.00'
       table[0]['Budget ($)'].should == '100.00'
       table[0]['Possible Double-Count?'].should == 'false'
@@ -100,8 +103,9 @@ describe Reports::ActivityOverview do
       table[1]['Organization'].should == 'organization1'
       table[1]['Project'].should == 'project1'
       table[1]['Activity'].should == 'activity1'
-      table[1]['Funding Source'].should == 'donor1'
+      table[1]['Funding Source'].should == 'donor1 (donor)'
       table[1]['Implementer'].should == 'organization2'
+      table[1]['Implementer Type'].should be_nil
       table[1]['Expenditure ($)'].should == '50.00'
       table[1]['Budget ($)'].should == '100.00'
       table[1]['Possible Double-Count?'].should == 'true'
@@ -150,8 +154,9 @@ describe Reports::ActivityOverview do
       table[0]['Organization'].should == 'organization1'
       table[0]['Project'].should == 'project1'
       table[0]['Activity'].should == 'activity1'
-      table[0]['Funding Source'].should == 'donor1 | donor2'
+      table[0]['Funding Source'].should == 'donor1 (donor) | donor2'
       table[0]['Implementer'].should == 'organization1'
+      table[0]['Implementer Type'].should == 'implementer'
       table[0]['Expenditure ($)'].should == '50.00'
       table[0]['Budget ($)'].should == '100.00'
       table[0]['Possible Double-Count?'].should == 'false'
@@ -161,8 +166,9 @@ describe Reports::ActivityOverview do
       table[1]['Organization'].should == 'organization1'
       table[1]['Project'].should == 'project1'
       table[1]['Activity'].should == 'activity1'
-      table[1]['Funding Source'].should == 'donor1 | donor2'
+      table[1]['Funding Source'].should == 'donor1 (donor) | donor2'
       table[1]['Implementer'].should == 'organization2'
+      table[1]['Implementer Type'].should be nil
       table[1]['Expenditure ($)'].should == '50.00'
       table[1]['Budget ($)'].should == '100.00'
       table[1]['Possible Double-Count?'].should == 'true'

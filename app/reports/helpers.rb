@@ -26,6 +26,10 @@ module Reports::Helpers
   end
 
   def project_in_flows(project)
-    project ? project.in_flows.map{ |f| f.from.name }.join(' | ') : ''
+    project ? project.in_flows.map{ |f| "#{f.from.name}#{organization_funder_type(f.from)}" }.join(' | ') : ''
+  end
+
+  def organization_funder_type(org)
+    org.funder_type ? " (#{org.funder_type})" : ''
   end
 end

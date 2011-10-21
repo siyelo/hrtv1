@@ -14,7 +14,8 @@ describe Reports::ClassificationSplit do
 
   before :each do
     @donor1        = Factory(:organization, :name => "donor1")
-    @organization1 = Factory(:organization, :name => "organization1")
+    @organization1 = Factory(:organization, :name => "organization1",
+      :implementer_type => "Implementer")
     @request       = Factory(:data_request, :organization => @organization1)
     @response1     = @organization1.latest_response
     in_flows       = [Factory.build(:funding_flow, :from => @donor1,
@@ -77,6 +78,7 @@ describe Reports::ClassificationSplit do
           table[0]['Activity'].should == '@activity1'
           table[0]['Total Activity Budget ($)'].should == '150.00'
           table[0]['Implementer'].should == 'organization1'
+          table[0]['Implementer Type'].should == 'Implementer'
           table[0]['Total Implementer Budget ($)'].should == '100.00'
           table[0]["#{@classification_name} Code"].should == @code1_name
           table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
@@ -94,6 +96,7 @@ describe Reports::ClassificationSplit do
           table[1]['Activity'].should == '@activity1'
           table[1]['Total Activity Budget ($)'].should == '150.00'
           table[1]['Implementer'].should == 'organization1'
+          table[1]['Implementer Type'].should == 'Implementer'
           table[1]['Total Implementer Budget ($)'].should == '100.00'
           table[1]["#{@classification_name} Code"].should == @code2_name
           table[1]["#{@classification_name} Code Split (%)"].should == '75.0'
@@ -111,6 +114,7 @@ describe Reports::ClassificationSplit do
           table[2]['Activity'].should == '@activity1'
           table[2]['Total Activity Budget ($)'].should == '150.00'
           table[2]['Implementer'].should == 'organization2'
+          table[2]['Implementer Type'].should be_nil
           table[2]['Total Implementer Budget ($)'].should == '50.00'
           table[2]["#{@classification_name} Code"].should == @code1_name
           table[2]["#{@classification_name} Code Split (%)"].should == '25.0'
@@ -128,6 +132,7 @@ describe Reports::ClassificationSplit do
           table[3]['Activity'].should == '@activity1'
           table[3]['Total Activity Budget ($)'].should == '150.00'
           table[3]['Implementer'].should == 'organization2'
+          table[3]['Implementer Type'].should be_nil
           table[3]['Total Implementer Budget ($)'].should == '50.00'
           table[3]["#{@classification_name} Code"].should == @code2_name
           table[3]["#{@classification_name} Code Split (%)"].should == '75.0'
@@ -150,6 +155,7 @@ describe Reports::ClassificationSplit do
           table[0]['Activity'].should == '@activity1'
           table[0]['Total Activity Budget ($)'].should == '15.00'
           table[0]['Implementer'].should == 'organization1'
+          table[0]['Implementer Type'].should == 'Implementer'
           table[0]['Total Implementer Budget ($)'].should == '10.00'
           table[0]["#{@classification_name} Code"].should == @code1_name
           table[0]["#{@classification_name} Code Split (%)"].should == '25.0'

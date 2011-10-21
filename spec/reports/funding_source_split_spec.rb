@@ -19,9 +19,12 @@ describe Reports::FundingSourceSplit do
   [:budget, :spend].each do |amount_type|
     context "#{amount_type}" do
       before :each do
-        @donor1        = Factory(:organization, :name => "donor1")
-        @donor2        = Factory(:organization, :name => "donor2")
-        @organization1 = Factory(:organization, :name => "organization1")
+        @donor1        = Factory(:organization, :name => "donor1",
+         :funder_type => "donor")
+        @donor2        = Factory(:organization, :name => "donor2",
+         :funder_type => "government")
+        @organization1 = Factory(:organization, :name => "organization1",
+         :implementer_type => "implementer")
         @request       = Factory(:data_request, :organization => @organization1)
         @response1     = @organization1.latest_response
         in_flow1       = Factory.build(:funding_flow, :from => @donor1,
@@ -33,7 +36,8 @@ describe Reports::FundingSourceSplit do
                                  :name => 'project1',
                                  :in_flows => in_flows)
         impl_splits   = []
-        organization2 = Factory(:organization, :name => 'organization2')
+        organization2 = Factory(:organization, :name => 'organization2',
+         :implementer_type => 'distributor')
         impl_splits << Factory(:implementer_split,
           :organization => @organization1, amount_type => 50)
         impl_splits << Factory(:implementer_split,
@@ -59,8 +63,10 @@ describe Reports::FundingSourceSplit do
         table[0]['Activity'].should == 'activity1'
         table[0]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[0]['Implementer'].should == 'organization1'
+        table[0]['Implementer Type'].should == 'implementer'
         table[0]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[0]['Funding Source'].should == 'donor1'
+        table[0]['Funder Type'].should == 'donor'
         table[0]["Total Funding Source #{amount_name} ($)"].should == '60.00'
         table[0]['Funding Source Ratio'].should == '0.6'
         table[0]["Implementer #{amount_name} by Funding Source"] == '30.00'
@@ -75,8 +81,10 @@ describe Reports::FundingSourceSplit do
         table[1]['Activity'].should == 'activity1'
         table[1]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[1]['Implementer'].should == 'organization1'
+        table[1]['Implementer Type'].should == 'implementer'
         table[1]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[1]['Funding Source'].should == 'donor2'
+        table[1]['Funder Type'].should == 'government'
         table[1]["Total Funding Source #{amount_name} ($)"].should == '40.00'
         table[1]['Funding Source Ratio'].should == '0.4'
         table[1]["Implementer #{amount_name} by Funding Source"] == '20.00'
@@ -91,8 +99,10 @@ describe Reports::FundingSourceSplit do
         table[2]['Activity'].should == 'activity1'
         table[2]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[2]['Implementer'].should == 'organization2'
+        table[2]['Implementer Type'].should == 'distributor'
         table[2]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[2]['Funding Source'].should == 'donor1'
+        table[2]['Funder Type'].should == 'donor'
         table[2]["Total Funding Source #{amount_name} ($)"].should == '60.00'
         table[2]['Funding Source Ratio'].should == '0.6'
         table[2]["Implementer #{amount_name} by Funding Source"] == '30.00'
@@ -107,8 +117,10 @@ describe Reports::FundingSourceSplit do
         table[3]['Activity'].should == 'activity1'
         table[3]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[3]['Implementer'].should == 'organization2'
+        table[3]['Implementer Type'].should == 'distributor'
         table[3]["Total Implementer #{amount_name} ($)"].should == '50.00'
         table[3]['Funding Source'].should == 'donor2'
+        table[3]['Funder Type'].should == 'government'
         table[3]["Total Funding Source #{amount_name} ($)"].should == '40.00'
         table[3]['Funding Source Ratio'].should == '0.4'
         table[3]["Implementer #{amount_name} by Funding Source"] == '20.00'

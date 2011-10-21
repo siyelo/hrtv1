@@ -54,6 +54,7 @@ class Reports::ClassificationSplit
       row << 'Activity'
       row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
+      row << 'Implementer Type'
       row << "Total Implementer #{amount_name} ($)"
       row << "#{classification_name} Code"
       row << "#{classification_name} Code Split (%)"
@@ -94,6 +95,7 @@ class Reports::ClassificationSplit
         base_row << n2c(activity_amount)
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
+        base_row << implementer_split.organization.implementer_type
         base_row << n2c(split_amount)
 
         # iterate here over classifications

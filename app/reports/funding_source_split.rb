@@ -39,8 +39,10 @@ class Reports::FundingSourceSplit
       row << 'Activity'
       row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
+      row << 'Implementer Type'
       row << "Total Implementer #{amount_name} ($)"
       row << 'Funding Source'
+      row << 'Funder Type'
       row << "Total Funding Source #{amount_name} ($)"
       row << 'Funding Source Ratio'
       row << "Implementer #{amount_name} by Funding Source ($)"
@@ -83,6 +85,7 @@ class Reports::FundingSourceSplit
 
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
+        base_row << implementer_split.organization.implementer_type
         base_row << n2c(split_amount) # here
 
         # iterate here over funding sources
@@ -99,6 +102,7 @@ class Reports::FundingSourceSplit
 
           funder_ratio = (funders_total == 0 ? 0 : funder_amount / funders_total)
           row << in_flow.from.try(:name)
+          row << in_flow.from.funder_type
           row << n2c(funder_amount)
           row << funder_ratio
           row << n2c(funder_ratio * split_amount)

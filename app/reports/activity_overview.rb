@@ -36,6 +36,7 @@ class Reports::ActivityOverview
       row << 'Funding Source'
 
       row << 'Implementer'
+      row << 'Implementer Type'
       row << 'Implementer Split ID'
       row << 'Expenditure ($)'
       row << 'Budget ($)'
@@ -57,6 +58,7 @@ class Reports::ActivityOverview
       row << activity_url(activity)
       row << project_in_flows(activity.project)
       row << implementer_split.organization.try(:name)
+      row << implementer_split.organization.implementer_type
       row << implementer_split.id
       row << n2c(universal_currency_converter(implementer_split.spend, activity.currency, 'USD'))
       row << n2c(universal_currency_converter(implementer_split.budget, activity.currency, 'USD'))

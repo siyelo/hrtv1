@@ -13,8 +13,7 @@ class Reports::FundingSourceSplit
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ :project => { :in_flows => :from } },
         { :data_response => :organization } ]},
-        { :organization => :data_responses }],
-      :limit => 10
+        { :organization => :data_responses }]
   end
 
   def csv

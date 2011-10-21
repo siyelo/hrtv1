@@ -80,7 +80,7 @@ describe Reports::ClassificationSplit do
           table[0]['Total Implementer Budget ($)'].should == '100.0'
           table[0]["#{@classification_name} Code"].should == @code1_name
           table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
-          table[0]["Implementer Budget by #{@classification_name}"].should == '25.0'
+          table[0]["Implementer Budget by #{@classification_name} ($)"].should == '25.0'
           table[0]['Possible Duplicate?'].should == 'false'
           table[0]['Actual Duplicate?'].should == nil
           table[0]["#{@classification_name} Hierarchy"].should == @code1_name
@@ -97,7 +97,7 @@ describe Reports::ClassificationSplit do
           table[1]['Total Implementer Budget ($)'].should == '100.0'
           table[1]["#{@classification_name} Code"].should == @code2_name
           table[1]["#{@classification_name} Code Split (%)"].should == '75.0'
-          table[1]["Implementer Budget by #{@classification_name}"].should == '75.0'
+          table[1]["Implementer Budget by #{@classification_name} ($)"].should == '75.0'
           table[1]['Possible Duplicate?'].should == 'false'
           table[1]['Actual Duplicate?'].should == nil
           table[1]["#{@classification_name} Hierarchy"].should == @code2_name
@@ -114,7 +114,7 @@ describe Reports::ClassificationSplit do
           table[2]['Total Implementer Budget ($)'].should == '50.0'
           table[2]["#{@classification_name} Code"].should == @code1_name
           table[2]["#{@classification_name} Code Split (%)"].should == '25.0'
-          table[2]["Implementer Budget by #{@classification_name}"].should == '12.5'
+          table[2]["Implementer Budget by #{@classification_name} ($)"].should == '12.5'
           table[2]['Possible Duplicate?'].should == 'false'
           table[2]['Actual Duplicate?'].should == nil
           table[2]["#{@classification_name} Hierarchy"].should == @code1_name
@@ -131,7 +131,7 @@ describe Reports::ClassificationSplit do
           table[3]['Total Implementer Budget ($)'].should == '50.0'
           table[3]["#{@classification_name} Code"].should == @code2_name
           table[3]["#{@classification_name} Code Split (%)"].should == '75.0'
-          table[3]["Implementer Budget by #{@classification_name}"].should == '37.5'
+          table[3]["Implementer Budget by #{@classification_name} ($)"].should == '37.5'
           table[3]['Possible Duplicate?'].should == 'false'
           table[3]['Actual Duplicate?'].should == nil
           table[3]["#{@classification_name} Hierarchy"].should == @code2_name
@@ -153,7 +153,7 @@ describe Reports::ClassificationSplit do
           table[0]['Total Implementer Budget ($)'].should == '10.0'
           table[0]["#{@classification_name} Code"].should == @code1_name
           table[0]["#{@classification_name} Code Split (%)"].should == '25.0'
-          table[0]["Implementer Budget by #{@classification_name}"].should == '2.5'
+          table[0]["Implementer Budget by #{@classification_name} ($)"].should == '2.5'
           table[0]['Possible Duplicate?'].should == 'false'
           table[0]['Actual Duplicate?'].should == nil
           table[0]["#{@classification_name} Hierarchy"].should == @code1_name

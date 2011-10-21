@@ -58,8 +58,8 @@ class Reports::ClassificationSplit
       row << "Total Implementer #{amount_name} ($)"
       row << "#{classification_name} Code"
       row << "#{classification_name} Code Split (%)"
-      row << 'Total Classification Group (%)?'
       row << "Implementer #{amount_name} by #{classification_name} ($)"
+      row << 'Total Classification Group (%)?'
       row << 'Possible Duplicate?'
       row << 'Actual Duplicate?'
       @code_deepest_nesting.times{ row << "#{classification_name} Hierarchy" }

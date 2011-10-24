@@ -12,7 +12,6 @@ module CurrencyNumberHelper
     end
   end
 
-
   def universal_currency_converter(amount, from, to)
     amount = 0 if amount.blank?
     amount * currency_rate(from, to)

@@ -2,4 +2,28 @@
   =image_tag "icon_lightning.png", :class => "heading_icon"
   Summary
 .dashboard_section
-  = render :partial => 'shared/data_responses/show'
+  - content_for :head do
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+  :javascript
+    google.load("visualization", "1", {packages:["corechart"]});
+    var _spent_pie_values   = #{js_safe(@spent_pie_values)};
+    var _budget_pie_values  = #{js_safe(@budget_pie_values)};
+    var _code_spent_values  = #{js_safe(@code_spent_values)};
+    var _code_budget_values = #{js_safe(@code_budget_values)};
+
+  %ul.group
+    %li= link_to "MTEF", {:code_type => "mtef"}, active_if(@mtef)
+    %li= link_to "NSP", {:code_type => "nsp"}, active_if(@nsp)
+    %li= link_to "Inputs", {:code_type => "cost_category"}, active_if(@cost_category)
+    %li= link_to "HSSP2 Strat Prog", {:code_type => "hssp2_strat_prog"}, active_if(@hssp2_strat_prog)
+    %li= link_to "HSSP2 Strat Obj", {:code_type => "hssp2_strat_obj"}, active_if(@hssp2_strat_obj)
+
+  .full
+    .first-half
+      %h2= "#{@chart_name} Expenditure"
+      #code_spent.bordered
+
+    .second-half
+      %h2= "#{@chart_name} Current Budget"
+      #code_budget.bordered

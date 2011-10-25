@@ -22,6 +22,7 @@ class Reports::ClassificationSplit
     @is_budget          = is_budget?(amount_type)
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },
+      :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ @classification_association => :code },

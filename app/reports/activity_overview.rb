@@ -8,6 +8,7 @@ class Reports::ActivityOverview
   def initialize(request)
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },
+      :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
       :include => [{ :activity => [{ :project => { :in_flows => :from } },

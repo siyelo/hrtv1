@@ -30,13 +30,14 @@
     Activities
   .dashboard_section
     %ul.admin_reports
-      %li= render 'report_row', :title => "Activity Overview Report", :key => 'activity_overview'
-      %li= render 'report_row', :title => "Budget Implementer Purpose", :key => 'budget_implementer_purpose'
-      %li= render 'report_row', :title => "Budget Implementer Input", :key => 'budget_implementer_input'
-      %li= render 'report_row', :title => "Budget Implementer Location", :key => 'budget_implementer_location'
-      %li= render 'report_row', :title => "Expenditure Implementer Purpose", :key => 'spend_implementer_purpose'
-      %li= render 'report_row', :title => "Expenditure Implementer Input", :key => 'spend_implementer_input'
-      %li= render 'report_row', :title => "Expenditure Implementer Location", :key => 'spend_implementer_location'
+      %li= render 'report_row', :key => 'activity_overview', :buttons => nil
+      %li= render 'report_row', :key => 'implementer_purpose', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_input', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_location', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_funding_source', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_target', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_output', :buttons => ['budget', 'spend']
+      %li= render 'report_row', :key => 'implementer_beneficiary', :buttons => ['budget', 'spend']
       -#%li= render 'report_row', :title => "Dynamic Query By Current Budget (beta)", :key => 'dynamic_query_report_budget'
       -#%li= render 'report_row', :title => "Dynamic Query By Expenditure (beta)", :key => 'dynamic_query_report_spent'
 

@@ -502,6 +502,26 @@ var admin_responses_empty = {
   }
 };
 
+var admin_reports_index = {
+  run: function () {
+    $('.js_dropdown_trigger').click(function (e){
+      e.preventDefault();
+      menu = dropdown.menu($(this));
+      if (!menu.is('.persist')) {
+        dropdown.toggle_on(menu);
+      } else {
+        dropdown.toggle_off(menu);
+      };
+    });
+
+    $('.js_dropdown_menu .menu_items a').click(function (e){
+      menu = dropdown.menu($(this));
+      dropdown.toggle_off(menu);
+      $(this).click; // continue with desired click action
+    });
+  }
+}
+
 var getOrganizationInfo = function (organization_id, box) {
   if (organization_id) {
     $.get(organization_id + '.js', function (data) {

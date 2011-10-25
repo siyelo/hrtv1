@@ -3,7 +3,7 @@
 // BUTTONS AND BUTTON-LIKE LINKS //
 ///////////////////////////////////
 
-a.target, a.add_nested, a.remove_nested
+ul.target, a.target, a.add_nested, a.remove_nested
   background: image_url("icon_link.png") no-repeat $lightest-blue 10px center
   display: block
   font-size: 12px
@@ -17,6 +17,10 @@ a.target, a.add_nested, a.remove_nested
   &:hover
     background: image_url("icon_link_hover.png") no-repeat #fff 10px center
     +box-shadow($light-blue, 0, 0, 5px)
+
+ul.target
+  margin-bottom: 5px !important
+  color: #449FEB
 
 a.add_nested
   width: 150px

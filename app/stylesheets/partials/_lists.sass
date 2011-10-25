@@ -358,6 +358,33 @@ ul.ordered_nav
           color: #fff
           +linear-gradient(color-stops(#777, #666))
           +text-shadow($orange - #444, 0, 1px, 0)
+  ul.admin_reports
+    background: #eee
+    left: 1px
+    padding: 10px 0 5px
+    position: absolute
+    right: 1px
+    top: 7px
+    z-index: 15
+    +border-bottom-radius
+    +box-shadow(#444, 0, 1px, 2px)
+    li
+      display: block
+      width: 100%
+      a
+        border-bottom: 1px solid #ccc
+        color: $mid-blue
+        display: block
+        font-size: 10px
+        padding: 6px 10px
+        text-decoration: none
+        +text-shadow(#fff, 0, 1px, 0)
+        &:hover
+          background: #777
+          color: #fff
+          +linear-gradient(color-stops(#777, #666))
+          +text-shadow($orange - #444, 0, 1px, 0)
+
 
 // MAIN COMMENTS //
 .comments_input

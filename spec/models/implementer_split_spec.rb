@@ -316,7 +316,7 @@ describe ImplementerSplit do
       report = Reports::ActivityOverview.new(@request)
       rows = FasterCSV.parse(file, {:headers => true})
 
-      rows.each{ |row| row['Actual Duplicate?'] = true }
+      rows.each{ |row| row['Actual Double-Count?'] = true }
 
       double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
 
@@ -325,6 +325,40 @@ describe ImplementerSplit do
       splits = ImplementerSplit.all
       splits[0].double_count.should be_true
       splits[1].double_count.should be_true
+    end
+
+    it "reset double-count marks when nil" do
+      file = File.open('spec/fixtures/activity_overview.csv')
+
+      report = Reports::ActivityOverview.new(@request)
+      rows = FasterCSV.parse(file, {:headers => true})
+
+      rows.each{ |row| row['Actual Double-Count?'] = nil }
+
+      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+
+      run_delayed_jobs
+
+      splits = ImplementerSplit.all
+      splits[0].double_count.should be_nil
+      splits[1].double_count.should be_nil
+    end
+
+    it "reset double-count marks when empty string" do
+      file = File.open('spec/fixtures/activity_overview.csv')
+
+      report = Reports::ActivityOverview.new(@request)
+      rows = FasterCSV.parse(file, {:headers => true})
+
+      rows.each{ |row| row['Actual Double-Count?'] = '' }
+
+      double_count_marker = ImplementerSplit.mark_double_counting(rows.to_csv)
+
+      run_delayed_jobs
+
+      splits = ImplementerSplit.all
+      splits[0].double_count.should be_nil
+      splits[1].double_count.should be_nil
     end
   end
 end

@@ -98,7 +98,6 @@ class Project < ActiveRecord::Base
   def currency
     c = read_attribute(:currency)
     return c unless c.blank?
-    return "USD" if data_response.nil?
     return data_response.currency
   end
 

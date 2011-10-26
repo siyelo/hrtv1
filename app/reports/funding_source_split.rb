@@ -7,13 +7,12 @@ class Reports::FundingSourceSplit
 
   def initialize(request, amount_type)
     @amount_type        = amount_type
-    @is_budget          = is_budget?(amount_type)
     @implementer_splits = ImplementerSplit.find :all,
-      :joins => { :activity => [:project, :data_response] },
+      :joins => { :activity => :data_response },
       :order => "implementer_splits.id ASC",
       :conditions => ['data_responses.data_request_id = ? AND
                        data_responses.state = ?', request.id, 'accepted'],
-      :include => [{ :activity => [{ :project => { :in_flows => :from } },
+      :include => [{ :activity => [{ :project => [ { :activities => [:implementer_splits, :project] } , { :in_flows => :from }] },
         { :data_response => :organization } ]},
         { :organization => :data_responses }]
   end
@@ -56,17 +55,14 @@ class Reports::FundingSourceSplit
     def build_rows(csv, implementer_split)
       activity = implementer_split.activity
       base_row = []
-      if @is_budget
-        activity_amount = activity.budget          || 0
-        split_amount    = implementer_split.budget || 0
-        funders_total = activity.project.in_flows.
-          map{ |in_flow| in_flow.budget || 0 }.sum
-      else
-        activity_amount = activity.spend           || 0
-        split_amount    = implementer_split.spend  || 0
-        funders_total = activity.project.in_flows.
-          map{ |in_flow| in_flow.spend || 0 }.sum
-      end
+
+      activity.project = fake_project(activity) unless activity.project_id
+      fake_in_flow(activity)
+
+      activity_amount = activity.send(@amount_type) || 0
+      split_amount    = implementer_split.send(@amount_type) || 0
+      funders_total = activity.project.in_flows.
+        map{ |in_flow| in_flow.send(@amount_type) || 0 }.sum
 
       activity_amount = universal_currency_converter(activity_amount.to_f,
         activity.currency, 'USD')
@@ -76,7 +72,7 @@ class Reports::FundingSourceSplit
         activity.currency, 'USD')
 
       # dont bother printing a row if theres nothing to report!
-      if activity_amount > 0
+      if implementer_split.send(@amount_type) && implementer_split.send(@amount_type) > 0
         base_row << activity.organization.name
         base_row << activity.project.try(:name) # other costs does not have a project
         base_row << activity.data_response.id
@@ -92,16 +88,17 @@ class Reports::FundingSourceSplit
         # iterate here over funding sources
         activity.project.in_flows.each do |in_flow|
           row = base_row.dup
-          if @is_budget
-            funder_amount = in_flow.budget || 0 # here
-          else
-            funder_amount = in_flow.spend  || 0
-          end
+          funder_amount = in_flow.send(@amount_type) || 0
 
           funder_amount = universal_currency_converter(funder_amount.to_f,
             activity.currency, 'USD')
 
-          funder_ratio = (funders_total == 0 ? 0 : funder_amount / funders_total)
+          if funders_total != 0
+            funder_ratio = funder_amount / funders_total
+          else
+            funder_ratio =  1.0 / activity.project.in_flows.length
+          end
+
           row << in_flow.from.try(:name)
           row << in_flow.from.funder_type
           row << n2c(funder_amount)
@@ -113,5 +110,36 @@ class Reports::FundingSourceSplit
           csv << row
         end
       end
+    end
+
+    def fake_project(activity)
+      Project.new(:name => 'N/A', :data_response => activity.data_response)
+    end
+
+    def fake_in_flow(activity)
+      in_flows_total = 0
+      splits_total   = 0
+
+      activity.project.in_flows.each do |in_flow|
+        in_flows_total += in_flow.send(@amount_type) || 0
+      end
+
+      activity.project.activities.each do |activity|
+        activity.implementer_splits.each do |implementer_split|
+          splits_total += implementer_split.send(@amount_type) || 0
+        end
+      end
+
+      amount_diff = splits_total - in_flows_total
+
+      if amount_diff
+        in_flow = FundingFlow.new(:from => fake_org)
+        in_flow.send(:"#{@amount_type}=", amount_diff)
+        activity.project.in_flows << in_flow
+      end
+    end
+
+    def fake_org
+      @fake_org ||= Organization.new(:name => 'N/A (Undefined)')
     end
 end

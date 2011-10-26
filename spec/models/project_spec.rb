@@ -3,6 +3,7 @@ require 'set'
 
 describe Project do
   describe "Associations" do
+    subject { basic_setup_project; @project }
     it { should belong_to(:data_response) }
     it { should have_many(:activities).dependent(:destroy) }
     it { should have_many(:other_costs).dependent(:destroy) }
@@ -15,6 +16,7 @@ describe Project do
   end
 
   describe "Attributes" do
+    subject { basic_setup_project; @project }
     it { should allow_mass_assignment_of(:name) }
     it { should allow_mass_assignment_of(:description) }
     it { should allow_mass_assignment_of(:start_date) }
@@ -26,6 +28,7 @@ describe Project do
   end
 
   describe "Validations" do
+    subject { basic_setup_project; @project }
     it { should validate_presence_of(:name) }
     it { should validate_presence_of(:data_response_id) }
     it { should allow_value('2010-12-01').for(:start_date) }
@@ -49,7 +52,11 @@ describe Project do
     end
 
     it "should have at least one funder" do
-      @project = Factory.build(:project, :in_flows => [])
+      @organization = Factory(:organization)
+      @other_org    = Factory(:organization)
+      @request      = Factory(:data_request, :organization => @organization)
+      @response     = @organization.latest_response
+      @project = Factory.build(:project, :data_response => @response, :in_flows => [])
       @project.save.should be_false
       @project.errors.on(:base).should == "Project must have at least one Funding Source."
     end

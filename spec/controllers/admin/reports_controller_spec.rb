@@ -66,7 +66,7 @@ describe Admin::ReportsController do
 
         get :generate, :id => 'activity_overview'
         response.should be_redirect
-        flash[:notice].should == 'Report generation is taking a while. We will send you the download link on email'
+        flash[:notice].should == "We are generating your report and will send you email (at #{@admin.email}) when it is ready."
 
         run_delayed_jobs
         unread_emails_for(@admin.email).size.should == 1

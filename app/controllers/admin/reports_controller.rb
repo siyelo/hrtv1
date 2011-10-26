@@ -76,7 +76,7 @@ class Admin::ReportsController < Admin::BaseController
     rescue Timeout::Error
       @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
       @report.generate_report_for_download(current_user)
-      flash[:notice] = 'Report generation is taking a while. We will send you the download link on email'
+      flash[:notice] = "We are generating your report and will send you email (at #{current_user.email}) when it is ready."
       redirect_to admin_reports_path
     end
   end

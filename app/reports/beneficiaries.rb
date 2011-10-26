@@ -78,7 +78,7 @@ class Reports::Beneficiaries
       activity.beneficiaries.each do |beneficiary|
         row = base_row.dup
         amount_by_ratio = split_amount * (1.0/activity.beneficiaries.length)
-        row << beneficiary.description
+        row << beneficiary.short_display
         row << n2c(amount_by_ratio * rate, "", "")
 
         row << implementer_split.possible_double_count?

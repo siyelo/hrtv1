@@ -64,7 +64,7 @@ describe Reports::Beneficiaries do
         table[0]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[0]['Implementer'].should == 'organization1'
         table[0]['Implementer Type'].should == 'Implementer'
-        table[0]["Total Implementer #{amount_name} ($)"].should == '50.00'
+        table[0]["Total Implementer #{amount_name} ($)"].should == '25.00'
         table[0]['Activity Beneficiary'].should == 'beneficiary1'
         table[0]['Possible Double-Count?'].should == 'false'
         table[0]['Actual Double-Count?'].should == nil
@@ -78,7 +78,7 @@ describe Reports::Beneficiaries do
         table[1]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[1]['Implementer'].should == 'organization1'
         table[1]['Implementer Type'].should == 'Implementer'
-        table[1]["Total Implementer #{amount_name} ($)"].should == '50.00'
+        table[1]["Total Implementer #{amount_name} ($)"].should == '25.00'
         table[1]['Activity Beneficiary'].should == 'beneficiary2'
         table[1]['Possible Double-Count?'].should == 'false'
         table[1]['Actual Double-Count?'].should == nil
@@ -92,7 +92,7 @@ describe Reports::Beneficiaries do
         table[2]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[2]['Implementer'].should == 'organization2'
         table[2]['Implementer Type'].should be_nil
-        table[2]["Total Implementer #{amount_name} ($)"].should == '50.00'
+        table[2]["Total Implementer #{amount_name} ($)"].should == '25.00'
         table[2]['Activity Beneficiary'].should == 'beneficiary1'
         table[2]['Possible Double-Count?'].should == 'false'
         table[2]['Actual Double-Count?'].should == nil
@@ -106,8 +106,7 @@ describe Reports::Beneficiaries do
         table[3]["Total Activity #{amount_name} ($)"].should == '100.00'
         table[3]['Implementer'].should == 'organization2'
         table[3]['Implementer Type'].should be_nil
-        table[3]["Total Implementer #{amount_name} ($)"].should == '50.00'
-        table[3]["Implementer #{amount_name} by Funding Source"] == '20.00'
+        table[3]["Total Implementer #{amount_name} ($)"].should == '25.00'
         table[3]['Activity Beneficiary'].should == 'beneficiary2'
         table[3]['Possible Double-Count?'].should == 'false'
         table[3]['Actual Double-Count?'].should == nil

@@ -78,12 +78,12 @@ class Reports::FundingSourceSplit
         base_row << activity.data_response.id
         base_row << activity.id
         base_row << activity.name
-        base_row << n2c(activity_amount)
+        base_row << n2c(activity_amount,"","")
 
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
         base_row << implementer_split.organization.implementer_type
-        base_row << n2c(split_amount) # here
+        base_row << n2c(split_amount,"","")
 
         # iterate here over funding sources
         activity.project.in_flows.each do |in_flow|
@@ -101,9 +101,9 @@ class Reports::FundingSourceSplit
 
           row << in_flow.from.try(:name)
           row << in_flow.from.funder_type
-          row << n2c(funder_amount)
+          row << n2c(funder_amount,"","")
           row << funder_ratio
-          row << n2c(funder_ratio * split_amount)
+          row << n2c(funder_ratio * split_amount,"","")
           row << implementer_split.possible_double_count?
           row << implementer_split.double_count
 

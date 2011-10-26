@@ -32,4 +32,4 @@
           %ul
             - a.implementer_splits.each do |is|
               - is.errors.each do |attr,msg|
-                %li= "Implementer \"#{is.provider.try(:name)}\" : #{attr} #{msg}"
+                %li= "Implementer \"#{is.organization.try(:name)}\" : #{attr} #{msg}"

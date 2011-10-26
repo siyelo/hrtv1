@@ -41,8 +41,8 @@ class Reports::Beneficiaries
       row << "Total Activity #{amount_name} ($)"
       row << 'Implementer'
       row << 'Implementer Type'
-      row << "Total Implementer #{amount_name} ($)"
       row << 'Activity Beneficiary'
+      row << "Total Implementer #{amount_name} ($)"
       row << 'Possible Double-Count?'
       row << 'Actual Double-Count?'
 
@@ -72,15 +72,15 @@ class Reports::Beneficiaries
       base_row << n2c(activity_amount * rate)
       base_row << implementer_split.organization.try(:name)
       base_row << implementer_split.organization.implementer_type
-      base_row << n2c(split_amount * rate)
 
-      # fake beneficiary if none
+      # fake output if none
       activity.beneficiaries.build(:description => 'n/a') if activity.beneficiaries.length == 0
-
-      # iterate here over beneficiaries
       activity.beneficiaries.each do |beneficiary|
         row = base_row.dup
-        row << beneficiary.short_display
+        amount_by_ratio = split_amount * (1.0/activity.beneficiaries.length)
+        row << beneficiary.description
+        row << n2c(amount_by_ratio * rate, "", "")
+
         row << implementer_split.possible_double_count?
         # don't use double_count?, we need to display if the value is nil
         row << implementer_split.double_count

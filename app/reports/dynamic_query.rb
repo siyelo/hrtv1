@@ -68,8 +68,12 @@ class Reports::DynamicQuery
       build_fake_classifications(activity)
       build_fake_project_and_in_flow(activity)
 
-      activity.project.in_flows.each do |in_flow|
-        in_flows_total = activity.project.in_flows.inject(0) { |sum, e| sum + (e.send(@amount_type) || 0) }
+      in_flows_total = activity.project.in_flows.inject(0) { |sum, e| sum + (e.send(@amount_type) || 0) }
+      @currency = activity.project_id.nil? ? activity.organization.currency : activity.currency
+      activity.project.in_flows = [fake_inflow(@currency)] if in_flows_total == 0
+      activity.project.in_flows.select do |in_flow|
+        !in_flow.send(@amount_type).nil? && in_flow.send(@amount_type) > 0
+      end.each do |in_flow|
         populate_row(csv, implementer_split, in_flow, in_flows_total)
       end
     end
@@ -118,7 +122,7 @@ class Reports::DynamicQuery
             district_row << district_classification.code.short_display
             district_row << n2c(in_flow_ratio *
               ( universal_currency_converter(implementer_split.send(@amount_type),
-                  activity.project_id.nil? ? activity.organization.currency : activity.currency, 'USD') || 0 ) *
+                  @currency, 'USD') || 0 ) *
               ( (input_classification.percentage || 0) / 100 ) *
               ( (purpose_classification.percentage || 0) /100 ) *
               ( (district_classification.percentage || 0) / 100))

@@ -1730,4 +1730,67 @@ describe Reports::ClassificationSplit do
       end
     end
   end
+
+  context "organization has funders without amounts" do
+    before :each do
+      @organization = Factory :organization, :name => "organization",
+        :implementer_type => "Implementer"
+      @request       = Factory :data_request, :organization => @organization
+      @response      = @organization.latest_response
+      @response.state = 'accepted'
+      @response.save
+      in_flows       = [Factory.build :funding_flow, :from => @organization,
+        :budget => 0]
+      @project      = Factory :project, :data_response => @response,
+        :name => 'project',
+        :in_flows => in_flows
+      @root_code = Factory :code
+      @code1          = Factory :code, :hssp2_stratprog_val => "hssp2stratprogval",
+        :hssp2_stratobj_val => "hssp2stratobval", :official_name => "root"
+      @activity      = Factory :activity, :project => @project,
+        :data_response => @response, :description => "desc"
+      @is            = Factory :implementer_split, :activity => @activity,
+        :organization => @organization, :budget => 100
+      @mtef = Factory :mtef_code, :short_display => "sub_prog_name"
+      @nsp = Factory :nsp_code, :short_display => "Nsp_code"
+      @cost_categorization = Factory :coding_budget_cost_categorization,
+        :percentage => 100, :activity => @activity, :code => @code1
+      @budget_purpose = Factory :budget_purpose, :percentage => 100,
+        :activity => @activity, :code => @code1
+      @coding_budget_district = Factory :coding_budget_district,
+        :percentage => 100, :activity => @activity, :code => @code1
+
+      #creating dummy tree
+      @mtef.move_to_child_of(@root_code)
+      @nsp.move_to_child_of(@mtef)
+      @code1.move_to_child_of(@nsp)
+      run_delayed_jobs
+      @activity.reload;@activity.save
+    end
+
+    it "should create return no financing agent" do
+      table = run_report
+      table[0]['Financing Agent'].should == "N/A"
+      table[0]['Organization'].should == @organization.name
+      table[0]['Implementing Agent'].should == @is.organization.name
+      table[0]['Description of Activity'].should == @activity.description
+      table[0]['Targets'].should == @activity.targets.map(&:description).join(',')
+      table[0]['Cost Category Split Total %'].should == "100.0"
+      table[0]['Cost Category Split %'].should == "100.0"
+      table[0]['Cost Category'].should == @cost_categorization.code.short_display
+      table[0]['Purpose Split Total %'].should == '100.0'
+      table[0]['Purpose Split %'].should == "100.0"
+      table[0]['HSSP2 Strategic Objectives (post JHSR)'].should == "hssp2stratobval"
+      table[0]['HSSP2 Strategic Programs (post JHSR)'].should == "hssp2stratprogval"
+      table[0]['Associated MTEF Sub Program'].should == "sub_prog_name"
+      table[0]['NSP Outputs'].should == "Nsp_code"
+      table[0]['Location Split Total %'].should == '100.0'
+      table[0]['Location Split %'].should == "100.0"
+      table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
+      table[0]['Total Amount ($)'].should == "100.00"
+      table[0]['Actual Double Count'].should == @is.double_count?.to_s
+    end
+
+  end
+
 end

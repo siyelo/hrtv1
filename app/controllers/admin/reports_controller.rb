@@ -67,18 +67,18 @@ class Admin::ReportsController < Admin::BaseController
   # regenerate the report csv.
   # find it using the report key, if it exists.
   def generate
-    begin
-      Timeout::timeout(15) do
+    # begin
+    #   Timeout::timeout(15) do
         @report = Report.find_or_initialize_by_key_and_data_request_id(params[:id], current_request.id)
         @report.generate_report
         redirect_to @report.csv.url
-      end
-    rescue Timeout::Error
-      @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
-      @report.generate_report_for_download(current_user)
-      flash[:notice] = "We are generating your report and will send you email (at #{current_user.email}) when it is ready."
-      redirect_to admin_reports_path
-    end
+    #   end
+    # rescue Timeout::Error
+    #   @report = Report.find_or_create_by_key_and_data_request_id(params[:id], current_request.id)
+    #   @report.generate_report_for_download(current_user)
+    #   flash[:notice] = "We are generating your report and will send you email (at #{current_user.email}) when it is ready."
+    #   redirect_to admin_reports_path
+    # end
   end
 
   protected

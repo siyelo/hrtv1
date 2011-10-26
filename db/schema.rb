@@ -168,19 +168,9 @@ ActiveRecord::Schema.define(:version => 20111026152801) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "budget"
-    t.decimal  "spend_q1"
-    t.decimal  "spend_q2"
-    t.decimal  "spend_q3"
-    t.decimal  "spend_q4"
     t.text     "organization_text"
     t.integer  "self_provider_flag",   :default => 0
     t.decimal  "spend"
-    t.decimal  "spend_q4_prev"
-    t.decimal  "budget_q1"
-    t.decimal  "budget_q2"
-    t.decimal  "budget_q3"
-    t.decimal  "budget_q4"
-    t.decimal  "budget_q4_prev"
     t.integer  "project_from_id"
     t.decimal  "budget_in_usd",        :default => 0.0
     t.decimal  "spend_in_usd",         :default => 0.0

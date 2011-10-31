@@ -1768,9 +1768,9 @@ describe Reports::ClassificationSplit do
       @activity.reload;@activity.save
     end
 
-    it "should create return no financing agent" do
+    it "should return financing agent" do
       table = run_report
-      table[0]['Financing Agent'].should == "N/A"
+      table[0]['Financing Agent'].should == @organization.name
       table[0]['Organization'].should == @organization.name
       table[0]['Implementing Agent'].should == @is.organization.name
       table[0]['Description of Activity'].should == @activity.description

@@ -22,7 +22,9 @@ class Report < ActiveRecord::Base
     'budget_implementer_output',
     'spend_implementer_output',
     'budget_implementer_beneficiary',
-    'spend_implementer_beneficiary'
+    'spend_implementer_beneficiary',
+    'budget_dynamic_query',
+    'spend_dynamic_query'
   ]
 
   ### Attributes
@@ -43,19 +45,21 @@ class Report < ActiveRecord::Base
     case key
     when 'activity_overview': 'Activity Overview Report'
     when 'budget_implementer_purpose': 'Budget Implementer Purpose'
-    when 'spend_implementer_purpose' : 'Expenditure Implementer Purpose'
-    when 'budget_implementer_input' : 'Budget Implementer Input'
-    when 'spend_implementer_input' : 'Expenditure Implementer Input'
-    when 'budget_implementer_location' : 'Budget Implementer Location'
-    when 'spend_implementer_location' : 'Expenditure Implementer Location'
-    when 'budget_implementer_funding_source' : 'Budget Implementer Funding Source'
-    when 'spend_implementer_funding_source' : 'Expenditure Implementer Funding Source'
-    when 'budget_implementer_target' : 'Budget Implementer Target'
-    when 'spend_implementer_target' : 'Expenditure Implementer Target'
-    when 'budget_implementer_output' : 'Budget Implementer Output'
-    when 'spend_implementer_output' : 'Expenditure Implementer Output'
-    when 'budget_implementer_beneficiary' : 'Budget Implementer Beneficiary'
-    when 'spend_implementer_beneficiary' : 'Expenditure Implementer Beneficiary'
+    when 'spend_implementer_purpose': 'Expenditure Implementer Purpose'
+    when 'budget_implementer_input': 'Budget Implementer Input'
+    when 'spend_implementer_input': 'Expenditure Implementer Input'
+    when 'budget_implementer_location': 'Budget Implementer Location'
+    when 'spend_implementer_location': 'Expenditure Implementer Location'
+    when 'budget_implementer_funding_source': 'Budget Implementer Funding Source'
+    when 'spend_implementer_funding_source': 'Expenditure Implementer Funding Source'
+    when 'budget_implementer_target': 'Budget Implementer Target'
+    when 'spend_implementer_target': 'Expenditure Implementer Target'
+    when 'budget_implementer_output': 'Budget Implementer Output'
+    when 'spend_implementer_output': 'Expenditure Implementer Output'
+    when 'budget_implementer_beneficiary': 'Budget Implementer Beneficiary'
+    when 'spend_implementer_beneficiary': 'Expenditure Implementer Beneficiary'
+    when 'budget_dynamic_query': 'Budget Dynamic Query'
+    when 'spend_dynamic_query': 'Spend Dynamic Query'
     else
       raise "Invalid report key #{key}".to_yaml
     end
@@ -106,6 +110,10 @@ class Report < ActiveRecord::Base
           Reports::Beneficiaries.new(data_request, :budget)
         when 'spend_implementer_beneficiary'
           Reports::Beneficiaries.new(data_request, :spend)
+        when 'budget_dynamic_query'
+          Reports::DynamicQuery.new(data_request, :budget)
+        when 'spend_dynamic_query'
+          Reports::DynamicQuery.new(data_request, :spend)
         else
           raise "Invalid report request '#{self.key}'"
         end

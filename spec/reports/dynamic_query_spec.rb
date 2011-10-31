@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 include DelayedJobSpecHelper
 
-describe Reports::ClassificationSplit do
+describe Reports::DynamicQuery do
   def run_report
     report = Reports::DynamicQuery.new(@request, :budget)
     csv = report.csv

@@ -24,7 +24,8 @@ class Report < ActiveRecord::Base
     'budget_implementer_beneficiary',
     'spend_implementer_beneficiary',
     'budget_dynamic_query',
-    'spend_dynamic_query'
+    'spend_dynamic_query',
+    'funding_source_query'
   ]
 
   ### Attributes
@@ -60,6 +61,7 @@ class Report < ActiveRecord::Base
     when 'spend_implementer_beneficiary': 'Expenditure Implementer Beneficiary'
     when 'budget_dynamic_query': 'Budget Dynamic Query'
     when 'spend_dynamic_query': 'Spend Dynamic Query'
+    when 'funding_source_query': 'Funding Source Query'
     else
       raise "Invalid report key #{key}".to_yaml
     end
@@ -114,6 +116,8 @@ class Report < ActiveRecord::Base
           Reports::DynamicQuery.new(data_request, :budget)
         when 'spend_dynamic_query'
           Reports::DynamicQuery.new(data_request, :spend)
+        when 'funding_source_query'
+          Reports::FundingSource.new(data_request)
         else
           raise "Invalid report request '#{self.key}'"
         end

@@ -5,9 +5,13 @@ class Reports::ActivityManagerWorkplan
   include EncodingHelper
   include CurrencyViewNumberHelper
 
-  def initialize(response, organizations)
-    @organizations = organizations
+  def initialize(response, organizations = nil)
     @response = response
+    if organizations
+      @organizations = organizations.sorted
+    else
+      @organizations = [response.organization]
+    end
   end
 
   def to_xls
@@ -18,7 +22,7 @@ class Reports::ActivityManagerWorkplan
     def build_rows
       rows = []
       rows << header
-      @organizations.sorted.each do |organization|
+      @organizations.each do |organization|
         row = []
         org_response = organization.responses.find(:first, :conditions => "data_request_id = #{@response.request.id}")
         row << sanitize_encoding(organization.name)

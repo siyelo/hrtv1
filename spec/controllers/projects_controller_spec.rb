@@ -139,16 +139,20 @@ describe ProjectsController do
       @organization = @user.organization
       login @user
       @data_response = mock_model(DataResponse)
+      @data_request = mock_model(DataRequest)
       DataResponse.stub(:find).and_return(@data_response)
     end
 
     describe "import / export" do
       it "downloads csv workplan" do
-        @data_response.should_receive(:organization).and_return(@organization)
+        @data_request.stub(:id).and_return(1)
+        @data_response.stub(:organization).and_return(@organization)
         @data_response.stub_chain(:projects, :sorted).and_return([])
+        @data_response.stub_chain(:projects, :empty?).and_return(true)
+        @data_response.stub(:request).and_return(@data_request)
         @organization.stub(:name).and_return('Org Name')
 
-        workplan = Reports::OrganizationWorkplan.new(@data_response)
+        workplan = Reports::ActivityManagerWorkplan.new(@data_response)
         workplan.stub(:data).and_return(StringIO.new('dummy,xls,header'))
         get :export_workplan, :response_id => 1
         response.should be_success

@@ -19,7 +19,6 @@ class Project < ActiveRecord::Base
   has_many :normal_activities, :class_name => "Activity",
            :conditions => [ "activities.type IS NULL"], :dependent => :destroy
   has_many :funding_flows, :dependent => :destroy
-  has_many :funding_streams, :dependent => :destroy
 
   #FIXME - cant initialize nested in_flows because of the :conditions statement
   has_many :in_flows, :class_name => "FundingFlow"
@@ -119,10 +118,8 @@ class Project < ActiveRecord::Base
       clone.send(assoc) << self.send(assoc).map { |obj| obj.deep_clone }
     end
 
-    # shallow has_many's
-    %w[in_flows funding_streams].each do |assoc|
-      clone.send("#{assoc}=", self.send(assoc).collect { |obj| obj.project_id = nil; obj.clone })
-    end
+    clone.in_flows = self.in_flows.collect { |obj| obj.project_id = nil; obj.clone }
+
     clone
   end
 
@@ -132,44 +129,6 @@ class Project < ActiveRecord::Base
       sum += amt unless amt.nil?
       sum = sum
     end
-  end
-
-  def funding_chains(fake_if_none = true, scale_if_not_match_proj = true)
-    ufs = in_flows.map(&:funding_chains).flatten
-    ufs = FundingChain.merge_chains(ufs)
-    if ufs.empty? and fake_if_none
-      # if data bad, assume self-funded
-      ufs = [FundingChain.new({:organization_chain => [organization, organization],
-       :budget => budget, :spend => spend})]
-    end
-    if scale_if_not_match_proj
-      ufs = FundingChain.adjust_amount_totals!(ufs, spend, budget)
-    end
-    ufs
-  end
-
-  def ultimate_funding_sources
-    funding_chains
-  end
-
-  def funding_chains_to(to)
-      s = amount_for_provider(to, :spend)
-      b = amount_for_provider(to, :budget)
-      fs = funding_chains
-      if s > 0 or b > 0
-        FundingChain.add_to(fs, to, s, b)
-      else
-        []
-      end
-  end
-
-  def cached_ultimate_funding_sources
-    ufs = []
-    funding_streams.each do |fs|
-      # fa = financing agent - the last link in the chain before the actual implementer
-      ufs << {:ufs => fs.ufs, :fa => fs.fa, :budget => fs.budget, :spend => fs.spend}
-    end
-    ufs
   end
 
   def funding_sources_have_organizations_and_amounts?
@@ -239,109 +198,9 @@ class Project < ActiveRecord::Base
       errors.add_to_base "Project must have at least one Funding Source."
     end
 
-    def trace_ultimate_funding_source(organization, funders, traced = [])
-      traced = traced.dup
-      traced << organization
-      funding_sources = []
-
-      funders.each do |funder|
-
-        funder_reported_flows = funder.in_flows.select{|f| f.organization == funder}
-        self_flows = funder_reported_flows.select{|f| f.from == funder}
-        parent_flows = funder_reported_flows.select{|f| f.from != funder}
-
-        # real UFS - self funded organization that funds other organizations
-        # i.e. has activity(ies) with the organization as implementer
-        if implementer_in_flows?(organization, self_flows)
-          ffs = organization.in_flows.select{|ff| ff.from == funder}
-
-          funding_sources << {:ufs => funder, :fa => traced.last,
-                              :budget => get_budget(ffs), :spend => get_spend(ffs)}
-        else
-          # potential UFS - parent funded organization that funds other organizations
-          # i.e. does not have any activity(ies) with organization as implementer
-          unless implementer_in_flows?(organization, parent_flows)
-            self_funded = funder.in_flows.map(&:from).include?(funder)
-
-            if self_funded
-              ffs = funder.in_flows.select{|ff| ff.from == funder}
-              funding_sources << {:ufs => funder, :fa => traced.last,
-                                  :budget => get_budget(ffs), :spend => get_spend(ffs)}
-            elsif funder.in_flows.empty? || ["Multilateral", "Bilateral", "Donor"].include?(funder.raw_type) || funder.name == "Ministry of Health" # when funder has blank data response
-              budget, spend = get_budget_and_spend(funder.id, organization.id)
-              funding_sources << {:ufs => funder, :fa => traced.last,
-                                  :budget => budget, :spend => spend}
-            end
-          end
-        end
-
-
-        # keep looking in parent funders
-        unless traced.include?(funder)
-          parent_funders = parent_flows.map(&:from).reject{|f| f.nil?}
-          parent_funders = remove_not_funded_donors(funder, parent_funders)
-          funding_sources.concat(trace_ultimate_funding_source(funder, parent_funders.uniq, traced))
-        end
-      end
-
-      funding_sources
-    end
-
-    # TODO: optimize this method
-    def remove_not_funded_donors(funder, parent_funders)
-      activities = funder.projects.map(&:activities).flatten.compact
-      activities_funders = activities.map(&:project).
-        map(&:in_flows).flatten.map(&:from).flatten.reject{|p| p.nil?}
-
-      real_funders = []
-
-      parent_funders.each do |parent_funder|
-        unless ((funder.raw_type == "Donor" || funder.name == "Ministry of Health") &&
-                !activities_funders.include?(parent_funder))
-          real_funders << parent_funder
-        end
-      end
-
-      real_funders
-    end
-
     def implementer_in_flows?(organization, flows)
       flows.map(&:project).reject{|f| f.nil?}.map(&:activities).flatten.
         map(&:provider).include?(organization)
-    end
-
-    def get_budget_and_spend(from_id, to_id, project_id = nil)
-      scope = FundingFlow.scoped({})
-      # TODO - refactor SQL. we need to add Org Id on project...
-      scope = scope.scoped(:conditions => ["organization_id_from = ?
-                                            AND project_id IN (
-                                              SELECT id FROM projects
-                                              where data_response_id in (
-                                                SELECT id FROM data_responses
-                                                 WHERE organization_id = ?))",
-                                            from_id, to_id])
-      scope = scope.scoped(:conditions => {:project_id => project_id}) if project_id
-      ffs = scope.all
-
-      [get_budget(ffs), get_spend(ffs)]
-    end
-
-    def get_budget(funding_sources)
-      amount = 0
-      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
-        budget = fss.reject{|ff| ff.budget.nil?}.sum(&:budget)
-        amount += budget * currency_rate(project.currency, 'USD')
-      end
-      amount
-    end
-
-    def get_spend(funding_sources)
-      amount = 0
-      funding_sources.group_by { |ff| ff.project }.each do |project, fss|
-        spend = fss.reject{|ff| ff.spend.nil?}.sum(&:spend)
-        amount += spend * currency_rate(project.currency, 'USD')
-      end
-      amount
     end
 
     def strip_leading_spaces

@@ -25,46 +25,6 @@ module Charts::DistrictPies
       prepare_pie_values_json(records)
     end
 
-    def ultimate_funding_sources(location, amount_type, request_id)
-      records = FundingStream.find :all,
-        :select => "organizations.id,
-          organizations.name,
-          SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON
-                    funding_streams.organization_ufs_id = organizations.id
-                   INNER JOIN projects ON projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON
-                    data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
-                   INNER JOIN activities ON activities.project_id = projects.id
-                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
-                     AND code_assignments.code_id = #{location.id}",
-        :group => "organizations.id,
-                   organizations.name",
-        :order => "value DESC"
-
-      prepare_pie_values_json(records)
-    end
-
-    def financing_agents(location, amount_type, request_id)
-      records = FundingStream.find :all,
-        :select => "organizations.id,
-          organizations.name,
-          SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON
-                    funding_streams.organization_fa_id = organizations.id
-                   INNER JOIN projects ON projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON
-                    data_responses.id = projects.data_response_id AND data_responses.data_request_id = #{request_id}
-                   INNER JOIN activities ON activities.project_id = projects.id
-                   INNER JOIN code_assignments ON activities.id = code_assignments.activity_id
-                     AND code_assignments.code_id = #{location.id}",
-        :group => "organizations.id,
-                   organizations.name",
-        :order => "value DESC"
-
-      prepare_pie_values_json(records)
-    end
-
     def implementers(location, amount_type, request_id)
       records = ImplementerSplit.find :all,
         :select => "organizations.id,

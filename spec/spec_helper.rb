@@ -96,53 +96,6 @@ Spork.each_run do
     proj_funded_by(proj, proj.data_response.organization, budget, spend)
   end
 
-  # setup for Ultimate Funding Source scenarios
-  def ufs_test_setup
-    @org0 = Factory(:organization, :name => 'org0', :currency => 'USD')
-    @org1 = Factory(:organization, :name => 'org1', :currency => 'USD')
-    @org2 = Factory(:organization, :name => 'org2', :currency => 'USD')
-    @org3 = Factory(:organization, :name => 'org3', :currency => 'USD')
-    @org4 = Factory(:organization, :name => 'org4', :currency => 'USD')
-    @org_with_no_data_response = Factory(:organization,
-                                         :name => 'org_with_no_data_response')
-    @org_with_empty_data_response = Factory(:organization,
-                                            :name => 'org_with_empty_data_response')
-    request = Factory(:data_request)
-
-    @response0 = @org0.data_responses[0]
-    @response1 = @org1.data_responses[0]
-    @response2 = @org2.data_responses[0]
-    @response3 = @org3.data_responses[0]
-    @response4 = @org4.data_responses[0]
-
-    @proj0 = Factory(:project, :name => 'p0', :data_response => @response0, :currency => "USD")
-    @proj1 = Factory(:project, :name => 'p1', :data_response => @response1, :currency => "USD")
-    @proj11 = Factory(:project, :name => 'p11', :data_response => @response1, :currency => "USD")
-    @proj12 = Factory(:project, :name => 'p12', :data_response => @response1, :currency => "USD")
-    @proj2 = Factory(:project, :name => 'p2', :data_response => @response2, :currency => "USD")
-    @proj3 = Factory(:project, :name => 'p3', :data_response => @response3, :currency => "USD")
-    @proj4 = Factory(:project, :name => 'p4', :data_response => @response4, :currency => "USD")
-  end
-
-  def ufs_without_chains(ufs)
-    ufs.each{|fs| fs.delete(:org_chain)}
-  end
-
-  def ufs_equality(ufs, target)
-    if ufs.size == 1 and ufs.size == target.size
-      ufs = ufs.first; target = target.first
-      # simple case, can do pretty compare
-      ufs.ufs.should == target[:ufs]
-      ufs.fa.should == target[:fa]
-      ufs.budget.round(3).should == target[:budget]
-      ufs.spend.round(3).should == target[:spend]
-      # chain[:org_chain].should == target's after we add chains to test
-    else
-      raise 'collection comparison not implemented here'
-      ufs.should == target
-    end
-  end
-
   def login_as_admin
     # mock current_response_is_latest? method for Users
     # CAUTION: current_response_is_latest? method of model

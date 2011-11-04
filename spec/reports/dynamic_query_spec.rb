@@ -1163,6 +1163,12 @@ describe Reports::DynamicQuery do
       @activity.reload;@activity.save
     end
 
+    it "SHOULD NOT ADD/REMOVE A PROJECT" do
+      table = run_report
+      Project.all.count.should == 0
+      @activity.project.should be_nil
+    end
+
     it "should adjust the total amounts as per codings (2 of each budget splits and 2 funders)" do
       #total amount is 100 because the amount of the activity is 100 despite being funded 150
       @cost_categorization = Factory :coding_budget_cost_categorization,
@@ -1789,6 +1795,12 @@ describe Reports::DynamicQuery do
       table[0]['Name of District'].should == @activity.locations.map(&:short_display).join(",")
       table[0]['Total Amount ($)'].should == "100.00"
       table[0]['Actual Double Count'].should == @is.double_count?.to_s
+    end
+
+    it "should NOT ADD OR REMOVE INFLOWS!!!" do
+      @activity.project.in_flows.size.should == 1 #sanity
+      table = run_report
+      @activity.project.in_flows.size.should == 1
     end
 
   end

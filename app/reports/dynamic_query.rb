@@ -70,8 +70,11 @@ class Reports::DynamicQuery
       build_fake_project_and_in_flow(activity)
 
       in_flows_total = activity.project.in_flows.inject(0) { |sum, e| sum + (e.send(@amount_type) || 0) }
-      activity.project.in_flows = [fake_inflow(@currency)] if in_flows_total == 0
-      activity.project.in_flows.select do |in_flow|
+
+      in_flows = in_flows_total == 0 ? loop_act = [fake_inflow(@currency)] : activity.project.in_flows
+
+      # activity.project.in_flows.each do |in_flow|
+      in_flows.each do |in_flow|
         !in_flow.send(@amount_type).nil? && in_flow.send(@amount_type) > 0
       end.each do |in_flow|
         populate_row(csv, implementer_split, in_flow, in_flows_total)

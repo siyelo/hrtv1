@@ -74,10 +74,11 @@ class Reports::Beneficiaries
       base_row << implementer_split.organization.implementer_type
 
       # fake output if none
-      activity.beneficiaries.build(:description => 'n/a') if activity.beneficiaries.length == 0
-      activity.beneficiaries.each do |beneficiary|
+      beneficiaries = activity.beneficiaries.presence ||
+        [Beneficiary.new(:description => 'n/a')]
+      beneficiaries.each do |beneficiary|
         row = base_row.dup
-        amount_by_ratio = split_amount * (1.0/activity.beneficiaries.length)
+        amount_by_ratio = split_amount * (1.0 / beneficiaries.length)
         row << beneficiary.short_display
         row << n2c(amount_by_ratio * rate, "", "")
 

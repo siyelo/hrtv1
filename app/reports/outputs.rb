@@ -74,10 +74,10 @@ class Reports::Outputs
       base_row << implementer_split.organization.implementer_type
 
       # fake output if none
-      activity.outputs.build(:description => 'n/a') if activity.outputs.length == 0
-      activity.outputs.each do |output|
+      outputs = activity.outputs.presence || [Output.new(:description => 'n/a')]
+      outputs.each do |output|
         row = base_row.dup
-        amount_by_ratio = split_amount * (1.0/activity.outputs.length)
+        amount_by_ratio = split_amount * (1.0 / outputs.length)
         row << output.description
         row << n2c(amount_by_ratio * rate, "", "")
         row << implementer_split.possible_double_count?

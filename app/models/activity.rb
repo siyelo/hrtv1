@@ -279,26 +279,6 @@ class Activity < ActiveRecord::Base
     end
   end
 
-  def funding_streams
-    return [] if project.nil?
-    budget_ratio = budget && project.budget ? budget / project.budget : 0
-    spend_ratio  = spend && project.spend ? spend / project.spend : 0
-    ufs = project.cached_ultimate_funding_sources
-    ufs.each do |fs|
-      fs[:budget] = fs[:budget] * budget_ratio if fs[:budget]
-      fs[:spend]  = fs[:spend] * spend_ratio if fs[:spend]
-    end
-    ufs
-  end
-
-  def actual_spend
-    (spend || 0 )
-  end
-
-  def actual_budget
-    (budget || 0 )
-  end
-
   def implementer_splits_each_have_defined_districts?(coding_type)
     !implementer_split_district_code_assignments_if_complete(coding_type).empty?
   end

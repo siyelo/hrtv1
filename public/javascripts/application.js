@@ -913,15 +913,6 @@ var reports_districts_show = reports_countries_show = {
   }
 };
 
-var reports_districts_funders = reports_countries_funders = {
-  run: function () {
-    drawPieChart('budget_ufs_pie', _budget_ufs_values, 400, 250);
-    drawPieChart('budget_fa_pie', _budget_fa_values, 400, 250);
-    drawPieChart('spend_ufs_pie', _spend_ufs_values, 400, 250);
-    drawPieChart('spend_fa_pie', _spend_fa_values, 400, 250);
-  }
-}
-
 var reports_districts_classifications = reports_countries_classifications = {
   run: function () {
     if (_pie) {

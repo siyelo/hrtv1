@@ -22,49 +22,6 @@ module Charts::CountryPies
       prepare_pie_values_json(records)
     end
 
-    def ultimate_funding_sources(amount_type, data_request_id)
-      records = FundingStream.find :all,
-        :select => "organizations.id,
-          organizations.name,
-          SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON
-                    funding_streams.organization_ufs_id = organizations.id
-                   INNER JOIN projects ON
-                    projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON
-                    data_responses.id = projects.data_response_id
-                   INNER JOIN data_requests ON
-                    data_requests.id = data_responses.data_request_id AND
-                    data_requests.id = #{data_request_id}",
-        :group => "organizations.id,
-                   organizations.name",
-        :order => "value DESC",
-        :conditions => []
-
-      prepare_pie_values_json(records)
-    end
-
-    def financing_agents(amount_type, data_request_id)
-      records = FundingStream.find :all,
-        :select => "organizations.id,
-          organizations.name,
-          SUM(funding_streams.#{amount_type}_in_usd) as value",
-        :joins => "INNER JOIN organizations ON
-                    funding_streams.organization_fa_id = organizations.id
-                   INNER JOIN projects ON
-                    projects.id = funding_streams.project_id
-                   INNER JOIN data_responses ON
-                    data_responses.id = projects.data_response_id
-                   INNER JOIN data_requests ON
-                    data_requests.id = data_responses.data_request_id AND
-                    data_requests.id = #{data_request_id}",
-        :group => "organizations.id,
-                   organizations.name",
-        :order => "value DESC"
-
-      prepare_pie_values_json(records)
-    end
-
     def implementers(amount_type, data_request_id)
       records = ImplementerSplit.find :all,
         :select => "organizations.id,

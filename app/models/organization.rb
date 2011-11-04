@@ -176,45 +176,6 @@ class Organization < ActiveRecord::Base
     n.first(length)
   end
 
-  def funding_chains(request)
-    ufs = projects_in_request(request).map{|p| p.funding_chains(false)}.flatten
-    if ufs.empty?
-      ufs = [FundingChain.new({:organization_chain => [self, self]})]
-    end
-    ufs
-  end
-
-  def funding_chains_to(to, request)
-    fs = projects_in_request(request).map{|p| p.funding_chains_to(to)}.flatten
-    FundingChain.merge_chains(fs)
-  end
-
-  def best_guess_funding_chains_to(to, request)
-    chains = funding_chains_to(to, request)
-    unless chains.empty?
-      chains
-    else
-      guess_funding_chains_to(to,request)
-    end
-  end
-
-  def guess_funding_chains_to(to, request)
-    if ["Donor", "Bilateral", "Multilateral"].include?(raw_type)
-      # assume i funded even if didnt enter it
-      return [FundingChain.new({:organization_chain => [self, to]})]
-    else
-      # evenly split across all funding sources
-      chains = funding_chains(request)
-      unless chains.empty?
-        FundingChain.add_to(chains, to)
-      else
-        #assume I am self funded if I entered no funding information
-        # could enter "Unknown - maybe #{self.name}" ?
-        [FundingChain.new({:organization_chain => [self, to]})]
-      end
-    end
-  end
-
   # returns the last response that was created.
   def latest_response
     self.responses.latest_first.first

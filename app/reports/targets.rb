@@ -75,10 +75,10 @@ class Reports::Targets
       base_row << implementer_split.organization.implementer_type
 
       # fake target if none
-      activity.targets.build(:description => 'n/a') if activity.targets.length == 0
-      activity.targets.each do |target|
+      targets = activity.targets.presence || [Target.new(:description => 'n/a')]
+      targets.each do |target|
         row = base_row.dup
-        amount_by_ratio = split_amount * (1.0/activity.targets.length)
+        amount_by_ratio = split_amount * (1.0 / targets.length)
         row << target.description
         row << n2c(amount_by_ratio * rate, '', '')
         row << implementer_split.possible_double_count?

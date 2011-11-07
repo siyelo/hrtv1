@@ -135,7 +135,7 @@ class Reports::FundingSourceSplit
 
       amount_diff = splits_total - in_flows_total
 
-      if amount_diff > 0
+      if amount_diff > 0 || in_flows.blank?
         in_flow = FundingFlow.new(:from => fake_org)
         in_flow.send(:"#{@amount_type}=", amount_diff)
         in_flows << in_flow

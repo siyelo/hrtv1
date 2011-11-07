@@ -44,5 +44,4 @@ class Reports::FundingSource
       row << n2c(universal_currency_converter(in_flow.budget, in_flow_currency, "USD"))
       csv << row
     end
-
 end

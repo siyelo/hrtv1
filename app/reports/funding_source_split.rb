@@ -85,7 +85,7 @@ class Reports::FundingSourceSplit
         # TODO: remove try after implementer_splits without implementer are fixed
         base_row << implementer_split.organization.try(:name)
         base_row << implementer_split.organization.implementer_type
-        base_row << n2c(split_amount, "", "") # here
+        base_row << n2c(split_amount, "", "")
 
         # iterate here over funding sources
         in_flows.each do |in_flow|

@@ -6,6 +6,7 @@ class Reports::DynamicQuery
   include CurrencyViewNumberHelper
 
   def initialize(request, amount_type)
+    @deepest_nesting = Code.deepest_nesting
     @amount_type = amount_type
     @implementer_splits = ImplementerSplit.find :all,
       :joins => { :activity => :data_response },
@@ -50,8 +51,8 @@ class Reports::DynamicQuery
       row << 'Purpose Split Total %'
       row << 'Purpose Split %'
       row << 'Purpose'
-      Code.deepest_nesting.times { |index| row << "Purpose #{index + 1} (short display)" }
-      Code.deepest_nesting.times { |index| row << "Purpose #{index + 1} (official name)" }
+      @deepest_nesting.times { |index| row << "Purpose #{index + 1} (short display)" }
+      @deepest_nesting.times { |index| row << "Purpose #{index + 1} (official name)" }
       row << 'HSSP2 Strategic Objectives (post JHSR)'
       row << 'HSSP2 Strategic Programs (post JHSR)'
       row << 'Associated MTEF Sub Program'
@@ -117,8 +118,8 @@ class Reports::DynamicQuery
 
           # purpose tree
           codes = self_and_ancestors(purpose_classification.code).reverse
-          add_codes_to_row(purpose_row, codes, Code.deepest_nesting, :short_display)
-          add_codes_to_row(purpose_row, codes, Code.deepest_nesting, :official_name)
+          add_codes_to_row(purpose_row, codes, @deepest_nesting, :short_display)
+          add_codes_to_row(purpose_row, codes, @deepest_nesting, :official_name)
 
 
           purpose_row << purpose_classification.code.hssp2_stratobj_val

@@ -31,7 +31,8 @@ class Reports::DynamicQuery
     FasterCSV.generate do |csv|
       csv << build_header
       @implementer_splits.each do |implementer_split|
-        build_rows(csv, implementer_split)
+        amount = implementer_split.activity.send(@amount_type)
+        build_rows(csv, implementer_split) if amount && amount > 0
       end
     end
   end

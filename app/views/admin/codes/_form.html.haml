@@ -10,9 +10,9 @@
       = f.input :official_name, :required => false, :hint => "The name officially used for this code"
       = f.input :hssp2_stratprog_val, :required => false, :hint => "The strategic program this code should be included under."
       = f.input :hssp2_stratobj_val, :required => false, :hint => "The strategic objective this code should be included under."
-      = f.input :sub_account, :required => false, :hint => "What this code pertains to"
-      = f.input :nasa_code, :required => false, :hint => "The corresponding NASA code"
-      = f.input :nha_code, :required => false, :hint => "The corresponding NHA code"
+      -# = f.input :sub_account, :required => false, :hint => "What this code pertains to"
+      -# = f.input :nasa_code, :required => false, :hint => "The corresponding NASA code"
+      -# = f.input :nha_code, :required => false, :hint => "The corresponding NHA code"
 
 - f.buttons :class => 'wrap-80 buttons' do
   = f.commit_button @code.new_record? ? "Create New Code" : "Update Code", :class => "last"

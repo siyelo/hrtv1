@@ -46,6 +46,7 @@ describe Reports::ClassificationSplit do
 
           @activity1 = Factory(:activity, :project => @project1,
                               :name => '@activity1',
+                              :description => '@activity1 descr',
                               :data_response => @response1,
                               :implementer_splits => impl_splits)
 
@@ -76,6 +77,7 @@ describe Reports::ClassificationSplit do
           table[0]['Data Response ID'].should == @response1.id.to_s
           table[0]['Activity ID'].should == @activity1.id.to_s
           table[0]['Activity'].should == '@activity1'
+          table[0]['Activity Descr'].should == '@activity1 descr'
           table[0]['Total Activity Budget ($)'].should == '150.00'
           table[0]['Implementer'].should == 'organization1'
           table[0]['Implementer Type'].should == 'Implementer'
@@ -94,6 +96,7 @@ describe Reports::ClassificationSplit do
           table[1]['Data Response ID'].should == @response1.id.to_s
           table[1]['Activity ID'].should == @activity1.id.to_s
           table[1]['Activity'].should == '@activity1'
+          table[1]['Activity Descr'].should == '@activity1 descr'
           table[1]['Total Activity Budget ($)'].should == '150.00'
           table[1]['Implementer'].should == 'organization1'
           table[1]['Implementer Type'].should == 'Implementer'
@@ -112,6 +115,7 @@ describe Reports::ClassificationSplit do
           table[2]['Data Response ID'].should == @response1.id.to_s
           table[2]['Activity ID'].should == @activity1.id.to_s
           table[2]['Activity'].should == '@activity1'
+          table[2]['Activity Descr'].should == '@activity1 descr'
           table[2]['Total Activity Budget ($)'].should == '150.00'
           table[2]['Implementer'].should == 'organization2'
           table[2]['Implementer Type'].should be_nil
@@ -130,6 +134,7 @@ describe Reports::ClassificationSplit do
           table[3]['Data Response ID'].should == @response1.id.to_s
           table[3]['Activity ID'].should == @activity1.id.to_s
           table[3]['Activity'].should == '@activity1'
+          table[3]['Activity Descr'].should == '@activity1 descr'
           table[3]['Total Activity Budget ($)'].should == '150.00'
           table[3]['Implementer'].should == 'organization2'
           table[3]['Implementer Type'].should be_nil
@@ -153,6 +158,7 @@ describe Reports::ClassificationSplit do
           table[0]['Data Response ID'].should == @response1.id.to_s
           table[0]['Activity ID'].should == @activity1.id.to_s
           table[0]['Activity'].should == '@activity1'
+          table[0]['Activity Descr'].should == '@activity1 descr'
           table[0]['Total Activity Budget ($)'].should == '15.00'
           table[0]['Implementer'].should == 'organization1'
           table[0]['Implementer Type'].should == 'Implementer'
